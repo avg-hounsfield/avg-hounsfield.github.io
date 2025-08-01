@@ -1,0 +1,619 @@
+[
+{
+  "category": "Neurological Imaging",
+  "protocols": [
+    {
+      "study": "Trigeminal Neuralgia",
+      "scanner": ["3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "MRA",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Circle of Willis screening"
+        },
+        {
+          "type": "FIESTA",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "High-res nerve root evaluation"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Thin slices for vascular contact"
+        }
+      ]
+    },
+    {
+      "study": "Brain Tumor Protocol",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Edema and mass effect evaluation"
+        },
+        {
+          "type": "FLAIR",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Peritumoral changes and gliosis"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Restricted diffusion in high-grade lesions"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Enhancing tumor margins"
+        }
+      ]
+    },
+    {
+      "study": "Epilepsy Protocol",
+      "scanner": ["3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T1-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Baseline anatomy"
+        },
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Structural abnormalities"
+        },
+        {
+          "type": "FLAIR",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Signal changes near hippocampus and cortex"
+        },
+        {
+          "type": "3D T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Malformations and neoplasm detection"
+        }
+      ]
+    },
+    {
+      "study": "Multiple Sclerosis",
+      "scanner": ["3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "FLAIR",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "White matter plaques and periventricular lesions"
+        },
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Lesion burden and atrophy"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Active plaques enhancement"
+        }
+      ]
+    }
+  ]
+},
+	{
+	"category": "Pediatric Imaging",
+	"protocols": [
+    {
+      "study": "Pediatric Brain MRI",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T1-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Baseline brain anatomy"
+        },
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Hydrocephalus, structural anomalies"
+        },
+        {
+          "type": "FLAIR",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Periventricular and cortical changes"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Ischemia or encephalitis screening"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Tumor or infection assessment"
+        }
+      ]
+    },
+    {
+      "study": "Pediatric Spine MRI",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Sagittal"],
+          "contrast": "No",
+          "note": "Cord and vertebral evaluation"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Axial", "Sagittal"],
+          "contrast": "No",
+          "note": "Inflammation or marrow signal"
+        },
+        {
+          "type": "T1-weighted",
+          "planes": ["Sagittal"],
+          "contrast": "No",
+          "note": "Vertebral body and disc anatomy"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Sagittal", "Axial"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Infectious or neoplastic enhancement"
+        }
+      ]
+    },
+    {
+      "study": "Pediatric Abdominal MRI",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T2-weighted SSFSE",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Abdominal organ detail"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Detect restricted diffusion in mass or inflammation"
+        },
+        {
+          "type": "T1-weighted pre-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Baseline liver and spleen anatomy"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Tumor enhancement or vascular anomalies"
+        }
+      ]
+    },
+    {
+      "study": "Pediatric Musculoskeletal MRI (Hip)",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Joint effusion and soft tissue"
+        },
+        {
+          "type": "PD-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Cartilage and labrum evaluation"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Marrow edema or inflammation"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Infection or neoplasm characterization"
+        }
+      ]
+    }
+  ]
+  },
+	{
+		"category": "Musculoskeletal Imaging",
+		"protocols": [
+    {
+      "study": "Shoulder MRI",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Rotator cuff, labrum, and effusion evaluation"
+        },
+        {
+          "type": "PD-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Tendon and cartilage integrity"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Edema or soft tissue inflammation"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Synovitis or enhancing mass"
+        }
+      ]
+    },
+    {
+      "study": "Knee MRI",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "PD-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Meniscus, ligament, and cartilage evaluation"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Sagittal", "Coronal"],
+          "contrast": "No",
+          "note": "Bone bruise or edema"
+        },
+        {
+          "type": "T1-weighted",
+          "planes": ["Sagittal", "Axial"],
+          "contrast": "No",
+          "note": "Anatomy and marrow"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Sagittal", "Coronal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Inflammation or tumor"
+        }
+      ]
+    },
+    {
+      "study": "Pelvis / Hip MRI",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Effusion, bursitis, labral pathology"
+        },
+        {
+          "type": "PD-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Cartilage and femoral head detail"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Marrow edema"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Infection or enhancing lesion"
+        }
+      ]
+    },
+    {
+      "study": "Wrist MRI",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "PD-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "TFCC, ligaments, and bone detail"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Coronal"],
+          "contrast": "No",
+          "note": "Inflammatory or traumatic edema"
+        },
+        {
+          "type": "T1-weighted",
+          "planes": ["Sagittal"],
+          "contrast": "No",
+          "note": "Structural anatomy"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Mass, synovitis, or enhancement"
+        }
+      ]
+    }
+  ]
+},
+{
+  "category": "Abdominal Imaging",
+  "protocols": [
+    {
+      "study": "Enterography / IBD",
+      "scanner": ["3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T2-weighted SSFSE",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Bowel wall edema and layering"
+        },
+        {
+          "type": "FIESTA",
+          "planes": ["Axial", "Coronal", "Sagittal", "Oblique"],
+          "contrast": "No",
+          "note": "Motion-resistant imaging of ileum"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Post-contrast restricted diffusion"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Inflammation and mucosal enhancement"
+        }
+      ]
+    },
+    {
+      "study": "Urography",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Timed excretory phases: 1–10 min"
+        },
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "High-resolution kidney and bladder views"
+        },
+        {
+          "type": "GRE/3D",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "Mixed",
+		  "highlight": true,
+          "note": "Dynamic urinary tract mapping"
+        }
+      ]
+    },
+    {
+      "study": "Liver MRI Protocol",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Cystic vs solid lesion evaluation"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Restricted diffusion in HCC or metastases"
+        },
+        {
+          "type": "T1-weighted pre-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Baseline fat and iron content"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Dynamic contrast phases for lesion characterization"
+        }
+      ]
+    },
+    {
+      "study": "Pelvic MRI Protocol (Non-GYN)",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Soft tissue mass and lymph node evaluation"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Restricted diffusion in tumor or infection"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Enhancement patterns in pelvic organs"
+        }
+      ]
+    }
+  ]
+},
+{
+  "category": "Miscellaneous Protocols",
+  "protocols": [
+    {
+      "study": "Sports Hernia",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal", "Oblique"],
+          "contrast": "No",
+          "note": "Primary soft tissue and hernia evaluation"
+        },
+        {
+          "type": "PD-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal", "Oblique"],
+          "contrast": "No",
+          "note": "Fat-suppressed detail of pelvic walls"
+        },
+        {
+          "type": "T1-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Baseline anatomy"
+        }
+      ]
+    },
+    {
+      "study": "MR Neurography (Peripheral Nerve)",
+      "scanner": ["3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "STIR",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Edema or signal abnormalities along nerve path"
+        },
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Detailed view of nerve anatomy and surrounding tissue"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Evaluation of mass or nerve sheath enhancement"
+        }
+      ]
+    },
+    {
+      "study": "Whole-Body MRI (Oncology Screening)",
+      "scanner": ["1.5T", "3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "STIR",
+          "planes": ["Coronal"],
+          "contrast": "No",
+          "note": "Marrow and soft tissue assessment"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "High-sensitivity for metastatic lesions"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "Yes",
+		  "highlight": true,
+          "note": "Enhancing lesions across body compartments"
+        }
+      ]
+    },
+    {
+      "study": "MR Lymphangiography",
+      "scanner": ["3T"],
+	  "usesContrast": true,
+      "sequences": [
+        {
+          "type": "3D T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Lymphatic flow and vessel architecture"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes", 
+		  "highlight": true,
+          "note": "Delayed phase for lymph node visualization"
+        }
+      ]
+    }
+  ]
+}
+]

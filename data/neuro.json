@@ -1,0 +1,113 @@
+{
+  "category": "Neurological Imaging",
+  "protocols": [
+    {
+      "study": "Trigeminal Neuralgia",
+      "scanner": ["3T"],
+      "sequences": [
+        {
+          "type": "MRA",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Circle of Willis screening"
+        },
+        {
+          "type": "FIESTA",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "High-res nerve root evaluation"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial"],
+          "contrast": "Yes",
+          "note": "Thin slices for vascular contact"
+        }
+      ]
+    },
+    {
+      "study": "Brain Tumor Protocol",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Edema and mass effect evaluation"
+        },
+        {
+          "type": "FLAIR",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Peritumoral changes and gliosis"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Restricted diffusion in high-grade lesions"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Enhancing tumor margins"
+        }
+      ]
+    },
+    {
+      "study": "Epilepsy Protocol",
+      "scanner": ["3T"],
+      "sequences": [
+        {
+          "type": "T1-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Baseline anatomy"
+        },
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Structural abnormalities"
+        },
+        {
+          "type": "FLAIR",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Signal changes near hippocampus and cortex"
+        },
+        {
+          "type": "3D T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Malformations and neoplasm detection"
+        }
+      ]
+    },
+    {
+      "study": "Multiple Sclerosis",
+      "scanner": ["3T"],
+      "sequences": [
+        {
+          "type": "FLAIR",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "White matter plaques and periventricular lesions"
+        },
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Lesion burden and atrophy"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Active plaques enhancement"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MRI Protocol Finder</title>
+  <link rel="stylesheet" href="./assets/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+ <div class="container">
+  <h1>MRI Protocol Finder</h1>
+  <div class="search-row">
+<input type="text" id="searchInput" placeholder="Search protocol..." />
+<button id="searchButton">Search</button>
+  </div>
+  <div class="filters-row">
+    <select id="scanner">
+      <option value="Any">Any Scanner</option>
+      <option value="1.5T">1.5T</option>
+      <option value="3T">3T</option>
+    </select>
+    <label>
+      <input type="checkbox" id="contrastToggle" />
+      Contrast Only
+    </label>
+  </div>
+  <div id="results"></div>
+</div>
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

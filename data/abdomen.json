@@ -1,0 +1,113 @@
+{
+  "category": "Abdominal Imaging",
+  "protocols": [
+    {
+      "study": "Enterography / IBD",
+      "scanner": ["3T"],
+      "sequences": [
+        {
+          "type": "T2-weighted SSFSE",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Bowel wall edema and layering"
+        },
+        {
+          "type": "FIESTA",
+          "planes": ["Axial", "Coronal", "Sagittal", "Oblique"],
+          "contrast": "No",
+          "note": "Motion-resistant imaging of ileum"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "Yes",
+          "note": "Post-contrast restricted diffusion"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "Yes",
+          "note": "Inflammation and mucosal enhancement"
+        }
+      ]
+    },
+    {
+      "study": "Urography",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Timed excretory phases: 1–10 min"
+        },
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "High-resolution kidney and bladder views"
+        },
+        {
+          "type": "GRE/3D",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "Mixed",
+          "note": "Dynamic urinary tract mapping"
+        }
+      ]
+    },
+    {
+      "study": "Liver MRI Protocol",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Cystic vs solid lesion evaluation"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Restricted diffusion in HCC or metastases"
+        },
+        {
+          "type": "T1-weighted pre-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Baseline fat and iron content"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Dynamic contrast phases for lesion characterization"
+        }
+      ]
+    },
+    {
+      "study": "Pelvic MRI Protocol (Non-GYN)",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Soft tissue mass and lymph node evaluation"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Restricted diffusion in tumor or infection"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Enhancement patterns in pelvic organs"
+        }
+      ]
+    }
+  ]
+}

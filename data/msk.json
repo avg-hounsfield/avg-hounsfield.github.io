@@ -1,0 +1,125 @@
+{
+  "category": "Musculoskeletal Imaging",
+  "protocols": [
+    {
+      "study": "Shoulder MRI",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Rotator cuff, labrum, and effusion evaluation"
+        },
+        {
+          "type": "PD-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Tendon and cartilage integrity"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Edema or soft tissue inflammation"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Synovitis or enhancing mass"
+        }
+      ]
+    },
+    {
+      "study": "Knee MRI",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "PD-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Meniscus, ligament, and cartilage evaluation"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Sagittal", "Coronal"],
+          "contrast": "No",
+          "note": "Bone bruise or edema"
+        },
+        {
+          "type": "T1-weighted",
+          "planes": ["Sagittal", "Axial"],
+          "contrast": "No",
+          "note": "Anatomy and marrow"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Sagittal", "Coronal"],
+          "contrast": "Yes",
+          "note": "Inflammation or tumor"
+        }
+      ]
+    },
+    {
+      "study": "Pelvis / Hip MRI",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Effusion, bursitis, labral pathology"
+        },
+        {
+          "type": "PD-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Cartilage and femoral head detail"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Marrow edema"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Infection or enhancing lesion"
+        }
+      ]
+    },
+    {
+      "study": "Wrist MRI",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "PD-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "TFCC, ligaments, and bone detail"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Coronal"],
+          "contrast": "No",
+          "note": "Inflammatory or traumatic edema"
+        },
+        {
+          "type": "T1-weighted",
+          "planes": ["Sagittal"],
+          "contrast": "No",
+          "note": "Structural anatomy"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "Yes",
+          "note": "Mass, synovitis, or enhancement"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "category": "Miscellaneous Protocols",
+  "protocols": [
+    {
+      "study": "Sports Hernia",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal", "Oblique"],
+          "contrast": "No",
+          "note": "Primary soft tissue and hernia evaluation"
+        },
+        {
+          "type": "PD-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal", "Oblique"],
+          "contrast": "No",
+          "note": "Fat-suppressed detail of pelvic walls"
+        },
+        {
+          "type": "T1-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Baseline anatomy"
+        }
+      ]
+    },
+    {
+      "study": "MR Neurography (Peripheral Nerve)",
+      "scanner": ["3T"],
+      "sequences": [
+        {
+          "type": "STIR",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Edema or signal abnormalities along nerve path"
+        },
+        {
+          "type": "T2-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Detailed view of nerve anatomy and surrounding tissue"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "Yes",
+          "note": "Evaluation of mass or nerve sheath enhancement"
+        }
+      ]
+    },
+    {
+      "study": "Whole-Body MRI (Oncology Screening)",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "STIR",
+          "planes": ["Coronal"],
+          "contrast": "No",
+          "note": "Marrow and soft tissue assessment"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "High-sensitivity for metastatic lesions"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "Yes",
+          "note": "Enhancing lesions across body compartments"
+        }
+      ]
+    },
+    {
+      "study": "MR Lymphangiography",
+      "scanner": ["3T"],
+      "sequences": [
+        {
+          "type": "3D T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Lymphatic flow and vessel architecture"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Delayed phase for lymph node visualization"
+        }
+      ]
+    }
+  ]
+}

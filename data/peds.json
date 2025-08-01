@@ -1,0 +1,131 @@
+{
+  "category": "Pediatric Imaging",
+  "protocols": [
+    {
+      "study": "Pediatric Brain MRI",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T1-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Baseline brain anatomy"
+        },
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Hydrocephalus, structural anomalies"
+        },
+        {
+          "type": "FLAIR",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Periventricular and cortical changes"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Ischemia or encephalitis screening"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Tumor or infection assessment"
+        }
+      ]
+    },
+    {
+      "study": "Pediatric Spine MRI",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Sagittal"],
+          "contrast": "No",
+          "note": "Cord and vertebral evaluation"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Axial", "Sagittal"],
+          "contrast": "No",
+          "note": "Inflammation or marrow signal"
+        },
+        {
+          "type": "T1-weighted",
+          "planes": ["Sagittal"],
+          "contrast": "No",
+          "note": "Vertebral body and disc anatomy"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Sagittal", "Axial"],
+          "contrast": "Yes",
+          "note": "Infectious or neoplastic enhancement"
+        }
+      ]
+    },
+    {
+      "study": "Pediatric Abdominal MRI",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T2-weighted SSFSE",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Abdominal organ detail"
+        },
+        {
+          "type": "DWI",
+          "planes": ["Axial"],
+          "contrast": "No",
+          "note": "Detect restricted diffusion in mass or inflammation"
+        },
+        {
+          "type": "T1-weighted pre-contrast",
+          "planes": ["Axial", "Coronal"],
+          "contrast": "No",
+          "note": "Baseline liver and spleen anatomy"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Tumor enhancement or vascular anomalies"
+        }
+      ]
+    },
+    {
+      "study": "Pediatric Musculoskeletal MRI (Hip)",
+      "scanner": ["1.5T", "3T"],
+      "sequences": [
+        {
+          "type": "T2-weighted",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Joint effusion and soft tissue"
+        },
+        {
+          "type": "PD-weighted FS",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Cartilage and labrum evaluation"
+        },
+        {
+          "type": "STIR",
+          "planes": ["Coronal", "Sagittal"],
+          "contrast": "No",
+          "note": "Marrow edema or inflammation"
+        },
+        {
+          "type": "T1-weighted post-contrast",
+          "planes": ["Axial", "Coronal", "Sagittal"],
+          "contrast": "Yes",
+          "note": "Infection or neoplasm characterization"
+        }
+      ]
+    }
+  ]
+}
