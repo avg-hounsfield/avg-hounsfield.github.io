@@ -1,619 +1,1304 @@
 [
-{
-  "category": "Neurological Imaging",
-  "protocols": [
-    {
-      "study": "Trigeminal Neuralgia",
-      "scanner": ["3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "MRA",
-          "planes": ["Axial"],
-          "contrast": "No",
-          "note": "Circle of Willis screening"
-        },
-        {
-          "type": "FIESTA",
-          "planes": ["Axial"],
-          "contrast": "No",
-          "note": "High-res nerve root evaluation"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Thin slices for vascular contact"
-        }
-      ]
-    },
-    {
-      "study": "Brain Tumor Protocol",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T2-weighted",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Edema and mass effect evaluation"
-        },
-        {
-          "type": "FLAIR",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "No",
-          "note": "Peritumoral changes and gliosis"
-        },
-        {
-          "type": "DWI",
-          "planes": ["Axial"],
-          "contrast": "No",
-          "note": "Restricted diffusion in high-grade lesions"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Enhancing tumor margins"
-        }
-      ]
-    },
-    {
-      "study": "Epilepsy Protocol",
-      "scanner": ["3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T1-weighted",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Baseline anatomy"
-        },
-        {
-          "type": "T2-weighted",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Structural abnormalities"
-        },
-        {
-          "type": "FLAIR",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "No",
-          "note": "Signal changes near hippocampus and cortex"
-        },
-        {
-          "type": "3D T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Malformations and neoplasm detection"
-        }
-      ]
-    },
-    {
-      "study": "Multiple Sclerosis",
-      "scanner": ["3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "FLAIR",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "White matter plaques and periventricular lesions"
-        },
-        {
-          "type": "T2-weighted",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Lesion burden and atrophy"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Active plaques enhancement"
-        }
-      ]
-    }
-  ]
-},
-	{
-	"category": "Pediatric Imaging",
-	"protocols": [
-    {
-      "study": "Pediatric Brain MRI",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T1-weighted",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Baseline brain anatomy"
-        },
-        {
-          "type": "T2-weighted",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Hydrocephalus, structural anomalies"
-        },
-        {
-          "type": "FLAIR",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "No",
-          "note": "Periventricular and cortical changes"
-        },
-        {
-          "type": "DWI",
-          "planes": ["Axial"],
-          "contrast": "No",
-          "note": "Ischemia or encephalitis screening"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Tumor or infection assessment"
-        }
-      ]
-    },
-    {
-      "study": "Pediatric Spine MRI",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T2-weighted",
-          "planes": ["Axial", "Sagittal"],
-          "contrast": "No",
-          "note": "Cord and vertebral evaluation"
-        },
-        {
-          "type": "STIR",
-          "planes": ["Axial", "Sagittal"],
-          "contrast": "No",
-          "note": "Inflammation or marrow signal"
-        },
-        {
-          "type": "T1-weighted",
-          "planes": ["Sagittal"],
-          "contrast": "No",
-          "note": "Vertebral body and disc anatomy"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Sagittal", "Axial"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Infectious or neoplastic enhancement"
-        }
-      ]
-    },
-    {
-      "study": "Pediatric Abdominal MRI",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T2-weighted SSFSE",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "No",
-          "note": "Abdominal organ detail"
-        },
-        {
-          "type": "DWI",
-          "planes": ["Axial"],
-          "contrast": "No",
-          "note": "Detect restricted diffusion in mass or inflammation"
-        },
-        {
-          "type": "T1-weighted pre-contrast",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "No",
-          "note": "Baseline liver and spleen anatomy"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Tumor enhancement or vascular anomalies"
-        }
-      ]
-    },
-    {
-      "study": "Pediatric Musculoskeletal MRI (Hip)",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T2-weighted",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Joint effusion and soft tissue"
-        },
-        {
-          "type": "PD-weighted FS",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Cartilage and labrum evaluation"
-        },
-        {
-          "type": "STIR",
-          "planes": ["Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Marrow edema or inflammation"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Infection or neoplasm characterization"
-        }
-      ]
-    }
-  ]
+  {
+    "category": "Neurological Imaging",
+    "protocols": [
+      {
+        "study": "Brain",
+        "scanner": [ "1.5T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "FLAIR CUBE",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "SWAN",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "Brain",
+        "scanner": [ "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "SWI",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "Brain Tumor/Infection",
+        "scanner": [ "1.5T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "Routine Brain",
+            "planes": [],
+            "note": "Standard pre-contrast sequences."
+          },
+          {
+            "type": "T1",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "POST T1",
+            "planes": [ "Axial", "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "Brain Tumor/Infection",
+        "scanner": [ "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "Routine Brain",
+            "planes": [],
+            "note": "Standard pre-contrast sequences."
+          },
+          {
+            "type": "T1",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "POST T1",
+            "planes": [ "Axial", "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "POST SAG MPRAGE FS",
+            "planes": [ "Sagittal" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "Seizure",
+        "scanner": [ "1.5T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T2",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "FLAIR CUBE",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "SWAN",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T2 TEMP LOBE",
+            "planes": [ "Coronal" ]
+          },
+          {
+            "type": "SAG SPGR TEMP LOBE",
+            "planes": [ "Sagittal" ]
+          }
+        ]
+      },
+      {
+        "study": "Seizure",
+        "scanner": [ "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T2",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "SWI",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "MPRAGE",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2 TEMP LOBE",
+            "planes": [ "Coronal" ]
+          }
+        ]
+      },
+      {
+        "study": "Brain MS",
+        "scanner": [ "1.5T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "Routine Brain",
+            "planes": [],
+            "note": "Standard pre-contrast sequences."
+          },
+          {
+            "type": "T1",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "POST T1",
+            "planes": [ "Axial", "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "Brain MS",
+        "scanner": [ "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "Routine Brain",
+            "planes": [],
+            "note": "Standard pre-contrast sequences."
+          },
+          {
+            "type": "T1",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "POST T1",
+            "planes": [ "Axial", "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "POST SAG MPRAGE FS",
+            "planes": [ "Sagittal" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "IAC",
+        "scanner": [ "1.5T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "3D FIESTA",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "IAC",
+        "scanner": [ "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "3D SPACE",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "IAC w/Gad",
+        "scanner": [ "1.5T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T2",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T1 THIN IAC",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "3D FIESTA IAC",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T1 THIN FS IAC POST",
+            "planes": [ "Axial", "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "IAC w/Gad",
+        "scanner": [ "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T2",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T1 THIN IAC",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "3D SPACE IAC",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T1 THIN FS IAC POST",
+            "planes": [ "Axial", "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "Pituitary",
+        "scanner": [ "1.5T", "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T1 3mm",
+            "planes": [ "Coronal", "Sagittal" ]
+          },
+          {
+            "type": "T2 3mm",
+            "planes": [ "Coronal", "Sagittal" ]
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T1 3mm POST",
+            "planes": [ "Coronal", "Sagittal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "DYNAMIC COR (1PRE/6POST)",
+            "planes": [ "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "AX T1 BRAIN POST",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "SAG T1 3mm FS POST",
+            "planes": [ "Sagittal" ],
+            "contrast": "Yes",
+            "highlight": true,
+            "note": "Post-Op only."
+          },
+          {
+            "type": "COR T1 3mm FS POST",
+            "planes": [ "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true,
+            "note": "Post-Op only."
+          }
+        ]
+      },
+      {
+        "study": "Orbits",
+        "scanner": [ "1.5T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T1 ORBITS",
+            "planes": [ "Axial", "Coronal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T2 ORBITS",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T2 FS ORBITS",
+            "planes": [ "Coronal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "SWAN",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "POST COR T1 FS ORBITS",
+            "planes": [ "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "POST AX T1 FS ORBITS",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "POST AX T1 BRAIN",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "Orbits",
+        "scanner": [ "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T1 ORBITS",
+            "planes": [ "Axial", "Coronal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T2 ORBITS",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T2 FS ORBITS",
+            "planes": [ "Coronal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "SWI",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "POST COR T1 FS ORBITS",
+            "planes": [ "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "POST AX T1 FS ORBITS",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "POST AX T1 BRAIN",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "Orbit Nemmers",
+        "scanner": [ "1.5T", "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T1 ORBITS",
+            "planes": [ "Coronal" ]
+          },
+          {
+            "type": "T2 FS ORBITS",
+            "planes": [ "Coronal" ]
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "AX MRA COW",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "TIA",
+        "scanner": [ "1.5T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "SWAN",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "AX MRA COW",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "AX MRA BIFURCATION",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "TIA",
+        "scanner": [ "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "SWI",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "AX MRA COW",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "AX MRA CAROTID",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "TIA MRA Dissection",
+        "scanner": [ "1.5T", "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "Routine TIA",
+            "planes": [],
+            "note": "Standard TIA sequences."
+          },
+          {
+            "type": "AX T1 FS (C4-SELLA)",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "MRA Aneurysm",
+        "scanner": [ "1.5T", "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "Routine Brain",
+            "planes": [],
+            "note": "Standard brain sequences."
+          },
+          {
+            "type": "AX MRA COW",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "Cranial Nerves/Parotid",
+        "scanner": [ "1.5T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T1 (HEAD & NECK)",
+            "planes": [ "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T1 BRAIN",
+            "planes": [ "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T1 (ORB-MANDIBLE)",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T2 (ORB-MANDIBLE)",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "SWAN",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "AX MRA COW",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "AX T1 FS POST (ORB-MANDIBLE)",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "COR T1 FS (CORD-FACE)",
+            "planes": [ "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "Cranial Nerves/Parotid",
+        "scanner": [ "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T1 (HEAD & NECK)",
+            "planes": [ "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T1 BRAIN",
+            "planes": [ "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T1 (ORB-MANDIBLE)",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T2 (ORB-MANDIBLE)",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "FLAIR",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "DWI",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "SWI",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "AX MRA COW",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "AX T1 FS POST (ORB-MANDIBLE)",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "COR T1 FS (CORD-FACE)",
+            "planes": [ "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "Trigeminal Neuralgia",
+        "scanner": [ "1.5T", "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "Routine Brain",
+            "planes": [],
+            "note": "Standard pre-contrast sequences."
+          },
+          {
+            "type": "AX MRA COW",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "AX 3D FIESTA IAC",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "AX T1 FS POST THIN",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "Stealth",
+        "scanner": [ "1.5T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "AX T1 POST",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "Stealth",
+        "scanner": [ "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "SAG MPRAGE POST NO FS",
+            "planes": [ "Sagittal" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      }
+    ]
   },
-	{
-		"category": "Musculoskeletal Imaging",
-		"protocols": [
-    {
-      "study": "Shoulder MRI",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T2-weighted FS",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Rotator cuff, labrum, and effusion evaluation"
-        },
-        {
-          "type": "PD-weighted FS",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Tendon and cartilage integrity"
-        },
-        {
-          "type": "STIR",
-          "planes": ["Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Edema or soft tissue inflammation"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Synovitis or enhancing mass"
-        }
-      ]
-    },
-    {
-      "study": "Knee MRI",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "PD-weighted FS",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Meniscus, ligament, and cartilage evaluation"
-        },
-        {
-          "type": "STIR",
-          "planes": ["Sagittal", "Coronal"],
-          "contrast": "No",
-          "note": "Bone bruise or edema"
-        },
-        {
-          "type": "T1-weighted",
-          "planes": ["Sagittal", "Axial"],
-          "contrast": "No",
-          "note": "Anatomy and marrow"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Sagittal", "Coronal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Inflammation or tumor"
-        }
-      ]
-    },
-    {
-      "study": "Pelvis / Hip MRI",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T2-weighted FS",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Effusion, bursitis, labral pathology"
-        },
-        {
-          "type": "PD-weighted FS",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Cartilage and femoral head detail"
-        },
-        {
-          "type": "STIR",
-          "planes": ["Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Marrow edema"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Infection or enhancing lesion"
-        }
-      ]
-    },
-    {
-      "study": "Wrist MRI",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "PD-weighted FS",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "TFCC, ligaments, and bone detail"
-        },
-        {
-          "type": "STIR",
-          "planes": ["Coronal"],
-          "contrast": "No",
-          "note": "Inflammatory or traumatic edema"
-        },
-        {
-          "type": "T1-weighted",
-          "planes": ["Sagittal"],
-          "contrast": "No",
-          "note": "Structural anatomy"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Mass, synovitis, or enhancement"
-        }
-      ]
-    }
-  ]
-},
-{
-  "category": "Abdominal Imaging",
-  "protocols": [
-    {
-      "study": "Enterography / IBD",
-      "scanner": ["3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T2-weighted SSFSE",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "No",
-          "note": "Bowel wall edema and layering"
-        },
-        {
-          "type": "FIESTA",
-          "planes": ["Axial", "Coronal", "Sagittal", "Oblique"],
-          "contrast": "No",
-          "note": "Motion-resistant imaging of ileum"
-        },
-        {
-          "type": "DWI",
-          "planes": ["Axial"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Post-contrast restricted diffusion"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Inflammation and mucosal enhancement"
-        }
-      ]
-    },
-    {
-      "study": "Urography",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Timed excretory phases: 1–10 min"
-        },
-        {
-          "type": "T2-weighted FS",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "No",
-          "note": "High-resolution kidney and bladder views"
-        },
-        {
-          "type": "GRE/3D",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "Mixed",
-		  "highlight": true,
-          "note": "Dynamic urinary tract mapping"
-        }
-      ]
-    },
-    {
-      "study": "Liver MRI Protocol",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T2-weighted FS",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "No",
-          "note": "Cystic vs solid lesion evaluation"
-        },
-        {
-          "type": "DWI",
-          "planes": ["Axial"],
-          "contrast": "No",
-          "note": "Restricted diffusion in HCC or metastases"
-        },
-        {
-          "type": "T1-weighted pre-contrast",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "No",
-          "note": "Baseline fat and iron content"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Dynamic contrast phases for lesion characterization"
-        }
-      ]
-    },
-    {
-      "study": "Pelvic MRI Protocol (Non-GYN)",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "T2-weighted FS",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Soft tissue mass and lymph node evaluation"
-        },
-        {
-          "type": "DWI",
-          "planes": ["Axial"],
-          "contrast": "No",
-          "note": "Restricted diffusion in tumor or infection"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Enhancement patterns in pelvic organs"
-        }
-      ]
-    }
-  ]
-},
-{
-  "category": "Miscellaneous Protocols",
-  "protocols": [
-    {
-      "study": "Sports Hernia",
-      "scanner": ["1.5T", "3T"],
-      "sequences": [
-        {
-          "type": "T2-weighted",
-          "planes": ["Axial", "Coronal", "Sagittal", "Oblique"],
-          "contrast": "No",
-          "note": "Primary soft tissue and hernia evaluation"
-        },
-        {
-          "type": "PD-weighted",
-          "planes": ["Axial", "Coronal", "Sagittal", "Oblique"],
-          "contrast": "No",
-          "note": "Fat-suppressed detail of pelvic walls"
-        },
-        {
-          "type": "T1-weighted",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Baseline anatomy"
-        }
-      ]
-    },
-    {
-      "study": "MR Neurography (Peripheral Nerve)",
-      "scanner": ["3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "STIR",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Edema or signal abnormalities along nerve path"
-        },
-        {
-          "type": "T2-weighted FS",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Detailed view of nerve anatomy and surrounding tissue"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Evaluation of mass or nerve sheath enhancement"
-        }
-      ]
-    },
-    {
-      "study": "Whole-Body MRI (Oncology Screening)",
-      "scanner": ["1.5T", "3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "STIR",
-          "planes": ["Coronal"],
-          "contrast": "No",
-          "note": "Marrow and soft tissue assessment"
-        },
-        {
-          "type": "DWI",
-          "planes": ["Axial"],
-          "contrast": "No",
-          "note": "High-sensitivity for metastatic lesions"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal"],
-          "contrast": "Yes",
-		  "highlight": true,
-          "note": "Enhancing lesions across body compartments"
-        }
-      ]
-    },
-    {
-      "study": "MR Lymphangiography",
-      "scanner": ["3T"],
-	  "usesContrast": true,
-      "sequences": [
-        {
-          "type": "3D T2-weighted",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "No",
-          "note": "Lymphatic flow and vessel architecture"
-        },
-        {
-          "type": "T1-weighted post-contrast",
-          "planes": ["Axial", "Coronal", "Sagittal"],
-          "contrast": "Yes", 
-		  "highlight": true,
-          "note": "Delayed phase for lymph node visualization"
-        }
-      ]
-    }
-  ]
-}
+  {
+    "category": "Spine Imaging",
+    "protocols": [
+      {
+        "study": "C-Spine",
+        "scanner": [ "1.5T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T2 FS",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "AX 3D COSMIC",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "C-Spine",
+        "scanner": [ "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T2 FS",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "AX 3D SPACE",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "C-Spine MS",
+        "scanner": [ "1.5T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T2",
+            "planes": [ "Axial", "Sagittal" ]
+          },
+          {
+            "type": "POST SAG T1",
+            "planes": [ "Sagittal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "*AX T1 THRU ANY LESIONS",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "C-Spine MS",
+        "scanner": [ "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T2",
+            "planes": [ "Axial", "Sagittal" ]
+          },
+          {
+            "type": "POST SAG T1",
+            "planes": [ "Sagittal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "*AX T1 3D VIBE THRU ANY LESIONS",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "T-Spine",
+        "scanner": [ "1.5T", "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2 HIGH RES.",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2 (DISC SPACES)",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "SAG STIR",
+            "planes": [ "Sagittal" ]
+          }
+        ]
+      },
+      {
+        "study": "T-Spine MS",
+        "scanner": [ "1.5T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T2",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T2 HIGH RES",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "POST SAG T1",
+            "planes": [ "Sagittal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "AX T1 THRU ANY LESIONS",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "T-Spine MS",
+        "scanner": [ "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T2",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T2 HIGH RES",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "POST SAG T1",
+            "planes": [ "Sagittal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "*AX T1 3D VIBE THRU ANY LESIONSI",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "L-Spine",
+        "scanner": [ "1.5T", "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2 FS",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "PD",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "L-Spine Post-Op",
+        "scanner": [ "1.5T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Axial", "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T2",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T2 FS",
+            "planes": [ "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "SAG T1 FS POST",
+            "planes": [ "Sagittal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "AX T1 FS POST",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "L-Spine Post-Op",
+        "scanner": [ "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "Routine L-Spine",
+            "planes": [],
+            "note": "Standard pre-contrast sequences."
+          },
+          {
+            "type": "AX T1 3D VIBE",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "SAG T1 FS POST",
+            "planes": [ "Sagittal" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "AX T1 3D VIBE FS POST",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "Sacrum",
+        "scanner": [ "1.5T", "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Axial", "Coronal" ]
+          },
+          {
+            "type": "T2",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "SAG T2 STIR",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "COR T2 STIR",
+            "planes": [ "Coronal" ]
+          }
+        ]
+      },
+      {
+        "study": "Screening Spine",
+        "scanner": [ "1.5T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1 (2 FOV)",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2 C-SPINE",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "AX FGRE DISC SPACES",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "PD L-SPINE",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "SAG FSEIR (2 FOV)",
+            "planes": [ "Sagittal" ]
+          }
+        ]
+      },
+      {
+        "study": "Screening Spine",
+        "scanner": [ "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1 (2 FOV)",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2 C-SPINE",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T2 T-SPINE",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T2 FS (2 FOV)",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "PD L-SPINE",
+            "planes": [ "Axial" ]
+          }
+        ]
+      },
+      {
+        "study": "Scoliosis Spine",
+        "scanner": [ "1.5T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1 (2 FOV)",
+            "planes": [ "Coronal", "Sagittal" ]
+          },
+          {
+            "type": "T1 THRU CURVATURES",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T2 CONUS",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "AX FGRE DISC SPACES",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "SAG FSEIR (2 FOV)",
+            "planes": [ "Sagittal" ]
+          }
+        ]
+      },
+      {
+        "study": "Scoliosis Spine",
+        "scanner": [ "3T" ],
+        "usesContrast": false,
+        "sequences": [
+          {
+            "type": "T1 (2FOV)",
+            "planes": [ "Coronal", "Sagittal" ]
+          },
+          {
+            "type": "T1 THRU CURVATURES",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T2 C-SPINE",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T2 T-SPINE",
+            "planes": [ "Axial" ]
+          },
+          {
+            "type": "T2 FS (2 FOV)",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "PD L-SPINE",
+            "planes": [ "Axial" ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Head & Neck Imaging",
+    "protocols": [
+      {
+        "study": "Neck Soft Tissue",
+        "scanner": [ "1.5T", "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Axial", "Coronal", "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "AX STIR",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "AX T1 FS POST",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "COR T1 FS POST",
+            "planes": [ "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "study": "TMJ",
+        "scanner": [ "1.5T" ],
+        "usesContrast": false,
+        "note": "This protocol is for 1.5T only.",
+        "sequences": [
+          {
+            "type": "T1 CLOSED",
+            "planes": [ "Coronal", "Sagittal" ]
+          },
+          {
+            "type": "T2 CLOSED",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2 OPEN",
+            "planes": [ "Sagittal" ]
+          },
+          {
+            "type": "T2* GRE CLOSED",
+            "planes": [ "Sagittal" ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Musculoskeletal Imaging",
+    "protocols": [
+      {
+        "study": "Brachial Plexus",
+        "scanner": [ "1.5T", "3T" ],
+        "usesContrast": true,
+        "sequences": [
+          {
+            "type": "T1",
+            "planes": [ "Axial", "Coronal", "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "T2",
+            "planes": [ "Sagittal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "AX FSEIR (INCL. BOTH SIDES)",
+            "planes": [ "Axial" ],
+            "contrast": "No"
+          },
+          {
+            "type": "COR FSEIR (INCL. BOTH SIDES)",
+            "planes": [ "Coronal" ],
+            "contrast": "No"
+          },
+          {
+            "type": "AX T1 FS POST (INCL. BOTH SIDES)",
+            "planes": [ "Axial" ],
+            "contrast": "Yes",
+            "highlight": true
+          },
+          {
+            "type": "COR T1 FS POST (INCL. BOTH SIDES)",
+            "planes": [ "Coronal" ],
+            "contrast": "Yes",
+            "highlight": true
+          }
+        ]
+      }
+    ]
+  }
 ]

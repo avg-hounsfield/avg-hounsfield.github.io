@@ -1,32 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<!-- Mirrored from mri-search.web.app/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 03 Aug 2025 06:58:14 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MRI Protocol Finder</title>
-  <link rel="stylesheet" href="./assets/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>MRI Search</title>
+  
+  <link rel="stylesheet" href="assets/style.css" />
+  
+  <link rel="preconnect" href="../fonts.googleapis.com/index.html">
+  <link rel="preconnect" href="../fonts.gstatic.com/index.html" crossorigin>
+  <link href="../fonts.googleapis.com/css25777.css?family=Roboto:wght@400;500&amp;family=Google+Sans+Text:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <!-- index.html - FIXED -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
+
 <body>
- <div class="container">
-  <h1>MRI Protocol Finder</h1>
-  <div class="search-row">
-<input type="text" id="searchInput" placeholder="Search protocol..." />
-<button id="searchButton">Search</button>
+  <button id="theme-toggle" title="Toggle theme">
+    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+  </button>
+
+  <div class="container">
+    <header class="main-header">
+      <h1>MRI Protocol Search</h1>
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search by anatomy, e.g., 'Knee' or 'Glioblastoma'">
+        <button id="searchButton" aria-label="Search">
+          <span class="material-symbols-outlined">search</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Filters are now always visible, as they were in the good version -->
+      <div class="filters-row">
+          <div class="filter-group">
+            <label for="scanner-filter">Scanner</label>
+            <select id="scanner-filter">
+              <option value="all">All Scanners</option>
+              <option value="1.5T">1.5T</option>
+              <option value="3T">3T</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="contrast-filter">Contrast</label>
+            <select id="contrast-filter">
+              <option value="all">All</option>
+              <option value="with">With Contrast</option>
+              <option value="without">Without Contrast</option>
+            </select>
+          </div>
+      </div>
+      
+      <div id="results">
+        <!-- Protocol cards will be generated here -->
+      </div>
+    </main>
   </div>
-  <div class="filters-row">
-    <select id="scanner">
-      <option value="Any">Any Scanner</option>
-      <option value="1.5T">1.5T</option>
-      <option value="3T">3T</option>
-    </select>
-    <label>
-      <input type="checkbox" id="contrastToggle" />
-      Contrast Only
-    </label>
-  </div>
-  <div id="results"></div>
-</div>
-  <script type="module" src="./js/main.js"></script>
+
+  <script type="module" src="js/main.js"></script>
 </body>
+
+<!-- Mirrored from mri-search.web.app/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 03 Aug 2025 06:58:16 GMT -->
 </html>

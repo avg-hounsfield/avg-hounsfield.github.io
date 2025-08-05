@@ -1,171 +1,250 @@
+/*------------------------------------*\
+    #LOCAL JOST FONT
+\*------------------------------------*/
+@font-face {
+  font-family: 'Jost';
+  src: url('./fonts/Jost-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Jost';
+  src: url('./fonts/Jost-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Jost';
+  src: url('./fonts/Jost-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Jost';
+  src: url('./fonts/Jost-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+/* Add more weights/styles as needed */
+
+/*------------------------------------*\
+    #THEMES & COLORS
+\*------------------------------------*/
 :root {
-  --bg-dark: #282828;
-  --card-bg: #323232;
-  --text-primary: #dadada;
-  --label-accent: #ffae3d;      /* orange */
-  --heading-blue: #4fc3f7;      /* cyan */
-  --sequence-bg: #1d2b2b;       /* deep teal */
-  --sequence-text: #a2ffe6;     /* light green-cyan */
-  --note-bg: #323232;
-  --note-border: #4fd3ff;
-  --note-text: #8de0e9;
+  /* Dark Theme with Orange Accent */
+  --bg-color: #1F1F1F;
+  --primary-surface-bg: #2A2A2A;
+  --secondary-surface-bg: #313131;
+  --text-primary: #E8EAED;
+  --text-secondary: #BDC1C6;
+  --interactive-accent: #FFAB40; /* Vivid Orange */
+  --interactive-accent-hover: #FFC273;
+  --interactive-accent-text: #202124;
+  --border-color: #3C4043;
+  --border-color-focus: var(--interactive-accent);
+  --underline-color: #5F6368;
 }
 
-/* Modern global styles */
+.light-theme {
+  /* Light Theme with Orange Accent */
+  --bg-color: #F8F9FA;
+  --primary-surface-bg: #FFFFFF;
+  --secondary-surface-bg: #F1F3F4;
+  --text-primary: #202124;
+  --text-secondary: #5F6368;
+  --interactive-accent: #F97F17;
+  --interactive-accent-hover: #E87415;
+  --interactive-accent-text: #FFFFFF;
+  --border-color: #DADCE0;
+  --border-color-focus: var(--interactive-accent);
+  --underline-color: #D2D2D2;
+}
+
+/*------------------------------------*\
+    #ANIMATIONS
+\*------------------------------------*/
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/*------------------------------------*\
+    #GLOBAL & LAYOUT
+\*------------------------------------*/
 body {
   margin: 0;
-  padding: 0;
-  background-color: var(--bg-dark);
-  color: var(--text-primary);
-  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  min-height: 100vh;
-}
-
-.container {
-  max-width: 800px;
-  width: 90%;
   padding: 2rem;
-  margin-top: 2rem;
-  background-color: #323232;
-  border-radius: 10px;
-  /* Removed box-shadow */
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Jost', sans-serif;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-/* Inline search bar + button */
-.search-row {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+/* Optional: Ensure headings use bold Jost */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Jost', sans-serif;
+  font-weight: 700;
+  font-style: normal;
 }
 
-.search-row input {
-  flex: 1;
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #2c2c2c;
-  color: #f0f0f0;
-}
-
-.search-row button {
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #4bc;
-  color: #000;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.search-row button:hover {
-  background-color: #37a7a7;
-}
-
-/* Filters below search */
-.filters-row {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.filters-row select,
-.filters-row label {
-  padding: 0.4rem 0.6rem;
-  font-size: 0.9rem;
-  background-color: #2c2c2c;
-  border: none;
-  border-radius: 6px;
-  color: #f0f0f0;
-}
-
-#results {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-@media (min-width: 600px) {
-  #results {
-    grid-template-columns: repeat(2, 1fr);
+/* Responsive padding for mobile */
+@media (max-width: 500px) {
+  body {
+    padding: 1rem; /* Reduces padding on small screens */
   }
 }
 
-.protocol-card:hover {
-  background-color: #2a2a2a;
-  transition: background-color 0.2s ease-in-out;
+/* In style.css */
+.container {
+  max-width: 800px; /* Revert to this for a clean header width */
+  margin: 0 auto;
 }
-.tag.contrast {
-  background-color: var(--contrast-seq);
-  color: #000;
-  padding: 2px 6px;
-  font-size: 0.75rem;
-  border-radius: 4px;
-  font-weight: 600;
-  margin-left: 0.5rem;
+.main-header { text-align: center; margin-bottom: 1rem; }
+.main-header h1 { font-size: 2.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1.5rem; }
+
+/*------------------------------------*\
+    #THEME TOGGLE
+\*------------------------------------*/
+#theme-toggle {
+  position: absolute; top: 1.5rem; right: 1.5rem; background: var(--primary-surface-bg);
+  color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 50%;
+  width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
+  cursor: pointer; transition: all 0.2s ease;
+}
+#theme-toggle:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+
+/*------------------------------------*\
+    #SEARCH BAR
+\*------------------------------------*/
+.search-container { position: relative; width: 100%; }
+#searchInput {
+  width: 100%; box-sizing: border-box; background-color: transparent; color: var(--text-primary);
+  border: none; border-bottom: 1px solid var(--underline-color); padding: 1rem 3.5rem 1rem 1rem;
+  font-size: 1.25rem; transition: border-color 0.2s ease;
+}
+#searchInput:focus { outline: none; border-bottom: 2px solid var(--border-color-focus); }
+#searchButton {
+  position: absolute; top: 50%; right: 0.5rem; transform: translateY(-50%); background: transparent;
+  border: none; color: var(--interactive-accent); cursor: pointer; border-radius: 50%;
+  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+  transition: background-color 0.2s ease;
+}
+#searchButton:hover { background-color: var(--secondary-surface-bg); }
+
+/*------------------------------------*\
+    #FILTERS
+\*------------------------------------*/
+.filters-row {
+  display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; padding: 1.5rem 0 2.5rem;
+}
+.filter-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.filter-group label { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
+.filter-group select {
+  padding: 0.6rem 0.8rem; font-size: 0.9rem; background-color: var(--primary-surface-bg);
+  border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);
+}
+
+/*------------------------------------*\
+    #RESULTS & CARDS
+\*------------------------------------*/
+/* This makes the results area take up more screen width */
+#results {
+  max-width: 1100px; /* Makes the results wider than the search bar */
+  margin: 0 auto; /* Keeps it centered */
+}
+@media (min-width: 700px) { #results { grid-template-columns: repeat(2, 1fr); } }
+.protocol-card {
+  background-color: var(--primary-surface-bg); border-radius: 12px; padding: 1.5rem;
+  border: 1px solid var(--border-color); transform: translateY(0);
+  transition: transform 0.25s ease-out, background-color 0.25s ease-out, border-color 0.25s ease-out;
+}
+.protocol-card:hover { transform: translateY(-5px); border-color: var(--text-secondary); }
+.protocol-card.fade-in-up {
+  opacity: 0; animation: fade-in-up 0.5s ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+.protocol-card h3 { color: var(--text-primary); font-size: 1.25rem; margin: 0 0 0.25rem; }
+.protocol-card p strong { /* etc... */ }
+
+/* assets/style.css - ADD TO THE END OF THE FILE */
+
+/*------------------------------------*\
+    #PAIRED LAYOUT & CARD STYLING
+\*------------------------------------*/
+
+/* New container for the 2-column grid layout */
+.protocol-grid-container {
+  display: grid;
+  grid-template-columns: 1fr; /* Default to 1 column on mobile */
+  gap: 1.5rem;
+  margin-bottom: 2.5rem; /* Space between different study groups */
+}
+
+/* Activate 2-column layout on wider screens */
+@media (min-width: 700px) {
+  .protocol-grid-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.category-block {
+  margin-bottom: 2rem;
 }
 .category-header {
-  margin-top: 2rem;
-  font-size: 1.2rem;
-  color: #ccc;
-  border-bottom: 1px solid #444;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 700;
 }
 
-
-
-.card h3 {
-  color: #f0f0f0;          /* Near-white for "study" */
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+/* Subtle color difference for scanner cards */
+.protocol-card.scanner-1-5t {
+  background-color: var(--secondary-surface-bg); /* Slightly darker */
+}
+.protocol-card.scanner-3t {
+  background-color: var(--primary-surface-bg); /* Default lighter color */
 }
 
-.card p strong {
-  font-style: italic;
-  font-weight: 300;
-  color: #f4ca7f;          /* Light grey for scanner */
-  margin-top: -0.25rem;
-  margin-bottom: 0.75rem;
-  letter-spacing: 0.5px;
+/* Placeholder for when a pair is incomplete (e.g., only a 3T protocol exists) */
+.card-placeholder {
+  display: none; /* Hide placeholder on mobile */
+}
+@media (min-width: 700px) {
+  .card-placeholder {
+    display: block; /* Show placeholder on desktop to maintain grid alignment */
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px dashed var(--border-color);
+    content: '';
+  }
 }
 
-.sequences h4 {
-  color: #7ff4ca;
-  margin-top: 1rem;
+/*------------------------------------*\
+    #CONTRAST & SEQUENCE STYLING
+\*------------------------------------*/
+
+/* Bright color pop for the "Contrast: Yes" text */
+.contrast-value.contrast-yes {
+  color: var(--interactive-accent);
+  font-weight: 700;
 }
 
-.sequences li {
-  background-color: #6c6c6c;
-  color: #1f1f1f;
-  border-radius: 6px;
-  padding: 0.4rem 0.75rem;
-  margin: 0.3rem 0;
+/* Styling for individual sequences that use contrast */
+li.contrast-sequence {
+  color: var(--interactive-accent-hover); /* Use a slightly different shade to stand out */
   font-weight: 500;
 }
 
-.note {
-  background-color: var(--note-bg);
-  border-left: 4px solid var(--note-border);
-  color: var(--note-text);
-  padding: 0.5rem 0.75rem;
-  margin-top: 1rem;
-  font-style: italic;
-  border-radius: 4px;
-}
-.sequence-list li {
-  opacity: 0;
-  transform: translateY(8px);
-  animation: fadeInUp 400ms ease-in forwards;
+/* Keep the sequence type text the primary color for readability */
+li.contrast-sequence strong {
+  color: var(--text-primary);
 }
 
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.protocol-note {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
 }
