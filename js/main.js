@@ -20,28 +20,22 @@ fetch('./data/protocols.json')
     return res.json();
   })
   .then(rawData => {
-    // This is the crucial data transformation step:
-    // We expand any protocol with multiple scanners into separate objects.
-    // This ensures the data format is consistent for the renderer.
     protocolData = rawData.flatMap(group =>
       group.protocols.flatMap(p => {
         if (p.scanner && p.scanner.length > 1) {
-          // SPLIT: Create a new protocol object for each scanner type
           return p.scanner.map(scannerType => ({
             ...p,
-            scanner: [scannerType], // Override scanner to be a single-item array
+            scanner: [scannerType],
             category: group.category
           }));
         }
-        // KEEP: Protocol already has only one scanner, just add category
         return [{ ...p, category: group.category }];
       })
     );
-    
-    // Initialize the fuzzy search engine with the complete, clean dataset
+
+    // Use fuzzy search from search.js
     initFuzzy(protocolData);
 
-    // If there's a search query from a previous session, run the search on load
     const searchInput = document.getElementById('searchInput');
     if (searchInput.value) {
       runSearchAndRender();
@@ -63,28 +57,18 @@ fetch('./data/protocols.json')
 function runSearchAndRender() {
   const searchInput = document.getElementById('searchInput');
   const resultsContainer = document.getElementById('results');
-
   const query = searchInput.value.trim();
 
   sessionStorage.setItem('lastQuery', query);
 
-  // If search is empty, clear results
-  if (!query) {
-    resultsContainer.innerHTML = '';
-    return;
-  }
+  let results = query ? fuzzySearch(query) : protocolData;
 
-  // Only fuzzy search, no filters
-  let results = fuzzySearch(query);
-
-  // Group results by category
   const grouped = results.reduce((acc, p) => {
     if (!acc[p.category]) acc[p.category] = [];
     acc[p.category].push(p);
     return acc;
   }, {});
 
-  // Render results
   if (results.length === 0) {
     resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
   } else {
@@ -204,3 +188,13 @@ function fuzzySearch(query) {
   if (!window.fuse) return [];
   return window.fuse.search(query).map(result => result.item);
 }
+
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  document.body.classList.toggle('light-theme');
+  const icon = document.getElementById('theme-icon');
+  if (document.body.classList.contains('light-theme')) {
+    icon.textContent = 'dark_mode';
+  } else {
+    icon.textContent = 'light_mode';
+  }
+});
