@@ -1,10 +1,10 @@
 import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js';
 
 let fuse;
-export function initFuzzy(data) {
-  // Debug log
-  console.log('Initializing fuzzy search with data:', data);
+let lastData = [];
 
+export function initFuzzy(data) {
+  lastData = data;
   fuse = new Fuse(data, {
     includeScore: true,
     threshold: 0.3,           // Stricter matching (lower = more exact matches required)
@@ -71,22 +71,19 @@ function preprocessQuery(query) {
   return searchExpression;
 }
 
-function matchesSection(protocol, querySection) {
-  if (Array.isArray(protocol.section)) {
-    return protocol.section.some(sec => sec.toLowerCase().includes(querySection.toLowerCase()));
-  }
-  return false;
-}
-
-export function fuzzySearch(query) {
-  if (!fuse || !query.trim()) return [];
+// Accepts optional data argument for searching a specific array
+export function fuzzySearch(query, dataOverride) {
+  if ((!fuse && !dataOverride) || !query.trim()) return [];
   
   const processedQuery = preprocessQuery(query);
-  console.log('Searching with processed query:', processedQuery);
-  
+  let searchFuse = fuse;
+  if (dataOverride) {
+    // If dataOverride is provided, create a temporary Fuse instance for this search
+    searchFuse = new Fuse(dataOverride, fuse.options);
+  }
   try {
     // Search with the processed query
-    let results = fuse.search(processedQuery);
+    let results = searchFuse.search(processedQuery);
     
     // Filter out low-scoring results
     results = results.filter(result => result.score < 0.5);
@@ -96,8 +93,6 @@ export function fuzzySearch(query) {
     
     // Extract just the items
     const items = results.map(r => r.item);
-    
-    console.log(`Search returned ${items.length} results`);
     
     return items;
   } catch (error) {

@@ -34,42 +34,38 @@ function runSearchAndRender() {
     return;
   }
 
-  // Only search if we have data
-  if (!protocolData || !protocolData.length) {
-    console.error('No protocol data available');
-    resultsContainer.innerHTML = 
-      '<p class="error">Failed to load protocols. Please try again later.</p>';
-    return;
-  }
-
   try {
-    // Perform search and ensure results is an array
-    let results = [];
     // Flatten all protocols from all sections for searching
+    const allStudies = [];
     protocolData.forEach(sectionObj => {
       if (Array.isArray(sectionObj.studies)) {
         sectionObj.studies.forEach(study => {
           // Attach section info to each study for grouping later
           study.section = sectionObj.section;
-          results.push(study);
+          allStudies.push(study);
         });
       }
     });
 
-    // Now run fuzzySearch on the flattened array
-    let searchResults = fuzzySearch(query, results);
-    if (!Array.isArray(searchResults)) {
-      searchResults = [];
+    // Only search if we have data
+    if (!allStudies.length) {
+      resultsContainer.innerHTML = '<p class="error">No protocol data available.</p>';
+      return;
+    }
+
+    // Pass the flattened array to fuzzySearch (update search.js to accept data as 2nd arg)
+    let results = fuzzySearch(query, allStudies);
+    if (!Array.isArray(results)) {
+      results = [];
     }
 
     // Debug logs
-    console.log('Search returned results:', searchResults);
+    console.log('Search returned results:', results);
 
-    if (searchResults.length === 0) {
+    if (results.length === 0) {
       resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
     } else {
-      // Group protocols by their first section name (now always an array)
-      const grouped = searchResults.reduce((acc, protocol) => {
+      const grouped = results.reduce((acc, protocol) => {
         const sectionArr = protocol.section;
         const sectionKey = Array.isArray(sectionArr) && sectionArr.length > 0 ? sectionArr[0] : 'Other';
         if (!acc[sectionKey]) {
@@ -79,7 +75,6 @@ function runSearchAndRender() {
         return acc;
       }, {});
 
-      // Render the grouped protocols
       resultsContainer.innerHTML = renderGroupedProtocols(grouped);
       const cards = resultsContainer.querySelectorAll('.protocol-card');
       cards.forEach((card, index) => {
@@ -107,12 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(res => res.json())
     .then(rawData => {
       protocolData = rawData;
-      // Flatten all studies for fuzzy search initialization
       const allStudies = [];
       protocolData.forEach(sectionObj => {
         if (Array.isArray(sectionObj.studies)) {
           sectionObj.studies.forEach(study => {
-            // Attach section info to each study for grouping later
             study.section = sectionObj.section;
             allStudies.push(study);
           });
