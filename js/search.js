@@ -66,6 +66,13 @@ function preprocessQuery(query) {
   return searchExpression;
 }
 
+function matchesSection(protocol, querySection) {
+  if (Array.isArray(protocol.section)) {
+    return protocol.section.some(sec => sec.toLowerCase().includes(querySection.toLowerCase()));
+  }
+  return false;
+}
+
 export function fuzzySearch(query) {
   if (!fuse || !query.trim()) return [];
   

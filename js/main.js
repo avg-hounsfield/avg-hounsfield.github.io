@@ -55,14 +55,15 @@ function runSearchAndRender() {
     if (results.length === 0) {
       resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
     } else {
-      // Group protocols by their base study name
+      // Group protocols by their first section name (now always an array)
       const grouped = results.reduce((acc, protocol) => {
-        const studyName = protocol.study || 'Other';
-        const category = studyName.split(' ')[0];
-        if (!acc[category]) {
-          acc[category] = [];
+        // section is always an array, use first value for grouping
+        const sectionArr = protocol.section;
+        const sectionKey = Array.isArray(sectionArr) && sectionArr.length > 0 ? sectionArr[0] : 'Other';
+        if (!acc[sectionKey]) {
+          acc[sectionKey] = [];
         }
-        acc[category].push(protocol);
+        acc[sectionKey].push(protocol);
         return acc;
       }, {});
 

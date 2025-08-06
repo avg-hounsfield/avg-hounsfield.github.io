@@ -1,1022 +1,1237 @@
-
 [
     {
-        "study": "BRAIN",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "T2: AX", "highlight": false },
-                    { "sequence": "DWI: AX", "highlight": false },
-                    { "sequence": "FLAIR CUBE: SAG", "highlight": false },
-                    { "sequence": "SWAN: AX", "highlight": false }
-                ]
+        "section": ["Neuro Imaging"],
+        "studies": [
+            {
+                "study": "BRAIN",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR CUBE: SAG", "highlight": false },
+                            { "sequence": "SWAN: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Used for the general evaluation of neurological symptoms such as headaches, dizziness, or weakness. It can help detect conditions like stroke, tumors, and certain degenerative diseases."
+                        }
+                    }
+                }
             },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Used for the general evaluation of neurological symptoms such as headaches, dizziness, or weakness. It can help detect conditions like stroke, tumors, and certain degenerative diseases."
+            {
+                "study": "BRAIN TUMOR/INF",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "ROUTINE BRAIN +", "highlight": false },
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "POST AX T1", "highlight": true }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "Indicated for the detection, characterization, and follow-up of brain tumors or suspected infections. Contrast helps to visualize abnormal tissue and inflammation.",
+                            "contrastRationale": "Tumors and areas of infection often disrupt the blood-brain barrier, causing contrast to accumulate and 'enhance'. This helps delineate tumor margins, distinguish abscesses from solid masses, and assess for disease activity."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "SEIZURE",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "T2 TEMP LOBE: COR", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR CUBE: SAG", "highlight": false },
+                            { "sequence": "SWAN: AX", "highlight": false },
+                            { "sequence": "SPGR TEMP LOBE: SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Performed to identify the structural cause of seizures. This protocol is optimized to detect subtle abnormalities like hippocampal sclerosis, cortical dysplasia, or small tumors."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "BRAIN MS",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "ROUTINE BRAIN +", "highlight": false },
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "POST AX T1", "highlight": true }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "Specifically designed to detect and monitor the characteristic lesions of Multiple Sclerosis. Contrast is used to identify active areas of inflammation.",
+                            "contrastRationale": "In Multiple Sclerosis, active inflammation causes a temporary breakdown of the blood-brain barrier. Enhancing lesions indicate active disease, helping to distinguish new from old plaques and monitor treatment effectiveness."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "IAC",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "3D FIESTA: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Used to evaluate symptoms like hearing loss, tinnitus, or vertigo. This exam focuses on the internal auditory canals and cranial nerves VII and VIII."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "IAC W/GAD",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 THIN IAC: AX", "highlight": false },
+                            { "sequence": "T1 THIN FS IAC POST: AX, COR", "highlight": true },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "3D FIESTA IAC: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "Indicated for suspected acoustic neuromas or other tumors affecting the auditory nerves. Contrast enhancement is crucial for visualizing these abnormalities.",
+                            "contrastRationale": "Contrast is essential for visualizing small tumors like acoustic neuromas (vestibular schwannomas), which enhance avidly. It helps to precisely define the size and extent of the tumor."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "PITUITARY",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 3mm: COR, SAG", "highlight": false },
+                            { "sequence": "T1 3mm POST: COR, SAG", "highlight": true },
+                            { "sequence": "T1 BRAIN POST: AX", "highlight": true },
+                            { "sequence": "T2 3mm: COR, SAG", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "DYNAMIC COR (1PRE/6POST)", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "For evaluating pituitary gland abnormalities, such as adenomas, often related to hormonal imbalances. Dynamic contrast helps differentiate small tumors from normal gland tissue.",
+                            "contrastRationale": "The normal pituitary gland enhances rapidly, while adenomas enhance more slowly. Dynamic imaging captures this difference, making even small microadenomas visible against the intensely enhancing normal gland."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "*POST-OP",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 3mm FS POST: COR, SAG", "highlight": true },
+                            { "sequence": "NO DYNAMIC", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "Follow-up imaging after surgery, typically to assess for residual tumor, scarring, or other post-operative changes.",
+                            "contrastRationale": "Contrast helps differentiate between non-enhancing scar tissue and enhancing residual or recurrent tumor. This is critical for assessing the success of surgery and planning future treatment."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "ORBITS",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 ORBITS: AX, COR", "highlight": false },
+                            { "sequence": "T1 FS ORBITS: AX", "highlight": false },
+                            { "sequence": "T1 BRAIN: AX", "highlight": false },
+                            { "sequence": "T2 ORBITS: AX", "highlight": false },
+                            { "sequence": "T2 FS ORBITS: COR", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "SWAN: AX", "highlight": false },
+                            { "sequence": "POST COR T1 FS ORBITS", "highlight": true }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "Evaluation of eye pain, vision changes, or proptosis (bulging eyes). Used to assess the muscles, nerves, and other soft tissues of the orbits.",
+                            "contrastRationale": "Contrast is used to evaluate for inflammation of the optic nerve (optic neuritis) or to characterize orbital masses and vascular abnormalities. Fat suppression is used to better visualize enhancing structures within the fatty orbit."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "ORBIT NEMMERS",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 ORBITS: COR", "highlight": false },
+                            { "sequence": "T2 FS ORBITS: COR", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "MRA COW: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Specialized protocol for evaluating the orbital apex and cavernous sinuses, often for cranial nerve palsies or suspected vascular abnormalities."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "TIA",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "SWAN: AX", "highlight": false },
+                            { "sequence": "MRA COW: AX", "highlight": false },
+                            { "sequence": "MRA BIFURCATION: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "For patients with symptoms of a Transient Ischemic Attack (TIA) or stroke. The exam is designed to rapidly identify acute ischemia and evaluate the major arteries of the brain and neck."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "TIA MRA DISSECTION",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "ROUTINE TIA +", "highlight": false },
+                            { "sequence": "T1 FS (C4-SELLA): AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "A specialized protocol to look for dissection (a tear in the vessel wall) of the carotid or vertebral arteries, which is a potential cause of stroke."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "MRA ANEURYSM",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "ROUTINE BRAIN +", "highlight": false },
+                            { "sequence": "MRA COW: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Screening for or follow-up of intracranial aneurysms. This exam focuses on visualizing the arteries of the Circle of Willis."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "CRANIAL NERVES/PAROTID",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 (HEAD & NECK): SAG", "highlight": false },
+                            { "sequence": "T1 BRAIN: SAG", "highlight": false },
+                            { "sequence": "T1 (ORB-MANDIBLE): AX", "highlight": false },
+                            { "sequence": "T1 FS POST (ORB-MANDIBLE): AX", "highlight": true },
+                            { "sequence": "T1 FS (CORD-FACE): COR", "highlight": false },
+                            { "sequence": "T2 (ORB-MANDIBLE): AX", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "SWAN: AX", "highlight": false },
+                            { "sequence": "MRA COW: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "Used to evaluate pathologies affecting the lower cranial nerves or the parotid glands, such as tumors, inflammation, or facial palsy.",
+                            "contrastRationale": "Contrast helps to identify and characterize tumors or inflammatory processes affecting the parotid glands or cranial nerves. It is key for defining the extent of disease."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "TRIGEMINAL NEURALGIA",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "ROUTINE BRAIN +", "highlight": false },
+                            { "sequence": "T1 FS POST THIN (CHEAT HIGH): AX", "highlight": true },
+                            { "sequence": "3D FIESTA IAC: AX", "highlight": false },
+                            { "sequence": "MRA COW: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "Specifically for patients with trigeminal neuralgia (severe facial pain). The goal is to identify vascular compression of the trigeminal nerve.",
+                            "contrastRationale": "While the primary goal is often to see a vessel compressing the nerve, contrast can help rule out other causes of trigeminal pain, such as a schwannoma or MS plaque, which would enhance."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "C-SPINE",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "T2 FS: SAG", "highlight": false },
+                            { "sequence": "3D COSMIC: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "For evaluation of neck pain, radiculopathy, or myelopathy. This exam assesses the cervical vertebrae, intervertebral discs, and the spinal cord."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "T-SPINE",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T2 HIGH RES.: SAG", "highlight": false },
+                            { "sequence": "T2 (DISC SPACES): AX", "highlight": false },
+                            { "sequence": "STIR: SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Indicated for pain in the mid-back, or symptoms of nerve compression at this level. Useful for evaluating disc herniations, fractures, or tumors."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "L-SPINE",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T2 FS: SAG", "highlight": false },
+                            { "sequence": "PD: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Evaluation of lower back pain and sciatica. This exam focuses on the lumbar vertebrae, discs, and nerve roots."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "SACRUM",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "T2 STIR: COR", "highlight": false },
+                            { "sequence": "STIR: SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "For evaluation of pain in the sacrum or coccyx. Can be used to assess for stress fractures, tumors, or inflammatory conditions like sacroiliitis."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "SCREENING SPINE",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 (2 FOV): SAG", "highlight": false },
+                            { "sequence": "T2 C-SPINE: AX", "highlight": false },
+                            { "sequence": "FSEIR (2 FOV): SAG", "highlight": false },
+                            { "sequence": "FGRE DISC SPACES: AX", "highlight": false },
+                            { "sequence": "PD L-SPINE: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "A screening examination of the entire spine. Often used to look for metastatic disease or widespread inflammatory processes."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "SCOLIOSIS SPINE",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 (2 FOV): COR, SAG", "highlight": false },
+                            { "sequence": "T1 THRU CURVATURES: AX", "highlight": false },
+                            { "sequence": "T2 CONUS: AX", "highlight": false },
+                            { "sequence": "FSEIR (2 FOV): SAG", "highlight": false },
+                            { "sequence": "FGRE DISC SPACES: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Evaluation of abnormal curvature of the spine (scoliosis). This exam helps identify any underlying spinal cord or vertebral anomalies."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "NECK SOFT TISSUE",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                            { "sequence": "T1 FS POST: AX, COR", "highlight": true },
+                            { "sequence": "STIR: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "For evaluation of lumps, masses, or other abnormalities in the soft tissues of the neck, such as lymph nodes, muscles, or glands.",
+                            "contrastRationale": "Contrast is used to delineate neck masses, assess for abscess formation, and evaluate lymph nodes for metastatic disease, which often shows characteristic enhancement patterns."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "STEALTH",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 POST: AX", "highlight": true }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "A pre-operative scan used for surgical navigation systems. It provides a detailed 3D map for precise tumor localization during surgery.",
+                            "contrastRationale": "Contrast-enhanced images are required for the surgical navigation system to accurately map the boundaries of the tumor that needs to be resected."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "BRACHIAL PLEXUS",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 (INCL. BOTH SIDES): AX, COR", "highlight": false },
+                            { "sequence": "T2: SAG", "highlight": false },
+                            { "sequence": "FSEIR (INCL. BOTH SIDES): AX, COR", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Evaluation of pain, weakness, or numbness in the shoulder, arm, or hand due to suspected injury or compression of the brachial plexus nerves."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "TMJ",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 CLOSED: COR, SAG", "highlight": false },
+                            { "sequence": "T2 CLOSED: SAG", "highlight": false },
+                            { "sequence": "T2 OPEN: SAG", "highlight": false },
+                            { "sequence": "T2* GRE CLOSED: SAG", "highlight": false },
+                            { "sequence": "*1.5 ONLY", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "For evaluation of jaw pain, clicking, or locking. This exam assesses the position and function of the temporomandibular joint disc."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "C-SPINE MS",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 THRU ANY LESIONS: AX", "highlight": false },
+                            { "sequence": "T2: SAG", "highlight": false },
+                            { "sequence": "T2 (C1-T1): AX", "highlight": false },
+                            { "sequence": "POST", "highlight": true }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "A specialized protocol for detecting Multiple Sclerosis plaques in the cervical spinal cord.",
+                            "contrastRationale": "Similar to the brain, contrast is used to identify active MS plaques within the spinal cord. Enhancement indicates active inflammation and demyelination."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "T-SPINE MS",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 THRU ANY LESIONS: AX", "highlight": false },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "T2 HIGH RES: SAG", "highlight": false },
+                            { "sequence": "POST", "highlight": true }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "A specialized protocol for detecting Multiple Sclerosis plaques in the thoracic spinal cord.",
+                            "contrastRationale": "Similar to the brain, contrast is used to identify active MS plaques within the spinal cord. Enhancement indicates active inflammation and demyelination."
+                        }
+                    }
                 }
             }
-        }
+        ]
     },
     {
-        "study": "BRAIN TUMOR/INF",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "ROUTINE BRAIN +", "highlight": false },
-                    { "sequence": "T1: AX, COR", "highlight": false },
-                    { "sequence": "POST AX T1", "highlight": true }
-                ]
+        "section": ["MSK Imaging"],
+        "studies": [
+            {
+                "study": "SHOULDER",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Evaluation of shoulder pain, instability, or suspected rotator cuff injury. Also used to assess for impingement or arthritis."
+                        }
+                    }
+                }
             },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "Indicated for the detection, characterization, and follow-up of brain tumors or suspected infections. Contrast helps to visualize abnormal tissue and inflammation.",
-                    "contrastRationale": "Tumors and areas of infection often disrupt the blood-brain barrier, causing contrast to accumulate and 'enhance'. This helps delineate tumor margins, distinguish abscesses from solid masses, and assess for disease activity."
+            {
+                "study": "SHOULDER ARTHROGRAM",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T1 FS: AX, COR, SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "A specialized exam where contrast is injected into the shoulder joint to better visualize internal structures, primarily for suspected labral tears."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "ELBOW",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Evaluation of elbow pain, swelling, or limited range of motion. Useful for assessing ligaments, tendons, and cartilage."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "WRIST",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "T2: AX, COR, SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Indicated for wrist pain, instability, or suspected ligament tears or fractures. Particularly useful for evaluating the small carpal bones and ligaments."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "WRIST ARTHROGRAM",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T1 FS: COR", "highlight": false },
+                            { "sequence": "T2 FS: AX", "highlight": false },
+                            { "sequence": "3D-GRE", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "An exam with contrast injected into the wrist joint to evaluate the integrity of the ligaments, especially the triangular fibrocartilage complex (TFCC)."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "HAND/FINGER",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Evaluation of pain, masses, or ligament/tendon injuries in the hand or a specific finger."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "HIP",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 (BOTH HIPS): COR", "highlight": false },
+                            { "sequence": "T1 (SIDE OF INT): SAG", "highlight": false },
+                            { "sequence": "T2 FS (BOTH HIPS): COR", "highlight": false },
+                            { "sequence": "T2 FS (SIDE OF INT): AX, SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Evaluation of hip pain, particularly for suspected avascular necrosis, stress fractures, or muscle injuries."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "HIP ARTHROGRAM",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: COR, SAG", "highlight": false },
+                            { "sequence": "T1 FS: AX, COR, SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "A specialized exam with contrast injected into the hip joint, primarily to look for tears of the acetabular labrum."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "FEMUR",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Evaluation of pain or suspected pathology in the femur (thigh bone), such as a tumor or stress fracture."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "KNEE",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T2: SAG", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR", "highlight": false },
+                            { "sequence": "PD: SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Indicated for knee pain, instability, or swelling. This is the primary imaging test for evaluating meniscal tears, ligament injuries (like the ACL), and cartilage damage."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "TIB/FIB",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Evaluation of pain or suspected pathology in the tibia or fibula (lower leg bones), such as a tumor or stress fracture."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "ANKLE",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: COR, SAG", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Evaluation of ankle pain, instability, or suspected ligament or tendon tears. It can also assess for cartilage damage."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "FOOT/TOE",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "For evaluation of pain in the foot or a specific toe. It is useful for diagnosing conditions like plantar fasciitis, stress fractures, or neuromas."
+                        }
+                    }
                 }
             }
-        }
+        ]
     },
     {
-        "study": "SEIZURE",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T2: AX", "highlight": false },
-                    { "sequence": "T2 TEMP LOBE: COR", "highlight": false },
-                    { "sequence": "DWI: AX", "highlight": false },
-                    { "sequence": "FLAIR CUBE: SAG", "highlight": false },
-                    { "sequence": "SWAN: AX", "highlight": false },
-                    { "sequence": "SPGR TEMP LOBE: SAG", "highlight": false }
-                ]
+        "section": ["Abdominal Imaging"],
+        "studies": [
+            {
+                "study": "PELVIS",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "T2 FS: COR", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "General evaluation of pelvic pain or to assess for abnormalities of the bones and soft tissues within the pelvis."
+                        }
+                    }
+                }
             },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Performed to identify the structural cause of seizures. This protocol is optimized to detect subtle abnormalities like hippocampal sclerosis, cortical dysplasia, or small tumors."
+            {
+                "study": "PROSTATE",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 (SMALL FOV): DYNAMIC", "highlight": false },
+                            { "sequence": "T2 (SMALL FOV): AX, COR, SAG", "highlight": false },
+                            { "sequence": "DWI (SMALL FOV): AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Detection, localization, and staging of prostate cancer. It is also used for surgical or radiation therapy planning."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "RECTAL CA",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T2 (LARGE FOV): AX", "highlight": false },
+                            { "sequence": "T2 (SMALL FOV): AX, COR, SAG", "highlight": false },
+                            { "sequence": "DWI (LARGE FOV): AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Staging of rectal cancer to determine the extent of tumor invasion into the rectal wall and surrounding structures, which is critical for treatment planning."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "MRCP",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 IN/OP: AX", "highlight": false },
+                            { "sequence": "T1 PRE: AX", "highlight": false },
+                            { "sequence": "T1 ART: AX", "highlight": false },
+                            { "sequence": "T1 PORT: AX", "highlight": false },
+                            { "sequence": "T1 DELAY: AX", "highlight": false },
+                            { "sequence": "T2: AX, COR", "highlight": false },
+                            { "sequence": "T2 THICK SLAB: COR", "highlight": false },
+                            { "sequence": "3D MRCP", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Magnetic Resonance Cholangiopancreatography (MRCP) is a non-invasive exam for evaluating the bile ducts, gallbladder, and pancreatic duct for stones, strictures, or tumors."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "LIVER",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 IN/OP: AX", "highlight": false },
+                            { "sequence": "T1 PRE: AX", "highlight": false },
+                            { "sequence": "T1 ART: AX", "highlight": false },
+                            { "sequence": "T1 PORT: AX", "highlight": false },
+                            { "sequence": "T1 DELAY: AX", "highlight": false },
+                            { "sequence": "T2: COR", "highlight": false },
+                            { "sequence": "T2 FS: AX", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Detection and characterization of liver lesions, such as cysts, hemangiomas, or malignant tumors. Dynamic contrast helps differentiate between different types of lesions."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "ADRENALS",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T1 IN/OP: AX", "highlight": false },
+                            { "sequence": "T2: AX, COR", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Evaluation of adrenal gland masses, which are often incidentally found on other imaging. Chemical shift imaging helps differentiate benign adenomas from other tumors."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "KIDNEYS",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 IN/OP: AX", "highlight": false },
+                            { "sequence": "T1 PRE: AX, COR", "highlight": false },
+                            { "sequence": "T1 CORT: AX", "highlight": false },
+                            { "sequence": "T1 NEPH: AX", "highlight": false },
+                            { "sequence": "T1 DELAY: AX", "highlight": false },
+                            { "sequence": "T1 POST: COR", "highlight": true },
+                            { "sequence": "T2: COR", "highlight": false },
+                            { "sequence": "T2 FS: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "Characterization of renal masses, staging of renal cell carcinoma, and evaluation of complex cysts.",
+                            "contrastRationale": "Contrast is used to assess the vascularity of a renal mass. The pattern and timing of enhancement (e.g., rapid arterial enhancement followed by washout) are key features used to differentiate benign cysts from malignant tumors like renal cell carcinoma."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "MRA RENALS",
+                "usesContrast": false,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T2: COR", "highlight": false },
+                            { "sequence": "3D MRA: COR", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": true,
+                        "content": {
+                            "indications": "Magnetic Resonance Angiography (MRA) of the renal arteries is primarily used to evaluate for renal artery stenosis, a cause of high blood pressure."
+                        }
+                    }
+                }
+            },
+            {
+                "study": "ENTEROGRAPHY",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1 PRE: AX", "highlight": false },
+                            { "sequence": "T1 POST: AX, COR", "highlight": true },
+                            { "sequence": "T2 (WHOLE ABD): AX, COR", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FIESTA: AX, COR", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "Evaluation of the small bowel, primarily for inflammatory bowel disease such as Crohn's disease, to assess for inflammation, strictures, and fistulas.",
+                            "contrastRationale": "In active inflammatory bowel disease, the inflamed segments of the bowel wall show increased blood flow. This results in hyperenhancement after contrast administration, allowing for clear identification of active disease, strictures, and fistulas."
+                        }
+                    }
                 }
             }
-        }
+        ]
     },
     {
-        "study": "BRAIN MS",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "ROUTINE BRAIN +", "highlight": false },
-                    { "sequence": "T1: AX, COR", "highlight": false },
-                    { "sequence": "POST AX T1", "highlight": true }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "Specifically designed to detect and monitor the characteristic lesions of Multiple Sclerosis. Contrast is used to identify active areas of inflammation.",
-                    "contrastRationale": "In Multiple Sclerosis, active inflammation causes a temporary breakdown of the blood-brain barrier. Enhancing lesions indicate active disease, helping to distinguish new from old plaques and monitor treatment effectiveness."
+        "section": ["Misc."],
+        "studies": [
+            {
+                "study": "VESSEL WALL IMAGING",
+                "usesContrast": true,
+                "layout": {
+                    "leftCard": {
+                        "sequences": [
+                            { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                            { "sequence": "T1 POST: AX", "highlight": true },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "PD: AX", "highlight": false }
+                        ]
+                    },
+                    "rightCard": {
+                        "fullHeight": false,
+                        "content": {
+                            "indications": "A specialized technique to directly visualize the walls of blood vessels, used to evaluate for vasculitis, intracranial dissections, or atherosclerotic plaque.",
+                            "contrastRationale": "Contrast helps to identify inflammation within the vessel wall, which is a key sign of active vasculitis. It can also help to characterize atherosclerotic plaques."
+                        }
+                    }
                 }
             }
-        }
+        ]
     },
-    {
-        "study": "IAC",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "FLAIR: AX", "highlight": false },
-                    { "sequence": "3D FIESTA: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Used to evaluate symptoms like hearing loss, tinnitus, or vertigo. This exam focuses on the internal auditory canals and cranial nerves VII and VIII."
-                }
-            }
-        }
-    },
-    {
-        "study": "IAC W/GAD",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "T1 THIN IAC: AX", "highlight": false },
-                    { "sequence": "T1 THIN FS IAC POST: AX, COR", "highlight": true },
-                    { "sequence": "T2: AX", "highlight": false },
-                    { "sequence": "DWI: AX", "highlight": false },
-                    { "sequence": "FLAIR: AX", "highlight": false },
-                    { "sequence": "3D FIESTA IAC: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "Indicated for suspected acoustic neuromas or other tumors affecting the auditory nerves. Contrast enhancement is crucial for visualizing these abnormalities.",
-                    "contrastRationale": "Contrast is essential for visualizing small tumors like acoustic neuromas (vestibular schwannomas), which enhance avidly. It helps to precisely define the size and extent of the tumor."
-                }
-            }
-        }
-    },
-    {
-        "study": "PITUITARY",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "T1 3mm: COR, SAG", "highlight": false },
-                    { "sequence": "T1 3mm POST: COR, SAG", "highlight": true },
-                    { "sequence": "T1 BRAIN POST: AX", "highlight": true },
-                    { "sequence": "T2 3mm: COR, SAG", "highlight": false },
-                    { "sequence": "FLAIR: AX", "highlight": false },
-                    { "sequence": "DYNAMIC COR (1PRE/6POST)", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "For evaluating pituitary gland abnormalities, such as adenomas, often related to hormonal imbalances. Dynamic contrast helps differentiate small tumors from normal gland tissue.",
-                    "contrastRationale": "The normal pituitary gland enhances rapidly, while adenomas enhance more slowly. Dynamic imaging captures this difference, making even small microadenomas visible against the intensely enhancing normal gland."
-                }
-            }
-        }
-    },
-    {
-        "study": "*POST-OP",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 3mm FS POST: COR, SAG", "highlight": true },
-                    { "sequence": "NO DYNAMIC", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "Follow-up imaging after surgery, typically to assess for residual tumor, scarring, or other post-operative changes.",
-                    "contrastRationale": "Contrast helps differentiate between non-enhancing scar tissue and enhancing residual or recurrent tumor. This is critical for assessing the success of surgery and planning future treatment."
-                }
-            }
-        }
-    },
-    {
-        "study": "ORBITS",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "T1 ORBITS: AX, COR", "highlight": false },
-                    { "sequence": "T1 FS ORBITS: AX", "highlight": false },
-                    { "sequence": "T1 BRAIN: AX", "highlight": false },
-                    { "sequence": "T2 ORBITS: AX", "highlight": false },
-                    { "sequence": "T2 FS ORBITS: COR", "highlight": false },
-                    { "sequence": "DWI: AX", "highlight": false },
-                    { "sequence": "FLAIR: AX", "highlight": false },
-                    { "sequence": "SWAN: AX", "highlight": false },
-                    { "sequence": "POST COR T1 FS ORBITS", "highlight": true }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "Evaluation of eye pain, vision changes, or proptosis (bulging eyes). Used to assess the muscles, nerves, and other soft tissues of the orbits.",
-                    "contrastRationale": "Contrast is used to evaluate for inflammation of the optic nerve (optic neuritis) or to characterize orbital masses and vascular abnormalities. Fat suppression is used to better visualize enhancing structures within the fatty orbit."
-                }
-            }
-        }
-    },
-    {
-        "study": "ORBIT NEMMERS",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "T1 ORBITS: COR", "highlight": false },
-                    { "sequence": "T2 FS ORBITS: COR", "highlight": false },
-                    { "sequence": "DWI: AX", "highlight": false },
-                    { "sequence": "FLAIR: AX", "highlight": false },
-                    { "sequence": "MRA COW: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Specialized protocol for evaluating the orbital apex and cavernous sinuses, often for cranial nerve palsies or suspected vascular abnormalities."
-                }
-            }
-        }
-    },
-    {
-        "study": "TIA",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "DWI: AX", "highlight": false },
-                    { "sequence": "FLAIR: AX", "highlight": false },
-                    { "sequence": "SWAN: AX", "highlight": false },
-                    { "sequence": "MRA COW: AX", "highlight": false },
-                    { "sequence": "MRA BIFURCATION: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "For patients with symptoms of a Transient Ischemic Attack (TIA) or stroke. The exam is designed to rapidly identify acute ischemia and evaluate the major arteries of the brain and neck."
-                }
-            }
-        }
-    },
-    {
-        "study": "TIA MRA DISSECTION",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "ROUTINE TIA +", "highlight": false },
-                    { "sequence": "T1 FS (C4-SELLA): AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "A specialized protocol to look for dissection (a tear in the vessel wall) of the carotid or vertebral arteries, which is a potential cause of stroke."
-                }
-            }
-        }
-    },
-    {
-        "study": "MRA ANEURYSM",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "ROUTINE BRAIN +", "highlight": false },
-                    { "sequence": "MRA COW: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Screening for or follow-up of intracranial aneurysms. This exam focuses on visualizing the arteries of the Circle of Willis."
-                }
-            }
-        }
-    },
-    {
-        "study": "CRANIAL NERVES/PAROTID",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 (HEAD & NECK): SAG", "highlight": false },
-                    { "sequence": "T1 BRAIN: SAG", "highlight": false },
-                    { "sequence": "T1 (ORB-MANDIBLE): AX", "highlight": false },
-                    { "sequence": "T1 FS POST (ORB-MANDIBLE): AX", "highlight": true },
-                    { "sequence": "T1 FS (CORD-FACE): COR", "highlight": false },
-                    { "sequence": "T2 (ORB-MANDIBLE): AX", "highlight": false },
-                    { "sequence": "DWI: AX", "highlight": false },
-                    { "sequence": "FLAIR: AX", "highlight": false },
-                    { "sequence": "SWAN: AX", "highlight": false },
-                    { "sequence": "MRA COW: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "Used to evaluate pathologies affecting the lower cranial nerves or the parotid glands, such as tumors, inflammation, or facial palsy.",
-                    "contrastRationale": "Contrast helps to identify and characterize tumors or inflammatory processes affecting the parotid glands or cranial nerves. It is key for defining the extent of disease."
-                }
-            }
-        }
-    },
-    {
-        "study": "TRIGEMINAL NEURALGIA",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "ROUTINE BRAIN +", "highlight": false },
-                    { "sequence": "T1 FS POST THIN (CHEAT HIGH): AX", "highlight": true },
-                    { "sequence": "3D FIESTA IAC: AX", "highlight": false },
-                    { "sequence": "MRA COW: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "Specifically for patients with trigeminal neuralgia (severe facial pain). The goal is to identify vascular compression of the trigeminal nerve.",
-                    "contrastRationale": "While the primary goal is often to see a vessel compressing the nerve, contrast can help rule out other causes of trigeminal pain, such as a schwannoma or MS plaque, which would enhance."
-                }
-            }
-        }
-    },
-    {
-        "study": "C-SPINE",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "T2: AX", "highlight": false },
-                    { "sequence": "T2 FS: SAG", "highlight": false },
-                    { "sequence": "3D COSMIC: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "For evaluation of neck pain, radiculopathy, or myelopathy. This exam assesses the cervical vertebrae, intervertebral discs, and the spinal cord."
-                }
-            }
-        }
-    },
-    {
-        "study": "T-SPINE",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "T2 HIGH RES.: SAG", "highlight": false },
-                    { "sequence": "T2 (DISC SPACES): AX", "highlight": false },
-                    { "sequence": "STIR: SAG", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Indicated for pain in the mid-back, or symptoms of nerve compression at this level. Useful for evaluating disc herniations, fractures, or tumors."
-                }
-            }
-        }
-    },
-    {
-        "study": "L-SPINE",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "T2 FS: SAG", "highlight": false },
-                    { "sequence": "PD: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Evaluation of lower back pain and sciatica. This exam focuses on the lumbar vertebrae, discs, and nerve roots."
-                }
-            }
-        }
-    },
-    {
-        "study": "SACRUM",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: AX, COR", "highlight": false },
-                    { "sequence": "T2: AX", "highlight": false },
-                    { "sequence": "T2 STIR: COR", "highlight": false },
-                    { "sequence": "STIR: SAG", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "For evaluation of pain in the sacrum or coccyx. Can be used to assess for stress fractures, tumors, or inflammatory conditions like sacroiliitis."
-                }
-            }
-        }
-    },
-    {
-        "study": "SCREENING SPINE",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 (2 FOV): SAG", "highlight": false },
-                    { "sequence": "T2 C-SPINE: AX", "highlight": false },
-                    { "sequence": "FSEIR (2 FOV): SAG", "highlight": false },
-                    { "sequence": "FGRE DISC SPACES: AX", "highlight": false },
-                    { "sequence": "PD L-SPINE: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "A screening examination of the entire spine. Often used to look for metastatic disease or widespread inflammatory processes."
-                }
-            }
-        }
-    },
-    {
-        "study": "SCOLIOSIS SPINE",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 (2 FOV): COR, SAG", "highlight": false },
-                    { "sequence": "T1 THRU CURVATURES: AX", "highlight": false },
-                    { "sequence": "T2 CONUS: AX", "highlight": false },
-                    { "sequence": "FSEIR (2 FOV): SAG", "highlight": false },
-                    { "sequence": "FGRE DISC SPACES: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Evaluation of abnormal curvature of the spine (scoliosis). This exam helps identify any underlying spinal cord or vertebral anomalies."
-                }
-            }
-        }
-    },
-    {
-        "study": "NECK SOFT TISSUE",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: AX, COR, SAG", "highlight": false },
-                    { "sequence": "T1 FS POST: AX, COR", "highlight": true },
-                    { "sequence": "STIR: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "For evaluation of lumps, masses, or other abnormalities in the soft tissues of the neck, such as lymph nodes, muscles, or glands.",
-                    "contrastRationale": "Contrast is used to delineate neck masses, assess for abscess formation, and evaluate lymph nodes for metastatic disease, which often shows characteristic enhancement patterns."
-                }
-            }
-        }
-    },
-    {
-        "study": "STEALTH",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 POST: AX", "highlight": true }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "A pre-operative scan used for surgical navigation systems. It provides a detailed 3D map for precise tumor localization during surgery.",
-                    "contrastRationale": "Contrast-enhanced images are required for the surgical navigation system to accurately map the boundaries of the tumor that needs to be resected."
-                }
-            }
-        }
-    },
-    {
-        "study": "BRACHIAL PLEXUS",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "T1 (INCL. BOTH SIDES): AX, COR", "highlight": false },
-                    { "sequence": "T2: SAG", "highlight": false },
-                    { "sequence": "FSEIR (INCL. BOTH SIDES): AX, COR", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Evaluation of pain, weakness, or numbness in the shoulder, arm, or hand due to suspected injury or compression of the brachial plexus nerves."
-                }
-            }
-        }
-    },
-    {
-        "study": "TMJ",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 CLOSED: COR, SAG", "highlight": false },
-                    { "sequence": "T2 CLOSED: SAG", "highlight": false },
-                    { "sequence": "T2 OPEN: SAG", "highlight": false },
-                    { "sequence": "T2* GRE CLOSED: SAG", "highlight": false },
-                    { "sequence": "*1.5 ONLY", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "For evaluation of jaw pain, clicking, or locking. This exam assesses the position and function of the temporomandibular joint disc."
-                }
-            }
-        }
-    },
-    {
-        "study": "C-SPINE MS",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "T1 THRU ANY LESIONS: AX", "highlight": false },
-                    { "sequence": "T2: SAG", "highlight": false },
-                    { "sequence": "T2 (C1-T1): AX", "highlight": false },
-                    { "sequence": "POST", "highlight": true }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "A specialized protocol for detecting Multiple Sclerosis plaques in the cervical spinal cord.",
-                    "contrastRationale": "Similar to the brain, contrast is used to identify active MS plaques within the spinal cord. Enhancement indicates active inflammation and demyelination."
-                }
-            }
-        }
-    },
-    {
-        "study": "T-SPINE MS",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: SAG", "highlight": false },
-                    { "sequence": "T1 THRU ANY LESIONS: AX", "highlight": false },
-                    { "sequence": "T2: AX", "highlight": false },
-                    { "sequence": "T2 HIGH RES: SAG", "highlight": false },
-                    { "sequence": "POST", "highlight": true }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "A specialized protocol for detecting Multiple Sclerosis plaques in the thoracic spinal cord.",
-                    "contrastRationale": "Similar to the brain, contrast is used to identify active MS plaques within the spinal cord. Enhancement indicates active inflammation and demyelination."
-                }
-            }
-        }
-    },
-    {
-        "study": "SHOULDER",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: COR", "highlight": false },
-                    { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Evaluation of shoulder pain, instability, or suspected rotator cuff injury. Also used to assess for impingement or arthritis."
-                }
-            }
-        }
-    },
-    {
-        "study": "SHOULDER ARTHROGRAM",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: COR", "highlight": false },
-                    { "sequence": "T1 FS: AX, COR, SAG", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "A specialized exam where contrast is injected into the shoulder joint to better visualize internal structures, primarily for suspected labral tears."
-                }
-            }
-        }
-    },
-    {
-        "study": "ELBOW",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: AX, COR", "highlight": false },
-                    { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Evaluation of elbow pain, swelling, or limited range of motion. Useful for assessing ligaments, tendons, and cartilage."
-                }
-            }
-        }
-    },
-    {
-        "study": "WRIST",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: AX, COR", "highlight": false },
-                    { "sequence": "T2: AX, COR, SAG", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Indicated for wrist pain, instability, or suspected ligament tears or fractures. Particularly useful for evaluating the small carpal bones and ligaments."
-                }
-            }
-        }
-    },
-    {
-        "study": "WRIST ARTHROGRAM",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: COR", "highlight": false },
-                    { "sequence": "T1 FS: COR", "highlight": false },
-                    { "sequence": "T2 FS: AX", "highlight": false },
-                    { "sequence": "3D-GRE", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "An exam with contrast injected into the wrist joint to evaluate the integrity of the ligaments, especially the triangular fibrocartilage complex (TFCC)."
-                }
-            }
-        }
-    },
-    {
-        "study": "HAND/FINGER",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: AX, COR, SAG", "highlight": false },
-                    { "sequence": "T2 FS: AX, COR", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Evaluation of pain, masses, or ligament/tendon injuries in the hand or a specific finger."
-                }
-            }
-        }
-    },
-    {
-        "study": "HIP",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 (BOTH HIPS): COR", "highlight": false },
-                    { "sequence": "T1 (SIDE OF INT): SAG", "highlight": false },
-                    { "sequence": "T2 FS (BOTH HIPS): COR", "highlight": false },
-                    { "sequence": "T2 FS (SIDE OF INT): AX, SAG", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Evaluation of hip pain, particularly for suspected avascular necrosis, stress fractures, or muscle injuries."
-                }
-            }
-        }
-    },
-    {
-        "study": "HIP ARTHROGRAM",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: COR, SAG", "highlight": false },
-                    { "sequence": "T1 FS: AX, COR, SAG", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "A specialized exam with contrast injected into the hip joint, primarily to look for tears of the acetabular labrum."
-                }
-            }
-        }
-    },
-    {
-        "study": "FEMUR",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: AX, COR", "highlight": false },
-                    { "sequence": "T2 FS: AX, COR", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Evaluation of pain or suspected pathology in the femur (thigh bone), such as a tumor or stress fracture."
-                }
-            }
-        }
-    },
-    {
-        "study": "KNEE",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: COR", "highlight": false },
-                    { "sequence": "T2: SAG", "highlight": false },
-                    { "sequence": "T2 FS: AX, COR", "highlight": false },
-                    { "sequence": "PD: SAG", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Indicated for knee pain, instability, or swelling. This is the primary imaging test for evaluating meniscal tears, ligament injuries (like the ACL), and cartilage damage."
-                }
-            }
-        }
-    },
-    {
-        "study": "TIB/FIB",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: AX, COR, SAG", "highlight": false },
-                    { "sequence": "T2 FS: AX, COR", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Evaluation of pain or suspected pathology in the tibia or fibula (lower leg bones), such as a tumor or stress fracture."
-                }
-            }
-        }
-    },
-    {
-        "study": "ANKLE",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: COR, SAG", "highlight": false },
-                    { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Evaluation of ankle pain, instability, or suspected ligament or tendon tears. It can also assess for cartilage damage."
-                }
-            }
-        }
-    },
-    {
-        "study": "FOOT/TOE",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: AX, COR, SAG", "highlight": false },
-                    { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "For evaluation of pain in the foot or a specific toe. It is useful for diagnosing conditions like plantar fasciitis, stress fractures, or neuromas."
-                }
-            }
-        }
-    },
-    {
-        "study": "PELVIS",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: AX, COR", "highlight": false },
-                    { "sequence": "T2: AX", "highlight": false },
-                    { "sequence": "T2 FS: COR", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "General evaluation of pelvic pain or to assess for abnormalities of the bones and soft tissues within the pelvis."
-                }
-            }
-        }
-    },
-    {
-        "study": "PROSTATE",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 (SMALL FOV): DYNAMIC", "highlight": false },
-                    { "sequence": "T2 (SMALL FOV): AX, COR, SAG", "highlight": false },
-                    { "sequence": "DWI (SMALL FOV): AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Detection, localization, and staging of prostate cancer. It is also used for surgical or radiation therapy planning."
-                }
-            }
-        }
-    },
-    {
-        "study": "RECTAL CA",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T2 (LARGE FOV): AX", "highlight": false },
-                    { "sequence": "T2 (SMALL FOV): AX, COR, SAG", "highlight": false },
-                    { "sequence": "DWI (LARGE FOV): AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Staging of rectal cancer to determine the extent of tumor invasion into the rectal wall and surrounding structures, which is critical for treatment planning."
-                }
-            }
-        }
-    },
-    {
-        "study": "MRCP",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 IN/OP: AX", "highlight": false },
-                    { "sequence": "T1 PRE: AX", "highlight": false },
-                    { "sequence": "T1 ART: AX", "highlight": false },
-                    { "sequence": "T1 PORT: AX", "highlight": false },
-                    { "sequence": "T1 DELAY: AX", "highlight": false },
-                    { "sequence": "T2: AX, COR", "highlight": false },
-                    { "sequence": "T2 THICK SLAB: COR", "highlight": false },
-                    { "sequence": "3D MRCP", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Magnetic Resonance Cholangiopancreatography (MRCP) is a non-invasive exam for evaluating the bile ducts, gallbladder, and pancreatic duct for stones, strictures, or tumors."
-                }
-            }
-        }
-    },
-    {
-        "study": "LIVER",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 IN/OP: AX", "highlight": false },
-                    { "sequence": "T1 PRE: AX", "highlight": false },
-                    { "sequence": "T1 ART: AX", "highlight": false },
-                    { "sequence": "T1 PORT: AX", "highlight": false },
-                    { "sequence": "T1 DELAY: AX", "highlight": false },
-                    { "sequence": "T2: COR", "highlight": false },
-                    { "sequence": "T2 FS: AX", "highlight": false },
-                    { "sequence": "DWI: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Detection and characterization of liver lesions, such as cysts, hemangiomas, or malignant tumors. Dynamic contrast helps differentiate between different types of lesions."
-                }
-            }
-        }
-    },
-    {
-        "study": "ADRENALS",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: COR", "highlight": false },
-                    { "sequence": "T1 IN/OP: AX", "highlight": false },
-                    { "sequence": "T2: AX, COR", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Evaluation of adrenal gland masses, which are often incidentally found on other imaging. Chemical shift imaging helps differentiate benign adenomas from other tumors."
-                }
-            }
-        }
-    },
-    {
-        "study": "KIDNEYS",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 IN/OP: AX", "highlight": false },
-                    { "sequence": "T1 PRE: AX, COR", "highlight": false },
-                    { "sequence": "T1 CORT: AX", "highlight": false },
-                    { "sequence": "T1 NEPH: AX", "highlight": false },
-                    { "sequence": "T1 DELAY: AX", "highlight": false },
-                    { "sequence": "T1 POST: COR", "highlight": true },
-                    { "sequence": "T2: COR", "highlight": false },
-                    { "sequence": "T2 FS: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "Characterization of renal masses, staging of renal cell carcinoma, and evaluation of complex cysts.",
-                    "contrastRationale": "Contrast is used to assess the vascularity of a renal mass. The pattern and timing of enhancement (e.g., rapid arterial enhancement followed by washout) are key features used to differentiate benign cysts from malignant tumors like renal cell carcinoma."
-                }
-            }
-        }
-    },
-    {
-        "study": "MRA RENALS",
-        "usesContrast": false,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: COR", "highlight": false },
-                    { "sequence": "T2: COR", "highlight": false },
-                    { "sequence": "3D MRA: COR", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": true,
-                "content": {
-                    "indications": "Magnetic Resonance Angiography (MRA) of the renal arteries is primarily used to evaluate for renal artery stenosis, a cause of high blood pressure."
-                }
-            }
-        }
-    },
-    {
-        "study": "ENTEROGRAPHY",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1 PRE: AX", "highlight": false },
-                    { "sequence": "T1 POST: AX, COR", "highlight": true },
-                    { "sequence": "T2 (WHOLE ABD): AX, COR", "highlight": false },
-                    { "sequence": "DWI: AX", "highlight": false },
-                    { "sequence": "FIESTA: AX, COR", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "Evaluation of the small bowel, primarily for inflammatory bowel disease such as Crohn's disease, to assess for inflammation, strictures, and fistulas.",
-                    "contrastRationale": "In active inflammatory bowel disease, the inflamed segments of the bowel wall show increased blood flow. This results in hyperenhancement after contrast administration, allowing for clear identification of active disease, strictures, and fistulas."
-                }
-            }
-        }
-    },
-    {
-        "study": "VESSEL WALL IMAGING",
-        "usesContrast": true,
-        "layout": {
-            "leftCard": {
-                "sequences": [
-                    { "sequence": "T1: AX, COR, SAG", "highlight": false },
-                    { "sequence": "T1 POST: AX", "highlight": true },
-                    { "sequence": "T2: AX", "highlight": false },
-                    { "sequence": "PD: AX", "highlight": false }
-                ]
-            },
-            "rightCard": {
-                "fullHeight": false,
-                "content": {
-                    "indications": "A specialized technique to directly visualize the walls of blood vessels, used to evaluate for vasculitis, intracranial dissections, or atherosclerotic plaque.",
-                    "contrastRationale": "Contrast helps to identify inflammation within the vessel wall, which is a key sign of active vasculitis. It can also help to characterize atherosclerotic plaques."
-                }
-            }
-        }
-    }
-]
 
+    {
+      "section": ["Neuro Imaging", "Pediatrics"],
+      "studies": [
+        {
+          "study": "Pediatric Brain MRI",
+          "layout": {
+            "leftCard": {
+              "sequences": [
+                {
+                  "type": "T1-weighted",
+                  "planes": ["Axial", "Coronal", "Sagittal"],
+                  "contrast": "No",
+                  "note": "Baseline brain anatomy"
+                },
+                {
+                  "type": "T2-weighted",
+                  "planes": ["Axial", "Coronal", "Sagittal"],
+                  "contrast": "No",
+                  "note": "Hydrocephalus, structural anomalies"
+                },
+                {
+                  "type": "FLAIR",
+                  "planes": ["Axial", "Coronal"],
+                  "contrast": "No",
+                  "note": "Periventricular and cortical changes"
+                },
+                {
+                  "type": "DWI",
+                  "planes": ["Axial"],
+                  "contrast": "No",
+                  "note": "Ischemia or encephalitis screening"
+                },
+                {
+                  "type": "T1-weighted post-contrast",
+                  "planes": ["Axial", "Coronal", "Sagittal"],
+                  "contrast": "Yes",
+                  "note": "Tumor or infection assessment"
+                }
+              ]
+            },
+            "rightCard": {
+              "fullHeight": true,
+              "content": {
+                "indications": "Comprehensive evaluation of pediatric brain anatomy and pathology, including tumors, infection, ischemia, and congenital anomalies."
+              }
+            }
+          }
+        },
+        {
+          "study": "Pediatric Spine MRI",
+          "layout": {
+            "leftCard": {
+              "sequences": [
+                {
+                  "type": "T2-weighted",
+                  "planes": ["Axial", "Sagittal"],
+                  "contrast": "No",
+                  "note": "Cord and vertebral evaluation"
+                },
+                {
+                  "type": "STIR",
+                  "planes": ["Axial", "Sagittal"],
+                  "contrast": "No",
+                  "note": "Inflammation or marrow signal"
+                },
+                {
+                  "type": "T1-weighted",
+                  "planes": ["Sagittal"],
+                  "contrast": "No",
+                  "note": "Vertebral body and disc anatomy"
+                },
+                {
+                  "type": "T1-weighted post-contrast",
+                  "planes": ["Sagittal", "Axial"],
+                  "contrast": "Yes",
+                  "note": "Infectious or neoplastic enhancement"
+                }
+              ]
+            },
+            "rightCard": {
+              "fullHeight": true,
+              "content": {
+                "indications": "Assessment of the pediatric spine for cord, vertebral, infectious, or neoplastic pathology."
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "section": ["Abdominal Imaging"],
+      "studies": [
+        {
+          "study": "Pediatric Abdominal MRI",
+          "layout": {
+            "leftCard": {
+              "sequences": [
+                {
+                  "type": "T2-weighted SSFSE",
+                  "planes": ["Axial", "Coronal"],
+                  "contrast": "No",
+                  "note": "Abdominal organ detail"
+                },
+                {
+                  "type": "DWI",
+                  "planes": ["Axial"],
+                  "contrast": "No",
+                  "note": "Detect restricted diffusion in mass or inflammation"
+                },
+                {
+                  "type": "T1-weighted pre-contrast",
+                  "planes": ["Axial", "Coronal"],
+                  "contrast": "No",
+                  "note": "Baseline liver and spleen anatomy"
+                },
+                {
+                  "type": "T1-weighted post-contrast",
+                  "planes": ["Axial", "Coronal", "Sagittal"],
+                  "contrast": "Yes",
+                  "note": "Tumor enhancement or vascular anomalies"
+                }
+              ]
+            },
+            "rightCard": {
+              "fullHeight": true,
+              "content": {
+                "indications": "Evaluation of abdominal organs for tumors, inflammation, or congenital anomalies in pediatric patients."
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "section": ["MSK Imaging"],
+      "studies": [
+        {
+          "study": "Pediatric Musculoskeletal MRI (Hip)",
+          "layout": {
+            "leftCard": {
+              "sequences": [
+                {
+                  "type": "T2-weighted",
+                  "planes": ["Axial", "Coronal", "Sagittal"],
+                  "contrast": "No",
+                  "note": "Joint effusion and soft tissue"
+                },
+                {
+                  "type": "PD-weighted FS",
+                  "planes": ["Axial", "Coronal", "Sagittal"],
+                  "contrast": "No",
+                  "note": "Cartilage and labrum evaluation"
+                },
+                {
+                  "type": "STIR",
+                  "planes": ["Coronal", "Sagittal"],
+                  "contrast": "No",
+                  "note": "Marrow edema or inflammation"
+                },
+                {
+                  "type": "T1-weighted post-contrast",
+                  "planes": ["Axial", "Coronal", "Sagittal"],
+                  "contrast": "Yes",
+                  "note": "Infection or neoplasm characterization"
+                }
+              ]
+            },
+            "rightCard": {
+              "fullHeight": true,
+              "content": {
+                "indications": "Assessment of pediatric hip for joint effusion, infection, neoplasm, or structural abnormalities."
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "section": ["Misc."],
+      "studies": [
+        {
+          "study": "Empty Section",
+          "layout": {
+            "leftCard": {
+              "sequences": []
+            },
+            "rightCard": {
+              "fullHeight": true,
+              "content": {
+                "indications": "No pediatric protocols for this section yet."
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
