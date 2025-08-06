@@ -8,7 +8,6 @@ import { renderPairedProtocols } from './render.js';
 // =================================================================================
 
 let protocolData = [];
-let typingTimer;
 const DEBOUNCE_DELAY = 300;
 
 // Fetch and process the protocol data once when the app loads
@@ -197,4 +196,30 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
   } else {
     icon.textContent = 'light_mode';
   }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+  const body = document.body;
+
+  function applyTheme(theme) {
+    if (theme === 'light') {
+      body.classList.add('light-theme');
+      themeIcon.textContent = 'dark_mode';
+    } else {
+      body.classList.remove('light-theme');
+      themeIcon.textContent = 'light_mode';
+    }
+  }
+
+  themeToggle.addEventListener('click', () => {
+    const isLight = body.classList.contains('light-theme');
+    const newTheme = isLight ? 'dark' : 'light';
+    applyTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  });
+
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  applyTheme(savedTheme);
 });
