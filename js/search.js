@@ -4,25 +4,32 @@ let fuse;
 export function initFuzzy(data) {
   fuse = new Fuse(data, {
     includeScore: true,
-    threshold: 0.4,           // Increased threshold for more matches
+    threshold: 0.4,           // More lenient matching
     ignoreLocation: true,
     minMatchCharLength: 2,
     keys: [
-      { name: 'study', weight: 2 },
+      { name: 'study', weight: 2.0 },
       { name: 'indications', weight: 1.5 },
-      { name: 'sequences', weight: 1 },
-      { name: 'category', weight: 0.5 },
-      { name: 'contrastRationale', weight: 0.5 } // Added this field
+      { name: 'sequences', weight: 1.5 },
+      { name: 'category', weight: 1.0 },
+      { name: 'contrastRationale', weight: 1.0 }
     ]
   });
-  
-  // Log for debugging
-  console.log('Fuzzy search initialized with data:', data);
+
+  // Debug log
+  console.log('Search initialized with data:', data);
 }
 
 export function fuzzySearch(query) {
   if (!fuse || !query.trim()) return [];
+  
+  // Debug log
+  console.log('Searching for:', query);
+  
   const results = fuse.search(query).map(r => r.item);
-  console.log(`Fuzzy search for "${query}" returned:`, results);
+  
+  // Debug log
+  console.log('Search results:', results);
+  
   return results;
 }

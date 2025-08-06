@@ -39,31 +39,32 @@
     #THEMES & COLORS
 \*------------------------------------*/
 :root {
-  /* RadReview-inspired theme */
-  --bg-color: #1e2329;                /* Dark charcoal background */
-  --primary-surface-bg: #252a31;      /* Slightly lighter charcoal panel */
-  --secondary-surface-bg: #2d333b;    /* Panel/Sidebar */
-  --text-primary: #e6e9ec;            /* Main text: off-white */
-  --text-secondary: #a0a7b0;          /* Secondary text: muted grey */
-  --interactive-accent: #40b4a6;      /* Teal accent like RadReview */
-  --interactive-accent-hover: #4ecfbf;/* Lighter teal */
-  --interactive-accent-text: #ffffff; /* White text on accent */
-  --border-color: #363c44;            /* Subtle border */
-  --border-color-focus: #40b4a6;      /* Teal focus */
-  --link-color: #40b4a6;             /* Teal links */
-  --header-color: #40b4a6;           /* Teal headers */
+  /* Dark theme - keeping current colors */
+  --bg-color: #1e2329;
+  --primary-surface-bg: #252a31;
+  --secondary-surface-bg: #2d333b;
+  --text-primary: #e6e9ec;
+  --text-secondary: #a0a7b0;
+  --interactive-accent: #40b4a6;
+  --interactive-accent-hover: #4ecfbf;
+  --interactive-accent-text: #ffffff;
+  --border-color: #363c44;
+  --border-color-focus: #40b4a6;
+  --link-color: #40b4a6;
+  --header-color: #40b4a6;
 }
 
 .light-theme {
-  --bg-color: #ffffff;
-  --primary-surface-bg: #f5f7f9;
-  --secondary-surface-bg: #eef0f2;
+  /* Softer light theme */
+  --bg-color: #f0f2f4;               /* Softer background */
+  --primary-surface-bg: #e5e9ec;     /* Softer surface */
+  --secondary-surface-bg: #dce0e4;   /* Softer secondary */
   --text-primary: #2d333b;
   --text-secondary: #586069;
   --interactive-accent: #40b4a6;
   --interactive-accent-hover: #4ecfbf;
   --interactive-accent-text: #ffffff;
-  --border-color: #e1e4e8;
+  --border-color: #cfd4d9;           /* Softer border */
   --border-color-focus: #40b4a6;
   --link-color: #40b4a6;
   --header-color: #40b4a6;
@@ -175,14 +176,14 @@ a:hover {
   align-items: center;
   margin: 3rem auto 2rem auto;
   gap: 1rem;
-  max-width: 90vw; /* Increased from 65vw */
+  max-width: 115vw; /* Increased from 90vw */
   width: 100%;
 }
 
 #searchInput {
   flex: 1;
-  min-width: 300px; /* Increased from 180px */
-  max-width: 800px; /* Increased from 600px */
+  min-width: 400px; /* Increased from 300px */
+  max-width: 1000px; /* Increased from 800px */
   width: 100%;
   font-size: 1.2rem;
   padding: 0.75em 1em;
