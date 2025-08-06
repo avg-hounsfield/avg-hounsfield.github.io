@@ -72,19 +72,24 @@ export function fuzzySearch(query) {
   const processedQuery = preprocessQuery(query);
   console.log('Searching with processed query:', processedQuery);
   
-  // Search with the processed query
-  let results = fuse.search(processedQuery);
-  
-  // Filter out low-scoring results
-  results = results.filter(result => result.score < 0.5);
-  
-  // Sort by score
-  results.sort((a, b) => a.score - b.score);
-  
-  // Extract just the items
-  const items = results.map(r => r.item);
-  
-  console.log(`Search returned ${items.length} results`);
-  
-  return items;
+  try {
+    // Search with the processed query
+    let results = fuse.search(processedQuery);
+    
+    // Filter out low-scoring results
+    results = results.filter(result => result.score < 0.5);
+    
+    // Sort by score
+    results.sort((a, b) => a.score - b.score);
+    
+    // Extract just the items
+    const items = results.map(r => r.item);
+    
+    console.log(`Search returned ${items.length} results`);
+    
+    return items;
+  } catch (error) {
+    console.error('Error in fuzzy search:', error);
+    return [];
+  }
 }

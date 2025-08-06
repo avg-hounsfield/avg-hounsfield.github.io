@@ -18,8 +18,8 @@ function sortSequences(sequences) {
 
     // If both are non-contrast, sort by the predefined order
     if (!aIsContrast && !bIsContrast) {
-      const aBaseType = a.type.split(' ')[0].toUpperCase();
-      const bBaseType = b.type.split(' ')[0].toUpperCase();
+      const aBaseType = a.sequence?.split(' ')[0].toUpperCase();
+      const bBaseType = b.sequence?.split(' ')[0].toUpperCase();
       const indexA = PREDEFINED_ORDER.indexOf(aBaseType);
       const indexB = PREDEFINED_ORDER.indexOf(bBaseType);
       
@@ -29,7 +29,7 @@ function sortSequences(sequences) {
     }
 
     // Fallback to alphabetical sort for everything else
-    return a.type.localeCompare(b.type);
+    return (a.sequence || '').localeCompare(b.sequence || '');
   });
 }
 
@@ -44,7 +44,14 @@ function renderProtocolCard(protocol) {
 
   // Get sequences from the new layout structure
   const sequences = protocol.layout?.leftCard?.sequences || [];
-  const sortedSequences = sortSequences(sequences);
+  let sortedSequences;
+  
+  try {
+    sortedSequences = sortSequences(sequences);
+  } catch (error) {
+    console.error('Error sorting sequences:', error);
+    sortedSequences = sequences; // Fallback to unsorted sequences
+  }
   
   // Get content from the right card
   const rightCardContent = protocol.layout?.rightCard?.content || {};

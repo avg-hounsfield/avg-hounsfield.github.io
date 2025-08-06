@@ -42,36 +42,41 @@ function runSearchAndRender() {
     return;
   }
 
-  // Perform search and ensure results is an array
-  let results = fuzzySearch(query);
-  if (!Array.isArray(results)) {
-    results = [];
-  }
-  
-  // Debug logs
-  console.log('Search returned results:', results);
+  try {
+    // Perform search and ensure results is an array
+    let results = fuzzySearch(query);
+    if (!Array.isArray(results)) {
+      results = [];
+    }
+    
+    // Debug logs
+    console.log('Search returned results:', results);
 
-  if (results.length === 0) {
-    resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
-  } else {
-    // Group protocols by their base study name
-    const grouped = results.reduce((acc, protocol) => {
-      const studyName = protocol.study || 'Other';
-      const category = studyName.split(' ')[0];
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      acc[category].push(protocol);
-      return acc;
-    }, {});
+    if (results.length === 0) {
+      resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
+    } else {
+      // Group protocols by their base study name
+      const grouped = results.reduce((acc, protocol) => {
+        const studyName = protocol.study || 'Other';
+        const category = studyName.split(' ')[0];
+        if (!acc[category]) {
+          acc[category] = [];
+        }
+        acc[category].push(protocol);
+        return acc;
+      }, {});
 
-    // Render the grouped protocols
-    resultsContainer.innerHTML = renderGroupedProtocols(grouped);
-    const cards = resultsContainer.querySelectorAll('.protocol-card');
-    cards.forEach((card, index) => {
-      card.style.setProperty('--delay', `${index * 60}ms`);
-      card.classList.add('fade-in-up');
-    });
+      // Render the grouped protocols
+      resultsContainer.innerHTML = renderGroupedProtocols(grouped);
+      const cards = resultsContainer.querySelectorAll('.protocol-card');
+      cards.forEach((card, index) => {
+        card.style.setProperty('--delay', `${index * 60}ms`);
+        card.classList.add('fade-in-up');
+      });
+    }
+  } catch (error) {
+    console.error('Error in search and render:', error);
+    resultsContainer.innerHTML = '<p class="error">An error occurred while searching. Please try again.</p>';
   }
 }
 
