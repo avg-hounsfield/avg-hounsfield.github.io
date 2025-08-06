@@ -2,7 +2,6 @@
 [
     {
         "study": "BRAIN",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -24,7 +23,6 @@
     },
     {
         "study": "BRAIN TUMOR/INF",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -45,7 +43,6 @@
     },
     {
         "study": "SEIZURE",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -68,7 +65,6 @@
     },
     {
         "study": "BRAIN MS",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -89,7 +85,6 @@
     },
     {
         "study": "IAC",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -108,7 +103,6 @@
     },
     {
         "study": "IAC W/GAD",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -133,7 +127,6 @@
     },
     {
         "study": "PITUITARY",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -158,7 +151,6 @@
     },
     {
         "study": "*POST-OP",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -178,7 +170,6 @@
     },
     {
         "study": "ORBITS",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -206,7 +197,6 @@
     },
     {
         "study": "ORBIT NEMMERS",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -229,7 +219,6 @@
     },
     {
         "study": "TIA",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -252,7 +241,6 @@
     },
     {
         "study": "TIA MRA DISSECTION",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -271,7 +259,6 @@
     },
     {
         "study": "MRA ANEURYSM",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -290,7 +277,6 @@
     },
     {
         "study": "CRANIAL NERVES/PAROTID",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -318,7 +304,6 @@
     },
     {
         "study": "TRIGEMINAL NEURALGIA",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -340,7 +325,6 @@
     },
     {
         "study": "C-SPINE",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -361,7 +345,6 @@
     },
     {
         "study": "T-SPINE",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -382,7 +365,6 @@
     },
     {
         "study": "L-SPINE",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -402,7 +384,6 @@
     },
     {
         "study": "SACRUM",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -423,7 +404,6 @@
     },
     {
         "study": "SCREENING SPINE",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -445,7 +425,6 @@
     },
     {
         "study": "SCOLIOSIS SPINE",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -467,7 +446,6 @@
     },
     {
         "study": "NECK SOFT TISSUE",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -488,7 +466,6 @@
     },
     {
         "study": "STEALTH",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -507,7 +484,6 @@
     },
     {
         "study": "BRACHIAL PLEXUS",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -528,7 +504,6 @@
     },
     {
         "study": "TMJ",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -550,7 +525,6 @@
     },
     {
         "study": "C-SPINE MS",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -573,7 +547,6 @@
     },
     {
         "study": "T-SPINE MS",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -596,7 +569,6 @@
     },
     {
         "study": "SHOULDER",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -615,7 +587,6 @@
     },
     {
         "study": "SHOULDER ARTHROGRAM",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -634,7 +605,6 @@
     },
     {
         "study": "ELBOW",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -653,7 +623,6 @@
     },
     {
         "study": "WRIST",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -672,7 +641,6 @@
     },
     {
         "study": "WRIST ARTHROGRAM",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -693,7 +661,6 @@
     },
     {
         "study": "HAND/FINGER",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -712,7 +679,6 @@
     },
     {
         "study": "HIP",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -733,7 +699,6 @@
     },
     {
         "study": "HIP ARTHROGRAM",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -752,7 +717,6 @@
     },
     {
         "study": "FEMUR",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -771,7 +735,6 @@
     },
     {
         "study": "KNEE",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -792,7 +755,6 @@
     },
     {
         "study": "TIB/FIB",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -811,7 +773,6 @@
     },
     {
         "study": "ANKLE",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -830,7 +791,6 @@
     },
     {
         "study": "FOOT/TOE",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -849,7 +809,6 @@
     },
     {
         "study": "PELVIS",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -869,7 +828,6 @@
     },
     {
         "study": "PROSTATE",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -889,7 +847,6 @@
     },
     {
         "study": "RECTAL CA",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -909,7 +866,6 @@
     },
     {
         "study": "MRCP",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -934,7 +890,6 @@
     },
     {
         "study": "LIVER",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -959,7 +914,6 @@
     },
     {
         "study": "ADRENALS",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -979,7 +933,6 @@
     },
     {
         "study": "KIDNEYS",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -1005,7 +958,6 @@
     },
     {
         "study": "MRA RENALS",
-        "scanner": "1.5T",
         "usesContrast": false,
         "layout": {
             "leftCard": {
@@ -1025,7 +977,6 @@
     },
     {
         "study": "ENTEROGRAPHY",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {
@@ -1048,7 +999,6 @@
     },
     {
         "study": "VESSEL WALL IMAGING",
-        "scanner": "1.5T",
         "usesContrast": true,
         "layout": {
             "leftCard": {

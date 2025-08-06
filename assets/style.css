@@ -108,19 +108,19 @@
 }
 
 .sequences {
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 .sequences ul {
   list-style: none;
   padding: 0;
-  margin: 10px 0 0 0;
+  margin: 5px 0 0 0;
 }
 
 .sequences li {
   padding: 6px 0;
   color: var(--text-secondary);
-  line-height: 1.4;
+  line-height: 1.1;
 }
 
 .sequences li.highlight-sequence {
@@ -137,15 +137,18 @@
 .indications {
   color: var(--text-primary);
   margin-bottom: 15px;
+  font-weight: 400;
 }
 
 .contrast-rationale {
   color: var(--text-secondary);
   font-style: italic;
+  font-weight: 200;
 }
 
 .contrast-yes, .contrast-yes strong {
-  color: var(--interactive-accent);
+  color: #ffd116;
+  text-transform: uppercase;!important;
 }
 
 .contrast-no, .contrast-no strong {
@@ -157,11 +160,13 @@
   border-radius: 4px;
   font-size: 0.9em;
   margin-left: 4px;
+  color: #ffd116;
 }
 
 .contrast-yes .contrast-value {
   background: var(--interactive-accent);
-  color: var(--interactive-accent-text);
+  color: #ffd116;
+  text-transform: uppercase;!important;
 }
 
 .contrast-no .contrast-value {
