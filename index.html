@@ -26,34 +26,14 @@
     <header class="main-header">
       <h1>MRI Protocol Search</h1>
       <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search by anatomy, e.g., 'Knee' or 'Glioblastoma'">
-        <button id="searchButton" aria-label="Search">
-          <span class="material-symbols-outlined">search</span>
-        </button>
+        <div class="search-bar-wrapper">
+          <input type="text" id="searchInput" placeholder="Search protocols...">
+          <button id="searchButton">Search</button>
+        </div>
       </div>
     </header>
 
     <main>
-      <!-- Filters are now always visible, as they were in the good version -->
-      <div class="filters-row">
-          <div class="filter-group">
-            <label for="scanner-filter">Scanner</label>
-            <select id="scanner-filter">
-              <option value="all">All Scanners</option>
-              <option value="1.5T">1.5T</option>
-              <option value="3T">3T</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label for="contrast-filter">Contrast</label>
-            <select id="contrast-filter">
-              <option value="all">All</option>
-              <option value="with">With Contrast</option>
-              <option value="without">Without Contrast</option>
-            </select>
-          </div>
-      </div>
-      
       <div id="results">
         <!-- Protocol cards will be generated here -->
       </div>

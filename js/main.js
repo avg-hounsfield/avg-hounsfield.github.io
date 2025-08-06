@@ -109,7 +109,7 @@ function renderPairedProtocols(grouped) {
             <div><strong>Study:</strong> ${protocol.study || ''}</div>
             <div>
               <strong>Contrast:</strong>
-              <span style="color:${protocol.usesContrast ? '#FFAB40' : 'inherit'};font-weight:${protocol.usesContrast ? 'bold' : 'normal'};">
+              <span style="color:${protocol.usesContrast ? '#b58900' : 'inherit'};font-weight:${protocol.usesContrast ? 'bold' : 'normal'};">
                 ${protocol.usesContrast ? 'Yes' : 'No'}
               </span>
             </div>
@@ -192,3 +192,15 @@ window.addEventListener('DOMContentLoaded', () => {
   
   searchInput.focus();
 });
+
+function initFuzzy(data) {
+  window.fuse = new Fuse(data, {
+    keys: ['study', 'sequences', 'indications', 'contrastRationale'],
+    threshold: 0.3
+  });
+}
+
+function fuzzySearch(query) {
+  if (!window.fuse) return [];
+  return window.fuse.search(query).map(result => result.item);
+}
