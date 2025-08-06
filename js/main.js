@@ -63,17 +63,15 @@ fetch('./data/protocols.json')
 function runSearchAndRender() {
   const searchInput = document.getElementById('searchInput');
   const contrastFilter = document.getElementById('contrast-filter');
-  const scannerFilter = document.getElementById('scanner-filter');
   const resultsContainer = document.getElementById('results');
 
   const query = searchInput.value.trim();
   const contrastValue = contrastFilter.value;
-  const scannerValue = scannerFilter.value;
 
   sessionStorage.setItem('lastQuery', query);
 
   // If all inputs are empty/default, clear the results and exit.
-  if (!query && contrastValue === 'all' && scannerValue === 'all') {
+  if (!query && contrastValue === 'all') {
     resultsContainer.innerHTML = '';
     return;
   }
@@ -81,14 +79,10 @@ function runSearchAndRender() {
   // 1. Start with initial results: either from fuzzy search or the full dataset.
   let results = query ? fuzzySearch(query) : protocolData;
 
-  // 2. Apply the secondary filters on the results from step 1.
+  // 2. Apply the contrast filter.
   if (contrastValue !== 'all') {
     const requiresContrast = (contrastValue === 'with');
     results = results.filter(p => p.usesContrast === requiresContrast);
-  }
-
-  if (scannerValue !== 'all') {
-    results = results.filter(p => p.scanner && p.scanner.includes(scannerValue));
   }
 
   // 3. Group the final, filtered results by their category.
@@ -111,6 +105,36 @@ function runSearchAndRender() {
       card.classList.add('fade-in-up');
     });
   }
+}
+
+// Replace your renderPairedProtocols function with this:
+function renderPairedProtocols(grouped) {
+  let html = '';
+  Object.entries(grouped).forEach(([category, protocols]) => {
+    html += `<h2>${category}</h2><div class="protocol-grid">`;
+    protocols.forEach(protocol => {
+      html += `
+        <div class="protocol-card">
+          <div class="protocol-left">
+            <div><strong>Study:</strong> ${protocol.study || ''}</div>
+            <div>
+              <strong>Contrast:</strong>
+              <span style="color:${protocol.usesContrast ? '#FFAB40' : 'inherit'};font-weight:${protocol.usesContrast ? 'bold' : 'normal'};">
+                ${protocol.usesContrast ? 'Yes' : 'No'}
+              </span>
+            </div>
+            <div><strong>Sequences:</strong> ${Array.isArray(protocol.sequences) ? protocol.sequences.join(', ') : ''}</div>
+          </div>
+          <div class="protocol-right">
+            <div><strong>Indications:</strong> ${protocol.indications || ''}</div>
+            <div><strong>Contrast rationale:</strong> ${protocol.contrastRationale || ''}</div>
+          </div>
+        </div>
+      `;
+    });
+    html += '</div>';
+  });
+  return html;
 }
 
 /**

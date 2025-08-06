@@ -252,3 +252,21 @@ li.contrast-sequence strong {
   font-size: 0.9rem;
   color: var(--text-secondary);
 }
+
+.protocol-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.protocol-card {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  padding: 1rem;
+  background: var(--primary-surface-bg);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.protocol-left, .protocol-right {
+  flex: 1;
+}
