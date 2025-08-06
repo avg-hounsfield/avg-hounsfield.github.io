@@ -86,38 +86,35 @@ function renderProtocolCard(protocol) {
 }
 
 /**
- * Creates HTML for search results, pairing 1.5T and 3T protocols side-by-side.
+ * Renders protocol cards into a grid.
  */
-export function renderPairedProtocols(groupedData) {
+export function renderProtocols(protocols) {
+  if (!protocols || protocols.length === 0) {
+    return '<p>No protocols found.</p>';
+  }
+
+  const protocolCards = protocols.map(renderProtocolCard).join('');
+
+  return `
+    <div class="protocol-grid">
+      ${protocolCards}
+    </div>
+  `;
+}
+
+/**
+ * Creates HTML for search results, grouped by category.
+ */
+export function renderGroupedProtocols(groupedData) {
   return Object.entries(groupedData).map(([category, protocols]) => {
-    const studies = protocols.reduce((acc, protocol) => {
-      const studyName = protocol.study || 'Uncategorized';
-      if (!acc[studyName]) {
-        acc[studyName] = {};
-      }
-      // Because of the data transformation, protocol.scanner is always a single-item array
-      const scannerType = protocol.scanner[0]; 
-      acc[studyName][scannerType] = protocol;
-      return acc;
-    }, {});
-
-    const renderedGrids = Object.values(studies).map(studyPair => {
-      // Render the cards or placeholders. 1.5T is always on the left.
-      const card1_5T = renderProtocolCard(studyPair['1.5T']) || '<div class="card-placeholder"></div>';
-      const card3T = renderProtocolCard(studyPair['3T']) || '<div class="card-placeholder"></div>';
-      
-      return `
-        <div class="protocol-grid-container">
-          ${card1_5T}
-          ${card3T}
-        </div>
-      `;
-    }).join('');
-
+    const protocolCards = protocols.map(renderProtocolCard).join('');
+    
     return `
-      <div class="category-block">
+      <div class="protocol-group">
         <h2 class="category-header">${category}</h2>
-        ${renderedGrids}
+        <div class="protocol-grid">
+          ${protocolCards}
+        </div>
       </div>
     `;
   }).join('');
