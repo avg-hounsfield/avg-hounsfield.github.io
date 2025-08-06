@@ -23,6 +23,10 @@ function runSearchAndRender() {
   const resultsContainer = document.getElementById('results');
   const query = searchInput.value.trim();
 
+  // Debug logs
+  console.log('Running search with query:', query);
+  console.log('Protocol data available:', protocolData.length);
+
   // If search is empty, just clear results
   if (!query) {
     resultsContainer.innerHTML = '';
@@ -37,24 +41,17 @@ function runSearchAndRender() {
     return;
   }
 
-  // Only fuzzy search if there's a query
+  // Perform search
   let results = fuzzySearch(query);
-
-  // Log for debugging
-  console.log('Search query:', query);
-  console.log('Search results:', results);
-
-  // Group results by category
-  const grouped = results.reduce((acc, p) => {
-    if (!acc[p.category]) acc[p.category] = [];
-    acc[p.category].push(p);
-    return acc;
-  }, {});
+  
+  // Debug logs
+  console.log('Search returned results:', results);
 
   if (results.length === 0) {
     resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
   } else {
-    resultsContainer.innerHTML = renderPairedProtocols(grouped);
+    // Directly render the results without grouping first
+    resultsContainer.innerHTML = renderPairedProtocols(results);
     const cards = resultsContainer.querySelectorAll('.protocol-card');
     cards.forEach((card, index) => {
       card.style.setProperty('--delay', `${index * 60}ms`);
@@ -109,19 +106,33 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function renderPairedProtocols(results) {
+  // Debug log
+  console.log('Rendering results:', results);
+
   let html = '';
   
   // Group by study type (first word of study name)
   const grouped = results.reduce((acc, protocol) => {
-    const category = protocol.study.split(' ')[0]; // Use first word as category
+    // Handle potential undefined study names
+    const studyName = protocol.study || 'Other';
+    const category = studyName.split(' ')[0];
     if (!acc[category]) acc[category] = [];
     acc[category].push(protocol);
     return acc;
   }, {});
 
+  // Debug log
+  console.log('Grouped results:', grouped);
+
   Object.entries(grouped).forEach(([category, protocols]) => {
     html += `<h2>${category}</h2><div class="protocol-grid">`;
     protocols.forEach(protocol => {
+      // Safely handle potentially missing data
+      const sequences = protocol.sequences || [];
+      const sequenceText = Array.isArray(sequences) 
+        ? sequences.map(s => s.sequence || '').filter(Boolean).join(', ')
+        : '';
+
       html += `
         <div class="protocol-card">
           <div class="protocol-left">
@@ -132,16 +143,17 @@ function renderPairedProtocols(results) {
                 ${protocol.usesContrast ? 'Yes' : 'No'}
               </span>
             </div>
-            <div><strong>Sequences:</strong> ${protocol.sequences.map(s => s.sequence).join(', ')}</div>
+            <div><strong>Sequences:</strong> ${sequenceText}</div>
           </div>
           <div class="protocol-right">
             <div><strong>Indications:</strong> ${protocol.Indications || ''}</div>
-            <div><strong>Contrast rationale:</strong> ${protocol['Contrast rationale:'] || ''}</div>
+            <div>${protocol['Contrast rationale:'] ? `<strong>Contrast rationale:</strong> ${protocol['Contrast rationale:']}` : ''}</div>
           </div>
         </div>
       `;
     });
     html += '</div>';
   });
+
   return html;
 }

@@ -2,34 +2,34 @@ import Fuse from 'https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js';
 
 let fuse;
 export function initFuzzy(data) {
+  // Debug log
+  console.log('Initializing fuzzy search with data:', data);
+
   fuse = new Fuse(data, {
     includeScore: true,
-    threshold: 0.4,
+    threshold: 0.6,           // More lenient matching
     ignoreLocation: true,
     minMatchCharLength: 2,
     keys: [
       { name: 'study', weight: 2.0 },
-      { name: 'Indications', weight: 1.5 },  // Note the capital "I"
-      { name: 'sequences.sequence', weight: 1.0 }, // Updated to match nested structure
+      { name: 'Indications', weight: 1.5 },
+      { name: 'sequences.sequence', weight: 1.0 },
       { name: 'scanner', weight: 0.5 },
-      { name: 'Contrast rationale:', weight: 0.5 } // Note the colon
+      { name: 'Contrast rationale:', weight: 0.5 }
     ]
   });
-
-  // Debug log
-  console.log('Search initialized with data:', data);
 }
 
 export function fuzzySearch(query) {
   if (!fuse || !query.trim()) return [];
   
   // Debug log
-  console.log('Searching for:', query);
+  console.log('Searching with query:', query);
   
   const results = fuse.search(query).map(r => r.item);
   
   // Debug log
-  console.log('Search results:', results);
+  console.log('Search returned:', results);
   
   return results;
 }
