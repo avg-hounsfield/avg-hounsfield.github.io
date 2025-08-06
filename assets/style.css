@@ -108,7 +108,7 @@
 }
 
 .sequences {
-  margin-top: auto;
+  margin-top: 15px;
 }
 
 .sequences ul {
@@ -144,11 +144,11 @@
   font-style: italic;
 }
 
-.contrast-yes {
+.contrast-yes, .contrast-yes strong {
   color: var(--interactive-accent);
 }
 
-.contrast-no {
+.contrast-no, .contrast-no strong {
   color: var(--text-secondary);
 }
 
@@ -156,6 +156,7 @@
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 0.9em;
+  margin-left: 4px;
 }
 
 .contrast-yes .contrast-value {

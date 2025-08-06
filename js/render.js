@@ -39,7 +39,6 @@ function sortSequences(sequences) {
 function renderProtocolCard(protocol) {
   if (!protocol) return ''; // Safety check
   
-  const scannerType = protocol.scanner;
   const contrastText = protocol.usesContrast ? 'Yes' : 'No';
   const contrastClass = protocol.usesContrast ? 'contrast-yes' : 'contrast-no';
 
