@@ -62,39 +62,29 @@ fetch('./data/protocols.json')
  */
 function runSearchAndRender() {
   const searchInput = document.getElementById('searchInput');
-  const contrastFilter = document.getElementById('contrast-filter');
   const resultsContainer = document.getElementById('results');
 
   const query = searchInput.value.trim();
-  const contrastValue = contrastFilter.value;
 
   sessionStorage.setItem('lastQuery', query);
 
-  // If all inputs are empty/default, clear the results and exit.
-  if (!query && contrastValue === 'all') {
+  // If search is empty, clear results
+  if (!query) {
     resultsContainer.innerHTML = '';
     return;
   }
 
-  // 1. Start with initial results: either from fuzzy search or the full dataset.
-  let results = query ? fuzzySearch(query) : protocolData;
+  // Only fuzzy search, no filters
+  let results = fuzzySearch(query);
 
-  // 2. Apply the contrast filter.
-  if (contrastValue !== 'all') {
-    const requiresContrast = (contrastValue === 'with');
-    results = results.filter(p => p.usesContrast === requiresContrast);
-  }
-
-  // 3. Group the final, filtered results by their category.
+  // Group results by category
   const grouped = results.reduce((acc, p) => {
-    if (!acc[p.category]) {
-      acc[p.category] = [];
-    }
+    if (!acc[p.category]) acc[p.category] = [];
     acc[p.category].push(p);
     return acc;
   }, {});
 
-  // 4. Render the output to the page.
+  // Render results
   if (results.length === 0) {
     resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
   } else {
