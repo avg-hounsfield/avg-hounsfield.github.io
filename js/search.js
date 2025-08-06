@@ -25,7 +25,7 @@ export function initFuzzy(data) {
         weight: 2.0,
         getFn: (obj) => {
           const sequences = obj.layout?.leftCard?.sequences || [];
-          return sequences.map(s => s.sequence.toLowerCase());
+          return sequences.map(s => s.sequence?.toLowerCase?.() || '');
         }
       },
       { 
@@ -37,6 +37,11 @@ export function initFuzzy(data) {
         name: 'layout.rightCard.content.contrastRationale', 
         weight: 1.0,
         getFn: (obj) => obj.layout?.rightCard?.content?.contrastRationale?.toLowerCase() || null
+      },
+      {
+        name: 'section',
+        weight: 1.5,
+        getFn: (obj) => Array.isArray(obj.section) ? obj.section.map(s => s.toLowerCase()) : []
       }
     ]
   });

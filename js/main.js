@@ -44,20 +44,32 @@ function runSearchAndRender() {
 
   try {
     // Perform search and ensure results is an array
-    let results = fuzzySearch(query);
-    if (!Array.isArray(results)) {
-      results = [];
-    }
-    
-    // Debug logs
-    console.log('Search returned results:', results);
+    let results = [];
+    // Flatten all protocols from all sections for searching
+    protocolData.forEach(sectionObj => {
+      if (Array.isArray(sectionObj.studies)) {
+        sectionObj.studies.forEach(study => {
+          // Attach section info to each study for grouping later
+          study.section = sectionObj.section;
+          results.push(study);
+        });
+      }
+    });
 
-    if (results.length === 0) {
+    // Now run fuzzySearch on the flattened array
+    let searchResults = fuzzySearch(query, results);
+    if (!Array.isArray(searchResults)) {
+      searchResults = [];
+    }
+
+    // Debug logs
+    console.log('Search returned results:', searchResults);
+
+    if (searchResults.length === 0) {
       resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
     } else {
       // Group protocols by their first section name (now always an array)
-      const grouped = results.reduce((acc, protocol) => {
-        // section is always an array, use first value for grouping
+      const grouped = searchResults.reduce((acc, protocol) => {
         const sectionArr = protocol.section;
         const sectionKey = Array.isArray(sectionArr) && sectionArr.length > 0 ? sectionArr[0] : 'Other';
         if (!acc[sectionKey]) {
@@ -94,11 +106,19 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch('./data/protocols.json')
     .then(res => res.json())
     .then(rawData => {
-      // Data is already in the format we need
       protocolData = rawData;
-      
-      // Initialize fuzzy search
-      initFuzzy(protocolData);
+      // Flatten all studies for fuzzy search initialization
+      const allStudies = [];
+      protocolData.forEach(sectionObj => {
+        if (Array.isArray(sectionObj.studies)) {
+          sectionObj.studies.forEach(study => {
+            // Attach section info to each study for grouping later
+            study.section = sectionObj.section;
+            allStudies.push(study);
+          });
+        }
+      });
+      initFuzzy(allStudies);
       
       // Don't show any results initially
       resultsContainer.innerHTML = '';
