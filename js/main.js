@@ -76,27 +76,21 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch('./data/protocols.json')
     .then(res => res.json())
     .then(rawData => {
-      protocolData = rawData.flatMap(group =>
-        group.protocols.map(p => ({
-          ...p,
-          category: group.category
-        }))
-      );
+      // Data is already in the format we need
+      protocolData = rawData;
       
       // Initialize fuzzy search
       initFuzzy(protocolData);
       
-      // Don't show any results initially, wait for user input
+      // Don't show any results initially
       resultsContainer.innerHTML = '';
       
-      // Only run search if there's an initial value
       if (searchInput.value.trim()) {
         runSearchAndRender();
       }
     })
     .catch(error => {
       console.error('Failed to load protocols:', error);
-      // Only show error if user has tried to search
       if (searchInput.value.trim()) {
         resultsContainer.innerHTML = 
           '<p class="error">Failed to load protocols. Please try again later.</p>';
@@ -114,8 +108,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-function renderPairedProtocols(grouped) {
+function renderPairedProtocols(results) {
   let html = '';
+  
+  // Group by study type (first word of study name)
+  const grouped = results.reduce((acc, protocol) => {
+    const category = protocol.study.split(' ')[0]; // Use first word as category
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(protocol);
+    return acc;
+  }, {});
+
   Object.entries(grouped).forEach(([category, protocols]) => {
     html += `<h2>${category}</h2><div class="protocol-grid">`;
     protocols.forEach(protocol => {
@@ -129,11 +132,11 @@ function renderPairedProtocols(grouped) {
                 ${protocol.usesContrast ? 'Yes' : 'No'}
               </span>
             </div>
-            <div><strong>Sequences:</strong> ${Array.isArray(protocol.sequences) ? protocol.sequences.join(', ') : ''}</div>
+            <div><strong>Sequences:</strong> ${protocol.sequences.map(s => s.sequence).join(', ')}</div>
           </div>
           <div class="protocol-right">
-            <div><strong>Indications:</strong> ${protocol.indications || ''}</div>
-            <div><strong>Contrast rationale:</strong> ${protocol.contrastRationale || ''}</div>
+            <div><strong>Indications:</strong> ${protocol.Indications || ''}</div>
+            <div><strong>Contrast rationale:</strong> ${protocol['Contrast rationale:'] || ''}</div>
           </div>
         </div>
       `;

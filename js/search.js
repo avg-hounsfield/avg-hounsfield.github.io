@@ -4,15 +4,15 @@ let fuse;
 export function initFuzzy(data) {
   fuse = new Fuse(data, {
     includeScore: true,
-    threshold: 0.4,           // More lenient matching
+    threshold: 0.4,
     ignoreLocation: true,
     minMatchCharLength: 2,
     keys: [
       { name: 'study', weight: 2.0 },
-      { name: 'indications', weight: 1.5 },
-      { name: 'sequences', weight: 1.5 },
-      { name: 'category', weight: 1.0 },
-      { name: 'contrastRationale', weight: 1.0 }
+      { name: 'Indications', weight: 1.5 },  // Note the capital "I"
+      { name: 'sequences.sequence', weight: 1.0 }, // Updated to match nested structure
+      { name: 'scanner', weight: 0.5 },
+      { name: 'Contrast rationale:', weight: 0.5 } // Note the colon
     ]
   });
 
