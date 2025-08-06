@@ -23,13 +23,13 @@ export function initFuzzy(data) {
 export function fuzzySearch(query) {
   if (!fuse || !query.trim()) return [];
   
-  // Debug log
   console.log('Searching with query:', query);
   
+  // Make sure we return the items array
   const results = fuse.search(query).map(r => r.item);
   
-  // Debug log
   console.log('Search returned:', results);
   
-  return results;
+  // Ensure we're returning an array
+  return Array.isArray(results) ? results : [];
 }

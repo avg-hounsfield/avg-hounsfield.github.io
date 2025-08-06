@@ -41,8 +41,11 @@ function runSearchAndRender() {
     return;
   }
 
-  // Perform search
+  // Perform search and ensure results is an array
   let results = fuzzySearch(query);
+  if (!Array.isArray(results)) {
+    results = [];
+  }
   
   // Debug logs
   console.log('Search returned results:', results);
@@ -50,7 +53,7 @@ function runSearchAndRender() {
   if (results.length === 0) {
     resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
   } else {
-    // Directly render the results without grouping first
+    // Directly render the results
     resultsContainer.innerHTML = renderPairedProtocols(results);
     const cards = resultsContainer.querySelectorAll('.protocol-card');
     cards.forEach((card, index) => {
@@ -111,8 +114,11 @@ function renderPairedProtocols(results) {
 
   let html = '';
   
+  // Convert results to array if it's not already
+  const resultsArray = Array.isArray(results) ? results : [results];
+  
   // Group by study type (first word of study name)
-  const grouped = results.reduce((acc, protocol) => {
+  const grouped = resultsArray.reduce((acc, protocol) => {
     // Handle potential undefined study names
     const studyName = protocol.study || 'Other';
     const category = studyName.split(' ')[0];
