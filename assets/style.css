@@ -55,6 +55,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Protocol Card Styles */
@@ -67,6 +69,8 @@
   margin: 10px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--border-color);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .protocol-header {
@@ -90,6 +94,8 @@
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   min-height: 200px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .protocol-content.full-height {
@@ -103,6 +109,8 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .right-card {
@@ -110,6 +118,8 @@
   background: var(--secondary-surface-bg);
   border-radius: 6px;
   padding-top: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sequences {
@@ -167,6 +177,7 @@
 .contrast-yes .contrast-value {
   background: var(--interactive-accent);
   color: #ffd116 !important;
+  font-weight: bold;
 }
 
 .contrast-no .contrast-value {
@@ -375,6 +386,22 @@ a:hover {
 
   .protocol-content {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .protocol-card {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .left-card, .right-card {
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+  
+  .protocol-group {
+    width: 100%;
   }
 }
 
@@ -393,6 +420,30 @@ a:hover {
   }
   body {
     padding: 1rem;
+  }
+  
+  .protocol-card {
+    padding: 15px;
+    width: 100%;
+  }
+  
+  .left-card, .right-card {
+    padding: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .protocol-grid {
+    gap: 1rem;
+  }
+  
+  .protocol-content {
+    min-height: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
   }
 }
 
