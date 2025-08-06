@@ -9,8 +9,8 @@ export function initFuzzy(data) {
     minMatchCharLength: 2,
     keys: [
       { name: 'study', weight: 2 },
-      { name: 'sequences.type', weight: 1 },
-      { name: 'sequences.note', weight: 0.5 },
+      { name: 'indications', weight: 1.5 },
+      { name: 'sequences', weight: 1 },
       { name: 'category', weight: 0.5 }
     ]
   });

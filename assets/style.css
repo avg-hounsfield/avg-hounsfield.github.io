@@ -39,31 +39,30 @@
     #THEMES & COLORS
 \*------------------------------------*/
 :root {
-  /* VS Code Dark Theme */
-  --bg-color: #181818;                /* Dark grey background */
-  --primary-surface-bg: #232323;      /* Slightly lighter panel */
-  --secondary-surface-bg: #2c2c2c;    /* Panel/Sidebar */
-  --text-primary: #e0e0e0;            /* Main text */
-  --text-secondary: #b0b0b0;          /* Secondary text */
-  --interactive-accent: #ff9800;      /* Orange accent */
-  --interactive-accent-hover: #ffa726;/* Lighter orange */
-  --interactive-accent-text: #232323; /* Text on accent */
-  --border-color: #444;               /* Subtle border */
-  --border-color-focus: #ff9800;      /* Orange focus */
+  /* VS Code-inspired dark navy theme */
+  --bg-color: #151a24;                /* Deep navy background */
+  --primary-surface-bg: #1b2232;      /* Slightly lighter navy panel */
+  --secondary-surface-bg: #222a3a;    /* Panel/Sidebar */
+  --text-primary: #e0e6ed;            /* Main text: very light blue-grey */
+  --text-secondary: #a3adc2;          /* Secondary text: muted blue-grey */
+  --interactive-accent: #00bfff;      /* Techy blue accent */
+  --interactive-accent-hover: #0099e6;/* Deeper techy blue */
+  --interactive-accent-text: #151a24; /* Text on accent */
+  --border-color: #25304a;            /* Subtle navy border */
+  --border-color-focus: #00bfff;      /* Techy blue focus */
 }
 
 .light-theme {
-  /* Solarized Light Theme */
-  --bg-color: #f5f5f5;
-  --primary-surface-bg: #e0e0e0;
-  --secondary-surface-bg: #cccccc;
-  --text-primary: #232323;
-  --text-secondary: #444;
-  --interactive-accent: #ff9800;
-  --interactive-accent-hover: #ffa726;
+  --bg-color: #f5f8fa;
+  --primary-surface-bg: #eaf1fb;
+  --secondary-surface-bg: #dbeafe;
+  --text-primary: #23233a;
+  --text-secondary: #4c4c6a;
+  --interactive-accent: #00bfff;
+  --interactive-accent-hover: #0099e6;
   --interactive-accent-text: #fff;
-  --border-color: #b0b0b0;
-  --border-color-focus: #ff9800;
+  --border-color: #b0b0c3;
+  --border-color-focus: #00bfff;
 }
 
 /*------------------------------------*\
