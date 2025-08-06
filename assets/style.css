@@ -109,6 +109,7 @@
   padding: 15px;
   background: var(--secondary-surface-bg);
   border-radius: 6px;
+  padding-top: 20px;
 }
 
 .sequences {
@@ -165,7 +166,7 @@
 
 .contrast-yes .contrast-value {
   background: var(--interactive-accent);
-  color: #ffd116;
+  color: #ffd116 !important;
 }
 
 .contrast-no .contrast-value {
