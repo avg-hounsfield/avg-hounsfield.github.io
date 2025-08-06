@@ -112,12 +112,72 @@ function renderPairedProtocols(results) {
   // Debug log
   console.log('Rendering results:', results);
 
-  let html = '';
-  
   // Convert results to array if it's not already
   const resultsArray = Array.isArray(results) ? results : [results];
   
-  // Group by study type (first word of study name)
+  // Group protocols by their base study name
+  const groupedProtocols = resultsArray.reduce((acc, protocol) => {
+    const studyBase = protocol.study.split(' ')[0];
+    if (!acc[studyBase]) {
+      acc[studyBase] = [];
+    }
+    acc[studyBase].push(protocol);
+    return acc;
+  }, {});
+
+  // Sort groups alphabetically
+  const sortedGroups = Object.entries(groupedProtocols).sort(([a], [b]) => a.localeCompare(b));
+
+  // Generate HTML for each group
+  return sortedGroups.map(([groupName, protocols]) => {
+    const protocolCards = protocols.map(protocol => {
+      const { study, scanner, usesContrast, layout } = protocol;
+      const { leftCard, rightCard } = layout;
+
+      return `
+        <div class="protocol-card">
+          <div class="protocol-header">
+            <h3>${study}</h3>
+            <div class="protocol-info">
+              <span><strong>Scanner:</strong> ${scanner}</span>
+              <span><strong>Contrast:</strong> <span class="contrast-value ${usesContrast ? 'contrast-yes' : 'contrast-no'}">${usesContrast ? 'Yes' : 'No'}</span></span>
+            </div>
+          </div>
+          
+          <div class="protocol-content ${rightCard.fullHeight ? 'full-height' : ''}">
+            <div class="left-card">
+              <div class="sequences">
+                <h4>Sequences:</h4>
+                <ul>
+                  ${leftCard.sequences.map(seq => `
+                    <li class="${seq.highlight ? 'highlight-sequence' : ''}">${seq.sequence}</li>
+                  `).join('')}
+                </ul>
+              </div>
+            </div>
+            
+            <div class="right-card">
+              <div class="content">
+                <p class="indications">${rightCard.content.indications}</p>
+                ${rightCard.content.contrastRationale ? 
+                  `<p class="contrast-rationale"><strong>Contrast Rationale:</strong> ${rightCard.content.contrastRationale}</p>`
+                  : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="protocol-group">
+        <h2>${groupName}</h2>
+        <div class="protocol-grid">
+          ${protocolCards}
+        </div>
+      </div>
+    `;
+  }).join('');
   const grouped = resultsArray.reduce((acc, protocol) => {
     // Handle potential undefined study names
     const studyName = protocol.study || 'Other';

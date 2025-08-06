@@ -39,36 +39,51 @@ function sortSequences(sequences) {
 function renderProtocolCard(protocol) {
   if (!protocol) return ''; // Safety check
   
-  const scannerClasses = protocol.scanner.map(s => `scanner-${s.replace('.', '-')}`).join(' ');
-  const scannerText = protocol.scanner.join(' / ');
+  const scannerType = protocol.scanner;
   const contrastText = protocol.usesContrast ? 'Yes' : 'No';
   const contrastClass = protocol.usesContrast ? 'contrast-yes' : 'contrast-no';
 
-  // Safely sort sequences; default to an empty array if they don't exist.
-  const sortedSequences = protocol.sequences ? sortSequences(protocol.sequences) : [];
+  // Get sequences from the new layout structure
+  const sequences = protocol.layout?.leftCard?.sequences || [];
+  const sortedSequences = sortSequences(sequences);
+  
+  // Get content from the right card
+  const rightCardContent = protocol.layout?.rightCard?.content || {};
+  const fullHeight = protocol.layout?.rightCard?.fullHeight;
 
   return `
-    <div class="protocol-card ${scannerClasses}">
-      <h3>${protocol.study || 'Untitled Study'}</h3>
-      <p><strong>Scanner:</strong> ${scannerText}</p>
-      <p><strong>Contrast:</strong> <span class="contrast-value ${contrastClass}">${contrastText}</span></p>
-
-      <div class="sequences">
-        <h4>Sequences:</h4>
-        <ul>
-          ${sortedSequences.map(seq => {
-            const isContrastSequence = seq.contrast === true || seq.highlight === true;
-            const liClass = isContrastSequence ? 'class="contrast-sequence"' : '';
-            return `
-              <li ${liClass}>
-                <strong>${seq.type}:</strong> ${seq.planes?.join(', ') || '–'}
-                ${seq.note ? `<em class="note">(${seq.note})</em>` : ''}
-              </li>
-            `;
-          }).join('') || '<li>None listed</li>'}
-        </ul>
+    <div class="protocol-card scanner-${scannerType.replace('.', '-')}">
+      <div class="protocol-header">
+        <h3>${protocol.study || 'Untitled Study'}</h3>
+        <div class="protocol-info">
+          <span><strong>Scanner:</strong> ${scannerType}</span>
+          <span class="${contrastClass}"><strong>Contrast:</strong> <span class="contrast-value">${contrastText}</span></span>
+        </div>
       </div>
-      ${protocol.note ? `<p class="protocol-note"><strong>Note:</strong> ${protocol.note}</p>` : ''}
+
+      <div class="protocol-content ${fullHeight ? 'full-height' : ''}">
+        <div class="left-card">
+          <div class="sequences">
+            <h4>Sequences:</h4>
+            <ul>
+              ${sortedSequences.map(seq => {
+                const isHighlight = seq.highlight === true;
+                const liClass = isHighlight ? 'class="highlight-sequence"' : '';
+                return `<li ${liClass}>${seq.sequence}</li>`;
+              }).join('\n              ') || '<li>None listed</li>'}
+            </ul>
+          </div>
+        </div>
+
+        <div class="right-card">
+          <div class="content">
+            <p class="indications">${rightCardContent.indications || ''}</p>
+            ${rightCardContent.contrastRationale ? 
+              `<p class="contrast-rationale"><strong>Contrast Rationale:</strong> ${rightCardContent.contrastRationale}</p>` 
+              : ''}
+          </div>
+        </div>
+      </div>
     </div>
   `;
 }

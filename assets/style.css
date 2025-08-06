@@ -38,6 +38,142 @@
 /*------------------------------------*\
     #THEMES & COLORS
 \*------------------------------------*/
+
+/* Protocol Groups */
+.protocol-group {
+  margin-bottom: 40px;
+}
+
+.protocol-group h2 {
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--interactive-accent);
+}
+
+.protocol-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+/* Protocol Card Styles */
+.protocol-card {
+  background: var(--primary-surface-bg);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.protocol-header {
+  margin-bottom: 15px;
+}
+
+.protocol-header h3 {
+  margin: 0 0 10px 0;
+  color: var(--text-primary);
+}
+
+.protocol-info {
+  display: flex;
+  gap: 20px;
+  color: var(--text-secondary);
+}
+
+.protocol-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  min-height: 200px;
+}
+
+.protocol-content.full-height {
+  height: 100%;
+}
+
+.left-card {
+  padding: 15px;
+  background: var(--secondary-surface-bg);
+  border-radius: 6px;
+}
+
+.right-card {
+  padding: 15px;
+  background: var(--secondary-surface-bg);
+  border-radius: 6px;
+}
+
+.sequences ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+
+.sequences li {
+  padding: 6px 0;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.sequences li.highlight-sequence {
+  color: var(--interactive-accent);
+  font-weight: bold;
+}
+
+.sequences h4 {
+  margin-bottom: 15px;
+  color: var(--text-primary);
+}
+
+.indications {
+  color: var(--text-primary);
+  margin-bottom: 15px;
+}
+
+.contrast-rationale {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.contrast-yes {
+  color: var(--interactive-accent);
+}
+
+.contrast-no {
+  color: var(--text-secondary);
+}
+
+.contrast-value {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.contrast-yes .contrast-value {
+  background: var(--interactive-accent);
+  color: var(--interactive-accent-text);
+}
+
+.contrast-no .contrast-value {
+  background: var(--secondary-surface-bg);
+  color: var(--text-secondary);
+}
+
+/* Protocol Grid Container */
+.protocol-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card-placeholder {
+  background: var(--secondary-surface-bg);
+  border-radius: 8px;
+  min-height: 200px;
+}
+
 :root {
   /* Dark theme - keeping current colors */
   --bg-color: #1e2329;

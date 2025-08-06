@@ -12,10 +12,10 @@ export function initFuzzy(data) {
     minMatchCharLength: 2,
     keys: [
       { name: 'study', weight: 2.0 },
-      { name: 'Indications', weight: 1.5 },
-      { name: 'sequences.sequence', weight: 1.0 },
-      { name: 'scanner', weight: 0.5 },
-      { name: 'Contrast rationale:', weight: 0.5 }
+      { name: 'layout.rightCard.content.indications', weight: 1.5 },
+      { name: 'layout.rightCard.content.contrastRationale', weight: 1.2 },
+      { name: 'layout.leftCard.sequences.sequence', weight: 1.0 },
+      { name: 'scanner', weight: 0.5 }
     ]
   });
 }
