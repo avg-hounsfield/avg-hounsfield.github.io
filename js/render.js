@@ -52,17 +52,15 @@ function renderProtocolCard(protocol) {
   const fullHeight = protocol.layout?.rightCard?.fullHeight;
 
   return `
-    <div class="protocol-card scanner-${scannerType.replace('.', '-')}">
-      <div class="protocol-header">
-        <h3>${protocol.study || 'Untitled Study'}</h3>
-        <div class="protocol-info">
-          <span><strong>Scanner:</strong> ${scannerType}</span>
-          <span class="${contrastClass}"><strong>Contrast:</strong> <span class="contrast-value">${contrastText}</span></span>
-        </div>
-      </div>
-
+    <div class="protocol-card">
       <div class="protocol-content ${fullHeight ? 'full-height' : ''}">
         <div class="left-card">
+          <div class="protocol-header">
+            <h3>${protocol.study || 'Untitled Study'}</h3>
+            <div class="protocol-info">
+              <span class="${contrastClass}"><strong>Contrast:</strong> <span class="contrast-value">${contrastText}</span></span>
+            </div>
+          </div>
           <div class="sequences">
             <h4>Sequences:</h4>
             <ul>
