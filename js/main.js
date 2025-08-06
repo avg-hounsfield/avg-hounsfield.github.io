@@ -23,9 +23,17 @@ function runSearchAndRender() {
   const resultsContainer = document.getElementById('results');
   const query = searchInput.value.trim();
 
-  // If search is empty, clear results without showing "no results" message
+  // If search is empty, just clear results
   if (!query) {
     resultsContainer.innerHTML = '';
+    return;
+  }
+
+  // Only search if we have data
+  if (!protocolData || !protocolData.length) {
+    console.error('No protocol data available');
+    resultsContainer.innerHTML = 
+      '<p class="error">Failed to load protocols. Please try again later.</p>';
     return;
   }
 
@@ -62,6 +70,7 @@ const debouncedSearch = debounce(runSearchAndRender, DEBOUNCE_DELAY);
 document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
   const searchButton = document.getElementById('searchButton');
+  const resultsContainer = document.getElementById('results');
 
   // Load protocols data
   fetch('./data/protocols.json')
@@ -77,15 +86,21 @@ document.addEventListener('DOMContentLoaded', () => {
       // Initialize fuzzy search
       initFuzzy(protocolData);
       
-      // Run initial search if there's a value
-      if (searchInput.value) {
+      // Don't show any results initially, wait for user input
+      resultsContainer.innerHTML = '';
+      
+      // Only run search if there's an initial value
+      if (searchInput.value.trim()) {
         runSearchAndRender();
       }
     })
     .catch(error => {
       console.error('Failed to load protocols:', error);
-      document.getElementById('results').innerHTML = 
-        '<p class="error">Failed to load protocols. Please try again later.</p>';
+      // Only show error if user has tried to search
+      if (searchInput.value.trim()) {
+        resultsContainer.innerHTML = 
+          '<p class="error">Failed to load protocols. Please try again later.</p>';
+      }
     });
 
   // Set up event listeners for search
