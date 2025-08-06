@@ -39,30 +39,34 @@
     #THEMES & COLORS
 \*------------------------------------*/
 :root {
-  /* VS Code-inspired dark navy theme */
-  --bg-color: #151a24;                /* Deep navy background */
-  --primary-surface-bg: #1b2232;      /* Slightly lighter navy panel */
-  --secondary-surface-bg: #222a3a;    /* Panel/Sidebar */
-  --text-primary: #e0e6ed;            /* Main text: very light blue-grey */
-  --text-secondary: #a3adc2;          /* Secondary text: muted blue-grey */
-  --interactive-accent: #00bfff;      /* Techy blue accent */
-  --interactive-accent-hover: #0099e6;/* Deeper techy blue */
-  --interactive-accent-text: #151a24; /* Text on accent */
-  --border-color: #25304a;            /* Subtle navy border */
-  --border-color-focus: #00bfff;      /* Techy blue focus */
+  /* RadReview-inspired theme */
+  --bg-color: #1e2329;                /* Dark charcoal background */
+  --primary-surface-bg: #252a31;      /* Slightly lighter charcoal panel */
+  --secondary-surface-bg: #2d333b;    /* Panel/Sidebar */
+  --text-primary: #e6e9ec;            /* Main text: off-white */
+  --text-secondary: #a0a7b0;          /* Secondary text: muted grey */
+  --interactive-accent: #40b4a6;      /* Teal accent like RadReview */
+  --interactive-accent-hover: #4ecfbf;/* Lighter teal */
+  --interactive-accent-text: #ffffff; /* White text on accent */
+  --border-color: #363c44;            /* Subtle border */
+  --border-color-focus: #40b4a6;      /* Teal focus */
+  --link-color: #40b4a6;             /* Teal links */
+  --header-color: #40b4a6;           /* Teal headers */
 }
 
 .light-theme {
-  --bg-color: #f5f8fa;
-  --primary-surface-bg: #eaf1fb;
-  --secondary-surface-bg: #dbeafe;
-  --text-primary: #23233a;
-  --text-secondary: #4c4c6a;
-  --interactive-accent: #00bfff;
-  --interactive-accent-hover: #0099e6;
-  --interactive-accent-text: #fff;
-  --border-color: #b0b0c3;
-  --border-color-focus: #00bfff;
+  --bg-color: #ffffff;
+  --primary-surface-bg: #f5f7f9;
+  --secondary-surface-bg: #eef0f2;
+  --text-primary: #2d333b;
+  --text-secondary: #586069;
+  --interactive-accent: #40b4a6;
+  --interactive-accent-hover: #4ecfbf;
+  --interactive-accent-text: #ffffff;
+  --border-color: #e1e4e8;
+  --border-color-focus: #40b4a6;
+  --link-color: #40b4a6;
+  --header-color: #40b4a6;
 }
 
 /*------------------------------------*\
@@ -171,17 +175,18 @@ a:hover {
   align-items: center;
   margin: 3rem auto 2rem auto;
   gap: 1rem;
-  max-width: 65vw;
+  max-width: 90vw; /* Increased from 65vw */
   width: 100%;
 }
 
 #searchInput {
   flex: 1;
-  min-width: 180px;
-  max-width: 600px;
+  min-width: 300px; /* Increased from 180px */
+  max-width: 800px; /* Increased from 600px */
   width: 100%;
   font-size: 1.2rem;
-  padding: 0.75em 0;
+  padding: 0.75em 1em;
+  border-radius: 4px;
   border: none;
   border-bottom: 2px solid var(--interactive-accent);
   background: transparent;

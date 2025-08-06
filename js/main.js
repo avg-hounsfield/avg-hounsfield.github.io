@@ -23,8 +23,20 @@ function runSearchAndRender() {
   const resultsContainer = document.getElementById('results');
   const query = searchInput.value.trim();
 
-  let results = query ? fuzzySearch(query) : protocolData;
+  // If search is empty, clear results without showing "no results" message
+  if (!query) {
+    resultsContainer.innerHTML = '';
+    return;
+  }
 
+  // Only fuzzy search if there's a query
+  let results = fuzzySearch(query);
+
+  // Log for debugging
+  console.log('Search query:', query);
+  console.log('Search results:', results);
+
+  // Group results by category
   const grouped = results.reduce((acc, p) => {
     if (!acc[p.category]) acc[p.category] = [];
     acc[p.category].push(p);
