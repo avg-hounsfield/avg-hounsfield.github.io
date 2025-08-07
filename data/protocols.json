@@ -8,17 +8,18 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "T1: SAG", "highlight": false },
-                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "T1: SAG (4mm)", "highlight": false },
+                            { "sequence": "T2: AX (5mm)", "highlight": false },
                             { "sequence": "DWI: AX", "highlight": false },
                             { "sequence": "FLAIR CUBE: SAG", "highlight": false },
-                            { "sequence": "SWAN: AX", "highlight": false }
+                            { "sequence": "SWAN: AX (3mm or 2mm for SWI)", "highlight": false }
                         ]
                     },
                     "rightCard": {
                         "fullHeight": true,
                         "content": {
                             "indications": "Used for the general evaluation of neurological symptoms such as headaches, dizziness, or weakness. It can help detect conditions like stroke, tumors, and certain degenerative diseases."
+                            
                         }
                     }
                 }
@@ -30,15 +31,27 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "ROUTINE BRAIN +", "highlight": false },
-                            { "sequence": "T1: AX, COR", "highlight": false },
-                            { "sequence": "POST AX T1", "highlight": true }
+                            { "sequence": "T1: AX, COR (4mm)", "highlight": false },
+                            { "sequence": "T2 FSE: AX (5mm)", "highlight": false },
+                            { "sequence": "T1 MPRAGE FS (0.9mm)", "highlight": true },
+                            { "sequence": "T1-POST AX (5mm)", "highlight": true }
                         ]
                     },
                     "rightCard": {
                         "fullHeight": false,
                         "content": {
                             "indications": "Indicated for the detection, characterization, and follow-up of brain tumors or suspected infections. Contrast helps to visualize abnormal tissue and inflammation.",
-                            "contrastRationale": "Tumors and areas of infection often disrupt the blood-brain barrier, causing contrast to accumulate and 'enhance'. This helps delineate tumor margins, distinguish abscesses from solid masses, and assess for disease activity."
+                            "contrastRationale": "Tumors and areas of infection often disrupt the blood-brain barrier, causing contrast to accumulate and 'enhance'. This helps delineate tumor margins, distinguish abscesses from solid masses, and assess for disease activity.",
+                            "scannerSpecificNotes": {
+                                "SKYRA": [
+                                    { "sequence": "T1-POST 3D SPACE (1.2mm)", "highlight": true },
+                                    { "sequence": "T1-POST 3D MPRAGE SAG (1mm)", "highlight": true }
+                                ],
+                                "GE": [
+                                    { "sequence": "T1 FS POST COR SAG (1.2mm)", "highlight": true },
+                                    { "sequence": "FSPGR SAG (1.2mm)", "highlight": true }
+                                ]
+                            }
                         }
                     }
                 }
@@ -139,7 +152,7 @@
                             { "sequence": "T1 BRAIN POST: AX", "highlight": true },
                             { "sequence": "T2 3mm: COR, SAG", "highlight": false },
                             { "sequence": "FLAIR: AX", "highlight": false },
-                            { "sequence": "DYNAMIC COR (1PRE/6POST)", "highlight": false }
+                            { "sequence": "DYNAMIC COR (1/6POST)", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -635,7 +648,8 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "T1: AX, COR", "highlight": false },
-                            { "sequence": "T2: AX, COR, SAG", "highlight": false }
+                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false },
+                            { "sequence": "DESS COR", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -673,7 +687,8 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "T1: AX, COR, SAG", "highlight": false },
-                            { "sequence": "T2 FS: AX, COR", "highlight": false }
+                            { "sequence": "T2 FS: AX, COR", "highlight": false },
+                            { "sequence": "STIR: SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -747,7 +762,7 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "T1: COR", "highlight": false },
-                            { "sequence": "T2: SAG", "highlight": false },
+                            { "sequence": "T2 FS: SAG", "highlight": false },
                             { "sequence": "T2 FS: AX, COR", "highlight": false },
                             { "sequence": "PD: SAG", "highlight": false }
                         ]
@@ -803,7 +818,8 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "T1: AX, COR, SAG", "highlight": false },
-                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
+                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false },
+                            { "sequence": "STIR: SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -883,7 +899,7 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "T1 IN/OP: AX", "highlight": false },
-                            { "sequence": "T1 PRE: AX", "highlight": false },
+                            { "sequence": "T1: AX", "highlight": false },
                             { "sequence": "T1 ART: AX", "highlight": false },
                             { "sequence": "T1 PORT: AX", "highlight": false },
                             { "sequence": "T1 DELAY: AX", "highlight": false },
@@ -907,7 +923,7 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "T1 IN/OP: AX", "highlight": false },
-                            { "sequence": "T1 PRE: AX", "highlight": false },
+                            { "sequence": "T1: AX", "highlight": false },
                             { "sequence": "T1 ART: AX", "highlight": false },
                             { "sequence": "T1 PORT: AX", "highlight": false },
                             { "sequence": "T1 DELAY: AX", "highlight": false },
@@ -950,7 +966,7 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "T1 IN/OP: AX", "highlight": false },
-                            { "sequence": "T1 PRE: AX, COR", "highlight": false },
+                            { "sequence": "T1: AX, COR", "highlight": false },
                             { "sequence": "T1 CORT: AX", "highlight": false },
                             { "sequence": "T1 NEPH: AX", "highlight": false },
                             { "sequence": "T1 DELAY: AX", "highlight": false },
@@ -993,7 +1009,7 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "T1 PRE: AX", "highlight": false },
+                            { "sequence": "T1: AX", "highlight": false },
                             { "sequence": "T1 POST: AX, COR", "highlight": true },
                             { "sequence": "T2 (WHOLE ABD): AX, COR", "highlight": false },
                             { "sequence": "DWI: AX", "highlight": false },
@@ -1046,11 +1062,11 @@
           "layout": {
             "leftCard": {
               "sequences": [
-                { "sequence": "T1: Axial, Coronal, Sagittal", "highlight": false },
-                { "sequence": "T2: Axial, Coronal, Sagittal", "highlight": false },
-                { "sequence": "FLAIR: Axial, Coronal", "highlight": false },
-                { "sequence": "DWI: Axial", "highlight": false },
-                { "sequence": "T1 post-contrast: Axial, Coronal, Sagittal", "highlight": true }
+                { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                { "sequence": "T2: AX, COR, SAG", "highlight": false },
+                { "sequence": "FLAIR: AX, COR", "highlight": false },
+                { "sequence": "DWI: AX", "highlight": false },
+                { "sequence": "T1 POST: AX, COR, SAG", "highlight": true }
               ]
             },
             "rightCard": {
@@ -1067,10 +1083,10 @@
           "layout": {
             "leftCard": {
               "sequences": [
-                { "sequence": "T2: Axial, Sagittal", "highlight": false },
-                { "sequence": "STIR: Axial, Sagittal", "highlight": false },
-                { "sequence": "T1: Sagittal", "highlight": false },
-                { "sequence": "T1 post-contrast: Sagittal, Axial", "highlight": true }
+                { "sequence": "T2: AX, SAG", "highlight": false },
+                { "sequence": "STIR: AX, SAG", "highlight": false },
+                { "sequence": "T1: SAG", "highlight": false },
+                { "sequence": "T1 POST: SAG, AX", "highlight": true }
               ]
             },
             "rightCard": {
@@ -1092,10 +1108,10 @@
           "layout": {
             "leftCard": {
               "sequences": [
-                { "sequence": "T2 SSFSE: Axial, Coronal", "highlight": false },
-                { "sequence": "DWI: Axial", "highlight": false },
-                { "sequence": "T1 pre-contrast: Axial, Coronal", "highlight": false },
-                { "sequence": "T1 post-contrast: Axial, Coronal, Sagittal", "highlight": true }
+                { "sequence": "T2 SSFSE: AX, COR", "highlight": false },
+                { "sequence": "DWI: AX", "highlight": false },
+                { "sequence": "T1: AX, COR", "highlight": false },
+                { "sequence": "T1 POST: AX, COR, SAG", "highlight": true }
               ]
             },
             "rightCard": {
@@ -1117,10 +1133,10 @@
           "layout": {
             "leftCard": {
               "sequences": [
-                { "sequence": "T2: Axial, Coronal, Sagittal", "highlight": false },
-                { "sequence": "PD-weighted FS: Axial, Coronal, Sagittal", "highlight": false },
-                { "sequence": "STIR: Coronal, Sagittal", "highlight": false },
-                { "sequence": "T1 post-contrast: Axial, Coronal, Sagittal", "highlight": true }
+                { "sequence": "T2 FS: AX, COR, SAG", "highlight": false },
+                { "sequence": "PD FS: AX, COR, SAG", "highlight": false },
+                { "sequence": "STIR: COR, SAG", "highlight": false },
+                { "sequence": "T1 POST: AX, COR, SAG", "highlight": true }
               ]
             },
             "rightCard": {

@@ -39,6 +39,27 @@ export function initFuzzy(data) {
         getFn: (obj) => obj.layout?.rightCard?.content?.contrastRationale?.toLowerCase() || null
       },
       {
+        name: 'layout.rightCard.content.scannerSpecificNotes',
+        weight: 1.8,
+        getFn: (obj) => {
+          const scannerNotes = obj.layout?.rightCard?.content?.scannerSpecificNotes;
+          if (!scannerNotes || typeof scannerNotes !== 'object') return null;
+          
+          // Extract all sequences from all scanner types
+          const allSequences = [];
+          Object.values(scannerNotes).forEach(sequences => {
+            if (Array.isArray(sequences)) {
+              sequences.forEach(seq => {
+                if (seq.sequence) {
+                  allSequences.push(seq.sequence.toLowerCase());
+                }
+              });
+            }
+          });
+          return allSequences;
+        }
+      },
+      {
         name: 'section',
         weight: 1.5,
         getFn: (obj) => {

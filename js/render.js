@@ -34,6 +34,90 @@ function sortSequences(sequences) {
 }
 
 /**
+ * Renders scanner-specific notes as a separate card
+ */
+function renderScannerNotesCard(scannerNotes) {
+  if (!scannerNotes || typeof scannerNotes !== 'object') {
+    return '';
+  }
+
+  const scannerSections = Object.entries(scannerNotes).map(([scannerType, sequences]) => {
+    if (!Array.isArray(sequences) || sequences.length === 0) {
+      return '';
+    }
+
+    const sequenceList = sequences.map(seq => {
+      const isHighlight = seq.highlight === true;
+      const liClass = isHighlight ? 'class="highlight-sequence"' : '';
+      return `<li ${liClass}>${seq.sequence}</li>`;
+    }).join('');
+
+    return `
+      <div class="scanner-section">
+        <h3>${scannerType}</h3>
+        <ul class="scanner-sequences">
+          ${sequenceList}
+        </ul>
+      </div>
+    `;
+  }).filter(Boolean);
+
+  if (scannerSections.length === 0) {
+    return '';
+  }
+
+  return `
+    <div class="scanner-notes-card">
+      <div class="scanner-notes">
+        <h4>Scanner Specific Notes:</h4>
+        ${scannerSections.join('')}
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Renders scanner-specific notes if they exist
+ */
+function renderScannerNotes(scannerNotes) {
+  if (!scannerNotes || typeof scannerNotes !== 'object') {
+    return '';
+  }
+
+  const scannerSections = Object.entries(scannerNotes).map(([scannerType, sequences]) => {
+    if (!Array.isArray(sequences) || sequences.length === 0) {
+      return '';
+    }
+
+    const sequenceList = sequences.map(seq => {
+      const isHighlight = seq.highlight === true;
+      const liClass = isHighlight ? 'class="highlight-sequence"' : '';
+      return `<li ${liClass}>${seq.sequence}</li>`;
+    }).join('');
+
+    return `
+      <div class="scanner-section">
+        <h3>${scannerType}</h3>
+        <ul class="scanner-sequences">
+          ${sequenceList}
+        </ul>
+      </div>
+    `;
+  }).filter(Boolean);
+
+  if (scannerSections.length === 0) {
+    return '';
+  }
+
+  return `
+    <div class="scanner-notes">
+      <h4>Scanner Specific Notes:</h4>
+      ${scannerSections.join('')}
+    </div>
+  `;
+}
+
+/**
  * Renders a single protocol card HTML string.
  */
 function renderProtocolCard(protocol) {
@@ -56,6 +140,9 @@ function renderProtocolCard(protocol) {
   // Get content from the right card
   const rightCardContent = protocol.layout?.rightCard?.content || {};
   const fullHeight = protocol.layout?.rightCard?.fullHeight;
+
+  // Get scanner-specific notes
+  const scannerNotesHtml = renderScannerNotesCard(rightCardContent.scannerSpecificNotes);
 
   return `
     <div class="protocol-card">
@@ -87,6 +174,8 @@ function renderProtocolCard(protocol) {
               : ''}
           </div>
         </div>
+
+        ${scannerNotesHtml}
       </div>
     </div>
   `;
