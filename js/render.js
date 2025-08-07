@@ -127,19 +127,3 @@ export function renderGroupedProtocols(groupedData) {
   }).join('');
 }
 
-/**
- * Creates HTML for grouped protocols by section.
- */
-export function renderGroupedProtocols(groupedProtocols) {
-  let html = '';
-  for (const sectionKey in groupedProtocols) {
-    const protocols = groupedProtocols[sectionKey];
-    html += `<h2 class="protocol-section">${sectionKey}</h2>`;
-    html += '<div class="protocol-section-list">';
-    protocols.forEach(protocol => {
-      html += renderProtocolCard(protocol);
-    });
-    html += '</div>';
-  }
-  return html;
-}
