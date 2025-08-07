@@ -57,8 +57,7 @@ function runSearchAndRender() {
       resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
     } else {
       const grouped = results.reduce((acc, protocol) => {
-        const sectionArr = protocol.section;
-        const sectionKey = Array.isArray(sectionArr) && sectionArr.length > 0 ? sectionArr[0] : 'Other';
+        const sectionKey = protocol.section || 'Other';
         if (!acc[sectionKey]) {
           acc[sectionKey] = [];
         }
@@ -94,14 +93,19 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(rawData => {
       protocolData = rawData;
       
-      // Flatten all studies from all sections into a single array
+      // Flatten all studies, duplicating them for each section they belong to
       allStudies = [];
       protocolData.forEach(sectionObj => {
         if (Array.isArray(sectionObj.studies)) {
+          const sections = Array.isArray(sectionObj.section) ? sectionObj.section : ['Other'];
           sectionObj.studies.forEach(study => {
-            // Attach section info to each study for grouping later
-            study.section = sectionObj.section;
-            allStudies.push(study);
+            sections.forEach(sectionName => {
+              // Create a new object for each study-section pair
+              allStudies.push({
+                ...study,
+                section: sectionName // Assign the single section name
+              });
+            });
           });
         }
       });
