@@ -134,11 +134,7 @@ export function renderGroupedProtocols(groupedProtocols) {
   let html = '';
   for (const sectionKey in groupedProtocols) {
     const protocols = groupedProtocols[sectionKey];
-    // Use section array if available, otherwise fallback to sectionKey
-    const sectionNames = Array.isArray(protocols[0]?.section)
-      ? protocols[0].section.join(', ')
-      : sectionKey;
-    html += `<h2 class="protocol-section">${sectionNames}</h2>`;
+    html += `<h2 class="protocol-section">${sectionKey}</h2>`;
     html += '<div class="protocol-section-list">';
     protocols.forEach(protocol => {
       html += renderProtocolCard(protocol);

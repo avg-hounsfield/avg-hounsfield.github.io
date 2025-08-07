@@ -41,7 +41,16 @@ export function initFuzzy(data) {
       {
         name: 'section',
         weight: 1.5,
-        getFn: (obj) => Array.isArray(obj.section) ? obj.section.map(s => s.toLowerCase()) : []
+        getFn: (obj) => {
+          const section = obj.section;
+          if (typeof section === 'string') {
+            return section.toLowerCase();
+          }
+          if (Array.isArray(section)) {
+            return section.map(s => s.toLowerCase());
+          }
+          return '';
+        }
       }
     ]
   });
