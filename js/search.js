@@ -96,17 +96,14 @@ function matchesSection(protocol, querySection) {
   return false;
 }
 
-export function fuzzySearch(query, data) { // Accept data as an argument
-  if (!fuse || !query.trim() || !data) return []; // Check for data
+export function fuzzySearch(query) {
+  if (!fuse || !query.trim()) return [];
   
   const processedQuery = preprocessQuery(query);
   console.log('Searching with processed query:', processedQuery);
   
   try {
-    // We re-initialize Fuse with the latest data to ensure it's correct.
-    // This is simple and avoids issues with stale data.
-    const fuseInstance = new Fuse(data, fuse.options);
-    let results = fuseInstance.search(processedQuery);
+    let results = fuse.search(processedQuery);
     
     // Filter out low-scoring results
     results = results.filter(result => result.score < 0.5);
