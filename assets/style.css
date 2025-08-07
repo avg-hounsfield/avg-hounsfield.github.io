@@ -142,8 +142,8 @@
 }
 
 .sequences li.highlight-sequence {
-  color: var(--interactive-accent);
-  font-weight: bold;
+  color: var(--text-secondary);
+  font-weight: normal;
 }
 
 .sequences h4 {
@@ -539,6 +539,6 @@ a:hover {
 }
 
 .scanner-sequences li.highlight-sequence {
-  color: var(--highlight-text);
-  font-weight: 600;
+  color: var(--text-secondary);
+  font-weight: normal;
 }
