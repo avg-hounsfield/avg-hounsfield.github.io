@@ -1037,45 +1037,20 @@
             }
         ]
     },
-
     {
       "section": ["Neuro Imaging", "Pediatrics"],
       "studies": [
         {
           "study": "Pediatric Brain MRI",
+          "usesContrast": true,
           "layout": {
             "leftCard": {
               "sequences": [
-                {
-                  "type": "T1-weighted",
-                  "planes": ["Axial", "Coronal", "Sagittal"],
-                  "contrast": "No",
-                  "note": "Baseline brain anatomy"
-                },
-                {
-                  "type": "T2-weighted",
-                  "planes": ["Axial", "Coronal", "Sagittal"],
-                  "contrast": "No",
-                  "note": "Hydrocephalus, structural anomalies"
-                },
-                {
-                  "type": "FLAIR",
-                  "planes": ["Axial", "Coronal"],
-                  "contrast": "No",
-                  "note": "Periventricular and cortical changes"
-                },
-                {
-                  "type": "DWI",
-                  "planes": ["Axial"],
-                  "contrast": "No",
-                  "note": "Ischemia or encephalitis screening"
-                },
-                {
-                  "type": "T1-weighted post-contrast",
-                  "planes": ["Axial", "Coronal", "Sagittal"],
-                  "contrast": "Yes",
-                  "note": "Tumor or infection assessment"
-                }
+                { "sequence": "T1: Axial, Coronal, Sagittal", "highlight": false },
+                { "sequence": "T2: Axial, Coronal, Sagittal", "highlight": false },
+                { "sequence": "FLAIR: Axial, Coronal", "highlight": false },
+                { "sequence": "DWI: Axial", "highlight": false },
+                { "sequence": "T1 post-contrast: Axial, Coronal, Sagittal", "highlight": true }
               ]
             },
             "rightCard": {
@@ -1088,33 +1063,14 @@
         },
         {
           "study": "Pediatric Spine MRI",
+          "usesContrast": true,
           "layout": {
             "leftCard": {
               "sequences": [
-                {
-                  "type": "T2-weighted",
-                  "planes": ["Axial", "Sagittal"],
-                  "contrast": "No",
-                  "note": "Cord and vertebral evaluation"
-                },
-                {
-                  "type": "STIR",
-                  "planes": ["Axial", "Sagittal"],
-                  "contrast": "No",
-                  "note": "Inflammation or marrow signal"
-                },
-                {
-                  "type": "T1-weighted",
-                  "planes": ["Sagittal"],
-                  "contrast": "No",
-                  "note": "Vertebral body and disc anatomy"
-                },
-                {
-                  "type": "T1-weighted post-contrast",
-                  "planes": ["Sagittal", "Axial"],
-                  "contrast": "Yes",
-                  "note": "Infectious or neoplastic enhancement"
-                }
+                { "sequence": "T2: Axial, Sagittal", "highlight": false },
+                { "sequence": "STIR: Axial, Sagittal", "highlight": false },
+                { "sequence": "T1: Sagittal", "highlight": false },
+                { "sequence": "T1 post-contrast: Sagittal, Axial", "highlight": true }
               ]
             },
             "rightCard": {
@@ -1132,33 +1088,14 @@
       "studies": [
         {
           "study": "Pediatric Abdominal MRI",
+          "usesContrast": true,
           "layout": {
             "leftCard": {
               "sequences": [
-                {
-                  "type": "T2-weighted SSFSE",
-                  "planes": ["Axial", "Coronal"],
-                  "contrast": "No",
-                  "note": "Abdominal organ detail"
-                },
-                {
-                  "type": "DWI",
-                  "planes": ["Axial"],
-                  "contrast": "No",
-                  "note": "Detect restricted diffusion in mass or inflammation"
-                },
-                {
-                  "type": "T1-weighted pre-contrast",
-                  "planes": ["Axial", "Coronal"],
-                  "contrast": "No",
-                  "note": "Baseline liver and spleen anatomy"
-                },
-                {
-                  "type": "T1-weighted post-contrast",
-                  "planes": ["Axial", "Coronal", "Sagittal"],
-                  "contrast": "Yes",
-                  "note": "Tumor enhancement or vascular anomalies"
-                }
+                { "sequence": "T2 SSFSE: Axial, Coronal", "highlight": false },
+                { "sequence": "DWI: Axial", "highlight": false },
+                { "sequence": "T1 pre-contrast: Axial, Coronal", "highlight": false },
+                { "sequence": "T1 post-contrast: Axial, Coronal, Sagittal", "highlight": true }
               ]
             },
             "rightCard": {
@@ -1175,6 +1112,47 @@
       "section": ["MSK Imaging"],
       "studies": [
         {
+          "study": "Pediatric Musculoskeletal MRI (Hip)",
+          "usesContrast": true,
+          "layout": {
+            "leftCard": {
+              "sequences": [
+                { "sequence": "T2: Axial, Coronal, Sagittal", "highlight": false },
+                { "sequence": "PD-weighted FS: Axial, Coronal, Sagittal", "highlight": false },
+                { "sequence": "STIR: Coronal, Sagittal", "highlight": false },
+                { "sequence": "T1 post-contrast: Axial, Coronal, Sagittal", "highlight": true }
+              ]
+            },
+            "rightCard": {
+              "fullHeight": true,
+              "content": {
+                "indications": "Assessment of pediatric hip for joint effusion, infection, neoplasm, or structural abnormalities."
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "section": ["Misc."],
+      "studies": [
+        {
+          "study": "Empty Section",
+          "layout": {
+            "leftCard": {
+              "sequences": []
+            },
+            "rightCard": {
+              "fullHeight": true,
+              "content": {
+                "indications": "No pediatric protocols for this section yet."
+              }
+            }
+          }
+        }
+      ]
+    },
+       {
           "study": "Pediatric Musculoskeletal MRI (Hip)",
           "layout": {
             "leftCard": {
@@ -1212,9 +1190,7 @@
               }
             }
           }
-        }
-      ]
-    },
+        },
     {
       "section": ["Misc."],
       "studies": [
@@ -1235,3 +1211,4 @@
       ]
     }
   ]
+  
