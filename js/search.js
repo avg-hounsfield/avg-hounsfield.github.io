@@ -71,19 +71,33 @@ function preprocessQuery(query) {
   return searchExpression;
 }
 
-// Accepts optional data argument for searching a specific array
-export function fuzzySearch(query, dataOverride) {
-  if ((!fuse && !dataOverride) || !query.trim()) return [];
+function matchesSection(protocol, querySection) {
+  // If the protocol has no sections, it can't match
+  if (!protocol.section || !Array.isArray(protocol.section)) {
+    return false;
+  }
+
+  // Check if any of the protocol's sections match the querySection
+  for (const section of protocol.section) {
+    if (typeof section === 'string' && section.toLowerCase() === querySection.toLowerCase()) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export function fuzzySearch(query, data) { // Accept data as an argument
+  if (!fuse || !query.trim() || !data) return []; // Check for data
   
   const processedQuery = preprocessQuery(query);
-  let searchFuse = fuse;
-  if (dataOverride) {
-    // If dataOverride is provided, create a temporary Fuse instance for this search
-    searchFuse = new Fuse(dataOverride, fuse.options);
-  }
+  console.log('Searching with processed query:', processedQuery);
+  
   try {
-    // Search with the processed query
-    let results = searchFuse.search(processedQuery);
+    // We re-initialize Fuse with the latest data to ensure it's correct.
+    // This is simple and avoids issues with stale data.
+    const fuseInstance = new Fuse(data, fuse.options);
+    let results = fuseInstance.search(processedQuery);
     
     // Filter out low-scoring results
     results = results.filter(result => result.score < 0.5);

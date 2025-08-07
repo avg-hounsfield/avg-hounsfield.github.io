@@ -1084,7 +1084,7 @@
       ]
     },
     {
-      "section": ["Abdominal Imaging"],
+      "section": ["Abdominal Imaging", "Pediatrics"],
       "studies": [
         {
           "study": "Pediatric Abdominal MRI",
@@ -1109,7 +1109,7 @@
       ]
     },
     {
-      "section": ["MSK Imaging"],
+      "section": ["MSK Imaging", "Pediatrics"],
       "studies": [
         {
           "study": "Pediatric Musculoskeletal MRI (Hip)",
@@ -1132,83 +1132,6 @@
           }
         }
       ]
-    },
-    {
-      "section": ["Misc."],
-      "studies": [
-        {
-          "study": "Empty Section",
-          "layout": {
-            "leftCard": {
-              "sequences": []
-            },
-            "rightCard": {
-              "fullHeight": true,
-              "content": {
-                "indications": "No pediatric protocols for this section yet."
-              }
-            }
-          }
-        }
-      ]
-    },
-       {
-          "study": "Pediatric Musculoskeletal MRI (Hip)",
-          "layout": {
-            "leftCard": {
-              "sequences": [
-                {
-                  "type": "T2-weighted",
-                  "planes": ["Axial", "Coronal", "Sagittal"],
-                  "contrast": "No",
-                  "note": "Joint effusion and soft tissue"
-                },
-                {
-                  "type": "PD-weighted FS",
-                  "planes": ["Axial", "Coronal", "Sagittal"],
-                  "contrast": "No",
-                  "note": "Cartilage and labrum evaluation"
-                },
-                {
-                  "type": "STIR",
-                  "planes": ["Coronal", "Sagittal"],
-                  "contrast": "No",
-                  "note": "Marrow edema or inflammation"
-                },
-                {
-                  "type": "T1-weighted post-contrast",
-                  "planes": ["Axial", "Coronal", "Sagittal"],
-                  "contrast": "Yes",
-                  "note": "Infection or neoplasm characterization"
-                }
-              ]
-            },
-            "rightCard": {
-              "fullHeight": true,
-              "content": {
-                "indications": "Assessment of pediatric hip for joint effusion, infection, neoplasm, or structural abnormalities."
-              }
-            }
-          }
-        },
-    {
-      "section": ["Misc."],
-      "studies": [
-        {
-          "study": "Empty Section",
-          "layout": {
-            "leftCard": {
-              "sequences": []
-            },
-            "rightCard": {
-              "fullHeight": true,
-              "content": {
-                "indications": "No pediatric protocols for this section yet."
-              }
-            }
-          }
-        }
-      ]
     }
   ]
-  
+

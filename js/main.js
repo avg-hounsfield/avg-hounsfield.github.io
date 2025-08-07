@@ -4,6 +4,7 @@ import { initFuzzy, fuzzySearch } from './search.js';
 import { renderGroupedProtocols } from './render.js';
 
 let protocolData = [];
+let allStudies = []; // Add a new variable to hold the flattened list of all studies
 const DEBOUNCE_DELAY = 300; // Delay for real-time search
 
 // Function to debounce the search
@@ -34,31 +35,21 @@ function runSearchAndRender() {
     return;
   }
 
+  // Only search if we have data
+  if (!allStudies || !allStudies.length) {
+    console.error('No protocol data available');
+    resultsContainer.innerHTML = 
+      '<p class="error">Failed to load protocols. Please try again later.</p>';
+    return;
+  }
+
   try {
-    // Flatten all protocols from all sections for searching
-    const allStudies = [];
-    protocolData.forEach(sectionObj => {
-      if (Array.isArray(sectionObj.studies)) {
-        sectionObj.studies.forEach(study => {
-          // Attach section info to each study for grouping later
-          study.section = sectionObj.section;
-          allStudies.push(study);
-        });
-      }
-    });
-
-    // Only search if we have data
-    if (!allStudies.length) {
-      resultsContainer.innerHTML = '<p class="error">No protocol data available.</p>';
-      return;
-    }
-
-    // Pass the flattened array to fuzzySearch (update search.js to accept data as 2nd arg)
+    // Perform search on the flattened list of all studies
     let results = fuzzySearch(query, allStudies);
     if (!Array.isArray(results)) {
       results = [];
     }
-
+    
     // Debug logs
     console.log('Search returned results:', results);
 
@@ -102,15 +93,20 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(res => res.json())
     .then(rawData => {
       protocolData = rawData;
-      const allStudies = [];
+      
+      // Flatten all studies from all sections into a single array
+      allStudies = [];
       protocolData.forEach(sectionObj => {
         if (Array.isArray(sectionObj.studies)) {
           sectionObj.studies.forEach(study => {
+            // Attach section info to each study for grouping later
             study.section = sectionObj.section;
             allStudies.push(study);
           });
         }
       });
+
+      // Initialize fuzzy search with the flattened list
       initFuzzy(allStudies);
       
       // Don't show any results initially
