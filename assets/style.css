@@ -118,37 +118,53 @@ body {
   border-bottom: 2px solid var(--interactive-accent);
 }
 
-/* Optimized animations with vendor prefixes and smooth easing */
+/* Optimized animations with vendor prefixes and professional easing */
 @-webkit-keyframes fade-in-up {
-  from { 
+  0% { 
     opacity: 0; 
-    -webkit-transform: translateY(30px) scale(0.95);
-    transform: translateY(30px) scale(0.95); 
+    -webkit-transform: translateY(40px) scale(0.92);
+    transform: translateY(40px) scale(0.92);
+    filter: blur(2px);
   }
-  to { 
+  60% {
+    opacity: 0.8;
+    -webkit-transform: translateY(8px) scale(0.98);
+    transform: translateY(8px) scale(0.98);
+    filter: blur(0.5px);
+  }
+  100% { 
     opacity: 1; 
     -webkit-transform: translateY(0) scale(1);
-    transform: translateY(0) scale(1); 
+    transform: translateY(0) scale(1);
+    filter: blur(0);
   }
 }
 
 @keyframes fade-in-up {
-  from { 
+  0% { 
     opacity: 0; 
-    -webkit-transform: translateY(30px) scale(0.95);
-    transform: translateY(30px) scale(0.95); 
+    -webkit-transform: translateY(40px) scale(0.92);
+    transform: translateY(40px) scale(0.92);
+    filter: blur(2px);
   }
-  to { 
+  60% {
+    opacity: 0.8;
+    -webkit-transform: translateY(8px) scale(0.98);
+    transform: translateY(8px) scale(0.98);
+    filter: blur(0.5px);
+  }
+  100% { 
     opacity: 1; 
     -webkit-transform: translateY(0) scale(1);
-    transform: translateY(0) scale(1); 
+    transform: translateY(0) scale(1);
+    filter: blur(0);
   }
 }
 
 .fade-in-up {
-  -webkit-animation: fade-in-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) both;
-  animation: fade-in-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) both;
-  will-change: transform, opacity;
+  -webkit-animation: fade-in-up 1.2s cubic-bezier(0.19, 1, 0.22, 1) both;
+  animation: fade-in-up 1.2s cubic-bezier(0.19, 1, 0.22, 1) both;
+  will-change: transform, opacity, filter;
 }
 
 .protocol-grid {
@@ -170,11 +186,11 @@ body {
   color: var(--text-primary);
   color: #e6e9ec; /* Fallback for IE */
   font-family: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  -webkit-transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  -moz-transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  -ms-transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  -o-transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  -webkit-transition: background-color 0.6s cubic-bezier(0.19, 1, 0.22, 1), color 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  -moz-transition: background-color 0.6s cubic-bezier(0.19, 1, 0.22, 1), color 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  -ms-transition: background-color 0.6s cubic-bezier(0.19, 1, 0.22, 1), color 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  -o-transition: background-color 0.6s cubic-bezier(0.19, 1, 0.22, 1), color 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: background-color 0.6s cubic-bezier(0.19, 1, 0.22, 1), color 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 h1, h2, h4, h5, h6 {
@@ -210,18 +226,37 @@ h3 {
   flex-direction: column;
   background: var(--primary-surface-bg);
   background: #252a31; /* Fallback */
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  border-radius: 8px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
   padding: 20px;
   margin: 10px 0;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform, box-shadow;
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: transform, box-shadow, filter;
+  position: relative;
+  overflow: hidden;
+}
+
+.protocol-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.02), transparent);
+  transition: left 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  pointer-events: none;
 }
 
 .protocol-card:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 8px 20px rgba(64, 180, 166, 0.1);
+  filter: brightness(1.05);
+}
+
+.protocol-card:hover::before {
+  left: 100%;
 }
 
 .protocol-card {
@@ -280,31 +315,72 @@ button, input, select {
   background: var(--secondary-surface-bg);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 0.5em 1em;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: border-color, background, transform;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: border-color, background, box-shadow;
+  position: relative;
+  overflow: hidden;
 }
+
+button::before, input::before, select::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(64, 180, 166, 0.1);
+  border-radius: 50%;
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 button:hover, input:focus, select:focus {
   border-color: var(--border-color-focus);
   outline: none;
   background: var(--interactive-accent-hover);
+  box-shadow: 0 8px 25px rgba(64, 180, 166, 0.2);
+}
+
+button:hover::before, input:focus::before, select:focus::before {
+  width: 300px;
+  height: 300px;
 }
 
 /* Links */
 a {
   color: var(--interactive-accent);
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
   will-change: color;
+  position: relative;
+  text-decoration: none;
 }
+
+a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--interactive-accent), var(--interactive-accent-hover));
+  transition: width 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
 a:hover {
   color: var(--interactive-accent-hover);
-  text-decoration: underline;
+  filter: brightness(1.1);
+}
+
+a:hover::after {
+  width: 100%;
 }
 
 /* Animations */
 .fade-in-up {
-  animation: fade-in-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) var(--delay, 0ms) both;
+  animation: fade-in-up 1.2s cubic-bezier(0.19, 1, 0.22, 1) var(--delay, 0ms) both;
 }
 
 /*------------------------------------*\
@@ -328,19 +404,30 @@ a:hover {
   width: 100%;
   font-size: 1.2rem;
   padding: 0.75em 1em;
-  border-radius: 4px;
-  border: none;
-  border-bottom: 2px solid var(--interactive-accent);
-  background: transparent;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--secondary-surface-bg);
   color: var(--text-primary);
-  box-sizing: border-box;
-  outline: none;
-  transition: border-color 0.2s;
-  caret-color: var(--interactive-accent); /* Blinking orange cursor */
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  will-change: border-color, box-shadow, transform;
+  position: relative;
 }
 
 #searchInput:focus {
-  border-bottom: 2.5px solid var(--interactive-accent-hover);
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 4px rgba(64, 180, 166, 0.1), 
+              0 8px 25px rgba(64, 180, 166, 0.15);
+  transform: translateY(-2px);
+}
+
+#searchInput::placeholder {
+  color: var(--text-secondary);
+  transition: opacity 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+#searchInput:focus::placeholder {
+  opacity: 0.7;
 }
 
 #searchButton {
@@ -554,10 +641,11 @@ a:hover {
 }
 
 .sequences-header:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 6px;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
   will-change: background;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
 }
 
 .sequences-content {
@@ -634,10 +722,11 @@ a:hover {
 }
 
 .indications-header:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 6px;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
   will-change: background;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
 }
 
 .indications-content {
@@ -690,31 +779,35 @@ a:hover {
 }
 
 .scanner-notes-header:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 6px;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
   will-change: background;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
 }
 
 .scanner-notes-content {
   margin-top: 15px;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
   overflow: hidden;
-  will-change: height, opacity;
+  will-change: height, opacity, transform;
 }
 
 .accordion-toggle {
   font-size: 1.2em;
   font-weight: bold;
   color: var(--interactive-accent); /* Default color */
-  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+              color 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+              filter 0.3s cubic-bezier(0.19, 1, 0.22, 1);
   min-width: 20px;
   text-align: center;
-  will-change: transform;
+  will-change: transform, color, filter;
 }
 
 .accordion-toggle.expanded {
-  transform: rotate(45deg) scale(1.1);
+  transform: rotate(45deg) scale(1.15);
+  filter: drop-shadow(0 2px 4px rgba(64, 180, 166, 0.3));
 }
 
 /* Specific accordion toggle colors to match headers */

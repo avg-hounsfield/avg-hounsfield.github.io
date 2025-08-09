@@ -16,7 +16,7 @@ const debounce = (func, wait) => {
   };
 };
 
-// Function to toggle accordion display with enhanced animations
+// Function to toggle accordion display with enhanced professional animations
 window.toggleAccordion = function(accordionId) {
   const content = document.getElementById(accordionId);
   const toggle = document.getElementById('toggle-' + accordionId);
@@ -25,30 +25,35 @@ window.toggleAccordion = function(accordionId) {
   
   const isHidden = content.style.display === 'none' || content.style.display === '';
   
-  // Add performance optimization
-  content.style.willChange = 'opacity, transform';
+  // Add professional performance optimization
+  content.style.willChange = 'opacity, transform, filter';
   
-  // Use requestAnimationFrame for smooth animations with enhanced timing
+  // Use requestAnimationFrame for buttery smooth animations
   requestAnimationFrame(() => {
     if (isHidden) {
-      // Opening animation
+      // Professional opening animation sequence
       content.style.display = 'block';
       content.style.opacity = '0';
-      content.style.transform = 'translateY(-10px)';
+      content.style.transform = 'translateY(-15px) scale(0.96)';
+      content.style.filter = 'blur(1px)';
       
       requestAnimationFrame(() => {
+        content.style.transition = 'all 0.6s cubic-bezier(0.19, 1, 0.22, 1)';
         content.style.opacity = '1';
-        content.style.transform = 'translateY(0)';
+        content.style.transform = 'translateY(0) scale(1)';
+        content.style.filter = 'blur(0)';
       });
     } else {
-      // Closing animation
+      // Professional closing animation sequence
+      content.style.transition = 'all 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)';
       content.style.opacity = '0';
-      content.style.transform = 'translateY(-10px)';
+      content.style.transform = 'translateY(-10px) scale(0.98)';
+      content.style.filter = 'blur(0.5px)';
       
       setTimeout(() => {
         content.style.display = 'none';
         content.style.willChange = 'auto';
-      }, 400); // Match CSS transition duration
+      }, 500); // Match enhanced CSS transition duration
     }
     
     toggle.textContent = isHidden ? '−' : '+';
@@ -96,20 +101,20 @@ function runSearchAndRender() {
 
     resultsContainer.innerHTML = renderGroupedProtocols(grouped);
     
-    // Optimize animations - use CSS classes with improved staggering
+    // Professional staggered animations with optimized timing
     const cards = resultsContainer.querySelectorAll('.protocol-card');
     cards.forEach((card, index) => {
-      // Smooth staggered animation with better timing
-      card.style.animationDelay = `${index * 80}ms`;
+      // Smooth staggered animation with professional timing curve
+      card.style.animationDelay = `${index * 120}ms`;
       card.classList.add('fade-in-up');
       
-      // Add performance optimization
-      card.style.willChange = 'transform, opacity';
+      // Enhanced performance optimization
+      card.style.willChange = 'transform, opacity, filter';
       
-      // Clean up will-change after animation completes
+      // Clean up will-change after animation completes with extended timing
       setTimeout(() => {
         card.style.willChange = 'auto';
-      }, 800 + (index * 80));
+      }, 1200 + (index * 120));
     });
     
   } catch (error) {
