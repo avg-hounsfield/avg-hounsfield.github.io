@@ -667,7 +667,7 @@ a:hover {
   margin: 0;
   color: var(--text-primary);
   font-size: 1em;
-  font-weight: 300 !important; /* Light font weight */
+  font-weight: 200 !important; /* Extra light font weight */
 }
 
 .scanner-section {
@@ -682,7 +682,7 @@ a:hover {
   margin: 0 0 12px 0;
   color: var(--interactive-accent);
   font-size: 1.1em;
-  font-weight: 700;
+  font-weight: 200 !important; /* Extra light font weight */
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border-bottom: 2px solid var(--interactive-accent);
@@ -700,9 +700,10 @@ a:hover {
   color: var(--text-secondary);
   font-size: 0.9em;
   line-height: 1.4;
+  font-weight: 200; /* Extra light font weight */
 }
 
 .scanner-sequences li.highlight-sequence {
   color: var(--highlight-bluegreen);
-  font-weight: 700; /* Bold */
+  font-weight: 200; /* Keep consistent light weight even for highlighted */
 }
