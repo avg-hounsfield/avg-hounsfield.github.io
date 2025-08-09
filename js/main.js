@@ -16,49 +16,63 @@ const debounce = (func, wait) => {
   };
 };
 
-// Function to toggle accordion display with enhanced professional animations
+// Function to toggle accordion display with smooth height-based animations
 window.toggleAccordion = function(accordionId) {
   const content = document.getElementById(accordionId);
   const toggle = document.getElementById('toggle-' + accordionId);
   
   if (!content || !toggle) return; // Safety check
   
-  const isHidden = content.style.display === 'none' || content.style.display === '';
+  const isExpanded = content.style.maxHeight && content.style.maxHeight !== '0px';
   
-  // Add professional performance optimization
-  content.style.willChange = 'opacity, transform, filter';
+  // Set up consistent transition for both open and close
+  content.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+  content.style.willChange = 'max-height, opacity, transform';
+  content.style.overflow = 'hidden';
   
-  // Use requestAnimationFrame for buttery smooth animations
-  requestAnimationFrame(() => {
-    if (isHidden) {
-      // Professional opening animation sequence
-      content.style.display = 'block';
-      content.style.opacity = '0';
-      content.style.transform = 'translateY(-15px) scale(0.96)';
-      content.style.filter = 'blur(1px)';
-      
-      requestAnimationFrame(() => {
-        content.style.transition = 'all 0.6s cubic-bezier(0.19, 1, 0.22, 1)';
-        content.style.opacity = '1';
-        content.style.transform = 'translateY(0) scale(1)';
-        content.style.filter = 'blur(0)';
-      });
-    } else {
-      // Professional closing animation sequence
-      content.style.transition = 'all 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)';
-      content.style.opacity = '0';
-      content.style.transform = 'translateY(-10px) scale(0.98)';
-      content.style.filter = 'blur(0.5px)';
-      
-      setTimeout(() => {
-        content.style.display = 'none';
-        content.style.willChange = 'auto';
-      }, 500); // Match enhanced CSS transition duration
-    }
+  if (!isExpanded) {
+    // Opening animation - smooth height expansion
+    content.style.display = 'block';
+    content.style.opacity = '0';
+    content.style.transform = 'translateY(-8px)';
+    content.style.maxHeight = '0px';
     
-    toggle.textContent = isHidden ? '−' : '+';
-    toggle.classList.toggle('expanded', isHidden);
-  });
+    // Get the natural height
+    const scrollHeight = content.scrollHeight;
+    
+    requestAnimationFrame(() => {
+      content.style.maxHeight = scrollHeight + 'px';
+      content.style.opacity = '1';
+      content.style.transform = 'translateY(0)';
+    });
+    
+    // Clean up after animation
+    setTimeout(() => {
+      content.style.maxHeight = 'none';
+      content.style.willChange = 'auto';
+    }, 500);
+    
+  } else {
+    // Closing animation - smooth height collapse
+    const scrollHeight = content.scrollHeight;
+    content.style.maxHeight = scrollHeight + 'px';
+    
+    requestAnimationFrame(() => {
+      content.style.maxHeight = '0px';
+      content.style.opacity = '0';
+      content.style.transform = 'translateY(-8px)';
+    });
+    
+    // Hide after animation completes
+    setTimeout(() => {
+      content.style.display = 'none';
+      content.style.willChange = 'auto';
+    }, 500);
+  }
+  
+  // Update toggle button
+  toggle.textContent = !isExpanded ? '−' : '+';
+  toggle.classList.toggle('expanded', !isExpanded);
 };
 
 // Optimized search and render function
