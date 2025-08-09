@@ -153,6 +153,36 @@ function renderIndicationsCard(rightCardContent) {
 }
 
 /**
+ * Renders a separate card for sequences with accordion functionality
+ */
+function renderSequencesCard(sequences) {
+  if (!sequences || sequences.length === 0) {
+    return '';
+  }
+
+  // Generate unique ID for this accordion
+  const accordionId = 'sequences-' + Math.random().toString(36).substr(2, 9);
+
+  return `
+    <div class="sequences-card">
+      <div class="sequences-header" onclick="toggleAccordion('${accordionId}')">
+        <h4>Sequences</h4>
+        <span class="accordion-toggle" id="toggle-${accordionId}">+</span>
+      </div>
+      <div class="sequences-content" id="${accordionId}" style="display: none;">
+        <ul>
+          ${sequences.map(seq => {
+            const isHighlight = seq.highlight === true;
+            const liClass = isHighlight ? 'class="highlight-sequence"' : '';
+            return `<li ${liClass}>${seq.sequence}</li>`;
+          }).join('\n          ') || '<li>None listed</li>'}
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+/**
  * Renders a single protocol card HTML string.
  */
 function renderProtocolCard(protocol) {
@@ -182,8 +212,8 @@ function renderProtocolCard(protocol) {
   // Get indications and contrast rationale
   const indicationsHtml = renderIndicationsCard(rightCardContent);
 
-  // Generate unique IDs for accordions
-  const sequencesId = 'sequences-' + Math.random().toString(36).substr(2, 9);
+  // Create sequences card similar to other accordion cards
+  const sequencesHtml = renderSequencesCard(sortedSequences);
 
   return `
     <div class="protocol-card">
@@ -195,22 +225,9 @@ function renderProtocolCard(protocol) {
               <span class="${contrastClass}"><strong>Contrast:</strong> <span class="contrast-value ${contrastClass}">${contrastText}</span></span>
             </div>
           </div>
-          <div class="sequences">
-            <div class="sequences-header" onclick="toggleAccordion('${sequencesId}')">
-              <h4>Sequences</h4>
-              <span class="accordion-toggle" id="toggle-${sequencesId}">+</span>
-            </div>
-            <div class="sequences-content" id="${sequencesId}" style="display: none;">
-              <ul>
-                ${sortedSequences.map(seq => {
-                  const isHighlight = seq.highlight === true;
-                  const liClass = isHighlight ? 'class="highlight-sequence"' : '';
-                  return `<li ${liClass}>${seq.sequence}</li>`;
-                }).join('\n                ') || '<li>None listed</li>'}
-              </ul>
-            </div>
-          </div>
         </div>
+
+        ${sequencesHtml}
 
         ${indicationsHtml}
 

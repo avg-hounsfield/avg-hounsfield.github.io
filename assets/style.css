@@ -151,11 +151,18 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h4, h5, h6 {
   font-family: 'Jost', sans-serif;
   font-weight: 700;
   font-style: normal;
   color: var(--interactive-accent);
+}
+
+h3 {
+  font-family: 'Jost', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  color: var(--text-primary); /* White/near-white for study headings */
 }
 
 .protocol-grid {
@@ -204,8 +211,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Sequence styling */
 li.contrast-sequence {
-  color: var(--highlight-bluegreen);
-  font-weight: 500;
+  color: var(--underline-color); /* Same orange color as "Contrast = Yes" */
+  font-weight: 600;
 }
 li.contrast-sequence strong {
   color: var(--text-primary);
@@ -331,12 +338,12 @@ a:hover {
     max-width: 100%;
   }
   
-  .left-card, .right-card, .scanner-notes-card, .indications-card {
-    width: 95%;
+  .left-card, .right-card, .scanner-notes-card, .indications-card, .sequences-card {
+    width: 100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    max-width: 95%;
+    max-width: 100%;
   }
   
   .protocol-group {
@@ -379,7 +386,7 @@ a:hover {
     width: 100%;
   }
   
-  .left-card, .right-card, .scanner-notes-card, .indications-card {
+  .left-card, .right-card, .scanner-notes-card, .indications-card, .sequences-card {
     padding: 15px;
     margin-bottom: 10px;
     width: 100%;
@@ -450,15 +457,80 @@ a:hover {
   padding: 20px;
   background: var(--secondary-surface-bg);
   border-radius: 6px;
-  width: 90%;
+  width: 100%;
   box-sizing: border-box;
   border-left: 3px solid var(--interactive-accent);
 }
 
+/* Sequences Card Styles */
+.sequences-card {
+  width: 100%;
+  margin: 0 0 20px 0;
+  background: var(--card-background);
+  border-radius: 8px;
+  -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-left: 3px solid var(--interactive-accent); /* Teal border */
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.sequences-header {
+  padding: 15px 20px;
+  background: var(--card-header-background, #f8f9fa);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.sequences-header h4 {
+  margin: 0;
+  color: var(--interactive-accent); /* Teal color for Sequences header */
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.sequences-content {
+  padding: 20px;
+  background: var(--card-background);
+}
+
+.sequences-content ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.sequences-content li {
+  margin-bottom: 6px;
+  color: var(--text-secondary);
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
 /* Indications Card Styles */
 .indications-card {
-  width: 90%;
-  margin: 0 auto 20px;
+  width: 100%;
+  margin: 0 0 20px 0; /* Remove auto centering, align left */
   background: var(--card-background);
   border-radius: 8px;
   -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -497,7 +569,7 @@ a:hover {
 
 .indications-header h4 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--interactive-accent); /* Teal color for Clinical Information header */
   font-size: 1.1rem;
   font-weight: 600;
 }

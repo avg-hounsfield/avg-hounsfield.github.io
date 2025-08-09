@@ -1057,7 +1057,7 @@
       "section": ["Neuro Imaging", "Pediatrics"],
       "studies": [
         {
-          "study": "Pediatric Brain MRI",
+          "study": "PEDIATRIC BRAIN MRI",
           "usesContrast": true,
           "layout": {
             "leftCard": {
@@ -1078,7 +1078,7 @@
           }
         },
         {
-          "study": "Pediatric Spine MRI",
+          "study": "PEDIATRIC SPINE MRI",
           "usesContrast": true,
           "layout": {
             "leftCard": {
@@ -1103,7 +1103,7 @@
       "section": ["Abdominal Imaging", "Pediatrics"],
       "studies": [
         {
-          "study": "Pediatric Abdominal MRI",
+          "study": "PEDIATRIC ABDOMINAL MRI",
           "usesContrast": true,
           "layout": {
             "leftCard": {
@@ -1128,7 +1128,7 @@
       "section": ["MSK Imaging", "Pediatrics"],
       "studies": [
         {
-          "study": "Pediatric Musculoskeletal MRI (Hip)",
+          "study": "PEDIATRIC MUSCULOSKELETAL MRI (HIP)",
           "usesContrast": true,
           "layout": {
             "leftCard": {
