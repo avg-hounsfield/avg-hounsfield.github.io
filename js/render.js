@@ -188,7 +188,7 @@ function renderSequencesCard(sequences) {
 function renderProtocolCard(protocol) {
   if (!protocol) return ''; // Safety check
   
-  const contrastText = protocol.usesContrast ? 'Yes' : 'No';
+  const contrastText = protocol.usesContrast ? 'YES' : 'NO';
   const contrastClass = protocol.usesContrast ? 'contrast-yes' : 'contrast-no';
 
   // Get sequences from the new layout structure

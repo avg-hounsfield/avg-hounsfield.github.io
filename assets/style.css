@@ -224,12 +224,8 @@ li.contrast-sequence strong {
 
 /* Highlighted sequences styling */
 li.highlight-sequence {
-  color: var(--highlight-bluegreen);
-  font-weight: 600;
-  background-color: rgba(78, 207, 191, 0.1);
-  padding: 4px 8px;
-  border-radius: 4px;
-  border-left: 3px solid var(--highlight-bluegreen);
+  color: var(--underline-color); /* Bold yellow-orange font */
+  font-weight: 700; /* Bold */
 }
 
 .protocol-note {
@@ -475,7 +471,7 @@ a:hover {
   -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-left: 3px solid var(--interactive-accent); /* Teal border */
+  border-left: 3px solid white; /* White border */
   overflow: hidden;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -508,7 +504,7 @@ a:hover {
 
 .sequences-header h4 {
   margin: 0;
-  color: var(--interactive-accent); /* Teal color for Sequences header */
+  color: var(--text-primary); /* White color for Sequences header */
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -685,9 +681,5 @@ a:hover {
 
 .scanner-sequences li.highlight-sequence {
   color: var(--highlight-bluegreen);
-  font-weight: 600;
-  background-color: rgba(78, 207, 191, 0.1);
-  padding: 4px 8px;
-  border-radius: 4px;
-  border-left: 3px solid var(--highlight-bluegreen);
+  font-weight: 700; /* Bold */
 }
