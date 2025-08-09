@@ -579,7 +579,7 @@ a:hover {
 
 .indications-header h4 {
   margin: 0;
-  color: var(--underline-color); /* Yellow-orange color for Clinical Information header */
+  color: var(--underline-color) !important; /* Yellow-orange color for Clinical Information header */
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -652,22 +652,22 @@ a:hover {
 
 /* Specific accordion toggle colors to match headers */
 .sequences-header .accordion-toggle {
-  color: var(--text-primary); /* White - matches sequences header */
+  color: var(--text-primary) !important; /* White - matches sequences header */
 }
 
 .indications-header .accordion-toggle {
-  color: var(--underline-color); /* Yellow-orange - matches clinical information header */
+  color: var(--underline-color) !important; /* Yellow-orange - matches clinical information header */
 }
 
 .scanner-notes-header .accordion-toggle {
-  color: var(--text-primary); /* White - matches scanner notes header */
+  color: var(--text-primary) !important; /* White - matches scanner notes header */
 }
 
 .scanner-notes h4 {
   margin: 0;
   color: var(--text-primary);
   font-size: 1em;
-  font-weight: 400; /* Normal font weight */
+  font-weight: 300 !important; /* Light font weight */
 }
 
 .scanner-section {
