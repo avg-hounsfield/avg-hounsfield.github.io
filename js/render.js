@@ -9,6 +9,14 @@ function sortSequences(sequences) {
   const PREDEFINED_ORDER = ['T1', 'T2', 'FLAIR', 'SWAN', 'SWI', 'GRE', 'PD', 'DWI', 'FIESTA', 'COSMIC', 'SPACE', 'MPRAGE', 'SPGR'];
   
   return sequences.slice().sort((a, b) => {
+    // ROUTINE BRAIN + always comes first
+    const aIsRoutineBrain = (a.sequence || '').toUpperCase().includes('ROUTINE BRAIN +');
+    const bIsRoutineBrain = (b.sequence || '').toUpperCase().includes('ROUTINE BRAIN +');
+    
+    if (aIsRoutineBrain && !bIsRoutineBrain) return -1;
+    if (!aIsRoutineBrain && bIsRoutineBrain) return 1;
+    if (aIsRoutineBrain && bIsRoutineBrain) return 0; // Both are routine brain, maintain order
+    
     const aIsContrast = a.contrast === true || a.highlight === true;
     const bIsContrast = b.contrast === true || b.highlight === true;
 
