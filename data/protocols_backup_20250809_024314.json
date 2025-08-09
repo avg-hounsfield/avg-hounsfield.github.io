@@ -8,11 +8,11 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1 (4mm)", "highlight": false },
-                            { "sequence": "AX T2 (5mm)", "highlight": false },
-                            { "sequence": "AX DWI", "highlight": false },
-                            { "sequence": "SAG FLAIR CUBE", "highlight": false },
-                            { "sequence": "AX SWAN (3mm or 2mm for SWI)", "highlight": false }
+                            { "sequence": "T1: SAG (4mm)", "highlight": false },
+                            { "sequence": "T2: AX (5mm)", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR CUBE: SAG", "highlight": false },
+                            { "sequence": "SWAN: AX (3mm or 2mm for SWI)", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -31,10 +31,10 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "ROUTINE BRAIN +", "highlight": false },
-                            { "sequence": "AX, COR T1 (4mm)", "highlight": false },
-                            { "sequence": "AX T2 FSE (5mm)", "highlight": false },
+                            { "sequence": "T1: AX, COR (4mm)", "highlight": false },
+                            { "sequence": "T2 FSE: AX (5mm)", "highlight": false },
                             { "sequence": "T1 MPRAGE FS (0.9mm)", "highlight": true },
-                            { "sequence": "AX T1-POST (5mm)", "highlight": true }
+                            { "sequence": "T1-POST AX (5mm)", "highlight": true }
                         ]
                     },
                     "rightCard": {
@@ -45,11 +45,11 @@
                             "scannerSpecificNotes": {
                                 "SKYRA": [
                                     { "sequence": "T1-POST 3D SPACE (1.2mm)", "highlight": true },
-                                    { "sequence": "SAG T1-POST 3D MPRAGE (1mm)", "highlight": true }
+                                    { "sequence": "T1-POST 3D MPRAGE SAG (1mm)", "highlight": true }
                                 ],
                                 "GE": [
-                                    { "sequence": "COR SAG T1 FS POST (1.2mm)", "highlight": true },
-                                    { "sequence": "SAG FSPGR (1.2mm)", "highlight": true }
+                                    { "sequence": "T1 FS POST COR SAG (1.2mm)", "highlight": true },
+                                    { "sequence": "FSPGR SAG (1.2mm)", "highlight": true }
                                 ]
                             }
                         }
@@ -62,12 +62,12 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX T2", "highlight": false },
-                            { "sequence": "COR T2 TEMP LOBE", "highlight": false },
-                            { "sequence": "AX DWI", "highlight": false },
-                            { "sequence": "SAG FLAIR CUBE", "highlight": false },
-                            { "sequence": "AX SWAN", "highlight": false },
-                            { "sequence": "SAG SPGR TEMP LOBE", "highlight": false }
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "T2 TEMP LOBE: COR", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR CUBE: SAG", "highlight": false },
+                            { "sequence": "SWAN: AX", "highlight": false },
+                            { "sequence": "SPGR TEMP LOBE: SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -85,8 +85,8 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "ROUTINE BRAIN +", "highlight": false },
-                            { "sequence": "AX, COR T1", "highlight": false },
-                            { "sequence": "AX POST T1", "highlight": true }
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "POST AX T1", "highlight": true }
                         ]
                     },
                     "rightCard": {
@@ -104,8 +104,8 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX FLAIR", "highlight": false },
-                            { "sequence": "AX 3D FIESTA", "highlight": false }
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "3D FIESTA: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -122,13 +122,13 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1", "highlight": false },
-                            { "sequence": "AX T1 THIN IAC", "highlight": false },
-                            { "sequence": "AX, COR T1 THIN FS IAC POST", "highlight": true },
-                            { "sequence": "AX T2", "highlight": false },
-                            { "sequence": "AX DWI", "highlight": false },
-                            { "sequence": "AX FLAIR", "highlight": false },
-                            { "sequence": "AX 3D FIESTA IAC", "highlight": false }
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 THIN IAC: AX", "highlight": false },
+                            { "sequence": "T1 THIN FS IAC POST: AX, COR", "highlight": true },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "3D FIESTA IAC: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -146,12 +146,12 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1", "highlight": false },
-                            { "sequence": "COR, SAG T1 3mm", "highlight": false },
-                            { "sequence": "COR, SAG T1 3mm POST", "highlight": true },
-                            { "sequence": "AX T1 BRAIN POST", "highlight": true },
-                            { "sequence": "COR, SAG T2 3mm", "highlight": false },
-                            { "sequence": "AX FLAIR", "highlight": false },
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 3mm: COR, SAG", "highlight": false },
+                            { "sequence": "T1 3mm POST: COR, SAG", "highlight": true },
+                            { "sequence": "T1 BRAIN POST: AX", "highlight": true },
+                            { "sequence": "T2 3mm: COR, SAG", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
                             { "sequence": "DYNAMIC COR (1/6POST)", "highlight": false }
                         ]
                     },
@@ -170,7 +170,7 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR, SAG T1 3mm FS POST", "highlight": true },
+                            { "sequence": "T1 3mm FS POST: COR, SAG", "highlight": true },
                             { "sequence": "NO DYNAMIC", "highlight": false }
                         ]
                     },
@@ -189,15 +189,15 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1", "highlight": false },
-                            { "sequence": "AX, COR T1 ORBITS", "highlight": false },
-                            { "sequence": "AX T1 FS ORBITS", "highlight": false },
-                            { "sequence": "AX T1 BRAIN", "highlight": false },
-                            { "sequence": "AX T2 ORBITS", "highlight": false },
-                            { "sequence": "COR T2 FS ORBITS", "highlight": false },
-                            { "sequence": "AX DWI", "highlight": false },
-                            { "sequence": "AX FLAIR", "highlight": false },
-                            { "sequence": "AX SWAN", "highlight": false },
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 ORBITS: AX, COR", "highlight": false },
+                            { "sequence": "T1 FS ORBITS: AX", "highlight": false },
+                            { "sequence": "T1 BRAIN: AX", "highlight": false },
+                            { "sequence": "T2 ORBITS: AX", "highlight": false },
+                            { "sequence": "T2 FS ORBITS: COR", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "SWAN: AX", "highlight": false },
                             { "sequence": "POST COR T1 FS ORBITS", "highlight": true }
                         ]
                     },
@@ -216,12 +216,12 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1", "highlight": false },
-                            { "sequence": "COR T1 ORBITS", "highlight": false },
-                            { "sequence": "COR T2 FS ORBITS", "highlight": false },
-                            { "sequence": "AX DWI", "highlight": false },
-                            { "sequence": "AX FLAIR", "highlight": false },
-                            { "sequence": "AX MRA COW", "highlight": false }
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 ORBITS: COR", "highlight": false },
+                            { "sequence": "T2 FS ORBITS: COR", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "MRA COW: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -238,12 +238,12 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1", "highlight": false },
-                            { "sequence": "AX DWI", "highlight": false },
-                            { "sequence": "AX FLAIR", "highlight": false },
-                            { "sequence": "AX SWAN", "highlight": false },
-                            { "sequence": "AX MRA COW", "highlight": false },
-                            { "sequence": "AX MRA BIFURCATION", "highlight": false }
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "SWAN: AX", "highlight": false },
+                            { "sequence": "MRA COW: AX", "highlight": false },
+                            { "sequence": "MRA BIFURCATION: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -261,7 +261,7 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "ROUTINE TIA +", "highlight": false },
-                            { "sequence": "AX T1 FS (C4-SELLA)", "highlight": false }
+                            { "sequence": "T1 FS (C4-SELLA): AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -279,7 +279,7 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "ROUTINE BRAIN +", "highlight": false },
-                            { "sequence": "AX MRA COW", "highlight": false }
+                            { "sequence": "MRA COW: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -296,16 +296,16 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1 (HEAD & NECK)", "highlight": false },
-                            { "sequence": "SAG T1 BRAIN", "highlight": false },
-                            { "sequence": "AX T1 (ORB-MANDIBLE)", "highlight": false },
-                            { "sequence": "AX T1 FS POST (ORB-MANDIBLE)", "highlight": true },
-                            { "sequence": "COR T1 FS (CORD-FACE)", "highlight": false },
-                            { "sequence": "AX T2 (ORB-MANDIBLE)", "highlight": false },
-                            { "sequence": "AX DWI", "highlight": false },
-                            { "sequence": "AX FLAIR", "highlight": false },
-                            { "sequence": "AX SWAN", "highlight": false },
-                            { "sequence": "AX MRA COW", "highlight": false }
+                            { "sequence": "T1 (HEAD & NECK): SAG", "highlight": false },
+                            { "sequence": "T1 BRAIN: SAG", "highlight": false },
+                            { "sequence": "T1 (ORB-MANDIBLE): AX", "highlight": false },
+                            { "sequence": "T1 FS POST (ORB-MANDIBLE): AX", "highlight": true },
+                            { "sequence": "T1 FS (CORD-FACE): COR", "highlight": false },
+                            { "sequence": "T2 (ORB-MANDIBLE): AX", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FLAIR: AX", "highlight": false },
+                            { "sequence": "SWAN: AX", "highlight": false },
+                            { "sequence": "MRA COW: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -324,9 +324,9 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "ROUTINE BRAIN +", "highlight": false },
-                            { "sequence": "AX T1 FS POST THIN (CHEAT HIGH)", "highlight": true },
-                            { "sequence": "AX 3D FIESTA IAC", "highlight": false },
-                            { "sequence": "AX MRA COW", "highlight": false }
+                            { "sequence": "T1 FS POST THIN (CHEAT HIGH): AX", "highlight": true },
+                            { "sequence": "3D FIESTA IAC: AX", "highlight": false },
+                            { "sequence": "MRA COW: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -344,10 +344,10 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1", "highlight": false },
-                            { "sequence": "AX T2", "highlight": false },
-                            { "sequence": "SAG T2 FS", "highlight": false },
-                            { "sequence": "AX 3D COSMIC", "highlight": false }
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "T2 FS: SAG", "highlight": false },
+                            { "sequence": "3D COSMIC: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -364,10 +364,10 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1", "highlight": false },
-                            { "sequence": "SAG T2 HIGH RES.", "highlight": false },
-                            { "sequence": "AX T2 (DISC SPACES)", "highlight": false },
-                            { "sequence": "SAG STIR", "highlight": false }
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T2 HIGH RES.: SAG", "highlight": false },
+                            { "sequence": "T2 (DISC SPACES): AX", "highlight": false },
+                            { "sequence": "STIR: SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -384,9 +384,9 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1", "highlight": false },
-                            { "sequence": "SAG T2 FS", "highlight": false },
-                            { "sequence": "AX PD", "highlight": false }
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T2 FS: SAG", "highlight": false },
+                            { "sequence": "PD: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -403,10 +403,10 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX, COR T1", "highlight": false },
-                            { "sequence": "AX T2", "highlight": false },
-                            { "sequence": "COR T2 STIR", "highlight": false },
-                            { "sequence": "SAG STIR", "highlight": false }
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "T2 STIR: COR", "highlight": false },
+                            { "sequence": "STIR: SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -423,11 +423,11 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1 (2 FOV)", "highlight": false },
-                            { "sequence": "AX T2 C-SPINE", "highlight": false },
-                            { "sequence": "SAG FSEIR (2 FOV)", "highlight": false },
-                            { "sequence": "AX FGRE DISC SPACES", "highlight": false },
-                            { "sequence": "AX PD L-SPINE", "highlight": false }
+                            { "sequence": "T1 (2 FOV): SAG", "highlight": false },
+                            { "sequence": "T2 C-SPINE: AX", "highlight": false },
+                            { "sequence": "FSEIR (2 FOV): SAG", "highlight": false },
+                            { "sequence": "FGRE DISC SPACES: AX", "highlight": false },
+                            { "sequence": "PD L-SPINE: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -444,11 +444,11 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR, SAG T1 (2 FOV)", "highlight": false },
-                            { "sequence": "AX T1 THRU CURVATURES", "highlight": false },
-                            { "sequence": "AX T2 CONUS", "highlight": false },
-                            { "sequence": "SAG FSEIR (2 FOV)", "highlight": false },
-                            { "sequence": "AX FGRE DISC SPACES", "highlight": false }
+                            { "sequence": "T1 (2 FOV): COR, SAG", "highlight": false },
+                            { "sequence": "T1 THRU CURVATURES: AX", "highlight": false },
+                            { "sequence": "T2 CONUS: AX", "highlight": false },
+                            { "sequence": "FSEIR (2 FOV): SAG", "highlight": false },
+                            { "sequence": "FGRE DISC SPACES: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -465,9 +465,9 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX, COR, SAG T1", "highlight": false },
-                            { "sequence": "AX, COR T1 FS POST", "highlight": true },
-                            { "sequence": "AX STIR", "highlight": false }
+                            { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                            { "sequence": "T1 FS POST: AX, COR", "highlight": true },
+                            { "sequence": "STIR: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -485,7 +485,7 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX T1 POST", "highlight": true }
+                            { "sequence": "T1 POST: AX", "highlight": true }
                         ]
                     },
                     "rightCard": {
@@ -503,10 +503,10 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1", "highlight": false },
-                            { "sequence": "AX, COR T1 (INCL. BOTH SIDES)", "highlight": false },
-                            { "sequence": "SAG T2", "highlight": false },
-                            { "sequence": "AX, COR FSEIR (INCL. BOTH SIDES)", "highlight": false }
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 (INCL. BOTH SIDES): AX, COR", "highlight": false },
+                            { "sequence": "T2: SAG", "highlight": false },
+                            { "sequence": "FSEIR (INCL. BOTH SIDES): AX, COR", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -523,10 +523,10 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR, SAG T1 CLOSED", "highlight": false },
-                            { "sequence": "SAG T2 CLOSED", "highlight": false },
-                            { "sequence": "SAG T2 OPEN", "highlight": false },
-                            { "sequence": "SAG T2* GRE CLOSED", "highlight": false },
+                            { "sequence": "T1 CLOSED: COR, SAG", "highlight": false },
+                            { "sequence": "T2 CLOSED: SAG", "highlight": false },
+                            { "sequence": "T2 OPEN: SAG", "highlight": false },
+                            { "sequence": "T2* GRE CLOSED: SAG", "highlight": false },
                             { "sequence": "*1.5 ONLY", "highlight": false }
                         ]
                     },
@@ -544,10 +544,10 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1", "highlight": false },
-                            { "sequence": "AX T1 THRU ANY LESIONS", "highlight": false },
-                            { "sequence": "SAG T2", "highlight": false },
-                            { "sequence": "AX T2 (C1-T1)", "highlight": false },
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 THRU ANY LESIONS: AX", "highlight": false },
+                            { "sequence": "T2: SAG", "highlight": false },
+                            { "sequence": "T2 (C1-T1): AX", "highlight": false },
                             { "sequence": "POST", "highlight": true }
                         ]
                     },
@@ -566,10 +566,10 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "SAG T1", "highlight": false },
-                            { "sequence": "AX T1 THRU ANY LESIONS", "highlight": false },
-                            { "sequence": "AX T2", "highlight": false },
-                            { "sequence": "SAG T2 HIGH RES", "highlight": false },
+                            { "sequence": "T1: SAG", "highlight": false },
+                            { "sequence": "T1 THRU ANY LESIONS: AX", "highlight": false },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "T2 HIGH RES: SAG", "highlight": false },
                             { "sequence": "POST", "highlight": true }
                         ]
                     },
@@ -593,8 +593,8 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR T1", "highlight": false },
-                            { "sequence": "AX, COR, SAG T2 FS", "highlight": false }
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -611,8 +611,8 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR T1", "highlight": false },
-                            { "sequence": "AX, COR, SAG T1 FS", "highlight": false }
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T1 FS: AX, COR, SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -629,8 +629,8 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX, COR T1", "highlight": false },
-                            { "sequence": "AX, COR, SAG T2 FS", "highlight": false }
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -647,8 +647,8 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX, COR T1", "highlight": false },
-                            { "sequence": "AX, COR, SAG T2 FS", "highlight": false },
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false },
                             { "sequence": "DESS COR", "highlight": false }
                         ]
                     },
@@ -666,9 +666,9 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR T1", "highlight": false },
-                            { "sequence": "COR T1 FS", "highlight": false },
-                            { "sequence": "AX T2 FS", "highlight": false },
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T1 FS: COR", "highlight": false },
+                            { "sequence": "T2 FS: AX", "highlight": false },
                             { "sequence": "3D-GRE", "highlight": false }
                         ]
                     },
@@ -686,9 +686,9 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX, COR, SAG T1", "highlight": false },
-                            { "sequence": "AX, COR T2 FS", "highlight": false },
-                            { "sequence": "SAG STIR", "highlight": false }
+                            { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR", "highlight": false },
+                            { "sequence": "STIR: SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -705,10 +705,10 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR T1 (BOTH HIPS)", "highlight": false },
-                            { "sequence": "SAG T1 (SIDE OF INT)", "highlight": false },
-                            { "sequence": "COR T2 FS (BOTH HIPS)", "highlight": false },
-                            { "sequence": "AX, SAG T2 FS (SIDE OF INT)", "highlight": false }
+                            { "sequence": "T1 (BOTH HIPS): COR", "highlight": false },
+                            { "sequence": "T1 (SIDE OF INT): SAG", "highlight": false },
+                            { "sequence": "T2 FS (BOTH HIPS): COR", "highlight": false },
+                            { "sequence": "T2 FS (SIDE OF INT): AX, SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -725,8 +725,8 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR, SAG T1", "highlight": false },
-                            { "sequence": "AX, COR, SAG T1 FS", "highlight": false }
+                            { "sequence": "T1: COR, SAG", "highlight": false },
+                            { "sequence": "T1 FS: AX, COR, SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -743,8 +743,8 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX, COR T1", "highlight": false },
-                            { "sequence": "AX, COR T2 FS", "highlight": false }
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -761,10 +761,10 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR T1", "highlight": false },
-                            { "sequence": "SAG T2 FS", "highlight": false },
-                            { "sequence": "AX, COR T2 FS", "highlight": false },
-                            { "sequence": "SAG PD", "highlight": false }
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T2 FS: SAG", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR", "highlight": false },
+                            { "sequence": "PD: SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -781,8 +781,8 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX, COR, SAG T1", "highlight": false },
-                            { "sequence": "AX, COR T2 FS", "highlight": false }
+                            { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -799,8 +799,8 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR, SAG T1", "highlight": false },
-                            { "sequence": "AX, COR, SAG T2 FS", "highlight": false }
+                            { "sequence": "T1: COR, SAG", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -817,9 +817,9 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX, COR, SAG T1", "highlight": false },
-                            { "sequence": "AX, COR, SAG T2 FS", "highlight": false },
-                            { "sequence": "SAG STIR", "highlight": false }
+                            { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                            { "sequence": "T2 FS: AX, COR, SAG", "highlight": false },
+                            { "sequence": "STIR: SAG", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -841,9 +841,9 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX, COR T1", "highlight": false },
-                            { "sequence": "AX T2", "highlight": false },
-                            { "sequence": "COR T2 FS", "highlight": false }
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "T2 FS: COR", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -861,8 +861,8 @@
                     "leftCard": {
                         "sequences": [
                             { "sequence": "T1 (SMALL FOV): DYNAMIC", "highlight": false },
-                            { "sequence": "AX, COR, SAG T2 (SMALL FOV)", "highlight": false },
-                            { "sequence": "AX DWI (SMALL FOV)", "highlight": false }
+                            { "sequence": "T2 (SMALL FOV): AX, COR, SAG", "highlight": false },
+                            { "sequence": "DWI (SMALL FOV): AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -879,9 +879,9 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX T2 (LARGE FOV)", "highlight": false },
-                            { "sequence": "AX, COR, SAG T2 (SMALL FOV)", "highlight": false },
-                            { "sequence": "AX DWI (LARGE FOV)", "highlight": false }
+                            { "sequence": "T2 (LARGE FOV): AX", "highlight": false },
+                            { "sequence": "T2 (SMALL FOV): AX, COR, SAG", "highlight": false },
+                            { "sequence": "DWI (LARGE FOV): AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -898,13 +898,13 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX T1 IN/OP", "highlight": false },
-                            { "sequence": "AX T1", "highlight": false },
-                            { "sequence": "AX T1 ART", "highlight": false },
-                            { "sequence": "AX T1 PORT", "highlight": false },
-                            { "sequence": "AX T1 DELAY", "highlight": false },
-                            { "sequence": "AX, COR T2", "highlight": false },
-                            { "sequence": "COR T2 THICK SLAB", "highlight": false },
+                            { "sequence": "T1 IN/OP: AX", "highlight": false },
+                            { "sequence": "T1: AX", "highlight": false },
+                            { "sequence": "T1 ART: AX", "highlight": false },
+                            { "sequence": "T1 PORT: AX", "highlight": false },
+                            { "sequence": "T1 DELAY: AX", "highlight": false },
+                            { "sequence": "T2: AX, COR", "highlight": false },
+                            { "sequence": "T2 THICK SLAB: COR", "highlight": false },
                             { "sequence": "3D MRCP", "highlight": false }
                         ]
                     },
@@ -922,14 +922,14 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX T1 IN/OP", "highlight": false },
-                            { "sequence": "AX T1", "highlight": false },
-                            { "sequence": "AX T1 ART", "highlight": false },
-                            { "sequence": "AX T1 PORT", "highlight": false },
-                            { "sequence": "AX T1 DELAY", "highlight": false },
-                            { "sequence": "COR T2", "highlight": false },
-                            { "sequence": "AX T2 FS", "highlight": false },
-                            { "sequence": "AX DWI", "highlight": false }
+                            { "sequence": "T1 IN/OP: AX", "highlight": false },
+                            { "sequence": "T1: AX", "highlight": false },
+                            { "sequence": "T1 ART: AX", "highlight": false },
+                            { "sequence": "T1 PORT: AX", "highlight": false },
+                            { "sequence": "T1 DELAY: AX", "highlight": false },
+                            { "sequence": "T2: COR", "highlight": false },
+                            { "sequence": "T2 FS: AX", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -946,9 +946,9 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR T1", "highlight": false },
-                            { "sequence": "AX T1 IN/OP", "highlight": false },
-                            { "sequence": "AX, COR T2", "highlight": false }
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T1 IN/OP: AX", "highlight": false },
+                            { "sequence": "T2: AX, COR", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -965,14 +965,14 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX T1 IN/OP", "highlight": false },
-                            { "sequence": "AX, COR T1", "highlight": false },
-                            { "sequence": "AX T1 CORT", "highlight": false },
-                            { "sequence": "AX T1 NEPH", "highlight": false },
-                            { "sequence": "AX T1 DELAY", "highlight": false },
-                            { "sequence": "COR T1 POST", "highlight": true },
-                            { "sequence": "COR T2", "highlight": false },
-                            { "sequence": "AX T2 FS", "highlight": false }
+                            { "sequence": "T1 IN/OP: AX", "highlight": false },
+                            { "sequence": "T1: AX, COR", "highlight": false },
+                            { "sequence": "T1 CORT: AX", "highlight": false },
+                            { "sequence": "T1 NEPH: AX", "highlight": false },
+                            { "sequence": "T1 DELAY: AX", "highlight": false },
+                            { "sequence": "T1 POST: COR", "highlight": true },
+                            { "sequence": "T2: COR", "highlight": false },
+                            { "sequence": "T2 FS: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -990,9 +990,9 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "COR T1", "highlight": false },
-                            { "sequence": "COR T2", "highlight": false },
-                            { "sequence": "COR 3D MRA", "highlight": false }
+                            { "sequence": "T1: COR", "highlight": false },
+                            { "sequence": "T2: COR", "highlight": false },
+                            { "sequence": "3D MRA: COR", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -1009,11 +1009,11 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX T1", "highlight": false },
-                            { "sequence": "AX, COR T1 POST", "highlight": true },
-                            { "sequence": "AX, COR T2 (WHOLE ABD)", "highlight": false },
-                            { "sequence": "AX DWI", "highlight": false },
-                            { "sequence": "AX, COR FIESTA", "highlight": false }
+                            { "sequence": "T1: AX", "highlight": false },
+                            { "sequence": "T1 POST: AX, COR", "highlight": true },
+                            { "sequence": "T2 (WHOLE ABD): AX, COR", "highlight": false },
+                            { "sequence": "DWI: AX", "highlight": false },
+                            { "sequence": "FIESTA: AX, COR", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -1036,10 +1036,10 @@
                 "layout": {
                     "leftCard": {
                         "sequences": [
-                            { "sequence": "AX, COR, SAG T1", "highlight": false },
-                            { "sequence": "AX T1 POST", "highlight": true },
-                            { "sequence": "AX T2", "highlight": false },
-                            { "sequence": "AX PD", "highlight": false }
+                            { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                            { "sequence": "T1 POST: AX", "highlight": true },
+                            { "sequence": "T2: AX", "highlight": false },
+                            { "sequence": "PD: AX", "highlight": false }
                         ]
                     },
                     "rightCard": {
@@ -1062,11 +1062,11 @@
           "layout": {
             "leftCard": {
               "sequences": [
-                { "sequence": "AX, COR, SAG T1", "highlight": false },
-                { "sequence": "AX, COR, SAG T2", "highlight": false },
-                { "sequence": "AX, COR FLAIR", "highlight": false },
-                { "sequence": "AX DWI", "highlight": false },
-                { "sequence": "AX, COR, SAG T1 POST", "highlight": true }
+                { "sequence": "T1: AX, COR, SAG", "highlight": false },
+                { "sequence": "T2: AX, COR, SAG", "highlight": false },
+                { "sequence": "FLAIR: AX, COR", "highlight": false },
+                { "sequence": "DWI: AX", "highlight": false },
+                { "sequence": "T1 POST: AX, COR, SAG", "highlight": true }
               ]
             },
             "rightCard": {
@@ -1083,10 +1083,10 @@
           "layout": {
             "leftCard": {
               "sequences": [
-                { "sequence": "AX, SAG T2", "highlight": false },
-                { "sequence": "AX, SAG STIR", "highlight": false },
-                { "sequence": "SAG T1", "highlight": false },
-                { "sequence": "SAG, AX T1 POST", "highlight": true }
+                { "sequence": "T2: AX, SAG", "highlight": false },
+                { "sequence": "STIR: AX, SAG", "highlight": false },
+                { "sequence": "T1: SAG", "highlight": false },
+                { "sequence": "T1 POST: SAG, AX", "highlight": true }
               ]
             },
             "rightCard": {
@@ -1108,10 +1108,10 @@
           "layout": {
             "leftCard": {
               "sequences": [
-                { "sequence": "AX, COR T2 SSFSE", "highlight": false },
-                { "sequence": "AX DWI", "highlight": false },
-                { "sequence": "AX, COR T1", "highlight": false },
-                { "sequence": "AX, COR, SAG T1 POST", "highlight": true }
+                { "sequence": "T2 SSFSE: AX, COR", "highlight": false },
+                { "sequence": "DWI: AX", "highlight": false },
+                { "sequence": "T1: AX, COR", "highlight": false },
+                { "sequence": "T1 POST: AX, COR, SAG", "highlight": true }
               ]
             },
             "rightCard": {
@@ -1133,10 +1133,10 @@
           "layout": {
             "leftCard": {
               "sequences": [
-                { "sequence": "AX, COR, SAG T2 FS", "highlight": false },
-                { "sequence": "AX, COR, SAG PD FS", "highlight": false },
-                { "sequence": "COR, SAG STIR", "highlight": false },
-                { "sequence": "AX, COR, SAG T1 POST", "highlight": true }
+                { "sequence": "T2 FS: AX, COR, SAG", "highlight": false },
+                { "sequence": "PD FS: AX, COR, SAG", "highlight": false },
+                { "sequence": "STIR: COR, SAG", "highlight": false },
+                { "sequence": "T1 POST: AX, COR, SAG", "highlight": true }
               ]
             },
             "rightCard": {
