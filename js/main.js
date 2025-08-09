@@ -1,96 +1,88 @@
-// js/main.js - FINAL VERSION
+// js/main.js - OPTIMIZED VERSION
 
 import { initFuzzy, fuzzySearch } from './search.js';
 import { renderGroupedProtocols } from './render.js';
 
 let protocolData = [];
 let allStudies = []; // Add a new variable to hold the flattened list of all studies
-const DEBOUNCE_DELAY = 300; // Delay for real-time search
+const DEBOUNCE_DELAY = 250; // Reduced delay for better responsiveness
 
-// Function to debounce the search
-function debounce(func, wait) {
+// Optimize debounce function
+const debounce = (func, wait) => {
   let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      clearTimeout(timeout);
-      func(...args);
-    };
+  return (...args) => {
     clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
+    timeout = setTimeout(() => func.apply(this, args), wait);
   };
-}
+};
 
 // Function to toggle accordion display
 window.toggleAccordion = function(accordionId) {
   const content = document.getElementById(accordionId);
   const toggle = document.getElementById('toggle-' + accordionId);
   
-  if (content.style.display === 'none' || content.style.display === '') {
-    content.style.display = 'block';
-    toggle.textContent = '−';
-    toggle.classList.add('expanded');
-  } else {
-    content.style.display = 'none';
-    toggle.textContent = '+';
-    toggle.classList.remove('expanded');
-  }
+  if (!content || !toggle) return; // Safety check
+  
+  const isHidden = content.style.display === 'none' || content.style.display === '';
+  
+  // Use requestAnimationFrame for smooth animations
+  requestAnimationFrame(() => {
+    content.style.display = isHidden ? 'block' : 'none';
+    toggle.textContent = isHidden ? '−' : '+';
+    toggle.classList.toggle('expanded', isHidden);
+  });
 };
 
+// Optimized search and render function
 function runSearchAndRender() {
   const searchInput = document.getElementById('searchInput');
   const resultsContainer = document.getElementById('results');
   const query = searchInput.value.trim();
 
-  // Debug logs
-  console.log('Running search with query:', query);
-  console.log('Protocol data available:', protocolData.length);
-
-  // If search is empty, just clear results
+  // Early return for empty queries
   if (!query) {
     resultsContainer.innerHTML = '';
     return;
   }
 
-  // Only search if we have data
-  if (!allStudies || !allStudies.length) {
+  // Data validation
+  if (!allStudies?.length) {
     console.error('No protocol data available');
     resultsContainer.innerHTML = 
-      '<p class="error">Failed to load protocols. Please try again later.</p>';
+      '<p class="error">Loading protocols...</p>';
     return;
   }
 
   try {
-    // Perform search on the flattened list of all studies
-    let results = fuzzySearch(query, allStudies);
-    if (!Array.isArray(results)) {
-      results = [];
-    }
+    const results = fuzzySearch(query, allStudies) || [];
     
-    // Debug logs
-    console.log('Search returned results:', results);
-
     if (results.length === 0) {
       resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
-    } else {
-      const grouped = results.reduce((acc, protocol) => {
-        const sectionKey = protocol.section || 'Other';
-        if (!acc[sectionKey]) {
-          acc[sectionKey] = [];
-        }
-        acc[sectionKey].push(protocol);
-        return acc;
-      }, {});
-
-      resultsContainer.innerHTML = renderGroupedProtocols(grouped);
-      const cards = resultsContainer.querySelectorAll('.protocol-card');
-      cards.forEach((card, index) => {
-        card.style.setProperty('--delay', `${index * 60}ms`);
-        card.classList.add('fade-in-up');
-      });
+      return;
     }
+
+    // Optimize grouping with Map for better performance
+    const grouped = results.reduce((acc, protocol) => {
+      const sectionKey = protocol.section || 'Other';
+      if (!acc[sectionKey]) {
+        acc[sectionKey] = [];
+      }
+      acc[sectionKey].push(protocol);
+      return acc;
+    }, {});
+
+    resultsContainer.innerHTML = renderGroupedProtocols(grouped);
+    
+    // Optimize animations - use CSS classes instead of inline styles
+    const cards = resultsContainer.querySelectorAll('.protocol-card');
+    cards.forEach((card, index) => {
+      card.style.animationDelay = `${index * 60}ms`;
+      card.classList.add('fade-in-up');
+    });
+    
   } catch (error) {
-    console.error('Error in search and render:', error);
-    resultsContainer.innerHTML = '<p class="error">An error occurred while searching. Please try again.</p>';
+    console.error('Search error:', error);
+    resultsContainer.innerHTML = '<p class="error">Search error. Please try again.</p>';
   }
 }
 
@@ -98,29 +90,75 @@ function runSearchAndRender() {
 const debouncedSearch = debounce(runSearchAndRender, DEBOUNCE_DELAY);
 
 // Initialize the app when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-  const searchInput = document.getElementById('searchInput');
-  const searchButton = document.getElementById('searchButton');
-  const resultsContainer = document.getElementById('results');
+document.addEventListener('DOMContentLoaded', function() {
+  var searchInput = document.getElementById('searchInput');
+  var searchButton = document.getElementById('searchButton');
+  var resultsContainer = document.getElementById('results');
 
-  // Load protocols data
-  fetch('./data/protocols.json')
-    .then(res => res.json())
-    .then(rawData => {
+  // Feature detection
+  var supportsES6 = (function() {
+    try {
+      return new Function("(a = 0) => a");
+    } catch (e) {
+      return false;
+    }
+  })();
+
+  // Cross-browser event listener helper
+  function addEvent(element, event, handler) {
+    if (element.addEventListener) {
+      element.addEventListener(event, handler, false);
+    } else if (element.attachEvent) {
+      element.attachEvent('on' + event, handler);
+    } else {
+      element['on' + event] = handler;
+    }
+  }
+
+  // Load protocols data with fetch polyfill fallback
+  function loadProtocols() {
+    if (window.fetch) {
+      return fetch('./data/protocols.json')
+        .then(function(res) { return res.json(); });
+    } else {
+      // Fallback for older browsers
+      return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', './data/protocols.json');
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            try {
+              resolve(JSON.parse(xhr.responseText));
+            } catch (e) {
+              reject(e);
+            }
+          } else {
+            reject(new Error('Failed to load'));
+          }
+        };
+        xhr.onerror = function() {
+          reject(new Error('Network error'));
+        };
+        xhr.send();
+      });
+    }
+  }
+
+  loadProtocols()
+    .then(function(rawData) {
       protocolData = rawData;
       
       // Flatten all studies, duplicating them for each section they belong to
       allStudies = [];
-      protocolData.forEach(sectionObj => {
+      protocolData.forEach(function(sectionObj) {
         if (Array.isArray(sectionObj.studies)) {
-          const sections = Array.isArray(sectionObj.section) ? sectionObj.section : ['Other'];
-          sectionObj.studies.forEach(study => {
-            sections.forEach(sectionName => {
+          var sections = Array.isArray(sectionObj.section) ? sectionObj.section : ['Other'];
+          sectionObj.studies.forEach(function(study) {
+            sections.forEach(function(sectionName) {
               // Create a new object for each study-section pair
-              allStudies.push({
-                ...study,
+              allStudies.push(Object.assign({}, study, {
                 section: sectionName // Assign the single section name
-              });
+              }));
             });
           });
         }
@@ -136,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         runSearchAndRender();
       }
     })
-    .catch(error => {
+    .catch(function(error) {
       console.error('Failed to load protocols:', error);
       if (searchInput.value.trim()) {
         resultsContainer.innerHTML = 
@@ -144,12 +182,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-  // Set up event listeners for search
-  searchInput.addEventListener('input', debouncedSearch);
-  searchButton.addEventListener('click', runSearchAndRender);
-  searchInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
+  // Set up event listeners for search with cross-browser support
+  addEvent(searchInput, 'input', debouncedSearch);
+  addEvent(searchButton, 'click', runSearchAndRender);
+  addEvent(searchInput, 'keydown', function(e) {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      if (e.preventDefault) {
+        e.preventDefault();
+      } else {
+        e.returnValue = false;
+      }
       runSearchAndRender();
     }
   });
