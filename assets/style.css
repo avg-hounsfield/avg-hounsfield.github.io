@@ -60,6 +60,15 @@ html {
 /* Optimized font loading - only essential weights with fallbacks */
 @font-face {
   font-family: 'Jost';
+  src: url('/fonts/Jost-ExtraLight.woff2') format('woff2'),
+       url('/fonts/Jost-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Jost';
   src: url('/fonts/Jost-Regular.woff2') format('woff2'),
        url('/fonts/Jost-Regular.woff') format('woff');
   font-weight: 400;
