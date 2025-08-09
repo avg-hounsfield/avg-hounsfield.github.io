@@ -124,6 +124,35 @@ function renderScannerNotes(scannerNotes) {
 }
 
 /**
+ * Renders a separate card for indications and contrast rationale
+ */
+function renderIndicationsCard(rightCardContent) {
+  if (!rightCardContent || (!rightCardContent.indications && !rightCardContent.contrastRationale)) {
+    return '';
+  }
+
+  // Generate unique ID for this accordion
+  const accordionId = 'indications-' + Math.random().toString(36).substr(2, 9);
+
+  return `
+    <div class="indications-card">
+      <div class="indications-header" onclick="toggleAccordion('${accordionId}')">
+        <h4>Clinical Information</h4>
+        <span class="accordion-toggle" id="toggle-${accordionId}">+</span>
+      </div>
+      <div class="indications-content" id="${accordionId}" style="display: none;">
+        ${rightCardContent.indications ? 
+          `<p class="indications"><strong>Indications:</strong> ${rightCardContent.indications}</p>` 
+          : ''}
+        ${rightCardContent.contrastRationale ? 
+          `<p class="contrast-rationale"><strong>Contrast Rationale:</strong> ${rightCardContent.contrastRationale}</p>` 
+          : ''}
+      </div>
+    </div>
+  `;
+}
+
+/**
  * Renders a single protocol card HTML string.
  */
 function renderProtocolCard(protocol) {
@@ -149,6 +178,9 @@ function renderProtocolCard(protocol) {
 
   // Get scanner-specific notes
   const scannerNotesHtml = renderScannerNotesCard(rightCardContent.scannerSpecificNotes);
+  
+  // Get indications and contrast rationale
+  const indicationsHtml = renderIndicationsCard(rightCardContent);
 
   // Generate unique IDs for accordions
   const sequencesId = 'sequences-' + Math.random().toString(36).substr(2, 9);
@@ -160,7 +192,7 @@ function renderProtocolCard(protocol) {
           <div class="protocol-header">
             <h3>${protocol.study || 'Untitled Study'}</h3>
             <div class="protocol-info">
-              <span class="${contrastClass}"><strong>Contrast:</strong> <span class="contrast-value">${contrastText}</span></span>
+              <span class="${contrastClass}"><strong>Contrast:</strong> <span class="contrast-value ${contrastClass}">${contrastText}</span></span>
             </div>
           </div>
           <div class="sequences">
@@ -180,14 +212,7 @@ function renderProtocolCard(protocol) {
           </div>
         </div>
 
-        <div class="right-card">
-          <div class="content">
-            <p class="indications">${rightCardContent.indications || ''}</p>
-            ${rightCardContent.contrastRationale ? 
-              `<p class="contrast-rationale"><strong>Contrast Rationale:</strong> ${rightCardContent.contrastRationale}</p>` 
-              : ''}
-          </div>
-        </div>
+        ${indicationsHtml}
 
         ${scannerNotesHtml}
       </div>
