@@ -220,7 +220,7 @@ function renderProtocolCard(protocol) {
       <div class="protocol-content ${fullHeight ? 'full-height' : ''}">
         <div class="left-card">
           <div class="protocol-header">
-            <h3>${protocol.study || 'Untitled Study'}</h3>
+            <h3>Protocol: ${protocol.study || 'Untitled Study'}</h3>
             <div class="protocol-info">
               <span class="${contrastClass}"><strong>Contrast:</strong> <span class="contrast-value ${contrastClass}">${contrastText}</span></span>
             </div>

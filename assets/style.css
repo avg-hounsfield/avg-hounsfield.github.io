@@ -203,6 +203,10 @@ h3 {
   flex: 1;
 }
 
+.left-card {
+  margin-bottom: 20px; /* Add space between Contrast and Sequences accordion */
+}
+
 /* Accent for "Contrast: Yes" */
 .contrast-value.contrast-yes {
   color: var(--underline-color);
@@ -466,7 +470,7 @@ a:hover {
 .sequences-card {
   width: 100%;
   margin: 0 0 20px 0;
-  background: var(--card-background);
+  background: var(--primary-surface-bg);
   border-radius: 8px;
   -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -480,7 +484,7 @@ a:hover {
 
 .sequences-header {
   padding: 15px 20px;
-  background: var(--card-header-background, #f8f9fa);
+  background: var(--secondary-surface-bg);
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -499,7 +503,7 @@ a:hover {
   -moz-align-items: center;
   -ms-align-items: center;
   align-items: center;
-  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .sequences-header h4 {
@@ -511,7 +515,7 @@ a:hover {
 
 .sequences-content {
   padding: 20px;
-  background: var(--card-background);
+  background: var(--primary-surface-bg);
 }
 
 .sequences-content ul {
@@ -531,7 +535,7 @@ a:hover {
 .indications-card {
   width: 100%;
   margin: 0 0 20px 0; /* Remove auto centering, align left */
-  background: var(--card-background);
+  background: var(--primary-surface-bg);
   border-radius: 8px;
   -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -545,7 +549,7 @@ a:hover {
 
 .indications-header {
   padding: 15px 20px;
-  background: var(--card-header-background, #f8f9fa);
+  background: var(--secondary-surface-bg);
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -564,7 +568,7 @@ a:hover {
   -moz-align-items: center;
   -ms-align-items: center;
   align-items: center;
-  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .indications-header h4 {
@@ -576,7 +580,7 @@ a:hover {
 
 .indications-content {
   padding: 20px;
-  background: var(--card-background);
+  background: var(--primary-surface-bg);
 }
 
 .indications-content p {
