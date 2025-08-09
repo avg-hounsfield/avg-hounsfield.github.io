@@ -66,10 +66,16 @@ function renderScannerNotesCard(scannerNotes) {
     return '';
   }
 
+  // Generate unique ID for this accordion
+  const accordionId = 'scanner-notes-' + Math.random().toString(36).substr(2, 9);
+
   return `
     <div class="scanner-notes-card">
-      <div class="scanner-notes">
-        <h4>Scanner Specific Notes:</h4>
+      <div class="scanner-notes-header" onclick="toggleAccordion('${accordionId}')">
+        <h4>Scanner Specific Notes</h4>
+        <span class="accordion-toggle" id="toggle-${accordionId}">+</span>
+      </div>
+      <div class="scanner-notes-content" id="${accordionId}" style="display: none;">
         ${scannerSections.join('')}
       </div>
     </div>
@@ -144,6 +150,9 @@ function renderProtocolCard(protocol) {
   // Get scanner-specific notes
   const scannerNotesHtml = renderScannerNotesCard(rightCardContent.scannerSpecificNotes);
 
+  // Generate unique IDs for accordions
+  const sequencesId = 'sequences-' + Math.random().toString(36).substr(2, 9);
+
   return `
     <div class="protocol-card">
       <div class="protocol-content ${fullHeight ? 'full-height' : ''}">
@@ -155,14 +164,19 @@ function renderProtocolCard(protocol) {
             </div>
           </div>
           <div class="sequences">
-            <h4>Sequences:</h4>
-            <ul>
-              ${sortedSequences.map(seq => {
-                const isHighlight = seq.highlight === true;
-                const liClass = isHighlight ? 'class="highlight-sequence"' : '';
-                return `<li ${liClass}>${seq.sequence}</li>`;
-              }).join('\n              ') || '<li>None listed</li>'}
-            </ul>
+            <div class="sequences-header" onclick="toggleAccordion('${sequencesId}')">
+              <h4>Sequences</h4>
+              <span class="accordion-toggle" id="toggle-${sequencesId}">+</span>
+            </div>
+            <div class="sequences-content" id="${sequencesId}" style="display: none;">
+              <ul>
+                ${sortedSequences.map(seq => {
+                  const isHighlight = seq.highlight === true;
+                  const liClass = isHighlight ? 'class="highlight-sequence"' : '';
+                  return `<li ${liClass}>${seq.sequence}</li>`;
+                }).join('\n                ') || '<li>None listed</li>'}
+              </ul>
+            </div>
           </div>
         </div>
 

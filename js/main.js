@@ -20,6 +20,22 @@ function debounce(func, wait) {
   };
 }
 
+// Function to toggle accordion display
+window.toggleAccordion = function(accordionId) {
+  const content = document.getElementById(accordionId);
+  const toggle = document.getElementById('toggle-' + accordionId);
+  
+  if (content.style.display === 'none' || content.style.display === '') {
+    content.style.display = 'block';
+    toggle.textContent = '−';
+    toggle.classList.add('expanded');
+  } else {
+    content.style.display = 'none';
+    toggle.textContent = '+';
+    toggle.classList.remove('expanded');
+  }
+};
+
 function runSearchAndRender() {
   const searchInput = document.getElementById('searchInput');
   const resultsContainer = document.getElementById('results');

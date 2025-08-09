@@ -129,6 +129,28 @@
   margin-top: 5px;
 }
 
+.sequences-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sequences-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 5px;
+  margin: -5px;
+}
+
+.sequences-content {
+  margin-top: 12px;
+  transition: all 0.3s ease;
+}
+
 .sequences ul {
   list-style: none;
   padding: 0;
@@ -147,7 +169,7 @@
 }
 
 .sequences h4 {
-  margin-bottom: 12px;
+  margin: 0;
   color: var(--text-primary);
   font-size: 1.1em;
 }
@@ -499,8 +521,43 @@ a:hover {
   padding: 0;
 }
 
+.scanner-notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+}
+
+.scanner-notes-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 5px;
+  margin: -5px;
+}
+
+.scanner-notes-content {
+  margin-top: 15px;
+  transition: all 0.3s ease;
+}
+
+.accordion-toggle {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: var(--interactive-accent);
+  transition: transform 0.3s ease;
+  min-width: 20px;
+  text-align: center;
+}
+
+.accordion-toggle.expanded {
+  transform: rotate(45deg);
+}
+
 .scanner-notes h4 {
-  margin: 0 0 15px 0;
+  margin: 0;
   color: var(--text-primary);
   font-size: 1em;
   font-weight: 600;
