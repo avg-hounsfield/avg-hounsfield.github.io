@@ -23,56 +23,69 @@ window.toggleAccordion = function(accordionId) {
   
   if (!content || !toggle) return; // Safety check
   
-  const isExpanded = content.style.maxHeight && content.style.maxHeight !== '0px';
+  // Determine current state more reliably
+  const isCurrentlyHidden = content.style.display === 'none' || 
+                           content.style.maxHeight === '0px' || 
+                           !content.style.maxHeight;
   
-  // Set up consistent transition for both open and close
+  // Ensure consistent setup for all accordion sections
+  content.style.overflow = 'hidden';
   content.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
   content.style.willChange = 'max-height, opacity, transform';
-  content.style.overflow = 'hidden';
   
-  if (!isExpanded) {
-    // Opening animation - smooth height expansion
+  if (isCurrentlyHidden) {
+    // Opening animation - ensure smooth expansion for all sections
     content.style.display = 'block';
     content.style.opacity = '0';
     content.style.transform = 'translateY(-8px)';
     content.style.maxHeight = '0px';
     
-    // Get the natural height
+    // Force reflow to ensure initial state is applied
+    content.offsetHeight;
+    
+    // Get the natural height after content is visible
     const scrollHeight = content.scrollHeight;
     
+    // Apply opening animation
     requestAnimationFrame(() => {
       content.style.maxHeight = scrollHeight + 'px';
       content.style.opacity = '1';
       content.style.transform = 'translateY(0)';
     });
     
-    // Clean up after animation
+    // Clean up after animation completes
     setTimeout(() => {
       content.style.maxHeight = 'none';
       content.style.willChange = 'auto';
     }, 500);
     
   } else {
-    // Closing animation - smooth height collapse
+    // Closing animation - ensure smooth collapse for all sections
     const scrollHeight = content.scrollHeight;
+    
+    // Set explicit height first
     content.style.maxHeight = scrollHeight + 'px';
     
+    // Force reflow
+    content.offsetHeight;
+    
+    // Apply closing animation
     requestAnimationFrame(() => {
       content.style.maxHeight = '0px';
       content.style.opacity = '0';
       content.style.transform = 'translateY(-8px)';
     });
     
-    // Hide after animation completes
+    // Hide completely after animation
     setTimeout(() => {
       content.style.display = 'none';
       content.style.willChange = 'auto';
     }, 500);
   }
   
-  // Update toggle button
-  toggle.textContent = !isExpanded ? '−' : '+';
-  toggle.classList.toggle('expanded', !isExpanded);
+  // Update toggle button consistently
+  toggle.textContent = isCurrentlyHidden ? '−' : '+';
+  toggle.classList.toggle('expanded', isCurrentlyHidden);
 };
 
 // Optimized search and render function

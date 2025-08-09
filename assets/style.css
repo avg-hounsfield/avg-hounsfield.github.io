@@ -655,6 +655,8 @@ a:hover::after {
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: max-height, opacity, transform;
   transform-origin: top;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .sequences-content ul {
@@ -737,6 +739,8 @@ a:hover::after {
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: max-height, opacity, transform;
   transform-origin: top;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .indications-content p {
@@ -794,6 +798,8 @@ a:hover::after {
   overflow: hidden;
   will-change: max-height, opacity, transform;
   transform-origin: top;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .accordion-toggle {
