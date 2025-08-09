@@ -210,7 +210,12 @@ h3 {
 /* Accent for "Contrast: Yes" */
 .contrast-value.contrast-yes {
   color: var(--underline-color);
-  font-weight: 700;
+  font-weight: 700; /* Keep YES bold */
+}
+
+/* Ensure contrast label has normal weight */
+.contrast-yes {
+  font-weight: 400; /* Normal weight for "Contrast:" */
 }
 
 /* Sequence styling */
@@ -527,6 +532,11 @@ a:hover {
   line-height: 1.4;
 }
 
+.sequences-content li.highlight-sequence {
+  color: var(--underline-color) !important; /* Yellow-orange font for highlighted sequences */
+  font-weight: 700; /* Bold */
+}
+
 /* Indications Card Styles */
 .indications-card {
   width: 100%;
@@ -569,7 +579,7 @@ a:hover {
 
 .indications-header h4 {
   margin: 0;
-  color: var(--interactive-accent); /* Teal color for Clinical Information header */
+  color: var(--underline-color); /* Yellow-orange color for Clinical Information header */
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -630,7 +640,7 @@ a:hover {
 .accordion-toggle {
   font-size: 1.2em;
   font-weight: bold;
-  color: var(--interactive-accent);
+  color: var(--interactive-accent); /* Default color */
   transition: transform 0.3s ease;
   min-width: 20px;
   text-align: center;
@@ -640,11 +650,24 @@ a:hover {
   transform: rotate(45deg);
 }
 
+/* Specific accordion toggle colors to match headers */
+.sequences-header .accordion-toggle {
+  color: var(--text-primary); /* White - matches sequences header */
+}
+
+.indications-header .accordion-toggle {
+  color: var(--underline-color); /* Yellow-orange - matches clinical information header */
+}
+
+.scanner-notes-header .accordion-toggle {
+  color: var(--text-primary); /* White - matches scanner notes header */
+}
+
 .scanner-notes h4 {
   margin: 0;
   color: var(--text-primary);
   font-size: 1em;
-  font-weight: 600;
+  font-weight: 400; /* Normal font weight */
 }
 
 .scanner-section {

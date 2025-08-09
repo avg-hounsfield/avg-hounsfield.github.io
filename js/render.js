@@ -222,7 +222,7 @@ function renderProtocolCard(protocol) {
           <div class="protocol-header">
             <h3>Protocol: ${protocol.study || 'Untitled Study'}</h3>
             <div class="protocol-info">
-              <span class="${contrastClass}"><strong>Contrast:</strong> <span class="contrast-value ${contrastClass}">${contrastText}</span></span>
+              <span class="${contrastClass}">Contrast: <span class="contrast-value ${contrastClass}">${contrastText}</span></span>
             </div>
           </div>
         </div>
