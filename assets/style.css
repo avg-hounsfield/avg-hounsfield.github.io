@@ -1,4 +1,20 @@
 /* Critical CSS - Above the fold styles */
+
+/* Global smooth scrolling and motion preferences */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 :root {
   /* Dark theme - keeping current colors */
   --bg-color: #1e2329;
@@ -102,36 +118,37 @@ body {
   border-bottom: 2px solid var(--interactive-accent);
 }
 
-/* Optimized animations with vendor prefixes */
+/* Optimized animations with vendor prefixes and smooth easing */
 @-webkit-keyframes fade-in-up {
   from { 
     opacity: 0; 
-    -webkit-transform: translateY(20px);
-    transform: translateY(20px); 
+    -webkit-transform: translateY(30px) scale(0.95);
+    transform: translateY(30px) scale(0.95); 
   }
   to { 
     opacity: 1; 
-    -webkit-transform: translateY(0);
-    transform: translateY(0); 
+    -webkit-transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1); 
   }
 }
 
 @keyframes fade-in-up {
   from { 
     opacity: 0; 
-    -webkit-transform: translateY(20px);
-    transform: translateY(20px); 
+    -webkit-transform: translateY(30px) scale(0.95);
+    transform: translateY(30px) scale(0.95); 
   }
   to { 
     opacity: 1; 
-    -webkit-transform: translateY(0);
-    transform: translateY(0); 
+    -webkit-transform: translateY(0) scale(1);
+    transform: translateY(0) scale(1); 
   }
 }
 
 .fade-in-up {
-  -webkit-animation: fade-in-up 0.5s ease-out both;
-  animation: fade-in-up 0.5s ease-out both;
+  -webkit-animation: fade-in-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: fade-in-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) both;
+  will-change: transform, opacity;
 }
 
 .protocol-grid {
@@ -153,11 +170,11 @@ body {
   color: var(--text-primary);
   color: #e6e9ec; /* Fallback for IE */
   font-family: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  -webkit-transition: background-color 0.3s, color 0.3s;
-  -moz-transition: background-color 0.3s, color 0.3s;
-  -ms-transition: background-color 0.3s, color 0.3s;
-  -o-transition: background-color 0.3s, color 0.3s;
-  transition: background-color 0.3s, color 0.3s;
+  -webkit-transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  -moz-transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  -ms-transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  -o-transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 h1, h2, h4, h5, h6 {
@@ -198,6 +215,16 @@ h3 {
   border-radius: 8px;
   padding: 20px;
   margin: 10px 0;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, box-shadow;
+}
+
+.protocol-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.protocol-card {
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -255,26 +282,31 @@ button, input, select {
   border: 1px solid var(--border-color);
   border-radius: 4px;
   padding: 0.5em 1em;
-  transition: border-color 0.2s, background 0.2s;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: border-color, background, transform;
 }
 button:hover, input:focus, select:focus {
   border-color: var(--border-color-focus);
   outline: none;
   background: var(--interactive-accent-hover);
+  transform: translateY(-1px);
 }
 
 /* Links */
 a {
   color: var(--interactive-accent);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: color;
 }
 a:hover {
   color: var(--interactive-accent-hover);
   text-decoration: underline;
+  transform: translateY(-0.5px);
 }
 
 /* Animations */
 .fade-in-up {
-  animation: fade-in-up 0.5s var(--delay, 0ms) both;
+  animation: fade-in-up 0.8s cubic-bezier(0.23, 1, 0.32, 1) var(--delay, 0ms) both;
 }
 
 /*------------------------------------*\
@@ -523,9 +555,22 @@ a:hover {
   font-weight: 600;
 }
 
+.sequences-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 8px;
+  margin: -8px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(-1px);
+  will-change: background, transform;
+}
+
 .sequences-content {
   padding: 20px;
   background: var(--primary-surface-bg);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: height, opacity, transform;
 }
 
 .sequences-content ul {
@@ -593,9 +638,22 @@ a:hover {
   font-weight: 600;
 }
 
+.indications-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 8px;
+  margin: -8px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(-1px);
+  will-change: background, transform;
+}
+
 .indications-content {
   padding: 20px;
   background: var(--primary-surface-bg);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: height, opacity, transform;
 }
 
 .indications-content p {
@@ -619,6 +677,11 @@ a:hover {
   font-weight: 600;
 }
 
+/* Specific styling for "Contrast Rationale:" title */
+.indications-content .contrast-rationale strong {
+  color: var(--underline-color) !important; /* Yellow-orange color for Contrast Rationale title */
+}
+
 .scanner-notes {
   margin: 0;
   padding: 0;
@@ -636,27 +699,33 @@ a:hover {
 
 .scanner-notes-header:hover {
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-  padding: 5px;
-  margin: -5px;
+  border-radius: 6px;
+  padding: 8px;
+  margin: -8px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(-1px);
+  will-change: background, transform;
 }
 
 .scanner-notes-content {
   margin-top: 15px;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+  will-change: height, opacity;
 }
 
 .accordion-toggle {
   font-size: 1.2em;
   font-weight: bold;
   color: var(--interactive-accent); /* Default color */
-  transition: transform 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   min-width: 20px;
   text-align: center;
+  will-change: transform;
 }
 
 .accordion-toggle.expanded {
-  transform: rotate(45deg);
+  transform: rotate(45deg) scale(1.1);
 }
 
 /* Specific accordion toggle colors to match headers */

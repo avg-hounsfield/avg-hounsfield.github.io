@@ -16,7 +16,7 @@ const debounce = (func, wait) => {
   };
 };
 
-// Function to toggle accordion display
+// Function to toggle accordion display with enhanced animations
 window.toggleAccordion = function(accordionId) {
   const content = document.getElementById(accordionId);
   const toggle = document.getElementById('toggle-' + accordionId);
@@ -25,9 +25,32 @@ window.toggleAccordion = function(accordionId) {
   
   const isHidden = content.style.display === 'none' || content.style.display === '';
   
-  // Use requestAnimationFrame for smooth animations
+  // Add performance optimization
+  content.style.willChange = 'opacity, transform';
+  
+  // Use requestAnimationFrame for smooth animations with enhanced timing
   requestAnimationFrame(() => {
-    content.style.display = isHidden ? 'block' : 'none';
+    if (isHidden) {
+      // Opening animation
+      content.style.display = 'block';
+      content.style.opacity = '0';
+      content.style.transform = 'translateY(-10px)';
+      
+      requestAnimationFrame(() => {
+        content.style.opacity = '1';
+        content.style.transform = 'translateY(0)';
+      });
+    } else {
+      // Closing animation
+      content.style.opacity = '0';
+      content.style.transform = 'translateY(-10px)';
+      
+      setTimeout(() => {
+        content.style.display = 'none';
+        content.style.willChange = 'auto';
+      }, 400); // Match CSS transition duration
+    }
+    
     toggle.textContent = isHidden ? '−' : '+';
     toggle.classList.toggle('expanded', isHidden);
   });
@@ -73,11 +96,20 @@ function runSearchAndRender() {
 
     resultsContainer.innerHTML = renderGroupedProtocols(grouped);
     
-    // Optimize animations - use CSS classes instead of inline styles
+    // Optimize animations - use CSS classes with improved staggering
     const cards = resultsContainer.querySelectorAll('.protocol-card');
     cards.forEach((card, index) => {
-      card.style.animationDelay = `${index * 60}ms`;
+      // Smooth staggered animation with better timing
+      card.style.animationDelay = `${index * 80}ms`;
       card.classList.add('fade-in-up');
+      
+      // Add performance optimization
+      card.style.willChange = 'transform, opacity';
+      
+      // Clean up will-change after animation completes
+      setTimeout(() => {
+        card.style.willChange = 'auto';
+      }, 800 + (index * 80));
     });
     
   } catch (error) {
