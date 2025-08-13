@@ -158,6 +158,31 @@ document.addEventListener('DOMContentLoaded', function() {
   var searchInput = document.getElementById('searchInput');
   var searchButton = document.getElementById('searchButton');
   var resultsContainer = document.getElementById('results');
+  var ordersOnlyToggle = document.getElementById('ordersOnlyToggle');
+
+  // Orders Only filter state
+  var isOrdersOnlyActive = false;
+
+  // Toggle button functionality
+  function toggleOrdersOnly() {
+    isOrdersOnlyActive = !isOrdersOnlyActive;
+    ordersOnlyToggle.setAttribute('data-active', isOrdersOnlyActive.toString());
+    
+    // Re-run search if there's a query
+    if (searchInput.value.trim()) {
+      runSearchAndRender();
+    }
+  }
+
+  // Add click event to toggle button
+  if (ordersOnlyToggle) {
+    ordersOnlyToggle.addEventListener('click', toggleOrdersOnly);
+  }
+
+  // Make filter state accessible globally for search function
+  window.getOrdersOnlyState = function() {
+    return isOrdersOnlyActive;
+  };
 
   // Feature detection
   var supportsES6 = (function() {
