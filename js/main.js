@@ -188,26 +188,33 @@ function runSearchAndRender() {
         // Limit animations to prevent lag with many results
         const maxAnimatedCards = Math.min(cards.length, 20);
         
-        // Use faster stagger for smoother perception
-        cards.forEach((card, index) => {
-          if (index < maxAnimatedCards) {
-            const delay = index * 50; // Reduced from 120ms to 50ms
-            
-            // Simplified style application - no CSS text manipulation
-            card.style.animationDelay = `${delay}ms`;
-            card.classList.add('fade-in-up');
-            
-            // Clean up will-change after animation completes
-            const timeoutId = setTimeout(() => {
-              card.style.willChange = 'auto';
-            }, 400 + delay); // Updated timing for new animation duration
-            animationTimeouts.push(timeoutId);
-          } else {
-            // For cards beyond the limit, show immediately without animation
-            card.style.opacity = '1';
-            card.style.transform = 'translate3d(0, 0, 0)';
-          }
-        });
+                 // Ultra-fast stagger with minimal delay
+         cards.forEach((card, index) => {
+           if (index < maxAnimatedCards) {
+             const delay = index * 30; // Reduced from 50ms to 30ms for smoother flow
+             
+             // Set initial state immediately to prevent flash
+             card.style.opacity = '0';
+             card.style.transform = 'translate3d(0, 15px, 0)';
+             
+             // Apply animation with delay
+             card.style.animationDelay = `${delay}ms`;
+             card.classList.add('fade-in-up');
+             
+             // Clean up will-change after animation completes
+             const timeoutId = setTimeout(() => {
+               card.style.willChange = 'auto';
+               // Ensure final state is set
+               card.style.opacity = '';
+               card.style.transform = '';
+             }, 250 + delay);
+             animationTimeouts.push(timeoutId);
+           } else {
+             // For cards beyond the limit, show immediately without animation
+             card.style.opacity = '1';
+             card.style.transform = 'translate3d(0, 0, 0)';
+           }
+         });
       });
     });
     

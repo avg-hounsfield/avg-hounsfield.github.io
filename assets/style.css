@@ -128,12 +128,12 @@ body {
   border-bottom: 2px solid var(--interactive-accent);
 }
 
-/* Performance-optimized animations - GPU accelerated, no expensive filters */
+/* Ultra-smooth animations with no pause at start/end */
 @-webkit-keyframes fade-in-up {
   0% { 
     opacity: 0; 
-    -webkit-transform: translate3d(0, 20px, 0);
-    transform: translate3d(0, 20px, 0);
+    -webkit-transform: translate3d(0, 15px, 0);
+    transform: translate3d(0, 15px, 0);
   }
   100% { 
     opacity: 1; 
@@ -145,8 +145,8 @@ body {
 @keyframes fade-in-up {
   0% { 
     opacity: 0; 
-    -webkit-transform: translate3d(0, 20px, 0);
-    transform: translate3d(0, 20px, 0);
+    -webkit-transform: translate3d(0, 15px, 0);
+    transform: translate3d(0, 15px, 0);
   }
   100% { 
     opacity: 1; 
@@ -156,8 +156,8 @@ body {
 }
 
 .fade-in-up {
-  -webkit-animation: fade-in-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  animation: fade-in-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  -webkit-animation: fade-in-up 0.25s ease-out both;
+  animation: fade-in-up 0.25s ease-out both;
   will-change: transform, opacity;
 }
 
@@ -378,9 +378,9 @@ a:hover::after {
   width: 100%;
 }
 
-/* Optimized animations for smooth performance */
+/* Optimized animations for ultra-smooth performance */
 .fade-in-up {
-  animation: fade-in-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: fade-in-up 0.25s ease-out both;
   /* GPU acceleration hints */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
