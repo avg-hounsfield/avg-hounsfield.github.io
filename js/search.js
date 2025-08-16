@@ -4,8 +4,18 @@ let fuse;
 let lastData = [];
 
 export function initFuzzy(data) {
+  if (!Array.isArray(data)) {
+    throw new Error('initFuzzy requires an array of data');
+  }
+  
+  if (data.length === 0) {
+    console.warn('initFuzzy called with empty data array');
+  }
+  
   lastData = data;
-  fuse = new Fuse(data, {
+  
+  try {
+    fuse = new Fuse(data, {
     includeScore: true,
     threshold: 0.3,           // Stricter matching (lower = more exact matches required)
     ignoreLocation: false,    // Consider the location of matches
@@ -75,6 +85,10 @@ export function initFuzzy(data) {
       }
     ]
   });
+  } catch (error) {
+    console.error('Error initializing Fuse search:', error);
+    throw error;
+  }
 }
 
 function preprocessQuery(query) {
@@ -121,7 +135,6 @@ export function fuzzySearch(query) {
   if (!fuse || !query.trim()) return [];
   
   const processedQuery = preprocessQuery(query);
-  console.log('Searching with processed query:', processedQuery);
   
   try {
     let results = fuse.search(processedQuery);

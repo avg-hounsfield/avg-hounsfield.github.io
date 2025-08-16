@@ -7,6 +7,13 @@ let protocolData = [];
 let allStudies = []; // Add a new variable to hold the flattened list of all studies
 const DEBOUNCE_DELAY = 250; // Reduced delay for better responsiveness
 
+// Track animation timeouts to prevent memory leaks
+let animationTimeouts = [];
+
+// Cache last search results to avoid unnecessary re-processing
+let lastSearchQuery = '';
+let lastSearchResults = null;
+
 // Optimize debounce function
 const debounce = (func, wait) => {
   let timeout;
@@ -16,12 +23,21 @@ const debounce = (func, wait) => {
   };
 };
 
+// Map to store active timeouts for accordion animations to prevent memory leaks
+const accordionTimeouts = new Map();
+
 // Function to toggle accordion display with smooth height-based animations
 window.toggleAccordion = function(accordionId) {
   const content = document.getElementById(accordionId);
   const toggle = document.getElementById('toggle-' + accordionId);
   
   if (!content || !toggle) return; // Safety check
+  
+  // Clear any existing timeout for this accordion to prevent memory leaks
+  if (accordionTimeouts.has(accordionId)) {
+    clearTimeout(accordionTimeouts.get(accordionId));
+    accordionTimeouts.delete(accordionId);
+  }
   
   // Determine current state more reliably
   const isCurrentlyHidden = content.style.display === 'none' || 
@@ -54,10 +70,12 @@ window.toggleAccordion = function(accordionId) {
     });
     
     // Clean up after animation completes
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       content.style.maxHeight = 'none';
       content.style.willChange = 'auto';
+      accordionTimeouts.delete(accordionId);
     }, 500);
+    accordionTimeouts.set(accordionId, timeoutId);
     
   } else {
     // Closing animation - ensure smooth collapse for all sections
@@ -77,10 +95,12 @@ window.toggleAccordion = function(accordionId) {
     });
     
     // Hide completely after animation
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       content.style.display = 'none';
       content.style.willChange = 'auto';
+      accordionTimeouts.delete(accordionId);
     }, 500);
+    accordionTimeouts.set(accordionId, timeoutId);
   }
   
   // Update toggle button consistently
@@ -88,15 +108,38 @@ window.toggleAccordion = function(accordionId) {
   toggle.classList.toggle('expanded', isCurrentlyHidden);
 };
 
+// Cache DOM elements to avoid repeated queries
+let cachedSearchInput;
+let cachedResultsContainer;
+
 // Optimized search and render function
 function runSearchAndRender() {
-  const searchInput = document.getElementById('searchInput');
-  const resultsContainer = document.getElementById('results');
+  // Use cached elements or query them once
+  if (!cachedSearchInput) cachedSearchInput = document.getElementById('searchInput');
+  if (!cachedResultsContainer) cachedResultsContainer = document.getElementById('results');
+  
+  const searchInput = cachedSearchInput;
+  const resultsContainer = cachedResultsContainer;
+  
+  if (!searchInput || !resultsContainer) return;
+  
   const query = searchInput.value.trim();
 
   // Early return for empty queries
   if (!query) {
-    resultsContainer.innerHTML = '';
+    if (lastSearchQuery !== '') {
+      resultsContainer.innerHTML = '';
+      // Clear any pending animation timeouts
+      animationTimeouts.forEach(clearTimeout);
+      animationTimeouts = [];
+      lastSearchQuery = '';
+      lastSearchResults = null;
+    }
+    return;
+  }
+
+  // Return cached results if query hasn't changed
+  if (query === lastSearchQuery && lastSearchResults) {
     return;
   }
 
@@ -110,6 +153,10 @@ function runSearchAndRender() {
 
   try {
     const results = fuzzySearch(query, allStudies) || [];
+    
+    // Cache the results
+    lastSearchQuery = query;
+    lastSearchResults = results;
     
     if (results.length === 0) {
       resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
@@ -126,22 +173,37 @@ function runSearchAndRender() {
       return acc;
     }, {});
 
-    resultsContainer.innerHTML = renderGroupedProtocols(grouped);
+    // Clear any pending animation timeouts before creating new ones
+    animationTimeouts.forEach(clearTimeout);
+    animationTimeouts = [];
     
-    // Professional staggered animations with optimized timing
-    const cards = resultsContainer.querySelectorAll('.protocol-card');
-    cards.forEach((card, index) => {
-      // Smooth staggered animation with professional timing curve
-      card.style.animationDelay = `${index * 120}ms`;
-      card.classList.add('fade-in-up');
+    // Use requestAnimationFrame for DOM updates to avoid layout thrashing
+    requestAnimationFrame(() => {
+      resultsContainer.innerHTML = renderGroupedProtocols(grouped);
       
-      // Enhanced performance optimization
-      card.style.willChange = 'transform, opacity, filter';
-      
-      // Clean up will-change after animation completes with extended timing
-      setTimeout(() => {
-        card.style.willChange = 'auto';
-      }, 1200 + (index * 120));
+      // Batch DOM queries and style operations for better performance
+      requestAnimationFrame(() => {
+        const cards = resultsContainer.querySelectorAll('.protocol-card');
+        const fragment = document.createDocumentFragment();
+        
+        // Batch style operations to minimize reflow/repaint
+        cards.forEach((card, index) => {
+          const delay = index * 120;
+          
+          // Apply all styles in one operation to reduce style recalculation
+          card.style.cssText += `
+            animation-delay: ${delay}ms;
+            will-change: transform, opacity, filter;
+          `;
+          card.classList.add('fade-in-up');
+          
+          // Use more efficient timeout management
+          const timeoutId = setTimeout(() => {
+            card.style.willChange = 'auto';
+          }, 1200 + delay);
+          animationTimeouts.push(timeoutId);
+        });
+      });
     });
     
   } catch (error) {
@@ -160,16 +222,23 @@ document.addEventListener('DOMContentLoaded', function() {
   var resultsContainer = document.getElementById('results');
   var ordersOnlyToggle = document.getElementById('ordersOnlyToggle');
 
+  // Validate required DOM elements exist
+  if (!searchInput || !resultsContainer) {
+    console.error('Required DOM elements not found. Application cannot initialize.');
+    return;
+  }
+
   // Orders Only filter state
   var isOrdersOnlyActive = false;
 
   // Toggle button functionality
   function toggleOrdersOnly() {
+    if (!ordersOnlyToggle) return; // Safety check
     isOrdersOnlyActive = !isOrdersOnlyActive;
     ordersOnlyToggle.setAttribute('data-active', isOrdersOnlyActive.toString());
     
     // Re-run search if there's a query
-    if (searchInput.value.trim()) {
+    if (searchInput && searchInput.value.trim()) {
       runSearchAndRender();
     }
   }
@@ -208,26 +277,52 @@ document.addEventListener('DOMContentLoaded', function() {
   function loadProtocols() {
     if (window.fetch) {
       return fetch('./data/protocols.json')
-        .then(function(res) { return res.json(); });
+        .then(function(res) { 
+          if (!res.ok) {
+            throw new Error('HTTP error! status: ' + res.status);
+          }
+          return res.json(); 
+        })
+        .then(function(data) {
+          // Validate data structure
+          if (!Array.isArray(data)) {
+            throw new Error('Invalid data format: expected array');
+          }
+          return data;
+        });
     } else {
       // Fallback for older browsers
       return new Promise(function(resolve, reject) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', './data/protocols.json');
+        xhr.timeout = 10000; // 10 second timeout
+        
         xhr.onload = function() {
           if (xhr.status === 200) {
             try {
-              resolve(JSON.parse(xhr.responseText));
+              var data = JSON.parse(xhr.responseText);
+              // Validate data structure
+              if (!Array.isArray(data)) {
+                reject(new Error('Invalid data format: expected array'));
+                return;
+              }
+              resolve(data);
             } catch (e) {
-              reject(e);
+              reject(new Error('JSON parse error: ' + e.message));
             }
           } else {
-            reject(new Error('Failed to load'));
+            reject(new Error('HTTP error! status: ' + xhr.status));
           }
         };
+        
         xhr.onerror = function() {
           reject(new Error('Network error'));
         };
+        
+        xhr.ontimeout = function() {
+          reject(new Error('Request timeout'));
+        };
+        
         xhr.send();
       });
     }
@@ -235,53 +330,99 @@ document.addEventListener('DOMContentLoaded', function() {
 
   loadProtocols()
     .then(function(rawData) {
-      protocolData = rawData;
-      
-      // Flatten all studies, duplicating them for each section they belong to
-      allStudies = [];
-      protocolData.forEach(function(sectionObj) {
-        if (Array.isArray(sectionObj.studies)) {
-          var sections = Array.isArray(sectionObj.section) ? sectionObj.section : ['Other'];
-          sectionObj.studies.forEach(function(study) {
-            sections.forEach(function(sectionName) {
-              // Create a new object for each study-section pair
-              allStudies.push(Object.assign({}, study, {
-                section: sectionName // Assign the single section name
-              }));
-            });
-          });
+      try {
+        protocolData = rawData;
+        
+        // Validate and flatten all studies
+        allStudies = [];
+        
+        if (!Array.isArray(protocolData)) {
+          throw new Error('Invalid protocol data structure');
         }
-      });
+        
+        protocolData.forEach(function(sectionObj, index) {
+          try {
+            if (!sectionObj || typeof sectionObj !== 'object') {
+              console.warn('Invalid section object at index', index);
+              return;
+            }
+            
+            if (Array.isArray(sectionObj.studies)) {
+              var sections = Array.isArray(sectionObj.section) ? sectionObj.section : ['Other'];
+              
+              sectionObj.studies.forEach(function(study, studyIndex) {
+                try {
+                  if (!study || typeof study !== 'object') {
+                    console.warn('Invalid study object at section', index, 'study', studyIndex);
+                    return;
+                  }
+                  
+                  sections.forEach(function(sectionName) {
+                    if (typeof sectionName === 'string' && sectionName.trim()) {
+                      // Create a new object for each study-section pair
+                      allStudies.push(Object.assign({}, study, {
+                        section: sectionName.trim()
+                      }));
+                    }
+                  });
+                } catch (studyError) {
+                  console.warn('Error processing study:', studyError);
+                }
+              });
+            }
+          } catch (sectionError) {
+            console.warn('Error processing section:', sectionError);
+          }
+        });
 
-      // Initialize fuzzy search with the flattened list
-      initFuzzy(allStudies);
-      
-      // Don't show any results initially
-      resultsContainer.innerHTML = '';
-      
-      if (searchInput.value.trim()) {
-        runSearchAndRender();
+        if (allStudies.length === 0) {
+          throw new Error('No valid studies found in protocol data');
+        }
+
+        // Initialize fuzzy search with the flattened list
+        initFuzzy(allStudies);
+        
+        // Don't show any results initially
+        if (resultsContainer) {
+          resultsContainer.innerHTML = '';
+        }
+        
+        if (searchInput && searchInput.value.trim()) {
+          runSearchAndRender();
+        }
+        
+      } catch (processingError) {
+        console.error('Error processing protocol data:', processingError);
+        if (resultsContainer) {
+          resultsContainer.innerHTML = 
+            '<p class="error">Error processing protocol data. Please try refreshing the page.</p>';
+        }
       }
     })
     .catch(function(error) {
       console.error('Failed to load protocols:', error);
-      if (searchInput.value.trim()) {
+      if (searchInput && searchInput.value.trim() && resultsContainer) {
         resultsContainer.innerHTML = 
           '<p class="error">Failed to load protocols. Please try again later.</p>';
       }
     });
 
   // Set up event listeners for search with cross-browser support
-  addEvent(searchInput, 'input', debouncedSearch);
-  addEvent(searchButton, 'click', runSearchAndRender);
-  addEvent(searchInput, 'keydown', function(e) {
-    if (e.key === 'Enter' || e.keyCode === 13) {
-      if (e.preventDefault) {
-        e.preventDefault();
-      } else {
-        e.returnValue = false;
+  if (searchInput) {
+    addEvent(searchInput, 'input', debouncedSearch);
+    addEvent(searchInput, 'keydown', function(e) {
+      if (e.key === 'Enter' || e.keyCode === 13) {
+        if (e.preventDefault) {
+          e.preventDefault();
+        } else {
+          e.returnValue = false;
+        }
+        runSearchAndRender();
       }
-      runSearchAndRender();
-    }
-  });
+    });
+  }
+  
+  if (searchButton) {
+    addEvent(searchButton, 'click', runSearchAndRender);
+  }
 });
