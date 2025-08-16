@@ -124,6 +124,50 @@
   <button id="theme-toggle" title="Toggle theme">
     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
   </button>
+  
+  <!-- Calculator Sidebar -->
+  <div id="calculator-sidebar" class="calculator-sidebar">
+    <button id="calculator-toggle" class="calculator-toggle" title="Toggle Calculator">
+      <span class="material-symbols-outlined">calculate</span>
+    </button>
+    <div class="calculator-panel">
+      <div class="calculator-display">
+        <input type="text" id="calculator-screen" readonly value="0">
+      </div>
+      <div class="calculator-buttons">
+        <div class="button-row">
+          <button class="calc-btn function-btn" data-action="clear">C</button>
+          <button class="calc-btn function-btn" data-action="clearEntry">CE</button>
+          <button class="calc-btn function-btn" data-action="backspace">⌫</button>
+          <button class="calc-btn operator-btn" data-action="divide">÷</button>
+        </div>
+        <div class="button-row">
+          <button class="calc-btn number-btn" data-value="7">7</button>
+          <button class="calc-btn number-btn" data-value="8">8</button>
+          <button class="calc-btn number-btn" data-value="9">9</button>
+          <button class="calc-btn operator-btn" data-action="multiply">×</button>
+        </div>
+        <div class="button-row">
+          <button class="calc-btn number-btn" data-value="4">4</button>
+          <button class="calc-btn number-btn" data-value="5">5</button>
+          <button class="calc-btn number-btn" data-value="6">6</button>
+          <button class="calc-btn operator-btn" data-action="subtract">−</button>
+        </div>
+        <div class="button-row">
+          <button class="calc-btn number-btn" data-value="1">1</button>
+          <button class="calc-btn number-btn" data-value="2">2</button>
+          <button class="calc-btn number-btn" data-value="3">3</button>
+          <button class="calc-btn operator-btn" data-action="add">+</button>
+        </div>
+        <div class="button-row">
+          <button class="calc-btn number-btn zero-btn" data-value="0">0</button>
+          <button class="calc-btn number-btn" data-value=".">.</button>
+          <button class="calc-btn equals-btn" data-action="equals">=</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <div class="container">
     <header class="main-header">
       <h1>MRI PROTOCOL SEARCH</h1>
@@ -148,6 +192,7 @@
   <!-- Load Lunr.js for search functionality -->
   <script src="https://unpkg.com/lunr@2.3.9/lunr.min.js"></script>
   
+  <script src="js/calculator.js"></script>
   <script type="module" src="js/theme.js"></script>
   <script type="module" src="js/main.js"></script>
   

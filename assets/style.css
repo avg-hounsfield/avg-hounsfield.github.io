@@ -959,3 +959,227 @@ a:hover::after {
   color: var(--highlight-bluegreen);
   font-weight: 200; /* Keep consistent light weight even for highlighted */
 }
+
+/*------------------------------------*\
+    #CALCULATOR SIDEBAR
+\*------------------------------------*/
+.calculator-sidebar {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 1000;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calculator-sidebar.open {
+  transform: translateY(-50%) translateX(0);
+}
+
+.calculator-toggle {
+  position: absolute;
+  left: -48px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: var(--interactive-accent);
+  color: var(--interactive-accent-text);
+  border: none;
+  border-radius: 8px 0 0 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.calculator-toggle:hover {
+  background: var(--interactive-accent-hover);
+  box-shadow: -4px 0 12px rgba(64, 180, 166, 0.3);
+}
+
+.calculator-panel {
+  width: 280px;
+  background: var(--primary-surface-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px 0 0 12px;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calculator-sidebar.open .calculator-panel {
+  transform: translateX(0);
+}
+
+.calculator-display {
+  margin-bottom: 20px;
+}
+
+#calculator-screen {
+  width: 100%;
+  height: 60px;
+  background: var(--secondary-surface-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 1.8rem;
+  font-weight: 500;
+  text-align: right;
+  padding: 0 16px;
+  font-family: 'Courier New', monospace;
+  outline: none;
+  cursor: default;
+}
+
+.calculator-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Increased spacing between button rows */
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px; /* Spacing between buttons in a row */
+}
+
+.button-row:last-child {
+  grid-template-columns: 2fr 1fr 1fr; /* Special layout for bottom row */
+}
+
+.calc-btn {
+  height: 50px;
+  border: none;
+  border-radius: 6px; /* Flat 2.0 styling with subtle rounded corners */
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Remove the ripple effect for flat 2.0 design */
+.calc-btn::before {
+  display: none;
+}
+
+/* Number buttons */
+.number-btn {
+  background: var(--secondary-surface-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.number-btn:hover {
+  background: var(--border-color);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.number-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Operator buttons */
+.operator-btn {
+  background: var(--interactive-accent);
+  color: var(--interactive-accent-text);
+  border: 1px solid var(--interactive-accent);
+}
+
+.operator-btn:hover {
+  background: var(--interactive-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(64, 180, 166, 0.3);
+}
+
+.operator-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Function buttons (Clear, CE, Backspace) */
+.function-btn {
+  background: var(--text-secondary);
+  color: var(--bg-color);
+  border: 1px solid var(--text-secondary);
+}
+
+.function-btn:hover {
+  background: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.function-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Equals button */
+.equals-btn {
+  background: var(--header-color);
+  color: var(--interactive-accent-text);
+  border: 1px solid var(--header-color);
+  font-weight: 600;
+}
+
+.equals-btn:hover {
+  background: var(--interactive-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(64, 180, 166, 0.3);
+}
+
+.equals-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Zero button spans two columns */
+.zero-btn {
+  grid-column: span 1;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .calculator-panel {
+    width: 240px;
+    padding: 16px;
+  }
+  
+  .calc-btn {
+    height: 44px;
+    font-size: 1rem;
+  }
+  
+  #calculator-screen {
+    height: 50px;
+    font-size: 1.5rem;
+    padding: 0 12px;
+  }
+  
+  .calculator-buttons {
+    gap: 8px;
+  }
+  
+  .button-row {
+    gap: 6px;
+  }
+}
+
+/* Hide calculator on very small screens */
+@media (max-width: 480px) {
+  .calculator-sidebar {
+    display: none;
+  }
+}
