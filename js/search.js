@@ -168,51 +168,27 @@ export function fuzzySearch(query) {
     let results = [];
     const terms = processedQuery.split(' ').filter(term => term.length > 0);
     
-    // Strategy 1: Exact phrase search for multi-word queries
-    if (terms.length > 1) {
-      const phraseQuery = `"${processedQuery}"`;
-      results = lunrIndex.search(phraseQuery);
-    }
+    // Fast primary search - try exact first, then wildcard if needed
+    results = lunrIndex.search(processedQuery);
     
-    // Strategy 2: Standard search if no phrase results or single word
-    if (results.length === 0) {
-      results = lunrIndex.search(processedQuery);
-    }
-    
-    // Strategy 3: Wildcard search for partial matches
+    // If no results and short query, try wildcard
     if (results.length === 0 && processedQuery.length > 2) {
       const wildcardQuery = terms.map(term => `${term}*`).join(' ');
       results = lunrIndex.search(wildcardQuery);
     }
     
-    // Strategy 4: Boost search for individual terms
-    if (results.length === 0 && terms.length > 1) {
-      const boostQuery = terms.map(term => `${term}^2`).join(' ');
-      results = lunrIndex.search(boostQuery);
-    }
-    
-    // Strategy 5: Fuzzy search with edit distance for typos
-    if (results.length === 0 && processedQuery.length > 3) {
+    // Only try fuzzy search if still no results and longer query
+    if (results.length === 0 && processedQuery.length > 4) {
       const fuzzyQuery = terms.map(term => `${term}~1`).join(' ');
       results = lunrIndex.search(fuzzyQuery);
     }
     
-    // Strategy 6: Very fuzzy search as last resort
-    if (results.length === 0 && processedQuery.length > 4) {
-      const veryFuzzyQuery = terms.map(term => `${term}~2`).join(' ');
-      results = lunrIndex.search(veryFuzzyQuery);
-    }
-    
-    // Convert Lunr results to documents and sort by score (descending)
+    // Convert Lunr results to documents efficiently
     const items = results
       .filter(result => result.score > 0.1) // Filter out very low scores
-      .sort((a, b) => b.score - a.score) // Lunr scores are higher = better (opposite of Fuse)
-      .map(result => {
-        const doc = documentsById.get(parseInt(result.ref));
-        return doc;
-      })
-      .filter(Boolean) // Remove any undefined documents
-      .slice(0, 50); // Limit results to top 50 for performance
+      .slice(0, 30) // Limit early for better performance
+      .map(result => documentsById.get(parseInt(result.ref)))
+      .filter(Boolean); // Remove any undefined documents
     
     return items;
   } catch (error) {

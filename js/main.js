@@ -151,72 +151,78 @@ function runSearchAndRender() {
     return;
   }
 
-  try {
-    const results = fuzzySearch(query) || [];
+    try {
+    // Show immediate loading feedback
+    resultsContainer.innerHTML = '<div class="loading-indicator">Searching...</div>';
     
-    // Cache the results
-    lastSearchQuery = query;
-    lastSearchResults = results;
-    
-    if (results.length === 0) {
-      resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
-      return;
-    }
-
-    // Optimize grouping with Map for better performance
-    const grouped = results.reduce((acc, protocol) => {
-      const sectionKey = protocol.section || 'Other';
-      if (!acc[sectionKey]) {
-        acc[sectionKey] = [];
-      }
-      acc[sectionKey].push(protocol);
-      return acc;
-    }, {});
-
-    // Clear any pending animation timeouts before creating new ones
-    animationTimeouts.forEach(clearTimeout);
-    animationTimeouts = [];
-    
-    // Use requestAnimationFrame for DOM updates to avoid layout thrashing
-    requestAnimationFrame(() => {
-      resultsContainer.innerHTML = renderGroupedProtocols(grouped);
+    // Use setTimeout to make search async and prevent UI blocking
+    setTimeout(() => {
+      const results = fuzzySearch(query) || [];
       
-      // Single requestAnimationFrame for better performance
+      // Cache the results
+      lastSearchQuery = query;
+      lastSearchResults = results;
+      
+      if (results.length === 0) {
+        resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
+        return;
+      }
+
+      // Optimize grouping with Map for better performance
+      const grouped = results.reduce((acc, protocol) => {
+        const sectionKey = protocol.section || 'Other';
+        if (!acc[sectionKey]) {
+          acc[sectionKey] = [];
+        }
+        acc[sectionKey].push(protocol);
+        return acc;
+      }, {});
+
+      // Clear any pending animation timeouts before creating new ones
+      animationTimeouts.forEach(clearTimeout);
+      animationTimeouts = [];
+      
+      // Use requestAnimationFrame for DOM updates to avoid layout thrashing
       requestAnimationFrame(() => {
-        const cards = resultsContainer.querySelectorAll('.protocol-card');
+        resultsContainer.innerHTML = renderGroupedProtocols(grouped);
         
-        // Limit animations to prevent lag with many results
-        const maxAnimatedCards = Math.min(cards.length, 20);
-        
-                 // Ultra-fast stagger with minimal delay
-         cards.forEach((card, index) => {
-           if (index < maxAnimatedCards) {
-             const delay = index * 30; // Reduced from 50ms to 30ms for smoother flow
-             
-             // Set initial state immediately to prevent flash
-             card.style.opacity = '0';
-             card.style.transform = 'translate3d(0, 15px, 0)';
-             
-             // Apply animation with delay
-             card.style.animationDelay = `${delay}ms`;
-             card.classList.add('fade-in-up');
-             
-             // Clean up will-change after animation completes
-             const timeoutId = setTimeout(() => {
-               card.style.willChange = 'auto';
-               // Ensure final state is set
-               card.style.opacity = '';
-               card.style.transform = '';
-             }, 250 + delay);
-             animationTimeouts.push(timeoutId);
-           } else {
-             // For cards beyond the limit, show immediately without animation
-             card.style.opacity = '1';
-             card.style.transform = 'translate3d(0, 0, 0)';
-           }
-         });
+        // Single requestAnimationFrame for better performance
+        requestAnimationFrame(() => {
+          const cards = resultsContainer.querySelectorAll('.protocol-card');
+          
+          // Limit animations to prevent lag with many results
+          const maxAnimatedCards = Math.min(cards.length, 20);
+          
+          // Ultra-fast stagger with minimal delay
+          cards.forEach((card, index) => {
+            if (index < maxAnimatedCards) {
+              const delay = index * 30; // Reduced from 50ms to 30ms for smoother flow
+              
+              // Set initial state immediately to prevent flash
+              card.style.opacity = '0';
+              card.style.transform = 'translate3d(0, 15px, 0)';
+              
+              // Apply animation with delay
+              card.style.animationDelay = `${delay}ms`;
+              card.classList.add('fade-in-up');
+              
+              // Clean up will-change after animation completes
+              const timeoutId = setTimeout(() => {
+                card.style.willChange = 'auto';
+                // Ensure final state is set
+                card.style.opacity = '';
+                card.style.transform = '';
+              }, 250 + delay);
+              animationTimeouts.push(timeoutId);
+            } else {
+              // For cards beyond the limit, show immediately without animation
+              card.style.opacity = '1';
+              card.style.transform = 'translate3d(0, 0, 0)';
+            }
+          });
+        });
       });
-    });
+    }, 10); // Small delay to show loading state
     
   } catch (error) {
     console.error('Search error:', error);

@@ -388,6 +388,21 @@ a:hover::after {
   perspective: 1000px;
 }
 
+/* Loading indicator for smooth data loading feedback */
+.loading-indicator {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  opacity: 0.8;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
 /*------------------------------------*\
     #SEARCH BAR
 \*------------------------------------*/
