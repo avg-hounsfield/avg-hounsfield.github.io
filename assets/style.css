@@ -888,17 +888,14 @@ a:hover::after {
   font-size: 1.2em;
   font-weight: bold;
   color: var(--interactive-accent); /* Default color */
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
-              color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.15s ease-out;
   min-width: 20px;
   text-align: center;
-  will-change: transform, color, filter;
+  will-change: transform;
 }
 
 .accordion-toggle.expanded {
-  transform: rotate(45deg) scale(1.15);
-  filter: drop-shadow(0 2px 4px rgba(64, 180, 166, 0.3));
+  transform: rotate(45deg);
 }
 
 /* Specific accordion toggle colors to match headers */
@@ -912,6 +909,20 @@ a:hover::after {
 
 .scanner-notes-header .accordion-toggle {
   color: var(--text-primary) !important; /* White - matches scanner notes header */
+}
+
+/* Ultra-smooth accordion content animations */
+.accordion-content {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.accordion-open {
+  overflow: visible !important;
+}
+
+.accordion-closed {
+  overflow: hidden !important;
 }
 
 .scanner-notes h4 {

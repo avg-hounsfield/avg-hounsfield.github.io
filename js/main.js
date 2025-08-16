@@ -40,51 +40,58 @@ window.toggleAccordion = function(accordionId) {
   }
   
   // Determine current state
-  const isCurrentlyHidden = content.style.display === 'none' || 
-                           content.style.maxHeight === '0px' || 
-                           !content.style.maxHeight;
-  
-  // Minimal transition - only max-height for performance
-  content.style.overflow = 'hidden';
-  content.style.transition = 'max-height 0.2s ease-out';
-  content.style.willChange = 'max-height';
+  const isCurrentlyHidden = content.classList.contains('accordion-closed') || 
+                           content.style.display === 'none' || 
+                           !content.classList.contains('accordion-open');
   
   if (isCurrentlyHidden) {
-    // Simple opening - just show and expand
+    // Opening: measure natural height first
     content.style.display = 'block';
-    content.style.maxHeight = '0px';
+    content.style.height = 'auto';
+    content.style.overflow = 'visible';
+    const naturalHeight = content.scrollHeight;
     
-    // Get natural height
-    const scrollHeight = content.scrollHeight;
+    // Set up for animation
+    content.style.height = '0px';
+    content.style.overflow = 'hidden';
+    content.style.transition = 'height 0.15s ease-out';
+    content.classList.remove('accordion-closed');
+    content.classList.add('accordion-open');
     
-    // Expand to natural height
+    // Trigger animation
     requestAnimationFrame(() => {
-      content.style.maxHeight = scrollHeight + 'px';
+      content.style.height = naturalHeight + 'px';
     });
     
     // Clean up after animation
     const timeoutId = setTimeout(() => {
-      content.style.maxHeight = 'none';
-      content.style.willChange = 'auto';
+      content.style.height = 'auto';
+      content.style.overflow = 'visible';
+      content.style.transition = '';
       accordionTimeouts.delete(accordionId);
-    }, 200);
+    }, 150);
     accordionTimeouts.set(accordionId, timeoutId);
     
   } else {
-    // Simple closing - collapse to 0
-    const scrollHeight = content.scrollHeight;
-    content.style.maxHeight = scrollHeight + 'px';
+    // Closing: get current height first
+    const currentHeight = content.scrollHeight;
+    content.style.height = currentHeight + 'px';
+    content.style.overflow = 'hidden';
+    content.style.transition = 'height 0.15s ease-out';
+    content.classList.remove('accordion-open');
+    content.classList.add('accordion-closed');
     
+    // Trigger animation
     requestAnimationFrame(() => {
-      content.style.maxHeight = '0px';
+      content.style.height = '0px';
     });
     
     // Hide after animation
     const timeoutId = setTimeout(() => {
       content.style.display = 'none';
-      content.style.willChange = 'auto';
+      content.style.transition = '';
       accordionTimeouts.delete(accordionId);
-    }, 200);
+    }, 150);
     accordionTimeouts.set(accordionId, timeoutId);
   }
   
