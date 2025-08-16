@@ -39,71 +39,56 @@ window.toggleAccordion = function(accordionId) {
     accordionTimeouts.delete(accordionId);
   }
   
-  // Determine current state more reliably
+  // Determine current state
   const isCurrentlyHidden = content.style.display === 'none' || 
                            content.style.maxHeight === '0px' || 
                            !content.style.maxHeight;
   
-  // Ensure consistent setup for all accordion sections
+  // Minimal transition - only max-height for performance
   content.style.overflow = 'hidden';
-  content.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-  content.style.willChange = 'max-height, opacity, transform';
+  content.style.transition = 'max-height 0.2s ease-out';
+  content.style.willChange = 'max-height';
   
   if (isCurrentlyHidden) {
-    // Opening animation - ensure smooth expansion for all sections
+    // Simple opening - just show and expand
     content.style.display = 'block';
-    content.style.opacity = '0';
-    content.style.transform = 'translateY(-8px)';
     content.style.maxHeight = '0px';
     
-    // Force reflow to ensure initial state is applied
-    content.offsetHeight;
-    
-    // Get the natural height after content is visible
+    // Get natural height
     const scrollHeight = content.scrollHeight;
     
-    // Apply opening animation
+    // Expand to natural height
     requestAnimationFrame(() => {
       content.style.maxHeight = scrollHeight + 'px';
-      content.style.opacity = '1';
-      content.style.transform = 'translateY(0)';
     });
     
-    // Clean up after animation completes
+    // Clean up after animation
     const timeoutId = setTimeout(() => {
       content.style.maxHeight = 'none';
       content.style.willChange = 'auto';
       accordionTimeouts.delete(accordionId);
-    }, 500);
+    }, 200);
     accordionTimeouts.set(accordionId, timeoutId);
     
   } else {
-    // Closing animation - ensure smooth collapse for all sections
+    // Simple closing - collapse to 0
     const scrollHeight = content.scrollHeight;
-    
-    // Set explicit height first
     content.style.maxHeight = scrollHeight + 'px';
     
-    // Force reflow
-    content.offsetHeight;
-    
-    // Apply closing animation
     requestAnimationFrame(() => {
       content.style.maxHeight = '0px';
-      content.style.opacity = '0';
-      content.style.transform = 'translateY(-8px)';
     });
     
-    // Hide completely after animation
+    // Hide after animation
     const timeoutId = setTimeout(() => {
       content.style.display = 'none';
       content.style.willChange = 'auto';
       accordionTimeouts.delete(accordionId);
-    }, 500);
+    }, 200);
     accordionTimeouts.set(accordionId, timeoutId);
   }
   
-  // Update toggle button consistently
+  // Update toggle button
   toggle.textContent = isCurrentlyHidden ? '−' : '+';
   toggle.classList.toggle('expanded', isCurrentlyHidden);
 };
@@ -193,33 +178,29 @@ function runSearchAndRender() {
           // Limit animations to prevent lag with many results
           const maxAnimatedCards = Math.min(cards.length, 20);
           
-          // Ultra-fast stagger with minimal delay
-          cards.forEach((card, index) => {
-            if (index < maxAnimatedCards) {
-              const delay = index * 30; // Reduced from 50ms to 30ms for smoother flow
-              
-              // Set initial state immediately to prevent flash
-              card.style.opacity = '0';
-              card.style.transform = 'translate3d(0, 15px, 0)';
-              
-              // Apply animation with delay
-              card.style.animationDelay = `${delay}ms`;
-              card.classList.add('fade-in-up');
-              
-              // Clean up will-change after animation completes
-              const timeoutId = setTimeout(() => {
-                card.style.willChange = 'auto';
-                // Ensure final state is set
-                card.style.opacity = '';
-                card.style.transform = '';
-              }, 250 + delay);
-              animationTimeouts.push(timeoutId);
-            } else {
-              // For cards beyond the limit, show immediately without animation
-              card.style.opacity = '1';
-              card.style.transform = 'translate3d(0, 0, 0)';
-            }
-          });
+                     // Minimal stagger with opacity-only animation
+           cards.forEach((card, index) => {
+             if (index < maxAnimatedCards) {
+               const delay = index * 20; // Even faster stagger
+               
+               // Set initial state
+               card.style.opacity = '0';
+               
+               // Apply animation with delay
+               card.style.animationDelay = `${delay}ms`;
+               card.classList.add('fade-in-up');
+               
+               // Clean up after animation completes
+               const timeoutId = setTimeout(() => {
+                 card.style.willChange = 'auto';
+                 card.style.opacity = '';
+               }, 150 + delay); // Shorter cleanup time
+               animationTimeouts.push(timeoutId);
+             } else {
+               // For cards beyond the limit, show immediately
+               card.style.opacity = '1';
+             }
+           });
         });
       });
     }, 10); // Small delay to show loading state

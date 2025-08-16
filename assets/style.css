@@ -128,37 +128,21 @@ body {
   border-bottom: 2px solid var(--interactive-accent);
 }
 
-/* Ultra-smooth animations with no pause at start/end */
-@-webkit-keyframes fade-in-up {
-  0% { 
-    opacity: 0; 
-    -webkit-transform: translate3d(0, 15px, 0);
-    transform: translate3d(0, 15px, 0);
-  }
-  100% { 
-    opacity: 1; 
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
+/* Minimal fade animation - opacity only for maximum smoothness */
+@-webkit-keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
-@keyframes fade-in-up {
-  0% { 
-    opacity: 0; 
-    -webkit-transform: translate3d(0, 15px, 0);
-    transform: translate3d(0, 15px, 0);
-  }
-  100% { 
-    opacity: 1; 
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-  }
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .fade-in-up {
-  -webkit-animation: fade-in-up 0.25s ease-out both;
-  animation: fade-in-up 0.25s ease-out both;
-  will-change: transform, opacity;
+  -webkit-animation: fade-in 0.15s ease-out both;
+  animation: fade-in 0.15s ease-out both;
+  will-change: opacity;
 }
 
 .protocol-grid {
@@ -380,12 +364,7 @@ a:hover::after {
 
 /* Optimized animations for ultra-smooth performance */
 .fade-in-up {
-  animation: fade-in-up 0.25s ease-out both;
-  /* GPU acceleration hints */
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -webkit-perspective: 1000px;
-  perspective: 1000px;
+  animation: fade-in 0.15s ease-out both;
 }
 
 /* Loading indicator for smooth data loading feedback */
