@@ -181,27 +181,32 @@ function runSearchAndRender() {
     requestAnimationFrame(() => {
       resultsContainer.innerHTML = renderGroupedProtocols(grouped);
       
-      // Batch DOM queries and style operations for better performance
+      // Single requestAnimationFrame for better performance
       requestAnimationFrame(() => {
         const cards = resultsContainer.querySelectorAll('.protocol-card');
-        const fragment = document.createDocumentFragment();
         
-        // Batch style operations to minimize reflow/repaint
+        // Limit animations to prevent lag with many results
+        const maxAnimatedCards = Math.min(cards.length, 20);
+        
+        // Use faster stagger for smoother perception
         cards.forEach((card, index) => {
-          const delay = index * 120;
-          
-          // Apply all styles in one operation to reduce style recalculation
-          card.style.cssText += `
-            animation-delay: ${delay}ms;
-            will-change: transform, opacity, filter;
-          `;
-          card.classList.add('fade-in-up');
-          
-          // Use more efficient timeout management
-          const timeoutId = setTimeout(() => {
-            card.style.willChange = 'auto';
-          }, 1200 + delay);
-          animationTimeouts.push(timeoutId);
+          if (index < maxAnimatedCards) {
+            const delay = index * 50; // Reduced from 120ms to 50ms
+            
+            // Simplified style application - no CSS text manipulation
+            card.style.animationDelay = `${delay}ms`;
+            card.classList.add('fade-in-up');
+            
+            // Clean up will-change after animation completes
+            const timeoutId = setTimeout(() => {
+              card.style.willChange = 'auto';
+            }, 400 + delay); // Updated timing for new animation duration
+            animationTimeouts.push(timeoutId);
+          } else {
+            // For cards beyond the limit, show immediately without animation
+            card.style.opacity = '1';
+            card.style.transform = 'translate3d(0, 0, 0)';
+          }
         });
       });
     });

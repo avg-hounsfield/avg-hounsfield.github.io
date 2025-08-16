@@ -13,6 +13,16 @@ html {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  
+  .fade-in-up {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) !important;
+  }
+  
+  .protocol-card {
+    will-change: auto !important;
+  }
 }
 
 :root {
@@ -118,53 +128,37 @@ body {
   border-bottom: 2px solid var(--interactive-accent);
 }
 
-/* Optimized animations with vendor prefixes and professional easing */
+/* Performance-optimized animations - GPU accelerated, no expensive filters */
 @-webkit-keyframes fade-in-up {
   0% { 
     opacity: 0; 
-    -webkit-transform: translateY(40px) scale(0.92);
-    transform: translateY(40px) scale(0.92);
-    filter: blur(2px);
-  }
-  60% {
-    opacity: 0.8;
-    -webkit-transform: translateY(8px) scale(0.98);
-    transform: translateY(8px) scale(0.98);
-    filter: blur(0.5px);
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
   }
   100% { 
     opacity: 1; 
-    -webkit-transform: translateY(0) scale(1);
-    transform: translateY(0) scale(1);
-    filter: blur(0);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes fade-in-up {
   0% { 
     opacity: 0; 
-    -webkit-transform: translateY(40px) scale(0.92);
-    transform: translateY(40px) scale(0.92);
-    filter: blur(2px);
-  }
-  60% {
-    opacity: 0.8;
-    -webkit-transform: translateY(8px) scale(0.98);
-    transform: translateY(8px) scale(0.98);
-    filter: blur(0.5px);
+    -webkit-transform: translate3d(0, 20px, 0);
+    transform: translate3d(0, 20px, 0);
   }
   100% { 
     opacity: 1; 
-    -webkit-transform: translateY(0) scale(1);
-    transform: translateY(0) scale(1);
-    filter: blur(0);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 .fade-in-up {
-  -webkit-animation: fade-in-up 1.2s cubic-bezier(0.19, 1, 0.22, 1) both;
-  animation: fade-in-up 1.2s cubic-bezier(0.19, 1, 0.22, 1) both;
-  will-change: transform, opacity, filter;
+  -webkit-animation: fade-in-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: fade-in-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  will-change: transform, opacity;
 }
 
 .protocol-grid {
@@ -235,6 +229,11 @@ h3 {
   will-change: transform, box-shadow, filter;
   position: relative;
   overflow: hidden;
+  /* GPU acceleration for smoother animations */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 
 .protocol-card::before {
@@ -250,7 +249,8 @@ h3 {
 }
 
 .protocol-card:hover {
-  transform: translateY(-6px) scale(1.02);
+  -webkit-transform: translate3d(0, -6px, 0) scale(1.02);
+  transform: translate3d(0, -6px, 0) scale(1.02);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 8px 20px rgba(64, 180, 166, 0.1);
   filter: brightness(1.05);
 }
@@ -378,9 +378,14 @@ a:hover::after {
   width: 100%;
 }
 
-/* Animations */
+/* Optimized animations for smooth performance */
 .fade-in-up {
-  animation: fade-in-up 1.2s cubic-bezier(0.19, 1, 0.22, 1) var(--delay, 0ms) both;
+  animation: fade-in-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  /* GPU acceleration hints */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
 }
 
 /*------------------------------------*\
