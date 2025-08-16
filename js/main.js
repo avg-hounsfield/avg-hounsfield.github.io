@@ -152,7 +152,7 @@ function runSearchAndRender() {
   }
 
   try {
-    const results = fuzzySearch(query, allStudies) || [];
+    const results = fuzzySearch(query) || [];
     
     // Cache the results
     lastSearchQuery = query;

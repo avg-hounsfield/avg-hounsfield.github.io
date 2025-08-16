@@ -16,7 +16,7 @@ const STATIC_ASSETS = [
 
 // External dependencies that should be cached
 const EXTERNAL_ASSETS = [
-  'https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.esm.js'
+  'https://unpkg.com/lunr@2.3.9/lunr.min.js'
 ];
 
 // Install event - cache static assets
