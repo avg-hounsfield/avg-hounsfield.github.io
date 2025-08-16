@@ -961,28 +961,29 @@ a:hover::after {
 }
 
 /*------------------------------------*\
-    #CALCULATOR SIDEBAR
+    #FLOATING CALCULATOR SIDEBAR
 \*------------------------------------*/
-.calculator-sidebar {
+.floating-sidebar {
   position: fixed;
   top: 50%;
   right: 0;
-  transform: translateY(-50%);
+  transform: translateY(-50%) translateX(calc(100% - 50px));
   z-index: 1000;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
 }
 
-.calculator-sidebar.open {
+.floating-sidebar.open {
   transform: translateY(-50%) translateX(0);
 }
 
-.calculator-toggle {
+.sidebar-toggle {
   position: absolute;
-  left: -48px;
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   background: var(--interactive-accent);
   color: var(--interactive-accent-text);
   border: none;
@@ -993,33 +994,51 @@ a:hover::after {
   justify-content: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  font-size: 1.2rem;
 }
 
-.calculator-toggle:hover {
+.sidebar-toggle:hover {
   background: var(--interactive-accent-hover);
   box-shadow: -4px 0 12px rgba(64, 180, 166, 0.3);
 }
 
-.calculator-panel {
-  width: 280px;
+.sidebar-content {
+  width: 300px;
   background: var(--primary-surface-bg);
   border: 1px solid var(--border-color);
   border-radius: 12px 0 0 12px;
   box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
-  padding: 20px;
-  transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: 50px;
+  overflow: hidden;
 }
 
-.calculator-sidebar.open .calculator-panel {
-  transform: translateX(0);
+.sidebar-header {
+  background: var(--secondary-surface-bg);
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.05em;
+}
+
+.sidebar-body {
+  padding: 20px;
+}
+
+.calculator {
+  width: 100%;
 }
 
 .calculator-display {
   margin-bottom: 20px;
 }
 
-#calculator-screen {
+#calcDisplay {
   width: 100%;
   height: 60px;
   background: var(--secondary-surface-bg);
@@ -1033,26 +1052,18 @@ a:hover::after {
   font-family: 'Courier New', monospace;
   outline: none;
   cursor: default;
+  box-sizing: border-box;
 }
 
 .calculator-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 12px; /* Increased spacing between button rows */
-}
-
-.button-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px; /* Spacing between buttons in a row */
-}
-
-.button-row:last-child {
-  grid-template-columns: 2fr 1fr 1fr; /* Special layout for bottom row */
+  gap: 10px; /* Increased spacing between buttons */
+  row-gap: 12px; /* Extra spacing between button rows */
 }
 
 .calc-btn {
-  height: 50px;
+  height: 48px;
   border: none;
   border-radius: 6px; /* Flat 2.0 styling with subtle rounded corners */
   font-size: 1.1rem;
@@ -1064,96 +1075,100 @@ a:hover::after {
   justify-content: center;
   user-select: none;
   position: relative;
-  overflow: hidden;
+  box-sizing: border-box;
 }
 
-/* Remove the ripple effect for flat 2.0 design */
+/* Remove any inherited ripple effects for flat 2.0 design */
 .calc-btn::before {
-  display: none;
+  display: none !important;
 }
 
 /* Number buttons */
-.number-btn {
+.calc-btn.number {
   background: var(--secondary-surface-bg);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
 }
 
-.number-btn:hover {
+.calc-btn.number:hover {
   background: var(--border-color);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.number-btn:active {
+.calc-btn.number:active {
   transform: translateY(0);
   box-shadow: none;
 }
 
 /* Operator buttons */
-.operator-btn {
+.calc-btn.operator {
   background: var(--interactive-accent);
   color: var(--interactive-accent-text);
   border: 1px solid var(--interactive-accent);
 }
 
-.operator-btn:hover {
+.calc-btn.operator:hover {
   background: var(--interactive-accent-hover);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(64, 180, 166, 0.3);
 }
 
-.operator-btn:active {
+.calc-btn.operator:active {
   transform: translateY(0);
   box-shadow: none;
 }
 
-/* Function buttons (Clear, CE, Backspace) */
-.function-btn {
+/* Clear buttons (C, CE) */
+.calc-btn.clear {
   background: var(--text-secondary);
   color: var(--bg-color);
   border: 1px solid var(--text-secondary);
 }
 
-.function-btn:hover {
+.calc-btn.clear:hover {
   background: var(--text-primary);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.function-btn:active {
+.calc-btn.clear:active {
   transform: translateY(0);
   box-shadow: none;
 }
 
 /* Equals button */
-.equals-btn {
+.calc-btn.equals {
   background: var(--header-color);
   color: var(--interactive-accent-text);
   border: 1px solid var(--header-color);
   font-weight: 600;
+  grid-column: span 1;
 }
 
-.equals-btn:hover {
+.calc-btn.equals:hover {
   background: var(--interactive-accent-hover);
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(64, 180, 166, 0.3);
 }
 
-.equals-btn:active {
+.calc-btn.equals:active {
   transform: translateY(0);
   box-shadow: none;
 }
 
 /* Zero button spans two columns */
-.zero-btn {
-  grid-column: span 1;
+.calc-btn.zero {
+  grid-column: span 2;
 }
 
 /* Responsive design for smaller screens */
 @media (max-width: 768px) {
-  .calculator-panel {
-    width: 240px;
+  .sidebar-content {
+    width: 260px;
+  }
+  
+  .sidebar-body {
     padding: 16px;
   }
   
@@ -1162,7 +1177,7 @@ a:hover::after {
     font-size: 1rem;
   }
   
-  #calculator-screen {
+  #calcDisplay {
     height: 50px;
     font-size: 1.5rem;
     padding: 0 12px;
@@ -1170,16 +1185,13 @@ a:hover::after {
   
   .calculator-buttons {
     gap: 8px;
-  }
-  
-  .button-row {
-    gap: 6px;
+    row-gap: 10px;
   }
 }
 
 /* Hide calculator on very small screens */
 @media (max-width: 480px) {
-  .calculator-sidebar {
+  .floating-sidebar {
     display: none;
   }
 }
