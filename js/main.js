@@ -388,6 +388,15 @@ function runSearchAndRender() {
   const currentDataset = isOrdersOnly ? allOrders : allStudies;
   const datasetName = isOrdersOnly ? 'orders' : 'protocols';
 
+  console.log('Search debug:', { 
+    query, 
+    isOrdersOnly, 
+    datasetName, 
+    currentDatasetLength: currentDataset?.length,
+    allStudiesLength: allStudies?.length,
+    allOrdersLength: allOrders?.length
+  });
+
   // Data validation
   if (!currentDataset?.length) {
     console.error(`No ${datasetName} data available`);
@@ -400,8 +409,8 @@ function runSearchAndRender() {
   try {
     let results;
     
-    // Use fuzzy search on the full combined dataset, then filter by data source
-    const allResults = fuzzySearch(query) || [];
+    // Use fuzzy search on the current dataset
+    const allResults = fuzzySearch(query, currentDataset) || [];
     
     if (isOrdersOnly) {
       // Filter to only orders (items with modality field)
@@ -1019,7 +1028,10 @@ document.addEventListener('DOMContentLoaded', function() {
       // Initialize systems with enhanced error handling
       try {
         if (typeof initFavorites === 'function') {
-          initFavorites();
+          // Delay favorites initialization to ensure DOM is ready
+          setTimeout(() => {
+            initFavorites();
+          }, 100);
         }
       } catch (error) {
         console.error('Failed to initialize favorites:', error);
@@ -1043,6 +1055,12 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Don't show any results initially
       resultsContainer.innerHTML = '';
+      
+      // Fallback favorites initialization if module failed
+      if (typeof initFavorites !== 'function') {
+        console.log('Setting up fallback favorites...');
+        setupFallbackFavorites();
+      }
       
       if (searchInput.value.trim()) {
         runSearchAndRender();
@@ -1158,4 +1176,36 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Setup keyboard shortcuts
   setupKeyboardShortcuts();
+
+  // Fallback favorites functionality
+  function setupFallbackFavorites() {
+    const trigger = document.getElementById('sidebar-trigger');
+    const close = document.getElementById('sidebar-close');
+    const content = document.getElementById('sidebar-content');
+    let sidebarOpen = false;
+
+    if (trigger) {
+      trigger.addEventListener('click', function() {
+        console.log('Fallback favorites trigger clicked');
+        if (content) {
+          if (sidebarOpen) {
+            content.classList.remove('open');
+            sidebarOpen = false;
+          } else {
+            content.classList.add('open');
+            sidebarOpen = true;
+          }
+        }
+      });
+    }
+
+    if (close) {
+      close.addEventListener('click', function() {
+        if (content) {
+          content.classList.remove('open');
+          sidebarOpen = false;
+        }
+      });
+    }
+  }
 });
