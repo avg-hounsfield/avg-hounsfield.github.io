@@ -22,6 +22,16 @@ html {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  
+  .fade-in-up {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) !important;
+  }
+  
+  .protocol-card {
+    will-change: auto !important;
+  }
 }
 
 :root {
@@ -195,53 +205,21 @@ body {
   border-bottom: 2px solid var(--interactive-accent);
 }
 
-/* Optimized animations with vendor prefixes and professional easing */
-@-webkit-keyframes fade-in-up {
-  0% { 
-    opacity: 0; 
-    -webkit-transform: translateY(40px) scale(0.92);
-    transform: translateY(40px) scale(0.92);
-    filter: blur(2px);
-  }
-  60% {
-    opacity: 0.8;
-    -webkit-transform: translateY(8px) scale(0.98);
-    transform: translateY(8px) scale(0.98);
-    filter: blur(0.5px);
-  }
-  100% { 
-    opacity: 1; 
-    -webkit-transform: translateY(0) scale(1);
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
+/* Minimal fade animation - opacity only for maximum smoothness */
+@-webkit-keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
-@keyframes fade-in-up {
-  0% { 
-    opacity: 0; 
-    -webkit-transform: translateY(40px) scale(0.92);
-    transform: translateY(40px) scale(0.92);
-    filter: blur(2px);
-  }
-  60% {
-    opacity: 0.8;
-    -webkit-transform: translateY(8px) scale(0.98);
-    transform: translateY(8px) scale(0.98);
-    filter: blur(0.5px);
-  }
-  100% { 
-    opacity: 1; 
-    -webkit-transform: translateY(0) scale(1);
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .fade-in-up {
-  -webkit-animation: fade-in-up 1.2s cubic-bezier(0.19, 1, 0.22, 1) both;
-  animation: fade-in-up 1.2s cubic-bezier(0.19, 1, 0.22, 1) both;
-  will-change: transform, opacity, filter;
+  -webkit-animation: fade-in 0.15s ease-out both;
+  animation: fade-in 0.15s ease-out both;
+  will-change: opacity;
 }
 
 .protocol-grid {
@@ -437,9 +415,24 @@ a:hover::after {
   width: 100%;
 }
 
-/* Animations */
+/* Optimized animations for ultra-smooth performance */
 .fade-in-up {
-  animation: fade-in-up 1.2s cubic-bezier(0.19, 1, 0.22, 1) var(--delay, 0ms) both;
+  animation: fade-in 0.15s ease-out both;
+}
+
+/* Loading indicator for smooth data loading feedback */
+.loading-indicator {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  opacity: 0.8;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
 /*------------------------------------*\
@@ -1817,17 +1810,14 @@ a:hover::after {
   font-size: 1.2em;
   font-weight: bold;
   color: var(--interactive-accent); /* Default color */
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
-              color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.15s ease-out;
   min-width: 20px;
   text-align: center;
-  will-change: transform, color, filter;
+  will-change: transform;
 }
 
 .accordion-toggle.expanded {
-  transform: rotate(45deg) scale(1.15);
-  filter: drop-shadow(0 2px 4px rgba(64, 180, 166, 0.3));
+  transform: rotate(45deg);
 }
 
 /* Specific accordion toggle colors to match headers */
@@ -1841,6 +1831,20 @@ a:hover::after {
 
 .scanner-notes-header .accordion-toggle {
   color: var(--text-primary) !important; /* White - matches scanner notes header */
+}
+
+/* Ultra-smooth accordion content animations */
+.accordion-content {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.accordion-open {
+  overflow: visible !important;
+}
+
+.accordion-closed {
+  overflow: hidden !important;
 }
 
 .scanner-notes h4 {

@@ -1,6 +1,29 @@
 // js/render.js - FINAL VERSION
 
 /**
+ * HTML sanitization functions to prevent XSS attacks
+ */
+function escapeHtml(unsafe) {
+  if (typeof unsafe !== 'string') {
+    return unsafe;
+  }
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function sanitizeForAttribute(unsafe) {
+  if (typeof unsafe !== 'string') {
+    return unsafe;
+  }
+  // More restrictive sanitization for HTML attributes
+  return unsafe.replace(/[^a-zA-Z0-9\-_]/g, '');
+}
+
+/**
  * Sorts MRI sequences into a predefined clinical order.
  */
 // js/render.js - CORRECTED sortSequences function
@@ -57,12 +80,12 @@ function renderScannerNotesCard(scannerNotes) {
     const sequenceList = sequences.map(seq => {
       const isHighlight = seq.highlight === true;
       const liClass = isHighlight ? 'class="highlight-sequence"' : '';
-      return `<li ${liClass}>${seq.sequence}</li>`;
+      return `<li ${liClass}>${escapeHtml(seq.sequence)}</li>`;
     }).join('');
 
     return `
       <div class="scanner-section">
-        <h3>${scannerType}</h3>
+        <h3>${escapeHtml(scannerType)}</h3>
         <ul class="scanner-sequences">
           ${sequenceList}
         </ul>
@@ -74,8 +97,8 @@ function renderScannerNotesCard(scannerNotes) {
     return '';
   }
 
-  // Generate unique ID for this accordion
-  const accordionId = 'scanner-notes-' + Math.random().toString(36).substr(2, 9);
+  // Generate unique ID for this accordion using more efficient method
+  const accordionId = 'scanner-notes-' + Date.now() + '-' + (Math.floor(Math.random() * 1000));
 
   return `
     <div class="scanner-notes-card">
@@ -106,12 +129,12 @@ function renderScannerNotes(scannerNotes) {
     const sequenceList = sequences.map(seq => {
       const isHighlight = seq.highlight === true;
       const liClass = isHighlight ? 'class="highlight-sequence"' : '';
-      return `<li ${liClass}>${seq.sequence}</li>`;
+      return `<li ${liClass}>${escapeHtml(seq.sequence)}</li>`;
     }).join('');
 
     return `
       <div class="scanner-section">
-        <h3>${scannerType}</h3>
+        <h3>${escapeHtml(scannerType)}</h3>
         <ul class="scanner-sequences">
           ${sequenceList}
         </ul>
@@ -139,8 +162,8 @@ function renderIndicationsCard(rightCardContent) {
     return '';
   }
 
-  // Generate unique ID for this accordion
-  const accordionId = 'indications-' + Math.random().toString(36).substr(2, 9);
+  // Generate unique ID for this accordion using more efficient method
+  const accordionId = 'indications-' + Date.now() + '-' + (Math.floor(Math.random() * 1000));
 
   return `
     <div class="indications-card">
@@ -150,10 +173,10 @@ function renderIndicationsCard(rightCardContent) {
       </div>
       <div class="indications-content" id="${accordionId}" style="display: none;">
         ${rightCardContent.indications ? 
-          `<p class="indications"><strong>Indications:</strong> ${rightCardContent.indications}</p>` 
+          `<p class="indications"><strong>Indications:</strong> ${escapeHtml(rightCardContent.indications)}</p>` 
           : ''}
         ${rightCardContent.contrastRationale ? 
-          `<p class="contrast-rationale"><strong>Contrast Rationale:</strong> ${rightCardContent.contrastRationale}</p>` 
+          `<p class="contrast-rationale"><strong>Contrast Rationale:</strong> ${escapeHtml(rightCardContent.contrastRationale)}</p>` 
           : ''}
       </div>
     </div>
@@ -168,8 +191,8 @@ function renderSequencesCard(sequences) {
     return '';
   }
 
-  // Generate unique ID for this accordion
-  const accordionId = 'sequences-' + Math.random().toString(36).substr(2, 9);
+  // Generate unique ID for this accordion using more efficient method
+  const accordionId = 'sequences-' + Date.now() + '-' + (Math.floor(Math.random() * 1000));
 
   return `
     <div class="sequences-card">
@@ -182,7 +205,7 @@ function renderSequencesCard(sequences) {
           ${sequences.map(seq => {
             const isHighlight = seq.highlight === true;
             const liClass = isHighlight ? 'class="highlight-sequence"' : '';
-            return `<li ${liClass}>${seq.sequence}</li>`;
+            return `<li ${liClass}>${escapeHtml(seq.sequence)}</li>`;
           }).join('\n          ') || '<li>None listed</li>'}
         </ul>
       </div>
@@ -228,7 +251,7 @@ function renderProtocolCard(protocol) {
       <div class="protocol-content ${fullHeight ? 'full-height' : ''}">
         <div class="left-card">
           <div class="protocol-header">
-            <h3>Protocol: ${protocol.study || 'Untitled Study'}</h3>
+            <h3>Protocol: ${escapeHtml(protocol.study || 'Untitled Study')}</h3>
             <div class="protocol-info">
               <span class="${contrastClass}">Contrast: <span class="contrast-value ${contrastClass}">${contrastText}</span></span>
             </div>

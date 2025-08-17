@@ -7,9 +7,16 @@ const STATIC_ASSETS = [
   '/js/search.js',
   '/js/render.js',
   '/js/theme.js',
-  '/js/fuse.min.js',
+  '/js/ui.js',
+  '/js/performance.js',
+  '/js/polyfills.js',
   '/data/protocols.json',
   '/manifest.json'
+];
+
+// External dependencies that should be cached
+const EXTERNAL_ASSETS = [
+  'https://unpkg.com/lunr@2.3.9/lunr.min.js'
 ];
 
 // Install event - cache static assets
@@ -17,8 +24,19 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Caching static assets');
-        return cache.addAll(STATIC_ASSETS);
+        // Caching static assets
+        // Cache static assets first
+        return cache.addAll(STATIC_ASSETS)
+          .then(() => {
+            // Then cache external dependencies with error handling
+            const externalPromises = EXTERNAL_ASSETS.map(url => 
+              cache.add(url).catch(error => {
+                console.warn('Failed to cache external asset:', url, error);
+                return Promise.resolve(); // Don't fail installation if external assets fail
+              })
+            );
+            return Promise.all(externalPromises);
+          });
       })
       .then(() => self.skipWaiting())
   );
@@ -32,7 +50,7 @@ self.addEventListener('activate', event => {
         return Promise.all(
           cacheNames.map(cacheName => {
             if (cacheName !== CACHE_NAME) {
-              console.log('Deleting old cache:', cacheName);
+              // Deleting old cache
               return caches.delete(cacheName);
             }
           })
@@ -47,9 +65,10 @@ self.addEventListener('fetch', event => {
   // Skip non-GET requests
   if (event.request.method !== 'GET') return;
   
-  // Skip external requests
-  if (!event.request.url.startsWith(self.location.origin)) return;
+  const url = event.request.url;
+  const isExternal = !url.startsWith(self.location.origin);
   
+  // Handle both internal and external requests (like CDN dependencies)
   event.respondWith(
     caches.match(event.request)
       .then(cachedResponse => {
@@ -60,7 +79,17 @@ self.addEventListener('fetch', event => {
         return fetch(event.request)
           .then(response => {
             // Check if response is valid
-            if (!response || response.status !== 200 || response.type !== 'basic') {
+            if (!response || response.status !== 200) {
+              return response;
+            }
+            
+            // For external resources, only cache if it's a known dependency
+            if (isExternal && !EXTERNAL_ASSETS.includes(url)) {
+              return response;
+            }
+            
+            // For internal resources, cache if response type is basic or cors
+            if (!isExternal && response.type !== 'basic') {
               return response;
             }
             
@@ -70,9 +99,17 @@ self.addEventListener('fetch', event => {
             caches.open(CACHE_NAME)
               .then(cache => {
                 cache.put(event.request, responseToCache);
+              })
+              .catch(error => {
+                console.warn('Failed to cache response:', error);
               });
             
             return response;
+          })
+          .catch(error => {
+            console.warn('Fetch failed:', error);
+            // For critical dependencies, you might want to return a fallback
+            throw error;
           });
       })
   );

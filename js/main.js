@@ -272,6 +272,9 @@ const debounce = (func, wait) => {
   };
 };
 
+// Map to store active timeouts for accordion animations to prevent memory leaks
+const accordionTimeouts = new Map();
+
 // Function to toggle accordion display with smooth height-based animations
 window.toggleAccordion = function(accordionId) {
   const content = document.getElementById(accordionId);
@@ -279,75 +282,88 @@ window.toggleAccordion = function(accordionId) {
   
   if (!content || !toggle) return; // Safety check
   
-  // Determine current state more reliably
-  const isCurrentlyHidden = content.style.display === 'none' || 
-                           content.style.maxHeight === '0px' || 
-                           !content.style.maxHeight;
-  
-  // Ensure consistent setup for all accordion sections
-  content.style.overflow = 'hidden';
-  content.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-  content.style.willChange = 'max-height, opacity, transform';
-  
-  if (isCurrentlyHidden) {
-    // Opening animation - ensure smooth expansion for all sections
-    content.style.display = 'block';
-    content.style.opacity = '0';
-    content.style.transform = 'translateY(-8px)';
-    content.style.maxHeight = '0px';
-    
-    // Force reflow to ensure initial state is applied
-    content.offsetHeight;
-    
-    // Get the natural height after content is visible
-    const scrollHeight = content.scrollHeight;
-    
-    // Apply opening animation
-    requestAnimationFrame(() => {
-      content.style.maxHeight = scrollHeight + 'px';
-      content.style.opacity = '1';
-      content.style.transform = 'translateY(0)';
-    });
-    
-    // Clean up after animation completes
-    setTimeout(() => {
-      content.style.maxHeight = 'none';
-      content.style.willChange = 'auto';
-    }, 500);
-    
-  } else {
-    // Closing animation - ensure smooth collapse for all sections
-    const scrollHeight = content.scrollHeight;
-    
-    // Set explicit height first
-    content.style.maxHeight = scrollHeight + 'px';
-    
-    // Force reflow
-    content.offsetHeight;
-    
-    // Apply closing animation
-    requestAnimationFrame(() => {
-      content.style.maxHeight = '0px';
-      content.style.opacity = '0';
-      content.style.transform = 'translateY(-8px)';
-    });
-    
-    // Hide completely after animation
-    setTimeout(() => {
-      content.style.display = 'none';
-      content.style.willChange = 'auto';
-    }, 500);
+  // Clear any existing timeout for this accordion to prevent memory leaks
+  if (accordionTimeouts.has(accordionId)) {
+    clearTimeout(accordionTimeouts.get(accordionId));
+    accordionTimeouts.delete(accordionId);
   }
   
-  // Update toggle button consistently
+  // Determine current state
+  const isCurrentlyHidden = content.classList.contains('accordion-closed') || 
+                           content.style.display === 'none' || 
+                           !content.classList.contains('accordion-open');
+  
+  if (isCurrentlyHidden) {
+    // Opening: measure natural height first
+    content.style.display = 'block';
+    content.style.height = 'auto';
+    content.style.overflow = 'visible';
+    const naturalHeight = content.scrollHeight;
+    
+    // Set up for animation
+    content.style.height = '0px';
+    content.style.overflow = 'hidden';
+    content.style.transition = 'height 0.15s ease-out';
+    content.classList.remove('accordion-closed');
+    content.classList.add('accordion-open');
+    
+    // Trigger animation
+    requestAnimationFrame(() => {
+      content.style.height = naturalHeight + 'px';
+    });
+    
+    // Clean up after animation
+    const timeoutId = setTimeout(() => {
+      content.style.height = 'auto';
+      content.style.overflow = 'visible';
+      content.style.transition = '';
+      accordionTimeouts.delete(accordionId);
+    }, 150);
+    accordionTimeouts.set(accordionId, timeoutId);
+    
+  } else {
+    // Closing: get current height first
+    const currentHeight = content.scrollHeight;
+    content.style.height = currentHeight + 'px';
+    content.style.overflow = 'hidden';
+    content.style.transition = 'height 0.15s ease-out';
+    content.classList.remove('accordion-open');
+    content.classList.add('accordion-closed');
+    
+    // Trigger animation
+    requestAnimationFrame(() => {
+      content.style.height = '0px';
+    });
+    
+    // Hide after animation
+    const timeoutId = setTimeout(() => {
+      content.style.display = 'none';
+      content.style.transition = '';
+      accordionTimeouts.delete(accordionId);
+    }, 150);
+    accordionTimeouts.set(accordionId, timeoutId);
+  }
+  
+  // Update toggle button
   toggle.textContent = isCurrentlyHidden ? '−' : '+';
   toggle.classList.toggle('expanded', isCurrentlyHidden);
 };
 
+// Cache DOM elements to avoid repeated queries
+let cachedSearchInput;
+let cachedResultsContainer;
+
 // Optimized search and render function
 function runSearchAndRender() {
-  const searchInput = document.getElementById('searchInput');
-  const resultsContainer = document.getElementById('results');
+  // Use cached elements or query them once
+  if (!cachedSearchInput) cachedSearchInput = document.getElementById('searchInput');
+  if (!cachedResultsContainer) cachedResultsContainer = document.getElementById('results');
+  
+  const searchInput = cachedSearchInput;
+  const resultsContainer = cachedResultsContainer;
+  
+  if (!searchInput || !resultsContainer) return;
+  
   const query = searchInput.value.trim();
 
   // Early return for empty queries
@@ -769,16 +785,23 @@ document.addEventListener('DOMContentLoaded', function() {
   var resultsContainer = document.getElementById('results');
   var ordersOnlyToggle = document.getElementById('ordersOnlyToggle');
 
+  // Validate required DOM elements exist
+  if (!searchInput || !resultsContainer) {
+    console.error('Required DOM elements not found. Application cannot initialize.');
+    return;
+  }
+
   // Orders Only filter state
   var isOrdersOnlyActive = false;
 
   // Toggle button functionality
   function toggleOrdersOnly() {
+    if (!ordersOnlyToggle) return; // Safety check
     isOrdersOnlyActive = !isOrdersOnlyActive;
     ordersOnlyToggle.setAttribute('data-active', isOrdersOnlyActive.toString());
     
     // Re-run search if there's a query
-    if (searchInput.value.trim()) {
+    if (searchInput && searchInput.value.trim()) {
       runSearchAndRender();
     }
   }
@@ -817,26 +840,52 @@ document.addEventListener('DOMContentLoaded', function() {
   function loadProtocols() {
     if (window.fetch) {
       return fetch('./data/protocols.json')
-        .then(function(res) { return res.json(); });
+        .then(function(res) { 
+          if (!res.ok) {
+            throw new Error('HTTP error! status: ' + res.status);
+          }
+          return res.json(); 
+        })
+        .then(function(data) {
+          // Validate data structure
+          if (!Array.isArray(data)) {
+            throw new Error('Invalid data format: expected array');
+          }
+          return data;
+        });
     } else {
       // Fallback for older browsers
       return new Promise(function(resolve, reject) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', './data/protocols.json');
+        xhr.timeout = 10000; // 10 second timeout
+        
         xhr.onload = function() {
           if (xhr.status === 200) {
             try {
-              resolve(JSON.parse(xhr.responseText));
+              var data = JSON.parse(xhr.responseText);
+              // Validate data structure
+              if (!Array.isArray(data)) {
+                reject(new Error('Invalid data format: expected array'));
+                return;
+              }
+              resolve(data);
             } catch (e) {
-              reject(e);
+              reject(new Error('JSON parse error: ' + e.message));
             }
           } else {
-            reject(new Error('Failed to load'));
+            reject(new Error('HTTP error! status: ' + xhr.status));
           }
         };
+        
         xhr.onerror = function() {
           reject(new Error('Network error'));
         };
+        
+        xhr.ontimeout = function() {
+          reject(new Error('Request timeout'));
+        };
+        
         xhr.send();
       });
     }

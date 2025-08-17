@@ -215,6 +215,11 @@
       <div id="results"></div>
     </main>
   </div>
+  
+  <!-- Load Lunr.js for search functionality -->
+  <script src="https://unpkg.com/lunr@2.3.9/lunr.min.js"></script>
+  
+
   <script type="module" src="js/theme.js"></script>
   <script type="module" src="js/main.js"></script>
   
@@ -223,8 +228,12 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
-          .then(registration => console.log('SW registered'))
-          .catch(error => console.log('SW registration failed'));
+          .then(registration => {
+            // Service worker registered successfully
+          })
+          .catch(error => {
+            console.warn('Service worker registration failed:', error);
+          });
       });
     }
   </script>

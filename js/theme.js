@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Enhanced toggle with better feedback
   themeToggle.addEventListener('click', () => {
+    if (!body) return;
+    
     const isLight = body.classList.contains('light-theme');
     const newTheme = isLight ? 'dark' : 'light';
     
