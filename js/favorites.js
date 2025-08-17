@@ -170,16 +170,19 @@ function updateFavoritesCount() {
 
 // Update all favorite buttons in the current view
 function updateFavoriteButtons() {
-  const buttons = document.querySelectorAll('.favorite-button');
+  const buttons = document.querySelectorAll('.favorite-btn');
   buttons.forEach(button => {
     const studyName = button.getAttribute('data-study');
-    if (studyName) {
+    const icon = button.querySelector('.material-symbols-outlined');
+    if (studyName && icon) {
       if (isFavorited(studyName)) {
         button.classList.add('favorited');
         button.title = 'Remove from favorites';
+        icon.textContent = 'favorite';
       } else {
         button.classList.remove('favorited');
         button.title = 'Add to favorites';
+        icon.textContent = 'favorite_border';
       }
     }
   });
@@ -209,12 +212,17 @@ function renderFavoritesList() {
   const favoritesHtml = sortedFavorites.map(favorite => {
     const contrastText = favorite.usesContrast ? 'Contrast' : 'No Contrast';
     const contrastClass = favorite.usesContrast ? 'contrast-yes' : 'contrast-no';
+    const typeText = favorite.type || 'protocol';
+    const typeBadge = `<span class="favorite-type-badge ${typeText}">${typeText}</span>`;
     
     return `
       <div class="favorite-item" data-study="${favorite.study}">
         <div class="favorite-item-header">
           <h4 class="favorite-item-title">${favorite.study}</h4>
-          <span class="favorite-item-contrast ${contrastClass}">${contrastText}</span>
+          <div class="favorite-item-badges">
+            ${typeBadge}
+            <span class="favorite-item-contrast ${contrastClass}">${contrastText}</span>
+          </div>
         </div>
         <p class="favorite-item-category">${favorite.section}</p>
         <button class="favorite-item-remove" onclick="handleRemoveFavorite('${favorite.study}')" title="Remove from favorites">
@@ -320,35 +328,20 @@ function showFeedback(message, type = 'info', duration = 3000) {
   }, duration);
 }
 
-// Export function to add favorite buttons to protocol cards
+// Export function to add event listeners to favorite buttons
 export function addFavoriteButtons() {
-  // Add favorite buttons to all protocol cards
-  const protocolCards = document.querySelectorAll('.protocol-card');
+  // Add event listeners to all favorite buttons
+  const favoriteButtons = document.querySelectorAll('.favorite-btn');
   
-  protocolCards.forEach(card => {
-    // Skip if button already exists
-    if (card.querySelector('.favorite-button')) return;
+  favoriteButtons.forEach(button => {
+    // Skip if event listener already added
+    if (button.hasAttribute('data-listener-added')) return;
     
-    // Get protocol data from data attributes
-    const studyName = card.getAttribute('data-study');
-    const usesContrast = card.getAttribute('data-contrast') === 'true';
-    const section = card.getAttribute('data-section') || 'Other';
+    // Get protocol/order data from button attributes
+    const studyName = button.getAttribute('data-study');
+    const type = button.getAttribute('data-type') || 'protocol';
     
     if (!studyName) return;
-    
-    // Create favorite button
-    const button = document.createElement('button');
-    button.className = 'favorite-button';
-    button.setAttribute('data-study', studyName);
-    button.innerHTML = '<span class="material-symbols-outlined">favorite</span>';
-    
-    // Set initial state
-    if (isFavorited(studyName)) {
-      button.classList.add('favorited');
-      button.title = 'Remove from favorites';
-    } else {
-      button.title = 'Add to favorites';
-    }
     
     // Add click handler
     button.addEventListener('click', (e) => {
@@ -358,17 +351,25 @@ export function addFavoriteButtons() {
       if (isFavorited(studyName)) {
         removeFromFavorites(studyName);
       } else {
-        // Get full protocol data for adding to favorites
-        const protocol = {
+        // Get full data for adding to favorites
+        const card = button.closest('.protocol-card');
+        const usesContrast = card?.getAttribute('data-contrast') === 'true';
+        const section = card?.getAttribute('data-section') || 'Other';
+        
+        const item = {
           study: studyName,
           usesContrast: usesContrast,
-          section: section
+          section: section,
+          type: type
         };
-        addToFavorites(protocol);
+        addToFavorites(item);
       }
     });
     
-    // Add button to card
-    card.appendChild(button);
+    // Mark as having listener added
+    button.setAttribute('data-listener-added', 'true');
   });
+  
+  // Update button states
+  updateFavoriteButtons();
 }

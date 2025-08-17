@@ -251,7 +251,12 @@ function renderProtocolCard(protocol) {
       <div class="protocol-content ${fullHeight ? 'full-height' : ''}">
         <div class="left-card">
           <div class="protocol-header">
-            <h3>Protocol: ${escapeHtml(protocol.study || 'Untitled Study')}</h3>
+            <div class="protocol-title-section">
+              <h3>Protocol: ${escapeHtml(protocol.study || 'Untitled Study')}</h3>
+              <button class="favorite-btn" data-type="protocol" data-study="${escapeHtml(protocol.study)}" title="Add to favorites">
+                <span class="material-symbols-outlined">favorite_border</span>
+              </button>
+            </div>
             <div class="protocol-info">
               <span class="${contrastClass}">Contrast: <span class="contrast-value ${contrastClass}">${contrastText}</span></span>
             </div>
@@ -338,7 +343,12 @@ function renderConsolidatedCard(protocols, groupType, mainProtocolName, cardTitl
       <div class="protocol-content ${fullHeight ? 'full-height' : ''}">
         <div class="left-card">
           <div class="protocol-header">
-            <h3>Protocol: ${cardTitle || mainProtocol.study}</h3>
+            <div class="protocol-title-section">
+              <h3>Protocol: ${cardTitle || mainProtocol.study}</h3>
+              <button class="favorite-btn" data-type="protocol" data-study="${escapeHtml(mainProtocol.study)}" title="Add to favorites">
+                <span class="material-symbols-outlined">favorite_border</span>
+              </button>
+            </div>
             <div class="protocol-info">
               <span class="${contrastClass}">Contrast: <span class="contrast-value ${contrastClass}">${contrastText}</span></span>
             </div>
@@ -536,7 +546,12 @@ function renderOrderCard(order) {
   return `
     <div class="protocol-card order-card">
       <div class="protocol-header">
-        <h3 class="protocol-title">${order.study}</h3>
+        <div class="protocol-title-section">
+          <h3 class="protocol-title">${order.study}</h3>
+          <button class="favorite-btn" data-type="order" data-study="${escapeHtml(order.study)}" title="Add to favorites">
+            <span class="material-symbols-outlined">favorite_border</span>
+          </button>
+        </div>
         <div class="protocol-badges">
           ${modalityBadge}
           ${contrastIndicator}

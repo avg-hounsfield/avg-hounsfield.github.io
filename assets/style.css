@@ -497,77 +497,73 @@ a:hover::after {
   background: var(--interactive-accent-hover);
 }
 
-/* Filter Toggle Button Styling */
-.filter-toggle-wrapper {
+/* Data Source Toggle Styling */
+.data-toggle-wrapper {
   display: flex;
   align-items: center;
   margin-left: 0.5rem;
 }
 
-.filter-toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75em 1em;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  background: var(--secondary-surface-bg);
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-  font-size: 0.9rem;
-  font-weight: 500;
-  white-space: nowrap;
+.toggle-switch {
   position: relative;
-  overflow: hidden;
+  display: inline-block;
 }
 
-.filter-toggle::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(64, 180, 166, 0.1), transparent);
-  transition: left 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-  pointer-events: none;
-}
-
-.filter-toggle:hover::before {
-  left: 100%;
-}
-
-.filter-toggle:hover {
-  border-color: var(--interactive-accent);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(64, 180, 166, 0.15);
-}
-
-.toggle-indicator {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--text-secondary);
-  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-  border: 2px solid var(--text-secondary);
-}
-
-.filter-toggle[data-active="true"] {
-  border-color: var(--interactive-accent);
-  background: rgba(64, 180, 166, 0.1);
-  color: var(--interactive-accent);
-}
-
-.filter-toggle[data-active="true"] .toggle-indicator {
-  background: var(--interactive-accent);
-  border-color: var(--interactive-accent);
-  box-shadow: 0 0 8px rgba(64, 180, 166, 0.4);
+.toggle-switch input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .toggle-label {
-  font-weight: 600;
-  letter-spacing: 0.025em;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: var(--primary-surface-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 25px;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  min-width: 120px;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.toggle-text {
+  color: var(--text-primary);
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background-color: var(--interactive-accent);
+  border-radius: 23px;
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.toggle-switch input:checked + .toggle-label {
+  border-color: var(--interactive-accent);
+}
+
+.toggle-switch input:checked + .toggle-label .toggle-slider {
+  opacity: 1;
+}
+
+.toggle-switch input:checked + .toggle-label .toggle-text {
+  color: var(--interactive-accent-text);
+}
+
+.toggle-label:hover {
+  border-color: var(--interactive-accent);
+  transform: scale(1.02);
 }
 
 /* Responsive design with fallbacks */
@@ -1038,48 +1034,84 @@ a:hover::after {
   font-size: 16px;
 }
 
-/* Protocol Card Heart Button */
-.protocol-card {
-  position: relative;
+/* Protocol Title Section with Favorite Button */
+.protocol-title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
-.favorite-button {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: none;
-  border: none;
+.protocol-title-section h3 {
+  flex: 1;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.favorite-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
+  padding: 0.5rem;
   transition: all 0.2s ease;
-  z-index: 10;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 40px;
+  height: 40px;
 }
 
-.favorite-button:hover {
-  background: rgba(64, 180, 166, 0.1);
+.favorite-btn:hover {
+  background-color: var(--secondary-surface-bg);
   color: var(--interactive-accent);
+  border-color: var(--interactive-accent);
+  transform: scale(1.05);
 }
 
-.favorite-button.favorited {
-  color: #e74c3c;
+.favorite-btn.favorited {
+  background-color: var(--interactive-accent);
+  color: var(--interactive-accent-text);
+  border-color: var(--interactive-accent);
 }
 
-.favorite-button.favorited:hover {
-  background: rgba(231, 76, 60, 0.1);
+.favorite-btn.favorited:hover {
+  background-color: var(--interactive-accent-hover);
 }
 
-.favorite-button .material-symbols-outlined {
-  font-size: 20px;
+.favorite-btn .material-symbols-outlined {
+  font-size: 1.2rem;
   font-variation-settings: 'FILL' 0;
 }
 
-.favorite-button.favorited .material-symbols-outlined {
+.favorite-btn.favorited .material-symbols-outlined {
   font-variation-settings: 'FILL' 1;
+}
+
+/* Favorite sidebar badge styles */
+.favorite-type-badge {
+  background-color: var(--interactive-accent);
+  color: var(--interactive-accent-text);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.4rem;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.favorite-type-badge.order {
+  background-color: var(--modality-ct);
+}
+
+.favorite-item-badges {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 /* Responsive adjustments */

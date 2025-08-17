@@ -783,7 +783,8 @@ document.addEventListener('DOMContentLoaded', function() {
   var searchInput = document.getElementById('searchInput');
   var searchButton = document.getElementById('searchButton');
   var resultsContainer = document.getElementById('results');
-  var ordersOnlyToggle = document.getElementById('ordersOnlyToggle');
+  var dataSourceToggle = document.getElementById('dataSourceToggle');
+  var toggleText = document.getElementById('toggleText');
 
   // Validate required DOM elements exist
   if (!searchInput || !resultsContainer) {
@@ -791,14 +792,20 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
 
-  // Orders Only filter state
-  var isOrdersOnlyActive = false;
+  // Data source state (protocols vs orders)
+  var currentDataSource = 'protocols'; // default
 
-  // Toggle button functionality
-  function toggleOrdersOnly() {
-    if (!ordersOnlyToggle) return; // Safety check
-    isOrdersOnlyActive = !isOrdersOnlyActive;
-    ordersOnlyToggle.setAttribute('data-active', isOrdersOnlyActive.toString());
+  // Toggle functionality for Protocols/Orders
+  function toggleDataSource() {
+    if (!dataSourceToggle || !toggleText) return; // Safety check
+    
+    if (dataSourceToggle.checked) {
+      currentDataSource = 'orders';
+      toggleText.textContent = 'Orders';
+    } else {
+      currentDataSource = 'protocols';
+      toggleText.textContent = 'Protocols';
+    }
     
     // Re-run search if there's a query
     if (searchInput && searchInput.value.trim()) {
@@ -806,14 +813,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Add click event to toggle button
-  if (ordersOnlyToggle) {
-    ordersOnlyToggle.addEventListener('click', toggleOrdersOnly);
+  // Add change event to toggle
+  if (dataSourceToggle) {
+    dataSourceToggle.addEventListener('change', toggleDataSource);
   }
 
-  // Make filter state accessible globally for search function
+  // Make data source state accessible globally for search function
   window.getOrdersOnlyState = function() {
-    return isOrdersOnlyActive;
+    return currentDataSource === 'orders';
   };
 
   // Feature detection
