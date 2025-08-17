@@ -1,3 +1,6 @@
+/* Import custom color palette */
+@import url('./colors.css');
+
 /* Critical CSS - Above the fold styles */
 
 /* Global smooth scrolling and motion preferences */
@@ -35,47 +38,36 @@ html {
 }
 
 :root {
-  /* Vibrant Color Palette from Coolors */
-  --bright-yellow: #FEC305;
-  --orange: #FE5E02;
-  --red: #C40100;
-  --dark-purple: #3D0021;
-  --very-dark: #0C0A0B;
-  --dark-blue-gray: #13111E;
-  --dark-blue: #211557;
-  --blue: #013195;
-  --medium-blue: #0352AE;
-  --light-blue: #02A6D4;
   
-  /* Theme Colors - Vibrant Professional Theme */
-  --bg-color: #ffffff;              /* White - main background */
-  --primary-surface-bg: #ffffff;    /* White - card backgrounds */
-  --secondary-surface-bg: #f8f9fa;  /* Light gray - secondary surfaces */
-  --text-primary: #13111E;          /* Dark blue-gray - primary text */
-  --text-secondary: #211557;        /* Dark blue - secondary text */
-  --text-muted: #0352AE;            /* Medium blue - muted text */
-  --interactive-accent: #02A6D4;    /* Light blue - primary actions */
-  --interactive-accent-hover: #0352AE; /* Medium blue on hover */
-  --interactive-accent-text: #ffffff;  /* White text on accent */
-  --border-color: #e9ecef;          /* Light gray - borders */
-  --border-color-focus: #02A6D4;    /* Light blue - focus borders */
-  --link-color: #0352AE;            /* Medium blue - links */
-  --header-color: #211557;          /* Dark blue - headers */
-  --highlight-bluegreen: #02A6D4;   /* Light blue - highlights */
-  --underline-color: #FEC305;       /* Bright yellow - underlines */
+  /* Theme Colors - Light Theme from colors.css */
+  --bg-color: var(--clr-surface-a0);              /* White - main background */
+  --primary-surface-bg: var(--clr-surface-a0);    /* White - card backgrounds */
+  --secondary-surface-bg: var(--clr-surface-tonal-a0);  /* Light tonal - secondary surfaces */
+  --text-primary: var(--clr-dark-a0);             /* Black - primary text */
+  --text-secondary: var(--clr-primary-a30);       /* Primary variant - secondary text */
+  --text-muted: var(--clr-primary-a40);           /* Primary muted - muted text */
+  --interactive-accent: var(--clr-primary-a0);    /* Primary - primary actions */
+  --interactive-accent-hover: var(--clr-primary-a10); /* Primary hover - hover */
+  --interactive-accent-text: var(--clr-light-a0); /* White text on accent */
+  --border-color: var(--clr-surface-a20);         /* Light surface - borders */
+  --border-color-focus: var(--clr-primary-a0);    /* Primary - focus borders */
+  --link-color: var(--clr-primary-a20);           /* Primary variant - links */
+  --header-color: var(--clr-primary-a0);          /* Primary - headers */
+  --highlight-bluegreen: var(--clr-primary-a10);  /* Primary variant - highlights */
+  --underline-color: var(--clr-primary-a30);      /* Primary accent - underlines */
   
-  /* Status Colors */
-  --success: #02A6D4;             /* Light blue - success */
-  --warning: #FEC305;             /* Bright yellow - warning */
-  --danger: #C40100;              /* Red - danger */
-  --info: #0352AE;                /* Medium blue - info */
+  /* Status Colors using color palette */
+  --success: var(--clr-primary-a20);     /* Primary variant - success */
+  --warning: var(--clr-primary-a40);     /* Primary light - warning */
+  --danger: var(--clr-primary-a0);       /* Primary - danger */
+  --info: var(--clr-primary-a30);        /* Primary accent - info */
   
-  /* Medical Modality Colors */
-  --modality-ct: #0352AE;         /* Medium blue - CT */
-  --modality-mri: #3D0021;        /* Dark purple - MRI */
-  --modality-us: #02A6D4;         /* Light blue - Ultrasound */
-  --modality-nm: #C40100;         /* Red - Nuclear Medicine */
-  --modality-fluoro: #FE5E02;     /* Orange - Fluoroscopy */
+  /* Medical Modality Colors using color palette */
+  --modality-ct: var(--clr-primary-a0);        /* Primary - CT */
+  --modality-mri: var(--clr-primary-a20);      /* Primary variant - MRI */
+  --modality-us: var(--clr-primary-a30);       /* Primary accent - Ultrasound */
+  --modality-nm: var(--clr-primary-a10);       /* Primary hover - Nuclear Medicine */
+  --modality-fluoro: var(--clr-primary-a40);   /* Primary light - Fluoroscopy */
   
   /* Flat UI Shadows */
   --shadow-flat: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -129,31 +121,35 @@ body {
 
 /* Dark theme override for users who prefer it */
 .dark-theme {
-  --bg-color: #0C0A0B;              /* Very dark - main background */
-  --primary-surface-bg: #13111E;    /* Dark blue-gray - card backgrounds */
-  --secondary-surface-bg: #211557;  /* Dark blue - secondary surfaces */
-  --text-primary: #ffffff;          /* White - primary text */
-  --text-secondary: #02A6D4;        /* Light blue - secondary text */
-  --text-muted: #0352AE;            /* Medium blue - muted text */
-  --border-color: #3D0021;          /* Dark purple - borders */
-  --interactive-accent: #FEC305;    /* Bright yellow - primary actions */
-  --interactive-accent-hover: #FE5E02; /* Orange on hover */
-  --header-color: #FEC305;          /* Bright yellow - headers for visibility */
-  --bright-yellow: #FEC305;         /* Ensure yellow stays bright in dark mode */
+  --bg-color: var(--clr-surface-a0);              /* Dark surface - main background */
+  --primary-surface-bg: var(--clr-surface-a10);   /* Dark surface variant - card backgrounds */
+  --secondary-surface-bg: var(--clr-surface-tonal-a0);  /* Dark tonal - secondary surfaces */
+  --text-primary: var(--clr-light-a0);            /* White - primary text */
+  --text-secondary: var(--clr-primary-a40);       /* Primary light - secondary text */
+  --text-muted: var(--clr-primary-a50);           /* Primary lighter - muted text */
+  --border-color: var(--clr-surface-a20);         /* Dark surface border - borders */
+  --interactive-accent: var(--clr-primary-a20);   /* Primary variant - primary actions */
+  --interactive-accent-hover: var(--clr-primary-a30); /* Primary lighter on hover */
+  --header-color: var(--clr-primary-a30);         /* Primary accent - headers for visibility */
+  --link-color: var(--clr-primary-a40);           /* Primary light - links */
+  --highlight-bluegreen: var(--clr-primary-a30);  /* Primary accent - highlights */
+  --underline-color: var(--clr-primary-a40);      /* Primary light - underlines */
 }
 
 /* Ensure good contrast in dark mode */
 .dark-theme .protocol-group h2 {
-  color: var(--bright-yellow);
-  border-bottom-color: var(--light-blue);
+  color: var(--clr-primary-a40);
+  border-bottom-color: var(--clr-primary-a30);
 }
 
 .dark-theme .clinical-indication {
-  border-left-color: var(--orange);
+  border-left-color: var(--clr-primary-a30);
 }
 
-.dark-theme .contrast-value.contrast-no {
-  color: var(--light-blue);
+.dark-theme .contrast-indicator.contrast-no {
+  background: linear-gradient(135deg, var(--clr-surface-a20), var(--clr-surface-a30));
+  color: var(--clr-primary-a40);
+  border-color: var(--clr-surface-a30);
 }
 
 /* Light theme fallbacks */
@@ -217,7 +213,7 @@ body {
   color: var(--header-color);
   margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 3px solid var(--bright-yellow);
+  border-bottom: 3px solid var(--clr-primary-a30);
   font-weight: 700;
   font-size: 1.5em;
 }
@@ -358,17 +354,17 @@ h3 {
 }
 
 .contrast-indicator.contrast-yes {
-  background: linear-gradient(135deg, var(--light-blue), var(--medium-blue));
-  color: white;
-  border-color: var(--medium-blue);
-  box-shadow: 0 4px 12px rgba(2, 166, 212, 0.3);
+  background: linear-gradient(135deg, var(--clr-primary-a0), var(--clr-primary-a20));
+  color: var(--clr-light-a0);
+  border-color: var(--clr-primary-a10);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--clr-primary-a0) 30%, transparent);
 }
 
 .contrast-indicator.contrast-no {
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-  color: var(--dark-blue);
-  border-color: var(--border-color);
-  box-shadow: 0 4px 12px rgba(33, 21, 87, 0.1);
+  background: linear-gradient(135deg, var(--clr-surface-a10), var(--clr-surface-a20));
+  color: var(--clr-primary-a0);
+  border-color: var(--clr-surface-a30);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--clr-primary-a0) 10%, transparent);
 }
 
 .contrast-icon {
@@ -376,15 +372,10 @@ h3 {
   font-weight: 500;
 }
 
-.dark-theme .contrast-indicator.contrast-no {
-  background: linear-gradient(135deg, var(--dark-blue-gray), var(--dark-blue));
-  color: var(--light-blue);
-  border-color: var(--dark-purple);
-}
 
 /* Sequence styling */
 li.contrast-sequence {
-  color: var(--orange); /* Orange from palette */
+  color: var(--clr-primary-a20); /* Primary variant from palette */
   font-weight: 600;
 }
 li.contrast-sequence strong {
@@ -393,7 +384,7 @@ li.contrast-sequence strong {
 
 /* Highlighted sequences styling */
 li.highlight-sequence {
-  color: var(--bright-yellow); /* Bright yellow from palette */
+  color: var(--clr-primary-a30); /* Primary accent from palette */
   font-weight: 700; /* Bold */
 }
 
@@ -2007,7 +1998,7 @@ a:hover::after {
   font-size: 0.9em;
   line-height: 1.5;
   color: var(--text-secondary);
-  border-left: 4px solid var(--bright-yellow);
+  border-left: 4px solid var(--clr-primary-a20);
   margin-top: 8px;
 }
 
