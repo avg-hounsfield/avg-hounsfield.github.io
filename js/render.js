@@ -169,9 +169,9 @@ function renderIndicationsCard(rightCardContent) {
     <div class="indications-card">
       <div class="indications-header" onclick="toggleAccordion('${accordionId}')">
         <h4>Clinical Information</h4>
-        <span class="accordion-toggle" id="toggle-${accordionId}">+</span>
+        <span class="accordion-toggle" id="toggle-${accordionId}">−</span>
       </div>
-      <div class="indications-content" id="${accordionId}" style="display: none;">
+      <div class="indications-content accordion-open" id="${accordionId}" style="display: block;">
         ${rightCardContent.indications ? 
           `<p class="indications"><strong>Indications:</strong> ${escapeHtml(rightCardContent.indications)}</p>` 
           : ''}

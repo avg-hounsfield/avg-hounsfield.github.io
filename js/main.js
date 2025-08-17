@@ -400,19 +400,21 @@ function runSearchAndRender() {
   try {
     let results;
     
+    // Use fuzzy search on the full combined dataset, then filter by data source
+    const allResults = fuzzySearch(query) || [];
+    
     if (isOrdersOnly) {
+      // Filter to only orders (items with modality field)
+      results = allResults.filter(item => item.modality);
+      
       // Try smart pathology search first for orders
       const pathologyResults = performPathologySearch(query, currentDataset);
-      
       if (pathologyResults.length > 0) {
         results = pathologyResults;
-      } else {
-        // Fall back to regular fuzzy search if no pathology matches
-        results = fuzzySearch(query, currentDataset) || [];
       }
     } else {
-      // Use regular fuzzy search for protocols
-      results = fuzzySearch(query, currentDataset) || [];
+      // Filter to only protocols (items without modality field)
+      results = allResults.filter(item => !item.modality);
     }
     
     if (results.length === 0) {
@@ -801,7 +803,8 @@ document.addEventListener('DOMContentLoaded', function() {
   var searchButton = document.getElementById('searchButton');
   var resultsContainer = document.getElementById('results');
   var dataSourceToggle = document.getElementById('dataSourceToggle');
-  var toggleText = document.getElementById('toggleText');
+  var protocolsLabel = document.getElementById('protocolsLabel');
+  var ordersLabel = document.getElementById('ordersLabel');
 
   // Validate required DOM elements exist
   if (!searchInput || !resultsContainer) {
@@ -814,14 +817,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Toggle functionality for Protocols/Orders
   function toggleDataSource() {
-    if (!dataSourceToggle || !toggleText) return; // Safety check
+    if (!dataSourceToggle || !protocolsLabel || !ordersLabel) return; // Safety check
     
     if (dataSourceToggle.checked) {
       currentDataSource = 'orders';
-      toggleText.textContent = 'Orders';
+      protocolsLabel.classList.remove('active');
+      ordersLabel.classList.add('active');
+      searchInput.placeholder = 'Search orders...';
     } else {
       currentDataSource = 'protocols';
-      toggleText.textContent = 'Protocols';
+      protocolsLabel.classList.add('active');
+      ordersLabel.classList.remove('active');
+      searchInput.placeholder = 'Search protocols...';
     }
     
     // Re-run search if there's a query

@@ -159,11 +159,14 @@
           <input type="text" id="searchInput" placeholder="Search protocols...">
           <button id="searchButton">Search</button>
           <div class="data-toggle-wrapper">
-            <div class="toggle-switch">
+            <div class="slider-toggle">
+              <div class="slider-labels">
+                <span class="slider-label left active" id="protocolsLabel">Protocols</span>
+                <span class="slider-label right" id="ordersLabel">Orders</span>
+              </div>
               <input type="checkbox" id="dataSourceToggle" />
-              <label for="dataSourceToggle" class="toggle-label">
-                <span class="toggle-text" id="toggleText">Protocols</span>
-                <span class="toggle-slider"></span>
+              <label for="dataSourceToggle" class="slider-track">
+                <span class="slider-thumb"></span>
               </label>
             </div>
           </div>

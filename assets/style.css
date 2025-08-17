@@ -497,73 +497,82 @@ a:hover::after {
   background: var(--interactive-accent-hover);
 }
 
-/* Data Source Toggle Styling */
+/* Data Source Slider Toggle Styling */
 .data-toggle-wrapper {
   display: flex;
   align-items: center;
   margin-left: 0.5rem;
 }
 
-.toggle-switch {
+.slider-toggle {
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-.toggle-switch input[type="checkbox"] {
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 140px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.slider-label {
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.slider-label.active {
+  color: var(--interactive-accent);
+  font-weight: 600;
+}
+
+.slider-toggle input[type="checkbox"] {
   opacity: 0;
   width: 0;
   height: 0;
+  position: absolute;
 }
 
-.toggle-label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  background-color: var(--primary-surface-bg);
-  border: 2px solid var(--border-color);
-  border-radius: 25px;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
+.slider-track {
   position: relative;
-  min-width: 120px;
-  justify-content: center;
-  font-weight: 500;
-  font-size: 0.9rem;
+  width: 60px;
+  height: 30px;
+  background-color: var(--secondary-surface-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.toggle-text {
-  color: var(--text-primary);
-  z-index: 2;
-  transition: color 0.3s ease;
-}
-
-.toggle-slider {
+.slider-thumb {
   position: absolute;
   top: 2px;
   left: 2px;
-  right: 2px;
-  bottom: 2px;
+  width: 22px;
+  height: 22px;
   background-color: var(--interactive-accent);
-  border-radius: 23px;
+  border-radius: 50%;
   transition: all 0.3s ease;
-  opacity: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.toggle-switch input:checked + .toggle-label {
+.slider-toggle input:checked + .slider-track {
+  background-color: var(--interactive-accent);
   border-color: var(--interactive-accent);
 }
 
-.toggle-switch input:checked + .toggle-label .toggle-slider {
-  opacity: 1;
+.slider-toggle input:checked + .slider-track .slider-thumb {
+  transform: translateX(30px);
+  background-color: var(--interactive-accent-text);
 }
 
-.toggle-switch input:checked + .toggle-label .toggle-text {
-  color: var(--interactive-accent-text);
-}
-
-.toggle-label:hover {
+.slider-track:hover {
   border-color: var(--interactive-accent);
-  transform: scale(1.02);
 }
 
 /* Responsive design with fallbacks */
