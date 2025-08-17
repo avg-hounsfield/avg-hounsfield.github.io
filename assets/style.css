@@ -120,7 +120,7 @@ a:hover {
   margin-bottom: 2rem;
   padding: 1.5rem;
   background: var(--md-sys-color-surface-container-highest); /* Changed to a neutral charcoal/dark surface */
-  border-radius: var(--radius-lg);
+  border-radius: 16px;
   box-shadow: var(--shadow-flat);
 }
 
@@ -209,7 +209,7 @@ input:focus, select:focus, textarea:focus {
   box-shadow: var(--shadow-floating);
   background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
-  transform: scale(1.05);
+  transform: scale(1.02);
   border: none;
 }
 
@@ -683,9 +683,10 @@ body[data-theme="dark"] .sidebar-trigger:hover {
     width: 100%;
     margin: 0.75rem 0 0 0;
     background: transparent;
-    border-radius: var(--radius-md);
+    border-radius: 6px;
     box-shadow: none;
     border: none;
+    outline: none;
     overflow: hidden;
 
     /* Keep the left accent border */
@@ -708,10 +709,18 @@ body[data-theme="dark"] .sidebar-trigger:hover {
     background-color: var(--secondary-surface-bg);
     margin-top: 1px;
 }
-.sequences-card { border-left: 3px solid var(--md-sys-color-secondary); }
-.sequences-header h4 { color: var(--md-sys-color-secondary); }
-.indications-card { border-left: 3px solid var(--highlight-yellow-orange); }
-.indications-header h4 { color: var(--highlight-yellow-orange); }
+.sequences-card { border-left: 3px solid var(--md-sys-color-primary); }
+.sequences-header h4 { color: var(--md-sys-color-primary); }
+.indications-card { 
+  border-left: 4px solid var(--md-sys-color-tertiary);
+  background-color: rgba(var(--md-sys-color-tertiary-rgb), 0.05);
+}
+.indications-header h4 { 
+  color: var(--md-sys-color-tertiary);
+  font-weight: 700;
+}
+.scanner-notes-card { border-left: 3px solid var(--md-sys-color-outline); }
+.scanner-notes-header h4 { color: var(--md-sys-color-on-surface-variant); }
 .indications-content .contrast-rationale strong { color: var(--highlight-yellow-orange); }
 li.contrast-sequence { color: var(--md-sys-color-primary); font-weight: 600; }
 li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700; }
@@ -972,7 +981,7 @@ body[data-theme="dark"] .slider-label.active {
 .sidebar-header {
   padding: 20px;
   background: var(--secondary-surface-bg);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: none;
   display: flex;
   justify-content: space-between;
   align-items: center;

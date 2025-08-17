@@ -181,62 +181,8 @@ function renderProtocolCard(protocol) {
  * Generic function to render consolidated protocol cards
  */
 function renderConsolidatedCard(protocols, groupType, mainProtocolName, cardTitle, borderColor = '#9b59b6') {
-  const mainProtocol = mainProtocolName ? protocols.find(p => p.study === mainProtocolName) : protocols[0];
-  const subProtocols = protocols.filter(p => p.study !== mainProtocol?.study);
-  
-  if (!mainProtocol) return protocols.map(renderProtocolCard).join('');
-  
-  const subProtocolsId = `sub-protocols-${groupType}-` + Math.random().toString(36).substr(2, 9);
-  const contrastText = mainProtocol.usesContrast ? 'YES' : 'NO';
-  const contrastClass = mainProtocol.usesContrast ? 'contrast-yes' : 'contrast-no';
-  
-  const sequences = mainProtocol.layout?.leftCard?.sequences || [];
-  const sortedSequences = sortSequences(sequences);
-  
-  const rightCardContent = mainProtocol.layout?.rightCard?.content || {};
-  
-  const sequencesHtml = renderSequencesCard(sortedSequences);
-  const indicationsHtml = renderIndicationsCard(rightCardContent);
-  const scannerNotesHtml = renderScannerNotesCard(rightCardContent.scannerSpecificNotes);
-  
-  const subProtocolsList = subProtocols.map(p => `<li class="sub-protocol-item">${p.study}${p.usesContrast ? ' (Contrast)' : ''}</li>`).join('');
-  
-  return `
-    <div class="protocol-card consolidated-${groupType}">
-      <div class="protocol-content">
-        <div class="left-card">
-          <div class="protocol-header">
-            <div class="protocol-title-section">
-              <h3>Protocol: ${escapeHtml(cardTitle || mainProtocol.study)}</h3>
-              <button class="favorite-btn" data-type="protocol" data-study="${escapeHtml(mainProtocol.study)}"><span class="material-symbols-outlined">favorite_border</span></button>
-            </div>
-            <div class="protocol-info">
-              <div class="contrast-indicator ${contrastClass}">
-                <span class="contrast-icon material-symbols-outlined">${mainProtocol.usesContrast ? 'science' : 'block'}</span>
-                <span>Contrast: ${contrastText}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        ${sequencesHtml}
-        ${indicationsHtml}
-        ${scannerNotesHtml}
-        ${subProtocols.length > 0 ? `
-        <div class="sub-protocols-card">
-          <div class="sub-protocols-header" data-accordion-id="${subProtocolsId}">
-            <h4>Related Protocols (${subProtocols.length})</h4>
-            <span class="accordion-toggle material-symbols-outlined">expand_more</span>
-          </div>
-          <div class="sub-protocols-content accordion-content" id="${subProtocolsId}">
-  <div class="accordion-content-inner">
-    <ul class="sub-protocols-list">${subProtocolsList}</ul>
-  </div>
-</div>
-        </div>
-        ` : ''}
-      </div>
-    </div>
-  `;
+  // Show individual protocols instead of grouping them
+  return protocols.map(renderProtocolCard).join('');
 }
 
 /**

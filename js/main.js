@@ -2,6 +2,7 @@
 
 // Import the render function at the very top
 import { renderGroupedProtocols } from './render.js';
+import { initFavorites, addFavoriteButtons } from './favorites.js';
 
 // The entire application logic is wrapped in this single event listener
 document.addEventListener('DOMContentLoaded', () => {
@@ -121,6 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // After rendering, attach listeners to the new accordion elements
             attachAccordionListeners();
+            
+            // Add favorite button listeners
+            addFavoriteButtons();
         }
     }
 
@@ -136,6 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // --- INITIALIZATION ---
+    // Initialize favorites system
+    initFavorites();
+    
     // Start the application by loading the data
     loadData();
 
