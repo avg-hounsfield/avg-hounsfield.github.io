@@ -149,23 +149,90 @@ input:focus, select:focus, textarea:focus {
   outline: 2px solid transparent;
   box-shadow: 0 0 0 2px var(--md-sys-color-primary-container);
 }
-#searchInput {
-  flex: 1;
-  min-width: 300px;
-  background: var(--md-sys-color-surface-container-highest);
-  border-radius: var(--radius-lg);
-}
-button, .button {
+/* ========================================================================== */
+/* Material 3 Forms & Buttons                                                 */
+/* ========================================================================== */
+
+/* Filled Button Style */
+.m3-button-filled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Space between icon and text */
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   border: none;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-lg); /* Fully rounded corners */
   padding: 10px 24px;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  box-shadow: var(--shadow-flat);
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
 }
+.m3-button-filled:hover {
+  box-shadow: var(--shadow-raised);
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, white);
+}
+
+/* Filled Text Field Style */
+.m3-text-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1; /* Allow it to grow */
+  min-width: 300px;
+  background-color: var(--md-sys-color-surface-container-highest);
+  border-radius: 16px 16px 0 0; /* M3 top-rounded corners */
+  border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
+  transition: border-color 0.2s ease;
+  padding: 8px 16px;
+}
+
+.m3-text-field:focus-within {
+  border-bottom: 2px solid var(--md-sys-color-primary);
+}
+
+.m3-text-field label {
+  position: absolute;
+  left: 52px; /* Position after the icon */
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--md-sys-color-on-surface-variant);
+  pointer-events: none;
+  transition: all 0.2s ease;
+  background-color: var(--md-sys-color-surface-container-highest);
+  padding: 0 4px;
+}
+
+.m3-text-field .leading-icon {
+  color: var(--md-sys-color-on-surface-variant);
+  margin-right: 12px;
+}
+
+/* The magic floating label animation */
+.m3-text-field input:focus + label,
+.m3-text-field input:not(:placeholder-shown) + label {
+  top: 0;
+  font-size: 0.75rem;
+  color: var(--md-sys-color-primary);
+}
+
+.m3-text-field input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 16px 0 8px 0; /* Adjust padding for label space */
+  font-size: 1rem;
+  color: var(--md-sys-color-on-surface);
+}
+
+/* Remove the placeholder from the input, we use the label instead */
+.m3-text-field input::placeholder {
+  color: transparent;
+}
+
 button:hover, .button:hover {
   background: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
@@ -333,7 +400,20 @@ li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700;
 .data-toggle-wrapper { display: flex; align-items: center; }
 .slider-toggle { position: relative; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
 .slider-labels { display: flex; justify-content: space-between; width: 140px; font-size: 0.8rem; font-weight: 500; }
-.slider-label { color: var(--text-secondary); transition: color 0.3s ease; cursor: pointer; }
+/* Data Toggle Slider */
+.slider-label {
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+  cursor: pointer;
+  padding-bottom: 4px; /* Give it some space */
+}
+
+/* ✅ MODIFY THIS RULE */
+.slider-label.active {
+  color: var(--md-sys-color-primary); /* Use the main accent color */
+  font-weight: 700; /* Make it bolder */
+  border-bottom: 2px solid var(--md-sys-color-primary); /* Add an underline */
+}
 .slider-label.active { color: var(--interactive-accent); font-weight: 600; }
 .slider-toggle input[type="checkbox"] { opacity: 0; width: 0; height: 0; position: absolute; }
 .slider-track { position: relative; width: 60px; height: 30px; background-color: var(--secondary-surface-bg); border: 2px solid var(--border-color); border-radius: 15px; cursor: pointer; transition: all 0.3s ease; }
@@ -393,12 +473,131 @@ li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700;
   body {
     padding: 1rem;
   }
-  .search-bar-wrapper {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  #searchInput, #searchButton {
+.search-bar-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* Change to center for vertical alignment */
+  gap: 1rem;
+  max-width: 1000px;
+  width: 100%;
+  margin: 3rem auto 2rem auto;
+}
+
+#searchInput, #searchButton {
     width: 100%;
     min-width: 0;
   }
+}
+
+/* ========================================================================== */
+/* Favorites Sidebar                                                          */
+/* ========================================================================== */
+.favorites-sidebar {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 1001; /* Higher than theme toggle */
+}
+
+.sidebar-trigger {
+  position: absolute;
+  right: 100%; /* Start attached to the left of the panel */
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  padding: 16px 12px;
+  border-radius: 12px 0 0 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-raised);
+}
+
+.sidebar-trigger:hover {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  transform: translateY(-50%) translateX(4px);
+}
+
+.favorites-count {
+  background: var(--md-sys-color-on-primary);
+  color: var(--md-sys-color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.sidebar-content {
+  width: 350px;
+  max-height: 80vh;
+  background: var(--primary-surface-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px 0 0 12px;
+  box-shadow: var(--shadow-floating);
+  transition: transform 0.4s ease;
+  transform: translateX(100%); /* Start hidden off-screen */
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-content.open {
+  transform: translateX(0); /* Slide in */
+}
+
+.sidebar-header {
+  padding: 20px;
+  background: var(--secondary-surface-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-close {
+  background: transparent;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+}
+
+.sidebar-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.empty-favorites {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 40px 20px;
+}
+
+/* ========================================================================== */
+/* Accessibility Utilities                                                    */
+/* ========================================================================== */
+
+/* Visually hide an element but keep it available for screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Remove default fieldset border and padding */
+.slider-toggle-fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
 }

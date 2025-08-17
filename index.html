@@ -19,6 +19,36 @@
 
 <body data-theme="light">
 
+  <body data-theme="light">
+
+    <!-- ✅ PASTE THIS ENTIRE BLOCK HERE -->
+    <div id="favorites-sidebar" class="favorites-sidebar">
+        <div class="sidebar-trigger" id="sidebar-trigger">
+            <span class="material-symbols-outlined">favorite</span>
+            <span class="favorites-count" id="favorites-count">0</span>
+        </div>
+        <div class="sidebar-content" id="sidebar-content">
+            <div class="sidebar-header">
+                <h3>Favorite Protocols</h3>
+                <button class="sidebar-close" id="sidebar-close" aria-label="Close favorites">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="sidebar-body">
+                <div id="favorites-list" class="favorites-list">
+                    <!-- Favorite items will be added here by JavaScript -->
+                    <div class="empty-favorites">
+                        <span class="material-symbols-outlined">favorite_border</span>
+                        <p>No favorites yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of favorites block -->
+
+        <!-- ... -->
+
     <button id="theme-toggle" title="Toggle theme">
         <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
     </button>
@@ -26,24 +56,43 @@
     <div class="container">
         <header class="main-header">
             <h1>MRI PROTOCOL SEARCH</h1>
-            <div class="search-container">
-                <div class="search-bar-wrapper">
-                    <input type="text" id="searchInput" placeholder="Search protocols...">
-                    <button id="searchButton">Search</button>
+            <div class="search-bar-wrapper">
+    <!-- ✅ NEW Material 3 Text Field Structure -->
+    <div class="m3-text-field">
+        <span class="material-symbols-outlined leading-icon">search</span>
+        <input type="text" id="searchInput" placeholder=" "> <!-- Placeholder is now just a space -->
+        <label for="searchInput">Search protocols...</label>
+    </div>
+
+    <button id="searchButton" class="m3-button-filled">
+        <span class="material-symbols-outlined">search</span>
+        <span>Search</span>
+    </button>
+    <!-- ... data toggle ... -->
                     
-                    <!-- ✅ FIXED: This was missing from some previous versions -->
-                    <div class="data-toggle-wrapper">
-                        <div class="slider-toggle">
-                            <div class="slider-labels">
-                                <span class="slider-label left active" id="protocolsLabel">Protocols</span>
-                                <span class="slider-label right" id="ordersLabel">Orders</span>
-                            </div>
-                            <input type="checkbox" id="dataSourceToggle" />
-                            <label for="dataSourceToggle" class="slider-track">
-                                <span class="slider-thumb"></span>
-                            </label>
-                        </div>
-                    </div>
+<div class="data-toggle-wrapper">
+    <!-- ✅ WRAP the entire component in a fieldset -->
+    <fieldset class="slider-toggle-fieldset">
+    
+        <!-- ✅ ADD a legend for screen readers -->
+        <legend class="sr-only">Select Data Source</legend>
+
+        <div class="slider-toggle">
+            <div class="slider-labels" aria-hidden="true"> <!-- Hide visual labels from screen reader -->
+                <span class="slider-label left active" id="protocolsLabel">Protocols</span>
+                <span class="slider-label right" id="ordersLabel">Orders</span>
+            </div>
+            
+            <!-- ✅ ADD aria-label to describe the checkbox's specific function -->
+            <input type="checkbox" id="dataSourceToggle" aria-label="Toggle between Protocols and Orders" />
+            
+            <label for="dataSourceToggle" class="slider-track" aria-hidden="true"> <!-- Hide visual track from screen reader -->
+                <span class="slider-thumb"></span>
+            </label>
+        </div>
+        
+    </fieldset>
+</div>
                 </div>
             </div>
         </header>
