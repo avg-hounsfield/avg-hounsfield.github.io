@@ -99,7 +99,7 @@ function toggleSidebar() {
 
 // Open sidebar
 function openSidebar() {
-  const content = document.getElementById('sidebar-content');
+  const content = document.getElementById('favorites-sidebar');
   if (content) {
     content.classList.add('open');
     sidebarOpen = true;
@@ -109,7 +109,7 @@ function openSidebar() {
 
 // Close sidebar
 function closeSidebar() {
-  const content = document.getElementById('sidebar-content');
+  const content = document.getElementById('favorites-sidebar');
   if (content) {
     content.classList.remove('open');
     sidebarOpen = false;

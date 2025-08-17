@@ -71,34 +71,17 @@
     </div>
 
 <!-- ✅ NEW, Material 3 Extended FAB Structure -->
-<button id="searchButton" class="m3-extended-fab">
-    <span class="material-symbols-outlined">search</span>
-    <span>Search</span>
-</button>
+<button id="searchButton" class="m3-extended-fab">Search</button>
     <!-- ... data toggle ... -->
                     
-<div class="data-toggle-wrapper">
-    <!-- ✅ WRAP the entire component in a fieldset -->
-    <fieldset class="slider-toggle-fieldset">
-    
-        <!-- ✅ ADD a legend for screen readers -->
-        <legend class="sr-only">Select Data Source</legend>
-
-        <div class="slider-toggle">
-            <div class="slider-labels" aria-hidden="true"> <!-- Hide visual labels from screen reader -->
-                <span class="slider-label left active" id="protocolsLabel">Protocols</span>
-                <span class="slider-label right" id="ordersLabel">Orders</span>
-            </div>
-            
-            <!-- ✅ ADD aria-label to describe the checkbox's specific function -->
-            <input type="checkbox" id="dataSourceToggle" aria-label="Toggle between Protocols and Orders" />
-            
-            <label for="dataSourceToggle" class="slider-track" aria-hidden="true"> <!-- Hide visual track from screen reader -->
-                <span class="slider-thumb"></span>
-            </label>
-        </div>
-        
-    </fieldset>
+<!-- ✅ NEW, Simplified Filter Toggle -->
+<div class="filter-toggle-wrapper">
+    <label for="dataSourceToggle" class="filter-toggle-label">ORDERS only</label>
+    <div class="m3-switch">
+        <input type="checkbox" id="dataSourceToggle" role="switch" />
+        <div class="m3-switch-track"></div>
+        <div class="m3-switch-thumb"></div>
+    </div>
 </div>
                 </div>
             </div>

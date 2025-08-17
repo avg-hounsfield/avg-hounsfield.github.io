@@ -12,9 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('searchButton');
     const resultsContainer = document.getElementById('results');
     const dataSourceToggle = document.getElementById('dataSourceToggle');
-    const sidebarTrigger = document.getElementById('sidebar-trigger');
-    const sidebarClose = document.getElementById('sidebar-close');
-    const sidebarContent = document.getElementById('sidebar-content');
+
 
     // --- STATE ---
     let allProtocols = [];
@@ -135,21 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (event.key === 'Enter') handleSearch();
         });
         dataSourceToggle.addEventListener('change', handleSearch);
-    }
-
-    // Sidebar event listeners
-    if (sidebarTrigger && sidebarClose && sidebarContent) {
-        sidebarTrigger.addEventListener('click', () => {
-            sidebarContent.classList.toggle('open');
-        });
-        sidebarClose.addEventListener('click', () => {
-            sidebarContent.classList.remove('open');
-        });
-        document.addEventListener('click', (event) => {
-            if (!sidebarContent.contains(event.target) && !sidebarTrigger.contains(event.target)) {
-                sidebarContent.classList.remove('open');
-            }
-        });
     }
     
     // --- INITIALIZATION ---

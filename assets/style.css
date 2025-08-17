@@ -162,48 +162,59 @@ input:focus, select:focus, textarea:focus {
 /* Material 3 Forms & Buttons                                                 */
 /* ========================================================================== */
 
+/* ✅ NEW: Material 3 Extended FAB Style for the Search Button */
 .m3-extended-fab {
   /* Layout & Sizing */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px; /* A bit more space for an FAB */
-  height: 56px; /* Standard M3 FAB height */
-  padding: 0 20px;
+  height: 56px;
+  padding: 0 32px; /* A bit more padding since there's no icon */
   
   /* Shape & Color */
   border: none;
-  border-radius: 16px; /* M3 "Medium" corner radius */
+  border-radius: 16px;
   background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
   
   /* Typography */
   font-family: 'Jost', sans-serif;
   font-weight: 500;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
   letter-spacing: 0.1px;
-  
+  text-transform: none; /* ✅ REMOVED ALL CAPS */
+
   /* Effects */
+  position: relative; /* Needed for the gradient overlay */
+  overflow: hidden; /* Keeps the gradient inside the button */
   box-shadow: var(--shadow-raised);
   cursor: pointer;
-  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease;
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Hover State */
+/* Gradient Overlay on Hover */
+.m3-extended-fab::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(255,255,255,0.15), rgba(255,255,255,0));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
 .m3-extended-fab:hover {
   box-shadow: var(--shadow-floating);
-  /* Use color-mix for a subtle hover brightness effect */
-  background-color: color-mix(in srgb, var(--md-sys-color-primary-container) 92%, white);
 }
 
-/* Active/Pressed State */
+.m3-extended-fab:hover::after {
+  opacity: 1; /* Show the gradient on hover */
+}
+
 .m3-extended-fab:active {
   box-shadow: var(--shadow-flat);
-}
-
-/* Icon inside the button */
-.m3-extended-fab .material-symbols-outlined {
-  font-size: 24px;
 }
 
 /* Filled Text Field Style */
@@ -440,15 +451,37 @@ button:hover, .button:hover {
 /* 1. Main Card Backgrounds & Text */
 body[data-theme="dark"] .protocol-card,
 body[data-theme="dark"] .order-card {
-  background-color: var(--md-sys-color-surface-container-low); /* Dark surface */
+  background-color: var(--md-sys-color-surface-container); /* Dark surface */
   color: var(--md-sys-color-on-surface); /* Light text */
-  border-color: var(--md-sys-color-outline-variant); /* Subtle dark border */
+  background-image: linear-gradient(rgba(var(--md-sys-color-primary-rgb), 0.08), rgba(var(--md-sys-color-primary-rgb), 0.08));
+  box-shadow: 0px 4px 8px 3px rgba(0,0,0,0.3), 0px 1px 3px 1px rgba(0,0,0,0.25);
+  border: 1px solid var(--md-sys-color-surface-container-high); /* Add a very subtle border for definition */
+}
+
+body[data-theme="dark"] .protocol-card:hover,
+body[data-theme="dark"] .order-card:hover {
+  /* On hover, increase the tint opacity and the shadow size */
+  background-image: linear-gradient(rgba(var(--md-sys-color-primary-rgb), 0.12), rgba(var(--md-sys-color-primary-rgb), 0.12));
+  box-shadow: 0px 8px 12px 6px rgba(0,0,0,0.3), 0px 4px 6px 2px rgba(0,0,0,0.25);
+  border-color: var(--md-sys-color-outline);
 }
 
 /* 2. Card Header Text */
 body[data-theme="dark"] .protocol-card h3,
 body[data-theme="dark"] .order-card h3 {
-  color: var(--md-sys-color-on-surface); /* Light text for titles */
+  color: var(--md-sys-color-on-surface);
+}
+body[data-theme="dark"] .accordion-content-inner {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+body[data-theme="dark"] .sequences-header,
+body[data-theme="dark"] .indications-header,
+body[data-theme="dark"] .sub-protocols-header,
+body[data-theme="dark"] .scanner-notes-header {
+  background-color: var(--md-sys-color-surface-container-high);
+  background-image: linear-gradient(rgba(var(--md-sys-color-primary-rgb), 0.05), rgba(var(--md-sys-color-primary-rgb), 0.05));
+  border-bottom-color: var(--md-sys-color-surface-container-highest);
 }
 
 /* 3. Accordion / Sub-card Styling */
@@ -515,14 +548,9 @@ body[data-theme="dark"] .indications-content .contrast-rationale strong {
   color: var(--md-sys-color-tertiary);
 }
 
-/* ... inside your "Dark Theme Overrides" section ... */
-
-/* ✅ ADD THESE NEW RULES FOR ACCORDIONS */
-
-/* This targets all accordion sub-cards */
 body[data-theme="dark"] .accordion-content {
-  background-color: var(--secondary-surface-bg);
-  color: var(--md-sys-color-on-surface-variant); /* Use a slightly dimmer text for content */
+  background-color: var(--md-sys-color-surface); /* The darkest surface */
+  background-image: none; /* No tint */
 }
 
 /* This targets the clickable headers of the accordions */
@@ -675,15 +703,74 @@ li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700;
 /* ========================================================================== */
 /* Data Toggle Slider                                                         */
 /* ========================================================================== */
-.data-toggle-wrapper { display: flex; align-items: center; }
-.slider-toggle { position: relative; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
-.slider-labels { display: flex; justify-content: space-between; width: 140px; font-size: 0.8rem; font-weight: 500; }
-/* Data Toggle Slider */
-.slider-label {
-  color: var(--text-md-ref-palette-primary90);
-  transition: color 0.3s ease;
+/* ========================================================================== */
+/* Material 3 Switch Toggle                                                   */
+/* ========================================================================== */
+
+.filter-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 1rem; /* Add some space from the search button */
+}
+
+.filter-toggle-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
-  padding-bottom: 4px; /* Give it some space */
+  user-select: none; /* Prevent text selection on click */
+}
+
+.m3-switch {
+  position: relative;
+  width: 52px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.m3-switch input {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.m3-switch-track {
+  width: 100%;
+  height: 100%;
+  background-color: var(--md-sys-color-surface-container-highest);
+  border: 2px solid var(--md-sys-color-outline);
+  border-radius: 16px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.m3-switch-thumb {
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-color: var(--md-sys-color-outline);
+  border-radius: 50%;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease, width 0.2s ease, height 0.2s ease;
+}
+
+/* --- Checked (Active) State --- */
+
+.m3-switch input:checked + .m3-switch-track {
+  background-color: var(--md-sys-color-primary);
+  border-color: var(--md-sys-color-primary);
+}
+
+.m3-switch input:checked ~ .m3-switch-thumb {
+  transform: translate(24px, -50%);
+  background-color: var(--md-sys-color-on-primary);
+  width: 24px;
+  height: 24px;
 }
 
 /* ✅ ADD THIS ENTIRE BLOCK for better dark mode visibility */
@@ -733,46 +820,31 @@ body[data-theme="dark"] .slider-label.active {
     background: var(--interactive-accent);
     color: var(--interactive-accent-text);
 }
-/* ... Other widget styles like favorites, feedback, etc. go here ... */
 /* ========================================================================== */
-/* Favorites Sidebar (Corrected and Simplified)                               */
+/* Favorites Sidebar (Definitive Fix)                                         */
 /* ========================================================================== */
-
 .favorites-sidebar {
   position: fixed;
-  top: 50%;
+  top: 0;
   right: 0;
-  transform: translateY(-50%);
+  height: 100%;
+  width: 350px; /* Width of the panel */
   z-index: 1001;
-  /* This container is just for positioning */
-}
-
-.sidebar-content {
-  position: relative; /* Relative for the trigger button */
-  width: 350px;
-  max-height: 80vh;
-  background: var(--primary-surface-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  box-shadow: var(--shadow-floating);
   
   /* ✅ CORE FIX: Animation logic */
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  /* Start hidden just off the screen to the right */
+  /* Start completely hidden off the right side of the screen */
   transform: translateX(100%); 
-  
-  display: flex;
-  flex-direction: column;
 }
 
-.sidebar-content.open {
-  /* When open, slide it fully into view */
+.favorites-sidebar.open {
+  /* When open, slide fully into view */
   transform: translateX(0); 
 }
 
 .sidebar-trigger {
   position: absolute;
-  /* Position it perfectly on the left edge of its parent (.sidebar-content) */
+  /* Position it perfectly on the left edge of its parent (.favorites-sidebar) */
   left: 0;
   top: 50%;
   /* Move it completely outside its parent's boundary to the left */
@@ -792,42 +864,14 @@ body[data-theme="dark"] .slider-label.active {
   box-shadow: var(--shadow-raised);
 }
 
-.sidebar-trigger:hover {
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
-}
-
-.favorites-count {
-  background: var(--md-sys-color-on-primary);
-  color: var(--md-sys-color-primary);
-  font-size: 12px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 10px;
-}
-.sidebar-header {
-  padding: 20px;
-  background: var(--secondary-surface-bg);
-  border-bottom: 1px solid var(--border-color);
+.sidebar-content {
+  width: 100%;
+  height: 100%;
+  background: var(--primary-surface-bg);
+  border-left: 1px solid var(--border-color);
+  box-shadow: var(--shadow-floating);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.sidebar-close {
-  background: transparent;
-  padding: 8px;
-  width: 40px;
-  height: 40px;
-}
-.sidebar-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-}
-.empty-favorites {
-  text-align: center;
-  color: var(--text-secondary);
-  padding: 40px 20px;
+  flex-direction: column;
 }
 
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
