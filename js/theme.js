@@ -18,10 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (theme === 'light') {
       body.classList.add('light-theme');
+      body.classList.remove('dark-theme');
       themeIcon.textContent = 'dark_mode';
       themeToggle.title = 'Switch to dark mode';
     } else {
       body.classList.remove('light-theme');
+      body.classList.add('dark-theme');
       themeIcon.textContent = 'light_mode';
       themeToggle.title = 'Switch to light mode';
     }

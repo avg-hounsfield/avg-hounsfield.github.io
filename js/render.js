@@ -198,9 +198,9 @@ function renderSequencesCard(sequences) {
     <div class="sequences-card">
       <div class="sequences-header" onclick="toggleAccordion('${accordionId}')">
         <h4>Sequences</h4>
-        <span class="accordion-toggle" id="toggle-${accordionId}">+</span>
+        <span class="accordion-toggle" id="toggle-${accordionId}">−</span>
       </div>
-      <div class="sequences-content" id="${accordionId}" style="display: none;">
+      <div class="sequences-content accordion-open" id="${accordionId}" style="display: block;">
         <ul>
           ${sequences.map(seq => {
             const isHighlight = seq.highlight === true;
@@ -560,11 +560,6 @@ function renderOrderCard(order) {
       </div>
       <div class="order-details">
         ${clinicalIndications}
-        <div class="order-info">
-          <p><strong>Modality:</strong> ${order.modality || 'Not specified'}</p>
-          <p><strong>Order Type:</strong> ${order.orderType || 'Standard'}</p>
-          <p><strong>Section:</strong> ${order.section || 'Other'}</p>
-        </div>
       </div>
     </div>
   `;

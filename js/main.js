@@ -459,7 +459,7 @@ function runSearchAndRender() {
     function applyProtocolConsolidation() {
       // Smart protocol consolidation filtering based on search query
       const consolidationGroups = {
-        brain: ['BRAIN', 'BRAIN TUMOR/INF', 'BRAIN MS', 'CRANIAL NERVES/PAROTID', 'TRIGEMINAL NEURALGIA', 'PITUITARY'],
+        brain: ['BRAIN', 'BRAIN TUMOR/INF', 'BRAIN MS', 'CRANIAL NERVES/PAROTID', 'TRIGEMINAL NEURALGIA', 'PITUITARY', 'PEDIATRIC BRAIN MRI'],
         spine: ['C-SPINE', 'T-SPINE', 'L-SPINE', 'SACRUM', 'SCREENING SPINE', 'SCOLIOSIS SPINE', 'C-SPINE MS', 'T-SPINE MS'],
         cerebrovascular: ['TIA', 'TIA MRA DISSECTION', 'MRA ANEURYSM'],
         arthrography: ['SHOULDER ARTHROGRAM', 'WRIST ARTHROGRAM', 'HIP ARTHROGRAM'],
@@ -547,24 +547,41 @@ function runSearchAndRender() {
       if (isSpecificSearch) {
         protocolFilteredResults = results.filter(protocol => targetProtocols.includes(protocol.study));
       }
-      // If searching for general terms, show only the main protocol from each group
+      // If searching for general terms, show all protocols in that group for consolidation
       else if (queryLower === 'brain') {
-        protocolFilteredResults = results.filter(protocol => protocol.study === 'BRAIN');
+        protocolFilteredResults = results.filter(protocol => 
+          consolidationGroups.brain.includes(protocol.study)
+        );
       }
       else if (queryLower === 'spine') {
-        protocolFilteredResults = results.filter(protocol => protocol.study === 'C-SPINE'); // Use C-SPINE as main spine protocol
+        protocolFilteredResults = results.filter(protocol => 
+          consolidationGroups.spine.includes(protocol.study)
+        );
       }
       else if (queryLower.includes('cerebrovascular') || queryLower.includes('vessel')) {
-        protocolFilteredResults = results.filter(protocol => protocol.study === 'TIA'); // Use TIA as main cerebrovascular protocol
+        protocolFilteredResults = results.filter(protocol => 
+          consolidationGroups.cerebrovascular.includes(protocol.study)
+        );
       }
       else if (queryLower.includes('arthrography')) {
-        protocolFilteredResults = results.filter(protocol => protocol.study === 'SHOULDER ARTHROGRAM'); // Use shoulder as main arthrogram
+        protocolFilteredResults = results.filter(protocol => 
+          consolidationGroups.arthrography.includes(protocol.study)
+        );
       }
       else if (queryLower.includes('upper extremity')) {
-        protocolFilteredResults = results.filter(protocol => protocol.study === 'SHOULDER'); // Use shoulder as main upper extremity
+        protocolFilteredResults = results.filter(protocol => 
+          consolidationGroups.upperExtremity.includes(protocol.study)
+        );
       }
       else if (queryLower.includes('lower extremity')) {
-        protocolFilteredResults = results.filter(protocol => protocol.study === 'HIP'); // Use hip as main lower extremity
+        protocolFilteredResults = results.filter(protocol => 
+          consolidationGroups.lowerExtremity.includes(protocol.study)
+        );
+      }
+      else if (queryLower === 'orbit' || queryLower === 'orbital' || queryLower.includes('orbit')) {
+        protocolFilteredResults = results.filter(protocol => 
+          consolidationGroups.orbital.includes(protocol.study)
+        );
       }
 
       // Optimize grouping with special handling for all consolidation groups
