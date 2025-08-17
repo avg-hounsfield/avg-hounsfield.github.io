@@ -2,7 +2,7 @@
 
 // Dynamic imports with fallbacks for better compatibility
 let initFuzzy, fuzzySearch, renderGroupedProtocols;
-let initFavorites, addFavoriteButtons, initRecentProtocols, trackProtocolView, initFeedback;
+let initFavorites, addFavoriteButtons, initFeedback;
 
 // Import modules with graceful fallbacks
 async function loadModules() {
@@ -49,15 +49,6 @@ async function loadModules() {
     addFavoriteButtons = function() {};
   }
 
-  try {
-    const recentModule = await import('./recent.js');
-    initRecentProtocols = recentModule.initRecentProtocols;
-    trackProtocolView = recentModule.trackProtocolView;
-  } catch (error) {
-    console.warn('Failed to load recent protocols module:', error);
-    initRecentProtocols = function() {};
-    trackProtocolView = function() {};
-  }
 
   try {
     const feedbackModule = await import('./feedback.js');
@@ -446,22 +437,7 @@ function runSearchAndRender() {
         return acc;
       }, {});
 
-      // Add search context information for pathology searches
-      const isPathologySearch = performPathologySearch(query, currentDataset).length > 0;
-      let searchContext = '';
-      
-      if (isPathologySearch) {
-        searchContext = `
-          <div class="search-context">
-            <p class="context-note">
-              <span class="material-symbols-outlined">medical_services</span>
-              Smart search results for medical condition: <strong>"${query}"</strong>
-            </p>
-          </div>
-        `;
-      }
-
-      resultsContainer.innerHTML = searchContext + renderGroupedProtocols(grouped, isOrdersOnly);
+      resultsContainer.innerHTML = renderGroupedProtocols(grouped, isOrdersOnly);
     } else {
       // Original protocol consolidation logic
       applyProtocolConsolidation();
@@ -488,16 +464,30 @@ function runSearchAndRender() {
     const specificSearches = {
       // Brain specific searches
       'tumor': 'BRAIN TUMOR/INF',
+      'tumour': 'BRAIN TUMOR/INF',
+      'mass': 'BRAIN TUMOR/INF',
+      'lesion': 'BRAIN TUMOR/INF',
       'infection': 'BRAIN TUMOR/INF',
       'inf': 'BRAIN TUMOR/INF',
+      'abscess': 'BRAIN TUMOR/INF',
       'ms': ['BRAIN MS', 'C-SPINE MS', 'T-SPINE MS'],
       'multiple sclerosis': ['BRAIN MS', 'C-SPINE MS', 'T-SPINE MS'],
+      'demyelinating': ['BRAIN MS', 'C-SPINE MS', 'T-SPINE MS'],
       'cranial': 'CRANIAL NERVES/PAROTID',
       'nerve': 'CRANIAL NERVES/PAROTID',
+      'nerves': 'CRANIAL NERVES/PAROTID',
+      'facial': 'CRANIAL NERVES/PAROTID',
       'parotid': 'CRANIAL NERVES/PAROTID',
       'trigeminal': 'TRIGEMINAL NEURALGIA',
       'neuralgia': 'TRIGEMINAL NEURALGIA',
+      'facial pain': 'TRIGEMINAL NEURALGIA',
       'pituitary': 'PITUITARY',
+      'sella': 'PITUITARY',
+      'sellar': 'PITUITARY',
+      'sella turcica': 'PITUITARY',
+      'adenoma': 'PITUITARY',
+      'hypophyseal': 'PITUITARY',
+      'hypophysis': 'PITUITARY',
       
       // Spine specific searches
       'cervical': 'C-SPINE',
@@ -525,6 +515,11 @@ function runSearchAndRender() {
       // Orbital specific searches
       'orbit': ['ORBITS', 'ORBIT NEMMERS'],
       'orbital': ['ORBITS', 'ORBIT NEMMERS'],
+      'orbits': ['ORBITS', 'ORBIT NEMMERS'],
+      'eye': ['ORBITS', 'ORBIT NEMMERS'],
+      'eyes': ['ORBITS', 'ORBIT NEMMERS'],
+      'optic': ['ORBITS', 'ORBIT NEMMERS'],
+      'vision': ['ORBITS', 'ORBIT NEMMERS'],
       'nemmers': 'ORBIT NEMMERS',
       
       // Upper extremity specific searches
@@ -654,24 +649,9 @@ function runSearchAndRender() {
 
       resultsContainer.innerHTML = renderGroupedProtocols(grouped);
       
-      // Track protocol views for recently viewed section
-      try {
-        if (typeof trackProtocolView === 'function') {
-          trackProtocolView(query, protocolFilteredResults);
-        }
-      } catch (error) {
-        console.warn('Failed to track protocol view:', error);
-      }
     }
     
-    // Track views and apply animations for both orders and protocols
-    try {
-      if (typeof trackProtocolView === 'function') {
-        trackProtocolView(query, filteredResults);
-      }
-    } catch (error) {
-      console.warn('Failed to track protocol view:', error);
-    }
+    // Apply animations for both orders and protocols
     
     // Professional staggered animations with optimized timing
     const cards = resultsContainer.querySelectorAll('.protocol-card');
@@ -724,7 +704,7 @@ function checkBrowserCompatibility() {
   }
   
   if (!window.localStorage && !window.sessionStorage) {
-    warnings.push('Your browser doesn\'t support data storage. Favorites and recent protocols won\'t be saved.');
+    warnings.push('Your browser doesn\'t support data storage. Favorites won\'t be saved.');
   }
   
   if (!window.requestAnimationFrame) {
@@ -803,8 +783,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize without module dependencies
     initFavorites = initFavorites || function() {};
     addFavoriteButtons = addFavoriteButtons || function() {};
-    initRecentProtocols = initRecentProtocols || function() {};
-    trackProtocolView = trackProtocolView || function() {};
     initFeedback = initFeedback || function() {};
   }
   
@@ -1037,13 +1015,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Failed to initialize favorites:', error);
       }
       
-      try {
-        if (typeof initRecentProtocols === 'function') {
-          initRecentProtocols();
-        }
-      } catch (error) {
-        console.error('Failed to initialize recent protocols:', error);
-      }
       
       try {
         if (typeof initFeedback === 'function') {

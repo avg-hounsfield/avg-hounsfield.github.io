@@ -35,50 +35,47 @@ html {
 }
 
 :root {
-  /* Flat UI 2.0 Core Colors */
-  --turquoise: #1abc9c;
-  --emerald: #2ecc71;
-  --peter-river: #3498db;
-  --amethyst: #9b59b6;
-  --wet-asphalt: #34495e;
-  --midnight-blue: #2c3e50;
-  --sun-flower: #f1c40f;
-  --carrot: #e67e22;
-  --alizarin: #e74c3c;
-  --clouds: #ecf0f1;
-  --silver: #bdc3c7;
-  --concrete: #95a5a6;
-  --asbestos: #7f8c8d;
+  /* Vibrant Color Palette from Coolors */
+  --bright-yellow: #FEC305;
+  --orange: #FE5E02;
+  --red: #C40100;
+  --dark-purple: #3D0021;
+  --very-dark: #0C0A0B;
+  --dark-blue-gray: #13111E;
+  --dark-blue: #211557;
+  --blue: #013195;
+  --medium-blue: #0352AE;
+  --light-blue: #02A6D4;
   
-  /* Theme Colors - Monochromatic Medical Professional Theme */
-  --bg-color: #f8f9fa;            /* Light gray - main background */
-  --primary-surface-bg: #ffffff;  /* White - card backgrounds */
-  --secondary-surface-bg: #f1f3f4; /* Very light gray - secondary surfaces */
-  --text-primary: #212529;        /* Dark gray - primary text */
-  --text-secondary: #6c757d;      /* Medium gray - secondary text */
-  --text-muted: #adb5bd;          /* Light gray - muted text */
-  --interactive-accent: #495057;  /* Dark gray - primary actions */
-  --interactive-accent-hover: #343a40; /* Darker gray on hover */
-  --interactive-accent-text: #ffffff; /* White text on accent */
-  --border-color: #dee2e6;        /* Light gray - borders */
-  --border-color-focus: #495057;  /* Dark gray - focus borders */
-  --link-color: #6c757d;          /* Medium gray - links */
-  --header-color: #343a40;        /* Dark gray - headers */
-  --highlight-bluegreen: #6c757d; /* Medium gray - highlights */
-  --underline-color: #6c757d;     /* Medium gray - underlines */
+  /* Theme Colors - Vibrant Professional Theme */
+  --bg-color: #ffffff;              /* White - main background */
+  --primary-surface-bg: #ffffff;    /* White - card backgrounds */
+  --secondary-surface-bg: #f8f9fa;  /* Light gray - secondary surfaces */
+  --text-primary: #13111E;          /* Dark blue-gray - primary text */
+  --text-secondary: #211557;        /* Dark blue - secondary text */
+  --text-muted: #0352AE;            /* Medium blue - muted text */
+  --interactive-accent: #02A6D4;    /* Light blue - primary actions */
+  --interactive-accent-hover: #0352AE; /* Medium blue on hover */
+  --interactive-accent-text: #ffffff;  /* White text on accent */
+  --border-color: #e9ecef;          /* Light gray - borders */
+  --border-color-focus: #02A6D4;    /* Light blue - focus borders */
+  --link-color: #0352AE;            /* Medium blue - links */
+  --header-color: #211557;          /* Dark blue - headers */
+  --highlight-bluegreen: #02A6D4;   /* Light blue - highlights */
+  --underline-color: #FEC305;       /* Bright yellow - underlines */
   
   /* Status Colors */
-  --success: #2ecc71;             /* Emerald - success */
-  --warning: #f1c40f;             /* Sun Flower - warning */
-  --danger: #e74c3c;              /* Alizarin - danger */
-  --info: #3498db;                /* Peter River - info */
+  --success: #02A6D4;             /* Light blue - success */
+  --warning: #FEC305;             /* Bright yellow - warning */
+  --danger: #C40100;              /* Red - danger */
+  --info: #0352AE;                /* Medium blue - info */
   
   /* Medical Modality Colors */
-  --modality-ct: #3498db;         /* Peter River - CT */
-  --modality-mri: #9b59b6;        /* Amethyst - MRI */
-  --modality-us: #2ecc71;         /* Emerald - Ultrasound */
-  --modality-nm: #e74c3c;         /* Alizarin - Nuclear Medicine */
-  --modality-fluoro: #f1c40f;     /* Sun Flower - Fluoroscopy */
+  --modality-ct: #0352AE;         /* Medium blue - CT */
+  --modality-mri: #3D0021;        /* Dark purple - MRI */
+  --modality-us: #02A6D4;         /* Light blue - Ultrasound */
+  --modality-nm: #C40100;         /* Red - Nuclear Medicine */
+  --modality-fluoro: #FE5E02;     /* Orange - Fluoroscopy */
   
   /* Flat UI Shadows */
   --shadow-flat: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -132,16 +129,31 @@ body {
 
 /* Dark theme override for users who prefer it */
 .dark-theme {
-  --bg-color: #212529;
-  --primary-surface-bg: #343a40;
-  --secondary-surface-bg: #495057;
-  --text-primary: #f8f9fa;
-  --text-secondary: #adb5bd;
-  --text-muted: #6c757d;
-  --border-color: #495057;
-  --interactive-accent: #adb5bd;
-  --interactive-accent-hover: #f8f9fa;
-  --header-color: #f8f9fa;
+  --bg-color: #0C0A0B;              /* Very dark - main background */
+  --primary-surface-bg: #13111E;    /* Dark blue-gray - card backgrounds */
+  --secondary-surface-bg: #211557;  /* Dark blue - secondary surfaces */
+  --text-primary: #ffffff;          /* White - primary text */
+  --text-secondary: #02A6D4;        /* Light blue - secondary text */
+  --text-muted: #0352AE;            /* Medium blue - muted text */
+  --border-color: #3D0021;          /* Dark purple - borders */
+  --interactive-accent: #FEC305;    /* Bright yellow - primary actions */
+  --interactive-accent-hover: #FE5E02; /* Orange on hover */
+  --header-color: #FEC305;          /* Bright yellow - headers for visibility */
+  --bright-yellow: #FEC305;         /* Ensure yellow stays bright in dark mode */
+}
+
+/* Ensure good contrast in dark mode */
+.dark-theme .protocol-group h2 {
+  color: var(--bright-yellow);
+  border-bottom-color: var(--light-blue);
+}
+
+.dark-theme .clinical-indication {
+  border-left-color: var(--orange);
+}
+
+.dark-theme .contrast-value.contrast-no {
+  color: var(--light-blue);
 }
 
 /* Light theme fallbacks */
@@ -202,10 +214,12 @@ body {
 }
 
 .protocol-group h2 {
-  color: var(--text-primary);
+  color: var(--header-color);
   margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 2px solid var(--interactive-accent);
+  border-bottom: 3px solid var(--bright-yellow);
+  font-weight: 700;
+  font-size: 1.5em;
 }
 
 /* Minimal fade animation - opacity only for maximum smoothness */
@@ -304,26 +318,73 @@ h3 {
   margin-bottom: 20px; /* Add space between Contrast and Sequences accordion */
 }
 
-/* Accent for "Contrast: Yes" - more legible green */
-.contrast-value.contrast-yes {
-  color: #27ae60;
-  font-weight: 700;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+/* Modern Flat UI 2.0 Contrast Display */
+.protocol-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
 }
 
-.contrast-value.contrast-no {
-  color: #6c757d;
+.contrast-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-lg);
+  font-size: 0.85em;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all var(--transition-fast);
+  border: 2px solid;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Ensure contrast label has normal weight */
-.contrast-yes {
-  font-weight: 400;
+.contrast-indicator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.contrast-indicator:hover::before {
+  left: 100%;
+}
+
+.contrast-indicator.contrast-yes {
+  background: linear-gradient(135deg, var(--light-blue), var(--medium-blue));
+  color: white;
+  border-color: var(--medium-blue);
+  box-shadow: 0 4px 12px rgba(2, 166, 212, 0.3);
+}
+
+.contrast-indicator.contrast-no {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  color: var(--dark-blue);
+  border-color: var(--border-color);
+  box-shadow: 0 4px 12px rgba(33, 21, 87, 0.1);
+}
+
+.contrast-icon {
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.dark-theme .contrast-indicator.contrast-no {
+  background: linear-gradient(135deg, var(--dark-blue-gray), var(--dark-blue));
+  color: var(--light-blue);
+  border-color: var(--dark-purple);
 }
 
 /* Sequence styling */
 li.contrast-sequence {
-  color: var(--underline-color); /* Same orange color as "Contrast = Yes" */
+  color: var(--orange); /* Orange from palette */
   font-weight: 600;
 }
 li.contrast-sequence strong {
@@ -332,7 +393,7 @@ li.contrast-sequence strong {
 
 /* Highlighted sequences styling */
 li.highlight-sequence {
-  color: var(--underline-color); /* Bold yellow-orange font */
+  color: var(--bright-yellow); /* Bright yellow from palette */
   font-weight: 700; /* Bold */
 }
 
@@ -1308,119 +1369,8 @@ a:hover::after {
   margin-left: 8px;
 }
 
-/* Recently Viewed Protocols */
-.recently-viewed {
-  margin-bottom: 30px;
-  padding: 20px;
-  background: var(--secondary-surface-bg);
-  border-radius: 12px;
-  border-left: 3px solid var(--interactive-accent);
-}
 
-.recently-viewed h3 {
-  margin: 0 0 16px 0;
-  color: var(--text-primary);
-  font-size: 1.1em;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
 
-.recently-viewed h3::before {
-  content: '🕒';
-  font-size: 1.2em;
-}
-
-.recent-protocols {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.recent-protocol-item {
-  background: var(--primary-surface-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 12px 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-  min-width: 200px;
-  max-width: 300px;
-  flex: 1;
-}
-
-.recent-protocol-item:hover {
-  background: var(--border-color);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.recent-protocol-title {
-  font-weight: 600;
-  color: var(--text-primary);
-  font-size: 0.95em;
-  margin: 0 0 6px 0;
-  line-height: 1.3;
-}
-
-.recent-protocol-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-}
-
-.recent-protocol-contrast {
-  font-size: 0.8em;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 500;
-}
-
-.recent-protocol-contrast.contrast-yes {
-  background: rgba(64, 180, 166, 0.2);
-  color: var(--interactive-accent);
-}
-
-.recent-protocol-contrast.contrast-no {
-  background: rgba(255, 140, 0, 0.2);
-  color: var(--underline-color);
-}
-
-.recent-protocol-time {
-  font-size: 0.8em;
-  color: var(--text-secondary);
-}
-
-.recent-clear {
-  background: none;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.8em;
-  transition: all 0.2s ease;
-  margin-left: auto;
-}
-
-.recent-clear:hover {
-  background: var(--border-color);
-  color: var(--text-primary);
-}
-
-@media (max-width: 768px) {
-  .recent-protocols {
-    flex-direction: column;
-  }
-  
-  .recent-protocol-item {
-    min-width: auto;
-    max-width: none;
-  }
-}
 
 /* Feedback Widget Styles */
 .feedback-widget {
@@ -2031,17 +1981,17 @@ a:hover::after {
 }
 
 .contrast-yes {
-  background: #27ae60;
+  background: #02A6D4;
   color: white;
-  border-color: #229954;
-  box-shadow: 0 2px 4px rgba(39, 174, 96, 0.3);
+  border-color: #0352AE;
+  box-shadow: 0 2px 4px rgba(2, 166, 212, 0.3);
 }
 
 .contrast-no {
   background: #f8f9fa;
-  color: #6c757d;
-  border-color: #dee2e6;
-  box-shadow: 0 2px 4px rgba(108, 117, 125, 0.15);
+  color: #211557;
+  border-color: #e9ecef;
+  box-shadow: 0 2px 4px rgba(33, 21, 87, 0.15);
 }
 
 .order-details {
@@ -2057,7 +2007,7 @@ a:hover::after {
   font-size: 0.9em;
   line-height: 1.5;
   color: var(--text-secondary);
-  border-left: 4px solid #27ae60;
+  border-left: 4px solid var(--bright-yellow);
   margin-top: 8px;
 }
 
@@ -2080,59 +2030,6 @@ a:hover::after {
   font-weight: 500;
 }
 
-/* Flat UI 2.0 Smart Search Context */
-.search-context {
-  background: var(--primary-surface-bg);
-  border: 2px solid var(--interactive-accent);
-  border-radius: var(--radius-lg);
-  padding: var(--space-lg);
-  margin-bottom: var(--space-xl);
-  box-shadow: var(--shadow-raised);
-  animation: slideInFromTop var(--transition-slow) var(--ease-flat);
-}
-
-.context-note {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0;
-  color: var(--text-primary);
-  font-size: 0.95em;
-  line-height: 1.5;
-}
-
-.context-note .material-symbols-outlined {
-  color: var(--interactive-accent);
-  font-size: 1.2em;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-.context-note strong {
-  color: var(--interactive-accent);
-  font-weight: 500;
-}
-
-@keyframes slideInFromTop {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.05);
-  }
-}
 
 /* Flat UI 2.0 Animation System */
 @keyframes flatFadeIn {

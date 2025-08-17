@@ -258,7 +258,12 @@ function renderProtocolCard(protocol) {
               </button>
             </div>
             <div class="protocol-info">
-              <span class="${contrastClass}">Contrast: <span class="contrast-value ${contrastClass}">${contrastText}</span></span>
+              <div class="contrast-indicator ${contrastClass}">
+                <span class="contrast-icon material-symbols-outlined">
+                  ${protocol.usesContrast ? 'science' : 'block'}
+                </span>
+                <span>Contrast: ${contrastText}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -350,7 +355,12 @@ function renderConsolidatedCard(protocols, groupType, mainProtocolName, cardTitl
               </button>
             </div>
             <div class="protocol-info">
-              <span class="${contrastClass}">Contrast: <span class="contrast-value ${contrastClass}">${contrastText}</span></span>
+              <div class="contrast-indicator ${contrastClass}">
+                <span class="contrast-icon material-symbols-outlined">
+                  ${protocol.usesContrast ? 'science' : 'block'}
+                </span>
+                <span>Contrast: ${contrastText}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -519,38 +529,60 @@ function renderOrderCard(order) {
   const orderTypeBadge = order.orderType && order.orderType !== 'Standard' ? 
     `<span class="order-type-badge">${order.orderType}</span>` : '';
 
-  // Add comprehensive clinical indications based on order type and study name
+  // Add highly specific clinical indications based on exact study patterns
   let clinicalIndications = '';
   const studyUpper = order.study.toUpperCase();
   
-  if (studyUpper.includes('ANGIO')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Vascular Imaging:</strong> Evaluates blood vessels, stenosis, aneurysms, and vascular malformations</div>';
-  } else if (studyUpper.includes('STONE PROTOCOL')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Stone Detection:</strong> Non-contrast imaging to identify kidney and ureteral stones</div>';
-  } else if (studyUpper.includes('LOW DOSE LUNG')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Lung Screening:</strong> Early detection of lung cancer in high-risk patients</div>';
-  } else if (studyUpper.includes('CALCIUM SCORING')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Cardiac Risk Assessment:</strong> Quantifies coronary artery calcium for cardiovascular risk stratification</div>';
-  } else if (studyUpper.includes('ENTEROGRAPHY')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Bowel Imaging:</strong> Evaluates inflammatory bowel disease (Crohn\'s disease, ulcerative colitis)</div>';
+  // Specific study-based indications with unique descriptions
+  if (studyUpper.includes('CT ANGIO BRAIN') || studyUpper.includes('CTA BRAIN')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Cerebral Vascular Assessment:</strong> Evaluates intracranial vessels for aneurysms, stenosis, arteriovenous malformations, and stroke evaluation</div>';
+  } else if (studyUpper.includes('CT ANGIO NECK') || studyUpper.includes('CTA NECK')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Carotid & Vertebral Assessment:</strong> Evaluates extracranial vessels for atherosclerotic disease, dissection, and TIA workup</div>';
+  } else if (studyUpper.includes('CT ANGIO CHEST') || studyUpper.includes('CTA CHEST')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Thoracic Vascular Imaging:</strong> Evaluates aortic dissection, aneurysm, pulmonary embolism, and thoracic outlet syndrome</div>';
+  } else if (studyUpper.includes('CT ANGIO ABDOMEN') || studyUpper.includes('CTA ABDOMEN')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Abdominal Vascular Analysis:</strong> Evaluates aortic aneurysm, mesenteric ischemia, renal artery stenosis, and visceral vessel pathology</div>';
+  } else if (studyUpper.includes('CT ANGIO PULMONARY') || studyUpper.includes('CTPA')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Pulmonary Embolism Detection:</strong> First-line imaging for suspected PE, evaluates pulmonary arteries and parenchymal disease</div>';
+  } else if (studyUpper.includes('CT ANGIO CORONARY')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Coronary Artery Disease Screening:</strong> Non-invasive evaluation of coronary stenosis, bypass graft patency, and cardiac anatomy</div>';
+  } else if (studyUpper.includes('STONE PROTOCOL') || studyUpper.includes('CT STONE')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Urolithiasis Detection:</strong> Non-contrast imaging optimized for kidney stones, ureteral calculi, and alternative diagnoses for flank pain</div>';
+  } else if (studyUpper.includes('LOW DOSE LUNG') || studyUpper.includes('LDCT LUNG')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Lung Cancer Screening:</strong> Low-dose CT for high-risk patients (30+ pack-year history, age 50-80) per USPSTF guidelines</div>';
+  } else if (studyUpper.includes('CALCIUM SCORING') || studyUpper.includes('CAC SCORE')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Coronary Risk Stratification:</strong> Quantifies coronary calcium burden for cardiovascular risk assessment and statin therapy guidance</div>';
+  } else if (studyUpper.includes('ENTEROGRAPHY') && studyUpper.includes('CT')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>CT Enterography:</strong> Evaluates Crohn\'s disease activity, complications (strictures, fistulas), and small bowel pathology</div>';
+  } else if (studyUpper.includes('ENTEROGRAPHY') && studyUpper.includes('MR')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>MR Enterography:</strong> Radiation-free assessment of IBD, superior soft tissue contrast for bowel wall evaluation and perianal disease</div>';
   } else if (studyUpper.includes('MRCP')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Biliary System:</strong> Non-invasive evaluation of bile ducts, gallbladder, and pancreatic duct</div>';
-  } else if (studyUpper.includes('PROSTATE')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Prostate Evaluation:</strong> Cancer detection, staging, and treatment monitoring</div>';
-  } else if (studyUpper.includes('BONE DENSITY')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Bone Health Assessment:</strong> Osteoporosis screening and fracture risk evaluation</div>';
-  } else if (studyUpper.includes('PET')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Metabolic Imaging:</strong> Cancer staging, treatment response assessment, and recurrence detection</div>';
-  } else if (studyUpper.includes('BRAIN') || studyUpper.includes('HEAD')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Neurological Imaging:</strong> Evaluation of brain structure, pathology, and function</div>';
-  } else if (studyUpper.includes('SPINE')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Spinal Imaging:</strong> Assessment of spinal cord, vertebrae, and surrounding structures</div>';
-  } else if (studyUpper.includes('CHEST') || studyUpper.includes('THORAX')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Thoracic Imaging:</strong> Evaluation of lungs, heart, and mediastinal structures</div>';
-  } else if (studyUpper.includes('ABDOMEN')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Abdominal Imaging:</strong> Assessment of intra-abdominal organs and pathology</div>';
-  } else if (studyUpper.includes('PELVIS')) {
-    clinicalIndications = '<div class="clinical-indication"><strong>Pelvic Imaging:</strong> Evaluation of pelvic organs and structures</div>';
+    clinicalIndications = '<div class="clinical-indication"><strong>Biliary Tree Visualization:</strong> Non-invasive ERCP alternative for choledocholithiasis, strictures, PSC, and pancreatic duct evaluation</div>';
+  } else if (studyUpper.includes('MRI PROSTATE') || studyUpper.includes('PROSTATE MRI')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Prostate Cancer Evaluation:</strong> PI-RADS assessment for cancer detection, staging, biopsy guidance, and active surveillance</div>';
+  } else if (studyUpper.includes('DEXA') || studyUpper.includes('BONE DENSITY')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Osteoporosis Assessment:</strong> T-score measurement for fracture risk, treatment monitoring, and WHO diagnostic criteria application</div>';
+  } else if (studyUpper.includes('PET/CT') || studyUpper.includes('PET CT')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Oncologic PET/CT:</strong> Cancer staging, restaging, treatment response assessment, and detection of residual/recurrent disease</div>';
+  } else if (studyUpper.includes('CT BRAIN') && !studyUpper.includes('ANGIO')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Acute Neurological Assessment:</strong> First-line imaging for stroke, trauma, headache, altered mental status, and intracranial pathology</div>';
+  } else if (studyUpper.includes('MRI BRAIN') && !studyUpper.includes('ANGIO')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Advanced Brain Imaging:</strong> Superior soft tissue contrast for tumor characterization, demyelinating disease, posterior fossa, and brainstem evaluation</div>';
+  } else if (studyUpper.includes('CT SPINE CERVICAL') || studyUpper.includes('CT C-SPINE')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Cervical Spine Trauma:</strong> Rapid assessment for fractures, dislocations, and spinal instability in trauma patients</div>';
+  } else if (studyUpper.includes('MRI SPINE CERVICAL') || studyUpper.includes('MRI C-SPINE')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Cervical Spine Pathology:</strong> Evaluates disc herniation, spinal stenosis, myelopathy, radiculopathy, and cord compression</div>';
+  } else if (studyUpper.includes('CT CHEST') && !studyUpper.includes('ANGIO')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Thoracic Pathology Assessment:</strong> Evaluates pulmonary nodules, infections, pleural disease, mediastinal masses, and interstitial lung disease</div>';
+  } else if (studyUpper.includes('CT ABDOMEN') && studyUpper.includes('PELVIS')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Abdominopelvic Evaluation:</strong> Comprehensive assessment for oncologic staging, infection, trauma, and organ-specific pathology</div>';
+  } else if (studyUpper.includes('ULTRASOUND ABDOMEN') || studyUpper.includes('US ABDOMEN')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Abdominal Ultrasound:</strong> First-line imaging for gallbladder disease, hepatic pathology, renal assessment, and abdominal pain evaluation</div>';
+  } else if (studyUpper.includes('ULTRASOUND PELVIS') || studyUpper.includes('US PELVIS')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Pelvic Ultrasound:</strong> Evaluates gynecologic pathology, pregnancy, ovarian cysts, uterine fibroids, and pelvic pain</div>';
+  } else {
+    // Fallback for unmatched studies
+    clinicalIndications = '<div class="clinical-indication"><strong>Diagnostic Imaging:</strong> Specialized imaging study tailored to clinical presentation and suspected pathology</div>';
   }
 
   return `
