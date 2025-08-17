@@ -22,18 +22,24 @@
   <body data-theme="light">
 
     <!-- ✅ PASTE THIS ENTIRE BLOCK HERE -->
-    <div id="favorites-sidebar" class="favorites-sidebar">
+<!-- ✅ NEW, CORRECTED STRUCTURE -->
+<div id="favorites-sidebar" class="favorites-sidebar">
+    <!-- The sidebar content is now the main container -->
+    <div class="sidebar-content" id="sidebar-content">
+    
+        <!-- The trigger is now INSIDE the content container -->
         <div class="sidebar-trigger" id="sidebar-trigger">
             <span class="material-symbols-outlined">favorite</span>
             <span class="favorites-count" id="favorites-count">0</span>
         </div>
-        <div class="sidebar-content" id="sidebar-content">
-            <div class="sidebar-header">
-                <h3>Favorite Protocols</h3>
-                <button class="sidebar-close" id="sidebar-close" aria-label="Close favorites">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
+        
+        <div class="sidebar-header">
+            <h3>Favorite Protocols</h3>
+            <button class="sidebar-close" id="sidebar-close" aria-label="Close favorites">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
             <div class="sidebar-body">
                 <div id="favorites-list" class="favorites-list">
                     <!-- Favorite items will be added here by JavaScript -->

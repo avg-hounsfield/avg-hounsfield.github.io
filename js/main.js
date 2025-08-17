@@ -1,13 +1,13 @@
-// js/main.js
+// js/main.js - COMPLETE AND CORRECTED VERSION
 
-// Import your render function at the top
+// Import the render function at the very top
 import { renderGroupedProtocols } from './render.js';
 
 // The entire application logic is wrapped in this single event listener
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- DOM ELEMENTS ---
-    // It's best to declare all your element variables at the top
+    // All element variables are declared together at the top for clarity
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
     const resultsContainer = document.getElementById('results');
@@ -17,14 +17,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebarContent = document.getElementById('sidebar-content');
 
     // --- STATE ---
-    // ✅ This code has been moved inside the listener
     let allProtocols = [];
     let allOrders = [];
 
     // --- FUNCTIONS ---
-    // ✅ This function has been moved inside the listener
+
+    /**
+     * Toggles the visibility of an accordion panel with a smooth animation.
+     * @param {string} accordionId - The ID of the content panel to toggle.
+     */
+    function toggleAccordion(accordionId) {
+        const content = document.getElementById(accordionId);
+        if (!content) return;
+
+        const header = document.querySelector(`[data-accordion-id="${accordionId}"]`);
+        const toggleIcon = header ? header.querySelector('.accordion-toggle') : null;
+        
+        const isOpen = content.classList.contains('open');
+
+        if (isOpen) {
+            content.classList.remove('open');
+            content.style.maxHeight = '0px';
+            if (toggleIcon) toggleIcon.classList.remove('expanded');
+        } else {
+            content.classList.add('open');
+            content.style.maxHeight = content.scrollHeight + 'px';
+            if (toggleIcon) toggleIcon.classList.add('expanded');
+        }
+    }
+
+    /**
+     * Finds all accordion headers in the results and attaches click listeners.
+     * This is called every time new results are rendered.
+     */
+    function attachAccordionListeners() {
+        const accordionHeaders = document.querySelectorAll('[data-accordion-id]');
+        accordionHeaders.forEach(header => {
+            // Check if a listener has already been attached
+            if (!header.dataset.listenerAttached) {
+                header.addEventListener('click', () => {
+                    const accordionId = header.dataset.accordionId;
+                    toggleAccordion(accordionId);
+                });
+                header.dataset.listenerAttached = 'true';
+            }
+        });
+    }
+
+    /**
+     * Fetches protocol and order data from JSON files.
+     */
     async function loadData() {
-        // Safety check to ensure resultsContainer was found
         if (!resultsContainer) return;
         resultsContainer.innerHTML = `<p>Loading data...</p>`;
         try {
@@ -48,9 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ✅ This function has been moved inside the listener
+    /**
+     * Filters data based on search query and renders the results.
+     */
     function handleSearch() {
-        // Safety checks
         if (!searchInput || !dataSourceToggle || !resultsContainer) return;
 
         const query = searchInput.value.toLowerCase().trim();
@@ -76,19 +120,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 return acc;
             }, {});
             resultsContainer.innerHTML = renderGroupedProtocols(grouped, isOrdersMode);
+            
+            // After rendering, attach listeners to the new accordion elements
+            attachAccordionListeners();
         }
     }
 
     // --- EVENT LISTENERS ---
 
     // Search event listeners
-    // ✅ This code has been moved inside the listener
     if (searchButton && searchInput && dataSourceToggle) {
         searchButton.addEventListener('click', handleSearch);
         searchInput.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter') {
-                handleSearch();
-            }
+            if (event.key === 'Enter') handleSearch();
         });
         dataSourceToggle.addEventListener('change', handleSearch);
     }
@@ -98,11 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
         sidebarTrigger.addEventListener('click', () => {
             sidebarContent.classList.toggle('open');
         });
-
         sidebarClose.addEventListener('click', () => {
             sidebarContent.classList.remove('open');
         });
-
         document.addEventListener('click', (event) => {
             if (!sidebarContent.contains(event.target) && !sidebarTrigger.contains(event.target)) {
                 sidebarContent.classList.remove('open');
@@ -111,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // --- INITIALIZATION ---
-    // ✅ The initial call to loadData is now correctly at the end, inside the listener
+    // Start the application by loading the data
     loadData();
 
-}); // <-- This is the one, correct closing bracket for the DOMContentLoaded listener
+});

@@ -369,6 +369,89 @@ button:hover, .button:hover {
 .modality-fluoroscopy { background: var(--modality-fluoro); color: var(--text-primary); }
 .order-type-badge { background: var(--interactive-accent); }
 
+
+/* ========================================================================== */
+/* Dark Theme Overrides                                                       */
+/* ========================================================================== */
+
+/* 1. Main Card Backgrounds & Text */
+body[data-theme="dark"] .protocol-card,
+body[data-theme="dark"] .order-card {
+  background-color: var(--md-sys-color-surface-container-low); /* Dark surface */
+  color: var(--md-sys-color-on-surface); /* Light text */
+  border-color: var(--md-sys-color-outline-variant); /* Subtle dark border */
+}
+
+/* 2. Card Header Text */
+body[data-theme="dark"] .protocol-card h3,
+body[data-theme="dark"] .order-card h3 {
+  color: var(--md-sys-color-on-surface); /* Light text for titles */
+}
+
+/* 3. Accordion / Sub-card Styling */
+body[data-theme="dark"] .sequences-card,
+body[data-theme="dark"] .indications-card,
+body[data-theme="dark"] .sub-protocols-card,
+body[data-theme="dark"] .scanner-notes-card {
+  background-color: var(--primary-surface-bg); /* Use the slightly darker surface */
+  border-color: var(--border-color);
+}
+
+body[data-theme="dark"] .sequences-header:hover,
+body[data-theme="dark"] .indications-header:hover,
+body[data-theme="dark"] .sub-protocols-header:hover,
+body[data-theme="dark"] .scanner-notes-header:hover {
+  background-color: var(--secondary-surface-bg);
+}
+
+body[data-theme="dark"] .sequences-content,
+body[data-theme="dark"] .indications-content,
+body[data-theme="dark"] .sub-protocols-content,
+body[data-theme="dark"] .scanner-notes-content {
+  background-color: var(--secondary-surface-bg);
+}
+
+
+/* 4. Update Accent Colors with Purple Variants */
+
+/* Clinical Indication Box (left border) */
+body[data-theme="dark"] .clinical-indication {
+  background-color: var(--secondary-surface-bg);
+  /* Use the main primary color, which is bright in dark mode */
+  border-left-color: var(--md-sys-color-primary);
+}
+
+/* Accordion Card Borders (using primary, secondary, tertiary from dark theme) */
+body[data-theme="dark"] .sequences-card {
+  border-left-color: var(--md-sys-color-secondary); /* A bright secondary color */
+}
+
+body[data-theme="dark"] .indications-card {
+  border-left-color: var(--md-sys-color-tertiary); /* A bright tertiary color */
+}
+
+/* Ensure the header text for these cards also uses the brighter accent colors */
+body[data-theme="dark"] .sequences-header h4 {
+  color: var(--md-sys-color-secondary);
+}
+
+body[data-theme="dark"] .indications-header h4 {
+  color: var(--md-sys-color-tertiary);
+}
+
+/* Highlighted and contrast text inside the cards */
+body[data-theme="dark"] li.contrast-sequence {
+  color: var(--md-sys-color-primary);
+}
+
+body[data-theme="dark"] li.highlight-sequence {
+  color: var(--md-sys-color-tertiary);
+}
+
+body[data-theme="dark"] .indications-content .contrast-rationale strong {
+  color: var(--md-sys-color-tertiary);
+}
+
 /* ========================================================================== */
 /* Accordions (Sequences, Notes, etc.)                                        */
 /* ========================================================================== */
@@ -402,6 +485,36 @@ button:hover, .button:hover {
 .indications-content .contrast-rationale strong { color: var(--highlight-yellow-orange); }
 li.contrast-sequence { color: var(--md-sys-color-primary); font-weight: 600; }
 li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700; }
+
+/* ========================================================================== */
+/* Accordion Animation & State                                                */
+/* ========================================================================== */
+
+/* The content panel starts with a max-height of 0 and hidden overflow */
+.sequences-content, .indications-content, .sub-protocols-content, .scanner-notes-content {
+    max-height: 0;
+    overflow: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+
+/* When the 'open' class is added, it animates to its full height */
+.sequences-content.open,
+.indications-content.open,
+.sub-protocols-content.open,
+.scanner-notes-content.open {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* Style for the + / - toggle icon */
+.accordion-toggle {
+    transition: transform 0.3s ease;
+}
+.accordion-toggle.expanded {
+    transform: rotate(45deg);
+}
 
 /* ========================================================================== */
 /* Data Toggle Slider                                                         */
@@ -465,17 +578,96 @@ body[data-theme="dark"] .slider-label.active {
     color: var(--interactive-accent-text);
 }
 /* ... Other widget styles like favorites, feedback, etc. go here ... */
-.favorites-sidebar { /* ... */ }
-.feedback-widget { /* ... */ }
-.loading-container { text-align: center; padding: 2rem; }
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--border-color);
-    border-top: 3px solid var(--interactive-accent);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 1rem;
+/* ========================================================================== */
+/* Favorites Sidebar (Corrected Version)                                      */
+/* ========================================================================== */
+
+.favorites-sidebar {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 1001;
+  /* Add this to allow the trigger to be positioned outside */
+  padding-left: 60px; 
+}
+
+.sidebar-content {
+  position: relative; /* Needed for positioning the trigger */
+  width: 350px;
+  max-height: 80vh;
+  background: var(--primary-surface-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px; /* Rounded on all corners now */
+  box-shadow: var(--shadow-floating);
+  transition: transform 0.4s ease;
+  transform: translateX(calc(100% - 60px)); /* Start mostly hidden, with trigger showing */
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-content.open {
+  transform: translateX(0); /* Slide fully into view */
+}
+
+.sidebar-trigger {
+  position: absolute;
+  /* Position it perfectly to the left of the panel */
+  left: 0;
+  top: 50%;
+  transform: translate(-100%, -50%); /* Move it outside the parent */
+  
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  padding: 16px 12px;
+  border-radius: 12px 0 0 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: background-color 0.3s ease; /* Remove the transform transition */
+  box-shadow: var(--shadow-raised);
+}
+
+.sidebar-trigger:hover {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  /* The problematic transform:hover is now gone */
+}
+
+/* The rest of the sidebar styles are mostly the same */
+.favorites-count {
+  background: var(--md-sys-color-on-primary);
+  color: var(--md-sys-color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+.sidebar-header {
+  padding: 20px;
+  background: var(--secondary-surface-bg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sidebar-close {
+  background: transparent;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+}
+.sidebar-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.empty-favorites {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 40px 20px;
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
