@@ -174,22 +174,22 @@ input:focus, select:focus, textarea:focus {
   /* Shape & Color */
   border: none;
   border-radius: 16px;
-  background-color: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
   
   /* Typography */
   font-family: 'Jost', sans-serif;
-  font-weight: 500;
+  font-weight: 700;
   font-size: 0.875rem;
   letter-spacing: 0.1px;
-  text-transform: none; /* ✅ REMOVED ALL CAPS */
+  text-transform: none;
 
   /* Effects */
   position: relative; /* Needed for the gradient overlay */
   overflow: hidden; /* Keeps the gradient inside the button */
   box-shadow: var(--shadow-raised);
   cursor: pointer;
-  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Gradient Overlay on Hover */
@@ -200,13 +200,17 @@ input:focus, select:focus, textarea:focus {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, rgba(255,255,255,0.15), rgba(255,255,255,0));
+  background: linear-gradient(45deg, rgba(var(--md-sys-color-primary-rgb), 0.3), rgba(var(--md-sys-color-primary-rgb), 0.1));
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .m3-extended-fab:hover {
   box-shadow: var(--shadow-floating);
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  transform: scale(1.05);
+  border: none;
 }
 
 .m3-extended-fab:hover::after {
@@ -215,6 +219,7 @@ input:focus, select:focus, textarea:focus {
 
 .m3-extended-fab:active {
   box-shadow: var(--shadow-flat);
+  transform: scale(0.98);
 }
 
 /* Filled Text Field Style */
@@ -241,6 +246,7 @@ input:focus, select:focus, textarea:focus {
   top: 50%;
   transform: translateY(-50%);
   color: var(--md-sys-color-on-surface-variant);
+  font-style: italic;
   pointer-events: none;
   transition: all 0.2s ease;
   background-color: var(--md-sys-color-surface-container-highest);
@@ -266,6 +272,7 @@ input:focus, select:focus, textarea:focus {
   outline: none;
   background: transparent;
   padding: 16px 0 8px 0; /* Adjust padding for label space */
+  font-family: 'Jost', sans-serif;
   font-size: 1rem;
   color: var(--md-sys-color-on-surface);
 }
@@ -429,7 +436,7 @@ button:hover, .button:hover {
 
 /* Specific styles for outlined contrast badges */
 .contrast-badge {
-  border: 1.5px solid; /* A slightly thicker border looks better */
+  border: none;
   transition: all 0.2s ease;
 }
 
@@ -455,7 +462,7 @@ body[data-theme="dark"] .order-card {
   color: var(--md-sys-color-on-surface); /* Light text */
   background-image: linear-gradient(rgba(var(--md-sys-color-primary-rgb), 0.08), rgba(var(--md-sys-color-primary-rgb), 0.08));
   box-shadow: 0px 4px 8px 3px rgba(0,0,0,0.3), 0px 1px 3px 1px rgba(0,0,0,0.25);
-  border: 1px solid var(--md-sys-color-surface-container-high); /* Add a very subtle border for definition */
+  border: none;
 }
 
 body[data-theme="dark"] .protocol-card:hover,
@@ -630,17 +637,55 @@ body[data-theme="dark"] .accordion-content-inner li.highlight-sequence {
   color: var(--md-sys-color-tertiary);
 }
 
+/* Dark theme overrides for toggle switch and favorites sidebar */
+body[data-theme="dark"] .m3-switch-track {
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+body[data-theme="dark"] .m3-switch-thumb {
+  background-color: var(--md-sys-color-surface-container-highest);
+}
+
+body[data-theme="dark"] .m3-switch input:checked + .m3-switch-track {
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
+body[data-theme="dark"] .sidebar-content {
+  background-color: #ffffff;
+  color: var(--md-sys-color-on-surface);
+}
+
+body[data-theme="dark"] .sidebar-header {
+  background-color: #f5f5f5;
+  color: var(--md-sys-color-on-surface);
+}
+
+body[data-theme="dark"] .sidebar-body {
+  color: var(--md-sys-color-on-surface);
+}
+
+body[data-theme="dark"] .sidebar-trigger {
+  background-color: #e8e8e8;
+  color: #333333;
+}
+
+body[data-theme="dark"] .sidebar-trigger:hover {
+  background-color: #d0d0d0;
+  color: #333333;
+}
+
 /* ========================================================================== */
 /* Accordions (Sequences, Notes, etc.)                                        */
 /* ========================================================================== */
 .sequences-card, .indications-card, .sub-protocols-card, .scanner-notes-card {
     width: 100%;
-    margin: 1rem 0 0 0;
+    margin: 0.75rem 0 0 0;
     background: transparent;
     border-radius: var(--radius-md);
     box-shadow: none;
-    /* border: 1px solid var(--border-color); */ /* REMOVED */
-    border: none; /* Explicitly remove border */
+    border: none;
     overflow: hidden;
 
     /* Keep the left accent border */
@@ -648,18 +693,20 @@ body[data-theme="dark"] .accordion-content-inner li.highlight-sequence {
     border-left-style: solid;
 }
 .sequences-header, .indications-header, .sub-protocols-header, .scanner-notes-header {
-    padding: 15px 20px;
+    padding: 8px 16px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 1px;
 }
 .sequences-header:hover, .indications-header:hover, .sub-protocols-header:hover, .scanner-notes-header:hover {
     background-color: var(--secondary-surface-bg);
 }
 .sequences-content, .indications-content, .sub-protocols-content, .scanner-notes-content {
-    padding: 20px;
+    padding: 12px 16px;
     background-color: var(--secondary-surface-bg);
+    margin-top: 1px;
 }
 .sequences-card { border-left: 3px solid var(--md-sys-color-secondary); }
 .sequences-header h4 { color: var(--md-sys-color-secondary); }
@@ -716,10 +763,16 @@ li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700;
 
 .filter-toggle-label {
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
-  user-select: none; /* Prevent text selection on click */
+  user-select: none;
+  transition: font-weight 0.2s ease;
+}
+
+/* Increase font weight when switch is checked */
+.filter-toggle-wrapper:has(#dataSourceToggle:checked) .filter-toggle-label {
+  font-weight: 700;
 }
 
 .m3-switch {
@@ -742,7 +795,7 @@ li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700;
   width: 100%;
   height: 100%;
   background-color: var(--md-sys-color-surface-container-highest);
-  border: 2px solid var(--md-sys-color-outline);
+  border: none;
   border-radius: 16px;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
@@ -805,7 +858,7 @@ body[data-theme="dark"] .slider-label.active {
     z-index: 1000;
     background: var(--primary-surface-bg);
     color: var(--interactive-accent);
-    border: 1px solid var(--border-color);
+    border: none;
     border-radius: 50%;
     width: 48px;
     height: 48px;
@@ -821,58 +874,8 @@ body[data-theme="dark"] .slider-label.active {
     color: var(--interactive-accent-text);
 }
 /* ========================================================================== */
-/* Favorites Sidebar (Definitive Fix)                                         */
+/* Favorites Sidebar (Removed Conflicting Definition)                        */
 /* ========================================================================== */
-.favorites-sidebar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 100%;
-  width: 350px; /* Width of the panel */
-  z-index: 1001;
-  
-  /* ✅ CORE FIX: Animation logic */
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  /* Start completely hidden off the right side of the screen */
-  transform: translateX(100%); 
-}
-
-.favorites-sidebar.open {
-  /* When open, slide fully into view */
-  transform: translateX(0); 
-}
-
-.sidebar-trigger {
-  position: absolute;
-  /* Position it perfectly on the left edge of its parent (.favorites-sidebar) */
-  left: 0;
-  top: 50%;
-  /* Move it completely outside its parent's boundary to the left */
-  transform: translate(-100%, -50%); 
-  
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
-  padding: 16px 12px;
-  width: 48px;
-  border-radius: 12px 0 0 12px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  transition: background-color 0.3s ease;
-  box-shadow: var(--shadow-raised);
-}
-
-.sidebar-content {
-  width: 100%;
-  height: 100%;
-  background: var(--primary-surface-bg);
-  border-left: 1px solid var(--border-color);
-  box-shadow: var(--shadow-floating);
-  display: flex;
-  flex-direction: column;
-}
 
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -913,6 +916,7 @@ body[data-theme="dark"] .slider-label.active {
   right: 0;
   transform: translateY(-50%);
   z-index: 1001; /* Higher than theme toggle */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-trigger {
@@ -936,7 +940,7 @@ body[data-theme="dark"] .slider-label.active {
 .sidebar-trigger:hover {
   background: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
-  transform: translateY(-50%) translateX(4px);
+  transform: translateY(-50%) translateX(-4px);
 }
 
 .favorites-count {
@@ -952,17 +956,17 @@ body[data-theme="dark"] .slider-label.active {
   width: 350px;
   max-height: 80vh;
   background: var(--primary-surface-bg);
-  border: 1px solid var(--border-color);
+  border: none;
   border-radius: 12px 0 0 12px;
   box-shadow: var(--shadow-floating);
-  transition: transform 0.4s ease;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateX(100%); /* Start hidden off-screen */
   display: flex;
   flex-direction: column;
 }
 
-.sidebar-content.open {
-  transform: translateX(0); /* Slide in */
+.favorites-sidebar.open .sidebar-content {
+  transform: translateX(0); /* Slide in when sidebar is open */
 }
 
 .sidebar-header {

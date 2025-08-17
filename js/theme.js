@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function applyTheme(theme) {
         body.setAttribute('data-theme', theme);
-        themeIcon.textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
+        themeIcon.textContent = theme === 'dark' ? 'dark_mode' : 'light_mode';
         if (themeMeta) {
             themeMeta.setAttribute('content', theme === 'dark' ? darkThemeColor : lightThemeColor);
         }
@@ -32,5 +32,5 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(newTheme);
     });
 
-    applyTheme(localStorage.getItem('theme') || getSystemTheme());
+    applyTheme(localStorage.getItem('theme') || 'dark');
 });

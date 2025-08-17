@@ -99,9 +99,9 @@ function toggleSidebar() {
 
 // Open sidebar
 function openSidebar() {
-  const content = document.getElementById('favorites-sidebar');
-  if (content) {
-    content.classList.add('open');
+  const sidebar = document.getElementById('favorites-sidebar');
+  if (sidebar) {
+    sidebar.classList.add('open');
     sidebarOpen = true;
     renderFavoritesList(); // Refresh the list when opening
   }
@@ -109,9 +109,9 @@ function openSidebar() {
 
 // Close sidebar
 function closeSidebar() {
-  const content = document.getElementById('favorites-sidebar');
-  if (content) {
-    content.classList.remove('open');
+  const sidebar = document.getElementById('favorites-sidebar');
+  if (sidebar) {
+    sidebar.classList.remove('open');
     sidebarOpen = false;
   }
 }
