@@ -1,138 +1,31 @@
-/* ========================================================================== */
-/* App-Specific Variable Mappings (The single source of truth)                */
-/* ========================================================================== */
+/* All your :root variables here */
 :root {
-  /* App-specific tokens mapped to Material 3 system roles */
   --bg-color: var(--md-sys-color-background);
-  --primary-surface-bg: var(--md-sys-color-surface-container-low);
-  --secondary-surface-bg: var(--md-sys-color-surface-container);
-  --text-primary: var(--md-sys-color-on-surface);
-  --text-secondary: var(--md-sys-color-on-surface-variant);
-  --interactive-accent: var(--md-sys-color-primary);
-  --interactive-accent-hover: var(--md-sys-color-primary-container);
-  --interactive-accent-text: var(--md-sys-color-on-primary);
-  --border-color: var(--md-sys-color-outline-variant);
-  --border-color-focus: var(--md-sys-color-outline);
-  --link-color: var(--md-sys-color-primary);
-  --header-color: var(--md-sys-color-primary);
-  
-  /* Using tertiary color for distinct highlights */
-  --highlight-yellow-orange: var(--md-sys-color-tertiary);
-  --on-highlight-yellow-orange: var(--md-sys-color-on-tertiary-container);
-  
-  /* Using secondary color for other accents */
-  --highlight-purple: var(--md-sys-color-secondary);
-
-  /* Material 3 Elevation Shadows */
-  --shadow-flat: 0px 1px 2px 0px rgba(0,0,0,0.15);
-  --shadow-raised: 0px 2px 6px 2px rgba(0,0,0,0.15);
-  --shadow-floating: 0px 4px 8px 3px rgba(0,0,0,0.15);
-
-  /* Material 3 Shape */
-  --radius-sm: 4px;
-  --radius-md: 12px;
-  --radius-lg: 28px;
+  /* ... etc ... */
 }
 
-/* ========================================================================== */
-/* Base & Global Styles                                                       */
-/* ========================================================================== */
+/* Base styles */
 html {
   scroll-behavior: smooth;
 }
-
-* {
-  box-sizing: border-box;
-}
-
 body {
-  font-family: 'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: 'Jost', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-primary);
-  margin: 0;
-  padding: 2rem;
-  min-height: 100vh;
-  line-height: 1.6;
-  font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* ... etc ... */
 }
 
-/* ========================================================================== */
-/* Animation & Transition Control                                             */
-/* ========================================================================== */
-
-/* The actual transition that will be used when the JS class is present */
-html.theme-in-transition,
-html.theme-in-transition * {
-  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
-}
-
-/* Respect user motion preferences */
-@media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* ========================================================================== */
-/* Typography                                                                 */
-/* ========================================================================== */
-h1, h2, h4, h5, h6 {
-  font-family: 'Jost', sans-serif;
-  font-weight: 700;
-  font-style: normal;
-  color: var(--interactive-accent);
-}
-
-h3 {
-  font-family: 'Jost', sans-serif;
-  font-weight: 700;
-  font-style: normal;
-  color: var(--text-primary);
-}
-
-a {
-  color: var(--link-color);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-a:hover {
-  color: var(--md-sys-color-primary);
-}
-
-/* ========================================================================== */
-/* Components                                                                 */
-/* ========================================================================== */
-
-/* Protocol Groups */
-.protocol-group h2 {
-  color: var(--header-color);
-  border-bottom: 3px solid var(--md-sys-color-primary-container);
-  /* ... other styles */
-}
-
-/* Protocol Cards */
+/* All your other component styles like .protocol-card */
 .protocol-card {
-  display: flex;
-  flex-direction: column;
-  background: var(--primary-surface-bg);
-  border: 1px solid var(--border-color);
+  /* ... */
+}
+
+.clinical-indication {
+  background: var(--secondary-surface-bg);
   border-radius: var(--radius-md);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-flat);
-  /* Add non-theme transitions here */
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--interactive-accent);
+  box-shadow: var(--shadow-flat); /* Safe fallback shadow */
 }
 
-.protocol-card:hover {
-  box-shadow: var(--shadow-raised);
-  border-color: var(--border-color-focus);
-  transform: translateY(-2px);
-}
-
-/* ... (The rest of your component styles go here unchanged) ... */
+/* ... etc ... */
