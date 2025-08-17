@@ -400,21 +400,31 @@ function runSearchAndRender() {
   try {
     let results;
     
-    // Use fuzzy search on the current dataset
-    const allResults = fuzzySearch(query, currentDataset) || [];
+    console.log('Search debug - dataset info:', {
+      isOrdersOnly,
+      currentDatasetLength: currentDataset?.length,
+      datasetName,
+      query
+    });
     
     if (isOrdersOnly) {
-      // Filter to only orders (items with modality field)
-      results = allResults.filter(item => item.modality);
+      // For orders, use the orders dataset and try fuzzy search
+      results = fuzzySearch(query, allOrders) || [];
       
       // Try smart pathology search first for orders
-      const pathologyResults = performPathologySearch(query, currentDataset);
+      const pathologyResults = performPathologySearch(query, allOrders);
       if (pathologyResults.length > 0) {
         results = pathologyResults;
       }
     } else {
-      // Filter to only protocols (items without modality field)
-      results = allResults.filter(item => !item.modality);
+      // For protocols, use the protocols dataset
+      results = fuzzySearch(query, allStudies) || [];
+      
+      console.log('Protocols search debug:', {
+        allStudiesLength: allStudies?.length,
+        resultsLength: results?.length,
+        firstFewResults: results?.slice(0, 3)?.map(r => r.study)
+      });
     }
     
     if (results.length === 0) {
@@ -987,16 +997,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
 
+      console.log('Data loading complete:', {
+        protocolDataLength: protocolData.length,
+        ordersDataLength: ordersData.length,
+        allStudiesLength: allStudies.length,
+        allOrdersLength: allOrders.length,
+        sampleProtocol: allStudies[0],
+        sampleOrder: allOrders[0]
+      });
+
       // Initialize fuzzy search with both flattened lists
       try {
         if (typeof initFuzzy === 'function') {
           // Initialize with all studies - we'll switch datasets dynamically in search
           initFuzzy(allStudies.concat(allOrders));
+          console.log('Fuzzy search initialized successfully');
         }
       } catch (error) {
         console.error('Failed to initialize search:', error);
         // Fallback: basic search without fuzzy matching
         window.fuzzySearch = fuzzySearch = function(query, data) {
+          console.log('Using fallback search for:', query, 'on dataset size:', data?.length);
           return data.filter(function(item) {
             return item.study && item.study.toLowerCase().indexOf(query.toLowerCase()) !== -1;
           });

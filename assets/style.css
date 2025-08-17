@@ -39,22 +39,22 @@ html {
 
 :root {
   
-  /* Theme Colors - Light Theme from colors.css */
+  /* Theme Colors - Light Theme with High Contrast */
   --bg-color: var(--clr-surface-a0);              /* White - main background */
   --primary-surface-bg: var(--clr-surface-a0);    /* White - card backgrounds */
-  --secondary-surface-bg: var(--clr-surface-tonal-a0);  /* Light tonal - secondary surfaces */
+  --secondary-surface-bg: var(--clr-surface-a10); /* More distinct secondary surfaces */
   --text-primary: var(--clr-dark-a0);             /* Black - primary text */
-  --text-secondary: var(--clr-primary-a30);       /* Primary variant - secondary text */
-  --text-muted: var(--clr-primary-a40);           /* Primary muted - muted text */
+  --text-secondary: var(--clr-primary-a0);        /* Strong primary - secondary text */
+  --text-muted: var(--clr-primary-a20);           /* Primary variant - muted text */
   --interactive-accent: var(--clr-primary-a0);    /* Primary - primary actions */
   --interactive-accent-hover: var(--clr-primary-a10); /* Primary hover - hover */
   --interactive-accent-text: var(--clr-light-a0); /* White text on accent */
-  --border-color: var(--clr-surface-a20);         /* Light surface - borders */
+  --border-color: var(--clr-surface-a30);         /* Much darker borders */
   --border-color-focus: var(--clr-primary-a0);    /* Primary - focus borders */
-  --link-color: var(--clr-primary-a20);           /* Primary variant - links */
+  --link-color: var(--clr-primary-a0);            /* Strong primary - links */
   --header-color: var(--clr-primary-a0);          /* Primary - headers */
-  --highlight-bluegreen: var(--clr-primary-a10);  /* Primary variant - highlights */
-  --underline-color: var(--clr-primary-a30);      /* Primary accent - underlines */
+  --highlight-bluegreen: var(--clr-primary-a0);   /* Strong primary - highlights */
+  --underline-color: var(--clr-primary-a0);       /* Strong primary - underlines */
   
   /* Status Colors using color palette */
   --success: var(--clr-primary-a20);     /* Primary variant - success */
@@ -119,21 +119,21 @@ body {
   transition: all var(--transition-normal);
 }
 
-/* Dark theme override for users who prefer it */
+/* Dark theme override with high contrast */
 .dark-theme {
   --bg-color: var(--clr-surface-a0);              /* Dark surface - main background */
   --primary-surface-bg: var(--clr-surface-a10);   /* Dark surface variant - card backgrounds */
-  --secondary-surface-bg: var(--clr-surface-tonal-a0);  /* Dark tonal - secondary surfaces */
+  --secondary-surface-bg: var(--clr-surface-a20); /* More distinct secondary surfaces */
   --text-primary: var(--clr-light-a0);            /* White - primary text */
-  --text-secondary: var(--clr-primary-a40);       /* Primary light - secondary text */
-  --text-muted: var(--clr-primary-a50);           /* Primary lighter - muted text */
-  --border-color: var(--clr-surface-a20);         /* Dark surface border - borders */
-  --interactive-accent: var(--clr-primary-a20);   /* Primary variant - primary actions */
-  --interactive-accent-hover: var(--clr-primary-a30); /* Primary lighter on hover */
-  --header-color: var(--clr-primary-a30);         /* Primary accent - headers for visibility */
-  --link-color: var(--clr-primary-a40);           /* Primary light - links */
-  --highlight-bluegreen: var(--clr-primary-a30);  /* Primary accent - highlights */
-  --underline-color: var(--clr-primary-a40);      /* Primary light - underlines */
+  --text-secondary: var(--clr-primary-a50);       /* Bright primary - secondary text */
+  --text-muted: var(--clr-primary-a40);           /* Primary light - muted text */
+  --border-color: var(--clr-surface-a40);         /* Much lighter borders for contrast */
+  --interactive-accent: var(--clr-primary-a30);   /* Bright primary - primary actions */
+  --interactive-accent-hover: var(--clr-primary-a40); /* Even brighter on hover */
+  --header-color: var(--clr-primary-a40);         /* Bright primary - headers for visibility */
+  --link-color: var(--clr-primary-a50);           /* Brightest primary - links */
+  --highlight-bluegreen: var(--clr-primary-a40);  /* Bright primary - highlights */
+  --underline-color: var(--clr-primary-a50);      /* Brightest primary - underlines */
 }
 
 /* Ensure good contrast in dark mode */
@@ -354,17 +354,19 @@ h3 {
 }
 
 .contrast-indicator.contrast-yes {
-  background: linear-gradient(135deg, var(--clr-primary-a0), var(--clr-primary-a20));
+  background: var(--clr-primary-a0);
   color: var(--clr-light-a0);
-  border-color: var(--clr-primary-a10);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--clr-primary-a0) 30%, transparent);
+  border-color: var(--clr-primary-a0);
+  border-width: 3px;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--clr-primary-a0) 40%, transparent);
 }
 
 .contrast-indicator.contrast-no {
-  background: linear-gradient(135deg, var(--clr-surface-a10), var(--clr-surface-a20));
+  background: var(--clr-surface-a0);
   color: var(--clr-primary-a0);
-  border-color: var(--clr-surface-a30);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--clr-primary-a0) 10%, transparent);
+  border-color: var(--clr-primary-a0);
+  border-width: 3px;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--clr-primary-a0) 20%, transparent);
 }
 
 .contrast-icon {
@@ -1998,8 +2000,10 @@ a:hover::after {
   font-size: 0.9em;
   line-height: 1.5;
   color: var(--text-secondary);
-  border-left: 4px solid var(--clr-primary-a20);
+  border: 2px solid var(--border-color);
+  border-left: 6px solid var(--clr-primary-a0);
   margin-top: 8px;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--clr-primary-a0) 15%, transparent);
 }
 
 .clinical-indication strong {
