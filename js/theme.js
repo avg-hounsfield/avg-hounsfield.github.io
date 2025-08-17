@@ -1,14 +1,13 @@
-// /js/theme.js - BULLETPROOF VERSION
+// js/theme.js
 
 document.addEventListener('DOMContentLoaded', () => {
-
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const body = document.body;
-    const themeMeta = document.getElementById('theme-color-meta'); // This might be null
+    const themeMeta = document.getElementById('theme-color-meta');
 
     if (!themeToggle || !themeIcon) {
-        console.warn('Theme toggle UI elements not found. Theming will be disabled.');
+        console.warn('Theme toggle UI elements not found.');
         return; 
     }
 
@@ -17,39 +16,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function applyTheme(theme) {
         body.setAttribute('data-theme', theme);
-        
-        if (theme === 'dark') {
-            themeIcon.textContent = 'light_mode';
-            themeToggle.title = 'Switch to light mode';
-            // ✅ THIS IS THE FIX: Only set attribute if the element exists
-            if (themeMeta) {
-                themeMeta.setAttribute('content', darkThemeColor);
-            }
-        } else {
-            themeIcon.textContent = 'dark_mode';
-            themeToggle.title = 'Switch to dark mode';
-            // ✅ THIS IS THE FIX: Only set attribute if the element exists
-            if (themeMeta) {
-                themeMeta.setAttribute('content', lightThemeColor);
-            }
+        themeIcon.textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
+        if (themeMeta) {
+            themeMeta.setAttribute('content', theme === 'dark' ? darkThemeColor : lightThemeColor);
         }
-        
         localStorage.setItem('theme', theme);
     }
 
     function getSystemTheme() {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            return 'dark';
-        }
-        return 'light';
+        return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
 
     themeToggle.addEventListener('click', () => {
-        const currentTheme = body.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        const newTheme = body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
         applyTheme(newTheme);
     });
 
-    const initialTheme = localStorage.getItem('theme') || getSystemTheme();
-    applyTheme(initialTheme);
+    applyTheme(localStorage.getItem('theme') || getSystemTheme());
 });

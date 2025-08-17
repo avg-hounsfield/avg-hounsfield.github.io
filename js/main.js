@@ -1,37 +1,89 @@
-// /js/main.js - DEBUGGING VERSION
+// js/main.js
 
-console.log("DEBUG: main.js script file has started execution."); // Log #1
-
-// Keep your imports at the top
+// Import your render function
+// Make sure you have a render.js file that exports this function
 import { renderGroupedProtocols } from './render.js';
-// ... other imports ...
 
 document.addEventListener('DOMContentLoaded', () => {
+    // --- DOM ELEMENTS ---
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const resultsContainer = document.getElementById('results');
+    const dataSourceToggle = document.getElementById('dataSourceToggle');
 
-  console.log("DEBUG: DOMContentLoaded event has fired. The HTML should be ready."); // Log #2
+    if (!searchInput || !searchButton || !resultsContainer || !dataSourceToggle) {
+        console.error('One or more critical UI elements are missing from the HTML!');
+        resultsContainer.innerHTML = '<p class="error">Page failed to initialize. Please check the console.</p>';
+        return;
+    }
+    
+    // --- STATE ---
+    let allProtocols = [];
+    let allOrders = [];
 
-  // Let's check what the document looks like right now
-  console.log("DEBUG: Document body at this moment:", document.body); // Log #3
+    // --- FUNCTIONS ---
+    async function loadData() {
+        resultsContainer.innerHTML = `<p>Loading data...</p>`;
+        try {
+            const [protocolRes, ordersRes] = await Promise.all([
+                fetch('./data/protocols.json'),
+                fetch('./data/imaging-orders.json')
+            ]);
+            if (!protocolRes.ok || !ordersRes.ok) throw new Error('Failed to fetch data files.');
+            
+            const protocolData = await protocolRes.json();
+            const ordersData = await ordersRes.json();
 
-  const searchInput = document.getElementById('searchInput');
-  const searchButton = document.getElementById('searchButton');
-  const resultsContainer = document.getElementById('results');
-  // ... and other elements
+            // Simple flattening of data
+            allProtocols = protocolData.flatMap(p => p.studies.map(s => ({...s, section: p.section[0]})));
+            allOrders = ordersData.flatMap(o => o.studies.map(s => ({...s, section: o.section[0]})));
+            
+            // Initial render
+            handleSearch();
+            
+        } catch (error) {
+            console.error('Data loading error:', error);
+            resultsContainer.innerHTML = `<p class="error">Could not load protocol data.</p>`;
+        }
+    }
 
-  console.log("DEBUG: Attempting to find elements. searchInput is:", searchInput); // Log #4
+    function handleSearch() {
+        const query = searchInput.value.toLowerCase().trim();
+        const isOrdersMode = dataSourceToggle.checked;
+        const dataToSearch = isOrdersMode ? allOrders : allProtocols;
 
-  if (!searchInput || !searchButton || !resultsContainer) {
-    console.error('Required DOM elements not found. Application cannot initialize.');
-    // Let's add more info to this error
-    console.error('Check if the elements with IDs "searchInput", "searchButton", and "results" exist in your index.html file.');
-    return; // Script stops here if elements are not found
-  }
+        if (!query) {
+            resultsContainer.innerHTML = '<p>Enter a search term to begin.</p>';
+            return;
+        }
 
-  // ... The rest of your main.js code follows ...
-  // (For brevity, I'm omitting the rest of the file, just add the logs to your existing one)
+        const results = dataToSearch.filter(item => 
+            item.study.toLowerCase().includes(query)
+        );
 
-  // Example of where to put the rest of your code:
-  let allProtocols = [];
-  // etc...
+        if (results.length === 0) {
+            resultsContainer.innerHTML = `<p>No results found for "${query}".</p>`;
+        } else {
+            // Group results for the render function
+            const grouped = results.reduce((acc, item) => {
+                const key = item.section || 'Other';
+                if (!acc[key]) acc[key] = [];
+                acc[key].push(item);
+                return acc;
+            }, {});
+            resultsContainer.innerHTML = renderGroupedProtocols(grouped, isOrdersMode);
+        }
+    }
 
+    // --- EVENT LISTENERS ---
+    searchButton.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
+    });
+    dataSourceToggle.addEventListener('change', handleSearch);
+
+    // --- INITIALIZATION ---
+    loadData();
 });

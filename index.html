@@ -3,35 +3,25 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MRI Protocol Search - Medical Imaging Reference</title>
-
-    <!-- PWA, Favicon, and Theme Meta Tags -->
-    <meta name="description" content="Search and reference MRI protocols..." />
-    <!-- ✅ FIXED: This meta tag now has the ID the script is looking for -->
+    <title>MRI Protocol Search</title>
     <meta id="theme-color-meta" name="theme-color" content="#FFFbff">
     <link rel="icon" href="data:image/svg+xml,...">
-    <!-- (Your other meta/manifest/apple-touch-icon tags go here) -->
-
+    
     <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
     
-    <!-- ✅ CRITICAL: Your App Stylesheets. Paths are confirmed correct. -->
+    <!-- App Stylesheets -->
     <link rel="stylesheet" href="assets/colors.css">
     <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body data-theme="light">
 
-    <!-- Your entire HTML structure remains the same -->
     <button id="theme-toggle" title="Toggle theme">
         <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
     </button>
-    
-    <div id="favorites-sidebar" class="favorites-sidebar">
-        <!-- ... sidebar content ... -->
-    </div>
     
     <div class="container">
         <header class="main-header">
@@ -40,7 +30,20 @@
                 <div class="search-bar-wrapper">
                     <input type="text" id="searchInput" placeholder="Search protocols...">
                     <button id="searchButton">Search</button>
-                    <!-- ... data toggle ... -->
+                    
+                    <!-- ✅ FIXED: This was missing from some previous versions -->
+                    <div class="data-toggle-wrapper">
+                        <div class="slider-toggle">
+                            <div class="slider-labels">
+                                <span class="slider-label left active" id="protocolsLabel">Protocols</span>
+                                <span class="slider-label right" id="ordersLabel">Orders</span>
+                            </div>
+                            <input type="checkbox" id="dataSourceToggle" />
+                            <label for="dataSourceToggle" class="slider-track">
+                                <span class="slider-thumb"></span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
@@ -49,13 +52,8 @@
         </main>
     </div>
 
-    <!-- ✅ STEP 2: All scripts are now at the VERY END of the body. -->
-    <!-- This GUARANTEES the HTML above is fully loaded before they run. -->
-    
-    <!-- Library Scripts First -->
+    <!-- Scripts at the very end of the body -->
     <script src="https://unpkg.com/lunr@2.3.9/lunr.min.js"></script>
-    
-    <!-- Your App Scripts Last (type="module" is fine here) -->
     <script type="module" src="js/theme.js"></script>
     <script type="module" src="js/main.js"></script>
 
