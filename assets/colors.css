@@ -1,72 +1,218 @@
+/**
+ * Material 3 Theme Generated from Source Color: #6F19D1
+ *
+ * This file is structured in three parts:
+ * 1. Reference Tonal Palettes: The raw materials. These are the 13 tones
+ *    generated for each key color (primary, secondary, etc.). You
+ *    generally don't use these directly in your components.
+ *
+ * 2. Light Theme Mappings: Assigns specific tones from the palettes to
+ *    semantic color roles for the light theme.
+ *
+ * 3. Dark Theme Mappings: Assigns different tones from the same palettes to
+ *    the same semantic color roles for the dark theme.
+ */
 
-/**Dark Theme */
-/** Base colors */
---clr-dark-a0: #000000;
---clr-light-a0: #ffffff;
+/* ========================================================================== */
+/* Part 1: Reference Tonal Palettes                                           */
+/* ========================================================================== */
+:root {
+  /* Primary Palette (from #6F19D1) */
+  --md-ref-palette-primary0: #000000;
+  --md-ref-palette-primary10: #260057;
+  --md-ref-palette-primary20: #3f0089;
+  --md-ref-palette-primary30: #5800b9;
+  --md-ref-palette-primary40: #6f19d1;
+  --md-ref-palette-primary50: #8937ec;
+  --md-ref-palette-primary60: #a258ff;
+  --md-ref-palette-primary70: #bc79ff;
+  --md-ref-palette-primary80: #d49cff;
+  --md-ref-palette-primary90: #eaddff;
+  --md-ref-palette-primary95: #f6edff;
+  --md-ref-palette-primary98: #fdf7ff;
+  --md-ref-palette-primary99: #fffbff;
+  --md-ref-palette-primary100: #ffffff;
 
-/** Theme primary colors */
---clr-primary-a0: #6439e6;
---clr-primary-a10: #7b4fea;
---clr-primary-a20: #8f65ed;
---clr-primary-a30: #a17af0;
---clr-primary-a40: #b290f3;
---clr-primary-a50: #c3a6f6;
+  /* Secondary Palette (generated) */
+  --md-ref-palette-secondary0: #000000;
+  --md-ref-palette-secondary10: #1e192b;
+  --md-ref-palette-secondary20: #332e41;
+  --md-ref-palette-secondary30: #4a4458;
+  --md-ref-palette-secondary40: #625b71;
+  --md-ref-palette-secondary50: #7b7289;
+  --md-ref-palette-secondary60: #958da5;
+  --md-ref-palette-secondary70: #b0a7c0;
+  --md-ref-palette-secondary80: #ccc2dc;
+  --md-ref-palette-secondary90: #e8def8;
+  --md-ref-palette-secondary95: #f6edff;
+  --md-ref-palette-secondary98: #fdf7ff;
+  --md-ref-palette-secondary99: #fffbff;
+  --md-ref-palette-secondary100: #ffffff;
 
-/** Theme surface colors */
---clr-surface-a0: #121212;
---clr-surface-a10: #282828;
---clr-surface-a20: #3f3f3f;
---clr-surface-a30: #575757;
---clr-surface-a40: #717171;
---clr-surface-a50: #8b8b8b;
+  /* Tertiary Palette (generated) */
+  --md-ref-palette-tertiary0: #000000;
+  --md-ref-palette-tertiary10: #31101d;
+  --md-ref-palette-tertiary20: #492532;
+  --md-ref-palette-tertiary30: #633b48;
+  --md-ref-palette-tertiary40: #7d5260;
+  --md-ref-palette-tertiary50: #986977;
+  --md-ref-palette-tertiary60: #b58392;
+  --md-ref-palette-tertiary70: #d29dac;
+  --md-ref-palette-tertiary80: #efb8c8;
+  --md-ref-palette-tertiary90: #ffd8e4;
+  --md-ref-palette-tertiary95: #ffecf0;
+  --md-ref-palette-tertiary98: #fff8f8;
+  --md-ref-palette-tertiary99: #fffbff;
+  --md-ref-palette-tertiary100: #ffffff;
 
-/** Theme tonal surface colors */
---clr-surface-tonal-a0: #1c1724;
---clr-surface-tonal-a10: #312c39;
---clr-surface-tonal-a20: #47434e;
---clr-surface-tonal-a30: #5f5b65;
---clr-surface-tonal-a40: #78747d;
---clr-surface-tonal-a50: #918e96;
+  /* Neutral Palette (for surfaces) */
+  --md-ref-palette-neutral0: #000000;
+  --md-ref-palette-neutral10: #1d1b20;
+  --md-ref-palette-neutral20: #322f35;
+  --md-ref-palette-neutral30: #48464c;
+  --md-ref-palette-neutral40: #605d64;
+  --md-ref-palette-neutral50: #79767d;
+  --md-ref-palette-neutral60: #938f97;
+  --md-ref-palette-neutral70: #aea9b2;
+  --md-ref-palette-neutral80: #c9c5cd;
+  --md-ref-palette-neutral90: #e6e1e9;
+  --md-ref-palette-neutral95: #f5eff7;
+  --md-ref-palette-neutral98: #fef7ff;
+  --md-ref-palette-neutral99: #fffbff;
+  --md-ref-palette-neutral100: #ffffff;
 
-/** Examples */
-.bg-primary {
- color: var(--clr-primary-a50);
- background-color: var(--clr-surface-a0);
+  /* Neutral Variant Palette (for outlines and subtle surfaces) */
+  --md-ref-palette-neutral-variant0: #000000;
+  --md-ref-palette-neutral-variant10: #1d1a25;
+  --md-ref-palette-neutral-variant20: #332f3a;
+  --md-ref-palette-neutral-variant30: #494552;
+  --md-ref-palette-neutral-variant40: #615d6a;
+  --md-ref-palette-neutral-variant50: #7a7583;
+  --md-ref-palette-neutral-variant60: #948f9d;
+  --md-ref-palette-neutral-variant70: #afa9b9;
+  --md-ref-palette-neutral-variant80: #cac4d5;
+  --md-ref-palette-neutral-variant90: #e7e0f1;
+  --md-ref-palette-neutral-variant95: #f5eefc;
+  --md-ref-palette-neutral-variant98: #fef7ff;
+  --md-ref-palette-neutral-variant99: #fffbff;
+  --md-ref-palette-neutral-variant100: #ffffff;
+
+  /* Error Palette */
+  --md-ref-palette-error0: #000000;
+  --md-ref-palette-error10: #410002;
+  --md-ref-palette-error20: #690005;
+  --md-ref-palette-error30: #93000a;
+  --md-ref-palette-error40: #ba1a1a;
+  --md-ref-palette-error50: #de3730;
+  --md-ref-palette-error60: #ff5449;
+  --md-ref-palette-error70: #ff897d;
+  --md-ref-palette-error80: #ffb4ab;
+  --md-ref-palette-error90: #ffdad6;
+  --md-ref-palette-error95: #ffedea;
+  --md-ref-palette-error98: #fff8f7;
+  --md-ref-palette-error99: #fffbff;
+  --md-ref-palette-error100: #ffffff;
+}
+
+/* ========================================================================== */
+/* Part 2: Light Theme Color Role Mappings                                    */
+/* ========================================================================== */
+:root, [data-theme="light"] {
+  --md-sys-color-primary: var(--md-ref-palette-primary40);
+  --md-sys-color-on-primary: var(--md-ref-palette-primary100);
+  --md-sys-color-primary-container: var(--md-ref-palette-primary90);
+  --md-sys-color-on-primary-container: var(--md-ref-palette-primary10);
+
+  --md-sys-color-secondary: var(--md-ref-palette-secondary40);
+  --md-sys-color-on-secondary: var(--md-ref-palette-secondary100);
+  --md-sys-color-secondary-container: var(--md-ref-palette-secondary90);
+  --md-sys-color-on-secondary-container: var(--md-ref-palette-secondary10);
+
+  --md-sys-color-tertiary: var(--md-ref-palette-tertiary40);
+  --md-sys-color-on-tertiary: var(--md-ref-palette-tertiary100);
+  --md-sys-color-tertiary-container: var(--md-ref-palette-tertiary90);
+  --md-sys-color-on-tertiary-container: var(--md-ref-palette-tertiary10);
+
+  --md-sys-color-error: var(--md-ref-palette-error40);
+  --md-sys-color-on-error: var(--md-ref-palette-error100);
+  --md-sys-color-error-container: var(--md-ref-palette-error90);
+  --md-sys-color-on-error-container: var(--md-ref-palette-error10);
+
+  --md-sys-color-background: var(--md-ref-palette-neutral99);
+  --md-sys-color-on-background: var(--md-ref-palette-neutral10);
+
+  --md-sys-color-surface: var(--md-ref-palette-neutral99);
+  --md-sys-color-on-surface: var(--md-ref-palette-neutral10);
+  --md-sys-color-surface-variant: var(--md-ref-palette-neutral-variant90);
+  --md-sys-color-on-surface-variant: var(--md-ref-palette-neutral-variant30);
+
+  --md-sys-color-outline: var(--md-ref-palette-neutral-variant50);
+  --md-sys-color-outline-variant: var(--md-ref-palette-neutral-variant80);
+  
+  --md-sys-color-shadow: var(--md-ref-palette-neutral0);
+  --md-sys-color-scrim: var(--md-ref-palette-neutral0);
+  --md-sys-color-inverse-surface: var(--md-ref-palette-neutral20);
+  --md-sys-color-inverse-on-surface: var(--md-ref-palette-neutral95);
+  --md-sys-color-inverse-primary: var(--md-ref-palette-primary80);
+
+  /* New Surface Tints/Tones */
+  --md-sys-color-surface-dim: #DED8E1; /* Neutral 87 */
+  --md-sys-color-surface-bright: var(--md-ref-palette-neutral98);
+  --md-sys-color-surface-container-lowest: var(--md-ref-palette-neutral100);
+  --md-sys-color-surface-container-low: var(--md-ref-palette-neutral95);
+  --md-sys-color-surface-container: var(--md-ref-palette-neutral90); /* Mapped from Neutral 94 */
+  --md-sys-color-surface-container-high: #EBE6EE; /* Neutral 92 */
+  --md-sys-color-surface-container-highest: var(--md-ref-palette-neutral90);
 }
 
 
+/* ========================================================================== */
+/* Part 3: Dark Theme Color Role Mappings                                     */
+/* ========================================================================== */
+[data-theme="dark"] {
+  --md-sys-color-primary: var(--md-ref-palette-primary80);
+  --md-sys-color-on-primary: var(--md-ref-palette-primary20);
+  --md-sys-color-primary-container: var(--md-ref-palette-primary30);
+  --md-sys-color-on-primary-container: var(--md-ref-palette-primary90);
 
-/**Light Theme */
-/** Base colors */
---clr-dark-a0: #000000;
---clr-light-a0: #ffffff;
+  --md-sys-color-secondary: var(--md-ref-palette-secondary80);
+  --md-sys-color-on-secondary: var(--md-ref-palette-secondary20);
+  --md-sys-color-secondary-container: var(--md-ref-palette-secondary30);
+  --md-sys-color-on-secondary-container: var(--md-ref-palette-secondary90);
 
-/** Theme primary colors */
---clr-primary-a0: #6439e6;
---clr-primary-a10: #6c42db;
---clr-primary-a20: #724bcf;
---clr-primary-a30: #7653c4;
---clr-primary-a40: #7a5bb9;
---clr-primary-a50: #7d63ae;
+  --md-sys-color-tertiary: var(--md-ref-palette-tertiary80);
+  --md-sys-color-on-tertiary: var(--md-ref-palette-tertiary20);
+  --md-sys-color-tertiary-container: var(--md-ref-palette-tertiary30);
+  --md-sys-color-on-tertiary-container: var(--md-ref-palette-tertiary90);
 
-/** Theme surface colors */
---clr-surface-a0: #ffffff;
---clr-surface-a10: #f0f0f0;
---clr-surface-a20: #e1e1e1;
---clr-surface-a30: #d3d3d3;
---clr-surface-a40: #c5c5c5;
---clr-surface-a50: #b6b6b6;
+  --md-sys-color-error: var(--md-ref-palette-error80);
+  --md-sys-color-on-error: var(--md-ref-palette-error20);
+  --md-sys-color-error-container: var(--md-ref-palette-error30);
+  --md-sys-color-on-error-container: var(--md-ref-palette-error90);
 
-/** Theme tonal surface colors */
---clr-surface-tonal-a0: #f2eafd;
---clr-surface-tonal-a10: #e5deee;
---clr-surface-tonal-a20: #d8d1e0;
---clr-surface-tonal-a30: #cbc5d2;
---clr-surface-tonal-a40: #beb9c4;
---clr-surface-tonal-a50: #b1aeb6;
+  --md-sys-color-background: var(--md-ref-palette-neutral10);
+  --md-sys-color-on-background: var(--md-ref-palette-neutral90);
 
-/** Examples */
-.bg-primary {
- color: var(--clr-primary-a50);
- background-color: var(--clr-surface-a0);
+  --md-sys-color-surface: var(--md-ref-palette-neutral10);
+  --md-sys-color-on-surface: var(--md-ref-palette-neutral90);
+  --md-sys-color-surface-variant: var(--md-ref-palette-neutral-variant30);
+  --md-sys-color-on-surface-variant: var(--md-ref-palette-neutral-variant80);
+
+  --md-sys-color-outline: var(--md-ref-palette-neutral-variant60);
+  --md-sys-color-outline-variant: var(--md-ref-palette-neutral-variant30);
+  
+  --md-sys-color-shadow: var(--md-ref-palette-neutral0);
+  --md-sys-color-scrim: var(--md-ref-palette-neutral0);
+  --md-sys-color-inverse-surface: var(--md-ref-palette-neutral90);
+  --md-sys-color-inverse-on-surface: var(--md-ref-palette-neutral20);
+  --md-sys-color-inverse-primary: var(--md-ref-palette-primary40);
+
+  /* New Surface Tints/Tones */
+  --md-sys-color-surface-dim: #141218; /* Neutral 6 */
+  --md-sys-color-surface-bright: #3A383F; /* Neutral 24 */
+  --md-sys-color-surface-container-lowest: #0F0D13; /* Neutral 4 */
+  --md-sys-color-surface-container-low: var(--md-ref-palette-neutral10);
+  --md-sys-color-surface-container: #1F1D23; /* Neutral 12 */
+  --md-sys-color-surface-container-high: #29282E; /* Neutral 17 */
+  --md-sys-color-surface-container-highest: #353339; /* Neutral 22 */
 }
