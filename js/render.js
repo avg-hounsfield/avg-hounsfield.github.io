@@ -75,10 +75,11 @@ function renderScannerNotesCard(scannerNotes) {
         <h4>Scanner Specific Notes</h4>
         <span class="accordion-toggle material-symbols-outlined">expand_more</span>
       </div>
-      <div class="scanner-notes-content" id="${accordionId}">
-        ${scannerSections.join('')}
-      </div>
-    </div>
+<div class="scanner-notes-content accordion-content" id="${accordionId}">
+  <div class="accordion-content-inner">
+    ${scannerSections.join('')}
+  </div>
+</div>
   `;
 }
 
@@ -96,9 +97,11 @@ function renderIndicationsCard(rightCardContent) {
         <h4>Clinical Information</h4>
         <span class="accordion-toggle material-symbols-outlined expanded">expand_more</span>
       </div>
-      <div class="indications-content open" id="${accordionId}">
+      <div class="indications-content accordion-content open" id="${accordionId}">
+  <div class="accordion-content-inner">
         ${rightCardContent.indications ? `<p class="indications"><strong>Indications:</strong> ${escapeHtml(rightCardContent.indications)}</p>` : ''}
         ${rightCardContent.contrastRationale ? `<p class="contrast-rationale"><strong>Contrast Rationale:</strong> ${escapeHtml(rightCardContent.contrastRationale)}</p>` : ''}
+      </div>
       </div>
     </div>
   `;
@@ -119,9 +122,11 @@ function renderSequencesCard(sequences) {
         <h4>Sequences</h4>
         <span class="accordion-toggle material-symbols-outlined">expand_more</span>
       </div>
-      <div class="sequences-content" id="${accordionId}">
-        <ul>${sequenceList}</ul>
-      </div>
+      <div class="sequences-content accordion-content" id="${accordionId}">
+  <div class="accordion-content-inner">
+    <ul>${sequenceList}</ul>
+  </div>
+</div>
     </div>
   `;
 }
@@ -222,9 +227,11 @@ function renderConsolidatedCard(protocols, groupType, mainProtocolName, cardTitl
             <h4>Related Protocols (${subProtocols.length})</h4>
             <span class="accordion-toggle material-symbols-outlined">expand_more</span>
           </div>
-          <div class="sub-protocols-content" id="${subProtocolsId}">
-            <ul class="sub-protocols-list">${subProtocolsList}</ul>
-          </div>
+          <div class="sub-protocols-content accordion-content" id="${subProtocolsId}">
+  <div class="accordion-content-inner">
+    <ul class="sub-protocols-list">${subProtocolsList}</ul>
+  </div>
+</div>
         </div>
         ` : ''}
       </div>

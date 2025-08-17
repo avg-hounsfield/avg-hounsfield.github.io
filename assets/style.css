@@ -452,6 +452,49 @@ body[data-theme="dark"] .indications-content .contrast-rationale strong {
   color: var(--md-sys-color-tertiary);
 }
 
+/* ... inside your "Dark Theme Overrides" section ... */
+
+/* ✅ ADD THESE NEW RULES FOR ACCORDIONS */
+
+/* This targets all accordion sub-cards */
+body[data-theme="dark"] .accordion-content {
+  background-color: var(--secondary-surface-bg);
+  color: var(--md-sys-color-on-surface-variant); /* Use a slightly dimmer text for content */
+}
+
+/* This targets the clickable headers of the accordions */
+body[data-theme="dark"] .sequences-header,
+body[data-theme="dark"] .indications-header,
+body[data-theme="dark"] .sub-protocols-header,
+body[data-theme="dark"] .scanner-notes-header {
+  background-color: var(--primary-surface-bg);
+  border-bottom-color: var(--border-color);
+}
+
+body[data-theme="dark"] .sequences-header:hover,
+body[data-theme="dark"] .indications-header:hover,
+body[data-theme="dark"] .sub-protocols-header:hover,
+body[data-theme="dark"] .scanner-notes-header:hover {
+  background-color: var(--secondary-surface-bg);
+}
+
+/* Make sure the text inside the accordion content is also the correct light color */
+body[data-theme="dark"] .accordion-content-inner {
+    color: var(--md-sys-color-on-surface-variant);
+}
+
+body[data-theme="dark"] .accordion-content-inner h3 {
+    color: var(--md-sys-color-on-surface); /* Make sub-headers brighter */
+}
+
+body[data-theme="dark"] .protocol-group h2 {
+  /* Use the main light text color for the font */
+  color: var(--md-sys-color-on-surface); 
+
+  /* Use a subtle, lighter gray for the underline */
+  border-bottom-color: var(--md-sys-color-outline);
+}
+
 /* ========================================================================== */
 /* Accordions (Sequences, Notes, etc.)                                        */
 /* ========================================================================== */
@@ -487,33 +530,34 @@ li.contrast-sequence { color: var(--md-sys-color-primary); font-weight: 600; }
 li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700; }
 
 /* ========================================================================== */
-/* Accordion Animation & State                                                */
+/* Accordion Animation & State (Improved Version)                             */
 /* ========================================================================== */
 
-/* The content panel starts with a max-height of 0 and hidden overflow */
-.sequences-content, .indications-content, .sub-protocols-content, .scanner-notes-content {
+/* The outer container that animates its height */
+.accordion-content {
     max-height: 0;
     overflow: hidden;
-    padding-top: 0;
-    padding-bottom: 0;
-    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    transition: max-height 0.3s ease-out;
+    background-color: var(--secondary-surface-bg); /* Set a base background */
 }
 
-/* When the 'open' class is added, it animates to its full height */
-.sequences-content.open,
-.indications-content.open,
-.sub-protocols-content.open,
-.scanner-notes-content.open {
-    padding-top: 20px;
-    padding-bottom: 20px;
+/* The inner container that provides consistent padding */
+.accordion-content-inner {
+    padding: 20px;
 }
 
-/* Style for the + / - toggle icon */
+/* When the 'open' class is added, the outer container expands */
+.accordion-content.open {
+    /* The max-height is set by JavaScript to content.scrollHeight */
+}
+
+/* Style for the + / expand_more icon */
 .accordion-toggle {
     transition: transform 0.3s ease;
+    font-size: 24px; /* Ensure icon is a good size */
 }
 .accordion-toggle.expanded {
-    transform: rotate(45deg);
+    transform: rotate(180deg); /* A better rotation for an arrow */
 }
 
 /* ========================================================================== */
@@ -588,55 +632,54 @@ body[data-theme="dark"] .slider-label.active {
   right: 0;
   transform: translateY(-50%);
   z-index: 1001;
-  /* Add this to allow the trigger to be positioned outside */
-  padding-left: 60px; 
+  /* This allows the trigger (width: 48px + padding) to be visible */
+  padding-left: 72px; 
 }
 
 .sidebar-content {
-  position: relative; /* Needed for positioning the trigger */
+  position: relative;
   width: 350px;
   max-height: 80vh;
   background: var(--primary-surface-bg);
   border: 1px solid var(--border-color);
-  border-radius: 12px; /* Rounded on all corners now */
+  border-radius: 12px;
   box-shadow: var(--shadow-floating);
-  transition: transform 0.4s ease;
-  transform: translateX(calc(100% - 60px)); /* Start mostly hidden, with trigger showing */
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* ✅ CORRECTED: Start completely hidden off-screen. */
+  transform: translateX(100%); 
   display: flex;
   flex-direction: column;
 }
 
 .sidebar-content.open {
-  transform: translateX(0); /* Slide fully into view */
+  /* ✅ CORRECTED: When open, slide it back by its own width MINUS the trigger space */
+  transform: translateX(calc(100% - 350px - 72px));
 }
 
 .sidebar-trigger {
   position: absolute;
-  /* Position it perfectly to the left of the panel */
   left: 0;
   top: 50%;
-  transform: translate(-100%, -50%); /* Move it outside the parent */
-  
+  transform: translate(-100%, -50%);
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   padding: 16px 12px;
+  width: 48px; /* Give it a fixed width */
   border-radius: 12px 0 0 12px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  transition: background-color 0.3s ease; /* Remove the transform transition */
+  transition: background-color 0.3s ease;
   box-shadow: var(--shadow-raised);
 }
 
 .sidebar-trigger:hover {
   background: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
-  /* The problematic transform:hover is now gone */
 }
 
-/* The rest of the sidebar styles are mostly the same */
 .favorites-count {
   background: var(--md-sys-color-on-primary);
   color: var(--md-sys-color-primary);
@@ -669,6 +712,7 @@ body[data-theme="dark"] .slider-label.active {
   color: var(--text-secondary);
   padding: 40px 20px;
 }
+
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* ========================================================================== */
