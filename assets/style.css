@@ -55,6 +55,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ✅ ADD THIS ENTIRE BLOCK to fix the dark theme background */
+body[data-theme="dark"] {
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+}
+
 /* ========================================================================== */
 /* Animation & Transition Control                                             */
 /* ========================================================================== */
@@ -105,6 +111,7 @@ a:hover {
 /* ========================================================================== */
 /* Layout & Header                                                            */
 /* ========================================================================== */
+/* ✅ MODIFY this rule */
 .main-header {
   display: flex;
   flex-direction: column;
@@ -112,14 +119,16 @@ a:hover {
   margin-top: 2rem;
   margin-bottom: 2rem;
   padding: 1.5rem;
-  background: var(--md-sys-color-primary-container);
+  background: var(--md-sys-color-surface-container-highest); /* Changed to a neutral charcoal/dark surface */
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-flat);
 }
+
+/* ✅ MODIFY this rule to ensure the text is always visible */
 .main-header h1 {
   text-align: center;
   font-size: 1.75rem;
-  color: var(--md-sys-color-on-primary-container);
+  color: var(--md-sys-color-on-surface); /* Changed to match the new background */
   margin-bottom: 1.5rem;
 }
 .search-bar-wrapper {
@@ -402,10 +411,19 @@ li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700;
 .slider-labels { display: flex; justify-content: space-between; width: 140px; font-size: 0.8rem; font-weight: 500; }
 /* Data Toggle Slider */
 .slider-label {
-  color: var(--text-secondary);
+  color: var(--text-md-ref-palette-primary90);
   transition: color 0.3s ease;
   cursor: pointer;
   padding-bottom: 4px; /* Give it some space */
+}
+
+/* ✅ ADD THIS ENTIRE BLOCK for better dark mode visibility */
+body[data-theme="dark"] .slider-label {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+body[data-theme="dark"] .slider-label.active {
+  color: var(--md-sys-color-primary); /* The primary color is already bright in dark mode */
 }
 
 /* ✅ MODIFY THIS RULE */
