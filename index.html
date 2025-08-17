@@ -58,38 +58,76 @@
 </head>
 
 <!-- CRITICAL FIX: Added data-theme="light" to connect to your CSS theming rules. -->
+<!-- Start of the corrected body section -->
 <body data-theme="light">
-  
+
   <button id="theme-toggle" title="Toggle theme">
     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
   </button>
   
-  <!-- Favorites Sidebar (No changes needed) -->
+  <!-- Favorites Sidebar -->
   <div id="favorites-sidebar" class="favorites-sidebar">
-    <!-- ... sidebar content ... -->
+    <div class="sidebar-trigger" id="sidebar-trigger">
+      <span class="material-symbols-outlined">favorite</span>
+      <span class="favorites-count" id="favorites-count">0</span>
+    </div>
+    <div class="sidebar-content" id="sidebar-content">
+      <div class="sidebar-header">
+        <h3>Favorite Protocols</h3>
+        <button class="sidebar-close" id="sidebar-close">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="sidebar-body">
+        <div id="favorites-list" class="favorites-list">
+          <div class="empty-favorites">
+            <span class="material-symbols-outlined">favorite_border</span>
+            <p>No favorite protocols yet</p>
+            <small>Click the heart icon on any protocol to add it here</small>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   
   <div class="container">
     <header class="main-header">
-      <!-- ... header content ... -->
+      <h1>MRI PROTOCOL SEARCH</h1>
+      <div class="search-container">
+        <div class="search-bar-wrapper">
+          <!-- ✅ VERIFY THIS INPUT EXISTS -->
+          <input type="text" id="searchInput" placeholder="Search protocols...">
+
+          <!-- ✅ VERIFY THIS BUTTON EXISTS -->
+          <button id="searchButton">Search</button>
+          
+          <div class="data-toggle-wrapper">
+            <div class="slider-toggle">
+              <div class="slider-labels">
+                <span class="slider-label left active" id="protocolsLabel">Protocols</span>
+                <span class="slider-label right" id="ordersLabel">Orders</span>
+              </div>
+              <input type="checkbox" id="dataSourceToggle" />
+              <label for="dataSourceToggle" class="slider-track">
+                <span class="slider-thumb"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
     <main>
+      <!-- ✅ VERIFY THIS DIV EXISTS -->
       <div id="results"></div>
     </main>
   </div>
   
   <!-- JAVASCRIPTS -->
   <script src="https://unpkg.com/lunr@2.3.9/lunr.min.js"></script>
-
-  <!-- BEST PRACTICE: Load polyfills only for older browsers using 'nomodule' -->
-  <script src="js/polyfills.js" nomodule></script>
-
-  <!-- Modern scripts for modern browsers -->
-<!-- THE CORRECTED SCRIPT TAGS WITH 'defer' -->
-<script type="module" src="js/theme.js" defer></script>
-<script type="module" src="js/main.js" defer></script>
+  <script type="module" src="js/theme.js" defer></script>
+  <script type="module" src="js/main.js" defer></script>
   
-  <!-- Service Worker (No changes needed) -->
+  <!-- Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
@@ -97,5 +135,7 @@
       });
     }
   </script>
+
 </body>
+<!-- End of the corrected body section -->
 </html>
