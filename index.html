@@ -124,6 +124,73 @@
   <button id="theme-toggle" title="Toggle theme">
     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
   </button>
+  
+  <!-- Feedback Widget -->
+  <div id="feedback-widget" class="feedback-widget">
+    <button class="feedback-trigger" id="feedback-trigger" title="Send feedback">
+      <span class="material-symbols-outlined">feedback</span>
+    </button>
+    <div class="feedback-panel" id="feedback-panel">
+      <div class="feedback-header">
+        <h3>Send Feedback</h3>
+        <button class="feedback-close" id="feedback-close">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <form class="feedback-form" id="feedback-form">
+        <div class="feedback-type">
+          <label>Feedback Type:</label>
+          <select id="feedback-type" required>
+            <option value="">Select type...</option>
+            <option value="bug">Bug Report</option>
+            <option value="feature">Feature Request</option>
+            <option value="improvement">Improvement Suggestion</option>
+            <option value="question">Question</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="feedback-message">
+          <label for="feedback-text">Message:</label>
+          <textarea id="feedback-text" placeholder="Please describe your feedback..." required rows="4"></textarea>
+        </div>
+        <div class="feedback-actions">
+          <button type="button" class="feedback-cancel" onclick="closeFeedbackWidget()">Cancel</button>
+          <button type="submit" class="feedback-submit">Send Feedback</button>
+        </div>
+      </form>
+      <div class="feedback-success" id="feedback-success" style="display: none;">
+        <span class="material-symbols-outlined">check_circle</span>
+        <p>Thank you for your feedback!</p>
+        <small>Your suggestions help us improve the MRI Protocol Search tool.</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Favorites Sidebar -->
+  <div id="favorites-sidebar" class="favorites-sidebar">
+    <div class="sidebar-trigger" id="sidebar-trigger">
+      <span class="material-symbols-outlined">favorite</span>
+      <span class="favorites-count" id="favorites-count">0</span>
+    </div>
+    <div class="sidebar-content" id="sidebar-content">
+      <div class="sidebar-header">
+        <h3>Favorite Protocols</h3>
+        <button class="sidebar-close" id="sidebar-close">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="sidebar-body">
+        <div id="favorites-list" class="favorites-list">
+          <div class="empty-favorites">
+            <span class="material-symbols-outlined">favorite_border</span>
+            <p>No favorite protocols yet</p>
+            <small>Click the heart icon on any protocol to add it here</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <div class="container">
     <header class="main-header">
       <h1>MRI PROTOCOL SEARCH</h1>
@@ -141,6 +208,10 @@
       </div>
     </header>
     <main>
+      <div id="recently-viewed" class="recently-viewed" style="display: none;">
+        <h3>Recently Viewed Protocols</h3>
+        <div id="recent-protocols" class="recent-protocols"></div>
+      </div>
       <div id="results"></div>
     </main>
   </div>

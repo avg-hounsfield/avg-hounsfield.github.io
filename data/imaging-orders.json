@@ -1,0 +1,579 @@
+[
+  {
+    "section": ["Neuro Imaging"],
+    "studies": [
+      {
+        "study": "CT ANGIO NECK",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Angiography"
+      },
+      {
+        "study": "CT BRAIN W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT MAXILLOFACIAL W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT NECK SOFT TISSUE W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT SINUS W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT SPINE CERVICAL W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT SPINE CERVICAL W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT SPINE LUMBAR W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT SPINE LUMBAR W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT SPINE THORACIC W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT SPINE THORACIC W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT TEMPORAL BONE W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT TEMPORAL BONE W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT VENOGRAM HEAD W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Venography"
+      },
+      {
+        "study": "MRA BRAIN/HEAD W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Angiography"
+      },
+      {
+        "study": "MRA NECK/CAROTID W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Angiography"
+      },
+      {
+        "study": "MRI BRACHIAL PLEXUS W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI BRAIN W/ + W/O CONTRAST",
+        "usesContrast": true,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI BRAIN W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI IAC W/ + W/O CONTRAST",
+        "usesContrast": true,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI IAC W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI NECK W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI ORBITS W/ + W/O CONTRAST",
+        "usesContrast": true,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI SELLA (PITUITARY) W/ +W/O CONTRAST",
+        "usesContrast": true,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI SPINE CERVICAL W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI SPINE LUMBAR W/ + W/O CONTRAST",
+        "usesContrast": true,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI SPINE LUMBAR W/O",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI SPINE THORACIC W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRV BRAIN/HEAD W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Venography"
+      },
+      {
+        "study": "CT ANGIO BRAIN AND NECK",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Angiography"
+      },
+      {
+        "study": "CT ANGIO BRAIN/HEAD",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Angiography"
+      },
+      {
+        "study": "CT MAXILLOFACIAL W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI FACE NECK ORBIT W/ + W/O CONTRAST",
+        "usesContrast": true,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI TEMPORAL BONE W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      }
+    ]
+  },
+  {
+    "section": ["Abdominal Imaging"],
+    "studies": [
+      {
+        "study": "CT ABDOMEN AND PELVIS W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT ABDOMEN AND PELVIS W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT KIDNEY W/ + W/O CONTRAST (MULTIPHASE)",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Multiphase"
+      },
+      {
+        "study": "CT STONE PROTOCOL",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Special"
+      },
+      {
+        "study": "MRI ABDOMEN W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI ENTEROGRAPHY W/ + W/O CONTRAST",
+        "usesContrast": true,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI KIDNEY W/ + W/O CONTRAST",
+        "usesContrast": true,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI KIDNEY W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI LIVER STUDY",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI PANCREAS W/ + W/O CONTRAST",
+        "usesContrast": true,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI PROSTATE W/ + W/O CONTRAST",
+        "usesContrast": true,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "RF ESOPHAGUS",
+        "usesContrast": true,
+        "modality": "Fluoroscopy",
+        "orderType": "Standard"
+      },
+      {
+        "study": "RF HYSTEROSALPINGOGRAPHY",
+        "usesContrast": true,
+        "modality": "Fluoroscopy",
+        "orderType": "Standard"
+      },
+      {
+        "study": "RF UPPER GI",
+        "usesContrast": true,
+        "modality": "Fluoroscopy",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT CHEST/ABDOMEN/PELVIS W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT ANGIO ABDOMEN AND PELVIS",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Angiography"
+      },
+      {
+        "study": "CT LIVER W/ + W/O (MULTIPHASE)",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Multiphase"
+      },
+      {
+        "study": "CT PELVIS W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT PELVIS W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "MRI MRCP PROTOCOL",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "RF SWALLOW FUNCTION W/ SPEECH",
+        "usesContrast": true,
+        "modality": "Fluoroscopy",
+        "orderType": "Standard"
+      }
+    ]
+  },
+  {
+    "section": ["Chest Imaging"],
+    "studies": [
+      {
+        "study": "CT ANGIO CORONARY ARTERY STR/MPH/FNT CNT",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Angiography"
+      },
+      {
+        "study": "CT CHEST W/ CONTRAST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT CHEST W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT HEART CALCIUM SCORING",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Special"
+      },
+      {
+        "study": "CT LOW DOSE LUNG SCREENING",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Screening"
+      },
+      {
+        "study": "MRI CARDIAC W/ + W/O CONTRAST",
+        "usesContrast": true,
+        "modality": "MRI",
+        "orderType": "Standard"
+      },
+      {
+        "study": "CT ANGIO PULMONARY",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Angiography"
+      },
+      {
+        "study": "CT ANGIO CHEST",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Angiography"
+      },
+      {
+        "study": "CT ANGIO CHEST/ABD/PELVIS + ILIOFEMORAL",
+        "usesContrast": true,
+        "modality": "CT",
+        "orderType": "Angiography"
+      }
+    ]
+  },
+  {
+    "section": ["Ultrasound"],
+    "studies": [
+      {
+        "study": "US ABDOMEN LIMITED",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US ABDOMEN RIGHT UPPER QUADRANT",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US ABDOMINAL AORTA",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US ABDOMINAL WALL",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US HEAD/NECK SOFT TISSUE",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US HYSTEROSONOGRAM",
+        "usesContrast": true,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US KIDNEY/BLADDER",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US LIVER ELASTOGRAPHY",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Special"
+      },
+      {
+        "study": "US LOWER EXT VENOUS DUPLEX",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Doppler"
+      },
+      {
+        "study": "US PELVIS COMP TRANS ABDOMINAL ONLY",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US PELVIS COMP W/ TRANSVAG IF INDICATED",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US PELVIS W/ TRANSVAG NON-OB COMPLETE",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US PREGNANCY 1ST TRIMESTER TRANSAB",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US SCROTUM (CONTENTS) W/ DOPPLER IF IND",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Doppler"
+      },
+      {
+        "study": "US SPLEEN",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US SUPERFICIAL EXTREMITY",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US SUPERFICIAL HEAD",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US SUPERFICIAL NECK",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US SUPERFICIAL PELVIS/PERINEUM/PERIANAL",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US SUPERFICIAL UPPER BACK",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US THYROID",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      },
+      {
+        "study": "US TRANSVAGINAL NON-OB",
+        "usesContrast": false,
+        "modality": "Ultrasound",
+        "orderType": "Standard"
+      }
+    ]
+  },
+  {
+    "section": ["Nuclear Medicine"],
+    "studies": [
+      {
+        "study": "NM BONE DENSITY DUAL PHOTON",
+        "usesContrast": false,
+        "modality": "Nuclear Medicine",
+        "orderType": "Standard"
+      },
+      {
+        "study": "NM BONE IMAGING LIMITED",
+        "usesContrast": false,
+        "modality": "Nuclear Medicine",
+        "orderType": "Standard"
+      },
+      {
+        "study": "BD BONE DENSITY DEXA AXIAL SKELETON",
+        "usesContrast": false,
+        "modality": "DEXA",
+        "orderType": "Standard"
+      },
+      {
+        "study": "NM PET/CT SKULL BASE TO MIDTHIGH",
+        "usesContrast": false,
+        "modality": "PET/CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "NM PET/CT WHOLE BODY",
+        "usesContrast": false,
+        "modality": "PET/CT",
+        "orderType": "Standard"
+      },
+      {
+        "study": "NM BONE IMAGING WHOLE BODY",
+        "usesContrast": false,
+        "modality": "Nuclear Medicine",
+        "orderType": "Standard"
+      }
+    ]
+  }
+]

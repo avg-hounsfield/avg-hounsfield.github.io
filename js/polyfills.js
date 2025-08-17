@@ -226,27 +226,177 @@
                                    };
   }
 
-  // CSS Custom Properties support check and fallback
+  // Enhanced browser feature detection
   function supportsCSSVariables() {
     try {
-      return CSS.supports('color', 'var(--fake-var)');
+      return CSS && CSS.supports && CSS.supports('color', 'var(--fake-var)');
     } catch (e) {
       return false;
     }
   }
 
-  if (!supportsCSSVariables()) {
-    // Add fallback styles for browsers that don't support CSS variables
-    var style = document.createElement('style');
-    style.innerHTML = `
-      body { background-color: #1e2329 !important; color: #e6e9ec !important; }
-      .light-theme { background-color: #f0f2f4 !important; color: #2d333b !important; }
-      .protocol-card { background: #252a31 !important; border: 1px solid #363c44 !important; }
-      .left-card, .right-card, .scanner-notes-card { background: #2d333b !important; }
-      h1, h2, h3, h4, h5, h6 { color: #40b4a6 !important; }
-      .interactive-accent { color: #40b4a6 !important; }
-    `;
-    document.head.appendChild(style);
+  function supportsFlexbox() {
+    try {
+      return CSS && CSS.supports && (
+        CSS.supports('display', 'flex') ||
+        CSS.supports('display', '-webkit-flex') ||
+        CSS.supports('display', '-moz-flex')
+      );
+    } catch (e) {
+      var test = document.createElement('div');
+      test.style.display = 'flex';
+      return test.style.display === 'flex';
+    }
   }
+
+  function supportsGrid() {
+    try {
+      return CSS && CSS.supports && CSS.supports('display', 'grid');
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // CSS Variables fallback for IE and older browsers
+  if (!supportsCSSVariables()) {
+    var style = document.createElement('style');
+    style.innerHTML = [
+      '/* Fallback styles for browsers without CSS variable support */',
+      'body { background-color: #1e2329 !important; color: #e6e9ec !important; }',
+      '.light-theme { background-color: #f0f2f4 !important; color: #2d333b !important; }',
+      '.protocol-card { background: #252a31 !important; border: 1px solid #363c44 !important; }',
+      '.left-card, .right-card, .scanner-notes-card, .indications-card, .sequences-card { background: #2d333b !important; }',
+      'h1, h2, h3, h4, h5, h6 { color: #40b4a6 !important; }',
+      '.interactive-accent, .favorite-button:hover { color: #40b4a6 !important; }',
+      '.sidebar-trigger { background: #40b4a6 !important; color: #ffffff !important; }',
+      '.feedback-trigger { background: #40b4a6 !important; color: #ffffff !important; }',
+      '.contrast-yes { color: #40b4a6 !important; }',
+      '.contrast-no { color: #ff8c00 !important; }',
+      'input, textarea, select { background: #2d333b !important; color: #e6e9ec !important; border: 1px solid #363c44 !important; }',
+      'button { background: #40b4a6 !important; color: #ffffff !important; border: none !important; }'
+    ].join('\n');
+    document.head.appendChild(style);
+    console.warn('CSS Variables not supported. Using fallback styles.');
+  }
+
+  // Flexbox fallback for IE9 and older
+  if (!supportsFlexbox()) {
+    var flexStyle = document.createElement('style');
+    flexStyle.innerHTML = [
+      '/* Flexbox fallback styles */',
+      '.protocol-grid { display: block !important; }',
+      '.protocol-card { display: block !important; margin-bottom: 20px !important; width: 100% !important; }',
+      '.breadcrumb { display: block !important; }',
+      '.breadcrumb-item { display: inline-block !important; margin-right: 8px !important; }',
+      '.feedback-actions { display: block !important; }',
+      '.feedback-cancel, .feedback-submit { display: block !important; width: 100% !important; margin-bottom: 8px !important; }'
+    ].join('\n');
+    document.head.appendChild(flexStyle);
+    console.warn('Flexbox not supported. Using fallback layout.');
+  }
+
+  // Console polyfill for IE8 and older
+  if (!window.console) {
+    window.console = {
+      log: function() {},
+      warn: function() {},
+      error: function() {},
+      info: function() {},
+      debug: function() {}
+    };
+  }
+
+  // Enhanced graceful degradation
+  function setupGracefulDegradation() {
+    // Disable animations for browsers that don't support them properly
+    if (!window.requestAnimationFrame || !supportsCSSVariables()) {
+      var noAnimStyle = document.createElement('style');
+      noAnimStyle.innerHTML = [
+        '/* Disable animations for compatibility */',
+        '*, *::before, *::after {',
+        '  animation-duration: 0s !important;',
+        '  animation-delay: 0s !important;',
+        '  transition-duration: 0s !important;',
+        '  transition-delay: 0s !important;',
+        '}',
+        '.loading-spinner { display: none !important; }',
+        '.loading-container::after {',
+        '  content: "Loading...";',
+        '  display: block;',
+        '  text-align: center;',
+        '  font-weight: bold;',
+        '}'
+      ].join('\n');
+      document.head.appendChild(noAnimStyle);
+    }
+
+    // Fallback for modern input types
+    function setupInputFallbacks() {
+      var inputs = document.querySelectorAll('input[type="search"]');
+      for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].type !== 'search') {
+          inputs[i].type = 'text';
+          inputs[i].placeholder = inputs[i].placeholder || 'Search...';
+        }
+      }
+    }
+
+    // Set up input fallbacks when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupInputFallbacks);
+    } else {
+      setupInputFallbacks();
+    }
+
+    // Provide fallback for modern JavaScript features
+    if (!Array.prototype.find) {
+      Array.prototype.find = function(predicate) {
+        for (var i = 0; i < this.length; i++) {
+          if (predicate(this[i], i, this)) {
+            return this[i];
+          }
+        }
+        return undefined;
+      };
+    }
+
+    if (!Array.prototype.filter) {
+      Array.prototype.filter = function(callback, thisArg) {
+        var result = [];
+        for (var i = 0; i < this.length; i++) {
+          if (callback.call(thisArg, this[i], i, this)) {
+            result.push(this[i]);
+          }
+        }
+        return result;
+      };
+    }
+
+    // Storage compatibility layer
+    if (typeof(Storage) === 'undefined') {
+      window.sessionStorage = window.localStorage = {
+        getItem: function() { return null; },
+        setItem: function() {},
+        removeItem: function() {},
+        clear: function() {},
+        length: 0
+      };
+    }
+  }
+
+  // Run graceful degradation setup
+  setupGracefulDegradation();
+
+  // Add browser info to global scope for debugging
+  window.browserInfo = {
+    cssVariables: supportsCSSVariables(),
+    flexbox: supportsFlexbox(),
+    grid: supportsGrid(),
+    storage: typeof(Storage) !== 'undefined',
+    requestAnimationFrame: typeof(requestAnimationFrame) !== 'undefined',
+    modules: 'noModule' in HTMLScriptElement.prototype,
+    fetch: typeof(fetch) !== 'undefined',
+    promise: typeof(Promise) !== 'undefined'
+  };
 
 })();

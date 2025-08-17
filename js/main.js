@@ -1,11 +1,267 @@
-// js/main.js - OPTIMIZED VERSION
+// js/main.js - OPTIMIZED VERSION WITH ENHANCED COMPATIBILITY
 
-import { initFuzzy, fuzzySearch } from './search.js';
-import { renderGroupedProtocols } from './render.js';
+// Dynamic imports with fallbacks for better compatibility
+let initFuzzy, fuzzySearch, renderGroupedProtocols;
+let initFavorites, addFavoriteButtons, initRecentProtocols, trackProtocolView, initFeedback;
+
+// Import modules with graceful fallbacks
+async function loadModules() {
+  try {
+    const searchModule = await import('./search.js');
+    initFuzzy = searchModule.initFuzzy;
+    fuzzySearch = searchModule.fuzzySearch;
+  } catch (error) {
+    console.warn('Failed to load search module, using fallback:', error);
+    // Fallback search function
+    window.fuzzySearch = fuzzySearch = function(query, data) {
+      return data.filter(function(item) {
+        return item.study && item.study.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+      });
+    };
+    initFuzzy = function() { console.log('Using fallback search'); };
+  }
+
+  try {
+    const renderModule = await import('./render.js');
+    renderGroupedProtocols = renderModule.renderGroupedProtocols;
+  } catch (error) {
+    console.warn('Failed to load render module, using fallback:', error);
+    // Basic fallback renderer
+    renderGroupedProtocols = function(grouped) {
+      let html = '';
+      for (const section in grouped) {
+        html += '<h3>' + section + '</h3>';
+        grouped[section].forEach(function(protocol) {
+          html += '<div class="protocol-card"><h4>' + protocol.study + '</h4></div>';
+        });
+      }
+      return html;
+    };
+  }
+
+  try {
+    const favoritesModule = await import('./favorites.js');
+    initFavorites = favoritesModule.initFavorites;
+    addFavoriteButtons = favoritesModule.addFavoriteButtons;
+  } catch (error) {
+    console.warn('Failed to load favorites module:', error);
+    initFavorites = function() {};
+    addFavoriteButtons = function() {};
+  }
+
+  try {
+    const recentModule = await import('./recent.js');
+    initRecentProtocols = recentModule.initRecentProtocols;
+    trackProtocolView = recentModule.trackProtocolView;
+  } catch (error) {
+    console.warn('Failed to load recent protocols module:', error);
+    initRecentProtocols = function() {};
+    trackProtocolView = function() {};
+  }
+
+  try {
+    const feedbackModule = await import('./feedback.js');
+    initFeedback = feedbackModule.initFeedback;
+  } catch (error) {
+    console.warn('Failed to load feedback module:', error);
+    initFeedback = function() {};
+  }
+}
 
 let protocolData = [];
+let ordersData = [];
 let allStudies = []; // Add a new variable to hold the flattened list of all studies
+let allOrders = []; // Add a new variable to hold the flattened list of all orders
 const DEBOUNCE_DELAY = 250; // Reduced delay for better responsiveness
+
+// Comprehensive pathology-to-imaging mapping database
+const pathologyMapping = {
+  // Neurological conditions
+  stroke: ['CT ANGIO NECK', 'CT ANGIO BRAIN/HEAD', 'CT ANGIO BRAIN AND NECK', 'MRA BRAIN/HEAD W/O CONTRAST', 'MRA NECK/CAROTID W/O CONTRAST', 'CT BRAIN W/ CONTRAST', 'MRI BRAIN W/ + W/O CONTRAST'],
+  'transient ischemic attack': ['CT ANGIO NECK', 'CT ANGIO BRAIN/HEAD', 'MRA BRAIN/HEAD W/O CONTRAST', 'MRA NECK/CAROTID W/O CONTRAST'],
+  tia: ['CT ANGIO NECK', 'CT ANGIO BRAIN/HEAD', 'MRA BRAIN/HEAD W/O CONTRAST', 'MRA NECK/CAROTID W/O CONTRAST'],
+  headache: ['CT BRAIN W/ CONTRAST', 'MRI BRAIN W/O CONTRAST', 'MRI BRAIN W/ + W/O CONTRAST', 'MRA BRAIN/HEAD W/O CONTRAST'],
+  'brain tumor': ['MRI BRAIN W/ + W/O CONTRAST', 'CT BRAIN W/ CONTRAST'],
+  seizure: ['MRI BRAIN W/ + W/O CONTRAST', 'CT BRAIN W/ CONTRAST'],
+  'hearing loss': ['MRI IAC W/ + W/O CONTRAST', 'MRI IAC W/O CONTRAST', 'CT TEMPORAL BONE W/O CONTRAST'],
+  tinnitus: ['MRI IAC W/ + W/O CONTRAST', 'MRI IAC W/O CONTRAST', 'CT TEMPORAL BONE W/O CONTRAST'],
+  vertigo: ['MRI IAC W/ + W/O CONTRAST', 'MRI IAC W/O CONTRAST', 'CT TEMPORAL BONE W/O CONTRAST'],
+  'facial numbness': ['MRI FACE NECK ORBIT W/ + W/O CONTRAST', 'CT MAXILLOFACIAL W/ CONTRAST'],
+  'neck pain': ['CT SPINE CERVICAL W/O CONTRAST', 'MRI SPINE CERVICAL W/O CONTRAST', 'CT NECK SOFT TISSUE W/ CONTRAST'],
+  'back pain': ['CT SPINE LUMBAR W/O CONTRAST', 'MRI SPINE LUMBAR W/O CONTRAST', 'CT SPINE THORACIC W/O CONTRAST'],
+  'spine pain': ['CT SPINE CERVICAL W/O CONTRAST', 'CT SPINE LUMBAR W/O CONTRAST', 'CT SPINE THORACIC W/O CONTRAST'],
+  'vision changes': ['MRI ORBITS W/ + W/O CONTRAST', 'CT MAXILLOFACIAL W/ CONTRAST'],
+  'sinus infection': ['CT SINUS W/O CONTRAST'],
+  sinusitis: ['CT SINUS W/O CONTRAST'],
+  
+  // Chest conditions
+  'chest pain': ['CT CHEST W/ CONTRAST', 'CT CHEST W/O CONTRAST', 'CT ANGIO CORONARY ARTERY STR/MPH/FNT CNT'],
+  'shortness of breath': ['CT CHEST W/ CONTRAST', 'CT ANGIO PULMONARY'],
+  dyspnea: ['CT CHEST W/ CONTRAST', 'CT ANGIO PULMONARY'],
+  'pulmonary embolism': ['CT ANGIO PULMONARY'],
+  'lung cancer': ['CT CHEST W/ CONTRAST', 'CT LOW DOSE LUNG SCREENING'],
+  'lung screening': ['CT LOW DOSE LUNG SCREENING'],
+  'heart disease': ['CT ANGIO CORONARY ARTERY STR/MPH/FNT CNT', 'CT HEART CALCIUM SCORING', 'MRI CARDIAC W/ + W/O CONTRAST'],
+  'coronary disease': ['CT ANGIO CORONARY ARTERY STR/MPH/FNT CNT', 'CT HEART CALCIUM SCORING'],
+  
+  // Abdominal conditions
+  'abdominal pain': ['CT ABDOMEN AND PELVIS W/ CONTRAST', 'CT ABDOMEN AND PELVIS W/O CONTRAST'],
+  'kidney stones': ['CT STONE PROTOCOL'],
+  'kidney disease': ['CT KIDNEY W/ + W/O CONTRAST (MULTIPHASE)', 'MRI KIDNEY W/ + W/O CONTRAST'],
+  'kidney mass': ['CT KIDNEY W/ + W/O CONTRAST (MULTIPHASE)', 'MRI KIDNEY W/ + W/O CONTRAST'],
+  'liver disease': ['CT LIVER W/ + W/O (MULTIPHASE)', 'MRI LIVER STUDY'],
+  'liver mass': ['CT LIVER W/ + W/O (MULTIPHASE)', 'MRI LIVER STUDY'],
+  jaundice: ['MRI MRCP PROTOCOL'],
+  'bile duct': ['MRI MRCP PROTOCOL'],
+  'pancreatic disease': ['MRI PANCREAS W/ + W/O CONTRAST'],
+  'prostate cancer': ['MRI PROSTATE W/ + W/O CONTRAST'],
+  'rectal cancer': ['MRI PROSTATE W/ + W/O CONTRAST'],
+  'bowel disease': ['MRI ENTEROGRAPHY W/ + W/O CONTRAST'],
+  'crohns disease': ['MRI ENTEROGRAPHY W/ + W/O CONTRAST'],
+  'inflammatory bowel': ['MRI ENTEROGRAPHY W/ + W/O CONTRAST'],
+  'swallowing difficulty': ['RF SWALLOW FUNCTION W/ SPEECH', 'RF ESOPHAGUS'],
+  dysphagia: ['RF SWALLOW FUNCTION W/ SPEECH', 'RF ESOPHAGUS'],
+  
+  // Pregnancy and gynecological
+  pregnancy: ['US PREGNANCY 1ST TRIMESTER TRANSAB', 'US PELVIS COMP W/ TRANSVAG IF INDICATED'],
+  'pelvic pain': ['US PELVIS COMP W/ TRANSVAG IF INDICATED', 'CT PELVIS W/ CONTRAST'],
+  'ovarian cyst': ['US PELVIS COMP W/ TRANSVAG IF INDICATED'],
+  fibroids: ['US PELVIS COMP W/ TRANSVAG IF INDICATED'],
+  
+  // Vascular conditions
+  'aortic aneurysm': ['US ABDOMINAL AORTA', 'CT ANGIO ABDOMEN AND PELVIS'],
+  'blood clot': ['US LOWER EXT VENOUS DUPLEX', 'CT ANGIO PULMONARY'],
+  'deep vein thrombosis': ['US LOWER EXT VENOUS DUPLEX'],
+  dvt: ['US LOWER EXT VENOUS DUPLEX'],
+  
+  // General symptoms
+  fever: ['CT CHEST W/ CONTRAST', 'CT ABDOMEN AND PELVIS W/ CONTRAST'],
+  'weight loss': ['CT CHEST W/ CONTRAST', 'CT ABDOMEN AND PELVIS W/ CONTRAST'],
+  fatigue: ['CT CHEST W/ CONTRAST', 'CT ABDOMEN AND PELVIS W/ CONTRAST'],
+  
+  // Oncology
+  cancer: ['CT CHEST/ABDOMEN/PELVIS W/ CONTRAST', 'NM PET/CT WHOLE BODY'],
+  'cancer screening': ['CT LOW DOSE LUNG SCREENING', 'CT CHEST/ABDOMEN/PELVIS W/ CONTRAST'],
+  metastasis: ['NM PET/CT WHOLE BODY', 'CT CHEST/ABDOMEN/PELVIS W/ CONTRAST'],
+  'tumor staging': ['NM PET/CT SKULL BASE TO MIDTHIGH', 'CT CHEST/ABDOMEN/PELVIS W/ CONTRAST'],
+  
+  // Bone and joint
+  'bone pain': ['NM BONE IMAGING WHOLE BODY', 'NM BONE IMAGING LIMITED'],
+  fracture: ['CT SPINE CERVICAL W/O CONTRAST', 'CT SPINE LUMBAR W/O CONTRAST'],
+  osteoporosis: ['BD BONE DENSITY DEXA AXIAL SKELETON'],
+  'bone density': ['BD BONE DENSITY DEXA AXIAL SKELETON', 'NM BONE DENSITY DUAL PHOTON'],
+  
+  // Thyroid and endocrine
+  'thyroid nodule': ['US THYROID'],
+  'thyroid mass': ['US THYROID'],
+  hyperthyroidism: ['US THYROID'],
+  hypothyroidism: ['US THYROID']
+};
+
+// Symptom-based keywords that should trigger smart search
+const symptomKeywords = [
+  'pain', 'ache', 'hurt', 'sore', 'tender',
+  'mass', 'lump', 'bump', 'growth', 'tumor', 'nodule',
+  'bleeding', 'blood', 'hemorrhage',
+  'swelling', 'swollen', 'edema', 'inflammation',
+  'numbness', 'tingling', 'weakness', 'paralysis',
+  'difficulty', 'trouble', 'problem', 'issue',
+  'changes', 'loss', 'decrease', 'increase',
+  'infection', 'fever', 'sick', 'illness',
+  'screening', 'checkup', 'monitor', 'follow-up'
+];
+
+// Smart pathology search function
+function performPathologySearch(query, orders) {
+  const queryLower = query.toLowerCase().trim();
+  const matchedOrders = new Set();
+  
+  // Direct pathology mapping search
+  for (const [condition, orderNames] of Object.entries(pathologyMapping)) {
+    if (queryLower.includes(condition.toLowerCase())) {
+      orderNames.forEach(orderName => {
+        const matchingOrder = orders.find(order => 
+          order.study.toUpperCase() === orderName.toUpperCase()
+        );
+        if (matchingOrder) {
+          matchedOrders.add(matchingOrder);
+        }
+      });
+    }
+  }
+  
+  // Anatomical region search
+  const anatomicalMappings = {
+    brain: ['CT BRAIN', 'MRI BRAIN', 'CT ANGIO BRAIN', 'MRA BRAIN'],
+    head: ['CT BRAIN', 'MRI BRAIN', 'CT ANGIO BRAIN', 'MRA BRAIN', 'CT MAXILLOFACIAL', 'MRI FACE'],
+    neck: ['CT NECK', 'MRI NECK', 'CT ANGIO NECK', 'MRA NECK', 'CT SPINE CERVICAL', 'MRI SPINE CERVICAL'],
+    chest: ['CT CHEST', 'CT ANGIO CHEST', 'CT ANGIO CORONARY', 'CT ANGIO PULMONARY', 'MRI CARDIAC'],
+    abdomen: ['CT ABDOMEN', 'MRI ABDOMEN', 'CT ANGIO ABDOMEN', 'US ABDOMEN'],
+    pelvis: ['CT PELVIS', 'US PELVIS', 'MRI PROSTATE'],
+    spine: ['CT SPINE', 'MRI SPINE'],
+    heart: ['CT HEART', 'CT ANGIO CORONARY', 'MRI CARDIAC'],
+    kidney: ['CT KIDNEY', 'MRI KIDNEY'],
+    liver: ['CT LIVER', 'MRI LIVER'],
+    thyroid: ['US THYROID']
+  };
+  
+  for (const [region, patterns] of Object.entries(anatomicalMappings)) {
+    if (queryLower.includes(region)) {
+      patterns.forEach(pattern => {
+        orders.forEach(order => {
+          if (order.study.toUpperCase().includes(pattern.toUpperCase())) {
+            matchedOrders.add(order);
+          }
+        });
+      });
+    }
+  }
+  
+  // Symptom-based contextual search
+  const hasSymptomKeyword = symptomKeywords.some(keyword => 
+    queryLower.includes(keyword.toLowerCase())
+  );
+  
+  if (hasSymptomKeyword) {
+    // Enhanced contextual search for symptoms + anatomy
+    const words = queryLower.split(/\s+/);
+    
+    words.forEach(word => {
+      // Check if word matches any anatomical region
+      for (const [region, patterns] of Object.entries(anatomicalMappings)) {
+        if (word.includes(region) || region.includes(word)) {
+          patterns.forEach(pattern => {
+            orders.forEach(order => {
+              if (order.study.toUpperCase().includes(pattern.toUpperCase())) {
+                matchedOrders.add(order);
+              }
+            });
+          });
+        }
+      }
+    });
+    
+    // Default comprehensive search for unspecific symptoms
+    if (matchedOrders.size === 0) {
+      const commonSymptomOrders = [
+        'CT CHEST W/ CONTRAST',
+        'CT ABDOMEN AND PELVIS W/ CONTRAST',
+        'CT CHEST/ABDOMEN/PELVIS W/ CONTRAST'
+      ];
+      
+      commonSymptomOrders.forEach(orderName => {
+        const matchingOrder = orders.find(order => 
+          order.study.toUpperCase() === orderName.toUpperCase()
+        );
+        if (matchingOrder) {
+          matchedOrders.add(matchingOrder);
+        }
+      });
+    }
+  }
+  
+  return Array.from(matchedOrders);
+}
 
 // Optimize debounce function
 const debounce = (func, wait) => {
@@ -97,36 +353,281 @@ function runSearchAndRender() {
   // Early return for empty queries
   if (!query) {
     resultsContainer.innerHTML = '';
+    searchInput.classList.remove('search-loading');
     return;
   }
 
+  // Show loading state
+  searchInput.classList.add('search-loading');
+  resultsContainer.innerHTML = `
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Searching protocols...</p>
+      <p class="loading-subtext">Finding matches for "${query}"</p>
+    </div>
+  `;
+
+  // Get current toggle state and determine which dataset to use
+  const isOrdersOnly = window.getOrdersOnlyState ? window.getOrdersOnlyState() : false;
+  const currentDataset = isOrdersOnly ? allOrders : allStudies;
+  const datasetName = isOrdersOnly ? 'orders' : 'protocols';
+
   // Data validation
-  if (!allStudies?.length) {
-    console.error('No protocol data available');
+  if (!currentDataset?.length) {
+    console.error(`No ${datasetName} data available`);
     resultsContainer.innerHTML = 
-      '<p class="error">Loading protocols...</p>';
+      `<p class="error">Loading ${datasetName}...</p>`;
+    searchInput.classList.remove('search-loading');
     return;
   }
 
   try {
-    const results = fuzzySearch(query, allStudies) || [];
+    let results;
+    
+    if (isOrdersOnly) {
+      // Try smart pathology search first for orders
+      const pathologyResults = performPathologySearch(query, currentDataset);
+      
+      if (pathologyResults.length > 0) {
+        results = pathologyResults;
+      } else {
+        // Fall back to regular fuzzy search if no pathology matches
+        results = fuzzySearch(query, currentDataset) || [];
+      }
+    } else {
+      // Use regular fuzzy search for protocols
+      results = fuzzySearch(query, currentDataset) || [];
+    }
     
     if (results.length === 0) {
-      resultsContainer.innerHTML = '<p>No matching protocols found.</p>';
+      resultsContainer.innerHTML = `<p>No matching ${datasetName} found.</p>`;
+      searchInput.classList.remove('search-loading');
       return;
     }
 
-    // Optimize grouping with Map for better performance
-    const grouped = results.reduce((acc, protocol) => {
-      const sectionKey = protocol.section || 'Other';
+    // Apply different logic for orders vs protocols
+    let filteredResults = results;
+    
+    if (isOrdersOnly) {
+      // For orders, group by section and add smart search info
+      const grouped = filteredResults.reduce((acc, order) => {
+        let sectionKey = order.section || 'Other';
+        if (!acc[sectionKey]) {
+          acc[sectionKey] = [];
+        }
+        acc[sectionKey].push(order);
+        return acc;
+      }, {});
+
+      // Add search context information for pathology searches
+      const isPathologySearch = performPathologySearch(query, currentDataset).length > 0;
+      let searchContext = '';
+      
+      if (isPathologySearch) {
+        searchContext = `
+          <div class="search-context">
+            <p class="context-note">
+              <span class="material-symbols-outlined">medical_services</span>
+              Smart search results for medical condition: <strong>"${query}"</strong>
+            </p>
+          </div>
+        `;
+      }
+
+      resultsContainer.innerHTML = searchContext + renderGroupedProtocols(grouped, isOrdersOnly);
+    } else {
+      // Original protocol consolidation logic
+      applyProtocolConsolidation();
+    }
+
+    function applyProtocolConsolidation() {
+      // Smart protocol consolidation filtering based on search query
+      const consolidationGroups = {
+        brain: ['BRAIN', 'BRAIN TUMOR/INF', 'BRAIN MS', 'CRANIAL NERVES/PAROTID', 'TRIGEMINAL NEURALGIA', 'PITUITARY'],
+        spine: ['C-SPINE', 'T-SPINE', 'L-SPINE', 'SACRUM', 'SCREENING SPINE', 'SCOLIOSIS SPINE', 'C-SPINE MS', 'T-SPINE MS'],
+        cerebrovascular: ['TIA', 'TIA MRA DISSECTION', 'MRA ANEURYSM'],
+        arthrography: ['SHOULDER ARTHROGRAM', 'WRIST ARTHROGRAM', 'HIP ARTHROGRAM'],
+        orbital: ['ORBITS', 'ORBIT NEMMERS'],
+        upperExtremity: ['SHOULDER', 'ELBOW', 'WRIST', 'HAND/FINGER'],
+        lowerExtremity: ['HIP', 'KNEE', 'ANKLE', 'FOOT/TOE']
+      };
+    
+      const queryLower = query.toLowerCase();
+    
+      // Filter protocols based on search specificity
+      let protocolFilteredResults = results;
+    
+    // Define specific searches for each consolidation group
+    const specificSearches = {
+      // Brain specific searches
+      'tumor': 'BRAIN TUMOR/INF',
+      'infection': 'BRAIN TUMOR/INF',
+      'inf': 'BRAIN TUMOR/INF',
+      'ms': ['BRAIN MS', 'C-SPINE MS', 'T-SPINE MS'],
+      'multiple sclerosis': ['BRAIN MS', 'C-SPINE MS', 'T-SPINE MS'],
+      'cranial': 'CRANIAL NERVES/PAROTID',
+      'nerve': 'CRANIAL NERVES/PAROTID',
+      'parotid': 'CRANIAL NERVES/PAROTID',
+      'trigeminal': 'TRIGEMINAL NEURALGIA',
+      'neuralgia': 'TRIGEMINAL NEURALGIA',
+      'pituitary': 'PITUITARY',
+      
+      // Spine specific searches
+      'cervical': 'C-SPINE',
+      'c-spine': 'C-SPINE',
+      'thoracic': 'T-SPINE',
+      't-spine': 'T-SPINE',
+      'lumbar': 'L-SPINE',
+      'l-spine': 'L-SPINE',
+      'sacrum': 'SACRUM',
+      'scoliosis': 'SCOLIOSIS SPINE',
+      'screening spine': 'SCREENING SPINE',
+      
+      // Cerebrovascular specific searches
+      'tia': ['TIA', 'TIA MRA DISSECTION'],
+      'stroke': ['TIA', 'TIA MRA DISSECTION'],
+      'dissection': 'TIA MRA DISSECTION',
+      'aneurysm': 'MRA ANEURYSM',
+      
+      // Arthrography specific searches
+      'arthrogram': ['SHOULDER ARTHROGRAM', 'WRIST ARTHROGRAM', 'HIP ARTHROGRAM'],
+      'shoulder arthrogram': 'SHOULDER ARTHROGRAM',
+      'wrist arthrogram': 'WRIST ARTHROGRAM',
+      'hip arthrogram': 'HIP ARTHROGRAM',
+      
+      // Orbital specific searches
+      'orbit': ['ORBITS', 'ORBIT NEMMERS'],
+      'orbital': ['ORBITS', 'ORBIT NEMMERS'],
+      'nemmers': 'ORBIT NEMMERS',
+      
+      // Upper extremity specific searches
+      'shoulder': ['SHOULDER', 'SHOULDER ARTHROGRAM'],
+      'elbow': 'ELBOW',
+      'wrist': ['WRIST', 'WRIST ARTHROGRAM'],
+      'hand': 'HAND/FINGER',
+      'finger': 'HAND/FINGER',
+      
+      // Lower extremity specific searches
+      'hip': ['HIP', 'HIP ARTHROGRAM'],
+      'knee': 'KNEE',
+      'ankle': 'ANKLE',
+      'foot': 'FOOT/TOE',
+      'toe': 'FOOT/TOE'
+    };
+    
+    // Check for specific searches
+    let isSpecificSearch = false;
+    let targetProtocols = [];
+    
+    for (const [searchTerm, protocolNames] of Object.entries(specificSearches)) {
+      if (queryLower.includes(searchTerm)) {
+        isSpecificSearch = true;
+        targetProtocols = Array.isArray(protocolNames) ? protocolNames : [protocolNames];
+        break;
+      }
+    }
+    
+      // If it's a specific search, filter to only show those protocols
+      if (isSpecificSearch) {
+        protocolFilteredResults = results.filter(protocol => targetProtocols.includes(protocol.study));
+      }
+      // If searching for general terms, show only the main protocol from each group
+      else if (queryLower === 'brain') {
+        protocolFilteredResults = results.filter(protocol => protocol.study === 'BRAIN');
+      }
+      else if (queryLower === 'spine') {
+        protocolFilteredResults = results.filter(protocol => protocol.study === 'C-SPINE'); // Use C-SPINE as main spine protocol
+      }
+      else if (queryLower.includes('cerebrovascular') || queryLower.includes('vessel')) {
+        protocolFilteredResults = results.filter(protocol => protocol.study === 'TIA'); // Use TIA as main cerebrovascular protocol
+      }
+      else if (queryLower.includes('arthrography')) {
+        protocolFilteredResults = results.filter(protocol => protocol.study === 'SHOULDER ARTHROGRAM'); // Use shoulder as main arthrogram
+      }
+      else if (queryLower.includes('upper extremity')) {
+        protocolFilteredResults = results.filter(protocol => protocol.study === 'SHOULDER'); // Use shoulder as main upper extremity
+      }
+      else if (queryLower.includes('lower extremity')) {
+        protocolFilteredResults = results.filter(protocol => protocol.study === 'HIP'); // Use hip as main lower extremity
+      }
+
+      // Optimize grouping with special handling for all consolidation groups
+      const grouped = protocolFilteredResults.reduce((acc, protocol) => {
+      let sectionKey = protocol.section || 'Other';
+      
+      // Determine which consolidation group this protocol belongs to
+      let consolidationGroup = null;
+      for (const [groupName, protocols] of Object.entries(consolidationGroups)) {
+        if (protocols.includes(protocol.study)) {
+          consolidationGroup = groupName;
+          break;
+        }
+      }
+      
+      // Handle consolidation grouping
+      if (consolidationGroup) {
+        // If showing specific protocol or main protocol, keep original section
+        if (isSpecificSearch || 
+            queryLower === 'brain' || queryLower === 'spine' || 
+            queryLower.includes('cerebrovascular') || queryLower.includes('vessel') ||
+            queryLower.includes('arthrography') || 
+            queryLower.includes('upper extremity') || queryLower.includes('lower extremity')) {
+          sectionKey = protocol.section || 'Other';
+        } else {
+          // Otherwise consolidate under appropriate category
+          switch (consolidationGroup) {
+            case 'brain':
+              sectionKey = 'Brain';
+              break;
+            case 'spine':
+              sectionKey = 'Spine';
+              break;
+            case 'cerebrovascular':
+              sectionKey = 'Cerebrovascular';
+              break;
+            case 'arthrography':
+              sectionKey = 'Joint Arthrography';
+              break;
+            case 'orbital':
+              sectionKey = 'Orbital Imaging';
+              break;
+            case 'upperExtremity':
+              sectionKey = 'Upper Extremity';
+              break;
+            case 'lowerExtremity':
+              sectionKey = 'Lower Extremity';
+              break;
+          }
+        }
+      }
+      
       if (!acc[sectionKey]) {
         acc[sectionKey] = [];
       }
       acc[sectionKey].push(protocol);
       return acc;
-    }, {});
+      }, {});
 
-    resultsContainer.innerHTML = renderGroupedProtocols(grouped);
+      resultsContainer.innerHTML = renderGroupedProtocols(grouped);
+      
+      // Track protocol views for recently viewed section
+      try {
+        if (typeof trackProtocolView === 'function') {
+          trackProtocolView(query, protocolFilteredResults);
+        }
+      } catch (error) {
+        console.warn('Failed to track protocol view:', error);
+      }
+    }
+    
+    // Track views and apply animations for both orders and protocols
+    try {
+      if (typeof trackProtocolView === 'function') {
+        trackProtocolView(query, filteredResults);
+      }
+    } catch (error) {
+      console.warn('Failed to track protocol view:', error);
+    }
     
     // Professional staggered animations with optimized timing
     const cards = resultsContainer.querySelectorAll('.protocol-card');
@@ -144,17 +645,125 @@ function runSearchAndRender() {
       }, 1200 + (index * 120));
     });
     
+    // Remove loading state and add favorite buttons after rendering
+    searchInput.classList.remove('search-loading');
+    setTimeout(() => {
+      try {
+        if (typeof addFavoriteButtons === 'function') {
+          addFavoriteButtons();
+        }
+      } catch (error) {
+        console.warn('Failed to add favorite buttons:', error);
+      }
+    }, 100);
+    
   } catch (error) {
     console.error('Search error:', error);
     resultsContainer.innerHTML = '<p class="error">Search error. Please try again.</p>';
+    searchInput.classList.remove('search-loading');
   }
 }
 
 // Create a debounced version of the search function
 const debouncedSearch = debounce(runSearchAndRender, DEBOUNCE_DELAY);
 
+// Feature detection and graceful degradation
+function checkBrowserCompatibility() {
+  const warnings = [];
+  
+  // Check for ES6 module support
+  const supportsModules = 'noModule' in HTMLScriptElement.prototype;
+  
+  // Check for essential APIs
+  if (!window.fetch) {
+    warnings.push('Your browser doesn\'t support modern networking. Some features may not work.');
+  }
+  
+  if (!window.localStorage && !window.sessionStorage) {
+    warnings.push('Your browser doesn\'t support data storage. Favorites and recent protocols won\'t be saved.');
+  }
+  
+  if (!window.requestAnimationFrame) {
+    warnings.push('Your browser doesn\'t support smooth animations.');
+  }
+  
+  // Show warnings if any
+  if (warnings.length > 0) {
+    setTimeout(function() {
+      const warningDiv = document.createElement('div');
+      warningDiv.style.cssText = `
+        position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
+        background: #ff9800; color: #ffffff; padding: 12px 16px;
+        border-radius: 8px; font-size: 0.9em; z-index: 3000;
+        max-width: 90%; text-align: center;
+      `;
+      warningDiv.innerHTML = `
+        <strong>Browser Compatibility Notice:</strong><br>
+        ${warnings.join('<br>')}
+        <br><small>Consider updating your browser for the best experience.</small>
+        <button onclick="this.parentElement.remove()" style="margin-left: 8px; background: rgba(255,255,255,0.2); border: none; color: inherit; padding: 2px 6px; border-radius: 3px; cursor: pointer;">×</button>
+      `;
+      document.body.appendChild(warningDiv);
+      
+      // Auto-remove after 10 seconds
+      setTimeout(function() {
+        if (warningDiv.parentNode) {
+          warningDiv.parentNode.removeChild(warningDiv);
+        }
+      }, 10000);
+    }, 1000);
+  }
+}
+
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+  // Check browser compatibility first
+  checkBrowserCompatibility();
+  
+  // Load modules with fallbacks - handle browsers without async/await support
+  if (typeof Promise === 'undefined' || !window.Promise) {
+    // Fallback for browsers without Promise support
+    console.warn('Browser does not support modern modules, using basic functionality');
+    initBasicFunctionality();
+    return;
+  }
+  
+  loadModules().then(function() {
+    console.log('Modules loaded successfully');
+  }).catch(function(error) {
+    console.error('Failed to load modules:', error);
+    initBasicFunctionality();
+  });
+
+  function initBasicFunctionality() {
+    // Set up basic fallback functions if modules fail to load
+    if (typeof fuzzySearch === 'undefined') {
+      window.fuzzySearch = fuzzySearch = function(query, data) {
+        return data.filter(function(item) {
+          return item.study && item.study.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+        });
+      };
+    }
+    if (typeof renderGroupedProtocols === 'undefined') {
+      renderGroupedProtocols = function(grouped) {
+        let html = '';
+        for (const section in grouped) {
+          html += '<h3>' + section + '</h3>';
+          grouped[section].forEach(function(protocol) {
+            html += '<div class="protocol-card"><h4>' + protocol.study + '</h4></div>';
+          });
+        }
+        return html;
+      };
+    }
+    // Initialize without module dependencies
+    initFavorites = initFavorites || function() {};
+    addFavoriteButtons = addFavoriteButtons || function() {};
+    initRecentProtocols = initRecentProtocols || function() {};
+    trackProtocolView = trackProtocolView || function() {};
+    initFeedback = initFeedback || function() {};
+  }
+  
   var searchInput = document.getElementById('searchInput');
   var searchButton = document.getElementById('searchButton');
   var resultsContainer = document.getElementById('results');
@@ -233,9 +842,40 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  loadProtocols()
-    .then(function(rawData) {
-      protocolData = rawData;
+  // Load orders data with fetch polyfill fallback
+  function loadOrders() {
+    if (window.fetch) {
+      return fetch('./data/imaging-orders.json')
+        .then(function(res) { return res.json(); });
+    } else {
+      // Fallback for older browsers
+      return new Promise(function(resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', './data/imaging-orders.json');
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            try {
+              resolve(JSON.parse(xhr.responseText));
+            } catch (e) {
+              reject(e);
+            }
+          } else {
+            reject(new Error('Failed to load'));
+          }
+        };
+        xhr.onerror = function() {
+          reject(new Error('Network error'));
+        };
+        xhr.send();
+      });
+    }
+  }
+
+  // Load both datasets concurrently
+  Promise.all([loadProtocols(), loadOrders()])
+    .then(function(results) {
+      protocolData = results[0];
+      ordersData = results[1];
       
       // Flatten all studies, duplicating them for each section they belong to
       allStudies = [];
@@ -245,16 +885,81 @@ document.addEventListener('DOMContentLoaded', function() {
           sectionObj.studies.forEach(function(study) {
             sections.forEach(function(sectionName) {
               // Create a new object for each study-section pair
-              allStudies.push(Object.assign({}, study, {
-                section: sectionName // Assign the single section name
-              }));
+              // Use fallback for Object.assign if not available
+              var newStudy = {};
+              for (var key in study) {
+                if (study.hasOwnProperty(key)) {
+                  newStudy[key] = study[key];
+                }
+              }
+              newStudy.section = sectionName;
+              allStudies.push(newStudy);
             });
           });
         }
       });
 
-      // Initialize fuzzy search with the flattened list
-      initFuzzy(allStudies);
+      // Flatten all orders, duplicating them for each section they belong to
+      allOrders = [];
+      ordersData.forEach(function(sectionObj) {
+        if (Array.isArray(sectionObj.studies)) {
+          var sections = Array.isArray(sectionObj.section) ? sectionObj.section : ['Other'];
+          sectionObj.studies.forEach(function(order) {
+            sections.forEach(function(sectionName) {
+              // Create a new object for each order-section pair
+              var newOrder = {};
+              for (var key in order) {
+                if (order.hasOwnProperty(key)) {
+                  newOrder[key] = order[key];
+                }
+              }
+              newOrder.section = sectionName;
+              allOrders.push(newOrder);
+            });
+          });
+        }
+      });
+
+      // Initialize fuzzy search with both flattened lists
+      try {
+        if (typeof initFuzzy === 'function') {
+          // Initialize with all studies - we'll switch datasets dynamically in search
+          initFuzzy(allStudies.concat(allOrders));
+        }
+      } catch (error) {
+        console.error('Failed to initialize search:', error);
+        // Fallback: basic search without fuzzy matching
+        window.fuzzySearch = fuzzySearch = function(query, data) {
+          return data.filter(function(item) {
+            return item.study && item.study.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+          });
+        };
+      }
+      
+      // Initialize systems with enhanced error handling
+      try {
+        if (typeof initFavorites === 'function') {
+          initFavorites();
+        }
+      } catch (error) {
+        console.error('Failed to initialize favorites:', error);
+      }
+      
+      try {
+        if (typeof initRecentProtocols === 'function') {
+          initRecentProtocols();
+        }
+      } catch (error) {
+        console.error('Failed to initialize recent protocols:', error);
+      }
+      
+      try {
+        if (typeof initFeedback === 'function') {
+          initFeedback();
+        }
+      } catch (error) {
+        console.error('Failed to initialize feedback:', error);
+      }
       
       // Don't show any results initially
       resultsContainer.innerHTML = '';
@@ -264,24 +969,113 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     })
     .catch(function(error) {
-      console.error('Failed to load protocols:', error);
-      if (searchInput.value.trim()) {
-        resultsContainer.innerHTML = 
-          '<p class="error">Failed to load protocols. Please try again later.</p>';
+      console.error('Failed to load data:', error);
+      
+      // Show user-friendly error message
+      var errorMessage = 'Failed to load protocols and orders. ';
+      if (!navigator.onLine) {
+        errorMessage += 'Please check your internet connection.';
+      } else if (error.name === 'TypeError') {
+        errorMessage += 'Please refresh the page and try again.';
+      } else {
+        errorMessage += 'Please try again later.';
+      }
+      
+      resultsContainer.innerHTML = '<p class="error">' + errorMessage + '</p>';
+    });
+
+  // Enhanced keyboard shortcuts
+  function setupKeyboardShortcuts() {
+    // Global keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      // Ctrl+K or Cmd+K to focus search
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+        return;
+      }
+      
+      // Escape to clear search (when search is focused)
+      if (e.key === 'Escape' && document.activeElement === searchInput) {
+        e.preventDefault();
+        searchInput.value = '';
+        resultsContainer.innerHTML = '';
+        searchInput.classList.remove('search-loading');
+        return;
+      }
+      
+      // Ctrl+/ to show keyboard shortcuts help
+      if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+        e.preventDefault();
+        showKeyboardShortcuts();
+        return;
       }
     });
+    
+    // Search input specific shortcuts
+    searchInput.addEventListener('keydown', function(e) {
+      // Enter to search immediately (bypass debounce)
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        runSearchAndRender();
+        return;
+      }
+      
+      // Escape to clear and blur
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        searchInput.value = '';
+        resultsContainer.innerHTML = '';
+        searchInput.classList.remove('search-loading');
+        searchInput.blur();
+        return;
+      }
+    });
+  }
+  
+  // Show keyboard shortcuts help
+  function showKeyboardShortcuts() {
+    const shortcuts = `
+      <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                  background: var(--primary-surface-bg); border: 1px solid var(--border-color); 
+                  border-radius: 12px; padding: 24px; z-index: 2000; min-width: 300px;
+                  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);">
+        <h3 style="margin: 0 0 16px 0; color: var(--text-primary);">Keyboard Shortcuts</h3>
+        <div style="font-family: 'Jost', sans-serif; line-height: 1.6;">
+          <div style="margin-bottom: 8px;"><kbd style="background: var(--secondary-surface-bg); padding: 2px 6px; border-radius: 4px; font-size: 0.9em;">Ctrl + K</kbd> Focus search</div>
+          <div style="margin-bottom: 8px;"><kbd style="background: var(--secondary-surface-bg); padding: 2px 6px; border-radius: 4px; font-size: 0.9em;">Enter</kbd> Search immediately</div>
+          <div style="margin-bottom: 8px;"><kbd style="background: var(--secondary-surface-bg); padding: 2px 6px; border-radius: 4px; font-size: 0.9em;">Esc</kbd> Clear search</div>
+          <div style="margin-bottom: 16px;"><kbd style="background: var(--secondary-surface-bg); padding: 2px 6px; border-radius: 4px; font-size: 0.9em;">Ctrl + /</kbd> Show this help</div>
+          <button onclick="this.parentElement.parentElement.remove()" 
+                  style="background: var(--interactive-accent); color: var(--interactive-accent-text); 
+                         border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Close</button>
+        </div>
+      </div>
+    `;
+    
+    // Remove existing shortcuts overlay
+    const existing = document.querySelector('.shortcuts-overlay');
+    if (existing) existing.remove();
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'shortcuts-overlay';
+    overlay.innerHTML = shortcuts;
+    overlay.style.cssText = `
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(0, 0, 0, 0.5); z-index: 1999;
+    `;
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) overlay.remove();
+    });
+    
+    document.body.appendChild(overlay);
+  }
 
   // Set up event listeners for search with cross-browser support
   addEvent(searchInput, 'input', debouncedSearch);
   addEvent(searchButton, 'click', runSearchAndRender);
-  addEvent(searchInput, 'keydown', function(e) {
-    if (e.key === 'Enter' || e.keyCode === 13) {
-      if (e.preventDefault) {
-        e.preventDefault();
-      } else {
-        e.returnValue = false;
-      }
-      runSearchAndRender();
-    }
-  });
+  
+  // Setup keyboard shortcuts
+  setupKeyboardShortcuts();
 });
