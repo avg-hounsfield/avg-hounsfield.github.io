@@ -50,22 +50,22 @@ html {
   --concrete: #95a5a6;
   --asbestos: #7f8c8d;
   
-  /* Theme Colors - Medical Professional Light Theme */
-  --bg-color: #ecf0f1;            /* Clouds - main background */
+  /* Theme Colors - Monochromatic Medical Professional Theme */
+  --bg-color: #f8f9fa;            /* Light gray - main background */
   --primary-surface-bg: #ffffff;  /* White - card backgrounds */
-  --secondary-surface-bg: #f8f9fa; /* Light gray - secondary surfaces */
-  --text-primary: #2c3e50;        /* Midnight Blue - primary text */
-  --text-secondary: #7f8c8d;      /* Asbestos - secondary text */
-  --text-muted: #95a5a6;          /* Concrete - muted text */
-  --interactive-accent: #1abc9c;  /* Turquoise - primary actions */
-  --interactive-accent-hover: #16a085; /* Darker turquoise on hover */
+  --secondary-surface-bg: #f1f3f4; /* Very light gray - secondary surfaces */
+  --text-primary: #212529;        /* Dark gray - primary text */
+  --text-secondary: #6c757d;      /* Medium gray - secondary text */
+  --text-muted: #adb5bd;          /* Light gray - muted text */
+  --interactive-accent: #495057;  /* Dark gray - primary actions */
+  --interactive-accent-hover: #343a40; /* Darker gray on hover */
   --interactive-accent-text: #ffffff; /* White text on accent */
-  --border-color: #bdc3c7;        /* Silver - borders */
-  --border-color-focus: #1abc9c;  /* Turquoise - focus borders */
-  --link-color: #3498db;          /* Peter River - links */
-  --header-color: #1abc9c;        /* Turquoise - headers */
-  --highlight-bluegreen: #1abc9c; /* Turquoise - highlights */
-  --underline-color: #f1c40f;     /* Sun Flower - underlines */
+  --border-color: #dee2e6;        /* Light gray - borders */
+  --border-color-focus: #495057;  /* Dark gray - focus borders */
+  --link-color: #6c757d;          /* Medium gray - links */
+  --header-color: #343a40;        /* Dark gray - headers */
+  --highlight-bluegreen: #6c757d; /* Medium gray - highlights */
+  --underline-color: #6c757d;     /* Medium gray - underlines */
   
   /* Status Colors */
   --success: #2ecc71;             /* Emerald - success */
@@ -132,13 +132,16 @@ body {
 
 /* Dark theme override for users who prefer it */
 .dark-theme {
-  --bg-color: #2c3e50;
-  --primary-surface-bg: #34495e;
-  --secondary-surface-bg: #3a506b;
-  --text-primary: #ecf0f1;
-  --text-secondary: #bdc3c7;
-  --text-muted: #95a5a6;
-  --border-color: #556983;
+  --bg-color: #212529;
+  --primary-surface-bg: #343a40;
+  --secondary-surface-bg: #495057;
+  --text-primary: #f8f9fa;
+  --text-secondary: #adb5bd;
+  --text-muted: #6c757d;
+  --border-color: #495057;
+  --interactive-accent: #adb5bd;
+  --interactive-accent-hover: #f8f9fa;
+  --header-color: #f8f9fa;
 }
 
 /* Light theme fallbacks */
@@ -301,15 +304,21 @@ h3 {
   margin-bottom: 20px; /* Add space between Contrast and Sequences accordion */
 }
 
-/* Accent for "Contrast: Yes" */
+/* Accent for "Contrast: Yes" - more legible green */
 .contrast-value.contrast-yes {
-  color: var(--underline-color);
-  font-weight: 700; /* Keep YES bold */
+  color: #27ae60;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.contrast-value.contrast-no {
+  color: #6c757d;
+  font-weight: 600;
 }
 
 /* Ensure contrast label has normal weight */
 .contrast-yes {
-  font-weight: 400; /* Normal weight for "Contrast:" */
+  font-weight: 400;
 }
 
 /* Sequence styling */
@@ -2013,21 +2022,26 @@ a:hover::after {
 .contrast-badge {
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-md);
-  font-size: 0.75em;
-  font-weight: 600;
-  border: none;
+  font-size: 0.8em;
+  font-weight: 700;
+  border: 2px solid;
   text-transform: uppercase;
   letter-spacing: 0.3px;
+  transition: all 0.2s ease;
 }
 
 .contrast-yes {
-  background: var(--success);
+  background: #27ae60;
   color: white;
+  border-color: #229954;
+  box-shadow: 0 2px 4px rgba(39, 174, 96, 0.3);
 }
 
 .contrast-no {
-  background: var(--warning);
-  color: var(--text-primary);
+  background: #f8f9fa;
+  color: #6c757d;
+  border-color: #dee2e6;
+  box-shadow: 0 2px 4px rgba(108, 117, 125, 0.15);
 }
 
 .order-details {
@@ -2036,23 +2050,23 @@ a:hover::after {
   border-top: 1px solid var(--border-color);
 }
 
-/* Flat UI 2.0 Clinical Indications */
 .clinical-indication {
   background: var(--secondary-surface-bg);
-  border-left: 4px solid var(--interactive-accent);
-  padding: var(--space-md) var(--space-lg);
-  margin: var(--space-md) 0;
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
   font-size: 0.9em;
   line-height: 1.5;
-  color: var(--text-primary);
-  box-shadow: var(--shadow-flat);
+  color: var(--text-secondary);
+  border-left: 4px solid #27ae60;
+  margin-top: 8px;
 }
 
 .clinical-indication strong {
-  color: var(--interactive-accent);
+  color: var(--text-primary);
   font-weight: 600;
 }
+
+/* Flat UI 2.0 Clinical Indications - Additional Styles */
 
 .order-info p {
   margin: 8px 0;

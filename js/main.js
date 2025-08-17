@@ -1056,11 +1056,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // Don't show any results initially
       resultsContainer.innerHTML = '';
       
-      // Fallback favorites initialization if module failed
-      if (typeof initFavorites !== 'function') {
-        console.log('Setting up fallback favorites...');
-        setupFallbackFavorites();
-      }
+      // Always setup fallback favorites as backup
+      console.log('Setting up fallback favorites as backup...');
+      setupFallbackFavorites();
       
       if (searchInput.value.trim()) {
         runSearchAndRender();
@@ -1177,35 +1175,68 @@ document.addEventListener('DOMContentLoaded', function() {
   // Setup keyboard shortcuts
   setupKeyboardShortcuts();
 
-  // Fallback favorites functionality
+  // Enhanced fallback favorites functionality with debugging
   function setupFallbackFavorites() {
+    console.log('Setting up fallback favorites...');
+    
     const trigger = document.getElementById('sidebar-trigger');
     const close = document.getElementById('sidebar-close');
     const content = document.getElementById('sidebar-content');
     let sidebarOpen = false;
 
+    console.log('Favorites elements found:', { 
+      trigger: !!trigger, 
+      close: !!close, 
+      content: !!content 
+    });
+
     if (trigger) {
-      trigger.addEventListener('click', function() {
-        console.log('Fallback favorites trigger clicked');
+      trigger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Fallback favorites trigger clicked - current state:', sidebarOpen);
+        
         if (content) {
           if (sidebarOpen) {
             content.classList.remove('open');
             sidebarOpen = false;
+            console.log('Sidebar closed');
           } else {
             content.classList.add('open');
             sidebarOpen = true;
+            console.log('Sidebar opened');
           }
+        } else {
+          console.error('Sidebar content not found');
         }
       });
+      
+      console.log('Click listener added to trigger');
+    } else {
+      console.error('Sidebar trigger not found');
     }
 
     if (close) {
-      close.addEventListener('click', function() {
+      close.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Close button clicked');
+        
         if (content) {
           content.classList.remove('open');
           sidebarOpen = false;
+          console.log('Sidebar closed via close button');
         }
       });
     }
+    
+    // Add escape key listener
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && sidebarOpen && content) {
+        content.classList.remove('open');
+        sidebarOpen = false;
+        console.log('Sidebar closed via Escape key');
+      }
+    });
   }
 });

@@ -198,9 +198,9 @@ function renderSequencesCard(sequences) {
     <div class="sequences-card">
       <div class="sequences-header" onclick="toggleAccordion('${accordionId}')">
         <h4>Sequences</h4>
-        <span class="accordion-toggle" id="toggle-${accordionId}">−</span>
+        <span class="accordion-toggle" id="toggle-${accordionId}">+</span>
       </div>
-      <div class="sequences-content accordion-open" id="${accordionId}" style="display: block;">
+      <div class="sequences-content accordion-closed" id="${accordionId}" style="display: none;">
         <ul>
           ${sequences.map(seq => {
             const isHighlight = seq.highlight === true;
@@ -519,28 +519,38 @@ function renderOrderCard(order) {
   const orderTypeBadge = order.orderType && order.orderType !== 'Standard' ? 
     `<span class="order-type-badge">${order.orderType}</span>` : '';
 
-  // Add clinical indications based on order type and study name
+  // Add comprehensive clinical indications based on order type and study name
   let clinicalIndications = '';
   const studyUpper = order.study.toUpperCase();
   
   if (studyUpper.includes('ANGIO')) {
-    clinicalIndications = '<div class="clinical-indication">🔍 <strong>Vascular imaging:</strong> Evaluates blood vessels, stenosis, aneurysms</div>';
+    clinicalIndications = '<div class="clinical-indication"><strong>Vascular Imaging:</strong> Evaluates blood vessels, stenosis, aneurysms, and vascular malformations</div>';
   } else if (studyUpper.includes('STONE PROTOCOL')) {
-    clinicalIndications = '<div class="clinical-indication">💎 <strong>Stone detection:</strong> Identifies kidney/ureteral stones without contrast</div>';
+    clinicalIndications = '<div class="clinical-indication"><strong>Stone Detection:</strong> Non-contrast imaging to identify kidney and ureteral stones</div>';
   } else if (studyUpper.includes('LOW DOSE LUNG')) {
-    clinicalIndications = '<div class="clinical-indication">🫁 <strong>Lung screening:</strong> Early lung cancer detection for high-risk patients</div>';
+    clinicalIndications = '<div class="clinical-indication"><strong>Lung Screening:</strong> Early detection of lung cancer in high-risk patients</div>';
   } else if (studyUpper.includes('CALCIUM SCORING')) {
-    clinicalIndications = '<div class="clinical-indication">❤️ <strong>Cardiac risk:</strong> Quantifies coronary artery calcium for risk stratification</div>';
+    clinicalIndications = '<div class="clinical-indication"><strong>Cardiac Risk Assessment:</strong> Quantifies coronary artery calcium for cardiovascular risk stratification</div>';
   } else if (studyUpper.includes('ENTEROGRAPHY')) {
-    clinicalIndications = '<div class="clinical-indication">🔬 <strong>Bowel imaging:</strong> Evaluates inflammatory bowel disease (Crohn\'s, UC)</div>';
+    clinicalIndications = '<div class="clinical-indication"><strong>Bowel Imaging:</strong> Evaluates inflammatory bowel disease (Crohn\'s disease, ulcerative colitis)</div>';
   } else if (studyUpper.includes('MRCP')) {
-    clinicalIndications = '<div class="clinical-indication">🟡 <strong>Biliary imaging:</strong> Evaluates bile ducts, gallbladder, pancreatic duct</div>';
+    clinicalIndications = '<div class="clinical-indication"><strong>Biliary System:</strong> Non-invasive evaluation of bile ducts, gallbladder, and pancreatic duct</div>';
   } else if (studyUpper.includes('PROSTATE')) {
-    clinicalIndications = '<div class="clinical-indication">🎯 <strong>Prostate evaluation:</strong> Cancer detection, staging, and monitoring</div>';
+    clinicalIndications = '<div class="clinical-indication"><strong>Prostate Evaluation:</strong> Cancer detection, staging, and treatment monitoring</div>';
   } else if (studyUpper.includes('BONE DENSITY')) {
-    clinicalIndications = '<div class="clinical-indication">🦴 <strong>Bone health:</strong> Osteoporosis screening and monitoring</div>';
+    clinicalIndications = '<div class="clinical-indication"><strong>Bone Health Assessment:</strong> Osteoporosis screening and fracture risk evaluation</div>';
   } else if (studyUpper.includes('PET')) {
-    clinicalIndications = '<div class="clinical-indication">⚡ <strong>Metabolic imaging:</strong> Cancer staging, treatment response assessment</div>';
+    clinicalIndications = '<div class="clinical-indication"><strong>Metabolic Imaging:</strong> Cancer staging, treatment response assessment, and recurrence detection</div>';
+  } else if (studyUpper.includes('BRAIN') || studyUpper.includes('HEAD')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Neurological Imaging:</strong> Evaluation of brain structure, pathology, and function</div>';
+  } else if (studyUpper.includes('SPINE')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Spinal Imaging:</strong> Assessment of spinal cord, vertebrae, and surrounding structures</div>';
+  } else if (studyUpper.includes('CHEST') || studyUpper.includes('THORAX')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Thoracic Imaging:</strong> Evaluation of lungs, heart, and mediastinal structures</div>';
+  } else if (studyUpper.includes('ABDOMEN')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Abdominal Imaging:</strong> Assessment of intra-abdominal organs and pathology</div>';
+  } else if (studyUpper.includes('PELVIS')) {
+    clinicalIndications = '<div class="clinical-indication"><strong>Pelvic Imaging:</strong> Evaluation of pelvic organs and structures</div>';
   }
 
   return `
