@@ -208,33 +208,18 @@ function renderBreadcrumb(category, protocols) {
  * Creates HTML for search results, grouped by category.
  */
 export function renderGroupedProtocols(groupedData, isOrdersMode = false) {
-  // Functions for consolidating protocols
-  const consolidationRenderers = {
-    'Brain': (protocols) => renderConsolidatedCard(protocols, 'brain', 'BRAIN', 'Brain Protocols'),
-    'Spine': (protocols) => renderConsolidatedCard(protocols, 'spine', 'C-SPINE', 'Spine Imaging'),
-    // Add other consolidators here as needed
-  };
-
   return Object.entries(groupedData).map(([category, protocols]) => {
     let protocolCards;
-    let breadcrumbHtml = '';
     
     if (isOrdersMode) {
       protocolCards = protocols.map(renderOrderCard).join('');
     } else {
-      const renderer = consolidationRenderers[category];
-      if (renderer && protocols.length > 1) {
-        protocolCards = renderer(protocols);
-        breadcrumbHtml = renderBreadcrumb(category, protocols);
-      } else {
-        protocolCards = protocols.map(renderProtocolCard).join('');
-      }
+      protocolCards = protocols.map(renderProtocolCard).join('');
     }
     
     return `
       <div class="protocol-group">
         <h2 class="category-header">${escapeHtml(category)}</h2>
-        ${breadcrumbHtml}
         <div class="protocol-grid">${protocolCards}</div>
       </div>
     `;

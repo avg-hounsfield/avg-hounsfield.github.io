@@ -206,11 +206,12 @@ input:focus, select:focus, textarea:focus {
 }
 
 .m3-extended-fab:hover {
-  box-shadow: var(--shadow-floating);
+  box-shadow: none;
   background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
   transform: scale(1.02);
   border: none;
+  outline: none;
 }
 
 .m3-extended-fab:hover::after {
@@ -231,7 +232,7 @@ input:focus, select:focus, textarea:focus {
   min-width: 300px;
   background-color: var(--md-sys-color-surface-container-highest);
   border-radius: 16px 16px 0 0; /* M3 top-rounded corners */
-  border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
+  border-bottom: none;
   transition: border-color 0.2s ease;
   padding: 8px 16px;
 }
@@ -398,7 +399,7 @@ button:hover, .button:hover {
   background: var(--secondary-surface-bg);
   padding: 12px 16px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
+  border: none;
   border-left: 6px solid var(--interactive-accent);
   margin-top: 8px;
   /* ✅ FIXED: Replaced color-mix() with a safe, theme-aware shadow */
@@ -519,9 +520,14 @@ body[data-theme="dark"] .scanner-notes-content {
 
 /* Clinical Indication Box (left border) */
 body[data-theme="dark"] .clinical-indication {
-  background-color: var(--secondary-surface-bg);
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
   /* Use the main primary color, which is bright in dark mode */
   border-left-color: var(--md-sys-color-primary);
+}
+
+body[data-theme="dark"] .clinical-indication strong {
+  color: var(--md-sys-color-on-surface);
 }
 
 /* Accordion Card Borders (using primary, secondary, tertiary from dark theme) */
@@ -709,14 +715,14 @@ body[data-theme="dark"] .sidebar-trigger:hover {
     background-color: var(--secondary-surface-bg);
     margin-top: 1px;
 }
-.sequences-card { border-left: 3px solid var(--md-sys-color-primary); }
-.sequences-header h4 { color: var(--md-sys-color-primary); }
+.sequences-card { border-left: 3px solid var(--md-sys-color-outline); }
+.sequences-header h4 { color: var(--md-sys-color-on-surface-variant); }
 .indications-card { 
-  border-left: 4px solid var(--md-sys-color-tertiary);
-  background-color: rgba(var(--md-sys-color-tertiary-rgb), 0.05);
+  border-left: 4px solid var(--md-sys-color-outline);
+  background-color: rgba(var(--md-sys-color-outline-rgb), 0.05);
 }
 .indications-header h4 { 
-  color: var(--md-sys-color-tertiary);
+  color: var(--md-sys-color-on-surface-variant);
   font-weight: 700;
 }
 .scanner-notes-card { border-left: 3px solid var(--md-sys-color-outline); }
@@ -782,6 +788,8 @@ li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700;
 /* Increase font weight when switch is checked */
 .filter-toggle-wrapper:has(#dataSourceToggle:checked) .filter-toggle-label {
   font-weight: 700;
+  color: #8a2be2;
+  text-shadow: 0 0 8px rgba(138, 43, 226, 0.6);
 }
 
 .m3-switch {
