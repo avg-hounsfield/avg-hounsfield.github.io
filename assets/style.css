@@ -162,26 +162,48 @@ input:focus, select:focus, textarea:focus {
 /* Material 3 Forms & Buttons                                                 */
 /* ========================================================================== */
 
-/* Filled Button Style */
-.m3-button-filled {
+.m3-extended-fab {
+  /* Layout & Sizing */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px; /* Space between icon and text */
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
+  gap: 12px; /* A bit more space for an FAB */
+  height: 56px; /* Standard M3 FAB height */
+  padding: 0 20px;
+  
+  /* Shape & Color */
   border: none;
-  border-radius: var(--radius-lg); /* Fully rounded corners */
-  padding: 10px 24px;
+  border-radius: 16px; /* M3 "Medium" corner radius */
+  background-color: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  
+  /* Typography */
+  font-family: 'Jost', sans-serif;
   font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  box-shadow: var(--shadow-flat);
-  transition: box-shadow 0.2s ease, background-color 0.2s ease;
-}
-.m3-button-filled:hover {
+  font-size: 0.875rem; /* 14px */
+  letter-spacing: 0.1px;
+  
+  /* Effects */
   box-shadow: var(--shadow-raised);
-  background-color: color-mix(in srgb, var(--md-sys-color-primary) 92%, white);
+  cursor: pointer;
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease;
+}
+
+/* Hover State */
+.m3-extended-fab:hover {
+  box-shadow: var(--shadow-floating);
+  /* Use color-mix for a subtle hover brightness effect */
+  background-color: color-mix(in srgb, var(--md-sys-color-primary-container) 92%, white);
+}
+
+/* Active/Pressed State */
+.m3-extended-fab:active {
+  box-shadow: var(--shadow-flat);
+}
+
+/* Icon inside the button */
+.m3-extended-fab .material-symbols-outlined {
+  font-size: 24px;
 }
 
 /* Filled Text Field Style */
@@ -248,8 +270,8 @@ button:hover, .button:hover {
   box-shadow: var(--shadow-raised);
 }
 .favorite-btn {
-  background: transparent;
-  border: 1px solid var(--border-color);
+  background: var(--primary-surface-bg); /* Give it a surface color */
+  border: none;
   border-radius: 50%;
   color: var(--text-secondary);
   width: 40px;
@@ -259,11 +281,14 @@ button:hover, .button:hover {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: var(--shadow-flat);
+  transition: all 0.2s ease;
 }
-.favorite-btn.favorited {
-  background-color: var(--interactive-accent);
-  color: var(--interactive-accent-text);
-  border-color: var(--interactive-accent);
+
+.favorite-btn:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-raised);
 }
 .favorite-btn .material-symbols-outlined {
   font-variation-settings: 'FILL' 0;
@@ -275,6 +300,13 @@ button:hover, .button:hover {
 /* ========================================================================== */
 /* Protocol & Order Cards                                                     */
 /* ========================================================================== */
+.protocol-badges {
+  display: flex;
+  flex-wrap: wrap; /* Allows badges to wrap on small screens */
+  gap: 8px; /* This adds 8px of space between each badge */
+  margin-top: 12px;
+}
+
 .protocol-group {
   margin-bottom: 40px;
 }
@@ -292,21 +324,24 @@ button:hover, .button:hover {
   gap: 20px;
   width: 100%;
 }
+/* ✅ NEW ELEVATED STYLE */
 .protocol-card, .order-card {
   display: flex;
   flex-direction: column;
   background: var(--primary-surface-bg);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  /* border: 1px solid var(--border-color); */ /* REMOVED */
+  border: none; /* Explicitly remove border */
+  border-radius: var(--radius-md); /* 12px */
   padding: 1.5rem;
-  box-shadow: var(--shadow-flat);
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  box-shadow: var(--shadow-flat); /* M3 Elevation Level 1 */
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   width: 100%;
 }
+
 .protocol-card:hover, .order-card:hover {
-  box-shadow: var(--shadow-raised);
-  border-color: var(--border-color-focus);
+  box-shadow: var(--shadow-raised); /* M3 Elevation Level 2 */
+  /* border-color: var(--border-color-focus); */ /* REMOVED */
   transform: translateY(-2px);
 }
 .protocol-title-section {
@@ -355,13 +390,24 @@ button:hover, .button:hover {
   color: var(--text-primary);
   font-weight: 600;
 }
-.modality-badge, .order-type-badge {
-    padding: 4px 12px;
-    border-radius: var(--radius-md);
-    font-size: 0.75em;
-    font-weight: 600;
-    color: white;
+.modality-badge,
+.order-type-badge,
+.contrast-badge {
+  padding: 4px 12px;
+  border-radius: 8px; /* ✅ CHANGED: From pill shape to a squarer M3 look */
+  font-size: 0.75rem; /* 12px */
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
 }
+
+/* Specific styles for colored/filled badges */
+.modality-badge,
+.order-type-badge {
+  color: white;
+  border: none;
+}
+
 .modality-ct { background: var(--modality-ct); }
 .modality-mri { background: var(--modality-mri); }
 .modality-ultrasound { background: var(--modality-us); }
@@ -370,6 +416,23 @@ button:hover, .button:hover {
 .order-type-badge { background: var(--interactive-accent); }
 
 
+/* Specific styles for outlined contrast badges */
+.contrast-badge {
+  border: 1.5px solid; /* A slightly thicker border looks better */
+  transition: all 0.2s ease;
+}
+
+.contrast-badge.contrast-yes {
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 15%, transparent);
+  color: var(--md-sys-color-primary);
+  border-color: var(--md-sys-color-primary);
+}
+
+.contrast-badge.contrast-no {
+  background-color: var(--primary-surface-bg);
+  color: var(--md-sys-color-on-surface-variant);
+  border-color: var(--border-color);
+}
 /* ========================================================================== */
 /* Dark Theme Overrides                                                       */
 /* ========================================================================== */
@@ -495,17 +558,66 @@ body[data-theme="dark"] .protocol-group h2 {
   border-bottom-color: var(--md-sys-color-outline);
 }
 
+body[data-theme="dark"] .sequences-header,
+body[data-theme="dark"] .indications-header,
+body[data-theme="dark"] .sub-protocols-header,
+body[data-theme="dark"] .scanner-notes-header {
+  background-color: var(--md-sys-color-surface-container); /* A slightly lighter dark gray */
+  border-bottom-color: var(--md-sys-color-outline-variant);
+}
+
+/* Defines the hover state for the headers */
+body[data-theme="dark"] .sequences-header:hover,
+body[data-theme="dark"] .indications-header:hover,
+body[data-theme="dark"] .sub-protocols-header:hover,
+body[data-theme="dark"] .scanner-notes-header:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+/* This targets the content panel that slides open */
+body[data-theme="dark"] .accordion-content {
+  background-color: var(--md-sys-color-surface-container-low); /* A darker gray for contrast */
+}
+
+/* This targets the text and elements INSIDE the content panel */
+body[data-theme="dark"] .accordion-content-inner {
+  color: var(--md-sys-color-on-surface-variant); /* Light text for content */
+}
+
+/* Ensure sub-headings inside the accordion are also light */
+body[data-theme="dark"] .accordion-content-inner h3 {
+  color: var(--md-sys-color-on-surface);
+}
+
+/* Ensure list items inside the accordion are light */
+body[data-theme="dark"] .accordion-content-inner li {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Re-apply the specific highlight colors for dark mode */
+body[data-theme="dark"] .accordion-content-inner li.contrast-sequence {
+  color: var(--md-sys-color-primary);
+}
+body[data-theme="dark"] .accordion-content-inner li.highlight-sequence {
+  color: var(--md-sys-color-tertiary);
+}
+
 /* ========================================================================== */
 /* Accordions (Sequences, Notes, etc.)                                        */
 /* ========================================================================== */
 .sequences-card, .indications-card, .sub-protocols-card, .scanner-notes-card {
     width: 100%;
     margin: 1rem 0 0 0;
-    background: transparent; /* Let the parent card handle background */
+    background: transparent;
     border-radius: var(--radius-md);
     box-shadow: none;
-    border: 1px solid var(--border-color);
+    /* border: 1px solid var(--border-color); */ /* REMOVED */
+    border: none; /* Explicitly remove border */
     overflow: hidden;
+
+    /* Keep the left accent border */
+    border-left-width: 3px;
+    border-left-style: solid;
 }
 .sequences-header, .indications-header, .sub-protocols-header, .scanner-notes-header {
     padding: 15px 20px;
@@ -623,7 +735,7 @@ body[data-theme="dark"] .slider-label.active {
 }
 /* ... Other widget styles like favorites, feedback, etc. go here ... */
 /* ========================================================================== */
-/* Favorites Sidebar (Corrected Version)                                      */
+/* Favorites Sidebar (Corrected and Simplified)                               */
 /* ========================================================================== */
 
 .favorites-sidebar {
@@ -632,39 +744,44 @@ body[data-theme="dark"] .slider-label.active {
   right: 0;
   transform: translateY(-50%);
   z-index: 1001;
-  /* This allows the trigger (width: 48px + padding) to be visible */
-  padding-left: 72px; 
+  /* This container is just for positioning */
 }
 
 .sidebar-content {
-  position: relative;
+  position: relative; /* Relative for the trigger button */
   width: 350px;
   max-height: 80vh;
   background: var(--primary-surface-bg);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   box-shadow: var(--shadow-floating);
+  
+  /* ✅ CORE FIX: Animation logic */
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  /* ✅ CORRECTED: Start completely hidden off-screen. */
+  /* Start hidden just off the screen to the right */
   transform: translateX(100%); 
+  
   display: flex;
   flex-direction: column;
 }
 
 .sidebar-content.open {
-  /* ✅ CORRECTED: When open, slide it back by its own width MINUS the trigger space */
-  transform: translateX(calc(100% - 350px - 72px));
+  /* When open, slide it fully into view */
+  transform: translateX(0); 
 }
 
 .sidebar-trigger {
   position: absolute;
+  /* Position it perfectly on the left edge of its parent (.sidebar-content) */
   left: 0;
   top: 50%;
-  transform: translate(-100%, -50%);
+  /* Move it completely outside its parent's boundary to the left */
+  transform: translate(-100%, -50%); 
+  
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   padding: 16px 12px;
-  width: 48px; /* Give it a fixed width */
+  width: 48px;
   border-radius: 12px 0 0 12px;
   cursor: pointer;
   display: flex;
