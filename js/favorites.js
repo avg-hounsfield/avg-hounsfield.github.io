@@ -129,6 +129,8 @@ export function addToFavorites(protocol) {
     study: protocol.study,
     usesContrast: protocol.usesContrast,
     section: protocol.section || 'Other',
+    type: protocol.type || 'protocol',
+    sequences: protocol.sequences || [],
     dateAdded: new Date().toISOString()
   });
   
@@ -215,6 +217,15 @@ function renderFavoritesList() {
     const typeText = favorite.type || 'protocol';
     const typeBadge = `<span class="favorite-type-badge ${typeText}">${typeText}</span>`;
     
+    // Create sequences list
+    let sequencesHtml = '';
+    if (favorite.sequences && favorite.sequences.length > 0) {
+      const sequencesList = favorite.sequences.map(seq => 
+        `<li class="${seq.highlight ? 'highlight-sequence' : ''}">${seq.sequence}</li>`
+      ).join('');
+      sequencesHtml = `<ul class="favorite-sequences">${sequencesList}</ul>`;
+    }
+    
     return `
       <div class="favorite-item" data-study="${favorite.study}">
         <div class="favorite-item-header">
@@ -225,6 +236,7 @@ function renderFavoritesList() {
           </div>
         </div>
         <p class="favorite-item-category">${favorite.section}</p>
+        ${sequencesHtml}
         <button class="favorite-item-remove" onclick="handleRemoveFavorite('${favorite.study}')" title="Remove from favorites">
           <span class="material-symbols-outlined">close</span>
         </button>
@@ -356,11 +368,28 @@ export function addFavoriteButtons() {
         const usesContrast = card?.getAttribute('data-contrast') === 'true';
         const section = card?.getAttribute('data-section') || 'Other';
         
+        // Extract sequences from the DOM
+        const sequences = [];
+        const sequencesList = card?.querySelector('.sequences-content ul');
+        if (sequencesList) {
+          const sequenceItems = sequencesList.querySelectorAll('li');
+          sequenceItems.forEach(li => {
+            const sequenceText = li.textContent.trim();
+            if (sequenceText && sequenceText !== 'None listed') {
+              sequences.push({
+                sequence: sequenceText,
+                highlight: li.classList.contains('highlight-sequence')
+              });
+            }
+          });
+        }
+        
         const item = {
           study: studyName,
           usesContrast: usesContrast,
           section: section,
-          type: type
+          type: type,
+          sequences: sequences
         };
         addToFavorites(item);
       }

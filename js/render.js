@@ -132,6 +132,123 @@ function renderSequencesCard(sequences) {
 }
 
 /**
+ * Determines the appropriate clinical order name for a protocol based on its study name and contrast usage
+ */
+function determineProtocolOrderName(protocol) {
+  if (!protocol || !protocol.study) return null;
+  
+  const studyName = protocol.study.toUpperCase();
+  const usesContrast = protocol.usesContrast;
+  
+  // Brain studies
+  if (studyName.includes('BRAIN') || studyName === 'SEIZURE' || studyName.includes('MS')) {
+    if (studyName.includes('TUMOR') || studyName.includes('INF') || studyName === 'SEIZURE' || studyName.includes('MS')) {
+      return usesContrast ? 'MRI BRAIN W/ + W/O CONTRAST' : 'MRI BRAIN W/O CONTRAST';
+    }
+    return usesContrast ? 'MRI BRAIN W/ CONTRAST' : 'MRI BRAIN W/O CONTRAST';
+  }
+  
+  // IAC studies
+  if (studyName.includes('IAC')) {
+    return usesContrast ? 'MRI IAC W/ + W/O CONTRAST' : 'MRI IAC W/O CONTRAST';
+  }
+  
+  // Pituitary studies
+  if (studyName.includes('PITUITARY')) {
+    return 'MRI SELLA (PITUITARY) W/ +W/O CONTRAST';
+  }
+  
+  // Orbit studies
+  if (studyName.includes('ORBIT')) {
+    return usesContrast ? 'MRI ORBITS W/ + W/O CONTRAST' : 'MRI ORBITS W/O CONTRAST';
+  }
+  
+  // TIA and stroke studies
+  if (studyName.includes('TIA')) {
+    if (studyName.includes('MRA') || studyName.includes('DISSECTION')) {
+      return 'MRA BRAIN/HEAD W/O CONTRAST';
+    }
+    return usesContrast ? 'MRI BRAIN W/ + W/O CONTRAST' : 'MRI BRAIN W/O CONTRAST';
+  }
+  
+  // Aneurysm studies
+  if (studyName.includes('ANEURYSM')) {
+    return 'MRA BRAIN/HEAD W/O CONTRAST';
+  }
+  
+  // Neck soft tissue
+  if (studyName.includes('NECK SOFT TISSUE')) {
+    return usesContrast ? 'MRI NECK W/ CONTRAST' : 'MRI NECK W/O CONTRAST';
+  }
+  
+  // Brachial plexus
+  if (studyName.includes('BRACHIAL PLEXUS')) {
+    return 'MRI BRACHIAL PLEXUS W/O CONTRAST';
+  }
+  
+  // TMJ studies
+  if (studyName.includes('TMJ')) {
+    return 'MRI TMJ W/O CONTRAST';
+  }
+  
+  // Spine studies
+  if (studyName.includes('SPINE') || studyName === 'C-SPINE' || studyName === 'T-SPINE' || studyName === 'L-SPINE') {
+    let spineRegion = '';
+    if (studyName.includes('CERVICAL') || studyName.includes('C-SPINE') || studyName === 'C-SPINE') spineRegion = 'CERVICAL';
+    else if (studyName.includes('THORACIC') || studyName.includes('T-SPINE') || studyName === 'T-SPINE') spineRegion = 'THORACIC';
+    else if (studyName.includes('LUMBAR') || studyName.includes('L-SPINE') || studyName === 'L-SPINE') spineRegion = 'LUMBAR';
+    
+    if (spineRegion) {
+      return usesContrast ? `MRI SPINE ${spineRegion} W/ + W/O CONTRAST` : `MRI SPINE ${spineRegion} W/O CONTRAST`;
+    }
+  }
+  
+  // Sacrum
+  if (studyName.includes('SACRUM')) {
+    return usesContrast ? 'MRI SACRUM W/ CONTRAST' : 'MRI SACRUM W/O CONTRAST';
+  }
+  
+  // Knee studies
+  if (studyName.includes('KNEE')) {
+    return usesContrast ? 'MRI KNEE W/ CONTRAST' : 'MRI KNEE W/O CONTRAST';
+  }
+  
+  // Shoulder studies
+  if (studyName.includes('SHOULDER')) {
+    return usesContrast ? 'MRI SHOULDER W/ CONTRAST' : 'MRI SHOULDER W/O CONTRAST';
+  }
+  
+  // Abdomen studies
+  if (studyName.includes('ABDOMEN')) {
+    return usesContrast ? 'MRI ABDOMEN W/ + W/O CONTRAST' : 'MRI ABDOMEN W/O CONTRAST';
+  }
+  
+  // Pelvis studies
+  if (studyName.includes('PELVIS')) {
+    return usesContrast ? 'MRI PELVIS W/ + W/O CONTRAST' : 'MRI PELVIS W/O CONTRAST';
+  }
+  
+  // Cardiac studies
+  if (studyName.includes('CARDIAC') || studyName.includes('HEART')) {
+    return usesContrast ? 'MRI CARDIAC W/ + W/O CONTRAST' : 'MRI CARDIAC W/O CONTRAST';
+  }
+  
+  // Angiography studies
+  if (studyName.includes('MRA') || studyName.includes('ANGIO')) {
+    if (studyName.includes('BRAIN') || studyName.includes('HEAD')) {
+      return 'MRA BRAIN/HEAD W/O CONTRAST';
+    }
+    if (studyName.includes('NECK') || studyName.includes('CAROTID')) {
+      return 'MRA NECK/CAROTID W/O CONTRAST';
+    }
+  }
+  
+  // Default fallback - construct from protocol name
+  const baseOrder = `MRI ${studyName}`;
+  return usesContrast ? `${baseOrder} W/ CONTRAST` : `${baseOrder} W/O CONTRAST`;
+}
+
+/**
  * Renders a single protocol card HTML string.
  */
 function renderProtocolCard(protocol) {
@@ -139,6 +256,10 @@ function renderProtocolCard(protocol) {
   
   const contrastText = protocol.usesContrast ? 'YES' : 'NO';
   const contrastClass = protocol.usesContrast ? 'contrast-yes' : 'contrast-no';
+  
+  // Determine clinical order name for this protocol
+  const clinicalOrderName = determineProtocolOrderName(protocol);
+  const orderNameBadge = clinicalOrderName ? `<span class="protocol-order-type-badge">${escapeHtml(clinicalOrderName)}</span>` : '';
 
   const sequences = protocol.layout?.leftCard?.sequences || [];
   const sortedSequences = sortSequences(sequences);
@@ -155,6 +276,7 @@ function renderProtocolCard(protocol) {
       <div class="protocol-content ${fullHeight ? 'full-height' : ''}">
         <div class="left-card">
           <div class="protocol-header">
+            ${orderNameBadge}
             <div class="protocol-title-section">
               <h3>Protocol: ${escapeHtml(protocol.study || 'Untitled Study')}</h3>
               <button class="favorite-btn" data-type="protocol" data-study="${escapeHtml(protocol.study)}" title="Add to favorites">
@@ -191,6 +313,7 @@ function renderProtocolCard(protocol) {
  */
 export function renderGroupedProtocols(groupedData, isOrdersMode = false) {
   // Force individual protocol cards - no consolidation
+  console.log('Rendering protocols:', groupedData); // Debug log
   return Object.entries(groupedData).map(([category, protocols]) => {
     let protocolCards;
     
@@ -198,6 +321,7 @@ export function renderGroupedProtocols(groupedData, isOrdersMode = false) {
       protocolCards = protocols.map(renderOrderCard).join('');
     } else {
       // Ensure each protocol gets its own card
+      console.log(`Rendering ${protocols.length} individual cards for ${category}`); // Debug log
       protocolCards = protocols.map(renderProtocolCard).join('');
     }
     
@@ -218,7 +342,9 @@ function renderOrderCard(order) {
   const modalityBadge = `<span class="modality-badge modality-${(order.modality || 'unknown').toLowerCase().replace(/[\s/]/g, '-')}">${escapeHtml(order.modality || 'Unknown')}</span>`;
   const orderTypeBadge = order.orderType && order.orderType !== 'Standard' ? `<span class="order-type-badge">${escapeHtml(order.orderType)}</span>` : '';
   
-  const clinicalIndications = `<div class="clinical-indication"><strong>Indications:</strong> For evaluation of related symptoms and conditions.</div>`;
+  const clinicalIndications = order.indication 
+    ? `<div class="clinical-indication"><strong>Indications:</strong> ${escapeHtml(order.indication)}</div>`
+    : `<div class="clinical-indication"><strong>Indications:</strong> For evaluation of related symptoms and conditions.</div>`;
 
   return `
     <div class="protocol-card order-card">
@@ -232,4 +358,4 @@ function renderOrderCard(order) {
       <div class="order-details">${clinicalIndications}</div>
     </div>
   `;
-}
+}// Force browser cache refresh

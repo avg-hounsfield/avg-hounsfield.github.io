@@ -232,8 +232,9 @@ input:focus, select:focus, textarea:focus {
   min-width: 300px;
   background-color: var(--md-sys-color-surface-container-highest);
   border-radius: 16px 16px 0 0; /* M3 top-rounded corners */
-  border: 1px solid var(--md-sys-color-outline-variant);
-  transition: border-color 0.2s ease;
+  border: none;
+  border-bottom: 2px solid var(--md-sys-color-outline-variant);
+  transition: border-bottom-color 0.2s ease;
   padding: 8px 16px;
 }
 
@@ -409,6 +410,24 @@ button:hover, .button:hover {
   color: var(--text-primary);
   font-weight: 600;
 }
+
+.order-details {
+  margin-top: 16px;
+}
+
+.protocol-order-type-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  color: white;
+  background: var(--interactive-accent);
+  margin-bottom: 8px;
+  border: none;
+}
 .modality-badge,
 .order-type-badge,
 .contrast-badge {
@@ -486,9 +505,8 @@ body[data-theme="dark"] .accordion-content-inner {
 body[data-theme="dark"] .sequences-header,
 body[data-theme="dark"] .indications-header,
 body[data-theme="dark"] .scanner-notes-header {
-  background-color: var(--md-sys-color-surface-container-high);
-  background-image: linear-gradient(rgba(var(--md-sys-color-primary-rgb), 0.05), rgba(var(--md-sys-color-primary-rgb), 0.05));
-  border-bottom: none;
+  background-color: var(--md-sys-color-surface-container);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 /* 3. Accordion / Sub-card Styling */
@@ -502,13 +520,15 @@ body[data-theme="dark"] .scanner-notes-card {
 body[data-theme="dark"] .sequences-header:hover,
 body[data-theme="dark"] .indications-header:hover,
 body[data-theme="dark"] .scanner-notes-header:hover {
-  background-color: var(--secondary-surface-bg);
+  background-color: var(--md-sys-color-surface-container-high);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 body[data-theme="dark"] .sequences-content,
 body[data-theme="dark"] .indications-content,
 body[data-theme="dark"] .scanner-notes-content {
-  background-color: var(--secondary-surface-bg);
+  background-color: var(--md-sys-color-surface-container-high);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 
@@ -581,7 +601,8 @@ body[data-theme="dark"] .scanner-notes-header {
 body[data-theme="dark"] .sequences-header:hover,
 body[data-theme="dark"] .indications-header:hover,
 body[data-theme="dark"] .scanner-notes-header:hover {
-  background-color: var(--secondary-surface-bg);
+  background-color: var(--md-sys-color-surface-container-high);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
 /* Make sure the text inside the accordion content is also the correct light color */
@@ -643,6 +664,15 @@ body[data-theme="dark"] .accordion-content-inner li.highlight-sequence {
   color: var(--md-sys-color-tertiary);
 }
 
+/* Ensure no borders in dark mode accordion content */
+body[data-theme="dark"] .accordion-content-inner,
+body[data-theme="dark"] .accordion-content-inner ul,
+body[data-theme="dark"] .accordion-content-inner li {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* Dark theme overrides for toggle switch and favorites sidebar */
 body[data-theme="dark"] .m3-switch-track {
   background-color: #ffffff;
@@ -660,16 +690,16 @@ body[data-theme="dark"] .m3-switch input:checked + .m3-switch-track {
 
 body[data-theme="dark"] .sidebar-content {
   background-color: #ffffff;
-  color: var(--md-sys-color-on-surface);
+  color: #1a1a1a;
 }
 
 body[data-theme="dark"] .sidebar-header {
   background-color: #f5f5f5;
-  color: var(--md-sys-color-on-surface);
+  color: #1a1a1a;
 }
 
 body[data-theme="dark"] .sidebar-body {
-  color: var(--md-sys-color-on-surface);
+  color: #1a1a1a;
 }
 
 body[data-theme="dark"] .sidebar-trigger {
@@ -680,6 +710,43 @@ body[data-theme="dark"] .sidebar-trigger {
 body[data-theme="dark"] .sidebar-trigger:hover {
   background-color: #d0d0d0;
   color: #333333;
+}
+
+/* Favorites sequences styling */
+.favorite-sequences {
+  list-style: none;
+  padding: 8px 0 0 0;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.favorite-sequences li {
+  padding: 2px 0;
+  color: #555555;
+}
+
+.favorite-sequences li.highlight-sequence {
+  color: #8a2be2;
+  font-weight: 600;
+}
+
+/* Ensure proper text contrast for favorites */
+.favorite-item-title,
+.favorite-item-category {
+  color: #1a1a1a !important;
+}
+
+body[data-theme="dark"] .favorite-item-title,
+body[data-theme="dark"] .favorite-item-category {
+  color: #1a1a1a !important;
+}
+
+body[data-theme="dark"] .favorite-sequences li {
+  color: #555555 !important;
+}
+
+body[data-theme="dark"] .favorite-sequences li.highlight-sequence {
+  color: #8a2be2 !important;
 }
 
 /* ========================================================================== */
@@ -700,20 +767,34 @@ body[data-theme="dark"] .sidebar-trigger:hover {
     border-left-style: solid;
 }
 .sequences-header, .indications-header, .scanner-notes-header {
-    padding: 8px 16px;
+    padding: 12px 20px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1px;
+    background: var(--md-sys-color-surface-container-highest);
+    border-radius: 8px;
+    margin: 16px 16px 0 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 2;
+    transition: all 0.2s ease;
 }
 .sequences-header:hover, .indications-header:hover, .scanner-notes-header:hover {
-    background-color: var(--secondary-surface-bg);
+    background-color: var(--md-sys-color-surface-container-high);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
 }
 .sequences-content, .indications-content, .scanner-notes-content {
-    padding: 12px 16px;
-    background-color: var(--secondary-surface-bg);
-    margin-top: 1px;
+    padding: 16px 20px 20px 20px;
+    background-color: transparent;
+    margin-top: -8px;
+    position: relative;
+    z-index: 1;
+    border-radius: 0 0 8px 8px;
+    border: none;
+    outline: none;
+    box-shadow: none;
 }
 .sequences-card { border-left: 3px solid var(--md-sys-color-outline); }
 .sequences-header h4 { color: var(--md-sys-color-on-surface-variant); }
@@ -740,12 +821,31 @@ li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-out;
-    background-color: var(--secondary-surface-bg); /* Set a base background */
+    background-color: var(--md-sys-color-surface-container-high);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4); /* Set a base background */
 }
 
 /* The inner container that provides consistent padding */
 .accordion-content-inner {
     padding: 20px;
+    border: none;
+    outline: none;
+}
+
+/* Remove all borders from accordion lists */
+.accordion-content-inner ul {
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.accordion-content-inner li {
+    border: none;
+    outline: none;
+    margin: 0;
+    padding: 4px 0;
 }
 
 /* When the 'open' class is added, the outer container expands */
@@ -812,7 +912,7 @@ li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700;
   width: 100%;
   height: 100%;
   background-color: var(--md-sys-color-surface-container-highest);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border: none;
   border-radius: 16px;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }

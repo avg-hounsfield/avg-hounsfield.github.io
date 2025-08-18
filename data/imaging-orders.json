@@ -6,205 +6,239 @@
         "study": "CT ANGIO NECK",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Angiography"
+        "orderType": "Angiography",
+        "indication": "Evaluation of carotid artery stenosis, vertebral artery pathology, suspected vascular malformation, neck trauma with vascular injury, pre-surgical planning for neck procedures, or assessment of post-operative vascular complications."
       },
       {
         "study": "CT BRAIN W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected brain tumor, metastases, infection (abscess, encephalitis), inflammatory conditions, enhancement of known lesions, post-operative surveillance, or when MRI is contraindicated."
       },
       {
         "study": "CT MAXILLOFACIAL W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected facial soft tissue mass, infection, inflammatory conditions, post-operative complications, evaluation of dental pathology with soft tissue involvement, or TMJ disorders with soft tissue component."
       },
       {
         "study": "CT NECK SOFT TISSUE W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected neck mass or lymphadenopathy, deep neck space infection, post-operative surveillance, evaluation of thyroid/parathyroid pathology, or assessment of airway compromise."
       },
       {
         "study": "CT SINUS W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Chronic sinusitis, recurrent acute sinusitis, nasal polyps, pre-surgical planning for FESS, suspected fungal sinusitis, or evaluation of sinus anatomy and drainage pathways."
       },
       {
         "study": "CT SPINE CERVICAL W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected spinal infection, tumor, post-operative complications, enhancement of known lesions, or when MRI is contraindicated in patients with neurological symptoms."
       },
       {
         "study": "CT SPINE CERVICAL W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Acute trauma with suspected fracture, cervical spondylosis, degenerative changes, bone pathology, or when rapid imaging is needed for unstable patients."
       },
       {
         "study": "CT SPINE LUMBAR W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected spinal infection, tumor, post-operative surveillance, enhancement of known lesions, or when MRI is contraindicated in patients with radiculopathy."
       },
       {
         "study": "CT SPINE LUMBAR W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Lumbar spine trauma, degenerative disc disease, spondylolisthesis, bone pathology, or when rapid imaging is needed for acute back pain with neurological deficits."
       },
       {
         "study": "CT SPINE THORACIC W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected spinal infection, tumor, post-operative complications, enhancement of known lesions, or when MRI is contraindicated in patients with thoracic myelopathy."
       },
       {
         "study": "CT SPINE THORACIC W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Thoracic spine trauma, compression fractures, degenerative changes, bone pathology, or when rapid imaging is needed for chest wall or thoracic back pain."
       },
       {
         "study": "CT TEMPORAL BONE W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Hearing loss, temporal bone trauma, chronic otitis media, cholesteatoma, tinnitus, vertigo, or pre-surgical planning for cochlear implants."
       },
       {
         "study": "CT TEMPORAL BONE W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected temporal bone infection, tumor, vascular malformation, post-operative complications, or when enhancement of soft tissue structures is needed."
       },
       {
         "study": "CT VENOGRAM HEAD W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Venography"
+        "orderType": "Venography",
+        "indication": "Suspected cerebral venous sinus thrombosis, venous malformation, increased intracranial pressure of unknown cause, or when MRV is contraindicated."
       },
       {
         "study": "MRA BRAIN/HEAD W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Angiography"
+        "orderType": "Angiography",
+        "indication": "Suspected intracranial aneurysm, arteriovenous malformation, stroke evaluation, headache with vascular etiology, or screening in high-risk patients."
       },
       {
         "study": "MRA NECK/CAROTID W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Angiography"
+        "orderType": "Angiography",
+        "indication": "Carotid artery stenosis, stroke or TIA evaluation, neck bruit, pre-operative vascular assessment, or follow-up of known vascular disease."
       },
       {
         "study": "MRI BRACHIAL PLEXUS W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Brachial plexus injury, thoracic outlet syndrome, Pancoast tumor, radiation plexopathy, or evaluation of arm weakness and numbness."
       },
       {
         "study": "MRI BRAIN W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected brain tumor, metastases, infection, inflammatory conditions, multiple sclerosis, post-operative surveillance, or detailed enhancement evaluation."
       },
       {
         "study": "MRI BRAIN W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Headache evaluation, seizure workup, cognitive decline, stroke, developmental delay, trauma, or screening when contrast is not indicated."
       },
       {
         "study": "MRI IAC W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected acoustic neuroma, hearing loss, tinnitus, facial nerve paralysis, cerebellopontine angle mass, or retrocochlear pathology."
       },
       {
         "study": "MRI IAC W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Initial evaluation of hearing loss, tinnitus, vertigo, or when contrast enhancement is not required for inner ear assessment."
       },
       {
         "study": "MRI NECK W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Neck mass evaluation, thyroid pathology, cervical lymphadenopathy, soft tissue trauma, or when contrast is contraindicated."
       },
       {
         "study": "MRI ORBITS W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected orbital tumor, thyroid eye disease, optic neuritis, orbital infection, proptosis, or vision changes requiring detailed enhancement evaluation."
       },
       {
         "study": "MRI SELLA (PITUITARY) W/ +W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected pituitary adenoma, hyperpituitarism, hypopituitarism, galactorrhea, amenorrhea, visual field defects, or endocrine dysfunction."
       },
       {
         "study": "MRI SPINE CERVICAL W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Cervical radiculopathy, myelopathy, disc herniation, spinal stenosis, degenerative changes, or evaluation of neck pain with neurological symptoms."
       },
       {
         "study": "MRI SPINE LUMBAR W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Post-operative lumbar spine surveillance, suspected infection, tumor, enhancement of known lesions, or when detailed soft tissue evaluation is needed."
       },
       {
         "study": "MRI SPINE LUMBAR W/O",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Lumbar radiculopathy, sciatica, disc herniation, spinal stenosis, degenerative changes, or evaluation of low back pain with neurological symptoms."
       },
       {
         "study": "MRI SPINE THORACIC W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Thoracic myelopathy, disc disease, spinal stenosis, thoracic back pain with neurological symptoms, or evaluation of spinal cord pathology."
       },
       {
         "study": "MRV BRAIN/HEAD W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Venography"
+        "orderType": "Venography",
+        "indication": "Suspected cerebral venous sinus thrombosis, venous malformation, idiopathic intracranial hypertension, or evaluation of venous drainage patterns."
       },
       {
         "study": "CT ANGIO BRAIN AND NECK",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Angiography"
+        "orderType": "Angiography",
+        "indication": "Comprehensive stroke evaluation, suspected aneurysm, arteriovenous malformation, carotid stenosis, or when complete cerebrovascular assessment is needed."
       },
       {
         "study": "CT ANGIO BRAIN/HEAD",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Angiography"
+        "orderType": "Angiography",
+        "indication": "Acute stroke evaluation, suspected intracranial aneurysm, arteriovenous malformation, vasculitis, or when rapid vascular imaging is needed."
       },
       {
         "study": "CT MAXILLOFACIAL W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Facial trauma, fractures, dental pathology, TMJ disorders, bone pathology, or pre-surgical planning when soft tissue detail is not required."
       },
       {
         "study": "MRI FACE NECK ORBIT W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Complex head and neck mass evaluation, extensive soft tissue involvement, perineural spread assessment, or comprehensive facial region evaluation."
       },
       {
         "study": "MRI TEMPORAL BONE W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Inner ear pathology, sudden sensorineural hearing loss, Meniere's disease, labyrinthitis, or when detailed soft tissue evaluation of the temporal bone is needed."
       }
     ]
   },
@@ -215,127 +249,148 @@
         "study": "CT ABDOMEN AND PELVIS W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Abdominal pain evaluation, suspected infection or abscess, tumor staging, post-operative complications, inflammatory bowel disease, or organ enhancement evaluation."
       },
       {
         "study": "CT ABDOMEN AND PELVIS W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Kidney stone evaluation, bowel obstruction, trauma, appendicitis, diverticulitis, or when contrast is contraindicated."
       },
       {
         "study": "CT KIDNEY W/ + W/O CONTRAST (MULTIPHASE)",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Multiphase"
+        "orderType": "Multiphase",
+        "indication": "Suspected renal cell carcinoma, complex renal mass characterization, renal artery stenosis, or detailed evaluation of enhancing renal lesions."
       },
       {
         "study": "CT STONE PROTOCOL",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Special"
+        "orderType": "Special",
+        "indication": "Suspected nephrolithiasis, renal colic, flank pain, hematuria, or follow-up of known kidney stones."
       },
       {
         "study": "MRI ABDOMEN W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Abdominal mass evaluation, liver lesion characterization, renal pathology, or when contrast is contraindicated but detailed soft tissue imaging is needed."
       },
       {
         "study": "MRI ENTEROGRAPHY W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Crohn's disease evaluation, inflammatory bowel disease, small bowel obstruction, or suspected small bowel pathology requiring detailed assessment."
       },
       {
         "study": "MRI KIDNEY W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Complex renal mass characterization, suspected renal cell carcinoma, renal function assessment, or when CT is inadequate or contraindicated."
       },
       {
         "study": "MRI KIDNEY W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Renal cyst evaluation, polycystic kidney disease, renal anatomy assessment, or when contrast enhancement is not required."
       },
       {
         "study": "MRI LIVER STUDY",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Liver lesion characterization, hepatocellular carcinoma screening, fatty liver disease evaluation, or hepatic function assessment."
       },
       {
         "study": "MRI PANCREAS W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected pancreatic cancer, pancreatitis evaluation, pancreatic cysts, endocrine tumors, or abdominal pain with pancreatic etiology."
       },
       {
         "study": "MRI PROSTATE W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected prostate cancer, elevated PSA, abnormal digital rectal exam, biopsy planning, or active surveillance of known prostate cancer."
       },
       {
         "study": "RF ESOPHAGUS",
         "usesContrast": true,
         "modality": "Fluoroscopy",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Dysphagia, suspected esophageal stricture, achalasia, gastroesophageal reflux disease, or post-operative esophageal evaluation."
       },
       {
         "study": "RF HYSTEROSALPINGOGRAPHY",
         "usesContrast": true,
         "modality": "Fluoroscopy",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Infertility evaluation, fallopian tube patency assessment, recurrent pregnancy loss, or suspected uterine anomalies."
       },
       {
         "study": "RF UPPER GI",
         "usesContrast": true,
         "modality": "Fluoroscopy",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Upper abdominal pain, dyspepsia, suspected peptic ulcer disease, gastric outlet obstruction, or post-operative evaluation."
       },
       {
         "study": "CT CHEST/ABDOMEN/PELVIS W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Cancer staging, metastatic disease evaluation, trauma assessment, or comprehensive evaluation of multiple body regions."
       },
       {
         "study": "CT ANGIO ABDOMEN AND PELVIS",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Angiography"
+        "orderType": "Angiography",
+        "indication": "Suspected aortic aneurysm, mesenteric ischemia, renal artery stenosis, peripheral vascular disease, or pre-operative vascular planning."
       },
       {
         "study": "CT LIVER W/ + W/O (MULTIPHASE)",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Multiphase"
+        "orderType": "Multiphase",
+        "indication": "Suspected hepatocellular carcinoma, liver metastases, hepatic lesion characterization, or detailed evaluation of enhancing liver masses."
       },
       {
         "study": "CT PELVIS W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Pelvic mass evaluation, gynecologic or urologic pathology, pelvic infection or abscess, or post-operative surveillance."
       },
       {
         "study": "CT PELVIS W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Pelvic trauma, bone pathology, kidney stones in pelvis, or when contrast is contraindicated."
       },
       {
         "study": "MRI MRCP PROTOCOL",
         "usesContrast": false,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected choledocholithiasis, biliary obstruction, primary sclerosing cholangitis, pancreatic duct pathology, or non-invasive biliary evaluation."
       },
       {
         "study": "RF SWALLOW FUNCTION W/ SPEECH",
         "usesContrast": true,
         "modality": "Fluoroscopy",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Dysphagia, aspiration risk assessment, stroke evaluation with swallowing difficulties, or post-operative swallowing function evaluation."
       }
     ]
   },
@@ -346,55 +401,64 @@
         "study": "CT ANGIO CORONARY ARTERY STR/MPH/FNT CNT",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Angiography"
+        "orderType": "Angiography",
+        "indication": "Suspected coronary artery disease, chest pain evaluation, cardiac risk stratification, or non-invasive coronary assessment when catheterization is not indicated."
       },
       {
         "study": "CT CHEST W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected lung mass, mediastinal pathology, hilar lymphadenopathy, infection evaluation, or when tissue enhancement is needed for diagnosis."
       },
       {
         "study": "CT CHEST W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Lung nodule evaluation, interstitial lung disease, trauma, pneumonia, or when contrast is contraindicated."
       },
       {
         "study": "CT HEART CALCIUM SCORING",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Special"
+        "orderType": "Special",
+        "indication": "Cardiovascular risk assessment, screening for coronary artery disease in asymptomatic patients, or cardiac risk stratification."
       },
       {
         "study": "CT LOW DOSE LUNG SCREENING",
         "usesContrast": false,
         "modality": "CT",
-        "orderType": "Screening"
+        "orderType": "Screening",
+        "indication": "Lung cancer screening in high-risk patients (smoking history), follow-up of pulmonary nodules, or annual screening per guidelines."
       },
       {
         "study": "MRI CARDIAC W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Cardiomyopathy evaluation, myocardial viability assessment, cardiac mass evaluation, congenital heart disease, or detailed cardiac function analysis."
       },
       {
         "study": "CT ANGIO PULMONARY",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Angiography"
+        "orderType": "Angiography",
+        "indication": "Suspected pulmonary embolism, shortness of breath, chest pain with concern for PE, or pulmonary vascular disease evaluation."
       },
       {
         "study": "CT ANGIO CHEST",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Angiography"
+        "orderType": "Angiography",
+        "indication": "Suspected aortic aneurysm, aortic dissection, thoracic vascular malformation, or comprehensive chest vascular evaluation."
       },
       {
         "study": "CT ANGIO CHEST/ABD/PELVIS + ILIOFEMORAL",
         "usesContrast": true,
         "modality": "CT",
-        "orderType": "Angiography"
+        "orderType": "Angiography",
+        "indication": "Comprehensive vascular evaluation, aortic aneurysm assessment, peripheral vascular disease, or multi-level vascular pathology evaluation."
       }
     ]
   },
@@ -405,133 +469,155 @@
         "study": "US ABDOMEN LIMITED",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Focused evaluation of specific abdominal organ, follow-up of known pathology, or when comprehensive abdominal ultrasound is not indicated."
       },
       {
         "study": "US ABDOMEN RIGHT UPPER QUADRANT",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Right upper quadrant pain, suspected gallbladder disease, cholelithiasis, cholecystitis, or liver pathology evaluation."
       },
       {
         "study": "US ABDOMINAL AORTA",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Suspected abdominal aortic aneurysm, AAA screening, abdominal pain with vascular concern, or follow-up of known aneurysm."
       },
       {
         "study": "US ABDOMINAL WALL",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Abdominal wall mass, hernia evaluation, soft tissue pathology, or post-operative complications assessment."
       },
       {
         "study": "US HEAD/NECK SOFT TISSUE",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Neck mass evaluation, lymphadenopathy, soft tissue swelling, or superficial head and neck pathology."
       },
       {
         "study": "US HYSTEROSONOGRAM",
         "usesContrast": true,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Abnormal uterine bleeding, suspected endometrial pathology, infertility evaluation, or assessment of uterine cavity abnormalities."
       },
       {
         "study": "US KIDNEY/BLADDER",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Renal colic, hematuria, suspected kidney stones, bladder pathology, or urinary retention evaluation."
       },
       {
         "study": "US LIVER ELASTOGRAPHY",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Special"
+        "orderType": "Special",
+        "indication": "Liver fibrosis assessment, chronic hepatitis evaluation, cirrhosis screening, or non-invasive liver stiffness measurement."
       },
       {
         "study": "US LOWER EXT VENOUS DUPLEX",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Doppler"
+        "orderType": "Doppler",
+        "indication": "Suspected deep vein thrombosis, leg swelling, varicose veins, chronic venous insufficiency, or post-thrombotic syndrome."
       },
       {
         "study": "US PELVIS COMP TRANS ABDOMINAL ONLY",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Pelvic mass evaluation, bladder assessment, pregnancy evaluation, or when transvaginal approach is not appropriate."
       },
       {
         "study": "US PELVIS COMP W/ TRANSVAG IF INDICATED",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Pelvic pain, abnormal bleeding, ovarian pathology, uterine abnormalities, or comprehensive gynecological evaluation."
       },
       {
         "study": "US PELVIS W/ TRANSVAG NON-OB COMPLETE",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Detailed gynecological evaluation, pelvic mass characterization, endometrial assessment, or ovarian pathology evaluation."
       },
       {
         "study": "US PREGNANCY 1ST TRIMESTER TRANSAB",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "First trimester pregnancy evaluation, dating confirmation, viability assessment, suspected miscarriage, or bleeding in early pregnancy."
       },
       {
         "study": "US SCROTUM (CONTENTS) W/ DOPPLER IF IND",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Doppler"
+        "orderType": "Doppler",
+        "indication": "Scrotal pain, testicular mass, epididymitis, testicular torsion, varicocele, or male infertility evaluation."
       },
       {
         "study": "US SPLEEN",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Splenomegaly evaluation, splenic mass, abdominal pain with left upper quadrant concern, or hematologic disorder assessment."
       },
       {
         "study": "US SUPERFICIAL EXTREMITY",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Superficial mass evaluation, soft tissue swelling, cyst assessment, lipoma evaluation, or extremity pain with palpable abnormality."
       },
       {
         "study": "US SUPERFICIAL HEAD",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Scalp mass, superficial head swelling, cyst evaluation, or palpable abnormality requiring superficial imaging."
       },
       {
         "study": "US SUPERFICIAL NECK",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Superficial neck mass, lymph node evaluation, thyroid assessment, or soft tissue pathology in superficial neck structures."
       },
       {
         "study": "US SUPERFICIAL PELVIS/PERINEUM/PERIANAL",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Superficial pelvic mass, perineal pathology, perianal abscess, or soft tissue evaluation in superficial pelvic region."
       },
       {
         "study": "US SUPERFICIAL UPPER BACK",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Upper back mass evaluation, superficial swelling, cyst assessment, or palpable abnormality in superficial back tissues."
       },
       {
         "study": "US THYROID",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Thyroid nodule evaluation, goiter assessment, hyperthyroidism or hypothyroidism workup, or abnormal thyroid function tests."
       },
       {
         "study": "US TRANSVAGINAL NON-OB",
         "usesContrast": false,
         "modality": "Ultrasound",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Detailed gynecological evaluation, pelvic pain assessment, abnormal bleeding investigation, or ovarian and uterine pathology evaluation."
       }
     ]
   },
@@ -542,37 +628,43 @@
         "study": "NM BONE DENSITY DUAL PHOTON",
         "usesContrast": false,
         "modality": "Nuclear Medicine",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Osteoporosis screening, bone density assessment, fracture risk evaluation, or monitoring of bone mineral density changes."
       },
       {
         "study": "NM BONE IMAGING LIMITED",
         "usesContrast": false,
         "modality": "Nuclear Medicine",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Focused bone pathology evaluation, suspected stress fracture, localized bone pain, or targeted assessment of specific bone region."
       },
       {
         "study": "BD BONE DENSITY DEXA AXIAL SKELETON",
         "usesContrast": false,
         "modality": "DEXA",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Osteoporosis screening, postmenopausal bone assessment, steroid-induced bone loss evaluation, or fracture risk stratification."
       },
       {
         "study": "NM PET/CT SKULL BASE TO MIDTHIGH",
         "usesContrast": false,
         "modality": "PET/CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Cancer staging, treatment response assessment, recurrence evaluation, or metabolic activity assessment in torso and head/neck regions."
       },
       {
         "study": "NM PET/CT WHOLE BODY",
         "usesContrast": false,
         "modality": "PET/CT",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Comprehensive cancer staging, metastatic disease evaluation, treatment response monitoring, or systemic malignancy assessment."
       },
       {
         "study": "NM BONE IMAGING WHOLE BODY",
         "usesContrast": false,
         "modality": "Nuclear Medicine",
-        "orderType": "Standard"
+        "orderType": "Standard",
+        "indication": "Metastatic bone disease evaluation, multiple myeloma assessment, widespread bone pain, or systemic bone pathology screening."
       }
     ]
   }
