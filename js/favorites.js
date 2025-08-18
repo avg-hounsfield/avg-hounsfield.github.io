@@ -59,24 +59,35 @@ function showStorageWarning() {
   }
 }
 
-// Setup sidebar event listeners
+// Setup sidebar event listeners with mobile optimizations
 function setupSidebarEvents() {
   const trigger = document.getElementById('sidebar-trigger');
   const close = document.getElementById('sidebar-close');
   
   if (trigger) {
     trigger.addEventListener('click', toggleSidebar);
+    
+    // Add touch feedback for mobile
+    trigger.addEventListener('touchstart', () => {
+      trigger.style.transform = 'scale(0.95)';
+    }, { passive: true });
+    
+    trigger.addEventListener('touchend', () => {
+      trigger.style.transform = '';
+    }, { passive: true });
   }
   
   if (close) {
     close.addEventListener('click', closeSidebar);
   }
   
-  // Close sidebar when clicking outside
+  // Close sidebar when clicking outside (not on mobile)
   document.addEventListener('click', (e) => {
-    const sidebar = document.getElementById('favorites-sidebar');
-    if (sidebarOpen && sidebar && !sidebar.contains(e.target)) {
-      closeSidebar();
+    if (window.innerWidth > 768) { // Only on desktop/tablet
+      const sidebar = document.getElementById('favorites-sidebar');
+      if (sidebarOpen && sidebar && !sidebar.contains(e.target)) {
+        closeSidebar();
+      }
     }
   });
   
@@ -86,6 +97,46 @@ function setupSidebarEvents() {
       closeSidebar();
     }
   });
+  
+  // Mobile swipe to close (simple implementation)
+  let startY = 0;
+  let currentY = 0;
+  const sidebar = document.getElementById('favorites-sidebar');
+  
+  if (sidebar) {
+    sidebar.addEventListener('touchstart', (e) => {
+      if (window.innerWidth <= 768) {
+        startY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+    
+    sidebar.addEventListener('touchmove', (e) => {
+      if (window.innerWidth <= 768 && sidebarOpen) {
+        currentY = e.touches[0].clientY;
+        const diffY = currentY - startY;
+        
+        // If swiping down from near the top, start closing
+        if (startY < 100 && diffY > 50) {
+          sidebar.style.transform = `translateY(${Math.max(0, diffY - 50)}px)`;
+          sidebar.style.opacity = Math.max(0.3, 1 - (diffY - 50) / 200);
+        }
+      }
+    }, { passive: true });
+    
+    sidebar.addEventListener('touchend', () => {
+      if (window.innerWidth <= 768 && sidebarOpen) {
+        const diffY = currentY - startY;
+        
+        if (startY < 100 && diffY > 150) {
+          closeSidebar();
+        } else {
+          // Reset position
+          sidebar.style.transform = '';
+          sidebar.style.opacity = '';
+        }
+      }
+    }, { passive: true });
+  }
 }
 
 // Toggle sidebar open/closed

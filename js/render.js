@@ -155,10 +155,7 @@ function determineProtocolOrderName(protocol) {
   
   // Brain studies
   if (studyName.includes('BRAIN') || studyName === 'SEIZURE' || studyName.includes('MS')) {
-    if (studyName.includes('TUMOR') || studyName.includes('INF') || studyName === 'SEIZURE' || studyName.includes('MS')) {
-      return usesContrast ? 'MRI BRAIN W/ + W/O CONTRAST' : 'MRI BRAIN W/O CONTRAST';
-    }
-    return usesContrast ? 'MRI BRAIN W/ CONTRAST' : 'MRI BRAIN W/O CONTRAST';
+    return usesContrast ? 'MRI BRAIN W/ + W/O CONTRAST' : 'MRI BRAIN W/O CONTRAST';
   }
   
   // IAC studies
@@ -191,7 +188,7 @@ function determineProtocolOrderName(protocol) {
   
   // Neck soft tissue
   if (studyName.includes('NECK SOFT TISSUE')) {
-    return usesContrast ? 'MRI NECK W/ CONTRAST' : 'MRI NECK W/O CONTRAST';
+    return usesContrast ? 'MRI NECK W/ + W/O CONTRAST' : 'MRI NECK W/O CONTRAST';
   }
   
   // Brachial plexus
@@ -218,17 +215,17 @@ function determineProtocolOrderName(protocol) {
   
   // Sacrum
   if (studyName.includes('SACRUM')) {
-    return usesContrast ? 'MRI SACRUM W/ CONTRAST' : 'MRI SACRUM W/O CONTRAST';
+    return usesContrast ? 'MRI SACRUM W/ + W/O CONTRAST' : 'MRI SACRUM W/O CONTRAST';
   }
   
   // Knee studies
   if (studyName.includes('KNEE')) {
-    return usesContrast ? 'MRI KNEE W/ CONTRAST' : 'MRI KNEE W/O CONTRAST';
+    return usesContrast ? 'MRI KNEE W/ + W/O CONTRAST' : 'MRI KNEE W/O CONTRAST';
   }
   
   // Shoulder studies
   if (studyName.includes('SHOULDER')) {
-    return usesContrast ? 'MRI SHOULDER W/ CONTRAST' : 'MRI SHOULDER W/O CONTRAST';
+    return usesContrast ? 'MRI SHOULDER W/ + W/O CONTRAST' : 'MRI SHOULDER W/O CONTRAST';
   }
   
   // Abdomen studies
@@ -258,7 +255,7 @@ function determineProtocolOrderName(protocol) {
   
   // Default fallback - construct from protocol name
   const baseOrder = `MRI ${studyName}`;
-  return usesContrast ? `${baseOrder} W/ CONTRAST` : `${baseOrder} W/O CONTRAST`;
+  return usesContrast ? `${baseOrder} W/ + W/O CONTRAST` : `${baseOrder} W/O CONTRAST`;
 }
 
 /**
