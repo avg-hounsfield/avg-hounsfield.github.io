@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>MRI Protocol Search</title>
     <meta id="theme-color-meta" name="theme-color" content="#FFFbff">
     <link rel="icon" href="data:image/svg+xml,...">
-    
+    <!-- Apple Touch Icon for iOS Home Screen -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
     <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
-    
     <!-- App Stylesheets -->
     <link rel="stylesheet" href="assets/colors.css">
     <link rel="stylesheet" href="assets/style.css">
@@ -75,7 +75,7 @@
 <!-- ✅ NEW, Simplified Filter Toggle -->
 <div class="filter-toggle-wrapper">
     <div class="m3-switch">
-        <input type="checkbox" id="dataSourceToggle" role="switch" />
+    <input type="checkbox" id="dataSourceToggle" role="switch" aria-label="Toggle orders data source" />
         <div class="m3-switch-track"></div>
         <div class="m3-switch-thumb"></div>
     </div>
