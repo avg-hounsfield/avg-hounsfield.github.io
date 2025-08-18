@@ -90,6 +90,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
+     * Initialize any accordions that start in the open state
+     */
+    function initializeOpenAccordions() {
+        const openAccordions = document.querySelectorAll('.accordion-content.open');
+        openAccordions.forEach(content => {
+            content.style.maxHeight = content.scrollHeight + 'px';
+        });
+    }
+
+    /**
      * Finds all accordion headers in the results and attaches click/touch listeners.
      * Mobile-optimized with passive listeners and touch feedback.
      */
@@ -199,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 requestAnimationFrame(() => {
                     attachAccordionListeners();
                     addFavoriteButtons();
+                    initializeOpenAccordions();
                 });
             }
         });
