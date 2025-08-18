@@ -98,45 +98,108 @@ function setupSidebarEvents() {
     }
   });
   
-  // Mobile swipe to close (simple implementation)
+  // Enhanced mobile touch interactions for iPhone
   let startY = 0;
+  let startX = 0;
   let currentY = 0;
+  let currentX = 0;
+  let isSwipeGesture = false;
   const sidebar = document.getElementById('favorites-sidebar');
   
   if (sidebar) {
+    // Improved touch start handling
     sidebar.addEventListener('touchstart', (e) => {
       if (window.innerWidth <= 768) {
         startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+        currentY = startY;
+        currentX = startX;
+        isSwipeGesture = false;
       }
     }, { passive: true });
     
+    // Enhanced touch move with multiple gesture types
     sidebar.addEventListener('touchmove', (e) => {
       if (window.innerWidth <= 768 && sidebarOpen) {
         currentY = e.touches[0].clientY;
+        currentX = e.touches[0].clientX;
         const diffY = currentY - startY;
+        const diffX = currentX - startX;
         
-        // If swiping down from near the top, start closing
-        if (startY < 100 && diffY > 50) {
-          sidebar.style.transform = `translateY(${Math.max(0, diffY - 50)}px)`;
-          sidebar.style.opacity = Math.max(0.3, 1 - (diffY - 50) / 200);
+        // Detect if this is a swipe gesture (movement > 10px)
+        if (Math.abs(diffY) > 10 || Math.abs(diffX) > 10) {
+          isSwipeGesture = true;
+        }
+        
+        // Vertical swipe down from anywhere to close
+        if (diffY > 30 && Math.abs(diffX) < Math.abs(diffY)) {
+          const progress = Math.min(diffY / 150, 1);
+          sidebar.style.transform = `translateY(${diffY}px)`;
+          sidebar.style.opacity = Math.max(0.2, 1 - progress * 0.8);
+        }
+        
+        // Horizontal swipe right to close (from left edge)
+        if (startX < 50 && diffX > 30 && Math.abs(diffY) < Math.abs(diffX)) {
+          const progress = Math.min(diffX / 200, 1);
+          sidebar.style.transform = `translateX(${diffX}px)`;
+          sidebar.style.opacity = Math.max(0.2, 1 - progress * 0.8);
         }
       }
     }, { passive: true });
     
-    sidebar.addEventListener('touchend', () => {
+    // Enhanced touch end with better gesture detection
+    sidebar.addEventListener('touchend', (e) => {
       if (window.innerWidth <= 768 && sidebarOpen) {
         const diffY = currentY - startY;
+        const diffX = currentX - startX;
+        const isVerticalSwipe = Math.abs(diffY) > Math.abs(diffX);
+        const isHorizontalSwipe = Math.abs(diffX) > Math.abs(diffY);
         
-        if (startY < 100 && diffY > 150) {
+        // Close on significant downward swipe
+        if (isVerticalSwipe && diffY > 80) {
           closeSidebar();
-        } else {
-          // Reset position
-          sidebar.style.transform = '';
-          sidebar.style.opacity = '';
+          return;
         }
+        
+        // Close on significant rightward swipe from left edge
+        if (isHorizontalSwipe && startX < 50 && diffX > 100) {
+          closeSidebar();
+          return;
+        }
+        
+        // Reset position if gesture wasn't strong enough to close
+        sidebar.style.transform = '';
+        sidebar.style.opacity = '';
+      }
+    }, { passive: true });
+    
+    // Add touch cancel handling for better reliability
+    sidebar.addEventListener('touchcancel', () => {
+      if (window.innerWidth <= 768) {
+        sidebar.style.transform = '';
+        sidebar.style.opacity = '';
       }
     }, { passive: true });
   }
+  
+  // Enhanced outside click/tap handling for mobile
+  document.addEventListener('touchstart', (e) => {
+    if (window.innerWidth <= 768 && sidebarOpen) {
+      const sidebar = document.getElementById('favorites-sidebar');
+      const trigger = document.getElementById('sidebar-trigger');
+      
+      // Close if touching outside sidebar (but not the trigger)
+      if (sidebar && !sidebar.contains(e.target) && 
+          trigger && !trigger.contains(e.target)) {
+        // Add small delay to prevent conflicts with swipe gestures
+        setTimeout(() => {
+          if (sidebarOpen && !isSwipeGesture) {
+            closeSidebar();
+          }
+        }, 50);
+      }
+    }
+  }, { passive: true });
 }
 
 // Toggle sidebar open/closed

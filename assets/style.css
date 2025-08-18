@@ -395,6 +395,7 @@ button:hover, .button:hover {
 .contrast-indicator.contrast-no {
   background: var(--md-sys-color-surface-container-high);
   color: var(--md-sys-color-on-surface);
+  opacity: 0.8;
 }
 .clinical-indication {
   background: var(--secondary-surface-bg);
@@ -484,6 +485,7 @@ button:hover, .button:hover {
   background-color: var(--primary-surface-bg);
   color: var(--md-sys-color-on-surface);
   border-color: var(--border-color);
+  opacity: 0.8;
 }
 /* ========================================================================== */
 /* Dark Theme Overrides                                                       */
@@ -1400,9 +1402,26 @@ body[data-theme="dark"] .slider-label.active {
 
 .sidebar-close {
   background: transparent;
-  padding: 8px;
-  width: 40px;
-  height: 40px;
+  padding: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-close:hover,
+.sidebar-close:focus {
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+/* Enhanced mobile close button */
+@media (max-width: 768px) {
+  .sidebar-close {
+    padding: 16px;
+    width: 56px;
+    height: 56px;
+    margin: 8px;
+  }
 }
 
 .sidebar-body {
