@@ -232,7 +232,7 @@ input:focus, select:focus, textarea:focus {
   min-width: 300px;
   background-color: var(--md-sys-color-surface-container-highest);
   border-radius: 16px 16px 0 0; /* M3 top-rounded corners */
-  border-bottom: none;
+  border: 1px solid var(--md-sys-color-outline-variant);
   transition: border-color 0.2s ease;
   padding: 8px 16px;
 }
@@ -383,7 +383,7 @@ button:hover, .button:hover {
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border-radius: var(--radius-lg);
+  border-radius: 8px;
   font-size: 0.85em;
   font-weight: 600;
 }
@@ -485,17 +485,15 @@ body[data-theme="dark"] .accordion-content-inner {
 
 body[data-theme="dark"] .sequences-header,
 body[data-theme="dark"] .indications-header,
-body[data-theme="dark"] .sub-protocols-header,
 body[data-theme="dark"] .scanner-notes-header {
   background-color: var(--md-sys-color-surface-container-high);
   background-image: linear-gradient(rgba(var(--md-sys-color-primary-rgb), 0.05), rgba(var(--md-sys-color-primary-rgb), 0.05));
-  border-bottom-color: var(--md-sys-color-surface-container-highest);
+  border-bottom: none;
 }
 
 /* 3. Accordion / Sub-card Styling */
 body[data-theme="dark"] .sequences-card,
 body[data-theme="dark"] .indications-card,
-body[data-theme="dark"] .sub-protocols-card,
 body[data-theme="dark"] .scanner-notes-card {
   background-color: var(--primary-surface-bg); /* Use the slightly darker surface */
   border-color: var(--border-color);
@@ -503,14 +501,12 @@ body[data-theme="dark"] .scanner-notes-card {
 
 body[data-theme="dark"] .sequences-header:hover,
 body[data-theme="dark"] .indications-header:hover,
-body[data-theme="dark"] .sub-protocols-header:hover,
 body[data-theme="dark"] .scanner-notes-header:hover {
   background-color: var(--secondary-surface-bg);
 }
 
 body[data-theme="dark"] .sequences-content,
 body[data-theme="dark"] .indications-content,
-body[data-theme="dark"] .sub-protocols-content,
 body[data-theme="dark"] .scanner-notes-content {
   background-color: var(--secondary-surface-bg);
 }
@@ -532,20 +528,28 @@ body[data-theme="dark"] .clinical-indication strong {
 
 /* Accordion Card Borders (using primary, secondary, tertiary from dark theme) */
 body[data-theme="dark"] .sequences-card {
-  border-left-color: var(--md-sys-color-secondary); /* A bright secondary color */
+  border-left-color: var(--md-sys-color-outline);
 }
 
 body[data-theme="dark"] .indications-card {
-  border-left-color: var(--md-sys-color-tertiary); /* A bright tertiary color */
+  border-left-color: var(--md-sys-color-outline);
+}
+
+body[data-theme="dark"] .scanner-notes-card {
+  border-left-color: var(--md-sys-color-outline);
 }
 
 /* Ensure the header text for these cards also uses the brighter accent colors */
 body[data-theme="dark"] .sequences-header h4 {
-  color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 body[data-theme="dark"] .indications-header h4 {
-  color: var(--md-sys-color-tertiary);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+body[data-theme="dark"] .scanner-notes-header h4 {
+  color: var(--md-sys-color-on-surface-variant);
 }
 
 /* Highlighted and contrast text inside the cards */
@@ -569,15 +573,13 @@ body[data-theme="dark"] .accordion-content {
 /* This targets the clickable headers of the accordions */
 body[data-theme="dark"] .sequences-header,
 body[data-theme="dark"] .indications-header,
-body[data-theme="dark"] .sub-protocols-header,
 body[data-theme="dark"] .scanner-notes-header {
   background-color: var(--primary-surface-bg);
-  border-bottom-color: var(--border-color);
+  border-bottom: none;
 }
 
 body[data-theme="dark"] .sequences-header:hover,
 body[data-theme="dark"] .indications-header:hover,
-body[data-theme="dark"] .sub-protocols-header:hover,
 body[data-theme="dark"] .scanner-notes-header:hover {
   background-color: var(--secondary-surface-bg);
 }
@@ -596,21 +598,19 @@ body[data-theme="dark"] .protocol-group h2 {
   color: var(--md-sys-color-on-surface); 
 
   /* Use a subtle, lighter gray for the underline */
-  border-bottom-color: var(--md-sys-color-outline);
+  border-bottom: none;
 }
 
 body[data-theme="dark"] .sequences-header,
 body[data-theme="dark"] .indications-header,
-body[data-theme="dark"] .sub-protocols-header,
 body[data-theme="dark"] .scanner-notes-header {
   background-color: var(--md-sys-color-surface-container); /* A slightly lighter dark gray */
-  border-bottom-color: var(--md-sys-color-outline-variant);
+  border-bottom: none;
 }
 
 /* Defines the hover state for the headers */
 body[data-theme="dark"] .sequences-header:hover,
 body[data-theme="dark"] .indications-header:hover,
-body[data-theme="dark"] .sub-protocols-header:hover,
 body[data-theme="dark"] .scanner-notes-header:hover {
   background-color: var(--md-sys-color-surface-container-high);
 }
@@ -685,7 +685,7 @@ body[data-theme="dark"] .sidebar-trigger:hover {
 /* ========================================================================== */
 /* Accordions (Sequences, Notes, etc.)                                        */
 /* ========================================================================== */
-.sequences-card, .indications-card, .sub-protocols-card, .scanner-notes-card {
+.sequences-card, .indications-card, .scanner-notes-card {
     width: 100%;
     margin: 0.75rem 0 0 0;
     background: transparent;
@@ -699,7 +699,7 @@ body[data-theme="dark"] .sidebar-trigger:hover {
     border-left-width: 3px;
     border-left-style: solid;
 }
-.sequences-header, .indications-header, .sub-protocols-header, .scanner-notes-header {
+.sequences-header, .indications-header, .scanner-notes-header {
     padding: 8px 16px;
     cursor: pointer;
     display: flex;
@@ -707,10 +707,10 @@ body[data-theme="dark"] .sidebar-trigger:hover {
     align-items: center;
     margin-bottom: 1px;
 }
-.sequences-header:hover, .indications-header:hover, .sub-protocols-header:hover, .scanner-notes-header:hover {
+.sequences-header:hover, .indications-header:hover, .scanner-notes-header:hover {
     background-color: var(--secondary-surface-bg);
 }
-.sequences-content, .indications-content, .sub-protocols-content, .scanner-notes-content {
+.sequences-content, .indications-content, .scanner-notes-content {
     padding: 12px 16px;
     background-color: var(--secondary-surface-bg);
     margin-top: 1px;
@@ -812,7 +812,7 @@ li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700;
   width: 100%;
   height: 100%;
   background-color: var(--md-sys-color-surface-container-highest);
-  border: none;
+  border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: 16px;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }

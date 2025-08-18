@@ -1,4 +1,4 @@
-// js/render.js - CORRECTED VERSION
+// js/render.js - NO SUBPROTOCOLS VERSION (Individual protocols only)
 
 /**
  * HTML sanitization functions to prevent XSS attacks
@@ -178,42 +178,26 @@ function renderProtocolCard(protocol) {
 }
 
 /**
- * Generic function to render consolidated protocol cards
+ * This function has been removed - protocols should always be individual
+ * No consolidation or grouping should ever occur
  */
-function renderConsolidatedCard(protocols, groupType, mainProtocolName, cardTitle, borderColor = '#9b59b6') {
-  // Show individual protocols instead of grouping them
-  return protocols.map(renderProtocolCard).join('');
-}
 
 /**
- * Creates breadcrumb navigation.
+ * Breadcrumb function removed - no longer needed since protocols are always individual
  */
-function renderBreadcrumb(category, protocols) {
-  if (protocols.length <= 1) return '';
-  const totalCount = protocols.length;
-  const mainProtocol = protocols[0]?.study || category;
-  return `
-    <div class="breadcrumb-nav">
-      <nav class="breadcrumb">
-        <span class="breadcrumb-item">${escapeHtml(category)}</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active">${escapeHtml(mainProtocol)}</span>
-        <span class="breadcrumb-count">${totalCount} protocols</span>
-      </nav>
-    </div>
-  `;
-}
 
 /**
  * Creates HTML for search results, grouped by category.
  */
 export function renderGroupedProtocols(groupedData, isOrdersMode = false) {
+  // Force individual protocol cards - no consolidation
   return Object.entries(groupedData).map(([category, protocols]) => {
     let protocolCards;
     
     if (isOrdersMode) {
       protocolCards = protocols.map(renderOrderCard).join('');
     } else {
+      // Ensure each protocol gets its own card
       protocolCards = protocols.map(renderProtocolCard).join('');
     }
     
