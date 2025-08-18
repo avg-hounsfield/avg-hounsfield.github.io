@@ -182,8 +182,8 @@ function setupSidebarEvents() {
     }, { passive: true });
   }
   
-  // Enhanced outside click/tap handling for mobile
-  document.addEventListener('touchstart', (e) => {
+  // Enhanced outside click/tap handling for mobile (simplified for iPhone)
+  document.addEventListener('touchend', (e) => {
     if (window.innerWidth <= 768 && sidebarOpen) {
       const sidebar = document.getElementById('favorites-sidebar');
       const trigger = document.getElementById('sidebar-trigger');
@@ -191,15 +191,26 @@ function setupSidebarEvents() {
       // Close if touching outside sidebar (but not the trigger)
       if (sidebar && !sidebar.contains(e.target) && 
           trigger && !trigger.contains(e.target)) {
-        // Add small delay to prevent conflicts with swipe gestures
-        setTimeout(() => {
-          if (sidebarOpen && !isSwipeGesture) {
-            closeSidebar();
-          }
-        }, 50);
+        closeSidebar();
       }
     }
   }, { passive: true });
+  
+  // Add a simple tap handler specifically for iPhone
+  if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+    document.addEventListener('click', (e) => {
+      if (sidebarOpen) {
+        const sidebar = document.getElementById('favorites-sidebar');
+        const trigger = document.getElementById('sidebar-trigger');
+        
+        if (sidebar && !sidebar.contains(e.target) && 
+            trigger && !trigger.contains(e.target)) {
+          e.preventDefault();
+          closeSidebar();
+        }
+      }
+    });
+  }
 }
 
 // Toggle sidebar open/closed
@@ -298,7 +309,7 @@ function updateFavoriteButtons() {
       } else {
         button.classList.remove('favorited');
         button.title = 'Add to favorites';
-        icon.textContent = 'favorite';
+        icon.textContent = 'favorite_border';
       }
     }
   });

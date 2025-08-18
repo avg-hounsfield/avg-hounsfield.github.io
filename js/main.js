@@ -192,11 +192,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     return true;
                 }
                 
-                // Search in keywords if they exist
+                // Search in keywords if they exist (protocols)
                 if (item.keywords && Array.isArray(item.keywords)) {
-                    return item.keywords.some(keyword => 
+                    if (item.keywords.some(keyword => 
                         keyword.toLowerCase().includes(query)
-                    );
+                    )) {
+                        return true;
+                    }
+                }
+                
+                // Search in indication field (orders)
+                if (item.indication && item.indication.toLowerCase().includes(query)) {
+                    return true;
+                }
+                
+                // Search in ACR appropriateness data (orders)
+                if (item.acrData && item.acrData.appropriateness) {
+                    const acrConditions = Object.keys(item.acrData.appropriateness);
+                    if (acrConditions.some(condition => 
+                        condition.toLowerCase().includes(query) || 
+                        query.includes(condition.toLowerCase())
+                    )) {
+                        return true;
+                    }
                 }
                 
                 return false;
