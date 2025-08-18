@@ -807,15 +807,18 @@ body[data-theme="dark"] .favorite-sequences li.highlight-sequence {
     transform: translateY(-1px);
 }
 .sequences-content, .indications-content, .scanner-notes-content {
-    padding: 16px 20px 20px 20px;
     background-color: var(--md-sys-color-surface-container);
-    margin-top: 0;
+    margin: 0;
     position: relative;
     z-index: 1;
     border-radius: 0 0 8px 8px;
     border: none;
     outline: none;
     box-shadow: none;
+}
+
+.sequences-content.open, .indications-content.open, .scanner-notes-content.open {
+    padding: 16px 20px 20px 20px;
 }
 .sequences-card { border-left: 3px solid var(--md-sys-color-outline); }
 .sequences-header h4 { color: var(--md-sys-color-on-surface-variant); }
@@ -843,7 +846,9 @@ li.highlight-sequence { color: var(--highlight-yellow-orange); font-weight: 700;
     overflow: hidden;
     transition: max-height 0.3s ease-out;
     background-color: var(--md-sys-color-surface-container-high);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4); /* Set a base background */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    padding: 0;
+    margin: 0;
 }
 
 /* The inner container that provides consistent padding */
@@ -1027,23 +1032,298 @@ body[data-theme="dark"] .slider-label.active {
 }
 @media (max-width: 500px) {
   body {
-    padding: 1rem;
+    padding: 0.5rem;
+    font-size: 0.95rem;
   }
-
+  
+  /* Header optimizations */
+  .main-header {
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  h1, h2, h3, h4 {
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  
+  /* Fixed search experience optimizations */
   .search-bar-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
+    margin: 1.5rem auto 1rem auto;
     width: 100%;
-    max-width: 100vw;
-    margin: 2rem auto 1rem auto;
+    max-width: calc(100vw - 1rem);
+    padding: 0 0.5rem;
+    box-sizing: border-box;
   }
-
-#searchInput, #searchButton {
+  
+  #searchInput {
     width: 100%;
     min-width: 0;
+    font-size: 1.1rem;
+    padding: 1rem;
+    min-height: 48px;
+    border-radius: 12px;
+    box-sizing: border-box;
+  }
+  
+  #searchButton {
+    width: 100%;
+    min-width: 0;
+    font-size: 1.1rem;
+    padding: 1rem;
+    min-height: 48px;
+    font-weight: 700;
+    box-sizing: border-box;
+  }
+  
+  /* Card optimizations */
+  .protocol-card, .order-card {
+    padding: 1.25rem;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    border-radius: 16px;
+  }
+  
+  .protocol-group h2 {
+    font-size: 1.2rem;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  
+  /* Touch-friendly order badges */
+  .protocol-order-type-badge {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+    margin-right: 8px;
+    display: inline-block;
+  }
+  
+  /* Stack arthrogram badges vertically on mobile */
+  .protocol-order-type-badge + .protocol-order-type-badge {
+    margin-top: 4px;
+    display: block;
+    width: fit-content;
+  }
+  
+  /* Protocol info section */
+  .protocol-info {
+    margin-top: 12px;
+  }
+  
+  .contrast-indicator {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Accordion optimizations for mobile */
+  .sequences-header, .indications-header, .scanner-notes-header {
+    padding: 16px 20px;
+    min-height: 56px;
+    font-size: 1rem;
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .sequences-header h4, .indications-header h4, .scanner-notes-header h4 {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .accordion-toggle {
+    font-size: 1.5rem;
+    padding: 4px;
+  }
+  
+  .sequences-content, .indications-content, .scanner-notes-content {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .sequences-content.open, .indications-content.open, .scanner-notes-content.open {
+    padding: 20px;
+  }
+  
+  /* Sequence lists mobile formatting */
+  .sequences-content ul {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+  
+  .sequences-content li {
+    margin-bottom: 8px;
+    padding: 4px 0;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+  
+  .highlight-sequence {
+    padding: 6px 8px;
+    border-radius: 6px;
+    margin: 2px 0;
+  }
+  
+  /* Favorites sidebar mobile optimizations */
+  .favorites-sidebar, .sidebar-content {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    border-radius: 0 !important;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    transform: none !important;
+    height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .sidebar-header {
+    padding: 16px;
+    position: sticky;
+    top: 0;
+    background: inherit;
+    z-index: 10;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .sidebar-body {
+    padding: 16px;
+    padding-bottom: 80px;
+  }
+  
+  .sidebar-trigger {
+    padding: 12px 10px;
+    font-size: 1rem;
+    min-height: 48px;
+    border-radius: 12px;
+  }
+  
+  /* Enhanced favorite items for mobile */
+  .favorite-item {
+    padding: 16px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    min-height: 60px;
+  }
+  
+  .favorite-item-header {
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  
+  .favorite-item-title {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  
+  .favorite-contrast-badge {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+  
+  .favorite-sequences {
+    margin-top: 8px;
+    font-size: 0.9rem;
+  }
+  
+  .favorite-sequences li {
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  
+  .favorite-item-remove {
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 10px;
+    top: 12px;
+    right: 12px;
+  }
+  
+  /* Toggle and FAB optimizations */
+  .m3-extended-fab {
+    height: 56px;
+    padding: 0 20px;
+    font-size: 1rem;
+    border-radius: 16px;
+    min-width: 120px;
+  }
+  
+  .filter-toggle-wrapper {
+    margin-left: 0.5rem;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .m3-switch {
+    transform: scale(1.1);
+  }
+  
+  /* Badge optimizations */
+  .protocol-badges {
+    gap: 6px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .modality-badge, .order-type-badge, .contrast-badge {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .clinical-indication {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    border-radius: 12px;
+  }
+  
+  /* Touch-friendly favorite button */
+  .favorite-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    padding: 8px;
+  }
+  
+  .favorite-btn .material-symbols-outlined {
+    font-size: 1.25rem;
+  }
+  
+  /* Order details mobile spacing */
+  .order-details {
+    margin-top: 16px;
+  }
+  
+  /* Reduce motion for mobile performance */
+  .protocol-card, .order-card,
+  .sequences-header, .indications-header, .scanner-notes-header {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  
+  /* Optimize hover states for touch (remove on mobile) */
+  .protocol-card:hover, .order-card:hover {
+    transform: none;
+    box-shadow: var(--shadow-flat);
+  }
+  
+  .sequences-header:hover, .indications-header:hover, .scanner-notes-header:hover {
+    transform: none;
   }
 }
 
