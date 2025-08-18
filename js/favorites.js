@@ -212,10 +212,11 @@ function renderFavoritesList() {
   );
   
   const favoritesHtml = sortedFavorites.map(favorite => {
-    const contrastText = favorite.usesContrast ? 'Contrast' : 'No Contrast';
-    const contrastClass = favorite.usesContrast ? 'contrast-yes' : 'contrast-no';
-    const typeText = favorite.type || 'protocol';
-    const typeBadge = `<span class="favorite-type-badge ${typeText}">${typeText}</span>`;
+    // Create emphasized contrast badge only for studies that use contrast
+    let contrastBadge = '';
+    if (favorite.usesContrast) {
+      contrastBadge = `<span class="favorite-contrast-badge">CONTRAST</span>`;
+    }
     
     // Create sequences list
     let sequencesHtml = '';
@@ -230,12 +231,8 @@ function renderFavoritesList() {
       <div class="favorite-item" data-study="${favorite.study}">
         <div class="favorite-item-header">
           <h4 class="favorite-item-title">${favorite.study}</h4>
-          <div class="favorite-item-badges">
-            ${typeBadge}
-            <span class="favorite-item-contrast ${contrastClass}">${contrastText}</span>
-          </div>
+          ${contrastBadge}
         </div>
-        <p class="favorite-item-category">${favorite.section}</p>
         ${sequencesHtml}
         <button class="favorite-item-remove" onclick="handleRemoveFavorite('${favorite.study}')" title="Remove from favorites">
           <span class="material-symbols-outlined">close</span>

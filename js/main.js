@@ -108,6 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const results = dataToSearch.filter(item => 
             item.study.toLowerCase().includes(query)
         );
+        
+        console.log(`Found ${results.length} results for query "${query}":`, results.map(r => r.study));
 
         if (results.length === 0) {
             resultsContainer.innerHTML = `<p>No results found for "${query}".</p>`;
@@ -118,6 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 acc[key].push(item);
                 return acc;
             }, {});
+            
+            console.log('Grouped results:', grouped);
             resultsContainer.innerHTML = renderGroupedProtocols(grouped, isOrdersMode);
             
             // After rendering, attach listeners to the new accordion elements

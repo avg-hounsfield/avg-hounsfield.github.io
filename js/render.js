@@ -132,13 +132,31 @@ function renderSequencesCard(sequences) {
 }
 
 /**
- * Determines the appropriate clinical order name for a protocol based on its study name and contrast usage
+ * Determines the appropriate clinical order name(s) for a protocol based on its study name and contrast usage
+ * Returns a string for single orders, or an array for multiple orders (like arthrograms)
  */
 function determineProtocolOrderName(protocol) {
   if (!protocol || !protocol.study) return null;
   
   const studyName = protocol.study.toUpperCase();
   const usesContrast = protocol.usesContrast;
+  
+  // Arthrogram studies require two separate orders
+  if (studyName.includes('ARTHROGRAM')) {
+    let bodyPart = '';
+    if (studyName.includes('SHOULDER')) bodyPart = 'SHOULDER';
+    else if (studyName.includes('WRIST')) bodyPart = 'WRIST'; 
+    else if (studyName.includes('HIP')) bodyPart = 'HIP';
+    else if (studyName.includes('KNEE')) bodyPart = 'KNEE';
+    else if (studyName.includes('ANKLE')) bodyPart = 'ANKLE';
+    
+    if (bodyPart) {
+      return [
+        `MRI ${bodyPart} W/O CONTRAST`,
+        `RF ARTHROGRAM ${bodyPart}`
+      ];
+    }
+  }
   
   // Brain studies
   if (studyName.includes('BRAIN') || studyName === 'SEIZURE' || studyName.includes('MS')) {
@@ -257,9 +275,21 @@ function renderProtocolCard(protocol) {
   const contrastText = protocol.usesContrast ? 'YES' : 'NO';
   const contrastClass = protocol.usesContrast ? 'contrast-yes' : 'contrast-no';
   
-  // Determine clinical order name for this protocol
+  // Determine clinical order name(s) for this protocol
   const clinicalOrderName = determineProtocolOrderName(protocol);
-  const orderNameBadge = clinicalOrderName ? `<span class="protocol-order-type-badge">${escapeHtml(clinicalOrderName)}</span>` : '';
+  let orderNameBadge = '';
+  
+  if (clinicalOrderName) {
+    if (Array.isArray(clinicalOrderName)) {
+      // Multiple orders (like arthrograms)
+      orderNameBadge = clinicalOrderName.map(order => 
+        `<span class="protocol-order-type-badge">${escapeHtml(order)}</span>`
+      ).join('');
+    } else {
+      // Single order
+      orderNameBadge = `<span class="protocol-order-type-badge">${escapeHtml(clinicalOrderName)}</span>`;
+    }
+  }
 
   const sequences = protocol.layout?.leftCard?.sequences || [];
   const sortedSequences = sortSequences(sequences);
@@ -322,7 +352,11 @@ export function renderGroupedProtocols(groupedData, isOrdersMode = false) {
     } else {
       // Ensure each protocol gets its own card
       console.log(`Rendering ${protocols.length} individual cards for ${category}`); // Debug log
-      protocolCards = protocols.map(renderProtocolCard).join('');
+      console.log('Protocol names:', protocols.map(p => p.study)); // Debug log
+      protocolCards = protocols.map((protocol, index) => {
+        console.log(`Rendering individual card ${index + 1}: ${protocol.study}`);
+        return renderProtocolCard(protocol);
+      }).join('');
     }
     
     return `

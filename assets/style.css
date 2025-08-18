@@ -428,6 +428,20 @@ button:hover, .button:hover {
   margin-bottom: 8px;
   border: none;
 }
+
+.favorite-contrast-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: white;
+  background: var(--interactive-accent);
+  margin-left: 8px;
+  border: none;
+}
 .modality-badge,
 .order-type-badge,
 .contrast-badge {
@@ -468,7 +482,7 @@ button:hover, .button:hover {
 
 .contrast-badge.contrast-no {
   background-color: var(--primary-surface-bg);
-  color: var(--md-sys-color-on-surface-variant);
+  color: var(--md-sys-color-on-surface);
   border-color: var(--border-color);
 }
 /* ========================================================================== */
@@ -755,7 +769,7 @@ body[data-theme="dark"] .favorite-sequences li.highlight-sequence {
 .sequences-card, .indications-card, .scanner-notes-card {
     width: 100%;
     margin: 0.75rem 0 0 0;
-    background: transparent;
+    background: var(--md-sys-color-surface-container);
     border-radius: 6px;
     box-shadow: none;
     border: none;
@@ -787,7 +801,7 @@ body[data-theme="dark"] .favorite-sequences li.highlight-sequence {
 }
 .sequences-content, .indications-content, .scanner-notes-content {
     padding: 16px 20px 20px 20px;
-    background-color: transparent;
+    background-color: var(--md-sys-color-surface-container);
     margin-top: -8px;
     position: relative;
     z-index: 1;
