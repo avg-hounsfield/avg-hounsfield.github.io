@@ -19,12 +19,37 @@
           "appropriateness": {
             "headache": { "rating": 4, "level": "May be appropriate" },
             "tumor": { "rating": 8, "level": "Usually appropriate" },
+            "brain tumor": { "rating": 8, "level": "Usually appropriate" },
             "infection": { "rating": 9, "level": "Usually appropriate" },
+            "meningitis": { "rating": 9, "level": "Usually appropriate" },
+            "encephalitis": { "rating": 9, "level": "Usually appropriate" },
+            "abscess": { "rating": 9, "level": "Usually appropriate" },
             "seizure": { "rating": 6, "level": "May be appropriate" },
-            "stroke": { "rating": 5, "level": "May be appropriate" }
+            "stroke": { "rating": 5, "level": "May be appropriate" },
+            "altered mental status": { "rating": 7, "level": "May be appropriate" }
           },
           "priority": "second-line",
           "notes": "Consider MRI first when available; CT when urgent or MRI contraindicated"
+        }
+      },
+      {
+        "study": "CT BRAIN W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Standard",
+        "indication": "Acute head trauma, suspected stroke, acute altered mental status, headache in emergency setting, or when rapid imaging is needed and MRI is not available.",
+        "acrData": {
+          "appropriateness": {
+            "headache": { "rating": 6, "level": "May be appropriate" },
+            "trauma": { "rating": 9, "level": "Usually appropriate" },
+            "stroke": { "rating": 8, "level": "Usually appropriate" },
+            "altered mental status": { "rating": 8, "level": "Usually appropriate" },
+            "seizure": { "rating": 7, "level": "May be appropriate" },
+            "brain tumor": { "rating": 5, "level": "May be appropriate" },
+            "meningitis": { "rating": 6, "level": "May be appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred for acute/emergency scenarios when rapid imaging needed"
         }
       },
       {
@@ -53,42 +78,107 @@
         "usesContrast": true,
         "modality": "CT",
         "orderType": "Standard",
-        "indication": "Suspected spinal infection, tumor, post-operative complications, enhancement of known lesions, or when MRI is contraindicated in patients with neurological symptoms."
+        "indication": "Suspected spinal infection, tumor, post-operative complications, enhancement of known lesions, or when MRI is contraindicated in patients with neurological symptoms.",
+        "acrData": {
+          "appropriateness": {
+            "neck pain": { "rating": 4, "level": "May be appropriate" },
+            "tumor": { "rating": 8, "level": "Usually appropriate" },
+            "infection": { "rating": 8, "level": "Usually appropriate" },
+            "radiculopathy": { "rating": 5, "level": "May be appropriate" },
+            "myelopathy": { "rating": 6, "level": "May be appropriate" }
+          },
+          "priority": "second-line",
+          "notes": "Consider MRI first; CT when MRI contraindicated or for bone detail"
+        }
       },
       {
         "study": "CT SPINE CERVICAL W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
         "orderType": "Standard",
-        "indication": "Acute trauma with suspected fracture, cervical spondylosis, degenerative changes, bone pathology, or when rapid imaging is needed for unstable patients."
+        "indication": "Acute trauma with suspected fracture, cervical spondylosis, degenerative changes, bone pathology, or when rapid imaging is needed for unstable patients.",
+        "acrData": {
+          "appropriateness": {
+            "neck pain": { "rating": 6, "level": "May be appropriate" },
+            "trauma": { "rating": 9, "level": "Usually appropriate" },
+            "fracture": { "rating": 9, "level": "Usually appropriate" },
+            "radiculopathy": { "rating": 6, "level": "May be appropriate" },
+            "myelopathy": { "rating": 6, "level": "May be appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred for acute trauma and when bone detail needed"
+        }
       },
       {
         "study": "CT SPINE LUMBAR W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
         "orderType": "Standard",
-        "indication": "Suspected spinal infection, tumor, post-operative surveillance, enhancement of known lesions, or when MRI is contraindicated in patients with radiculopathy."
+        "indication": "Suspected spinal infection, tumor, post-operative surveillance, enhancement of known lesions, or when MRI is contraindicated in patients with radiculopathy.",
+        "acrData": {
+          "appropriateness": {
+            "back pain": { "rating": 4, "level": "May be appropriate" },
+            "sciatica": { "rating": 5, "level": "May be appropriate" },
+            "tumor": { "rating": 8, "level": "Usually appropriate" },
+            "infection": { "rating": 8, "level": "Usually appropriate" },
+            "radiculopathy": { "rating": 5, "level": "May be appropriate" }
+          },
+          "priority": "second-line",
+          "notes": "Consider MRI first; CT when MRI contraindicated or for bone detail"
+        }
       },
       {
         "study": "CT SPINE LUMBAR W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
         "orderType": "Standard",
-        "indication": "Lumbar spine trauma, degenerative disc disease, spondylolisthesis, bone pathology, or when rapid imaging is needed for acute back pain with neurological deficits."
+        "indication": "Lumbar spine trauma, degenerative disc disease, spondylolisthesis, bone pathology, or when rapid imaging is needed for acute back pain with neurological deficits.",
+        "acrData": {
+          "appropriateness": {
+            "back pain": { "rating": 6, "level": "May be appropriate" },
+            "sciatica": { "rating": 6, "level": "May be appropriate" },
+            "trauma": { "rating": 9, "level": "Usually appropriate" },
+            "fracture": { "rating": 9, "level": "Usually appropriate" },
+            "radiculopathy": { "rating": 6, "level": "May be appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred for acute trauma and when bone detail needed"
+        }
       },
       {
         "study": "CT SPINE THORACIC W/ CONTRAST",
         "usesContrast": true,
         "modality": "CT",
         "orderType": "Standard",
-        "indication": "Suspected spinal infection, tumor, post-operative complications, enhancement of known lesions, or when MRI is contraindicated in patients with thoracic myelopathy."
+        "indication": "Suspected spinal infection, tumor, post-operative complications, enhancement of known lesions, or when MRI is contraindicated in patients with thoracic myelopathy.",
+        "acrData": {
+          "appropriateness": {
+            "back pain": { "rating": 4, "level": "May be appropriate" },
+            "tumor": { "rating": 8, "level": "Usually appropriate" },
+            "infection": { "rating": 8, "level": "Usually appropriate" },
+            "myelopathy": { "rating": 6, "level": "May be appropriate" }
+          },
+          "priority": "second-line",
+          "notes": "Consider MRI first; CT when MRI contraindicated or for bone detail"
+        }
       },
       {
         "study": "CT SPINE THORACIC W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
         "orderType": "Standard",
-        "indication": "Thoracic spine trauma, compression fractures, degenerative changes, bone pathology, or when rapid imaging is needed for chest wall or thoracic back pain."
+        "indication": "Thoracic spine trauma, compression fractures, degenerative changes, bone pathology, or when rapid imaging is needed for chest wall or thoracic back pain.",
+        "acrData": {
+          "appropriateness": {
+            "back pain": { "rating": 6, "level": "May be appropriate" },
+            "trauma": { "rating": 9, "level": "Usually appropriate" },
+            "fracture": { "rating": 9, "level": "Usually appropriate" },
+            "compression fracture": { "rating": 9, "level": "Usually appropriate" },
+            "myelopathy": { "rating": 6, "level": "May be appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred for acute trauma and when bone detail needed"
+        }
       },
       {
         "study": "CT TEMPORAL BONE W/O CONTRAST",
@@ -142,10 +232,15 @@
           "appropriateness": {
             "headache": { "rating": 6, "level": "May be appropriate" },
             "tumor": { "rating": 9, "level": "Usually appropriate" },
+            "brain tumor": { "rating": 9, "level": "Usually appropriate" },
             "infection": { "rating": 9, "level": "Usually appropriate" },
+            "meningitis": { "rating": 9, "level": "Usually appropriate" },
+            "encephalitis": { "rating": 9, "level": "Usually appropriate" },
+            "abscess": { "rating": 9, "level": "Usually appropriate" },
             "seizure": { "rating": 8, "level": "Usually appropriate" },
             "stroke": { "rating": 7, "level": "May be appropriate" },
-            "multiple sclerosis": { "rating": 9, "level": "Usually appropriate" }
+            "multiple sclerosis": { "rating": 9, "level": "Usually appropriate" },
+            "altered mental status": { "rating": 8, "level": "Usually appropriate" }
           },
           "priority": "first-line",
           "notes": "Preferred imaging for most brain pathologies requiring contrast evaluation"
@@ -163,7 +258,10 @@
             "seizure": { "rating": 9, "level": "Usually appropriate" },
             "stroke": { "rating": 8, "level": "Usually appropriate" },
             "trauma": { "rating": 8, "level": "Usually appropriate" },
-            "cognitive decline": { "rating": 8, "level": "Usually appropriate" }
+            "cognitive decline": { "rating": 8, "level": "Usually appropriate" },
+            "tumor": { "rating": 7, "level": "May be appropriate" },
+            "brain tumor": { "rating": 7, "level": "May be appropriate" },
+            "altered mental status": { "rating": 8, "level": "Usually appropriate" }
           },
           "priority": "first-line",
           "notes": "Preferred initial brain imaging for most non-contrast indications"
@@ -209,28 +307,72 @@
         "usesContrast": false,
         "modality": "MRI",
         "orderType": "Standard",
-        "indication": "Cervical radiculopathy, myelopathy, disc herniation, spinal stenosis, degenerative changes, or evaluation of neck pain with neurological symptoms."
+        "indication": "Cervical radiculopathy, myelopathy, disc herniation, spinal stenosis, degenerative changes, or evaluation of neck pain with neurological symptoms.",
+        "acrData": {
+          "appropriateness": {
+            "neck pain": { "rating": 8, "level": "Usually appropriate" },
+            "radiculopathy": { "rating": 9, "level": "Usually appropriate" },
+            "myelopathy": { "rating": 9, "level": "Usually appropriate" },
+            "herniated disc": { "rating": 9, "level": "Usually appropriate" },
+            "pinched nerve": { "rating": 9, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for cervical spine soft tissue evaluation"
+        }
       },
       {
         "study": "MRI SPINE LUMBAR W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
         "orderType": "Standard",
-        "indication": "Post-operative lumbar spine surveillance, suspected infection, tumor, enhancement of known lesions, or when detailed soft tissue evaluation is needed."
+        "indication": "Post-operative lumbar spine surveillance, suspected infection, tumor, enhancement of known lesions, or when detailed soft tissue evaluation is needed.",
+        "acrData": {
+          "appropriateness": {
+            "back pain": { "rating": 7, "level": "May be appropriate" },
+            "sciatica": { "rating": 8, "level": "Usually appropriate" },
+            "tumor": { "rating": 9, "level": "Usually appropriate" },
+            "infection": { "rating": 9, "level": "Usually appropriate" },
+            "radiculopathy": { "rating": 8, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Best for tumor/infection evaluation and post-operative surveillance"
+        }
       },
       {
         "study": "MRI SPINE LUMBAR W/O",
         "usesContrast": false,
         "modality": "MRI",
         "orderType": "Standard",
-        "indication": "Lumbar radiculopathy, sciatica, disc herniation, spinal stenosis, degenerative changes, or evaluation of low back pain with neurological symptoms."
+        "indication": "Lumbar radiculopathy, sciatica, disc herniation, spinal stenosis, degenerative changes, or evaluation of low back pain with neurological symptoms.",
+        "acrData": {
+          "appropriateness": {
+            "back pain": { "rating": 8, "level": "Usually appropriate" },
+            "sciatica": { "rating": 9, "level": "Usually appropriate" },
+            "radiculopathy": { "rating": 9, "level": "Usually appropriate" },
+            "herniated disc": { "rating": 9, "level": "Usually appropriate" },
+            "pinched nerve": { "rating": 9, "level": "Usually appropriate" },
+            "stenosis": { "rating": 9, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for lumbar spine soft tissue evaluation"
+        }
       },
       {
         "study": "MRI SPINE THORACIC W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
         "orderType": "Standard",
-        "indication": "Thoracic myelopathy, disc disease, spinal stenosis, thoracic back pain with neurological symptoms, or evaluation of spinal cord pathology."
+        "indication": "Thoracic myelopathy, disc disease, spinal stenosis, thoracic back pain with neurological symptoms, or evaluation of spinal cord pathology.",
+        "acrData": {
+          "appropriateness": {
+            "back pain": { "rating": 8, "level": "Usually appropriate" },
+            "myelopathy": { "rating": 9, "level": "Usually appropriate" },
+            "disc disease": { "rating": 8, "level": "Usually appropriate" },
+            "stenosis": { "rating": 9, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for thoracic spine soft tissue and spinal cord evaluation"
+        }
       },
       {
         "study": "MRV BRAIN/HEAD W/O CONTRAST",
@@ -284,42 +426,111 @@
         "usesContrast": true,
         "modality": "CT",
         "orderType": "Standard",
-        "indication": "Abdominal pain evaluation, suspected infection or abscess, tumor staging, post-operative complications, inflammatory bowel disease, or organ enhancement evaluation."
+        "indication": "Abdominal pain evaluation, suspected infection or abscess, tumor staging, post-operative complications, inflammatory bowel disease, or organ enhancement evaluation.",
+        "acrData": {
+          "appropriateness": {
+            "abdominal pain": { "rating": 8, "level": "Usually appropriate" },
+            "infection": { "rating": 9, "level": "Usually appropriate" },
+            "abscess": { "rating": 9, "level": "Usually appropriate" },
+            "tumor": { "rating": 9, "level": "Usually appropriate" },
+            "cancer staging": { "rating": 9, "level": "Usually appropriate" },
+            "appendicitis": { "rating": 7, "level": "May be appropriate" },
+            "diverticulitis": { "rating": 8, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred for acute abdominal conditions requiring contrast enhancement"
+        }
       },
       {
         "study": "CT ABDOMEN AND PELVIS W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
         "orderType": "Standard",
-        "indication": "Kidney stone evaluation, bowel obstruction, trauma, appendicitis, diverticulitis, or when contrast is contraindicated."
+        "indication": "Kidney stone evaluation, bowel obstruction, trauma, appendicitis, diverticulitis, or when contrast is contraindicated.",
+        "acrData": {
+          "appropriateness": {
+            "kidney stones": { "rating": 9, "level": "Usually appropriate" },
+            "bowel obstruction": { "rating": 9, "level": "Usually appropriate" },
+            "trauma": { "rating": 9, "level": "Usually appropriate" },
+            "appendicitis": { "rating": 8, "level": "Usually appropriate" },
+            "diverticulitis": { "rating": 7, "level": "May be appropriate" },
+            "abdominal pain": { "rating": 7, "level": "May be appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred for kidney stones, bowel obstruction, and trauma; consider contrast version for other conditions"
+        }
       },
       {
         "study": "CT KIDNEY W/ + W/O CONTRAST (MULTIPHASE)",
         "usesContrast": true,
         "modality": "CT",
         "orderType": "Multiphase",
-        "indication": "Suspected renal cell carcinoma, complex renal mass characterization, renal artery stenosis, or detailed evaluation of enhancing renal lesions."
+        "indication": "Suspected renal cell carcinoma, complex renal mass characterization, renal artery stenosis, or detailed evaluation of enhancing renal lesions.",
+        "acrData": {
+          "appropriateness": {
+            "kidney mass": { "rating": 9, "level": "Usually appropriate" },
+            "renal cell carcinoma": { "rating": 9, "level": "Usually appropriate" },
+            "kidney tumor": { "rating": 9, "level": "Usually appropriate" },
+            "hematuria": { "rating": 8, "level": "Usually appropriate" },
+            "renal lesion": { "rating": 9, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for renal mass characterization and RCC evaluation"
+        }
       },
       {
         "study": "CT STONE PROTOCOL",
         "usesContrast": false,
         "modality": "CT",
         "orderType": "Special",
-        "indication": "Suspected nephrolithiasis, renal colic, flank pain, hematuria, or follow-up of known kidney stones."
+        "indication": "Suspected nephrolithiasis, renal colic, flank pain, hematuria, or follow-up of known kidney stones.",
+        "acrData": {
+          "appropriateness": {
+            "kidney stones": { "rating": 9, "level": "Usually appropriate" },
+            "renal colic": { "rating": 9, "level": "Usually appropriate" },
+            "flank pain": { "rating": 9, "level": "Usually appropriate" },
+            "hematuria": { "rating": 8, "level": "Usually appropriate" },
+            "nephrolithiasis": { "rating": 9, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for kidney stone evaluation and renal colic"
+        }
       },
       {
         "study": "MRI ABDOMEN W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
         "orderType": "Standard",
-        "indication": "Abdominal mass evaluation, liver lesion characterization, renal pathology, or when contrast is contraindicated but detailed soft tissue imaging is needed."
+        "indication": "Abdominal mass evaluation, liver lesion characterization, renal pathology, or when contrast is contraindicated but detailed soft tissue imaging is needed.",
+        "acrData": {
+          "appropriateness": {
+            "liver lesion": { "rating": 8, "level": "Usually appropriate" },
+            "abdominal mass": { "rating": 7, "level": "May be appropriate" },
+            "kidney cyst": { "rating": 8, "level": "Usually appropriate" },
+            "fatty liver": { "rating": 8, "level": "Usually appropriate" },
+            "liver disease": { "rating": 7, "level": "May be appropriate" }
+          },
+          "priority": "second-line",
+          "notes": "Consider contrast version for most pathology; good for liver characterization"
+        }
       },
       {
         "study": "MRI ENTEROGRAPHY W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
         "orderType": "Standard",
-        "indication": "Crohn's disease evaluation, inflammatory bowel disease, small bowel obstruction, or suspected small bowel pathology requiring detailed assessment."
+        "indication": "Crohn's disease evaluation, inflammatory bowel disease, small bowel obstruction, or suspected small bowel pathology requiring detailed assessment.",
+        "acrData": {
+          "appropriateness": {
+            "crohns disease": { "rating": 9, "level": "Usually appropriate" },
+            "inflammatory bowel disease": { "rating": 9, "level": "Usually appropriate" },
+            "small bowel obstruction": { "rating": 8, "level": "Usually appropriate" },
+            "abdominal pain": { "rating": 6, "level": "May be appropriate" },
+            "bowel disease": { "rating": 8, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for Crohn's disease and small bowel evaluation"
+        }
       },
       {
         "study": "MRI KIDNEY W/ + W/O CONTRAST",
@@ -347,14 +558,36 @@
         "usesContrast": true,
         "modality": "MRI",
         "orderType": "Standard",
-        "indication": "Suspected pancreatic cancer, pancreatitis evaluation, pancreatic cysts, endocrine tumors, or abdominal pain with pancreatic etiology."
+        "indication": "Suspected pancreatic cancer, pancreatitis evaluation, pancreatic cysts, endocrine tumors, or abdominal pain with pancreatic etiology.",
+        "acrData": {
+          "appropriateness": {
+            "pancreatic cancer": { "rating": 9, "level": "Usually appropriate" },
+            "pancreatitis": { "rating": 8, "level": "Usually appropriate" },
+            "pancreatic cyst": { "rating": 9, "level": "Usually appropriate" },
+            "abdominal pain": { "rating": 7, "level": "May be appropriate" },
+            "pancreatic mass": { "rating": 9, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for pancreatic pathology evaluation"
+        }
       },
       {
         "study": "MRI PROSTATE W/ + W/O CONTRAST",
         "usesContrast": true,
         "modality": "MRI",
         "orderType": "Standard",
-        "indication": "Suspected prostate cancer, elevated PSA, abnormal digital rectal exam, biopsy planning, or active surveillance of known prostate cancer."
+        "indication": "Suspected prostate cancer, elevated PSA, abnormal digital rectal exam, biopsy planning, or active surveillance of known prostate cancer.",
+        "acrData": {
+          "appropriateness": {
+            "prostate cancer": { "rating": 9, "level": "Usually appropriate" },
+            "elevated psa": { "rating": 8, "level": "Usually appropriate" },
+            "abnormal prostate exam": { "rating": 8, "level": "Usually appropriate" },
+            "prostate mass": { "rating": 9, "level": "Usually appropriate" },
+            "psa elevation": { "rating": 8, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for prostate cancer evaluation and staging"
+        }
       },
       {
         "study": "RF ESOPHAGUS",
@@ -443,14 +676,38 @@
         "usesContrast": true,
         "modality": "CT",
         "orderType": "Standard",
-        "indication": "Suspected lung mass, mediastinal pathology, hilar lymphadenopathy, infection evaluation, or when tissue enhancement is needed for diagnosis."
+        "indication": "Suspected lung mass, mediastinal pathology, hilar lymphadenopathy, infection evaluation, or when tissue enhancement is needed for diagnosis.",
+        "acrData": {
+          "appropriateness": {
+            "lung mass": { "rating": 9, "level": "Usually appropriate" },
+            "chest mass": { "rating": 9, "level": "Usually appropriate" },
+            "lung cancer": { "rating": 9, "level": "Usually appropriate" },
+            "pneumonia": { "rating": 7, "level": "May be appropriate" },
+            "infection": { "rating": 8, "level": "Usually appropriate" },
+            "lymphadenopathy": { "rating": 8, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred for lung mass evaluation and staging"
+        }
       },
       {
         "study": "CT CHEST W/O CONTRAST",
         "usesContrast": false,
         "modality": "CT",
         "orderType": "Standard",
-        "indication": "Lung nodule evaluation, interstitial lung disease, trauma, pneumonia, or when contrast is contraindicated."
+        "indication": "Lung nodule evaluation, interstitial lung disease, trauma, pneumonia, or when contrast is contraindicated.",
+        "acrData": {
+          "appropriateness": {
+            "lung nodule": { "rating": 9, "level": "Usually appropriate" },
+            "chest pain": { "rating": 6, "level": "May be appropriate" },
+            "pneumonia": { "rating": 8, "level": "Usually appropriate" },
+            "trauma": { "rating": 9, "level": "Usually appropriate" },
+            "shortness of breath": { "rating": 7, "level": "May be appropriate" },
+            "cough": { "rating": 6, "level": "May be appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred for lung nodules, trauma, and when contrast contraindicated"
+        }
       },
       {
         "study": "CT HEART CALCIUM SCORING",
@@ -478,14 +735,36 @@
         "usesContrast": true,
         "modality": "CT",
         "orderType": "Angiography",
-        "indication": "Suspected pulmonary embolism, shortness of breath, chest pain with concern for PE, or pulmonary vascular disease evaluation."
+        "indication": "Suspected pulmonary embolism, shortness of breath, chest pain with concern for PE, or pulmonary vascular disease evaluation.",
+        "acrData": {
+          "appropriateness": {
+            "pulmonary embolism": { "rating": 9, "level": "Usually appropriate" },
+            "shortness of breath": { "rating": 8, "level": "Usually appropriate" },
+            "chest pain": { "rating": 7, "level": "May be appropriate" },
+            "pe": { "rating": 9, "level": "Usually appropriate" },
+            "blood clot": { "rating": 9, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for pulmonary embolism evaluation"
+        }
       },
       {
         "study": "CT ANGIO CHEST",
         "usesContrast": true,
         "modality": "CT",
         "orderType": "Angiography",
-        "indication": "Suspected aortic aneurysm, aortic dissection, thoracic vascular malformation, or comprehensive chest vascular evaluation."
+        "indication": "Suspected aortic aneurysm, aortic dissection, thoracic vascular malformation, or comprehensive chest vascular evaluation.",
+        "acrData": {
+          "appropriateness": {
+            "aortic aneurysm": { "rating": 9, "level": "Usually appropriate" },
+            "aortic dissection": { "rating": 9, "level": "Usually appropriate" },
+            "chest pain": { "rating": 8, "level": "Usually appropriate" },
+            "aneurysm": { "rating": 9, "level": "Usually appropriate" },
+            "dissection": { "rating": 9, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for aortic pathology evaluation"
+        }
       },
       {
         "study": "CT ANGIO CHEST/ABD/PELVIS + ILIOFEMORAL",
@@ -699,6 +978,103 @@
         "modality": "Nuclear Medicine",
         "orderType": "Standard",
         "indication": "Metastatic bone disease evaluation, multiple myeloma assessment, widespread bone pain, or systemic bone pathology screening."
+      }
+    ]
+  },
+  {
+    "section": ["Musculoskeletal Imaging"],
+    "studies": [
+      {
+        "study": "MRI KNEE W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard",
+        "indication": "Knee pain, suspected meniscal tear, ligament injury, cartilage evaluation, or internal derangement assessment.",
+        "acrData": {
+          "appropriateness": {
+            "knee pain": { "rating": 9, "level": "Usually appropriate" },
+            "meniscal tear": { "rating": 9, "level": "Usually appropriate" },
+            "ligament injury": { "rating": 9, "level": "Usually appropriate" },
+            "acl tear": { "rating": 9, "level": "Usually appropriate" },
+            "mcl injury": { "rating": 9, "level": "Usually appropriate" },
+            "cartilage damage": { "rating": 9, "level": "Usually appropriate" },
+            "sports injury": { "rating": 9, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for knee soft tissue and cartilage evaluation"
+        }
+      },
+      {
+        "study": "MRI SHOULDER W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard",
+        "indication": "Shoulder pain, rotator cuff injury, labral tear, impingement syndrome, or shoulder instability evaluation.",
+        "acrData": {
+          "appropriateness": {
+            "shoulder pain": { "rating": 9, "level": "Usually appropriate" },
+            "rotator cuff tear": { "rating": 9, "level": "Usually appropriate" },
+            "labral tear": { "rating": 9, "level": "Usually appropriate" },
+            "impingement": { "rating": 9, "level": "Usually appropriate" },
+            "shoulder injury": { "rating": 9, "level": "Usually appropriate" },
+            "frozen shoulder": { "rating": 8, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Gold standard for shoulder soft tissue evaluation"
+        }
+      },
+      {
+        "study": "MRI ANKLE W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard",
+        "indication": "Ankle pain, ligament injury, tendon pathology, osteochondral lesions, or chronic ankle instability.",
+        "acrData": {
+          "appropriateness": {
+            "ankle pain": { "rating": 8, "level": "Usually appropriate" },
+            "ankle sprain": { "rating": 8, "level": "Usually appropriate" },
+            "ligament injury": { "rating": 9, "level": "Usually appropriate" },
+            "tendon injury": { "rating": 9, "level": "Usually appropriate" },
+            "achilles tendon": { "rating": 9, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred for ankle soft tissue and ligament evaluation"
+        }
+      },
+      {
+        "study": "MRI WRIST W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "MRI",
+        "orderType": "Standard",
+        "indication": "Wrist pain, TFCC injury, scaphoid fracture evaluation, carpal tunnel syndrome, or chronic wrist pain.",
+        "acrData": {
+          "appropriateness": {
+            "wrist pain": { "rating": 8, "level": "Usually appropriate" },
+            "tfcc tear": { "rating": 9, "level": "Usually appropriate" },
+            "scaphoid fracture": { "rating": 8, "level": "Usually appropriate" },
+            "carpal tunnel": { "rating": 7, "level": "May be appropriate" },
+            "wrist injury": { "rating": 8, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Excellent for wrist soft tissue and TFCC evaluation"
+        }
+      },
+      {
+        "study": "CT EXTREMITY W/O CONTRAST",
+        "usesContrast": false,
+        "modality": "CT",
+        "orderType": "Standard",
+        "indication": "Extremity trauma, suspected fracture, bone pathology, or when rapid bone imaging is needed.",
+        "acrData": {
+          "appropriateness": {
+            "fracture": { "rating": 9, "level": "Usually appropriate" },
+            "trauma": { "rating": 9, "level": "Usually appropriate" },
+            "bone pain": { "rating": 7, "level": "May be appropriate" },
+            "extremity injury": { "rating": 8, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred for bone evaluation and trauma assessment"
+        }
       }
     ]
   }

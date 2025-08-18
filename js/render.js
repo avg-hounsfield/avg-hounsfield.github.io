@@ -276,7 +276,7 @@ function renderProtocolCard(protocol) {
       // Multiple orders (like arthrograms)
       orderNameBadge = clinicalOrderName.map(order => 
         `<span class="protocol-order-type-badge">${escapeHtml(order)}</span>`
-      ).join('');
+      ).join('<br>');
     } else {
       // Single order
       orderNameBadge = `<span class="protocol-order-type-badge">${escapeHtml(clinicalOrderName)}</span>`;
@@ -368,12 +368,21 @@ function getACRAppropriatenessForQuery(order, query) {
     return null;
   }
   
-  const queryLower = query.toLowerCase();
+  const queryLower = query.toLowerCase().trim();
   const appropriateness = order.acrData.appropriateness;
   
-  // Find the best matching condition for the query
+  // Skip ACR badges if searching for exact order words (modality + anatomy)
+  const orderWords = ['ct', 'mri', 'brain', 'spine', 'contrast', 'w/', 'w/o', 'without', 'with'];
+  const isOrderSearch = orderWords.some(word => queryLower.includes(word));
+  
+  if (isOrderSearch) {
+    return null;
+  }
+  
+  // Find the best matching condition for pathology/symptom queries
   for (const [condition, data] of Object.entries(appropriateness)) {
-    if (queryLower.includes(condition.toLowerCase()) || condition.toLowerCase().includes(queryLower)) {
+    const conditionLower = condition.toLowerCase();
+    if (queryLower.includes(conditionLower) || conditionLower.includes(queryLower)) {
       return {
         condition: condition,
         rating: data.rating,
@@ -383,7 +392,6 @@ function getACRAppropriatenessForQuery(order, query) {
       };
     }
   }
-  
   return null;
 }
 
