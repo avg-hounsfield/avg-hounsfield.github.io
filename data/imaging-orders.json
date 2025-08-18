@@ -14,7 +14,18 @@
         "usesContrast": true,
         "modality": "CT",
         "orderType": "Standard",
-        "indication": "Suspected brain tumor, metastases, infection (abscess, encephalitis), inflammatory conditions, enhancement of known lesions, post-operative surveillance, or when MRI is contraindicated."
+        "indication": "Suspected brain tumor, metastases, infection (abscess, encephalitis), inflammatory conditions, enhancement of known lesions, post-operative surveillance, or when MRI is contraindicated.",
+        "acrData": {
+          "appropriateness": {
+            "headache": { "rating": 4, "level": "May be appropriate" },
+            "tumor": { "rating": 8, "level": "Usually appropriate" },
+            "infection": { "rating": 9, "level": "Usually appropriate" },
+            "seizure": { "rating": 6, "level": "May be appropriate" },
+            "stroke": { "rating": 5, "level": "May be appropriate" }
+          },
+          "priority": "second-line",
+          "notes": "Consider MRI first when available; CT when urgent or MRI contraindicated"
+        }
       },
       {
         "study": "CT MAXILLOFACIAL W/ CONTRAST",
@@ -126,14 +137,37 @@
         "usesContrast": true,
         "modality": "MRI",
         "orderType": "Standard",
-        "indication": "Suspected brain tumor, metastases, infection, inflammatory conditions, multiple sclerosis, post-operative surveillance, or detailed enhancement evaluation."
+        "indication": "Suspected brain tumor, metastases, infection, inflammatory conditions, multiple sclerosis, post-operative surveillance, or detailed enhancement evaluation.",
+        "acrData": {
+          "appropriateness": {
+            "headache": { "rating": 6, "level": "May be appropriate" },
+            "tumor": { "rating": 9, "level": "Usually appropriate" },
+            "infection": { "rating": 9, "level": "Usually appropriate" },
+            "seizure": { "rating": 8, "level": "Usually appropriate" },
+            "stroke": { "rating": 7, "level": "May be appropriate" },
+            "multiple sclerosis": { "rating": 9, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred imaging for most brain pathologies requiring contrast evaluation"
+        }
       },
       {
         "study": "MRI BRAIN W/O CONTRAST",
         "usesContrast": false,
         "modality": "MRI",
         "orderType": "Standard",
-        "indication": "Headache evaluation, seizure workup, cognitive decline, stroke, developmental delay, trauma, or screening when contrast is not indicated."
+        "indication": "Headache evaluation, seizure workup, cognitive decline, stroke, developmental delay, trauma, or screening when contrast is not indicated.",
+        "acrData": {
+          "appropriateness": {
+            "headache": { "rating": 7, "level": "May be appropriate" },
+            "seizure": { "rating": 9, "level": "Usually appropriate" },
+            "stroke": { "rating": 8, "level": "Usually appropriate" },
+            "trauma": { "rating": 8, "level": "Usually appropriate" },
+            "cognitive decline": { "rating": 8, "level": "Usually appropriate" }
+          },
+          "priority": "first-line",
+          "notes": "Preferred initial brain imaging for most non-contrast indications"
+        }
       },
       {
         "study": "MRI IAC W/ + W/O CONTRAST",

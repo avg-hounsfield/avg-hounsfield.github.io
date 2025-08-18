@@ -318,6 +318,127 @@ button:hover, .button:hover {
 }
 
 /* ========================================================================== */
+/* ACR Appropriateness Badges                                               */
+/* ========================================================================== */
+.acr-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 20px;
+  padding: 0;
+}
+
+.acr-rating-badge,
+.acr-level-badge,
+.acr-priority-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid;
+  transition: all 0.2s ease;
+}
+
+/* Rating badges based on ACR score */
+.acr-rating-high {
+  background-color: #e8f5e8;
+  border-color: #4caf50;
+  color: #2e7d32;
+}
+
+.acr-rating-medium {
+  background-color: #fff3e0;
+  border-color: #ff9800;
+  color: #e65100;
+}
+
+.acr-rating-low {
+  background-color: #ffebee;
+  border-color: #f44336;
+  color: #c62828;
+}
+
+/* Priority badges */
+.acr-priority-first {
+  background-color: #e3f2fd;
+  border-color: #2196f3;
+  color: #1565c0;
+}
+
+.acr-priority-second {
+  background-color: #f3e5f5;
+  border-color: #9c27b0;
+  color: #7b1fa2;
+}
+
+/* Dark theme overrides for contrast badges */
+body[data-theme="dark"] .contrast-indicator.contrast-no {
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: #ffffff;
+  opacity: 1;
+  font-weight: 600;
+}
+
+body[data-theme="dark"] .contrast-badge.contrast-no {
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: #ffffff;
+  border-color: var(--md-sys-color-outline);
+  opacity: 1;
+  font-weight: 600;
+}
+
+/* Dark theme overrides for ACR badges */
+body[data-theme="dark"] .acr-rating-high {
+  background-color: rgba(76, 175, 80, 0.15);
+  border-color: #4caf50;
+  color: #81c784;
+}
+
+body[data-theme="dark"] .acr-rating-medium {
+  background-color: rgba(255, 152, 0, 0.15);
+  border-color: #ff9800;
+  color: #ffb74d;
+}
+
+body[data-theme="dark"] .acr-rating-low {
+  background-color: rgba(244, 67, 54, 0.15);
+  border-color: #f44336;
+  color: #e57373;
+}
+
+body[data-theme="dark"] .acr-priority-first {
+  background-color: rgba(33, 150, 243, 0.15);
+  border-color: #2196f3;
+  color: #64b5f6;
+}
+
+body[data-theme="dark"] .acr-priority-second {
+  background-color: rgba(156, 39, 176, 0.15);
+  border-color: #9c27b0;
+  color: #ba68c8;
+}
+
+/* Mobile optimizations for ACR badges */
+@media (max-width: 768px) {
+  .acr-badges {
+    margin: 10px 16px;
+    gap: 4px;
+  }
+  
+  .acr-rating-badge,
+  .acr-level-badge,
+  .acr-priority-badge {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+    border-radius: 10px;
+  }
+}
+
+/* ========================================================================== */
 /* Protocol & Order Cards                                                     */
 /* ========================================================================== */
 .protocol-badges {
@@ -332,8 +453,8 @@ button:hover, .button:hover {
 }
 .protocol-group h2 {
   color: var(--header-color);
-  margin-bottom: 20px;
-  padding-bottom: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
   border-bottom: 3px solid var(--md-sys-color-primary-container);
   font-weight: 700;
   font-size: 1.5em;
@@ -1094,8 +1215,8 @@ body[data-theme="dark"] .slider-label.active {
   
   .protocol-group h2 {
     font-size: 1.2rem;
-    padding-bottom: 8px;
-    margin-bottom: 16px;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
     font-weight: 700;
   }
   

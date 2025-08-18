@@ -333,14 +333,14 @@ function renderProtocolCard(protocol) {
 /**
  * Creates HTML for search results, grouped by category.
  */
-export function renderGroupedProtocols(groupedData, isOrdersMode = false) {
+export function renderGroupedProtocols(groupedData, isOrdersMode = false, searchQuery = '') {
   // Force individual protocol cards - no consolidation
   console.log('Rendering protocols:', groupedData); // Debug log
   return Object.entries(groupedData).map(([category, protocols]) => {
     let protocolCards;
     
     if (isOrdersMode) {
-      protocolCards = protocols.map(renderOrderCard).join('');
+      protocolCards = protocols.map(order => renderOrderCard(order, searchQuery)).join('');
     } else {
       // Ensure each protocol gets its own card
       console.log(`Rendering ${protocols.length} individual cards for ${category}`); // Debug log
@@ -361,9 +361,68 @@ export function renderGroupedProtocols(groupedData, isOrdersMode = false) {
 }
 
 /**
+ * Determines ACR appropriateness based on search query and order data
+ */
+function getACRAppropriatenessForQuery(order, query) {
+  if (!order.acrData || !order.acrData.appropriateness || !query) {
+    return null;
+  }
+  
+  const queryLower = query.toLowerCase();
+  const appropriateness = order.acrData.appropriateness;
+  
+  // Find the best matching condition for the query
+  for (const [condition, data] of Object.entries(appropriateness)) {
+    if (queryLower.includes(condition.toLowerCase()) || condition.toLowerCase().includes(queryLower)) {
+      return {
+        condition: condition,
+        rating: data.rating,
+        level: data.level,
+        priority: order.acrData.priority,
+        notes: order.acrData.notes
+      };
+    }
+  }
+  
+  return null;
+}
+
+/**
+ * Renders ACR appropriateness badges for orders
+ */
+function renderACRBadges(order, query) {
+  const acrData = getACRAppropriatenessForQuery(order, query);
+  if (!acrData) return '';
+  
+  const { rating, level, priority } = acrData;
+  
+  // Determine badge classes based on rating
+  let ratingClass = 'acr-rating-medium';
+  if (rating >= 8) ratingClass = 'acr-rating-high';
+  else if (rating <= 4) ratingClass = 'acr-rating-low';
+  
+  // Determine priority class
+  const priorityClass = priority === 'first-line' ? 'acr-priority-first' : 'acr-priority-second';
+  
+  return `
+    <div class="acr-badges">
+      <span class="acr-rating-badge ${ratingClass}" title="ACR Appropriateness Rating: ${rating}/9">
+        ACR ${rating}/9
+      </span>
+      <span class="acr-level-badge ${ratingClass}" title="${level}">
+        ${level}
+      </span>
+      <span class="acr-priority-badge ${priorityClass}" title="Imaging priority based on ACR guidelines">
+        ${priority === 'first-line' ? '1st Line' : '2nd Line'}
+      </span>
+    </div>
+  `;
+}
+
+/**
  * Renders a simplified card for imaging orders
  */
-function renderOrderCard(order) {
+function renderOrderCard(order, searchQuery = '') {
   const contrastIndicator = order.usesContrast ? `<span class="contrast-badge contrast-yes">With Contrast</span>` : `<span class="contrast-badge contrast-no">No Contrast</span>`;
   const modalityBadge = `<span class="modality-badge modality-${(order.modality || 'unknown').toLowerCase().replace(/[\s/]/g, '-')}">${escapeHtml(order.modality || 'Unknown')}</span>`;
   const orderTypeBadge = order.orderType && order.orderType !== 'Standard' ? `<span class="order-type-badge">${escapeHtml(order.orderType)}</span>` : '';
@@ -371,6 +430,8 @@ function renderOrderCard(order) {
   const clinicalIndications = order.indication 
     ? `<div class="clinical-indication"><strong>Indications:</strong> ${escapeHtml(order.indication)}</div>`
     : `<div class="clinical-indication"><strong>Indications:</strong> For evaluation of related symptoms and conditions.</div>`;
+
+  const acrBadges = renderACRBadges(order, searchQuery);
 
   return `
     <div class="protocol-card order-card">
@@ -381,6 +442,7 @@ function renderOrderCard(order) {
         </div>
         <div class="protocol-badges">${modalityBadge}${contrastIndicator}${orderTypeBadge}</div>
       </div>
+      ${acrBadges}
       <div class="order-details">${clinicalIndications}</div>
     </div>
   `;

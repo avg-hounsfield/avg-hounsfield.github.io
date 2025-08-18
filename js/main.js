@@ -186,9 +186,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Use requestAnimationFrame for smooth rendering on mobile
         requestAnimationFrame(() => {
-            const results = dataToSearch.filter(item => 
-                item.study.toLowerCase().includes(query)
-            );
+            const results = dataToSearch.filter(item => {
+                // Search in study name
+                if (item.study.toLowerCase().includes(query)) {
+                    return true;
+                }
+                
+                // Search in keywords if they exist
+                if (item.keywords && Array.isArray(item.keywords)) {
+                    return item.keywords.some(keyword => 
+                        keyword.toLowerCase().includes(query)
+                    );
+                }
+                
+                return false;
+            });
             
             console.log(`Found ${results.length} results for query "${query}":`, results.map(r => r.study));
 
@@ -203,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, {});
                 
                 console.log('Grouped results:', grouped);
-                resultsContainer.innerHTML = renderGroupedProtocols(grouped, isOrdersMode);
+                resultsContainer.innerHTML = renderGroupedProtocols(grouped, isOrdersMode, query);
                 
                 // Use next frame for attaching listeners to prevent blocking
                 requestAnimationFrame(() => {

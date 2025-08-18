@@ -298,7 +298,7 @@ function updateFavoriteButtons() {
       } else {
         button.classList.remove('favorited');
         button.title = 'Add to favorites';
-        icon.textContent = 'favorite_border';
+        icon.textContent = 'favorite';
       }
     }
   });

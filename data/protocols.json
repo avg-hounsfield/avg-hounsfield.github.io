@@ -5,6 +5,7 @@
             {
                 "study": "BRAIN",
                 "usesContrast": false,
+                "keywords": ["headache", "dizziness", "weakness", "stroke", "tumor", "degenerative", "neurological", "confusion", "memory loss", "altered mental status", "head trauma", "concussion", "dementia", "alzheimer", "parkinson", "syncope", "fainting"],
                 "layout": {
                     "leftCard": {
                         "sequences": [
@@ -27,6 +28,7 @@
             {
                 "study": "BRAIN TUMOR/INF",
                 "usesContrast": true,
+                "keywords": ["brain tumor", "tumor", "infection", "abscess", "mass", "lesion", "cancer", "metastasis", "glioma", "meningioma", "lymphoma", "enhancement", "malignant", "benign"],
                 "layout": {
                     "leftCard": {
                         "sequences": [
@@ -59,6 +61,7 @@
             {
                 "study": "SEIZURE",
                 "usesContrast": false,
+                "keywords": ["seizure", "epilepsy", "convulsion", "fits", "temporal lobe", "hippocampal sclerosis", "cortical dysplasia", "focal seizure", "generalized seizure", "tonic clonic", "absence seizure", "jerking", "spasms"],
                 "layout": {
                     "leftCard": {
                         "sequences": [
@@ -71,9 +74,16 @@
                         ]
                     },
                     "rightCard": {
-                        "fullHeight": true,
+                        "fullHeight": false,
                         "content": {
-                            "indications": "Performed to identify the structural cause of seizures. This protocol is optimized to detect subtle abnormalities like hippocampal sclerosis, cortical dysplasia, or small tumors."
+                            "indications": "Performed to identify the structural cause of seizures. This protocol is optimized to detect subtle abnormalities like hippocampal sclerosis, cortical dysplasia, or small tumors.",
+                            "scannerSpecificNotes": {
+                                "3T": [
+                                    { "sequence": "AX FLAIR (instead of SAG FLAIR CUBE)", "highlight": false },
+                                    { "sequence": "SAG MPRAGE", "highlight": false },
+                                    { "sequence": "AX SWI (instead of AX SWAN)", "highlight": false }
+                                ]
+                            }
                         }
                     }
                 }
@@ -81,6 +91,7 @@
             {
                 "study": "BRAIN MS",
                 "usesContrast": true,
+                "keywords": ["multiple sclerosis", "ms", "demyelinating", "plaques", "lesions", "white matter", "inflammation", "autoimmune", "enhancing lesions", "active ms", "relapse"],
                 "layout": {
                     "leftCard": {
                         "sequences": [
@@ -101,6 +112,7 @@
             {
                 "study": "IAC",
                 "usesContrast": false,
+                "keywords": ["hearing loss", "tinnitus", "vertigo", "dizziness", "acoustic neuroma", "vestibular schwannoma", "cranial nerve", "eighth nerve", "auditory", "balance", "ear pain", "hearing", "deafness"],
                 "layout": {
                     "leftCard": {
                         "sequences": [
@@ -109,9 +121,14 @@
                         ]
                     },
                     "rightCard": {
-                        "fullHeight": true,
+                        "fullHeight": false,
                         "content": {
-                            "indications": "Used to evaluate symptoms like hearing loss, tinnitus, or vertigo. This exam focuses on the internal auditory canals and cranial nerves VII and VIII."
+                            "indications": "Used to evaluate symptoms like hearing loss, tinnitus, or vertigo. This exam focuses on the internal auditory canals and cranial nerves VII and VIII.",
+                            "scannerSpecificNotes": {
+                                "3T": [
+                                    { "sequence": "AX 3D SPACE (instead of AX 3D FIESTA)", "highlight": false }
+                                ]
+                            }
                         }
                     }
                 }
@@ -205,7 +222,12 @@
                         "fullHeight": false,
                         "content": {
                             "indications": "Evaluation of eye pain, vision changes, or proptosis (bulging eyes). Used to assess the muscles, nerves, and other soft tissues of the orbits.",
-                            "contrastRationale": "Contrast is used to evaluate for inflammation of the optic nerve (optic neuritis) or to characterize orbital masses and vascular abnormalities. Fat suppression is used to better visualize enhancing structures within the fatty orbit."
+                            "contrastRationale": "Contrast is used to evaluate for inflammation of the optic nerve (optic neuritis) or to characterize orbital masses and vascular abnormalities. Fat suppression is used to better visualize enhancing structures within the fatty orbit.",
+                            "scannerSpecificNotes": {
+                                "3T": [
+                                    { "sequence": "AX SWI (instead of AX SWAN)", "highlight": false }
+                                ]
+                            }
                         }
                     }
                 }
@@ -235,6 +257,7 @@
             {
                 "study": "TIA",
                 "usesContrast": false,
+                "keywords": ["tia", "transient ischemic attack", "mini stroke", "stroke", "ischemia", "weakness", "numbness", "speech problems", "aphasia", "hemiparesis", "acute stroke", "cva"],
                 "layout": {
                     "leftCard": {
                         "sequences": [
@@ -247,9 +270,15 @@
                         ]
                     },
                     "rightCard": {
-                        "fullHeight": true,
+                        "fullHeight": false,
                         "content": {
-                            "indications": "For patients with symptoms of a Transient Ischemic Attack (TIA) or stroke. The exam is designed to rapidly identify acute ischemia and evaluate the major arteries of the brain and neck."
+                            "indications": "For patients with symptoms of a Transient Ischemic Attack (TIA) or stroke. The exam is designed to rapidly identify acute ischemia and evaluate the major arteries of the brain and neck.",
+                            "scannerSpecificNotes": {
+                                "3T": [
+                                    { "sequence": "AX SWI (instead of AX SWAN)", "highlight": false },
+                                    { "sequence": "AX MRA CAROTID (instead of AX MRA BIFURCATION)", "highlight": false }
+                                ]
+                            }
                         }
                     }
                 }
@@ -312,7 +341,12 @@
                         "fullHeight": false,
                         "content": {
                             "indications": "Used to evaluate pathologies affecting the lower cranial nerves or the parotid glands, such as tumors, inflammation, or facial palsy.",
-                            "contrastRationale": "Contrast helps to identify and characterize tumors or inflammatory processes affecting the parotid glands or cranial nerves. It is key for defining the extent of disease."
+                            "contrastRationale": "Contrast helps to identify and characterize tumors or inflammatory processes affecting the parotid glands or cranial nerves. It is key for defining the extent of disease.",
+                            "scannerSpecificNotes": {
+                                "3T": [
+                                    { "sequence": "AX SWI (instead of AX SWAN)", "highlight": false }
+                                ]
+                            }
                         }
                     }
                 }
@@ -341,6 +375,7 @@
             {
                 "study": "C-SPINE",
                 "usesContrast": false,
+                "keywords": ["neck pain", "radiculopathy", "myelopathy", "cervical", "herniated disc", "pinched nerve", "arm numbness", "arm weakness", "whiplash", "spinal stenosis", "cord compression", "tingling", "cervical spine"],
                 "layout": {
                     "leftCard": {
                         "sequences": [
@@ -351,9 +386,14 @@
                         ]
                     },
                     "rightCard": {
-                        "fullHeight": true,
+                        "fullHeight": false,
                         "content": {
-                            "indications": "For evaluation of neck pain, radiculopathy, or myelopathy. This exam assesses the cervical vertebrae, intervertebral discs, and the spinal cord."
+                            "indications": "For evaluation of neck pain, radiculopathy, or myelopathy. This exam assesses the cervical vertebrae, intervertebral discs, and the spinal cord.",
+                            "scannerSpecificNotes": {
+                                "3T": [
+                                    { "sequence": "AX 3D SPACE (instead of AX 3D COSMIC)", "highlight": false }
+                                ]
+                            }
                         }
                     }
                 }
@@ -381,6 +421,7 @@
             {
                 "study": "L-SPINE",
                 "usesContrast": false,
+                "keywords": ["back pain", "lower back pain", "sciatica", "lumbar", "herniated disc", "leg pain", "leg numbness", "leg weakness", "radiculopathy", "spinal stenosis", "disc bulge", "pinched nerve", "lumbar spine"],
                 "layout": {
                     "leftCard": {
                         "sequences": [
@@ -555,7 +596,12 @@
                         "fullHeight": false,
                         "content": {
                             "indications": "A specialized protocol for detecting Multiple Sclerosis plaques in the cervical spinal cord.",
-                            "contrastRationale": "Similar to the brain, contrast is used to identify active MS plaques within the spinal cord. Enhancement indicates active inflammation and demyelination."
+                            "contrastRationale": "Similar to the brain, contrast is used to identify active MS plaques within the spinal cord. Enhancement indicates active inflammation and demyelination.",
+                            "scannerSpecificNotes": {
+                                "3T": [
+                                    { "sequence": "AX T1 3D VIBE THRU ANY LESIONS (instead of AX T1 THRU ANY LESIONS)", "highlight": false }
+                                ]
+                            }
                         }
                     }
                 }
@@ -577,7 +623,12 @@
                         "fullHeight": false,
                         "content": {
                             "indications": "A specialized protocol for detecting Multiple Sclerosis plaques in the thoracic spinal cord.",
-                            "contrastRationale": "Similar to the brain, contrast is used to identify active MS plaques within the spinal cord. Enhancement indicates active inflammation and demyelination."
+                            "contrastRationale": "Similar to the brain, contrast is used to identify active MS plaques within the spinal cord. Enhancement indicates active inflammation and demyelination.",
+                            "scannerSpecificNotes": {
+                                "3T": [
+                                    { "sequence": "AX T1 3D VIBE THRU ANY LESIONS (instead of AX T1 THRU ANY LESIONS)", "highlight": false }
+                                ]
+                            }
                         }
                     }
                 }
@@ -590,6 +641,7 @@
             {
                 "study": "SHOULDER",
                 "usesContrast": false,
+                "keywords": ["shoulder pain", "rotator cuff tear", "impingement", "frozen shoulder", "shoulder instability", "labral tear", "supraspinatus tear", "infraspinatus", "subscapularis", "biceps tendon"],
                 "layout": {
                     "leftCard": {
                         "sequences": [
@@ -758,6 +810,7 @@
             {
                 "study": "KNEE",
                 "usesContrast": false,
+                "keywords": ["knee pain", "meniscus tear", "acl tear", "mcl tear", "pcl tear", "ligament injury", "cartilage damage", "knee instability", "knee swelling", "patella", "meniscal tear"],
                 "layout": {
                     "leftCard": {
                         "sequences": [
