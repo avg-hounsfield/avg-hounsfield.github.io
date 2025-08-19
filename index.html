@@ -59,7 +59,20 @@
     
     <div class="container">
         <header class="main-header">
-            <h1>IMAGING ORDERS AND PROTOCOLS</h1>
+            <!-- ✅ Header Toggle on Left -->
+            <div class="header-toggle-wrapper">
+                <div class="m3-switch">
+                <input type="checkbox" id="dataSourceToggle" role="switch" aria-label="Toggle orders data source" />
+                    <div class="m3-switch-track"></div>
+                    <div class="m3-switch-thumb"></div>
+                </div>
+                <label for="dataSourceToggle" class="filter-toggle-label">ORDERS</label>
+            </div>
+            
+            <div class="header-center">
+                <h1>IMAGING ORDERS AND PROTOCOLS</h1>
+            </div>
+            
             <div class="search-bar-wrapper">
     <!-- ✅ NEW Material 3 Text Field Structure -->
     <div class="m3-text-field">
@@ -70,19 +83,17 @@
 
 <!-- ✅ NEW, Material 3 Extended FAB Structure -->
 <button id="searchButton" class="m3-extended-fab">SEARCH</button>
-    <!-- ... data toggle ... -->
-                    
-<!-- ✅ NEW, Simplified Filter Toggle -->
-<div class="filter-toggle-wrapper">
-    <div class="m3-switch">
-    <input type="checkbox" id="dataSourceToggle" role="switch" aria-label="Toggle orders data source" />
-        <div class="m3-switch-track"></div>
-        <div class="m3-switch-thumb"></div>
+
+    <!-- ✅ Mobile-only toggle wrapper -->
+    <div class="mobile-filter-toggle-wrapper">
+        <div class="m3-switch">
+        <input type="checkbox" id="dataSourceToggleMobile" role="switch" aria-label="Toggle orders data source" />
+            <div class="m3-switch-track"></div>
+            <div class="m3-switch-thumb"></div>
+        </div>
+        <label for="dataSourceToggleMobile" class="filter-toggle-label">ORDERS</label>
     </div>
-    <label for="dataSourceToggle" class="filter-toggle-label">ORDERS</label>
-</div>
                 </div>
-            </div>
         </header>
         <main>
             <div id="results"></div>
