@@ -80,9 +80,21 @@
         <input type="text" id="searchInput" placeholder=" "> <!-- Placeholder is now just a space -->
         <label for="searchInput">Search protocols...</label>
     </div>
+    
+    <div class="search-controls">
+        <!-- ✅ NEW, Material 3 Extended FAB Structure -->
+        <button id="searchButton" class="m3-extended-fab">SEARCH</button>
 
-<!-- ✅ NEW, Material 3 Extended FAB Structure -->
-<button id="searchButton" class="m3-extended-fab">SEARCH</button>
+        <!-- ✅ Orders toggle now inline with search -->
+        <div class="orders-toggle-wrapper">
+            <div class="m3-switch">
+            <input type="checkbox" id="ordersOnlyToggle" role="switch" aria-label="Toggle orders data source" />
+                <div class="m3-switch-track"></div>
+                <div class="m3-switch-thumb"></div>
+            </div>
+            <label for="ordersOnlyToggle" class="filter-toggle-label">ORDERS</label>
+        </div>
+    </div>
 
     <!-- ✅ Mobile-only toggle wrapper -->
     <div class="mobile-filter-toggle-wrapper">

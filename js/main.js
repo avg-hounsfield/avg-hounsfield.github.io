@@ -43,11 +43,254 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsContainer = document.getElementById('results');
     const dataSourceToggle = document.getElementById('dataSourceToggle');
     const dataSourceToggleMobile = document.getElementById('dataSourceToggleMobile');
+    const ordersOnlyToggle = document.getElementById('ordersOnlyToggle');
 
 
     // --- STATE ---
     let allProtocols = [];
     let allOrders = [];
+
+    // Enhanced AI Chatbot Logic System
+    const chatbotState = {
+        conversationHistory: [],
+        currentContext: null,
+        userPreferences: {},
+        lastQuery: '',
+        clarificationNeeded: false,
+        followUpSuggestions: []
+    };
+
+    // Enhanced natural language patterns for better understanding
+    const conversationalPatterns = {
+        // Question types
+        questionTypes: {
+            symptoms: /(?:patient has|patient with|experiencing|complaining of|presenting with|symptoms of|suffering from)/i,
+            diagnostic: /(?:rule out|r\/o|exclude|differential|workup|evaluate for|assess for|screen for)/i,
+            followup: /(?:follow up|followup|monitor|recheck|surveillance|repeat|progression)/i,
+            comparison: /(?:compare|versus|vs|difference between|which is better|should i use)/i,
+            protocol: /(?:protocol for|imaging for|best scan|what study|recommended)/i,
+            urgency: /(?:urgent|stat|emergent|emergency|acute|now|immediate)/i,
+            contrast: /(?:with contrast|without contrast|w\/|w\/o|gadolinium|iv contrast)/i
+        },
+        
+        // Intent recognition
+        intents: {
+            findProtocol: /(?:find|search|look for|need|want|show me|protocol for)/i,
+            compare: /(?:compare|versus|vs|difference|which|better|prefer)/i,
+            explain: /(?:explain|what is|tell me about|describe|definition of)/i,
+            recommend: /(?:recommend|suggest|advise|best|should|would)/i,
+            clarify: /(?:clarify|unclear|confused|not sure|help|don't understand)/i
+        },
+        
+        // Context extraction
+        anatomy: {
+            brain: /(?:brain|head|cranial|cerebral|intracranial|neural|neuro)/i,
+            spine: /(?:spine|spinal|back|cervical|thoracic|lumbar|sacral|vertebr)/i,
+            chest: /(?:chest|lung|pulmonary|thorax|heart|cardiac|coronary)/i,
+            abdomen: /(?:abdomen|abdominal|belly|stomach|liver|kidney|bowel|intestin)/i,
+            pelvis: /(?:pelvis|pelvic|hip|reproductive|uterus|prostate|bladder)/i,
+            extremity: /(?:arm|leg|hand|foot|shoulder|knee|ankle|wrist|elbow)/i,
+            neck: /(?:neck|cervical|throat|thyroid|carotid)/i,
+            vascular: /(?:vessel|vascular|artery|vein|circulation|blood flow)/i
+        },
+        
+        // Urgency levels
+        urgency: {
+            emergent: /(?:emergency|urgent|stat|acute|severe|critical|immediate)/i,
+            routine: /(?:routine|standard|normal|regular|scheduled|elective)/i,
+            followup: /(?:follow.?up|monitor|surveillance|routine)/i
+        }
+    };
+
+    // Symptom-based keywords that should trigger smart search
+    const symptomKeywords = [
+        'pain', 'ache', 'hurt', 'sore', 'tender',
+        'mass', 'lump', 'bump', 'growth', 'tumor', 'nodule',
+        'bleeding', 'blood', 'hemorrhage',
+        'swelling', 'swollen', 'edema', 'inflammation',
+        'numbness', 'tingling', 'weakness', 'paralysis',
+        'difficulty', 'trouble', 'problem', 'issue',
+        'changes', 'loss', 'decrease', 'increase',
+        'infection', 'fever', 'sick', 'illness',
+        'screening', 'checkup', 'monitor', 'follow-up'
+    ];
+
+    // --- AI PROCESSING FUNCTIONS ---
+
+    // AI-powered query understanding
+    function parseNaturalLanguageQuery(query) {
+        const analysis = {
+            intent: 'findProtocol',
+            anatomy: [],
+            symptoms: [],
+            urgency: 'routine',
+            contrast: null,
+            questionType: 'protocol',
+            confidence: 0,
+            context: {}
+        };
+        
+        // Detect intent
+        for (const [intent, pattern] of Object.entries(conversationalPatterns.intents)) {
+            if (pattern.test(query)) {
+                analysis.intent = intent;
+                analysis.confidence += 0.2;
+                break;
+            }
+        }
+        
+        // Extract anatomy
+        for (const [anatomy, pattern] of Object.entries(conversationalPatterns.anatomy)) {
+            if (pattern.test(query)) {
+                analysis.anatomy.push(anatomy);
+                analysis.confidence += 0.15;
+            }
+        }
+        
+        // Detect question type
+        for (const [type, pattern] of Object.entries(conversationalPatterns.questionTypes)) {
+            if (pattern.test(query)) {
+                analysis.questionType = type;
+                analysis.confidence += 0.1;
+                break;
+            }
+        }
+        
+        // Detect urgency
+        for (const [urgency, pattern] of Object.entries(conversationalPatterns.urgency)) {
+            if (pattern.test(query)) {
+                analysis.urgency = urgency;
+                analysis.confidence += 0.1;
+                break;
+            }
+        }
+        
+        // Extract symptoms and conditions
+        const medicalTerms = extractMedicalTermsFromQuery(query);
+        analysis.symptoms = medicalTerms.symptoms;
+        analysis.confidence += medicalTerms.confidence;
+        
+        return analysis;
+    }
+
+    // Extract medical terms and conditions from query
+    function extractMedicalTermsFromQuery(query) {
+        const result = {
+            symptoms: [],
+            conditions: [],
+            confidence: 0
+        };
+        
+        // Extract symptoms
+        symptomKeywords.forEach(symptom => {
+            if (query.toLowerCase().includes(symptom)) {
+                result.symptoms.push(symptom);
+                result.confidence += 0.1;
+            }
+        });
+        
+        return result;
+    }
+
+    // Generate intelligent follow-up questions and suggestions
+    function generateFollowUpSuggestions(query, results, analysis) {
+        const suggestions = [];
+        
+        // If low confidence, ask clarifying questions
+        if (analysis.confidence < 0.3) {
+            if (analysis.anatomy.length === 0) {
+                suggestions.push({
+                    type: 'clarification',
+                    text: 'Which body part or organ system are you interested in?',
+                    options: ['Brain/Head', 'Spine', 'Chest', 'Abdomen', 'Pelvis', 'Extremities']
+                });
+            }
+            
+            if (analysis.symptoms.length === 0 && analysis.questionType === 'symptoms') {
+                suggestions.push({
+                    type: 'clarification',
+                    text: 'What symptoms is the patient experiencing?',
+                    options: ['Pain', 'Mass/Lump', 'Neurological symptoms', 'Breathing issues', 'Other']
+                });
+            }
+        }
+        
+        // Suggest related protocols based on results
+        if (results.length > 0) {
+            const relatedAnatomy = analysis.anatomy[0];
+            if (relatedAnatomy) {
+                suggestions.push({
+                    type: 'related',
+                    text: `Other ${relatedAnatomy} studies you might consider:`,
+                    queries: generateRelatedQueries(relatedAnatomy, results)
+                });
+            }
+        }
+        
+        // Suggest contrast considerations
+        if (results.some(r => r.usesContrast) && results.some(r => !r.usesContrast)) {
+            suggestions.push({
+                type: 'contrast',
+                text: 'Would you like to see options with or without contrast?',
+                options: ['With Contrast', 'Without Contrast', 'Both']
+            });
+        }
+        
+        // Urgency-based suggestions
+        if (analysis.urgency === 'emergent') {
+            suggestions.push({
+                type: 'urgency',
+                text: 'For urgent cases, consider these faster alternatives:',
+                focus: 'ct' // Prioritize CT over MRI for urgent cases
+            });
+        }
+        
+        return suggestions;
+    }
+
+    // Generate related search queries
+    function generateRelatedQueries(anatomy, currentResults) {
+        const relatedQueries = {
+            brain: ['brain tumor', 'stroke workup', 'headache evaluation', 'seizure workup'],
+            spine: ['back pain', 'cervical spine', 'lumbar spine', 'spinal stenosis'],
+            chest: ['chest pain', 'lung nodule', 'pulmonary embolism', 'coronary assessment'],
+            abdomen: ['abdominal pain', 'liver lesion', 'kidney stones', 'bowel obstruction'],
+            pelvis: ['pelvic pain', 'prostate', 'ovarian cyst', 'bladder'],
+            extremity: ['joint pain', 'fracture', 'sports injury', 'arthritis']
+        };
+        
+        return relatedQueries[anatomy] || [];
+    }
+
+    // Track user interactions for learning
+    function trackUserInteraction(query, selectedResult, analysis) {
+        // Store interaction in chatbot state
+        chatbotState.conversationHistory.push({
+            timestamp: Date.now(),
+            query: query,
+            analysis: analysis,
+            selectedResult: selectedResult,
+            context: chatbotState.currentContext
+        });
+        
+        // Update user preferences
+        if (selectedResult) {
+            const modality = selectedResult.modality || 'unknown';
+            chatbotState.userPreferences[modality] = (chatbotState.userPreferences[modality] || 0) + 1;
+            
+            // Track anatomy preferences
+            if (analysis.anatomy.length > 0) {
+                analysis.anatomy.forEach(anatomy => {
+                    chatbotState.userPreferences[anatomy] = (chatbotState.userPreferences[anatomy] || 0) + 1;
+                });
+            }
+        }
+        
+        // Limit history size
+        if (chatbotState.conversationHistory.length > 50) {
+            chatbotState.conversationHistory.shift();
+        }
+    }
 
     // --- FUNCTIONS ---
 
@@ -364,17 +607,28 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const query = searchInput.value.toLowerCase().trim();
-        const isOrdersMode = dataSourceToggle?.checked || dataSourceToggleMobile?.checked || false;
+        const query = searchInput.value.trim();
+        const isOrdersMode = dataSourceToggle?.checked || dataSourceToggleMobile?.checked || ordersOnlyToggle?.checked || false;
         const dataToSearch = isOrdersMode ? allOrders : allProtocols;
 
         if (!query) {
             resultsContainer.innerHTML = '<p>Enter a search term to begin.</p>';
+            document.body.classList.remove('search-active');
             return;
         }
 
+        // Add search active state for mobile full-screen and favorites hiding
+        document.body.classList.add('search-active');
+
         // Use requestAnimationFrame for smooth rendering on mobile
         requestAnimationFrame(() => {
+            // Parse query with AI understanding
+            const queryAnalysis = parseNaturalLanguageQuery(query);
+            
+            // Update chatbot state
+            chatbotState.lastQuery = query;
+            chatbotState.currentContext = queryAnalysis;
+
             const results = dataToSearch.filter(item => {
                 // Search in study name
                 if (item.study.toLowerCase().includes(query)) {
@@ -421,28 +675,303 @@ document.addEventListener('DOMContentLoaded', () => {
             
             console.log(`Found ${results.length} results for query "${query}":`, results.map(r => r.study));
 
-            if (results.length === 0) {
-                resultsContainer.innerHTML = `<p>No results found for "${query}".</p>`;
-            } else {
-                const grouped = results.reduce((acc, item) => {
-                    const key = item.section || 'Other';
-                    if (!acc[key]) acc[key] = [];
-                    acc[key].push(item);
-                    return acc;
-                }, {});
-                
-                console.log('Grouped results:', grouped);
-                resultsContainer.innerHTML = renderGroupedProtocols(grouped, isOrdersMode, query);
-                
-                // Use next frame for attaching listeners to prevent blocking
-                requestAnimationFrame(() => {
-                    attachAccordionListeners();
-                    addFavoriteButtons();
-                    initializeOpenAccordions();
-                });
-            }
+            // Limit results to top 2 suggestions for chatbot-style interface
+            const topResults = results.slice(0, 2);
+            
+            console.log(`Found ${results.length} results, showing top 2 for query "${query}":`, topResults.map(r => r.study));
+
+            // Render as suggestion cards with AI analysis
+            renderSuggestionCards(topResults, isOrdersMode, query, queryAnalysis);
         });
     }
+
+    // Enhanced chatbot-style suggestion cards with AI logic
+    function renderSuggestionCards(results, isOrdersOnly, query, queryAnalysis) {
+        // Generate intelligent follow-up suggestions
+        const followUpSuggestions = generateFollowUpSuggestions(query, results, queryAnalysis);
+        chatbotState.followUpSuggestions = followUpSuggestions;
+        
+        // Create conversational search context
+        let searchContext = '';
+        
+        if (queryAnalysis.confidence > 0.6) {
+            if (queryAnalysis.urgency === 'emergent') {
+                searchContext = `
+                    <div class="search-context urgent">
+                        <p class="context-note">
+                            <span class="material-symbols-outlined">emergency</span>
+                            🚨 <strong>Urgent Case Detected:</strong> Prioritizing rapid imaging options
+                        </p>
+                    </div>
+                `;
+            } else if (queryAnalysis.questionType === 'symptoms') {
+                const symptoms = queryAnalysis.symptoms.join(', ') || 'these symptoms';
+                searchContext = `
+                    <div class="search-context">
+                        <p class="context-note">
+                            <span class="material-symbols-outlined">medical_services</span>
+                            For patient with <strong>${symptoms}</strong>, here are the recommended imaging studies:
+                        </p>
+                    </div>
+                `;
+            } else if (queryAnalysis.questionType === 'diagnostic') {
+                searchContext = `
+                    <div class="search-context">
+                        <p class="context-note">
+                            <span class="material-symbols-outlined">search</span>
+                            Diagnostic workup recommendations:
+                        </p>
+                    </div>
+                `;
+            }
+        } else if (queryAnalysis.confidence < 0.3) {
+            searchContext = `
+                <div class="search-context clarification">
+                    <p class="context-note">
+                        <span class="material-symbols-outlined">help</span>
+                        I found some results, but could you be more specific? 
+                    </p>
+                </div>
+            `;
+        }
+
+        if (results.length === 0) {
+            resultsContainer.innerHTML = `${searchContext}<p>No results found for "${query}".</p>`;
+            return;
+        }
+
+        const suggestionCards = results.map((item, index) => {
+            const contrastText = item.usesContrast ? 'YES' : 'NO';
+            const contrastClass = item.usesContrast ? 'contrast-yes' : 'contrast-no';
+            
+            // Create enhanced preview content with AI insights
+            let previewContent = '';
+            let aiInsight = '';
+            
+            if (isOrdersOnly) {
+                previewContent = `${item.modality || 'Unknown modality'} • ${item.section || 'Other'}`;
+                if (item.orderType && item.orderType !== 'Standard') {
+                    previewContent += ` • ${item.orderType}`;
+                }
+                
+                // Add AI insights for orders
+                if (queryAnalysis.urgency === 'emergent' && item.modality === 'CT') {
+                    aiInsight = '⚡ Fast option for urgent cases';
+                } else if (queryAnalysis.questionType === 'symptoms' && item.study.includes('ANGIO')) {
+                    aiInsight = '🔍 Excellent for vascular assessment';
+                }
+            } else {
+                const sequenceCount = item.keywords ? item.keywords.length : 0;
+                if (sequenceCount > 0) {
+                    previewContent = `${sequenceCount} sequence${sequenceCount !== 1 ? 's' : ''}`;
+                }
+                if (item.indication) {
+                    const truncatedIndications = item.indication.length > 100 ? 
+                        item.indication.substring(0, 100) + '...' : item.indication;
+                    previewContent += previewContent ? ` • ${truncatedIndications}` : truncatedIndications;
+                }
+                if (!previewContent) {
+                    previewContent = `${item.section || 'Other'} protocol`;
+                }
+                
+                // Add AI insights for protocols
+                if (queryAnalysis.anatomy.length > 0 && 
+                    queryAnalysis.anatomy.some(anatomy => item.study.toLowerCase().includes(anatomy))) {
+                    aiInsight = `🎯 Matches ${queryAnalysis.anatomy.join(', ')} anatomy`;
+                }
+            }
+            
+            // Combine preview with AI insight
+            if (aiInsight) {
+                previewContent += ` • ${aiInsight}`;
+            }
+            
+            return `
+                <div class="suggestion-card" onclick="showDetailView(${index}, ${isOrdersOnly})" data-index="${index}">
+                    <div class="suggestion-header">
+                        <h3 class="suggestion-title">${item.study || 'Untitled'}</h3>
+                        <div class="suggestion-badges">
+                            <span class="contrast-badge ${contrastClass}">
+                                ${contrastText === 'YES' ? 'With Contrast' : 'No Contrast'}
+                            </span>
+                        </div>
+                    </div>
+                    <p class="suggestion-preview">${previewContent}</p>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            `;
+        }).join('');
+        
+        // Generate follow-up suggestions HTML
+        let followUpHTML = '';
+        if (followUpSuggestions.length > 0) {
+            followUpHTML = renderFollowUpSuggestions(followUpSuggestions);
+        }
+        
+        resultsContainer.innerHTML = `
+            ${searchContext}
+            <div class="search-suggestions">
+                ${suggestionCards}
+            </div>
+            ${followUpHTML}
+        `;
+        
+        // Store results globally for detail view access
+        window.currentSearchResults = results;
+        window.currentIsOrdersMode = isOrdersOnly;
+        window.currentQueryAnalysis = queryAnalysis;
+        
+        // Add animations
+        setTimeout(() => {
+            const cards = resultsContainer.querySelectorAll('.suggestion-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 120}ms`;
+                card.classList.add('fade-in-up');
+            });
+            
+            // Animate follow-up suggestions
+            const followUpCards = resultsContainer.querySelectorAll('.follow-up-suggestion');
+            followUpCards.forEach((card, index) => {
+                card.style.animationDelay = `${(cards.length + index) * 120}ms`;
+                card.classList.add('fade-in-up');
+            });
+        }, 100);
+    }
+
+    // Render follow-up suggestions
+    function renderFollowUpSuggestions(suggestions) {
+        if (!suggestions.length) return '';
+        
+        const suggestionCards = suggestions.map((suggestion, index) => {
+            if (suggestion.type === 'clarification') {
+                return `
+                    <div class="follow-up-suggestion clarification" data-type="${suggestion.type}">
+                        <div class="suggestion-header">
+                            <span class="material-symbols-outlined">help_outline</span>
+                            <h4>${suggestion.text}</h4>
+                        </div>
+                        <div class="suggestion-options">
+                            ${suggestion.options.map(option => 
+                                `<button class="suggestion-option" onclick="handleFollowUpClick('${option}')">${option}</button>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            } else if (suggestion.type === 'related') {
+                return `
+                    <div class="follow-up-suggestion related" data-type="${suggestion.type}">
+                        <div class="suggestion-header">
+                            <span class="material-symbols-outlined">explore</span>
+                            <h4>${suggestion.text}</h4>
+                        </div>
+                        <div class="suggestion-options">
+                            ${suggestion.queries.map(query => 
+                                `<button class="suggestion-option" onclick="handleFollowUpClick('${query}')">${query}</button>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            } else if (suggestion.type === 'contrast') {
+                return `
+                    <div class="follow-up-suggestion contrast" data-type="${suggestion.type}">
+                        <div class="suggestion-header">
+                            <span class="material-symbols-outlined">science</span>
+                            <h4>${suggestion.text}</h4>
+                        </div>
+                        <div class="suggestion-options">
+                            ${suggestion.options.map(option => 
+                                `<button class="suggestion-option" onclick="handleContrastFilter('${option}')">${option}</button>`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            } else if (suggestion.type === 'urgency') {
+                return `
+                    <div class="follow-up-suggestion urgency urgent" data-type="${suggestion.type}">
+                        <div class="suggestion-header">
+                            <span class="material-symbols-outlined">emergency</span>
+                            <h4>${suggestion.text}</h4>
+                        </div>
+                        <p>CT scans are typically faster than MRI for urgent cases.</p>
+                    </div>
+                `;
+            }
+            return '';
+        }).filter(Boolean).join('');
+        
+        return `
+            <div class="follow-up-suggestions">
+                <h3>💡 Suggestions</h3>
+                ${suggestionCards}
+            </div>
+        `;
+    }
+
+    // Global interaction handlers
+    window.handleFollowUpClick = function(query) {
+        searchInput.value = query;
+        handleSearch(true);
+    };
+
+    window.handleContrastFilter = function(contrastOption) {
+        const currentResults = window.currentSearchResults || [];
+        let filteredResults = currentResults;
+        
+        if (contrastOption === 'With Contrast') {
+            filteredResults = currentResults.filter(r => r.usesContrast);
+        } else if (contrastOption === 'Without Contrast') {
+            filteredResults = currentResults.filter(r => !r.usesContrast);
+        }
+        
+        // Re-render with filtered results
+        renderSuggestionCards(filteredResults.slice(0, 2), window.currentIsOrdersMode, chatbotState.lastQuery, window.currentQueryAnalysis);
+    };
+
+    window.showDetailView = function(index, isOrdersOnly) {
+        const item = window.currentSearchResults[index];
+        if (!item) return;
+        
+        // Track user interaction for learning
+        trackUserInteraction(chatbotState.lastQuery, item, window.currentQueryAnalysis);
+        
+        // Create overlay with detailed protocol information
+        const overlay = document.createElement('div');
+        overlay.className = 'detail-overlay';
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                document.body.removeChild(overlay);
+            }
+        };
+        
+        // Use existing render function or create simplified version
+        let detailContent;
+        if (typeof renderGroupedProtocols === 'function') {
+            const grouped = { [item.section || 'Details']: [item] };
+            detailContent = renderGroupedProtocols(grouped, isOrdersOnly, chatbotState.lastQuery);
+        } else {
+            // Fallback detailed view
+            detailContent = `
+                <div style="margin: 2rem; padding: 2rem;">
+                    <h2>${item.study}</h2>
+                    <p><strong>Section:</strong> ${item.section || 'Other'}</p>
+                    <p><strong>Contrast:</strong> ${item.usesContrast ? 'Yes' : 'No'}</p>
+                    ${item.indication ? `<p><strong>Indication:</strong> ${item.indication}</p>` : ''}
+                    ${item.keywords ? `<p><strong>Keywords:</strong> ${item.keywords.join(', ')}</p>` : ''}
+                </div>
+            `;
+        }
+        
+        overlay.innerHTML = `
+            <div class="detail-content">
+                <button class="detail-close" onclick="document.body.removeChild(this.closest('.detail-overlay'))">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                ${detailContent}
+            </div>
+        `;
+        
+        document.body.appendChild(overlay);
+    };
 
     // --- EVENT LISTENERS ---
 
