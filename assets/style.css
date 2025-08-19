@@ -127,11 +127,11 @@ a:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  margin-top: var(--space-xxl);
-  margin-bottom: var(--space-xxl);
-  padding: var(--space-xl);
-  min-height: 40vh;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  min-height: 25vh;
   justify-content: center;
   background: var(--md-sys-color-surface-container-highest);
   border-radius: 16px;
@@ -180,12 +180,8 @@ a:hover {
   text-align: center;
   font-size: 3rem;
   font-weight: 700;
-  color: var(--interactive-accent);
+  color: var(--md-sys-color-outline);
   margin-bottom: var(--space-xl);
-  background: linear-gradient(135deg, var(--interactive-accent), var(--md-sys-color-primary-container));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   animation: fadeInScale 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
@@ -194,28 +190,43 @@ a:hover {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
   justify-self: center;
-  max-width: 800px;
+  max-width: 900px;
   width: 100%;
-  margin: 4rem auto 3rem auto;
+  margin: 2rem auto 2rem auto;
 }
 
-/* Search controls container for button and toggle */
-.search-controls {
+/* Search input and button container - inline layout */
+.search-input-container {
   display: flex;
   align-items: center;
   gap: 1rem;
   width: 100%;
-  max-width: 600px;
-  justify-content: flex-start;
-  animation: fadeInScale 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.2s both;
+  max-width: 800px;
+  animation: fadeInScale 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
+/* Make text field grow to fill space */
+.search-input-container .m3-text-field {
+  flex: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Subtle animation on focus */
+.search-input-container .m3-text-field:focus-within {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Orders toggle positioned left-aligned below search */
 .orders-toggle-wrapper {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  align-self: flex-start;
+  margin-left: 0;
+  animation: fadeInScale 0.8s cubic-bezier(0.19, 1, 0.22, 1) 0.2s both;
 }
 
 /* ========================================================================== */
@@ -2107,18 +2118,19 @@ body[data-theme="dark"] .slider-label.active {
   }
   
   /* Mobile responsive search controls */
-  .search-controls {
+  .search-input-container {
     flex-direction: column;
     gap: 1rem;
-    align-items: center;
+    align-items: stretch;
   }
   
   .search-bar-wrapper {
-    margin: 2rem auto 1rem auto;
+    margin: 1rem auto 1rem auto;
     padding: 0 1rem;
   }
   
   .orders-toggle-wrapper {
+    align-self: center;
     width: 100%;
     max-width: 300px;
     justify-content: center;
@@ -2234,8 +2246,8 @@ body[data-theme="dark"] .chatbot-trigger {
 }
 
 .suggestion-card {
-  background: var(--primary-surface-bg);
-  border: 2px solid var(--border-color);
+  background: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   margin-bottom: 1rem;
@@ -2248,7 +2260,7 @@ body[data-theme="dark"] .chatbot-trigger {
 .suggestion-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-raised);
-  border-color: var(--interactive-accent);
+  border-color: var(--md-sys-color-primary);
 }
 
 .suggestion-card:active {
@@ -2266,7 +2278,7 @@ body[data-theme="dark"] .chatbot-trigger {
 .suggestion-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--md-sys-color-on-surface);
   margin: 0;
   flex: 1;
 }
@@ -2278,7 +2290,7 @@ body[data-theme="dark"] .chatbot-trigger {
 }
 
 .suggestion-preview {
-  color: var(--text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
   font-size: 0.9rem;
   line-height: 1.4;
   margin: 0.5rem 0 0 0;
@@ -2288,8 +2300,8 @@ body[data-theme="dark"] .chatbot-trigger {
   position: absolute;
   bottom: 1rem;
   right: 1rem;
-  background: var(--interactive-accent);
-  color: var(--interactive-accent-text);
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
   border: none;
   border-radius: var(--radius-md);
   padding: 0.5rem 1rem;
@@ -2305,7 +2317,7 @@ body[data-theme="dark"] .chatbot-trigger {
 }
 
 .view-details-btn:hover {
-  background: var(--interactive-accent-hover);
+  background: var(--md-sys-color-primary-container);
   transform: scale(1.05);
 }
 
@@ -2370,7 +2382,7 @@ body[data-theme="dark"] .chatbot-trigger {
 }
 
 .follow-up-suggestions h3 {
-  color: var(--text-primary);
+  color: var(--md-sys-color-on-surface);
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -2413,7 +2425,7 @@ body[data-theme="dark"] .chatbot-trigger {
 
 .follow-up-suggestion .suggestion-header h4 {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--md-sys-color-on-surface);
   font-size: 1rem;
   font-weight: 500;
 }
@@ -2430,22 +2442,22 @@ body[data-theme="dark"] .chatbot-trigger {
 }
 
 .suggestion-option {
-  background: var(--primary-surface-bg);
-  border: 1px solid var(--border-color);
+  background: var(--md-sys-color-surface-container-highest);
+  border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--radius-md);
   padding: 0.5rem 1rem;
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--text-primary);
+  color: var(--md-sys-color-on-surface);
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
 }
 
 .suggestion-option:hover {
-  background: var(--interactive-accent);
-  color: var(--interactive-accent-text);
-  border-color: var(--interactive-accent);
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-color: var(--md-sys-color-primary);
   transform: translateY(-1px);
 }
 

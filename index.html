@@ -74,26 +74,25 @@
             </div>
             
             <div class="search-bar-wrapper">
-    <!-- ✅ NEW Material 3 Text Field Structure -->
-    <div class="m3-text-field">
-        <span class="material-symbols-outlined leading-icon">search</span>
-        <input type="text" id="searchInput" placeholder=" "> <!-- Placeholder is now just a space -->
-        <label for="searchInput">Search protocols...</label>
+    <!-- ✅ Search input and button inline -->
+    <div class="search-input-container">
+        <div class="m3-text-field">
+            <span class="material-symbols-outlined leading-icon">search</span>
+            <input type="text" id="searchInput" placeholder=" "> <!-- Placeholder is now just a space -->
+            <label for="searchInput">Search protocols...</label>
+        </div>
+        <!-- ✅ Search button inline with input -->
+        <button id="searchButton" class="m3-extended-fab">SEARCH</button>
     </div>
     
-    <div class="search-controls">
-        <!-- ✅ NEW, Material 3 Extended FAB Structure -->
-        <button id="searchButton" class="m3-extended-fab">SEARCH</button>
-
-        <!-- ✅ Orders toggle now inline with search -->
-        <div class="orders-toggle-wrapper">
-            <div class="m3-switch">
-            <input type="checkbox" id="ordersOnlyToggle" role="switch" aria-label="Toggle orders data source" />
-                <div class="m3-switch-track"></div>
-                <div class="m3-switch-thumb"></div>
-            </div>
-            <label for="ordersOnlyToggle" class="filter-toggle-label">ORDERS</label>
+    <!-- ✅ Orders toggle left-aligned below search bar -->
+    <div class="orders-toggle-wrapper">
+        <div class="m3-switch">
+        <input type="checkbox" id="ordersOnlyToggle" role="switch" aria-label="Toggle orders data source" />
+            <div class="m3-switch-track"></div>
+            <div class="m3-switch-thumb"></div>
         </div>
+        <label for="ordersOnlyToggle" class="filter-toggle-label">ORDERS</label>
     </div>
 
     <!-- ✅ Mobile-only toggle wrapper -->
