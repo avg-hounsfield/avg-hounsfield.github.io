@@ -1968,12 +1968,12 @@ body[data-theme="dark"] .slider-label.active {
 }
 
 .acr-recommendation {
-  background: var(--md-sys-color-tertiary-container);
-  color: var(--md-sys-color-on-tertiary-container);
+  background: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
   padding: 12px;
   border-radius: 8px;
   margin: 8px 0;
-  border-left: 4px solid var(--md-sys-color-tertiary);
+  border: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .chatbot-input-container {
