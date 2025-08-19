@@ -369,9 +369,9 @@ class ImagingAIAssistant {
                     <p>Try asking: "Brain MRI protocol" or "Knee MRI sequences"</p>`;
         }
 
-        let response = `<p><strong>Found ${relevantProtocols.length} relevant protocol(s):</strong></p>`;
+        let response = `<p><strong>Top ${Math.min(relevantProtocols.length, 3)} relevant protocol(s):</strong></p>`;
         
-        relevantProtocols.slice(0, 2).forEach(protocol => {
+        relevantProtocols.slice(0, 3).forEach(protocol => {
             response += `
                 <div class="acr-recommendation">
                     <strong>${protocol.study}</strong><br>
@@ -397,12 +397,20 @@ class ImagingAIAssistant {
         );
 
         if (matches.length > 0) {
-            let response = `<p>I found ${matches.length} related items:</p>`;
-            matches.slice(0, 3).forEach(match => {
+            // Sort matches by relevance
+            const scoredMatches = matches.map(match => ({
+                ...match,
+                relevanceScore: this.calculateTextRelevance(query, match.study) + 
+                               (match.indication ? this.calculateTextRelevance(query, match.indication) * 0.5 : 0)
+            })).sort((a, b) => b.relevanceScore - a.relevanceScore);
+
+            let response = `<p>Top ${Math.min(scoredMatches.length, 3)} related items:</p>`;
+            scoredMatches.slice(0, 3).forEach(match => {
                 response += `
                     <div class="acr-recommendation">
                         <strong>${match.study}</strong><br>
                         <small>Type: ${match.type} | Section: ${match.section}</small>
+                        ${match.indication ? `<br><em>${match.indication.substring(0, 100)}...</em>` : ''}
                     </div>
                 `;
             });
@@ -420,17 +428,173 @@ class ImagingAIAssistant {
     }
 
     extractMedicalConditions(query) {
-        const medicalTerms = [
-            'headache', 'migraine', 'stroke', 'seizure', 'tumor', 'cancer', 'infection',
-            'meningitis', 'encephalitis', 'trauma', 'fracture', 'brain tumor',
-            'back pain', 'neck pain', 'sciatica', 'radiculopathy', 'myelopathy',
-            'knee pain', 'shoulder pain', 'ankle pain', 'wrist pain', 'joint pain',
-            'chest pain', 'shortness of breath', 'cough', 'lung nodule',
-            'abdominal pain', 'kidney stones', 'appendicitis', 'diverticulitis',
-            'pulmonary embolism', 'aortic aneurysm', 'dissection'
-        ];
+        const queryLower = query.toLowerCase().trim();
+        
+        // Enhanced medical condition patterns and their synonyms/variations
+        const medicalPatterns = {
+            'stroke': [
+                'stroke', 'cva', 'cerebrovascular accident', 'brain attack',
+                'concern for stroke', 'stroke like', 'stroke-like', 'strokelike',
+                'possible stroke', 'suspected stroke', 'r/o stroke', 'rule out stroke',
+                'stroke symptoms', 'stroke workup', 'acute stroke', 'tia'
+            ],
+            'headache': [
+                'headache', 'head ache', 'cephalgia', 'head pain', 'migraines',
+                'severe headache', 'chronic headache', 'migraine', 'cluster headache',
+                'concern for headache', 'headache workup', 'head hurt', 'cranial pain'
+            ],
+            'seizure': [
+                'seizure', 'seizures', 'convulsion', 'epilepsy', 'fits', 'spells',
+                'seizure like', 'seizure-like', 'possible seizure', 'convulsions',
+                'concern for seizure', 'r/o seizure', 'rule out seizure',
+                'seizure activity', 'convulsive episode', 'epileptic'
+            ],
+            'trauma': [
+                'trauma', 'injury', 'accident', 'fall', 'hit', 'struck', 'injured',
+                'head trauma', 'brain trauma', 'traumatic injury', 'blunt trauma',
+                'post trauma', 'after fall', 'motor vehicle accident', 'mva',
+                'car accident', 'fell down', 'head injury'
+            ],
+            'tumor': [
+                'tumor', 'tumour', 'mass', 'lesion', 'growth', 'neoplasm', 'cancer',
+                'brain tumor', 'brain mass', 'intracranial mass', 'malignancy',
+                'concern for tumor', 'possible tumor', 'r/o tumor', 'oncology',
+                'rule out tumor', 'mass effect', 'suspicious lesion'
+            ],
+            'infection': [
+                'infection', 'infectious', 'sepsis', 'abscess', 'cellulitis',
+                'concern for infection', 'possible infection', 'fever',
+                'r/o infection', 'rule out infection', 'inflammatory'
+            ],
+            'meningitis': [
+                'meningitis', 'meningeal', 'neck stiffness', 'stiff neck',
+                'concern for meningitis', 'possible meningitis',
+                'r/o meningitis', 'rule out meningitis'
+            ],
+            'altered mental status': [
+                'altered mental status', 'ams', 'confusion', 'confused',
+                'mental status change', 'altered consciousness', 'disoriented',
+                'cognitive change', 'behavioral change', 'acting strange'
+            ],
+            'back pain': [
+                'back pain', 'lower back pain', 'lumbar pain', 'low back pain',
+                'spine pain', 'spinal pain', 'dorsalgia', 'back ache',
+                'back hurt', 'lumbar ache'
+            ],
+            'neck pain': [
+                'neck pain', 'cervical pain', 'cervicalgia', 'neck ache',
+                'neck hurt', 'cervical spine pain'
+            ],
+            'sciatica': [
+                'sciatica', 'sciatic pain', 'radicular pain', 'shooting pain',
+                'leg pain', 'shooting pain down leg', 'pain radiating'
+            ],
+            'radiculopathy': [
+                'radiculopathy', 'nerve root', 'pinched nerve', 'trapped nerve',
+                'compressed nerve', 'nerve compression', 'nerve pain'
+            ],
+            'chest pain': [
+                'chest pain', 'chest discomfort', 'thoracic pain', 'chest hurt',
+                'precordial pain', 'retrosternal pain', 'chest tightness'
+            ],
+            'shortness of breath': [
+                'shortness of breath', 'dyspnea', 'sob', 'difficulty breathing',
+                'breathing problems', 'breathlessness', 'cant breathe',
+                'trouble breathing', 'winded'
+            ],
+            'pulmonary embolism': [
+                'pulmonary embolism', 'pe', 'blood clot', 'clot', 'embolus',
+                'concern for pe', 'possible pe', 'r/o pe', 'rule out pe',
+                'lung clot'
+            ],
+            'kidney stones': [
+                'kidney stones', 'renal stones', 'nephrolithiasis', 'stones',
+                'kidney stone', 'renal calculi', 'ureteral stone', 'flank pain'
+            ],
+            'abdominal pain': [
+                'abdominal pain', 'belly pain', 'stomach pain', 'tummy pain',
+                'abd pain', 'epigastric pain', 'right upper quadrant pain',
+                'left lower quadrant pain', 'rlq pain', 'llq pain', 'gut pain'
+            ],
+            'knee pain': [
+                'knee pain', 'knee hurt', 'knee injury', 'knee problem',
+                'patella pain', 'kneecap pain'
+            ],
+            'shoulder pain': [
+                'shoulder pain', 'shoulder hurt', 'shoulder injury',
+                'rotator cuff', 'shoulder problem'
+            ],
+            'ankle pain': [
+                'ankle pain', 'ankle hurt', 'ankle injury', 'ankle sprain',
+                'twisted ankle'
+            ]
+        };
+        
+        const extractedConditions = [];
+        
+        // Check each medical condition pattern
+        for (const [condition, patterns] of Object.entries(medicalPatterns)) {
+            for (const pattern of patterns) {
+                if (queryLower.includes(pattern)) {
+                    extractedConditions.push(condition);
+                    break; // Don't add the same condition multiple times
+                }
+            }
+        }
+        
+        return extractedConditions;
+    }
 
-        return medicalTerms.filter(term => query.includes(term.toLowerCase()));
+    calculateRelevanceScore(searchCondition, acrCondition) {
+        const searchLower = searchCondition.toLowerCase();
+        const acrLower = acrCondition.toLowerCase();
+        
+        // Exact match gets highest score
+        if (searchLower === acrLower) {
+            return 100;
+        }
+        
+        // One contains the other gets high score
+        if (searchLower.includes(acrLower) || acrLower.includes(searchLower)) {
+            return 80;
+        }
+        
+        // Check for medical synonyms and related terms
+        const synonymMap = {
+            'stroke': ['cva', 'cerebrovascular accident', 'brain attack'],
+            'headache': ['migraine', 'cephalgia', 'head pain'],
+            'seizure': ['epilepsy', 'convulsion', 'fits'],
+            'trauma': ['injury', 'accident', 'fracture'],
+            'tumor': ['cancer', 'mass', 'lesion', 'neoplasm'],
+            'infection': ['sepsis', 'abscess', 'inflammatory'],
+            'back pain': ['lumbar pain', 'spine pain', 'dorsalgia'],
+            'neck pain': ['cervical pain', 'cervicalgia'],
+            'chest pain': ['thoracic pain', 'precordial pain'],
+            'abdominal pain': ['belly pain', 'stomach pain', 'abd pain']
+        };
+        
+        // Check if terms are synonyms
+        for (const [primary, synonyms] of Object.entries(synonymMap)) {
+            if ((searchLower.includes(primary) || synonyms.some(s => searchLower.includes(s))) &&
+                (acrLower.includes(primary) || synonyms.some(s => acrLower.includes(s)))) {
+                return 60;
+            }
+        }
+        
+        // Partial word matching
+        const searchWords = searchLower.split(' ');
+        const acrWords = acrLower.split(' ');
+        const commonWords = searchWords.filter(word => 
+            word.length > 2 && acrWords.some(acrWord => 
+                acrWord.includes(word) || word.includes(acrWord)
+            )
+        );
+        
+        if (commonWords.length > 0) {
+            return Math.min(40, commonWords.length * 15);
+        }
+        
+        return 0;
     }
 
     findACRRecommendations(condition) {
@@ -438,22 +602,40 @@ class ImagingAIAssistant {
         
         this.orders.forEach(order => {
             if (order.acrData?.appropriateness) {
+                let bestMatch = null;
+                let bestScore = 0;
+                
                 Object.entries(order.acrData.appropriateness).forEach(([cond, data]) => {
-                    if (cond.toLowerCase().includes(condition.toLowerCase()) || 
-                        condition.toLowerCase().includes(cond.toLowerCase())) {
-                        recommendations.push({
+                    const relevanceScore = this.calculateRelevanceScore(condition, cond);
+                    if (relevanceScore > 0 && relevanceScore > bestScore) {
+                        bestMatch = {
                             study: order.study,
                             rating: data.rating,
                             level: data.level,
                             priority: order.acrData.priority,
-                            notes: order.acrData.notes
-                        });
+                            notes: order.acrData.notes,
+                            relevanceScore: relevanceScore,
+                            matchedCondition: cond
+                        };
+                        bestScore = relevanceScore;
                     }
                 });
+                
+                if (bestMatch) {
+                    recommendations.push(bestMatch);
+                }
             }
         });
 
-        return recommendations.sort((a, b) => b.rating - a.rating);
+        // Sort by relevance score first, then by ACR rating
+        return recommendations
+            .sort((a, b) => {
+                if (a.relevanceScore !== b.relevanceScore) {
+                    return b.relevanceScore - a.relevanceScore;
+                }
+                return b.rating - a.rating;
+            })
+            .slice(0, 3); // Limit to top 3 recommendations
     }
 
     findImagingRecommendations(condition) {
@@ -462,31 +644,76 @@ class ImagingAIAssistant {
         // Check orders with ACR data first
         this.orders.forEach(order => {
             if (order.acrData?.appropriateness) {
+                let bestMatch = null;
+                let bestScore = 0;
+                
                 Object.entries(order.acrData.appropriateness).forEach(([cond, data]) => {
-                    if (cond.toLowerCase().includes(condition.toLowerCase()) || 
-                        condition.toLowerCase().includes(cond.toLowerCase())) {
-                        recommendations.push({
+                    const relevanceScore = this.calculateRelevanceScore(condition, cond);
+                    if (relevanceScore > 0 && relevanceScore > bestScore) {
+                        bestMatch = {
                             ...order,
                             rating: data.rating,
-                            level: data.level
-                        });
+                            level: data.level,
+                            relevanceScore: relevanceScore,
+                            matchedCondition: cond
+                        };
+                        bestScore = relevanceScore;
                     }
                 });
+                
+                if (bestMatch) {
+                    recommendations.push(bestMatch);
+                }
             }
         });
 
-        // Also check indication text
-        const indicationMatches = this.orders.filter(order => 
-            order.indication?.toLowerCase().includes(condition.toLowerCase())
-        );
+        // Also check indication text with scoring
+        this.orders.forEach(order => {
+            if (order.indication && !recommendations.find(r => r.study === order.study)) {
+                const indicationScore = this.calculateTextRelevance(condition, order.indication);
+                if (indicationScore > 0) {
+                    recommendations.push({
+                        ...order,
+                        relevanceScore: indicationScore * 0.5 // Lower weight than ACR matches
+                    });
+                }
+            }
+        });
+
+        // Sort by relevance score first, then by ACR rating
+        return recommendations
+            .sort((a, b) => {
+                if (a.relevanceScore !== b.relevanceScore) {
+                    return b.relevanceScore - a.relevanceScore;
+                }
+                return (b.rating || 0) - (a.rating || 0);
+            })
+            .slice(0, 3); // Limit to top 3 recommendations
+    }
+
+    calculateTextRelevance(searchTerm, text) {
+        const searchLower = searchTerm.toLowerCase();
+        const textLower = text.toLowerCase();
         
-        indicationMatches.forEach(order => {
-            if (!recommendations.find(r => r.study === order.study)) {
-                recommendations.push(order);
+        // Exact phrase match
+        if (textLower.includes(searchLower)) {
+            return 100;
+        }
+        
+        // Word-by-word matching
+        const searchWords = searchLower.split(' ').filter(w => w.length > 2);
+        const textWords = textLower.split(/\s+/);
+        
+        let matches = 0;
+        for (const searchWord of searchWords) {
+            if (textWords.some(textWord => 
+                textWord.includes(searchWord) || searchWord.includes(textWord)
+            )) {
+                matches++;
             }
-        });
-
-        return recommendations;
+        }
+        
+        return searchWords.length > 0 ? (matches / searchWords.length) * 80 : 0;
     }
 }
 

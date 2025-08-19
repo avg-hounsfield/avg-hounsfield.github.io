@@ -51,6 +51,168 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- FUNCTIONS ---
 
     /**
+     * Extracts medical conditions from a clinical query using contextual patterns.
+     * @param {string} query - The clinical query or phrase
+     * @returns {string[]} - Array of extracted medical conditions
+     */
+    function extractMedicalConditions(query) {
+        const queryLower = query.toLowerCase().trim();
+        
+        // Medical condition patterns and their synonyms/variations
+        const medicalPatterns = {
+            'stroke': [
+                'stroke', 'cva', 'cerebrovascular accident', 'brain attack',
+                'concern for stroke', 'stroke like', 'stroke-like', 'strokelike',
+                'possible stroke', 'suspected stroke', 'r/o stroke', 'rule out stroke',
+                'stroke symptoms', 'stroke workup', 'acute stroke'
+            ],
+            'headache': [
+                'headache', 'head ache', 'cephalgia', 'head pain',
+                'severe headache', 'chronic headache', 'migraine',
+                'concern for headache', 'headache workup'
+            ],
+            'seizure': [
+                'seizure', 'seizures', 'convulsion', 'epilepsy', 'fits',
+                'seizure like', 'seizure-like', 'possible seizure',
+                'concern for seizure', 'r/o seizure', 'rule out seizure',
+                'seizure activity', 'convulsive episode'
+            ],
+            'trauma': [
+                'trauma', 'injury', 'accident', 'fall', 'hit', 'struck',
+                'head trauma', 'brain trauma', 'traumatic injury',
+                'post trauma', 'after fall', 'motor vehicle accident', 'mva'
+            ],
+            'tumor': [
+                'tumor', 'tumour', 'mass', 'lesion', 'growth', 'neoplasm',
+                'brain tumor', 'brain mass', 'intracranial mass',
+                'concern for tumor', 'possible tumor', 'r/o tumor',
+                'rule out tumor', 'mass effect'
+            ],
+            'infection': [
+                'infection', 'infectious', 'sepsis', 'abscess',
+                'concern for infection', 'possible infection',
+                'r/o infection', 'rule out infection'
+            ],
+            'meningitis': [
+                'meningitis', 'meningeal', 'neck stiffness',
+                'concern for meningitis', 'possible meningitis',
+                'r/o meningitis', 'rule out meningitis'
+            ],
+            'altered mental status': [
+                'altered mental status', 'ams', 'confusion', 'confused',
+                'mental status change', 'altered consciousness',
+                'cognitive change', 'behavioral change'
+            ],
+            'back pain': [
+                'back pain', 'lower back pain', 'lumbar pain',
+                'spine pain', 'spinal pain', 'dorsalgia'
+            ],
+            'neck pain': [
+                'neck pain', 'cervical pain', 'cervicalgia'
+            ],
+            'sciatica': [
+                'sciatica', 'sciatic pain', 'radicular pain',
+                'leg pain', 'shooting pain down leg'
+            ],
+            'radiculopathy': [
+                'radiculopathy', 'nerve root', 'pinched nerve',
+                'compressed nerve', 'nerve compression'
+            ],
+            'chest pain': [
+                'chest pain', 'chest discomfort', 'thoracic pain',
+                'precordial pain', 'retrosternal pain'
+            ],
+            'shortness of breath': [
+                'shortness of breath', 'dyspnea', 'sob', 'difficulty breathing',
+                'breathing problems', 'breathlessness'
+            ],
+            'pulmonary embolism': [
+                'pulmonary embolism', 'pe', 'blood clot', 'clot',
+                'concern for pe', 'possible pe', 'r/o pe', 'rule out pe'
+            ],
+            'kidney stones': [
+                'kidney stones', 'renal stones', 'nephrolithiasis',
+                'kidney stone', 'renal calculi', 'ureteral stone'
+            ],
+            'abdominal pain': [
+                'abdominal pain', 'belly pain', 'stomach pain',
+                'abd pain', 'epigastric pain', 'right upper quadrant pain',
+                'left lower quadrant pain', 'rlq pain', 'llq pain'
+            ]
+        };
+        
+        const extractedConditions = [];
+        
+        // Check each medical condition pattern - Edge compatible
+        var conditionKeys = Object.keys(medicalPatterns);
+        for (var i = 0; i < conditionKeys.length; i++) {
+            var condition = conditionKeys[i];
+            var patterns = medicalPatterns[condition];
+            for (var j = 0; j < patterns.length; j++) {
+                var pattern = patterns[j];
+                if (queryLower.includes(pattern)) {
+                    extractedConditions.push(condition);
+                    break; // Don't add the same condition multiple times
+                }
+            }
+        }
+        
+        return extractedConditions;
+    }
+
+    /**
+     * Gets the maximum ACR appropriateness rating for a study based on the search query.
+     * @param {Object} study - The study object with potential acrData
+     * @param {string} query - The search query to match against ACR conditions
+     * @returns {number} - The highest ACR rating found, or 0 if no ACR data
+     */
+    function getMaxAcrRating(study, query) {
+        if (!study.acrData || !study.acrData.appropriateness) {
+            return 0;
+        }
+        
+        const appropriateness = study.acrData.appropriateness;
+        let maxRating = 0;
+        
+        // Extract medical conditions from the query
+        const extractedConditions = extractMedicalConditions(query);
+        
+        // If we found specific medical conditions, prioritize them
+        if (extractedConditions.length > 0) {
+            for (const condition of extractedConditions) {
+                if (appropriateness[condition]) {
+                    maxRating = Math.max(maxRating, appropriateness[condition].rating || 0);
+                }
+            }
+        }
+        
+        // If no extracted conditions matched, fall back to simple keyword matching - Edge compatible
+        if (maxRating === 0) {
+            const queryLower = query.toLowerCase();
+            var conditions = Object.keys(appropriateness);
+            for (var i = 0; i < conditions.length; i++) {
+                var condition = conditions[i];
+                var data = appropriateness[condition];
+                if (condition.toLowerCase().includes(queryLower) || 
+                    queryLower.includes(condition.toLowerCase())) {
+                    maxRating = Math.max(maxRating, data.rating || 0);
+                }
+            }
+        }
+        
+        // If still no matches, return the highest rating overall for any condition - Edge compatible
+        if (maxRating === 0) {
+            var allConditions = Object.keys(appropriateness);
+            for (var j = 0; j < allConditions.length; j++) {
+                var conditionData = appropriateness[allConditions[j]];
+                maxRating = Math.max(maxRating, conditionData.rating || 0);
+            }
+        }
+        
+        return maxRating;
+    }
+
+    /**
      * Toggles the visibility of an accordion panel with a smooth animation.
      * Mobile-optimized with better touch feedback.
      * @param {string} accordionId - The ID of the content panel to toggle.
@@ -106,29 +268,29 @@ document.addEventListener('DOMContentLoaded', () => {
     function attachAccordionListeners() {
         const accordionHeaders = document.querySelectorAll('[data-accordion-id]');
         accordionHeaders.forEach(header => {
-            // Check if a listener has already been attached
-            if (!header.dataset.listenerAttached) {
-                // Primary click handler
-                header.addEventListener('click', (e) => {
+            // Check if a listener has already been attached - Edge compatible
+            if (!header.getAttribute('data-listener-attached')) {
+                // Primary click handler - Edge compatible
+                header.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const accordionId = header.dataset.accordionId;
+                    const accordionId = header.getAttribute('data-accordion-id');
                     toggleAccordion(accordionId);
-                }, { passive: false });
+                });
 
-                // Touch feedback for mobile
-                header.addEventListener('touchstart', () => {
+                // Touch feedback for mobile - Edge compatible
+                header.addEventListener('touchstart', function() {
                     header.style.opacity = '0.7';
-                }, { passive: true });
+                });
 
-                header.addEventListener('touchend', () => {
+                header.addEventListener('touchend', function() {
                     header.style.opacity = '';
-                }, { passive: true });
+                });
 
-                header.addEventListener('touchcancel', () => {
+                header.addEventListener('touchcancel', function() {
                     header.style.opacity = '';
-                }, { passive: true });
+                });
 
-                header.dataset.listenerAttached = 'true';
+                header.setAttribute('data-listener-attached', 'true');
             }
         });
     }
@@ -149,8 +311,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const protocolData = await protocolRes.json();
             const ordersData = await ordersRes.json();
 
-            allProtocols = protocolData.flatMap(p => p.studies.map(s => ({...s, section: p.section[0]})));
-            allOrders = ordersData.flatMap(o => o.studies.map(s => ({...s, section: o.section[0]})));
+            // Edge compatible flatMap alternative
+            allProtocols = [];
+            protocolData.forEach(function(p) {
+                p.studies.forEach(function(s) {
+                    var study = {};
+                    for (var key in s) {
+                        if (s.hasOwnProperty(key)) {
+                            study[key] = s[key];
+                        }
+                    }
+                    study.section = p.section[0];
+                    allProtocols.push(study);
+                });
+            });
+            
+            allOrders = [];
+            ordersData.forEach(function(o) {
+                o.studies.forEach(function(s) {
+                    var study = {};
+                    for (var key in s) {
+                        if (s.hasOwnProperty(key)) {
+                            study[key] = s[key];
+                        }
+                    }
+                    study.section = o.section[0];
+                    allOrders.push(study);
+                });
+            });
             
             handleSearch(); // Initial render after data is loaded
             
@@ -220,6 +408,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             });
             
+            // Sort by ACR appropriateness when in orders mode and we have medical conditions or ACR data
+            if (isOrdersMode && (extractMedicalConditions(query).length > 0 || 
+                results.some(r => r.acrData && r.acrData.appropriateness))) {
+                results.sort((a, b) => {
+                    const aMaxRating = getMaxAcrRating(a, query);
+                    const bMaxRating = getMaxAcrRating(b, query);
+                    return bMaxRating - aMaxRating; // Sort highest rating first
+                });
+            }
+            
             console.log(`Found ${results.length} results for query "${query}":`, results.map(r => r.study));
 
             if (results.length === 0) {
@@ -249,13 +447,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mobile-optimized search event listeners
     if (searchButton && searchInput && dataSourceToggle) {
-        // Immediate search on button click
-        searchButton.addEventListener('click', () => handleSearch(true));
+        // Immediate search on button click - Edge compatible
+        searchButton.addEventListener('click', function() {
+            handleSearch(true);
+        });
         
-        // Mobile-friendly search input handling
-        searchInput.addEventListener('input', handleSearch, { passive: true });
-        searchInput.addEventListener('keyup', (event) => {
-            if (event.key === 'Enter') {
+        // Mobile-friendly search input handling - Edge compatible
+        searchInput.addEventListener('input', handleSearch);
+        searchInput.addEventListener('keyup', function(event) {
+            // Edge compatible key check
+            var key = event.key || event.keyCode;
+            if (key === 'Enter' || key === 13) {
                 event.preventDefault();
                 handleSearch(true);
                 // Blur input on mobile to hide keyboard
@@ -265,8 +467,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        // Immediate search on toggle change
-        dataSourceToggle.addEventListener('change', () => handleSearch(true));
+        // Immediate search on toggle change - Edge compatible
+        dataSourceToggle.addEventListener('change', function() {
+            handleSearch(true);
+        });
     }
     
     // --- INITIALIZATION ---
