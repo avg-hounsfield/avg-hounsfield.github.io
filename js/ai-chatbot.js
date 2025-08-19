@@ -45,7 +45,9 @@ class ImagingAIAssistant {
 
         this.input?.addEventListener('input', () => {
             const hasText = this.input.value.trim().length > 0;
-            this.sendBtn.disabled = !hasText;
+            if (this.sendBtn) {
+                this.sendBtn.disabled = !hasText;
+            }
         });
 
         // Close on outside click
@@ -95,7 +97,10 @@ class ImagingAIAssistant {
     openChat() {
         this.isOpen = true;
         this.container?.classList.add('open');
-        this.input?.focus();
+        // Add a small delay to ensure the container is visible before focusing
+        setTimeout(() => {
+            this.input?.focus();
+        }, 100);
     }
 
     closeChat() {
@@ -110,7 +115,9 @@ class ImagingAIAssistant {
         // Add user message
         this.addMessage(message, 'user');
         this.input.value = '';
-        this.sendBtn.disabled = true;
+        if (this.sendBtn) {
+            this.sendBtn.disabled = true;
+        }
 
         // Show typing indicator
         this.showTyping();
@@ -138,17 +145,23 @@ class ImagingAIAssistant {
         this.messagesContainer?.appendChild(messageDiv);
         
         // Scroll to bottom
-        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        if (this.messagesContainer) {
+            this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        }
     }
 
     showTyping() {
         this.isTyping = true;
-        this.typingIndicator.style.display = 'flex';
+        if (this.typingIndicator) {
+            this.typingIndicator.style.display = 'flex';
+        }
     }
 
     hideTyping() {
         this.isTyping = false;
-        this.typingIndicator.style.display = 'none';
+        if (this.typingIndicator) {
+            this.typingIndicator.style.display = 'none';
+        }
     }
 
     async generateResponse(userMessage) {
