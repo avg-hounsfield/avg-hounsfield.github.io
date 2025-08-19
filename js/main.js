@@ -42,8 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('searchButton');
     const resultsContainer = document.getElementById('results');
     const dataSourceToggle = document.getElementById('dataSourceToggle');
-    const dataSourceToggleMobile = document.getElementById('dataSourceToggleMobile');
-    const ordersOnlyToggle = document.getElementById('ordersOnlyToggle');
 
 
     // --- STATE ---
@@ -367,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const query = searchInput.value.toLowerCase().trim();
-        const isOrdersMode = dataSourceToggle?.checked || dataSourceToggleMobile?.checked || ordersOnlyToggle?.checked || false;
+        const isOrdersMode = dataSourceToggle?.checked || false;
         const dataToSearch = isOrdersMode ? allOrders : allProtocols;
 
         if (!query) {
@@ -473,21 +471,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Immediate search on toggle change - Edge compatible
         dataSourceToggle.addEventListener('change', function() {
-            // Sync mobile toggle with desktop toggle
-            if (dataSourceToggleMobile) {
-                dataSourceToggleMobile.checked = dataSourceToggle.checked;
-            }
-            handleSearch(true);
-        });
-    }
-    
-    // Mobile toggle event listener
-    if (dataSourceToggleMobile) {
-        dataSourceToggleMobile.addEventListener('change', function() {
-            // Sync desktop toggle with mobile toggle
-            if (dataSourceToggle) {
-                dataSourceToggle.checked = dataSourceToggleMobile.checked;
-            }
             handleSearch(true);
         });
     }
