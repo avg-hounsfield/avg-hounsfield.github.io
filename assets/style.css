@@ -1315,6 +1315,8 @@ body[data-theme="dark"] .slider-label.active {
   padding: 2rem 0;
   border-top: 1px solid var(--md-sys-color-outline-variant);
   background: var(--md-sys-color-surface-container-low);
+  position: relative;
+  z-index: 1500;
 }
 
 .footer-content {
@@ -1351,6 +1353,8 @@ body[data-theme="dark"] .slider-label.active {
   display: flex;
   gap: 1.5rem;
   align-items: center;
+  position: relative;
+  z-index: 1501;
 }
 
 .footer-link {
@@ -1377,6 +1381,8 @@ body[data-theme="dark"] .slider-label.active {
   text-decoration: none;
   font-weight: 600;
   transition: all 0.2s ease;
+  position: relative;
+  z-index: 1502;
 }
 
 .discord-link:hover {
