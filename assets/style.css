@@ -1349,6 +1349,19 @@ body[data-theme="dark"] .slider-label.active {
   opacity: 0.8;
 }
 
+.project-link {
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  position: relative;
+  z-index: 1502;
+}
+
+.project-link:hover {
+  color: var(--md-sys-color-primary-container);
+  text-decoration: underline;
+}
+
 .footer-nav {
   display: flex;
   gap: 1.5rem;
