@@ -19,6 +19,38 @@
 
 <body data-theme="dark">
 
+    <!-- Beta Acknowledgment Modal -->
+    <div id="beta-acknowledgment-modal" class="beta-modal">
+        <div class="beta-modal-content">
+            <div class="beta-modal-header">
+                <span class="material-symbols-outlined beta-warning-icon">warning</span>
+                <h2>Important Notice</h2>
+            </div>
+            
+            <div class="beta-modal-body">
+                <div class="acknowledgment-item">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="beta-testing-ack" class="acknowledgment-checkbox">
+                        <span class="checkmark"></span>
+                        <span class="acknowledgment-text">
+                            I acknowledge this site is currently in beta testing. Known issues have been identified and are actively being addressed. I understand that I should consult a qualified medical professional for any questions or concerns regarding medical imaging decisions.
+                        </span>
+                    </label>
+                </div>
+                
+                <div class="acknowledgment-item">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="educational-use-ack" class="acknowledgment-checkbox">
+                        <span class="checkmark"></span>
+                        <span class="acknowledgment-text">
+                            I understand this platform is intended for educational purposes only for healthcare professionals. This tool is not designed for diagnostic purposes. I will consult with a healthcare provider for any health-related issues or concerns.
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ✅ PASTE THIS ENTIRE BLOCK HERE -->
 <!-- ✅ NEW, CORRECTED STRUCTURE -->
 <div id="favorites-sidebar" class="favorites-sidebar">
@@ -166,6 +198,7 @@
 
     <!-- Scripts at the very end of the body -->
     <script src="https://unpkg.com/lunr@2.3.9/lunr.min.js"></script>
+    <script type="module" src="js/beta-acknowledgment.js"></script>
     <script type="module" src="js/theme.js"></script>
     <script type="module" src="js/main.js"></script>
     <script type="module" src="js/ai-chatbot.js"></script>
