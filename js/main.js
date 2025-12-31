@@ -4,6 +4,7 @@
 import { renderGroupedProtocols } from './render.js';
 import { initFavorites, addFavoriteButtons } from './favorites.js';
 import { QueryExpander } from './query-expansion.js';
+import { initACRDatabase, isACRDatabaseReady, searchACRScenarios } from './acr-lookup.js';
 
 // Mobile viewport optimization
 function optimizeMobileViewport() {
@@ -48,6 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- STATE ---
     let allProtocols = [];
     let allOrders = [];
+    let acrDatabaseLoading = false;
+    let acrDatabaseLoaded = false;
 
 
     // --- FUNCTIONS ---
@@ -351,6 +354,260 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
+     * Render ACR scenario results with appropriateness ratings
+     */
+    function renderACRResults(scenarios, query) {
+        if (scenarios.length === 0) {
+            return `<p>No ACR scenarios found for "${query}".</p>`;
+        }
+
+        const getRatingClass = (rating) => {
+            if (rating >= 7) return 'rating-high';
+            if (rating >= 4) return 'rating-medium';
+            return 'rating-low';
+        };
+
+        const getRatingLabel = (rating) => {
+            if (rating >= 7) return 'Usually Appropriate';
+            if (rating >= 4) return 'May Be Appropriate';
+            return 'Usually Not Appropriate';
+        };
+
+        const scenarioCards = scenarios.map((scenario, idx) => {
+            const accordionId = `acr-${idx}-${Date.now()}`;
+            const topProc = scenario.topProcedure;
+
+            // Build procedures list
+            const proceduresList = (scenario.procedures || []).map(proc => `
+                <div class="acr-procedure-item ${getRatingClass(proc.rating)}">
+                    <span class="proc-name">${escapeHtml(proc.name)}</span>
+                    <span class="proc-modality">${escapeHtml(proc.modality)}</span>
+                    <span class="proc-rating">${proc.rating}/9</span>
+                </div>
+            `).join('');
+
+            return `
+                <div class="protocol-card acr-scenario-card">
+                    <div class="card-header" data-accordion-id="${accordionId}">
+                        <div class="card-title-row">
+                            <h3>${escapeHtml(simplifyScenarioName(scenario.name))}</h3>
+                            ${topProc ? `
+                                <span class="acr-badge ${getRatingClass(topProc.rating)}">
+                                    ${topProc.modality} ${topProc.rating}/9
+                                </span>
+                            ` : ''}
+                        </div>
+                        <span class="body-region-tag">${escapeHtml(scenario.body_region || 'General')}</span>
+                        <span class="accordion-toggle material-symbols-outlined">expand_more</span>
+                    </div>
+                    <div class="accordion-content" id="${accordionId}">
+                        ${topProc ? `
+                            <div class="primary-recommendation">
+                                <div class="rec-label">Top Recommendation</div>
+                                <div class="rec-study ${getRatingClass(topProc.rating)}">
+                                    <span class="study-name">${escapeHtml(topProc.procedure_name)}</span>
+                                    <span class="study-rating">${getRatingLabel(topProc.rating)}</span>
+                                </div>
+                            </div>
+                        ` : ''}
+                        ${scenario.clinical_summary ? `
+                            <div class="clinical-summary">
+                                <strong>Clinical Context:</strong>
+                                <p>${escapeHtml(truncateSummary(scenario.clinical_summary, 300))}</p>
+                            </div>
+                        ` : ''}
+                        ${proceduresList ? `
+                            <div class="acr-procedures-list">
+                                <strong>All Rated Procedures:</strong>
+                                ${proceduresList}
+                            </div>
+                        ` : ''}
+                        ${scenario.source_url ? `
+                            <a href="${escapeHtml(scenario.source_url)}" target="_blank" class="acr-source-link">
+                                <span class="material-symbols-outlined">open_in_new</span>
+                                View on ACR
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <div class="results-section acr-results">
+                <div class="section-header">
+                    <h2>ACR Appropriateness Criteria</h2>
+                    <span class="result-count">${scenarios.length} scenarios</span>
+                </div>
+                ${scenarioCards}
+            </div>
+        `;
+    }
+
+    /**
+     * Simplify long ACR scenario names for display
+     */
+    function simplifyScenarioName(name) {
+        if (!name) return 'Unknown';
+        // Remove redundant prefixes
+        let clean = name.replace(/^(Adult|Pediatric)\.\s*/i, '');
+        // Truncate if too long
+        if (clean.length > 80) {
+            clean = clean.substring(0, 77) + '...';
+        }
+        return clean;
+    }
+
+    /**
+     * Truncate text to a reasonable length
+     */
+    function truncateSummary(text, maxLen) {
+        if (!text || text.length <= maxLen) return text;
+        const truncated = text.substring(0, maxLen);
+        const lastPeriod = truncated.lastIndexOf('.');
+        if (lastPeriod > maxLen * 0.6) {
+            return truncated.substring(0, lastPeriod + 1);
+        }
+        return truncated.trim() + '...';
+    }
+
+    /**
+     * Escape HTML to prevent XSS
+     */
+    function escapeHtml(unsafe) {
+        if (typeof unsafe !== 'string') return unsafe || '';
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    /**
+     * Handle ACR database search (for ORDERS mode)
+     */
+    async function handleACRSearch(query) {
+        if (!resultsContainer) return;
+
+        // Show loading state
+        resultsContainer.innerHTML = `
+            <div class="acr-loading">
+                <div class="loading-spinner"></div>
+                <p>Searching ACR database...</p>
+            </div>
+        `;
+
+        try {
+            // Ensure database is loaded
+            if (!acrDatabaseLoaded) {
+                await initACRDatabase();
+                acrDatabaseLoaded = true;
+            }
+
+            // Expand layperson terms
+            const expandedQuery = QueryExpander.expand(query);
+            if (expandedQuery !== query) {
+                console.log(`QueryExpander: "${query}" -> "${expandedQuery}"`);
+            }
+
+            // Search ACR scenarios
+            const scenarios = await searchACRScenarios(expandedQuery, 15);
+            console.log(`ACR Search: Found ${scenarios.length} scenarios for "${query}"`);
+
+            // Render results
+            resultsContainer.innerHTML = renderACRResults(scenarios, query);
+
+            // Attach accordion listeners
+            requestAnimationFrame(() => {
+                attachAccordionListeners();
+            });
+
+        } catch (error) {
+            console.error('ACR search error:', error);
+            resultsContainer.innerHTML = `
+                <div class="acr-error">
+                    <span class="material-symbols-outlined">error</span>
+                    <p>Error searching ACR database. Falling back to basic search.</p>
+                </div>
+            `;
+            // Fallback to regular orders search
+            handleProtocolSearch(query, true);
+        }
+    }
+
+    /**
+     * Handle protocol search (for PROTOCOLS mode)
+     */
+    function handleProtocolSearch(query, isOrdersMode) {
+        const dataToSearch = isOrdersMode ? allOrders : allProtocols;
+
+        // Apply layperson query expansion
+        const expandedQuery = QueryExpander.expand(query);
+        const searchTerms = expandedQuery.toLowerCase().split(/\s+/).filter(t => t.length > 1);
+
+        if (expandedQuery !== query) {
+            console.log(`QueryExpander: "${query}" -> "${expandedQuery}"`);
+        }
+
+        const results = dataToSearch.filter(item => {
+            const studyLower = item.study.toLowerCase();
+            const keywordsText = (item.keywords || []).join(' ').toLowerCase();
+            const indicationText = (item.indication || '').toLowerCase();
+
+            for (const term of searchTerms) {
+                if (studyLower.includes(term)) return true;
+                if (keywordsText.includes(term)) return true;
+                if (indicationText.includes(term)) return true;
+            }
+
+            if (studyLower.includes(query) || keywordsText.includes(query)) return true;
+
+            if (item.acrData && item.acrData.appropriateness) {
+                const acrConditions = Object.keys(item.acrData.appropriateness);
+                if (acrConditions.some(condition =>
+                    condition.toLowerCase().includes(query) ||
+                    query.includes(condition.toLowerCase()) ||
+                    searchTerms.some(term => condition.toLowerCase().includes(term))
+                )) return true;
+            }
+
+            return false;
+        });
+
+        // Sort by ACR appropriateness in orders mode
+        if (isOrdersMode && (extractMedicalConditions(query).length > 0 ||
+            results.some(r => r.acrData && r.acrData.appropriateness))) {
+            results.sort((a, b) => {
+                const aMaxRating = getMaxAcrRating(a, query);
+                const bMaxRating = getMaxAcrRating(b, query);
+                return bMaxRating - aMaxRating;
+            });
+        }
+
+        console.log(`Found ${results.length} results for query "${query}":`, results.map(r => r.study));
+
+        if (results.length === 0) {
+            resultsContainer.innerHTML = `<p>No results found for "${query}".</p>`;
+        } else {
+            const grouped = results.reduce((acc, item) => {
+                const key = item.section || 'Other';
+                if (!acc[key]) acc[key] = [];
+                acc[key].push(item);
+                return acc;
+            }, {});
+
+            resultsContainer.innerHTML = renderGroupedProtocols(grouped, isOrdersMode, query);
+
+            requestAnimationFrame(() => {
+                attachAccordionListeners();
+                addFavoriteButtons();
+                initializeOpenAccordions();
+            });
+        }
+    }
+
+    /**
      * Filters data based on search query and renders the results.
      * Mobile-optimized with debouncing and performance improvements.
      */
@@ -367,101 +624,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const rawQuery = searchInput.value.toLowerCase().trim();
         const isOrdersMode = dataSourceToggle?.checked || false;
-        const dataToSearch = isOrdersMode ? allOrders : allProtocols;
 
         if (!rawQuery) {
             resultsContainer.innerHTML = '';
             return;
         }
 
-        // Apply layperson query expansion (e.g., "blood clot in lung" -> adds "pulmonary embolism PE")
-        const expandedQuery = QueryExpander.expand(rawQuery);
-        const searchTerms = expandedQuery.toLowerCase().split(/\s+/).filter(t => t.length > 1);
-
-        // Log expansion for debugging
-        if (expandedQuery !== rawQuery) {
-            console.log(`QueryExpander: "${rawQuery}" -> "${expandedQuery}"`);
+        // Use ACR database for ORDERS mode (comprehensive ACR data)
+        if (isOrdersMode) {
+            handleACRSearch(rawQuery);
+            return;
         }
 
-        // Use requestAnimationFrame for smooth rendering on mobile
-        requestAnimationFrame(() => {
-
-            const results = dataToSearch.filter(item => {
-                const studyLower = item.study.toLowerCase();
-                const keywordsText = (item.keywords || []).join(' ').toLowerCase();
-                const indicationText = (item.indication || '').toLowerCase();
-
-                // Check if ANY search term matches
-                for (const term of searchTerms) {
-                    // Search in study name
-                    if (studyLower.includes(term)) {
-                        return true;
-                    }
-
-                    // Search in keywords if they exist (protocols)
-                    if (keywordsText.includes(term)) {
-                        return true;
-                    }
-
-                    // Search in indication field (orders)
-                    if (indicationText.includes(term)) {
-                        return true;
-                    }
-                }
-
-                // Also check original query as phrase
-                if (studyLower.includes(rawQuery) || keywordsText.includes(rawQuery)) {
-                    return true;
-                }
-
-                // Search in ACR appropriateness data (orders)
-                if (item.acrData && item.acrData.appropriateness) {
-                    const acrConditions = Object.keys(item.acrData.appropriateness);
-                    if (acrConditions.some(condition =>
-                        condition.toLowerCase().includes(rawQuery) ||
-                        rawQuery.includes(condition.toLowerCase()) ||
-                        searchTerms.some(term => condition.toLowerCase().includes(term))
-                    )) {
-                        return true;
-                    }
-                }
-
-                return false;
-            });
-            
-            // Sort by ACR appropriateness when in orders mode and we have medical conditions or ACR data
-            if (isOrdersMode && (extractMedicalConditions(rawQuery).length > 0 ||
-                results.some(r => r.acrData && r.acrData.appropriateness))) {
-                results.sort((a, b) => {
-                    const aMaxRating = getMaxAcrRating(a, rawQuery);
-                    const bMaxRating = getMaxAcrRating(b, rawQuery);
-                    return bMaxRating - aMaxRating; // Sort highest rating first
-                });
-            }
-
-            console.log(`Found ${results.length} results for query "${rawQuery}":`, results.map(r => r.study));
-
-            if (results.length === 0) {
-                resultsContainer.innerHTML = `<p>No results found for "${rawQuery}".</p>`;
-            } else {
-                const grouped = results.reduce((acc, item) => {
-                    const key = item.section || 'Other';
-                    if (!acc[key]) acc[key] = [];
-                    acc[key].push(item);
-                    return acc;
-                }, {});
-                
-                console.log('Grouped results:', grouped);
-                resultsContainer.innerHTML = renderGroupedProtocols(grouped, isOrdersMode, rawQuery);
-                
-                // Use next frame for attaching listeners to prevent blocking
-                requestAnimationFrame(() => {
-                    attachAccordionListeners();
-                    addFavoriteButtons();
-                    initializeOpenAccordions();
-                });
-            }
-        });
+        // Use local protocols for PROTOCOLS mode (detailed sequences)
+        handleProtocolSearch(rawQuery, false);
     }
 
     // --- EVENT LISTENERS ---
