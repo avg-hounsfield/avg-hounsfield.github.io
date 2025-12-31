@@ -3,6 +3,7 @@
 // Import the render function at the very top
 import { renderGroupedProtocols } from './render.js';
 import { initFavorites, addFavoriteButtons } from './favorites.js';
+import { QueryExpander } from './query-expansion.js';
 
 // Mobile viewport optimization
 function optimizeMobileViewport() {
@@ -364,66 +365,84 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const query = searchInput.value.toLowerCase().trim();
+        const rawQuery = searchInput.value.toLowerCase().trim();
         const isOrdersMode = dataSourceToggle?.checked || false;
         const dataToSearch = isOrdersMode ? allOrders : allProtocols;
 
-        if (!query) {
+        if (!rawQuery) {
             resultsContainer.innerHTML = '';
             return;
+        }
+
+        // Apply layperson query expansion (e.g., "blood clot in lung" -> adds "pulmonary embolism PE")
+        const expandedQuery = QueryExpander.expand(rawQuery);
+        const searchTerms = expandedQuery.toLowerCase().split(/\s+/).filter(t => t.length > 1);
+
+        // Log expansion for debugging
+        if (expandedQuery !== rawQuery) {
+            console.log(`QueryExpander: "${rawQuery}" -> "${expandedQuery}"`);
         }
 
         // Use requestAnimationFrame for smooth rendering on mobile
         requestAnimationFrame(() => {
 
             const results = dataToSearch.filter(item => {
-                // Search in study name
-                if (item.study.toLowerCase().includes(query)) {
-                    return true;
-                }
-                
-                // Search in keywords if they exist (protocols)
-                if (item.keywords && Array.isArray(item.keywords)) {
-                    if (item.keywords.some(keyword => 
-                        keyword.toLowerCase().includes(query)
-                    )) {
+                const studyLower = item.study.toLowerCase();
+                const keywordsText = (item.keywords || []).join(' ').toLowerCase();
+                const indicationText = (item.indication || '').toLowerCase();
+
+                // Check if ANY search term matches
+                for (const term of searchTerms) {
+                    // Search in study name
+                    if (studyLower.includes(term)) {
+                        return true;
+                    }
+
+                    // Search in keywords if they exist (protocols)
+                    if (keywordsText.includes(term)) {
+                        return true;
+                    }
+
+                    // Search in indication field (orders)
+                    if (indicationText.includes(term)) {
                         return true;
                     }
                 }
-                
-                // Search in indication field (orders)
-                if (item.indication && item.indication.toLowerCase().includes(query)) {
+
+                // Also check original query as phrase
+                if (studyLower.includes(rawQuery) || keywordsText.includes(rawQuery)) {
                     return true;
                 }
-                
+
                 // Search in ACR appropriateness data (orders)
                 if (item.acrData && item.acrData.appropriateness) {
                     const acrConditions = Object.keys(item.acrData.appropriateness);
-                    if (acrConditions.some(condition => 
-                        condition.toLowerCase().includes(query) || 
-                        query.includes(condition.toLowerCase())
+                    if (acrConditions.some(condition =>
+                        condition.toLowerCase().includes(rawQuery) ||
+                        rawQuery.includes(condition.toLowerCase()) ||
+                        searchTerms.some(term => condition.toLowerCase().includes(term))
                     )) {
                         return true;
                     }
                 }
-                
+
                 return false;
             });
             
             // Sort by ACR appropriateness when in orders mode and we have medical conditions or ACR data
-            if (isOrdersMode && (extractMedicalConditions(query).length > 0 || 
+            if (isOrdersMode && (extractMedicalConditions(rawQuery).length > 0 ||
                 results.some(r => r.acrData && r.acrData.appropriateness))) {
                 results.sort((a, b) => {
-                    const aMaxRating = getMaxAcrRating(a, query);
-                    const bMaxRating = getMaxAcrRating(b, query);
+                    const aMaxRating = getMaxAcrRating(a, rawQuery);
+                    const bMaxRating = getMaxAcrRating(b, rawQuery);
                     return bMaxRating - aMaxRating; // Sort highest rating first
                 });
             }
-            
-            console.log(`Found ${results.length} results for query "${query}":`, results.map(r => r.study));
+
+            console.log(`Found ${results.length} results for query "${rawQuery}":`, results.map(r => r.study));
 
             if (results.length === 0) {
-                resultsContainer.innerHTML = `<p>No results found for "${query}".</p>`;
+                resultsContainer.innerHTML = `<p>No results found for "${rawQuery}".</p>`;
             } else {
                 const grouped = results.reduce((acc, item) => {
                     const key = item.section || 'Other';
@@ -433,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, {});
                 
                 console.log('Grouped results:', grouped);
-                resultsContainer.innerHTML = renderGroupedProtocols(grouped, isOrdersMode, query);
+                resultsContainer.innerHTML = renderGroupedProtocols(grouped, isOrdersMode, rawQuery);
                 
                 // Use next frame for attaching listeners to prevent blocking
                 requestAnimationFrame(() => {
