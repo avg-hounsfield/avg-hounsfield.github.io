@@ -466,6 +466,7 @@ export class UI {
   }
 
   // Format ACR scenario titles for better readability
+  // Preserves distinguishing qualifiers to avoid duplicate-looking titles
   formatScenarioTitle(title) {
     if (!title) return '';
 
@@ -482,27 +483,62 @@ export class UI {
                        'spine', 'cervical', 'thoracic', 'lumbar', 'sacral', 'coccyx',
                        'brain', 'head', 'neck', 'chest', 'abdomen', 'liver', 'kidney',
                        'pancreas', 'spleen', 'gallbladder', 'bowel', 'colon', 'rectum',
-                       'bladder', 'prostate', 'uterus', 'ovary', 'breast', 'thyroid'];
+                       'bladder', 'prostate', 'uterus', 'ovary', 'breast', 'thyroid',
+                       'mesenteric', 'renal', 'aortic', 'carotid', 'coronary', 'pulmonary'];
 
     // Extract key components
     const condition = parts[0];
     const qualifiers = parts.slice(1);
 
-    // Group qualifiers
+    // Group qualifiers by type (order matters for display priority)
     const bodyPart = [];
-    const clinical = [];
-    const imaging = [];
+    const size = [];        // Size qualifiers like <1cm, >1cm
+    const severity = [];    // Stage, risk level, invasiveness
+    const subtype = [];     // Tumor subtypes, specific variants
+    const clinical = [];    // Clinical context, treatment status
+    const imaging = [];     // Imaging findings
+    const purpose = [];     // Purpose of imaging (staging, surveillance, etc.)
     const other = [];
 
     qualifiers.forEach(q => {
       const ql = q.toLowerCase();
 
-      // Check if it's a body part
-      if (bodyParts.some(bp => ql.includes(bp)) ||
-          ql.includes('extremity') || ql.includes('joint')) {
+      // Skip generic phrases
+      if (ql.includes('next imaging') || ql.includes('initial imaging')) {
+        return;
+      }
+
+      // Size qualifiers (critical for differentiation)
+      if (ql.match(/<\s*\d|>\s*\d|>=\s*\d|<=\s*\d|\d+\s*cm|\d+\s*mm/)) {
+        size.push(q);
+      }
+      // Risk levels and severity
+      else if (ql.includes('high risk') || ql.includes('intermediate risk') ||
+               ql.includes('low risk') || ql.includes('average risk') ||
+               ql.includes('elevated risk') || ql.includes('very high risk')) {
+        severity.push(q);
+      }
+      // Stage and invasiveness
+      else if (ql.match(/stage\s*[0-9ivab]+/i) ||
+               ql.includes('muscle invasive') || ql.includes('nonmuscle invasive') ||
+               ql.includes('non-muscle invasive') || ql.includes('locally advanced') ||
+               ql.includes('metastatic') || ql.includes('localized')) {
+        severity.push(q);
+      }
+      // Tumor characteristics and subtypes
+      else if (ql.includes('aggressive') || ql.includes('malignant') || ql.includes('benign') ||
+               ql.includes('seminoma') || ql.includes('nonseminoma') ||
+               ql.includes('adenocarcinoma') || ql.includes('squamous') ||
+               ql.includes('appearance') || ql.includes('indeterminate')) {
+        subtype.push(q);
+      }
+      // Body parts and anatomic locations
+      else if (bodyParts.some(bp => ql.includes(bp)) ||
+               ql.includes('extremity') || ql.includes('joint') ||
+               ql.includes('arterial system') || ql.includes('urinary tract')) {
         bodyPart.push(q);
       }
-      // Clinical/treatment qualifiers - expanded to include surgical context
+      // Clinical/treatment qualifiers
       else if (ql.includes('acute') || ql.includes('chronic') || ql.includes('subacute') ||
                ql.includes('suspected') || ql.includes('known') || ql.includes('diabetic') ||
                ql.includes('hardware') || ql.includes('implant') ||
@@ -510,22 +546,57 @@ export class UI {
                ql.includes('repair') || ql.includes('tevar') || ql.includes('evar') ||
                ql.includes('surgery') || ql.includes('stent') || ql.includes('graft') ||
                ql.includes('without repair') || ql.includes('new symptoms') ||
-               ql.includes('follow-up') || ql.includes('follow up') || ql.includes('surveillance')) {
+               ql.includes('recurrence') || ql.includes('recurrent') ||
+               ql.includes('fracture completion') || ql.includes('need-to-know') ||
+               ql.includes('osteoporosis') || ql.includes('bisphosphonate') ||
+               ql.includes('puncture wound') || ql.includes('foreign body') ||
+               ql.includes('mri contraindicated') || ql.includes('contraindication') ||
+               ql.includes('cannot tolerate') || ql.includes('incomplete') ||
+               ql.includes('complicated') || ql.includes('uncomplicated') ||
+               ql.includes('frequent') || ql.includes('relapses') ||
+               ql.includes('curative') || ql.includes('palliation') || ql.includes('palliative') ||
+               ql.includes('wait and watch') || ql.includes('resection') ||
+               ql.includes('mets suspected') || ql.includes('regional recurrence') ||
+               ql.includes('treated') || ql.includes('asymptomatic') || ql.includes('symptomatic') ||
+               ql.includes('no hx of') || ql.includes('hx of hcc') ||
+               ql.includes('fibrosis') || ql.includes('neoadjuvant') || ql.includes('surgical planning') ||
+               ql.includes('equivocal') || ql.includes('fever') || ql.includes('wbc') ||
+               // Age and hormonal status
+               ql.includes('postmenopausal') || ql.includes('premenopausal') ||
+               ql.includes('transfeminine') || ql.includes('transmasculine') || ql.includes('pregnant') ||
+               // Specific risk factors
+               ql.includes('family hx') || ql.includes('personal hx') || ql.includes('genetic') ||
+               ql.includes('ca-125') || ql.includes('smoking') || ql.includes('lifetime risk') ||
+               ql.includes('hormone') || ql.includes('mastectomy') || ql.includes('mammoplasty') ||
+               ql.includes('lobular') || ql.includes('ductal') || ql.includes('atypical')) {
         clinical.push(q);
       }
-      // Imaging findings
-      else if (ql.includes('radiograph') || ql.includes('x-ray') || ql.includes('ct ') ||
-               ql.includes('mri ') || ql.includes('normal') || ql.includes('indeterminate') ||
-               ql.includes('finding') || ql.includes('negative') || ql.includes('positive')) {
+      // Imaging findings and modality
+      else if (ql.includes('radiograph') || ql.includes('x-ray') || ql.includes('on ct') ||
+               ql.includes('on mri') || ql.includes('on us') || ql.includes('on imaging') ||
+               ql.includes('noncontrast mri') || ql.includes('noncontrast ct') ||
+               ql.includes('single phase ct') || ql.includes('finding on us') ||
+               ql.includes('normal') || ql.includes('negative') || ql.includes('positive') ||
+               ql.includes('finding') || ql.includes('nondiagnostic')) {
         imaging.push(q);
       }
-      // Skip "next imaging study" as it's implied
-      else if (!ql.includes('next imaging') && !ql.includes('initial imaging')) {
+      // Purpose/outcome of imaging
+      else if (ql.includes('surveillance') || ql.includes('follow-up') || ql.includes('follow up') ||
+               ql.includes('staging') || ql.includes('restaging') ||
+               ql.includes('complication') || ql.includes('determining extent') ||
+               ql.includes('posttreatment') || ql.includes('pretreatment') ||
+               ql.includes('screening') || ql.includes('evaluation') ||
+               ql.includes('active surveillance') || ql.includes('post treatment') ||
+               ql.includes('diagnosis')) {
+        purpose.push(q);
+      }
+      // Everything else
+      else {
         other.push(q);
       }
     });
 
-    // Build readable title - always include body part
+    // Build readable title with distinguishing info
     let result = condition;
 
     // Add body part directly after condition
@@ -533,31 +604,146 @@ export class UI {
       result += ' - ' + bodyPart.join('/');
     }
 
-    // Add key clinical context (up to 2 qualifiers)
+    // Collect key differentiators (prioritized)
+    const differentiators = [];
+
+    // Size is critical - always include all size qualifiers
+    if (size.length > 0) {
+      differentiators.push(...size.map(s => this.shortenQualifier(s)));
+    }
+
+    // Severity/stage is important - include with purpose for context
+    if (severity.length > 0) {
+      differentiators.push(...severity.slice(0, 1).map(s => this.shortenQualifier(s)));
+      // Always add purpose with severity to distinguish staging vs surveillance
+      if (purpose.length > 0) {
+        differentiators.push(...purpose.slice(0, 1).map(s => this.shortenQualifier(s)));
+      }
+    }
+
+    // Subtype for tumors
+    if (subtype.length > 0) {
+      differentiators.push(...subtype.slice(0, 1).map(s => this.shortenQualifier(s)));
+    }
+
+    // Clinical context - include up to 2, more if they're differentiating risk factors
     if (clinical.length > 0) {
-      // Shorten common terms
-      const shortClinical = clinical.slice(0, 2).map(c => {
-        return c.replace(/follow[- ]?up imaging/gi, 'F/U')
-                .replace(/preop(erative)? planning/gi, 'Preop')
-                .replace(/without repair/gi, 'no repair')
-                .replace(/without or with new symptoms/gi, 'new sx');
-      });
-      result += ' (' + shortClinical.join(', ') + ')';
+      // Always show at least 2 clinical qualifiers to capture risk factors
+      const clinicalCount = Math.min(clinical.length, 2);
+      differentiators.push(...clinical.slice(0, clinicalCount).map(s => this.shortenQualifier(s)));
     }
 
-    // Add imaging status if no clinical and space permits
-    if (clinical.length === 0 && imaging.length > 0) {
-      const shortImaging = imaging[0].replace(/radiograph(y|s)?/i, 'XR')
-                                     .replace(/indeterminate/i, 'indeterminate')
-                                     .replace(/findings? suggest/i, 'suggests');
-      result += ' [' + shortImaging + ']';
+    // Purpose if not already added with severity
+    if (severity.length === 0 && purpose.length > 0) {
+      differentiators.push(...purpose.slice(0, 1).map(s => this.shortenQualifier(s)));
     }
 
-    // If nothing added yet and there are other qualifiers, add those
-    if (bodyPart.length === 0 && clinical.length === 0 && imaging.length === 0 && other.length > 0) {
-      result += ' - ' + other.slice(0, 2).join(', ');
+    // Imaging findings/modality - important for liver lesions etc.
+    if (imaging.length > 0 && differentiators.length < 3) {
+      differentiators.push(...imaging.slice(0, 1).map(s => this.shortenQualifier(s)));
+    }
+
+    // Other qualifiers as fallback
+    if (differentiators.length === 0 && other.length > 0) {
+      differentiators.push(...other.slice(0, 2).map(s => this.shortenQualifier(s)));
+    }
+
+    // Add differentiators to result (limit to 4 to keep readable but informative)
+    if (differentiators.length > 0) {
+      const displayDiffs = differentiators.slice(0, 4);
+      result += ' (' + displayDiffs.join(', ') + ')';
     }
 
     return result;
+  }
+
+  // Shorten common qualifier phrases
+  shortenQualifier(q) {
+    return q
+      .replace(/follow[- ]?up imaging/gi, 'F/U')
+      .replace(/preop(erative)? planning/gi, 'preop')
+      .replace(/posttreatment/gi, 'post-tx')
+      .replace(/pretreatment/gi, 'pre-tx')
+      .replace(/local recurrence surveillance/gi, 'recurrence surveil.')
+      .replace(/without repair/gi, 'no repair')
+      .replace(/without or with new symptoms/gi, 'new sx')
+      .replace(/radiograph(y|s)? (normal|negative)/gi, 'XR neg')
+      .replace(/radiograph(y|s)? (indeterminate)/gi, 'XR indet')
+      .replace(/radiograph(y|s)? and noncontrast US nondiagnostic/gi, 'XR/US non-dx')
+      .replace(/incidental finding on /gi, 'incidental ')
+      .replace(/hx of extrahepatic malignancy/gi, 'hx malig')
+      .replace(/hx of malignancy/gi, 'hx malig')
+      .replace(/no hx of malignancy/gi, 'no hx malig')
+      .replace(/cannot tolerate colonoscopy/gi, 'no colonoscopy')
+      .replace(/incomplete colonoscopy/gi, 'incomplete scope')
+      .replace(/no recurrence suspected/gi, 'no recurrence')
+      .replace(/recurrence suspected/gi, 'recurrence?')
+      .replace(/fracture completion risk/gi, 'fx completion')
+      .replace(/immediate need-to-know/gi, 'urgent')
+      .replace(/osteoporosis or bisphosphonate therapy/gi, 'osteoporosis/bisph')
+      .replace(/aggressive appearance for malignancy/gi, 'aggressive')
+      .replace(/benign appearance/gi, 'benign')
+      .replace(/muscle invasive/gi, 'invasive')
+      .replace(/nonmuscle invasive/gi, 'non-invasive')
+      .replace(/determining extent/gi, 'extent')
+      .replace(/associated complication/gi, 'complication')
+      .replace(/arterial system/gi, 'artery')
+      .replace(/urinary tract/gi, 'UT')
+      .replace(/no response to conventional therapy/gi, 'tx-refractory')
+      .replace(/no risk factors/gi, 'no RF')
+      .replace(/risk factors/gi, 'RF')
+      .replace(/MRI contraindicated/gi, 'no MRI')
+      .replace(/contraindication to iodinated and gadolinium based contrast/gi, 'no contrast')
+      .replace(/contraindication to iodinated contrast/gi, 'no iodine')
+      .replace(/no contraindication to iodinated or gadolinium based contrast/gi, 'contrast OK')
+      // New shortening rules
+      .replace(/pretreatment staging/gi, 'staging')
+      .replace(/active surveillance/gi, 'active surveil.')
+      .replace(/systemic disease monitoring/gi, 'systemic')
+      .replace(/curative resection/gi, 'curative')
+      .replace(/after curative resection/gi, 'post-curative')
+      .replace(/during palliation/gi, 'palliation')
+      .replace(/during watch and wait/gi, 'watch & wait')
+      .replace(/wait and watch/gi, 'watch & wait')
+      .replace(/locoregional restaging/gi, 'restaging')
+      .replace(/mets suspected/gi, 'mets?')
+      .replace(/regional recurrence suspected/gi, 'regional recur?')
+      .replace(/frequent relapses/gi, 'frequent relapse')
+      .replace(/incidental finding on noncontrast MRI/gi, 'incidental MRI')
+      .replace(/incidental finding on noncontrast or single phase CT/gi, 'incidental CT')
+      .replace(/incidental finding on US/gi, 'incidental US')
+      .replace(/US equivocal/gi, 'US equiv')
+      .replace(/US negative/gi, 'US neg')
+      .replace(/screening and surveillance/gi, 'screening')
+      .replace(/post treatment imaging/gi, 'post-tx')
+      .replace(/neoadjuvant therapy/gi, 'neoadjuvant')
+      .replace(/surgical planning/gi, 'surgical plan')
+      .replace(/distant metastatic evaluation/gi, 'distant mets')
+      .replace(/postprocedure surveillance/gi, 'post-proc surveil.')
+      .replace(/no hx of HCC/gi, 'no HCC hx')
+      .replace(/hx of HCC/gi, 'HCC hx')
+      .replace(/fibrosis suspected/gi, 'fibrosis?')
+      .replace(/diagnosis and staging/gi, 'dx/staging')
+      // Age and risk factor shortening
+      .replace(/postmenopausal/gi, 'postmeno')
+      .replace(/premenopausal/gi, 'premeno')
+      .replace(/transfeminine/gi, 'transfem')
+      .replace(/transmasculine/gi, 'transmasc')
+      .replace(/family hx of ovarian cancer/gi, 'fam hx ovarian')
+      .replace(/family hx of breast cancer/gi, 'fam hx breast')
+      .replace(/family hx of AAA/gi, 'fam hx AAA')
+      .replace(/personal hx of ovarian cancer/gi, 'pers hx ovarian')
+      .replace(/personal hx of breast cancer/gi, 'pers hx breast')
+      .replace(/genetic predisposition suspected/gi, 'genetic?')
+      .replace(/genetic predisposition/gi, 'genetic')
+      .replace(/elevated CA-125/gi, 'CA-125+')
+      .replace(/with or without smoking hx/gi, 'smoking hx')
+      .replace(/with or without family hx/gi, 'fam hx')
+      .replace(/reduction mammoplasty/gi, 'mammoplasty')
+      .replace(/personal hx lobular neoplasia/gi, 'pers hx lobular')
+      .replace(/personal hx atypical ductal hyperplasia/gi, 'pers hx ADH')
+      .replace(/15-20% lifetime risk/gi, '15-20% risk')
+      .replace(/no hormone use/gi, 'no hormones')
+      .replace(/pelvic US suspicious for malignancy/gi, 'US suspicious');
   }
 }
