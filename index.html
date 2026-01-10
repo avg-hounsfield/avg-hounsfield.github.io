@@ -1,124 +1,469 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protocol.Help - Maintenance</title>
-    <meta name="theme-color" content="#1a1a2e">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ImgGuide - Imaging Appropriateness Guide</title>
 
-        body {
-            font-family: 'Jost', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #e8e8e8;
-            padding: 1rem;
-        }
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="ImgGuide helps radiology residents and medical professionals find appropriate imaging studies based on ACR Appropriateness Criteria and MRI protocols.">
+  <meta name="keywords" content="radiology, imaging, ACR, appropriateness criteria, MRI protocols, CT, ultrasound, medical imaging, radiology education">
+  <meta name="author" content="CoreGRAI">
+  <meta name="robots" content="index, follow">
 
-        .maintenance-container {
-            text-align: center;
-            max-width: 500px;
-            padding: 3rem 2rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ImgGuide - Imaging Appropriateness Guide">
+  <meta property="og:description" content="Find appropriate imaging studies based on ACR Appropriateness Criteria. Educational tool for radiology residents and medical professionals.">
+  <meta property="og:url" content="https://protocols.help">
+  <meta property="og:site_name" content="ImgGuide">
 
-        .icon {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ImgGuide - Imaging Appropriateness Guide">
+  <meta name="twitter:description" content="Find appropriate imaging studies based on ACR Appropriateness Criteria.">
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#9B5DE5">
 
-        h1 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #fff;
-        }
-
-        p {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 1.5rem;
-        }
-
-        .status {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(76, 175, 80, 0.2);
-            border: 1px solid rgba(76, 175, 80, 0.3);
-            border-radius: 2rem;
-            font-size: 0.875rem;
-            color: #81c784;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #4caf50;
-            border-radius: 50%;
-            animation: blink 1.5s ease-in-out infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        .footer {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .footer a {
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            color: #fff;
-        }
-    </style>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>I</text></svg>">
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-    <div class="maintenance-container">
-        <div class="icon">&#128736;</div>
-        <h1>Scheduled Maintenance</h1>
-        <p>
-            We're upgrading Protocol.Help with enhanced ACR Appropriateness Criteria
-            and improved search capabilities. We'll be back shortly.
-        </p>
-        <div class="status">
-            <span class="status-dot"></span>
-            Upgrades in progress
+  <div class="app">
+    <!-- Header -->
+    <header class="header" role="banner">
+      <div class="header-brand">
+        <span class="brand-text">ImgGuide</span>
+      </div>
+      <nav class="header-nav" role="navigation" aria-label="Main navigation">
+        <button class="nav-link active" data-view="search" aria-pressed="true">Search</button>
+        <button class="nav-link" data-view="protocols" aria-pressed="false">Protocols</button>
+      </nav>
+      <!-- Mobile menu button -->
+      <button class="mobile-menu-btn hidden" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12h18M3 6h18M3 18h18"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Anatomy Selector -->
+      <section class="anatomy-section" aria-labelledby="region-title">
+        <h1 class="section-title" id="region-title">Select Body Region</h1>
+        <div class="anatomy-grid" role="group" aria-label="Body region selection">
+          <button class="anatomy-btn" data-region="neuro" aria-label="Neuro imaging">
+            <svg class="anatomy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <circle cx="12" cy="8" r="5"/>
+              <path d="M12 13v4M8 21h8"/>
+            </svg>
+            <span>Neuro</span>
+          </button>
+          <button class="anatomy-btn" data-region="spine" aria-label="Spine imaging">
+            <svg class="anatomy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M12 2v20M9 5h6M9 9h6M9 13h6M9 17h6"/>
+            </svg>
+            <span>Spine</span>
+          </button>
+          <button class="anatomy-btn" data-region="chest" aria-label="Chest imaging">
+            <svg class="anatomy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M12 4c-4 0-7 3-7 7v6h14v-6c0-4-3-7-7-7z"/>
+              <path d="M9 11h6M12 11v4"/>
+            </svg>
+            <span>Chest</span>
+          </button>
+          <button class="anatomy-btn" data-region="abdomen" aria-label="Abdomen imaging">
+            <svg class="anatomy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <ellipse cx="12" cy="12" rx="7" ry="8"/>
+              <path d="M8 10c0 2 4 2 4 0M12 10c0 2 4 2 4 0"/>
+            </svg>
+            <span>Abdomen</span>
+          </button>
+          <button class="anatomy-btn" data-region="msk" aria-label="Musculoskeletal imaging">
+            <svg class="anatomy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M8 2v8l-3 12M16 2v8l3 12"/>
+              <circle cx="12" cy="6" r="2"/>
+            </svg>
+            <span>MSK</span>
+          </button>
+          <button class="anatomy-btn" data-region="vascular" aria-label="Vascular imaging">
+            <svg class="anatomy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M12 2c0 4-4 6-4 10a4 4 0 108 0c0-4-4-6-4-10z"/>
+            </svg>
+            <span>Vascular</span>
+          </button>
+          <button class="anatomy-btn" data-region="breast" aria-label="Breast imaging">
+            <svg class="anatomy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <circle cx="8" cy="12" r="4"/>
+              <circle cx="16" cy="12" r="4"/>
+            </svg>
+            <span>Breast</span>
+          </button>
+          <button class="anatomy-btn" data-region="peds" aria-label="Pediatric imaging">
+            <svg class="anatomy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <circle cx="12" cy="6" r="4"/>
+              <path d="M12 10v6M8 22l4-6 4 6"/>
+            </svg>
+            <span>Pediatric</span>
+          </button>
         </div>
-        <div class="footer">
-            <p>Part of the <a href="https://www.radsreview.net" target="_blank">RadsReview Project</a></p>
+      </section>
+
+      <!-- Protocols Section (for direct protocol lookup) -->
+      <section class="protocols-section hidden" id="protocolsSection">
+        <div class="protocols-header">
+          <h1 class="section-title">MRI Protocol Lookup</h1>
+          <p class="section-subtitle">Search for a specific MRI protocol to view sequences and parameters</p>
         </div>
+
+        <div class="protocol-search-container">
+          <div class="search-input-wrap large">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input
+              type="text"
+              class="search-input"
+              id="protocolSearchInput"
+              placeholder="e.g., Brain, Knee, Lumbar Spine, Shoulder..."
+              autocomplete="off"
+              aria-label="Search MRI protocols"
+            >
+            <button class="search-clear hidden" id="protocolSearchClear" aria-label="Clear search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Protocol Results Grid -->
+        <div class="protocol-results" id="protocolResults">
+          <div class="protocol-grid" id="protocolGrid">
+            <!-- Dynamically populated with protocol cards -->
+          </div>
+        </div>
+
+        <!-- Protocol Detail View (shows when protocol selected) -->
+        <div class="protocol-detail hidden" id="protocolDetail">
+          <button class="protocol-back-btn" id="protocolBackBtn" aria-label="Back to protocol results">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back to results
+          </button>
+
+          <div class="protocol-detail-header">
+            <h2 class="protocol-detail-name" id="protocolDetailName">Protocol Name</h2>
+            <div class="protocol-detail-meta">
+              <span class="contrast-badge" id="protocolDetailContrast">No Contrast</span>
+              <span class="body-region-badge" id="protocolDetailRegion">Neuro</span>
+            </div>
+          </div>
+
+          <div class="protocol-detail-content">
+            <!-- Indications -->
+            <div class="protocol-section">
+              <h3 class="protocol-section-title">Indications</h3>
+              <p class="protocol-indications" id="protocolDetailIndications">-</p>
+            </div>
+
+            <!-- Sequences -->
+            <div class="protocol-section">
+              <h3 class="protocol-section-title">Sequences</h3>
+              <div class="protocol-sequences-list" id="protocolDetailSequences">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Contrast Rationale (if applicable) -->
+            <div class="protocol-section hidden" id="protocolDetailContrastSection">
+              <h3 class="protocol-section-title">Contrast Rationale</h3>
+              <p class="protocol-contrast-rationale" id="protocolDetailRationale">-</p>
+            </div>
+
+            <!-- Scanner Notes (if available) -->
+            <div class="protocol-section hidden" id="protocolDetailNotesSection">
+              <h3 class="protocol-section-title">Scanner Notes</h3>
+              <div class="protocol-scanner-notes" id="protocolDetailNotes">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search Section (hidden until region selected) -->
+      <section class="search-section hidden" id="searchSection" aria-labelledby="regionTitle">
+        <div class="search-header">
+          <button class="back-btn" id="backBtn" aria-label="Back to body region selection">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <h2 class="search-region-title" id="regionTitle">Neuro</h2>
+        </div>
+
+        <div class="search-container">
+          <div class="search-input-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input
+              type="text"
+              class="search-input"
+              id="searchInput"
+              placeholder="Describe the clinical scenario..."
+              autocomplete="off"
+              aria-label="Search clinical scenarios"
+            >
+            <button class="search-clear hidden" id="searchClear" aria-label="Clear search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Clarifying Prompts -->
+          <div class="clarify-chips hidden" id="clarifyChips">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Differential Card (RadLITE) -->
+          <div class="differential-card hidden" id="differentialCard">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Two-Panel Results Layout -->
+        <div class="results-layout">
+          <!-- Scenarios Panel (Left) -->
+          <div class="scenarios-panel" id="scenariosPanel">
+            <div class="panel-header">
+              <h3>Clinical Scenarios</h3>
+              <span class="result-count" id="resultCount">0 results</span>
+            </div>
+            <div class="scenarios-list" id="scenariosList">
+              <div class="empty-state">
+                <p>Enter a clinical scenario to search</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Procedures Panel (Right) - THE KEY INFO -->
+          <div class="procedures-panel" id="proceduresPanel">
+            <div class="panel-header">
+              <h3>Imaging Recommendations</h3>
+              <span class="panel-subtitle" id="selectedScenario"></span>
+            </div>
+            <div class="procedures-list" id="proceduresList">
+              <div class="empty-state">
+                <p>Select a scenario to see imaging recommendations</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MRI Protocol Card (Bottom) - Only shows when MRI selected -->
+        <div class="mri-protocol-card hidden" id="mriProtocolCard">
+          <div class="protocol-card-header">
+            <div class="protocol-card-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+              <span id="protocolName">MRI Protocol</span>
+            </div>
+            <div class="protocol-card-meta">
+              <span class="contrast-badge" id="contrastBadge">No Contrast</span>
+            </div>
+          </div>
+          <div class="protocol-card-content">
+            <div class="sequences-grid" id="sequencesGrid">
+              <!-- Dynamically populated -->
+            </div>
+            <div class="protocol-rationale hidden" id="protocolRationale">
+              <!-- Contrast rationale if applicable -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-text" id="statusText">Ready</span>
+      <span class="status-indicator" id="statusIndicator"></span>
     </div>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-content">
+        <div class="footer-links">
+          <button class="footer-link" id="aboutBtn">About</button>
+          <span class="footer-divider">|</span>
+          <button class="footer-link" id="termsBtn">Terms</button>
+          <span class="footer-divider">|</span>
+          <a href="https://asnr.org/acr-asnr-appropriateness-criteria/" target="_blank" rel="noopener" class="footer-link">ACR Guidelines</a>
+          <span class="footer-divider">|</span>
+          <a href="https://www.radsreview.net" target="_blank" rel="noopener" class="footer-link">RadsReview</a>
+          <span class="footer-divider">|</span>
+          <a href="https://coregrai.com" target="_blank" rel="noopener" class="footer-link">CoreGRAI</a>
+        </div>
+        <p class="footer-copyright">&copy; 2025 CoreGRAI. Educational use only.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- About Modal -->
+  <div class="modal hidden" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-content">
+      <button class="modal-close" data-close="true" aria-label="Close modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      <h2 class="modal-title" id="aboutModalTitle">About ImgGuide</h2>
+      <div class="modal-body">
+        <p>
+          ImgGuide is an educational reference tool designed for radiology residents and medical professionals
+          to quickly access imaging appropriateness criteria and MRI protocol information.
+        </p>
+
+        <h3>Data Sources</h3>
+        <p>
+          <strong>Appropriateness Criteria:</strong> Based on the ACR Appropriateness Criteria,
+          evidence-based guidelines developed by the American College of Radiology to assist referring
+          physicians and other providers in making the most appropriate imaging decisions.
+        </p>
+        <p>
+          <strong>MRI Protocols:</strong> Sample protocols based on common clinical practice.
+          <em>Your institution may have different sequences, parameters, or protocols based on
+          scanner hardware, software versions, radiologist preferences, and institutional policies.</em>
+        </p>
+
+        <h3>Important Notice</h3>
+        <p>
+          This tool is provided for <strong>educational purposes only</strong>. It is not a substitute
+          for clinical judgment, institutional protocols, or direct consultation with radiologists.
+          Imaging decisions should always be made in the context of individual patient circumstances.
+        </p>
+
+        <h3>Feedback</h3>
+        <p>
+          Questions or suggestions? Contact us at
+          <a href="mailto:contact@coregrai.com">contact@coregrai.com</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terms Modal -->
+  <div class="modal hidden" id="termsModal" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-content">
+      <button class="modal-close" data-close="true" aria-label="Close modal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+      <h2 class="modal-title" id="termsModalTitle">Terms of Use</h2>
+      <div class="modal-body terms-content">
+        <p><strong>Last Updated:</strong> January 2025</p>
+
+        <h3>1. Educational Purpose</h3>
+        <p>
+          ImgGuide ("the Service") is provided exclusively for educational and informational purposes.
+          The information contained herein should not be used as a substitute for professional medical
+          advice, diagnosis, or treatment.
+        </p>
+
+        <h3>2. No Medical Advice</h3>
+        <p>
+          The content provided by this Service does not constitute medical advice and should not be
+          relied upon for clinical decision-making. Always consult qualified healthcare professionals
+          and follow your institution's established protocols.
+        </p>
+
+        <h3>3. Accuracy Disclaimer</h3>
+        <p>
+          While we strive to provide accurate and up-to-date information based on ACR Appropriateness
+          Criteria, we make no warranties regarding the completeness, accuracy, or reliability of
+          any information. Protocol sequences shown are representative examples and may differ from
+          your institution's specific protocols.
+        </p>
+
+        <h3>4. Limitation of Liability</h3>
+        <p>
+          CoreGRAI and its affiliates shall not be liable for any direct, indirect, incidental,
+          consequential, or punitive damages arising from your use of or inability to use this Service.
+        </p>
+
+        <h3>5. Intellectual Property</h3>
+        <p>
+          ACR Appropriateness Criteria are developed by the American College of Radiology.
+          References to ACR content are used for educational purposes in accordance with fair use principles.
+        </p>
+
+        <h3>6. Use Restrictions</h3>
+        <p>
+          You agree not to use this Service for any unlawful purpose or in any way that could damage,
+          disable, or impair the Service. Commercial use requires explicit written permission.
+        </p>
+
+        <h3>7. Changes to Terms</h3>
+        <p>
+          We reserve the right to modify these terms at any time. Continued use of the Service
+          constitutes acceptance of any changes.
+        </p>
+
+        <h3>8. Contact</h3>
+        <p>
+          For questions about these Terms, contact: <a href="mailto:contact@coregrai.com">contact@coregrai.com</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome/Disclaimer Modal (shows on first visit, blocks until acknowledged) -->
+  <div class="modal welcome-modal" id="welcomeModal" role="dialog" aria-modal="true" aria-labelledby="welcomeModalTitle">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content welcome-content">
+      <div class="welcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 8v4M12 16h.01"/>
+        </svg>
+      </div>
+      <h2 class="modal-title" id="welcomeModalTitle">Welcome to ImgGuide</h2>
+      <div class="welcome-body">
+        <p class="welcome-highlight">
+          <strong>Educational Reference Only</strong>
+        </p>
+        <p>
+          This tool provides imaging appropriateness guidance based on ACR Appropriateness Criteria
+          and sample MRI protocols. Content has been generated with the assistance of AI.
+        </p>
+        <ul class="welcome-list">
+          <li>Always verify information with your institution's policies and protocols</li>
+          <li>This tool does not constitute medical advice</li>
+          <li>Clinical judgment should always take precedence</li>
+        </ul>
+        <p class="welcome-note">
+          By continuing, you acknowledge that you understand this is for educational purposes only.
+        </p>
+      </div>
+      <button class="welcome-btn" id="welcomeAcknowledge">I Understand - Continue</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>

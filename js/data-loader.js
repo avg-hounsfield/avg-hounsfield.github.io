@@ -1,0 +1,315 @@
+/**
+ * Data Loader - Handles loading region-specific data and protocol matching
+ */
+
+export class DataLoader {
+  constructor() {
+    this.cache = new Map();
+    this.protocols = null;
+  }
+
+  async loadRegion(region) {
+    if (this.cache.has(region)) {
+      return this.cache.get(region);
+    }
+
+    const scenariosPath = `data/regions/${region}.json`;
+
+    try {
+      const response = await fetch(scenariosPath);
+      if (!response.ok) {
+        throw new Error(`Failed to load ${scenariosPath}`);
+      }
+
+      const data = await response.json();
+      this.cache.set(region, data);
+      return data;
+    } catch (error) {
+      console.error(`Error loading region ${region}:`, error);
+      return {
+        region,
+        scenarios: [],
+        embeddings: null
+      };
+    }
+  }
+
+  async loadProtocols() {
+    if (this.protocols) {
+      return this.protocols;
+    }
+
+    try {
+      const response = await fetch('data/protocols.json');
+      if (!response.ok) {
+        throw new Error('Failed to load protocols');
+      }
+      this.protocols = await response.json();
+      return this.protocols;
+    } catch (error) {
+      console.error('Error loading protocols:', error);
+      return [];
+    }
+  }
+
+  async getProtocol(region, scenario, procedure) {
+    const protocols = await this.loadProtocols();
+
+    if (!protocols || protocols.length === 0) {
+      return null;
+    }
+
+    // Determine contrast needs from procedure
+    const needsContrast = this.procedureNeedsContrast(procedure);
+    const scenarioName = (scenario?.name || '').toLowerCase();
+
+    // FIRST: Apply clinical rules for specific conditions
+    const clinicalMatch = this.applyClinicalRules(protocols, scenarioName, needsContrast);
+    if (clinicalMatch) {
+      return clinicalMatch;
+    }
+
+    // SECOND: Check pre-computed scenario matches
+    if (scenario?.id) {
+      const scenarioId = String(scenario.id);
+      const preMatched = this.findPrecomputedMatch(protocols, scenarioId, needsContrast, scenarioName);
+      if (preMatched) {
+        return preMatched;
+      }
+    }
+
+    // FALLBACK: Dynamic scoring based on terms
+    const searchTerms = this.extractSearchTerms(scenario, procedure, region);
+
+    // Score each protocol
+    const scored = protocols.map(protocol => {
+      const score = this.scoreProtocol(protocol, region, searchTerms, needsContrast);
+      return { protocol, score };
+    });
+
+    // Sort by score
+    scored.sort((a, b) => b.score - a.score);
+
+    // Return best match if score is high enough
+    if (scored[0]?.score >= 10) {
+      return scored[0].protocol;
+    }
+
+    // Fallback: try to find any protocol in the right region
+    const regionFallback = scored.find(s => s.score >= 5);
+    return regionFallback?.protocol || null;
+  }
+
+  // Clinical intelligence for protocol selection
+  applyClinicalRules(protocols, scenarioName, needsContrast) {
+    // Acute stroke -> BRAIN protocol (has DWI), not TIA
+    if ((scenarioName.includes('stroke') || scenarioName.includes('ischemic')) &&
+        scenarioName.includes('acute') && !scenarioName.includes('tia')) {
+      const brain = protocols.find(p => p.name === 'BRAIN' && !p.uses_contrast);
+      if (brain) return brain;
+    }
+
+    // Explicitly mentions TIA -> TIA protocol
+    if (scenarioName.includes('tia') || scenarioName.includes('transient ischemic')) {
+      const tia = protocols.find(p => p.name === 'TIA');
+      if (tia) return tia;
+    }
+
+    // Brain tumor/mass -> BRAIN TUMOR/INF protocol
+    if (scenarioName.includes('tumor') || scenarioName.includes('mass') ||
+        scenarioName.includes('lesion') || scenarioName.includes('metasta')) {
+      // Prefer with contrast for tumors
+      const tumorProtocol = protocols.find(p =>
+        p.name === 'BRAIN TUMOR/INF' ||
+        (p.name.includes('TUMOR') && p.body_region === 'neuro')
+      );
+      if (tumorProtocol) return tumorProtocol;
+    }
+
+    // Seizure -> SEIZURE protocol
+    if (scenarioName.includes('seizure') || scenarioName.includes('epilep')) {
+      const seizure = protocols.find(p => p.name === 'SEIZURE');
+      if (seizure) return seizure;
+    }
+
+    // MS/demyelinating -> BRAIN MS protocol
+    if (scenarioName.includes('multiple sclerosis') || scenarioName.includes(' ms ') ||
+        scenarioName.includes('demyelinat')) {
+      const ms = protocols.find(p => p.name === 'BRAIN MS');
+      if (ms) return ms;
+    }
+
+    // Pituitary -> PITUITARY protocol
+    if (scenarioName.includes('pituitary') || scenarioName.includes('sellar')) {
+      const pit = protocols.find(p => p.name === 'PITUITARY');
+      if (pit) return pit;
+    }
+
+    return null; // No clinical rule matched
+  }
+
+  findPrecomputedMatch(protocols, scenarioId, needsContrast, scenarioName = '') {
+    // Find all protocols that have this scenario in their matches
+    const candidates = [];
+
+    for (const protocol of protocols) {
+      if (!protocol.scenario_matches) continue;
+
+      const match = protocol.scenario_matches.find(m => String(m.scenario_id) === scenarioId);
+      if (match) {
+        candidates.push({
+          protocol,
+          relevanceScore: match.relevance_score,
+          contrastMatch: (needsContrast && protocol.uses_contrast) ||
+                         (!needsContrast && !protocol.uses_contrast)
+        });
+      }
+    }
+
+    if (candidates.length === 0) {
+      return null;
+    }
+
+    // Sort by relevance score, with contrast match as tiebreaker
+    candidates.sort((a, b) => {
+      // Prefer matching contrast requirement
+      if (a.contrastMatch !== b.contrastMatch) {
+        return a.contrastMatch ? -1 : 1;
+      }
+      return b.relevanceScore - a.relevanceScore;
+    });
+
+    return candidates[0].protocol;
+  }
+
+  procedureNeedsContrast(procedure) {
+    if (!procedure) return false;
+
+    // Check explicit flag
+    if (procedure.usesContrast === 1 || procedure.usesContrast === 2) {
+      return true;
+    }
+
+    // Check procedure name for contrast indicators
+    const name = (procedure.name || '').toLowerCase();
+    if (name.includes('with iv contrast') ||
+        name.includes('with and without') ||
+        name.includes('w/ contrast') ||
+        name.includes('w/wo')) {
+      return true;
+    }
+
+    return false;
+  }
+
+  extractSearchTerms(scenario, procedure, region) {
+    const terms = new Set();
+
+    // Add region-specific terms
+    const regionTerms = {
+      neuro: ['brain', 'head', 'neuro', 'cranial', 'intracranial'],
+      spine: ['spine', 'cervical', 'thoracic', 'lumbar', 'sacral', 'cord'],
+      chest: ['chest', 'thorax', 'lung', 'cardiac', 'heart', 'pulmonary'],
+      abdomen: ['abdomen', 'pelvis', 'liver', 'kidney', 'pancreas', 'bowel', 'gi'],
+      msk: ['knee', 'shoulder', 'hip', 'ankle', 'wrist', 'elbow', 'foot', 'hand', 'extremity', 'joint', 'musculoskeletal'],
+      vascular: ['vascular', 'vessel', 'artery', 'vein', 'mra', 'mrv', 'angio'],
+      breast: ['breast'],
+      peds: ['pediatric', 'child', 'infant', 'neonatal']
+    };
+
+    (regionTerms[region] || []).forEach(t => terms.add(t));
+
+    // Extract from scenario name
+    if (scenario?.name) {
+      const scenarioWords = scenario.name.toLowerCase()
+        .replace(/[^\w\s]/g, ' ')
+        .split(/\s+/)
+        .filter(w => w.length > 3);
+
+      // Key anatomical/pathological terms
+      const importantTerms = ['tumor', 'mass', 'infection', 'trauma', 'fracture', 'pain',
+        'stroke', 'hemorrhage', 'lesion', 'cancer', 'metastasis', 'abscess', 'cyst',
+        'tear', 'rupture', 'disc', 'stenosis', 'hernia', 'inflammation'];
+
+      scenarioWords.forEach(word => {
+        if (importantTerms.some(t => word.includes(t))) {
+          terms.add(word);
+        }
+      });
+
+      // Add body part terms
+      const bodyParts = ['brain', 'spine', 'knee', 'shoulder', 'hip', 'ankle', 'wrist',
+        'liver', 'kidney', 'pelvis', 'chest', 'abdomen', 'neck', 'orbit', 'sinus'];
+
+      scenarioWords.forEach(word => {
+        if (bodyParts.includes(word)) {
+          terms.add(word);
+        }
+      });
+    }
+
+    // Extract from procedure name
+    if (procedure?.name) {
+      const procName = procedure.name.toLowerCase();
+
+      // Look for body part in procedure name
+      const match = procName.match(/mri\s+(\w+)/);
+      if (match) {
+        terms.add(match[1]);
+      }
+    }
+
+    return Array.from(terms);
+  }
+
+  scoreProtocol(protocol, region, searchTerms, needsContrast) {
+    let score = 0;
+
+    const protocolName = (protocol.name || '').toLowerCase();
+    const protocolDisplay = (protocol.display_name || '').toLowerCase();
+    const protocolRegion = (protocol.body_region || '').toLowerCase();
+    const protocolSection = (protocol.section || '').toLowerCase();
+    const protocolKeywords = (protocol.keywords || []).map(k => k.toLowerCase());
+    const protocolIndications = (protocol.indications || '').toLowerCase();
+
+    // Region match (highest priority)
+    if (protocolRegion === region || protocolSection.includes(region)) {
+      score += 15;
+    }
+
+    // Search term matches
+    for (const term of searchTerms) {
+      // Match in protocol name (high value)
+      if (protocolName.includes(term) || protocolDisplay.includes(term)) {
+        score += 10;
+      }
+
+      // Match in keywords (medium value)
+      if (protocolKeywords.some(k => k.includes(term) || term.includes(k))) {
+        score += 5;
+      }
+
+      // Match in indications (lower value)
+      if (protocolIndications.includes(term)) {
+        score += 2;
+      }
+    }
+
+    // Contrast match
+    const protocolContrast = protocol.uses_contrast;
+    if (needsContrast && protocolContrast) {
+      score += 8;
+    } else if (!needsContrast && !protocolContrast) {
+      score += 5;
+    } else if (needsContrast && !protocolContrast) {
+      // Mismatch - reduce score but don't eliminate
+      score -= 3;
+    }
+
+    return score;
+  }
+
+  clearCache() {
+    this.cache.clear();
+  }
+}

@@ -1,16 +1,22 @@
-const CACHE_NAME = 'mri-search-v1.0.0';
+const CACHE_NAME = 'imgguide-v1.0.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/assets/style.css',
-  '/js/main.js',
-  '/js/search.js',
-  '/js/render.js',
-  '/js/theme.js',
+  '/css/main.css',
+  '/js/app.js',
   '/js/ui.js',
-  '/js/performance.js',
-  '/js/polyfills.js',
-  '/data/protocols.json',
+  '/js/data-loader.js',
+  '/js/search-engine.js',
+  '/js/radlite-api.js',
+  '/data/protocols/mri-protocols.json',
+  '/data/regions/neuro.json',
+  '/data/regions/spine.json',
+  '/data/regions/chest.json',
+  '/data/regions/abdomen.json',
+  '/data/regions/msk.json',
+  '/data/regions/vascular.json',
+  '/data/regions/breast.json',
+  '/data/regions/peds.json',
   '/manifest.json'
 ];
 

@@ -1,0 +1,147 @@
+{
+  "region": "peds",
+  "scenarios": [
+    {
+      "id": "5353",
+      "name": "Hydronephrosis, antenatal, normal neonatal US",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nAntenatal Hydronephrosis-Infant\nVariants\nAntenatal diagnosis of hydronephrosis with normal neonatal ultrasound.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nHydronephrosis,",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US kidneys and bladder follow-up in 1-6 months",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US kidneys and bladder follow-up in 1...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "Fluoroscopy voiding cystourethrography",
+          "modality": "Fluoroscopy",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Fluoroscopy voiding cystourethrography",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Nuclear medicine cystography",
+          "modality": "Nuclear",
+          "usesContrast": 0,
+          "radiationDose": "0.03-0.3 mSv [ped]",
+          "shortName": "Nuclear medicine cystography",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI abdomen and pelvis with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI Abd/Pelvis W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI abdomen and pelvis without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI Abd/Pelvis W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI abdomen and pelvis without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI Abd/Pelvis W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=5353"
+    },
+    {
+      "id": "5353",
+      "name": "Hydronephrosis, antenatal, normal neonatal US",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nAntenatal Hydronephrosis-Infant\nVariants\nAntenatal diagnosis of hydronephrosis with normal neonatal ultrasound.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nHydronephrosis,",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US kidneys and bladder follow-up in 1-6 months",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US kidneys and bladder follow-up in 1...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "Fluoroscopy voiding cystourethrography",
+          "modality": "Fluoroscopy",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Fluoroscopy voiding cystourethrography",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI abdomen and pelvis with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI Abd/Pelvis W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI abdomen and pelvis without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI Abd/Pelvis W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI abdomen and pelvis without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI Abd/Pelvis W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Nuclear medicine cystography",
+          "modality": "Nuclear",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Nuclear medicine cystography",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=5353"
+    }
+  ],
+  "generatedAt": "2026-01-10T18:30:44.600Z",
+  "count": 2
+}

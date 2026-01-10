@@ -1,0 +1,4267 @@
+{
+  "region": "vascular",
+  "scenarios": [
+    {
+      "id": "5669",
+      "name": "Breast cancer screening, transmasculine, intermediate risk, reduction mammoplasty, personal hx atypical ductal hyperplasia",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nTransgender Breast Cancer Screening\nVariants\nBreast cancer screening. Transmasculine (female-to-male) patient with reduction mammoplasty or no chest surgery, 30 years of age or older. Intermediate risk (patient with personal history of breast cancer, lobular neoplasi",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "Digital breast tomosynthesis screening",
+          "modality": "Mammography",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "DBT screening",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "Mammography screening",
+          "modality": "Mammography",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Mammography screening",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US breast",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US breast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI breast without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI breast W/O & W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI breast without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI breast W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=5669"
+    },
+    {
+      "id": "7360",
+      "name": "Carotid stenosis, asymptomatic, surveillance",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCerebrovascular Diseases-Stroke and Stroke-Related Conditions\nVariants\nAdult. Asymptomatic carotid stenosis. Surveillance imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Categ",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US duplex Doppler carotid artery",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler carotid artery",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA neck W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI head without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US duplex Doppler transcranial",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler transcranial",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI head perfusion with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI head without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head perfusion with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTA head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTV head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTV head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7360"
+    },
+    {
+      "id": "7360",
+      "name": "Carotid stenosis, asymptomatic, surveillance",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCerebrovascular Diseases-Stroke and Stroke-Related Conditions\nVariants\nAdult. Asymptomatic carotid stenosis. Surveillance imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Categ",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US duplex Doppler carotid artery",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler carotid artery",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA neck W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI head without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US duplex Doppler transcranial",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler transcranial",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI head perfusion with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI head without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head perfusion with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTA head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTV head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTV head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7360"
+    },
+    {
+      "id": "7355",
+      "name": "Ischemic infarct, prior, surveillance",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCerebrovascular Diseases-Stroke and Stroke-Related Conditions\nVariants\nAdult. Prior ischemic infarct. Surveillance imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nIsc",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "CT head without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US duplex Doppler carotid artery",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler carotid artery",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI head without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA head W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA neck W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US duplex Doppler transcranial",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler transcranial",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI head perfusion with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI head without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head perfusion with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTV head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTV head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7355"
+    },
+    {
+      "id": "7355",
+      "name": "Ischemic infarct, prior, surveillance",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCerebrovascular Diseases-Stroke and Stroke-Related Conditions\nVariants\nAdult. Prior ischemic infarct. Surveillance imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nIsc",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "CT head without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US duplex Doppler carotid artery",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler carotid artery",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI head without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA head W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA neck W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US duplex Doppler transcranial",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler transcranial",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI head perfusion with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI head without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head perfusion with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTV head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTV head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7355"
+    },
+    {
+      "id": "6713",
+      "name": "Arterial occlusions, multi organ system, embolic etiology suspected, next imaging study, determine source",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nWorkup of Noncerebral Systemic Arterial Embolic Source\nVariants\nKnown multiorgan system arterial occlusions. Suspected embolic etiology. Next imaging study to determine source.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProc",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US echocardiography transthoracic resting",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transthoracic res...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT heart function and morphology with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT heart function and morphology W/ C...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA chest abdomen pelvis with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "30-100 mSv",
+          "shortName": "CTA chest abdomen pelvis W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US duplex Doppler abdomen",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler abdomen",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=6713"
+    },
+    {
+      "id": "7284",
+      "name": "Atrial fibrillation, preprocedural planning, left atrial appendage endovascular occlusion",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nPreprocedural Planning for Left Atrial Procedures in Atrial Fibrillation\nVariants\nAtrial fibrillation. Preprocedural planning prior to left atrial appendage endovascular occlusion.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\n",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT heart function and morphology with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT heart function and morphology W/ C...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US echocardiography transthoracic resting",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transthoracic res...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTA coronary arteries with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA coronary arteries W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7284"
+    },
+    {
+      "id": "7358",
+      "name": "Venous sinus thrombosis, surveillance",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCerebrovascular Diseases-Stroke and Stroke-Related Conditions\nVariants\nAdult. Known venous sinus thrombosis. Surveillance imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Categ",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI head without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI head without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT head without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTV head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTV head W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US duplex Doppler carotid artery",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler carotid artery",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "US duplex Doppler transcranial",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler transcranial",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI head perfusion with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head perfusion with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTA head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTA neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA neck W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7358"
+    },
+    {
+      "id": "7358",
+      "name": "Venous sinus thrombosis, surveillance",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCerebrovascular Diseases-Stroke and Stroke-Related Conditions\nVariants\nAdult. Known venous sinus thrombosis. Surveillance imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Categ",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI head without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI head without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT head without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTV head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTV head W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US duplex Doppler carotid artery",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler carotid artery",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "US duplex Doppler transcranial",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler transcranial",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI head perfusion with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head perfusion with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head perfusion W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT head without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT head W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTA head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA head W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTA neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA neck W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7358"
+    },
+    {
+      "id": "7102",
+      "name": "Single ventricle physiology, preop eval, stage 2 single ventricle palliation, TTE inadequate assessment of cardiovascular morphology and function, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCongenital or Acquired Heart Disease\nVariants\nChild. Known single ventricle physiology. Preoperative evaluation for stage 2 single ventricle palliation. Incomplete or inadequate assessment of cardiovascular morphology and function after transthoracic echocardiography",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI heart function and morphology without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT heart function and morphology with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT heart function and morphology W/ C...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O & ...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O Co...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTA coronary arteries with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA coronary arteries W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "FDG-PET/CT heart",
+          "modality": "PET",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "FDG-PET/CT heart",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7102"
+    },
+    {
+      "id": "7913",
+      "name": "Thromboembolic disease, chronic, surveillance",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nImaging for Pulmonary Embolism, Known Clot\nVariants\nAdult. Known chronic thromboembolic disease. Surveillance.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nThromboembolic d",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "CTA pulmonary arteries with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA pulmonary arteries W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US echocardiography transthoracic resting",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transthoracic res...",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT heart function and morphology with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT heart function and morphology W/ C...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7913"
+    },
+    {
+      "id": "7102",
+      "name": "Single ventricle physiology, preop eval, stage 2 single ventricle palliation, TTE inadequate assessment of cardiovascular morphology and function, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCongenital or Acquired Heart Disease\nVariants\nChild. Known single ventricle physiology. Preoperative evaluation for stage 2 single ventricle palliation. Incomplete or inadequate assessment of cardiovascular morphology and function after transthoracic echocardiography",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI heart function and morphology without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT heart function and morphology with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT heart function and morphology W/ C...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O & ...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O Co...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CTA coronary arteries with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA coronary arteries W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "FDG-PET/CT heart",
+          "modality": "PET",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "FDG-PET/CT heart",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7102"
+    },
+    {
+      "id": "7097",
+      "name": "Transposition of the great arteries, post arterial switch, TTE inadequate assessment of cardiovascular morphology and function, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCongenital or Acquired Heart Disease\nVariants\nChild or adult. Transposition of the great arteries after arterial switch. Incomplete or inadequate assessment of cardiovascular morphology and function after transthoracic echocardiography. Next imaging study.\nDocuments\n",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O & ...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT heart function and morphology with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT heart function and morphology W/ C...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O Co...",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA coronary arteries with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA coronary arteries W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "FDG-PET/CT heart",
+          "modality": "PET",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "FDG-PET/CT heart",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7097"
+    },
+    {
+      "id": "7096",
+      "name": "Transposition of the great arteries, post atrial switch, TTE inadequate assessment of cardiovascular morphology and function, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCongenital or Acquired Heart Disease\nVariants\nChild or adult. Transposition of the great arteries after atrial switch. Incomplete or inadequate assessment of cardiovascular morphology and function after transthoracic echocardiography. Next imaging study.\nDocuments\nDo",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI heart function and morphology without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT heart function and morphology with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT heart function and morphology W/ C...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA coronary arteries with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA coronary arteries W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O & ...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O Co...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "FDG-PET/CT heart",
+          "modality": "PET",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "FDG-PET/CT heart",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7096"
+    },
+    {
+      "id": "7465",
+      "name": "Vascular malformation suspected on US, face, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nSoft Tissue Vascular Anomalies: Vascular Malformations  and Infantile Vascular Tumors (Non-CNS)-Child\nVariants\nChild. Ultrasound features raise suspicion for vascular malformation. Next imaging study.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nS",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI maxillofacial without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI maxillofacial W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA and CTV head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "3-10 mSv [ped]",
+          "shortName": "CTA and CTV head W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA and CTV neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "3-10 mSv [ped]",
+          "shortName": "CTA and CTV neck W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT maxillofacial with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT maxillofacial W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US maxillofacial with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US maxillofacial W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography neck",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Radiography neck",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI maxillofacial without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI maxillofacial W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT maxillofacial without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT maxillofacial W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT maxillofacial without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT maxillofacial W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7465"
+    },
+    {
+      "id": "7462",
+      "name": "Vascular malformation suspected on US, neck, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nSoft Tissue Vascular Anomalies: Vascular Malformations  and Infantile Vascular Tumors (Non-CNS)-Child\nVariants\nChild. Ultrasound features raise suspicion for vascular malformation. Next imaging study.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nS",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI neck without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI neck W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA and CTV neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "3-10 mSv [ped]",
+          "shortName": "CTA and CTV neck W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US neck with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US neck W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography neck",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Radiography neck",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI neck without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI neck W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7462"
+    },
+    {
+      "id": "7473",
+      "name": "Vascular malformation suspected on US, thigh, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nSoft Tissue Vascular Anomalies: Vascular Malformations  and Infantile Vascular Tumors (Non-CNS)-Child\nVariants\nChild. Ultrasound features raise suspicion for vascular malformation. Next imaging study.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nS",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI lower extremity without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI lower extremity W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI thigh without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA and CTV lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "0.3-3 mSv [ped]",
+          "shortName": "CTA and CTV lower extremity W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT thigh with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT lower extremity W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US lower extremity with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US lower extremity W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "US thigh with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US thigh W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography femur",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography femur",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography lower extremity",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Radiography lower extremity",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI lower extremity without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI lower extremity W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI thigh without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT thigh without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT lower extremity without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT lower extremity W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT lower extremity without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT lower extremity W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT thigh without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT thigh W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7473"
+    },
+    {
+      "id": "7913",
+      "name": "Thromboembolic disease, chronic, surveillance",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nImaging for Pulmonary Embolism, Known Clot\nVariants\nAdult. Known chronic thromboembolic disease. Surveillance.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nThromboembolic d",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "CTA pulmonary arteries with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA pulmonary arteries W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US echocardiography transthoracic resting",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transthoracic res...",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT heart function and morphology with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT heart function and morphology W/ C...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7913"
+    },
+    {
+      "id": "7097",
+      "name": "Transposition of the great arteries, post arterial switch, TTE inadequate assessment of cardiovascular morphology and function, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCongenital or Acquired Heart Disease\nVariants\nChild or adult. Transposition of the great arteries after arterial switch. Incomplete or inadequate assessment of cardiovascular morphology and function after transthoracic echocardiography. Next imaging study.\nDocuments\n",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O & ...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT heart function and morphology with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT heart function and morphology W/ C...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O Co...",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA coronary arteries with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA coronary arteries W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "FDG-PET/CT heart",
+          "modality": "PET",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "FDG-PET/CT heart",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7097"
+    },
+    {
+      "id": "7096",
+      "name": "Transposition of the great arteries, post atrial switch, TTE inadequate assessment of cardiovascular morphology and function, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nCongenital or Acquired Heart Disease\nVariants\nChild or adult. Transposition of the great arteries after atrial switch. Incomplete or inadequate assessment of cardiovascular morphology and function after transthoracic echocardiography. Next imaging study.\nDocuments\nDo",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI heart function and morphology without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI heart function and morphology without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function and morphology W/O...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT heart function and morphology with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT heart function and morphology W/ C...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA coronary arteries with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA coronary arteries W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O & ...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI heart function with stress without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI heart function with stress W/O Co...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "FDG-PET/CT heart",
+          "modality": "PET",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "FDG-PET/CT heart",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7096"
+    },
+    {
+      "id": "5523",
+      "name": "ICU patient, central venous catheter placement, follow up imaging",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nIntensive Care Unit Patients\nVariants\nIntensive care unit patient following support device placement. Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nICU pati",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "Radiography chest portable",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest portable",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US chest",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US chest",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=5523"
+    },
+    {
+      "id": "7465",
+      "name": "Vascular malformation suspected on US, face, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nSoft Tissue Vascular Anomalies: Vascular Malformations  and Infantile Vascular Tumors (Non-CNS)-Child\nVariants\nChild. Ultrasound features raise suspicion for vascular malformation. Next imaging study.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nS",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI maxillofacial without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI maxillofacial W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA and CTV head with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "3-10 mSv [ped]",
+          "shortName": "CTA and CTV head W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA and CTV neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "3-10 mSv [ped]",
+          "shortName": "CTA and CTV neck W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT maxillofacial with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT maxillofacial W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US maxillofacial with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US maxillofacial W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography neck",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Radiography neck",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI maxillofacial without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI maxillofacial W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT maxillofacial without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT maxillofacial W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT maxillofacial without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT maxillofacial W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7465"
+    },
+    {
+      "id": "7462",
+      "name": "Vascular malformation suspected on US, neck, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nSoft Tissue Vascular Anomalies: Vascular Malformations  and Infantile Vascular Tumors (Non-CNS)-Child\nVariants\nChild. Ultrasound features raise suspicion for vascular malformation. Next imaging study.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nS",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI neck without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI neck W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA and CTV neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "3-10 mSv [ped]",
+          "shortName": "CTA and CTV neck W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US neck with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US neck W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography neck",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Radiography neck",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI neck without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI neck W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7462"
+    },
+    {
+      "id": "7473",
+      "name": "Vascular malformation suspected on US, thigh, next imaging study",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nSoft Tissue Vascular Anomalies: Vascular Malformations  and Infantile Vascular Tumors (Non-CNS)-Child\nVariants\nChild. Ultrasound features raise suspicion for vascular malformation. Next imaging study.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nS",
+      "ageGroup": "pediatric",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "MRI lower extremity without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI lower extremity W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI thigh without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA and CTV lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "0.3-3 mSv [ped]",
+          "shortName": "CTA and CTV lower extremity W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT thigh with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT lower extremity W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US lower extremity with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US lower extremity W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "US thigh with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US thigh W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography femur",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography femur",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography lower extremity",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Radiography lower extremity",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI lower extremity without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI lower extremity W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI thigh without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT thigh without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT lower extremity without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT lower extremity W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT lower extremity without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT lower extremity W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT thigh without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT thigh W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7473"
+    },
+    {
+      "id": "7743",
+      "name": "Tracheal stenosis, posttreatment  assessment",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nTracheobronchial Disease\nVariants\nAdult. Tracheal or bronchial stenosis. Pre- or posttreatment assessment.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nTracheal stenosis, p",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT neck without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT neck and chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT neck and chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "FDG-PET/CT skull base to mid-thigh",
+          "modality": "PET",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "FDG-PET/CT skull base to mid-thigh",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography neck",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Radiography neck",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI chest without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI chest without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI chest W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck and chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7743"
+    },
+    {
+      "id": "7742",
+      "name": "Tracheal stenosis, pretreatment  assessment",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nTracheobronchial Disease\nVariants\nAdult. Tracheal or bronchial stenosis. Pre- or posttreatment assessment.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nTracheal stenosis, p",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT neck without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT neck and chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT neck and chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "FDG-PET/CT skull base to mid-thigh",
+          "modality": "PET",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "FDG-PET/CT skull base to mid-thigh",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography neck",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Radiography neck",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI chest without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI chest without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI chest W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck and chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7742"
+    },
+    {
+      "id": "4650",
+      "name": "External iliac artery endofibrosis suspected",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nNonatherosclerotic Peripheral Arterial Disease\nVariants\nSuspected external iliac artery endofibrosis. Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nExternal",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US duplex Doppler lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler lower extremity",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA lower extremity W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US intravascular lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US intravascular lower extremity",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4650"
+    },
+    {
+      "id": "4748",
+      "name": "Fibromuscular dysplasia or other noninflammatory vascular disease",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nNonatherosclerotic Peripheral Arterial Disease\nVariants\nSuspected or known other noninflammatory lower-extremity vascular diseases (such as fibromuscular dysplasia, segmental arterial mediolysis). Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Sear",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "CTA lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA lower extremity W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US duplex Doppler lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler lower extremity",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US intravascular lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US intravascular lower extremity",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4748"
+    },
+    {
+      "id": "4747",
+      "name": "Fibromuscular dysplasia or other noninflammatory vascular disease suspected",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nNonatherosclerotic Peripheral Arterial Disease\nVariants\nSuspected or known other noninflammatory lower-extremity vascular diseases (such as fibromuscular dysplasia, segmental arterial mediolysis). Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Sear",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "CTA lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA lower extremity W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US duplex Doppler lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler lower extremity",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US intravascular lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US intravascular lower extremity",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4747"
+    },
+    {
+      "id": "7407",
+      "name": "PAVM, post embolization, surveillance",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nPulmonary Arteriovenous Malformation (PAVM)\nVariants\nAdult. Presenting to establish care with a past history of a treated PAVM. Follow-up (surveillance) imaging following embolization of PAVM.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\n",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US echocardiography transthoracic with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transthoracic W/ ...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA pulmonary arteries with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA pulmonary arteries W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal W...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "US echocardiography transthoracic resting",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transthoracic res...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7407"
+    },
+    {
+      "id": "4649",
+      "name": "Popliteal arterial entrapment syndrome suspected",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nNonatherosclerotic Peripheral Arterial Disease\nVariants\nSuspected popliteal entrapment syndrome. Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nPopliteal art",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US duplex Doppler lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler lower extremity",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA lower extremity W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US intravascular lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US intravascular lower extremity",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4649"
+    },
+    {
+      "id": "4809",
+      "name": "Vascular malformation suspected, thigh",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nClinically Suspected Vascular Malformation of the Extremities\nVariants\nUpper or lower extremity. Suspected vascular malformation presenting with pain or findings of physical deformity including soft-tissue mass, diffuse or focal enlargement, discoloration, or ulcerat",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US duplex Doppler thigh",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler thigh",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI thigh without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA thigh with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA thigh W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US thigh with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US thigh W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI thigh without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT thigh with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT thigh without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography femur",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography femur",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT thigh without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT thigh W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4809"
+    },
+    {
+      "id": "4821",
+      "name": "Vascular murmur, thigh",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nClinically Suspected Vascular Malformation of the Extremities\nVariants\nUpper or lower extremity. Vascular murmur (bruit or thrill). Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nApp",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US duplex Doppler thigh",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler thigh",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI thigh without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA thigh with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA thigh W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US thigh with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US thigh W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI thigh without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT thigh with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT thigh without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT thigh W/O & W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography femur",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography femur",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT thigh without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4821"
+    },
+    {
+      "id": "5523",
+      "name": "ICU patient, central venous catheter placement, follow up imaging",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nIntensive Care Unit Patients\nVariants\nIntensive care unit patient following support device placement. Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nICU pati",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "Radiography chest portable",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest portable",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US chest",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US chest",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=5523"
+    },
+    {
+      "id": "7743",
+      "name": "Tracheal stenosis, posttreatment  assessment",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nTracheobronchial Disease\nVariants\nAdult. Tracheal or bronchial stenosis. Pre- or posttreatment assessment.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nTracheal stenosis, p",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT neck without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT neck and chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT neck and chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "FDG-PET/CT skull base to mid-thigh",
+          "modality": "PET",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "FDG-PET/CT skull base to mid-thigh",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography neck",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Radiography neck",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI chest without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI chest without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI chest W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck and chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7743"
+    },
+    {
+      "id": "7742",
+      "name": "Tracheal stenosis, pretreatment  assessment",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nTracheobronchial Disease\nVariants\nAdult. Tracheal or bronchial stenosis. Pre- or posttreatment assessment.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nTracheal stenosis, p",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT neck without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT neck and chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT neck and chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "FDG-PET/CT skull base to mid-thigh",
+          "modality": "PET",
+          "usesContrast": 0,
+          "radiationDose": "10-30 mSv",
+          "shortName": "FDG-PET/CT skull base to mid-thigh",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography neck",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "Radiography neck",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI chest without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "MRI chest without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI chest W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT neck W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT neck and chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "10-30 mSv",
+          "shortName": "CT neck and chest W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7742"
+    },
+    {
+      "id": "4650",
+      "name": "External iliac artery endofibrosis suspected",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nNonatherosclerotic Peripheral Arterial Disease\nVariants\nSuspected external iliac artery endofibrosis. Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nExternal",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US duplex Doppler lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler lower extremity",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA lower extremity W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US intravascular lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US intravascular lower extremity",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4650"
+    },
+    {
+      "id": "4748",
+      "name": "Fibromuscular dysplasia or other noninflammatory vascular disease",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nNonatherosclerotic Peripheral Arterial Disease\nVariants\nSuspected or known other noninflammatory lower-extremity vascular diseases (such as fibromuscular dysplasia, segmental arterial mediolysis). Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Sear",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "CTA lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA lower extremity W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US duplex Doppler lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler lower extremity",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US intravascular lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US intravascular lower extremity",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4748"
+    },
+    {
+      "id": "4747",
+      "name": "Fibromuscular dysplasia or other noninflammatory vascular disease suspected",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nNonatherosclerotic Peripheral Arterial Disease\nVariants\nSuspected or known other noninflammatory lower-extremity vascular diseases (such as fibromuscular dysplasia, segmental arterial mediolysis). Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Sear",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "CTA lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA lower extremity W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US duplex Doppler lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler lower extremity",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "US intravascular lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US intravascular lower extremity",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4747"
+    },
+    {
+      "id": "7407",
+      "name": "PAVM, post embolization, surveillance",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nPulmonary Arteriovenous Malformation (PAVM)\nVariants\nAdult. Presenting to establish care with a past history of a treated PAVM. Follow-up (surveillance) imaging following embolization of PAVM.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\n",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US echocardiography transthoracic with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transthoracic W/ ...",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CT chest without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT chest W/O Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA chest with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA chest W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA pulmonary arteries with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA pulmonary arteries W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "US echocardiography transesophageal with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transesophageal W...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "US echocardiography transthoracic resting",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US echocardiography transthoracic res...",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "Radiography chest",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography chest",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=7407"
+    },
+    {
+      "id": "4649",
+      "name": "Popliteal arterial entrapment syndrome suspected",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nNonatherosclerotic Peripheral Arterial Disease\nVariants\nSuspected popliteal entrapment syndrome. Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nAppropriateness Category\nPopliteal art",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US duplex Doppler lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler lower extremity",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA lower extremity with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA lower extremity W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US intravascular lower extremity",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US intravascular lower extremity",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4649"
+    },
+    {
+      "id": "4809",
+      "name": "Vascular malformation suspected, thigh",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nClinically Suspected Vascular Malformation of the Extremities\nVariants\nUpper or lower extremity. Suspected vascular malformation presenting with pain or findings of physical deformity including soft-tissue mass, diffuse or focal enlargement, discoloration, or ulcerat",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US duplex Doppler thigh",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler thigh",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI thigh without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA thigh with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA thigh W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US thigh with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US thigh W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI thigh without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT thigh with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT thigh without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography femur",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography femur",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT thigh without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT thigh W/O & W/ Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4809"
+    },
+    {
+      "id": "4821",
+      "name": "Vascular murmur, thigh",
+      "description": "ACR AC Portal\nACR AC Portal\nHome\nClinically Suspected Vascular Malformation of the Extremities\nVariants\nUpper or lower extremity. Vascular murmur (bruit or thrill). Initial imaging.\nDocuments\nDocuments\nNarrative\nEvidence Table\nLit Search\nAppendix\nScenario\nScenario ID\nProcedure\nAdult RRL\nPeds RRL\nApp",
+      "ageGroup": "adult",
+      "variantCount": 1,
+      "procedures": [
+        {
+          "name": "US duplex Doppler thigh",
+          "modality": "US",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "US duplex Doppler thigh",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "MRI thigh without and with IV contrast",
+          "modality": "MRI",
+          "usesContrast": 2,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O & W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "CTA thigh with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CTA thigh W/ Contrast",
+          "rating": 9,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Appropriate"
+        },
+        {
+          "name": "US thigh with IV contrast",
+          "modality": "US",
+          "usesContrast": 1,
+          "radiationDose": "0 mSv",
+          "shortName": "US thigh W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "MRI thigh without IV contrast",
+          "modality": "MRI",
+          "usesContrast": 0,
+          "radiationDose": "0 mSv",
+          "shortName": "MRI thigh W/O Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT thigh with IV contrast",
+          "modality": "CT",
+          "usesContrast": 1,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "CT thigh without and with IV contrast",
+          "modality": "CT",
+          "usesContrast": 2,
+          "radiationDose": "1-10 mSv",
+          "shortName": "CT thigh W/O & W/ Contrast",
+          "rating": 5,
+          "hasDisagreement": false,
+          "ratingLevel": "May Be Appropriate"
+        },
+        {
+          "name": "Radiography femur",
+          "modality": "XR",
+          "usesContrast": 0,
+          "radiationDose": "<0.1 mSv",
+          "shortName": "Radiography femur",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        },
+        {
+          "name": "CT thigh without IV contrast",
+          "modality": "CT",
+          "usesContrast": 0,
+          "radiationDose": "0.1-1mSv",
+          "shortName": "CT thigh W/O Contrast",
+          "rating": 2,
+          "hasDisagreement": false,
+          "ratingLevel": "Usually Not Appropriate"
+        }
+      ],
+      "sourceUrl": "https://gravitas.acr.org/ACPortal/GetDataForOneScenario?senarioId=4821"
+    }
+  ],
+  "generatedAt": "2026-01-10T18:30:44.595Z",
+  "count": 43
+}
