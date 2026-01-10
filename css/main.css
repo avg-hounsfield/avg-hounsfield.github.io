@@ -139,11 +139,14 @@ input:focus, button:focus {
 }
 
 .brand-text {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 20px;
-  letter-spacing: 0.01em;
-  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .header-nav {
@@ -217,7 +220,8 @@ input:focus, button:focus {
   font-weight: 600;
   text-align: center;
   margin-bottom: var(--space-xl);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
 }
 
 .anatomy-grid {
@@ -270,6 +274,93 @@ input:focus, button:focus {
 
 .anatomy-btn:hover span {
   color: var(--text-primary);
+}
+
+/* ========================================
+   Info Card
+   ======================================== */
+.info-card {
+  display: flex;
+  gap: var(--space-lg);
+  max-width: 800px;
+  margin: var(--space-xl) auto 0;
+  padding: var(--space-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+
+.info-card-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-muted);
+  border-radius: var(--border-radius);
+}
+
+.info-card-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--accent);
+}
+
+.info-card-content {
+  flex: 1;
+}
+
+.info-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.info-card-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.info-card-text strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.info-card-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .info-card {
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-md);
+  }
+
+  .info-card-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .info-card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .info-card-title {
+    font-size: 15px;
+  }
+
+  .info-card-text {
+    font-size: 13px;
+  }
 }
 
 /* ========================================
@@ -1166,7 +1257,7 @@ input:focus, button:focus {
   }
 
   .brand-text {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .results-layout {
