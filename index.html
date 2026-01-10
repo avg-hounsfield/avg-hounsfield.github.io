@@ -141,6 +141,52 @@
           <p class="section-subtitle">Search for a specific MRI protocol to view sequences and parameters</p>
         </div>
 
+        <!-- Filters -->
+        <div class="protocol-filters">
+          <!-- Region Filter Chips -->
+          <div class="filter-group">
+            <span class="filter-label">Region:</span>
+            <div class="filter-chips" id="regionFilterChips">
+              <button class="filter-chip active" data-region="all">All</button>
+              <button class="filter-chip" data-region="neuro">Neuro</button>
+              <button class="filter-chip" data-region="spine">Spine</button>
+              <button class="filter-chip" data-region="msk">MSK</button>
+              <button class="filter-chip" data-region="abdomen">Abdomen</button>
+              <button class="filter-chip" data-region="chest">Chest</button>
+              <button class="filter-chip" data-region="vascular">Vascular</button>
+              <button class="filter-chip" data-region="breast">Breast</button>
+            </div>
+          </div>
+
+          <!-- Contrast Toggle -->
+          <div class="filter-group">
+            <span class="filter-label">Contrast:</span>
+            <div class="contrast-toggle" id="contrastToggle">
+              <button class="toggle-btn active" data-contrast="all">All</button>
+              <button class="toggle-btn" data-contrast="without">Without</button>
+              <button class="toggle-btn" data-contrast="with">With</button>
+            </div>
+          </div>
+
+          <!-- View Toggle -->
+          <div class="filter-group">
+            <span class="filter-label">View:</span>
+            <div class="view-toggle" id="viewToggle">
+              <button class="toggle-btn active" data-view="grid" aria-label="Grid view">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+                </svg>
+              </button>
+              <button class="toggle-btn" data-view="grouped" aria-label="Grouped view">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="protocol-search-container">
           <div class="search-input-wrap large">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -180,10 +226,28 @@
           </button>
 
           <div class="protocol-detail-header">
-            <h2 class="protocol-detail-name" id="protocolDetailName">Protocol Name</h2>
+            <div class="protocol-detail-title-row">
+              <h2 class="protocol-detail-name" id="protocolDetailName">Protocol Name</h2>
+              <div class="protocol-quick-actions">
+                <button class="quick-action-btn" id="copyProtocolBtn" title="Copy sequences to clipboard">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                  </svg>
+                  <span>Copy</span>
+                </button>
+                <button class="quick-action-btn" id="bookmarkProtocolBtn" title="Bookmark this protocol">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+                  </svg>
+                  <span>Bookmark</span>
+                </button>
+              </div>
+            </div>
             <div class="protocol-detail-meta">
               <span class="contrast-badge" id="protocolDetailContrast">No Contrast</span>
               <span class="body-region-badge" id="protocolDetailRegion">Neuro</span>
+              <span class="scan-time-badge" id="protocolDetailTime">~15 min</span>
             </div>
           </div>
 
@@ -194,10 +258,99 @@
               <p class="protocol-indications" id="protocolDetailIndications">-</p>
             </div>
 
-            <!-- Sequences -->
+            <!-- Sequences Timeline -->
             <div class="protocol-section">
               <h3 class="protocol-section-title">Sequences</h3>
+              <div class="sequence-timeline" id="protocolDetailTimeline">
+                <!-- Visual timeline showing pre/post contrast -->
+              </div>
               <div class="protocol-sequences-list" id="protocolDetailSequences">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Clinical Pearls (from enrichment) -->
+            <div class="protocol-section hidden" id="protocolDetailPearlsSection">
+              <h3 class="protocol-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="section-icon">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5"/>
+                  <path d="M2 12l10 5 10-5"/>
+                </svg>
+                Clinical Pearls
+              </h3>
+              <ul class="clinical-pearls-list" id="protocolDetailPearls">
+                <!-- Dynamically populated -->
+              </ul>
+            </div>
+
+            <!-- Patient Prep (from enrichment) -->
+            <div class="protocol-section hidden" id="protocolDetailPrepSection">
+              <h3 class="protocol-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="section-icon">
+                  <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                  <circle cx="8.5" cy="7" r="4"/>
+                  <path d="M20 8v6M23 11h-6"/>
+                </svg>
+                Patient Preparation
+              </h3>
+              <div class="patient-prep-grid" id="protocolDetailPrep">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Contraindications (from enrichment) -->
+            <div class="protocol-section hidden" id="protocolDetailContraSection">
+              <h3 class="protocol-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="section-icon">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M4.93 4.93l14.14 14.14"/>
+                </svg>
+                Contraindications
+              </h3>
+              <div class="contraindications-content" id="protocolDetailContra">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Red Flags (from enrichment) -->
+            <div class="protocol-section hidden" id="protocolDetailRedFlagsSection">
+              <h3 class="protocol-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="section-icon red-flag-icon">
+                  <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                  <line x1="4" y1="22" x2="4" y2="15"/>
+                </svg>
+                Red Flags
+              </h3>
+              <ul class="red-flags-list" id="protocolDetailRedFlags">
+                <!-- Dynamically populated -->
+              </ul>
+            </div>
+
+            <!-- Sequence Rationale (from enrichment) -->
+            <div class="protocol-section hidden" id="protocolDetailRationaleSection">
+              <h3 class="protocol-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="section-icon">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                Sequence Rationale
+              </h3>
+              <div class="sequence-rationale-list" id="protocolDetailSeqRationale">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- When to Upgrade/Downgrade (from enrichment) -->
+            <div class="protocol-section hidden" id="protocolDetailUpgradeSection">
+              <h3 class="protocol-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="section-icon">
+                  <path d="M12 20V10M18 20V4M6 20v-4"/>
+                </svg>
+                Protocol Modifications
+              </h3>
+              <div class="upgrade-downgrade-content" id="protocolDetailUpgrade">
                 <!-- Dynamically populated -->
               </div>
             </div>
@@ -212,6 +365,22 @@
             <div class="protocol-section hidden" id="protocolDetailNotesSection">
               <h3 class="protocol-section-title">Scanner Notes</h3>
               <div class="protocol-scanner-notes" id="protocolDetailNotes">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Alternative Protocols (from enrichment) -->
+            <div class="protocol-section hidden" id="protocolDetailAlternativesSection">
+              <h3 class="protocol-section-title">Alternative Protocols</h3>
+              <div class="alternatives-list" id="protocolDetailAlternatives">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Related Protocols -->
+            <div class="protocol-section" id="protocolDetailRelatedSection">
+              <h3 class="protocol-section-title">Related Protocols</h3>
+              <div class="related-protocols-grid" id="protocolDetailRelated">
                 <!-- Dynamically populated -->
               </div>
             </div>

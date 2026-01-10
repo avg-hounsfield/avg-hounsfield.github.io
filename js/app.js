@@ -27,7 +27,44 @@ class ProtocolHelpApp {
     this.activeFilter = null; // Currently selected filter
     this.allProtocols = null; // Cached protocols for protocol view
 
+    // Protocol view state
+    this.protocolFilters = {
+      region: 'all',
+      contrast: 'all',
+      viewMode: 'grid'
+    };
+    this.protocolSearchQuery = '';
+    this.currentProtocol = null; // Currently viewed protocol
+    this.bookmarkedProtocols = this.loadBookmarks();
+
     this.init();
+  }
+
+  loadBookmarks() {
+    try {
+      return JSON.parse(localStorage.getItem('radex_bookmarks') || '[]');
+    } catch {
+      return [];
+    }
+  }
+
+  saveBookmarks() {
+    localStorage.setItem('radex_bookmarks', JSON.stringify(this.bookmarkedProtocols));
+  }
+
+  isBookmarked(protocolName) {
+    return this.bookmarkedProtocols.includes(protocolName);
+  }
+
+  toggleBookmark(protocolName) {
+    const index = this.bookmarkedProtocols.indexOf(protocolName);
+    if (index > -1) {
+      this.bookmarkedProtocols.splice(index, 1);
+    } else {
+      this.bookmarkedProtocols.push(protocolName);
+    }
+    this.saveBookmarks();
+    return this.isBookmarked(protocolName);
   }
 
   async init() {
@@ -88,6 +125,9 @@ class ProtocolHelpApp {
       protocolBackBtn.addEventListener('click', () => this.hideProtocolDetail());
     }
 
+    // Protocol filter controls
+    this.bindProtocolFilters();
+
     // Footer links (About, Terms)
     this.bindModalEvents();
 
@@ -110,6 +150,143 @@ class ProtocolHelpApp {
       nav.classList.toggle('mobile-open');
       menuBtn.classList.toggle('active');
     });
+  }
+
+  bindProtocolFilters() {
+    // Region filter chips
+    document.querySelectorAll('#regionFilterChips .filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('#regionFilterChips .filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        this.protocolFilters.region = chip.dataset.region;
+        this.applyProtocolFilters();
+      });
+    });
+
+    // Contrast toggle
+    document.querySelectorAll('#contrastToggle .toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#contrastToggle .toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.protocolFilters.contrast = btn.dataset.contrast;
+        this.applyProtocolFilters();
+      });
+    });
+
+    // View toggle (grid/grouped)
+    document.querySelectorAll('#viewToggle .toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#viewToggle .toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.protocolFilters.viewMode = btn.dataset.view;
+        this.applyProtocolFilters();
+      });
+    });
+
+    // Copy protocol button
+    const copyBtn = document.getElementById('copyProtocolBtn');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => this.copyProtocolToClipboard());
+    }
+
+    // Bookmark protocol button
+    const bookmarkBtn = document.getElementById('bookmarkProtocolBtn');
+    if (bookmarkBtn) {
+      bookmarkBtn.addEventListener('click', () => this.toggleCurrentProtocolBookmark());
+    }
+  }
+
+  applyProtocolFilters() {
+    if (!this.allProtocols) return;
+
+    let filtered = [...this.allProtocols];
+
+    // Apply region filter
+    if (this.protocolFilters.region !== 'all') {
+      filtered = filtered.filter(p => {
+        const region = (p.body_region || '').toLowerCase();
+        return region === this.protocolFilters.region;
+      });
+    }
+
+    // Apply contrast filter
+    if (this.protocolFilters.contrast !== 'all') {
+      const wantsContrast = this.protocolFilters.contrast === 'with';
+      filtered = filtered.filter(p => wantsContrast ? p.uses_contrast : !p.uses_contrast);
+    }
+
+    // Apply search query
+    if (this.protocolSearchQuery) {
+      const q = this.protocolSearchQuery.toLowerCase();
+      filtered = filtered.filter(p => {
+        const name = (p.name || '').toLowerCase();
+        const displayName = (p.display_name || '').toLowerCase();
+        const keywords = (p.keywords || []).join(' ').toLowerCase();
+        const indications = (p.indications || '').toLowerCase();
+        return name.includes(q) || displayName.includes(q) || keywords.includes(q) || indications.includes(q);
+      });
+    }
+
+    // Render based on view mode
+    if (this.protocolFilters.viewMode === 'grouped') {
+      this.renderProtocolGrouped(filtered);
+    } else {
+      this.renderProtocolGrid(filtered);
+    }
+
+    this.ui.setStatus(`${filtered.length} protocols found`);
+  }
+
+  async copyProtocolToClipboard() {
+    if (!this.currentProtocol) return;
+
+    const sequences = this.currentProtocol.sequences || [];
+    const text = [
+      `Protocol: ${this.currentProtocol.display_name || this.currentProtocol.name}`,
+      `Contrast: ${this.currentProtocol.uses_contrast ? 'Yes' : 'No'}`,
+      '',
+      'Sequences:',
+      ...sequences.map((s, i) => `${i + 1}. ${s.sequence_name}${s.is_post_contrast ? ' (post-contrast)' : ''}`)
+    ].join('\n');
+
+    try {
+      await navigator.clipboard.writeText(text);
+      const btn = document.getElementById('copyProtocolBtn');
+      btn.classList.add('copied');
+      btn.querySelector('span').textContent = 'Copied!';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.querySelector('span').textContent = 'Copy';
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  }
+
+  toggleCurrentProtocolBookmark() {
+    if (!this.currentProtocol) return;
+
+    const name = this.currentProtocol.name;
+    const isNowBookmarked = this.toggleBookmark(name);
+
+    const btn = document.getElementById('bookmarkProtocolBtn');
+    btn.classList.toggle('active', isNowBookmarked);
+    btn.querySelector('span').textContent = isNowBookmarked ? 'Bookmarked' : 'Bookmark';
+  }
+
+  estimateScanTime(protocol) {
+    // Use enrichment data if available
+    if (protocol.enrichment?.scan_time_minutes) {
+      return `~${protocol.enrichment.scan_time_minutes} min`;
+    }
+
+    // Fallback to rough estimate
+    const sequences = protocol.sequences || [];
+    let minutes = 0;
+    sequences.forEach(seq => {
+      minutes += seq.is_post_contrast ? 4 : 3;
+    });
+    return minutes > 0 ? `~${minutes} min` : 'N/A';
   }
 
   bindModalEvents() {
@@ -493,33 +670,8 @@ class ProtocolHelpApp {
   }
 
   executeProtocolSearch(query) {
-    if (!this.allProtocols) return;
-
-    const q = query.toLowerCase().trim();
-
-    if (!q) {
-      // Show all protocols
-      this.renderProtocolGrid(this.allProtocols);
-      return;
-    }
-
-    // Filter protocols
-    const filtered = this.allProtocols.filter(protocol => {
-      const name = (protocol.name || '').toLowerCase();
-      const displayName = (protocol.display_name || '').toLowerCase();
-      const keywords = (protocol.keywords || []).join(' ').toLowerCase();
-      const indications = (protocol.indications || '').toLowerCase();
-      const bodyPart = (protocol.body_part || '').toLowerCase();
-
-      return name.includes(q) ||
-             displayName.includes(q) ||
-             keywords.includes(q) ||
-             indications.includes(q) ||
-             bodyPart.includes(q);
-    });
-
-    this.renderProtocolGrid(filtered);
-    this.ui.setStatus(`${filtered.length} protocols found`);
+    this.protocolSearchQuery = query.trim();
+    this.applyProtocolFilters();
   }
 
   renderProtocolGrid(protocols) {
@@ -528,7 +680,12 @@ class ProtocolHelpApp {
     if (protocols.length === 0) {
       grid.innerHTML = `
         <div class="protocol-empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
           <p>No protocols found</p>
+          <p class="suggestion">Try adjusting your filters or search terms</p>
         </div>
       `;
       return;
@@ -538,16 +695,37 @@ class ProtocolHelpApp {
       const seqCount = protocol.sequences?.length || 0;
       const hasContrast = protocol.uses_contrast;
       const region = protocol.body_region || protocol.section || 'General';
+      const indications = protocol.indications || '';
+      const scanTime = this.estimateScanTime(protocol);
+      const isBookmarked = this.isBookmarked(protocol.name);
+      const highlightedName = this.highlightSearchTerm(protocol.display_name || protocol.name);
 
       return `
-        <div class="protocol-grid-card" data-index="${index}">
-          <div class="protocol-grid-card-name">${this.escapeHtml(protocol.display_name || protocol.name)}</div>
+        <div class="protocol-grid-card ${isBookmarked ? 'bookmarked' : ''}" data-index="${index}" style="position: relative;">
+          ${isBookmarked ? `
+            <div class="bookmark-indicator">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+              </svg>
+            </div>
+          ` : ''}
+          <div class="protocol-grid-card-name">${highlightedName}</div>
           <div class="protocol-grid-card-meta">
             <span class="protocol-grid-card-region">${this.escapeHtml(region)}</span>
             ${hasContrast ? '<span class="contrast-badge with-contrast">Contrast</span>' : ''}
           </div>
-          <div class="protocol-grid-card-sequences">
-            <span>${seqCount}</span> sequences
+          ${indications ? `<div class="protocol-grid-card-indications">${this.escapeHtml(indications)}</div>` : ''}
+          <div class="protocol-grid-card-footer">
+            <div class="protocol-grid-card-sequences">
+              <span>${seqCount}</span> sequences
+            </div>
+            <div class="protocol-grid-card-time">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+              ${scanTime}
+            </div>
           </div>
         </div>
       `;
@@ -561,14 +739,128 @@ class ProtocolHelpApp {
     });
   }
 
+  renderProtocolGrouped(protocols) {
+    const grid = document.getElementById('protocolGrid');
+
+    if (protocols.length === 0) {
+      grid.innerHTML = `
+        <div class="protocol-empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <p>No protocols found</p>
+          <p class="suggestion">Try adjusting your filters or search terms</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Group by region
+    const groups = {};
+    const regionOrder = ['neuro', 'spine', 'msk', 'abdomen', 'chest', 'vascular', 'breast', 'other'];
+
+    protocols.forEach(protocol => {
+      const region = (protocol.body_region || 'other').toLowerCase();
+      if (!groups[region]) {
+        groups[region] = [];
+      }
+      groups[region].push(protocol);
+    });
+
+    const regionNames = {
+      neuro: 'Neuro',
+      spine: 'Spine',
+      msk: 'Musculoskeletal',
+      abdomen: 'Abdomen',
+      chest: 'Chest',
+      vascular: 'Vascular',
+      breast: 'Breast',
+      other: 'Other'
+    };
+
+    grid.innerHTML = `<div class="protocol-grouped-view">
+      ${regionOrder
+        .filter(region => groups[region]?.length > 0)
+        .map(region => {
+          const regionProtocols = groups[region];
+          return `
+            <div class="protocol-group" data-region="${region}">
+              <div class="protocol-group-header">
+                <div class="protocol-group-title">
+                  ${regionNames[region] || region}
+                  <span class="protocol-group-count">${regionProtocols.length}</span>
+                </div>
+                <div class="protocol-group-toggle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="protocol-group-content">
+                <div class="protocol-group-list">
+                  ${regionProtocols.map((protocol, idx) => {
+                    const hasContrast = protocol.uses_contrast;
+                    const seqCount = protocol.sequences?.length || 0;
+                    const isBookmarked = this.isBookmarked(protocol.name);
+                    return `
+                      <div class="protocol-list-item ${isBookmarked ? 'bookmarked' : ''}" data-region="${region}" data-index="${idx}">
+                        <span class="protocol-list-item-name">${this.escapeHtml(protocol.display_name || protocol.name)}</span>
+                        <div class="protocol-list-item-meta">
+                          ${isBookmarked ? '<span class="contrast-badge with-contrast" style="background: var(--accent-muted); color: var(--accent);">Saved</span>' : ''}
+                          ${hasContrast ? '<span class="contrast-badge with-contrast">Contrast</span>' : ''}
+                          <span class="protocol-grid-card-sequences"><span>${seqCount}</span> seq</span>
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+    </div>`;
+
+    // Bind group toggle events
+    grid.querySelectorAll('.protocol-group-header').forEach(header => {
+      header.addEventListener('click', () => {
+        header.parentElement.classList.toggle('collapsed');
+      });
+    });
+
+    // Bind item click events
+    grid.querySelectorAll('.protocol-list-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const region = item.dataset.region;
+        const index = parseInt(item.dataset.index);
+        this.showProtocolDetail(groups[region][index]);
+      });
+    });
+  }
+
+  highlightSearchTerm(text) {
+    if (!this.protocolSearchQuery || !text) {
+      return this.escapeHtml(text);
+    }
+    const escaped = this.escapeHtml(text);
+    const query = this.protocolSearchQuery.toLowerCase();
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return escaped.replace(regex, '<span class="search-highlight">$1</span>');
+  }
+
   showProtocolDetail(protocol) {
+    this.currentProtocol = protocol;
+
     const resultsDiv = document.getElementById('protocolResults');
     const detailDiv = document.getElementById('protocolDetail');
     const searchContainer = document.querySelector('.protocol-search-container');
+    const filtersContainer = document.querySelector('.protocol-filters');
 
-    // Hide grid and search, show detail
+    // Hide grid, search, and filters, show detail
     resultsDiv.classList.add('hidden');
     searchContainer.classList.add('hidden');
+    if (filtersContainer) filtersContainer.classList.add('hidden');
     detailDiv.classList.remove('hidden');
 
     // Populate detail view
@@ -582,13 +874,24 @@ class ProtocolHelpApp {
     // Region badge
     document.getElementById('protocolDetailRegion').textContent = protocol.body_region || protocol.section || 'General';
 
+    // Scan time badge
+    document.getElementById('protocolDetailTime').textContent = this.estimateScanTime(protocol);
+
+    // Update bookmark button state
+    const bookmarkBtn = document.getElementById('bookmarkProtocolBtn');
+    const isBookmarked = this.isBookmarked(protocol.name);
+    bookmarkBtn.classList.toggle('active', isBookmarked);
+    bookmarkBtn.querySelector('span').textContent = isBookmarked ? 'Bookmarked' : 'Bookmark';
+
     // Indications
     document.getElementById('protocolDetailIndications').textContent = protocol.indications || 'General imaging protocol';
 
-    // Sequences
-    const sequencesDiv = document.getElementById('protocolDetailSequences');
+    // Sequences Timeline
     const sequences = protocol.sequences || [];
+    this.renderSequenceTimeline(sequences, protocol.uses_contrast);
 
+    // Sequences List
+    const sequencesDiv = document.getElementById('protocolDetailSequences');
     if (sequences.length > 0) {
       sequencesDiv.innerHTML = sequences.map((seq, i) => {
         const isPost = seq.is_post_contrast;
@@ -624,22 +927,301 @@ class ProtocolHelpApp {
     } else {
       notesSection.classList.add('hidden');
     }
+
+    // Related protocols
+    this.renderRelatedProtocols(protocol);
+
+    // Render enrichment sections if available
+    this.renderEnrichmentSections(protocol);
+  }
+
+  renderEnrichmentSections(protocol) {
+    const enrichment = protocol.enrichment;
+
+    // Clinical Pearls
+    const pearlsSection = document.getElementById('protocolDetailPearlsSection');
+    const pearlsDiv = document.getElementById('protocolDetailPearls');
+    if (enrichment?.clinical_pearls?.length > 0) {
+      pearlsSection.classList.remove('hidden');
+      pearlsDiv.innerHTML = enrichment.clinical_pearls
+        .map(pearl => `<li class="clinical-pearl-item">${this.escapeHtml(pearl)}</li>`)
+        .join('');
+    } else {
+      pearlsSection.classList.add('hidden');
+    }
+
+    // Patient Prep
+    const prepSection = document.getElementById('protocolDetailPrepSection');
+    const prepDiv = document.getElementById('protocolDetailPrep');
+    if (enrichment?.patient_prep) {
+      prepSection.classList.remove('hidden');
+      const prep = enrichment.patient_prep;
+      let prepHtml = '<div class="prep-items">';
+
+      // Key prep items as badges/chips
+      if (prep.npo_required) {
+        prepHtml += `<div class="prep-badge warning">NPO ${prep.npo_hours ? prep.npo_hours + ' hours' : 'required'}</div>`;
+      }
+      if (prep.contrast_screening_required) {
+        prepHtml += `<div class="prep-badge">Contrast screening required</div>`;
+      }
+      if (prep.breath_hold_required) {
+        prepHtml += `<div class="prep-badge">Breath hold required</div>`;
+      }
+      if (prep.claustrophobia_concern && prep.claustrophobia_concern !== 'none') {
+        prepHtml += `<div class="prep-badge">${prep.claustrophobia_concern} claustrophobia concern</div>`;
+      }
+      if (prep.estimated_table_time_minutes) {
+        prepHtml += `<div class="prep-badge info">Table time: ~${prep.estimated_table_time_minutes} min</div>`;
+      }
+      prepHtml += '</div>';
+
+      // Special instructions
+      if (prep.special_instructions?.length > 0) {
+        prepHtml += '<div class="prep-instructions"><strong>Instructions:</strong><ul>';
+        prep.special_instructions.forEach(inst => {
+          prepHtml += `<li>${this.escapeHtml(inst)}</li>`;
+        });
+        prepHtml += '</ul></div>';
+      }
+
+      prepDiv.innerHTML = prepHtml;
+    } else {
+      prepSection.classList.add('hidden');
+    }
+
+    // Contraindications
+    const contraSection = document.getElementById('protocolDetailContraSection');
+    const contraDiv = document.getElementById('protocolDetailContra');
+    if (enrichment?.contraindications) {
+      const contra = enrichment.contraindications;
+      const hasContent = contra.absolute?.length > 0 || contra.relative?.length > 0;
+
+      if (hasContent) {
+        contraSection.classList.remove('hidden');
+        let contraHtml = '';
+
+        if (contra.absolute?.length > 0) {
+          contraHtml += '<div class="contra-group"><h4 class="contra-title absolute">Absolute</h4><ul>';
+          contra.absolute.forEach(c => {
+            contraHtml += `<li>${this.escapeHtml(c)}</li>`;
+          });
+          contraHtml += '</ul></div>';
+        }
+
+        if (contra.relative?.length > 0) {
+          contraHtml += '<div class="contra-group"><h4 class="contra-title relative">Relative</h4><ul>';
+          contra.relative.forEach(c => {
+            contraHtml += `<li>${this.escapeHtml(c)}</li>`;
+          });
+          contraHtml += '</ul></div>';
+        }
+
+        if (contra.gfr_cutoff) {
+          contraHtml += `<div class="contra-note">GFR cutoff: ${contra.gfr_cutoff} mL/min</div>`;
+        }
+
+        if (contra.pregnancy_considerations) {
+          contraHtml += `<div class="contra-note pregnancy"><strong>Pregnancy:</strong> ${this.escapeHtml(contra.pregnancy_considerations)}</div>`;
+        }
+
+        contraDiv.innerHTML = contraHtml;
+      } else {
+        contraSection.classList.add('hidden');
+      }
+    } else {
+      contraSection.classList.add('hidden');
+    }
+
+    // Red Flags
+    const redFlagsSection = document.getElementById('protocolDetailRedFlagsSection');
+    const redFlagsDiv = document.getElementById('protocolDetailRedFlags');
+    if (enrichment?.red_flags?.length > 0) {
+      redFlagsSection.classList.remove('hidden');
+      redFlagsDiv.innerHTML = enrichment.red_flags
+        .map(flag => `<li class="red-flag-item">${this.escapeHtml(flag)}</li>`)
+        .join('');
+    } else {
+      redFlagsSection.classList.add('hidden');
+    }
+
+    // Sequence Rationale
+    const rationaleSection = document.getElementById('protocolDetailRationaleSection');
+    const rationaleDiv = document.getElementById('protocolDetailSeqRationale');
+    if (enrichment?.sequence_rationale?.length > 0) {
+      rationaleSection.classList.remove('hidden');
+      rationaleDiv.innerHTML = enrichment.sequence_rationale
+        .map(seq => `
+          <div class="seq-rationale-item">
+            <div class="seq-rationale-name">${this.escapeHtml(seq.sequence)}</div>
+            <div class="seq-rationale-purpose">${this.escapeHtml(seq.purpose)}</div>
+            <div class="seq-rationale-findings"><strong>Key findings:</strong> ${this.escapeHtml(seq.key_findings)}</div>
+          </div>
+        `).join('');
+    } else {
+      rationaleSection.classList.add('hidden');
+    }
+
+    // When to Upgrade/Downgrade
+    const upgradeSection = document.getElementById('protocolDetailUpgradeSection');
+    const upgradeDiv = document.getElementById('protocolDetailUpgrade');
+    const hasUpgrade = enrichment?.when_to_upgrade?.length > 0;
+    const hasDowngrade = enrichment?.when_to_downgrade?.length > 0;
+
+    if (hasUpgrade || hasDowngrade) {
+      upgradeSection.classList.remove('hidden');
+      let upgradeHtml = '';
+
+      if (hasUpgrade) {
+        upgradeHtml += '<div class="mod-group"><h4 class="mod-title upgrade">When to Upgrade</h4><ul>';
+        enrichment.when_to_upgrade.forEach(item => {
+          upgradeHtml += `<li>${this.escapeHtml(item)}</li>`;
+        });
+        upgradeHtml += '</ul></div>';
+      }
+
+      if (hasDowngrade) {
+        upgradeHtml += '<div class="mod-group"><h4 class="mod-title downgrade">When to Simplify</h4><ul>';
+        enrichment.when_to_downgrade.forEach(item => {
+          upgradeHtml += `<li>${this.escapeHtml(item)}</li>`;
+        });
+        upgradeHtml += '</ul></div>';
+      }
+
+      upgradeDiv.innerHTML = upgradeHtml;
+    } else {
+      upgradeSection.classList.add('hidden');
+    }
+
+    // Alternative Protocols
+    const altSection = document.getElementById('protocolDetailAlternativesSection');
+    const altDiv = document.getElementById('protocolDetailAlternatives');
+    if (enrichment?.alternative_protocols?.length > 0) {
+      altSection.classList.remove('hidden');
+      altDiv.innerHTML = enrichment.alternative_protocols
+        .map(alt => `
+          <div class="alt-protocol-item">
+            <div class="alt-protocol-name">${this.escapeHtml(alt.protocol)}</div>
+            <div class="alt-protocol-when">${this.escapeHtml(alt.when_to_use)}</div>
+          </div>
+        `).join('');
+    } else {
+      altSection.classList.add('hidden');
+    }
+  }
+
+  renderSequenceTimeline(sequences, hasContrast) {
+    const timelineDiv = document.getElementById('protocolDetailTimeline');
+
+    if (!sequences || sequences.length === 0) {
+      timelineDiv.innerHTML = '';
+      return;
+    }
+
+    // Find where contrast injection happens
+    const firstPostContrastIdx = sequences.findIndex(s => s.is_post_contrast);
+    const hasPostContrast = firstPostContrastIdx > -1;
+
+    let html = '';
+
+    sequences.forEach((seq, i) => {
+      const isPost = seq.is_post_contrast;
+      const segmentClass = isPost ? 'post-contrast' : 'pre-contrast';
+
+      // Add contrast injection marker before first post-contrast sequence
+      if (hasContrast && hasPostContrast && i === firstPostContrastIdx) {
+        html += `
+          <div class="timeline-connector to-contrast"></div>
+          <div class="timeline-segment contrast-injection">
+            <div class="timeline-dot"></div>
+            <span class="timeline-label">Contrast</span>
+          </div>
+          <div class="timeline-connector from-contrast"></div>
+        `;
+      } else if (i > 0) {
+        html += `<div class="timeline-connector"></div>`;
+      }
+
+      // Shorten sequence name for timeline
+      const shortName = seq.sequence_name.length > 12
+        ? seq.sequence_name.substring(0, 10) + '...'
+        : seq.sequence_name;
+
+      html += `
+        <div class="timeline-segment ${segmentClass}">
+          <div class="timeline-dot"></div>
+          <span class="timeline-label">${this.escapeHtml(shortName)}</span>
+        </div>
+      `;
+    });
+
+    timelineDiv.innerHTML = html;
+  }
+
+  renderRelatedProtocols(protocol) {
+    const relatedSection = document.getElementById('protocolDetailRelatedSection');
+    const relatedDiv = document.getElementById('protocolDetailRelated');
+
+    if (!this.allProtocols) {
+      relatedSection.classList.add('hidden');
+      return;
+    }
+
+    // Find related protocols: same region, different protocol
+    const related = this.allProtocols.filter(p => {
+      if (p.name === protocol.name) return false;
+      if (p.body_region !== protocol.body_region) return false;
+      return true;
+    }).slice(0, 4); // Limit to 4
+
+    if (related.length === 0) {
+      relatedSection.classList.add('hidden');
+      return;
+    }
+
+    relatedSection.classList.remove('hidden');
+    relatedDiv.innerHTML = related.map((p, idx) => {
+      const seqCount = p.sequences?.length || 0;
+      return `
+        <div class="related-protocol-card" data-related-index="${idx}">
+          <div class="related-protocol-name">${this.escapeHtml(p.display_name || p.name)}</div>
+          <div class="related-protocol-meta">
+            ${p.uses_contrast ? 'Contrast' : 'No contrast'} - ${seqCount} sequences
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Bind click events
+    relatedDiv.querySelectorAll('.related-protocol-card').forEach((card, idx) => {
+      card.addEventListener('click', () => {
+        this.showProtocolDetail(related[idx]);
+      });
+    });
   }
 
   hideProtocolDetail() {
     const resultsDiv = document.getElementById('protocolResults');
     const detailDiv = document.getElementById('protocolDetail');
     const searchContainer = document.querySelector('.protocol-search-container');
+    const filtersContainer = document.querySelector('.protocol-filters');
 
     detailDiv.classList.add('hidden');
     resultsDiv.classList.remove('hidden');
     searchContainer.classList.remove('hidden');
+    if (filtersContainer) filtersContainer.classList.remove('hidden');
+
+    this.currentProtocol = null;
+
+    // Re-apply filters to refresh view (in case bookmarks changed)
+    this.applyProtocolFilters();
   }
 
   clearProtocolSearch() {
     document.getElementById('protocolSearchInput').value = '';
     document.getElementById('protocolSearchClear').classList.add('hidden');
-    this.renderProtocolGrid(this.allProtocols || []);
+    this.protocolSearchQuery = '';
+    this.applyProtocolFilters();
   }
 
   escapeHtml(str) {
