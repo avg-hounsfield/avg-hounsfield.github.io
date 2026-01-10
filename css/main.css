@@ -1,4 +1,4 @@
-/* ImgGuide - Dark-first Minimalist Design */
+/* Protocol Help - Dark-first Minimalist Design */
 /* Following coregrai.com design principles */
 
 /* ========================================
@@ -740,35 +740,6 @@ input:focus, button:focus {
   padding: var(--space-md);
   background: var(--bg-elevated);
   border-radius: var(--border-radius);
-}
-
-/* ========================================
-   Status Bar
-   ======================================== */
-.status-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-sm) var(--space-lg);
-  background: var(--bg-secondary);
-  border-top: 1px solid var(--border);
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.status-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-.status-indicator.loading {
-  animation: pulse 1.5s ease infinite;
-}
-
-.status-indicator.error {
-  background: var(--rating-low);
 }
 
 /* ========================================

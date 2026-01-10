@@ -1,5 +1,5 @@
 /**
- * ImgGuide - Main Application
+ * Protocol Help - Main Application
  * Anatomy-first imaging appropriateness guide
  *
  * Flow: Search -> Scenarios -> Procedures (ranked) -> MRI Protocol
@@ -10,7 +10,7 @@ import { DataLoader } from './data-loader.js';
 import { UI } from './ui.js';
 import { RadLiteAPI } from './radlite-api.js';
 
-class ImgGuideApp {
+class ProtocolHelpApp {
   constructor() {
     this.currentRegion = null;
     this.currentScenario = null;
@@ -167,7 +167,7 @@ class ImgGuideApp {
     if (!modal || !acknowledgeBtn) return;
 
     // Check if user has already acknowledged
-    const acknowledged = localStorage.getItem('imgguide_acknowledged');
+    const acknowledged = localStorage.getItem('protohelp_acknowledged');
     if (acknowledged) {
       modal.classList.add('hidden');
       return;
@@ -181,7 +181,7 @@ class ImgGuideApp {
     acknowledgeBtn.addEventListener('click', () => {
       modal.classList.add('hidden');
       document.body.style.overflow = '';
-      localStorage.setItem('imgguide_acknowledged', 'true');
+      localStorage.setItem('protohelp_acknowledged', 'true');
     });
   }
 
@@ -666,5 +666,5 @@ class ImgGuideApp {
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
-  window.app = new ImgGuideApp();
+  window.app = new ProtocolHelpApp();
 });

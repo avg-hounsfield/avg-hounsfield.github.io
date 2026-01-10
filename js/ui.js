@@ -31,12 +31,17 @@ export class UI {
   }
 
   setStatus(text, state = 'ready') {
-    this.statusText.textContent = text;
-    this.statusIndicator.className = 'status-indicator';
-    if (state === 'loading') {
-      this.statusIndicator.classList.add('loading');
-    } else if (state === 'error') {
-      this.statusIndicator.classList.add('error');
+    // Status bar elements are optional
+    if (this.statusText) {
+      this.statusText.textContent = text;
+    }
+    if (this.statusIndicator) {
+      this.statusIndicator.className = 'status-indicator';
+      if (state === 'loading') {
+        this.statusIndicator.classList.add('loading');
+      } else if (state === 'error') {
+        this.statusIndicator.classList.add('error');
+      }
     }
   }
 
@@ -497,10 +502,15 @@ export class UI {
           ql.includes('extremity') || ql.includes('joint')) {
         bodyPart.push(q);
       }
-      // Clinical qualifiers
+      // Clinical/treatment qualifiers - expanded to include surgical context
       else if (ql.includes('acute') || ql.includes('chronic') || ql.includes('subacute') ||
                ql.includes('suspected') || ql.includes('known') || ql.includes('diabetic') ||
-               ql.includes('hardware') || ql.includes('implant')) {
+               ql.includes('hardware') || ql.includes('implant') ||
+               ql.includes('post ') || ql.includes('preop') || ql.includes('pre-op') ||
+               ql.includes('repair') || ql.includes('tevar') || ql.includes('evar') ||
+               ql.includes('surgery') || ql.includes('stent') || ql.includes('graft') ||
+               ql.includes('without repair') || ql.includes('new symptoms') ||
+               ql.includes('follow-up') || ql.includes('follow up') || ql.includes('surveillance')) {
         clinical.push(q);
       }
       // Imaging findings
@@ -523,9 +533,16 @@ export class UI {
       result += ' - ' + bodyPart.join('/');
     }
 
-    // Add key clinical context
+    // Add key clinical context (up to 2 qualifiers)
     if (clinical.length > 0) {
-      result += ' (' + clinical.slice(0, 2).join(', ') + ')';
+      // Shorten common terms
+      const shortClinical = clinical.slice(0, 2).map(c => {
+        return c.replace(/follow[- ]?up imaging/gi, 'F/U')
+                .replace(/preop(erative)? planning/gi, 'Preop')
+                .replace(/without repair/gi, 'no repair')
+                .replace(/without or with new symptoms/gi, 'new sx');
+      });
+      result += ' (' + shortClinical.join(', ') + ')';
     }
 
     // Add imaging status if no clinical and space permits
@@ -534,6 +551,11 @@ export class UI {
                                      .replace(/indeterminate/i, 'indeterminate')
                                      .replace(/findings? suggest/i, 'suggests');
       result += ' [' + shortImaging + ']';
+    }
+
+    // If nothing added yet and there are other qualifiers, add those
+    if (bodyPart.length === 0 && clinical.length === 0 && imaging.length === 0 && other.length > 0) {
+      result += ' - ' + other.slice(0, 2).join(', ');
     }
 
     return result;

@@ -1,7 +1,7 @@
 {
-  "name": "ImgGuide - Imaging Appropriateness Guide",
-  "short_name": "ImgGuide",
-  "description": "Find appropriate imaging studies based on ACR Appropriateness Criteria and MRI protocols. Educational tool for radiology residents.",
+  "name": "Protocol Help - Imaging Protocol Guide",
+  "short_name": "ProtoHelp",
+  "description": "Find appropriate imaging studies and protocols based on ACR Appropriateness Criteria. Educational tool for radiology residents.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0f1a",
@@ -9,7 +9,7 @@
   "categories": ["medical", "education", "health"],
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%239B5DE5'/%3E%3Ctext x='50' y='68' text-anchor='middle' fill='white' font-size='45' font-family='Arial' font-weight='bold'%3EI%3C/text%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%239B5DE5'/%3E%3Ctext x='50' y='68' text-anchor='middle' fill='white' font-size='45' font-family='Arial' font-weight='bold'%3EP%3C/text%3E%3C/svg%3E",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
