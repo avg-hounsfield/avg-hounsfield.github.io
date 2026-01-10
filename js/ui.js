@@ -48,6 +48,60 @@ export class UI {
   // ========================================
   // Scenarios Panel (Left)
   // ========================================
+
+  // Group scenarios by their formatted title to create accordion for duplicates
+  groupScenariosByTitle(scenarios) {
+    const groups = new Map();
+
+    scenarios.forEach((scenario, originalIndex) => {
+      const formattedTitle = this.formatScenarioTitle(scenario.name);
+      const key = formattedTitle.toLowerCase();
+
+      if (!groups.has(key)) {
+        groups.set(key, {
+          formattedTitle,
+          scenarios: [],
+          originalIndices: []
+        });
+      }
+
+      groups.get(key).scenarios.push(scenario);
+      groups.get(key).originalIndices.push(originalIndex);
+    });
+
+    return groups;
+  }
+
+  // Extract the differentiating part of a scenario (what makes it unique within a group)
+  getDifferentiator(scenario, formattedTitle) {
+    const fullName = scenario.name;
+    const parts = fullName.split(',').map(p => p.trim());
+
+    // Get all qualifiers that aren't in the formatted title
+    const formattedLower = formattedTitle.toLowerCase();
+    const differentiators = [];
+
+    parts.slice(1).forEach(part => {
+      const partLower = part.toLowerCase();
+      // Skip generic phrases
+      if (partLower.includes('next imaging') || partLower.includes('initial imaging')) {
+        return;
+      }
+      // Check if this part is NOT represented in the formatted title
+      if (!formattedLower.includes(partLower.substring(0, 10))) {
+        differentiators.push(part);
+      }
+    });
+
+    // Return last 1-2 differentiators (most specific)
+    if (differentiators.length > 0) {
+      return differentiators.slice(-2).join(', ');
+    }
+
+    // Fallback: return everything after the condition
+    return parts.slice(1).join(', ');
+  }
+
   renderScenarios(scenarios, onSelect) {
     this.resultCount.textContent = `${scenarios.length} result${scenarios.length !== 1 ? 's' : ''}`;
 
@@ -61,26 +115,93 @@ export class UI {
       return;
     }
 
-    this.scenariosList.innerHTML = scenarios.map((scenario, index) => {
-      const procCount = scenario.procedures?.length || 0;
-      const formattedTitle = this.formatScenarioTitle(scenario.name);
-      // Count high-rated procedures
-      const highRated = (scenario.procedures || []).filter(p => p.rating >= 7).length;
+    // Group scenarios by formatted title
+    const groups = this.groupScenariosByTitle(scenarios);
 
-      return `
-        <div class="scenario-card" data-index="${index}">
-          <div class="scenario-title">${this.escapeHtml(formattedTitle)}</div>
-          <div class="scenario-meta">
-            ${highRated > 0 ? `<span class="high-rated-count">${highRated} recommended</span> - ` : ''}
-            ${procCount} imaging options
+    let html = '';
+    let cardIndex = 0;
+
+    groups.forEach((group) => {
+      if (group.scenarios.length === 1) {
+        // Single scenario - render as normal card
+        const scenario = group.scenarios[0];
+        const procCount = scenario.procedures?.length || 0;
+        const highRated = (scenario.procedures || []).filter(p => p.rating >= 7).length;
+
+        html += `
+          <div class="scenario-card" data-index="${group.originalIndices[0]}">
+            <div class="scenario-title">${this.escapeHtml(group.formattedTitle)}</div>
+            <div class="scenario-meta">
+              ${highRated > 0 ? `<span class="high-rated-count">${highRated} recommended</span> - ` : ''}
+              ${procCount} imaging options
+            </div>
           </div>
-        </div>
-      `;
-    }).join('');
+        `;
+      } else {
+        // Multiple scenarios with same title - render as accordion
+        const totalProcs = group.scenarios.reduce((sum, s) => sum + (s.procedures?.length || 0), 0);
+        const avgProcs = Math.round(totalProcs / group.scenarios.length);
 
-    // Bind click events
-    this.scenariosList.querySelectorAll('.scenario-card').forEach((card, index) => {
-      card.addEventListener('click', () => {
+        html += `
+          <div class="scenario-accordion" data-group-id="${cardIndex}">
+            <div class="accordion-header">
+              <div class="accordion-toggle">
+                <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </div>
+              <div class="accordion-content">
+                <div class="scenario-title">${this.escapeHtml(group.formattedTitle)}</div>
+                <div class="scenario-meta">
+                  <span class="variant-count">${group.scenarios.length} variants</span> - ~${avgProcs} imaging options each
+                </div>
+              </div>
+            </div>
+            <div class="accordion-children hidden">
+              ${group.scenarios.map((scenario, i) => {
+                const diff = this.getDifferentiator(scenario, group.formattedTitle);
+                const procCount = scenario.procedures?.length || 0;
+                const highRated = (scenario.procedures || []).filter(p => p.rating >= 7).length;
+
+                return `
+                  <div class="scenario-card scenario-child" data-index="${group.originalIndices[i]}">
+                    <div class="scenario-title child-title">${this.escapeHtml(diff)}</div>
+                    <div class="scenario-meta">
+                      ${highRated > 0 ? `<span class="high-rated-count">${highRated} rec</span> - ` : ''}
+                      ${procCount} options
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+        cardIndex++;
+      }
+    });
+
+    this.scenariosList.innerHTML = html;
+
+    // Bind accordion toggle events
+    this.scenariosList.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', (e) => {
+        const accordion = header.closest('.scenario-accordion');
+        const children = accordion.querySelector('.accordion-children');
+        const icon = accordion.querySelector('.accordion-icon');
+
+        children.classList.toggle('hidden');
+        icon.classList.toggle('expanded');
+        accordion.classList.toggle('expanded');
+      });
+    });
+
+    // Bind click events for scenario cards (both regular and child)
+    this.scenariosList.querySelectorAll('.scenario-card').forEach((card) => {
+      card.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent accordion toggle when clicking child
+
+        const index = parseInt(card.dataset.index);
+
         // Update active state
         if (this.activeScenarioCard) {
           this.activeScenarioCard.classList.remove('active');
@@ -88,7 +209,7 @@ export class UI {
         card.classList.add('active');
         this.activeScenarioCard = card;
 
-        // Call handler
+        // Call handler with the original scenario
         const scenario = scenarios[index];
         this.currentScenario = scenario;
         onSelect(scenario);
