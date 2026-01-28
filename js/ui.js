@@ -24,6 +24,10 @@ export class UI {
     this.statusText = document.getElementById('statusText');
     this.statusIndicator = document.getElementById('statusIndicator');
 
+    // Concept search elements
+    this.conceptHeader = document.getElementById('conceptHeader');
+    this.phaseFilterChips = document.getElementById('phaseFilterChips');
+
     // State
     this.activeScenarioCard = null;
     this.activeProcedureCard = null;
@@ -446,6 +450,185 @@ export class UI {
     this.clarifyChips.innerHTML = '';
     this.currentChipOptions = null;
     this.currentChipCallback = null;
+  }
+
+  // ========================================
+  // Concept Header
+  // ========================================
+  showConceptHeader(concept) {
+    if (!this.conceptHeader) return;
+
+    this.conceptHeader.classList.remove('hidden');
+    this.conceptHeader.innerHTML = `
+      <div class="concept-match">
+        <svg class="concept-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 12l2 2 4-4"/>
+          <circle cx="12" cy="12" r="10"/>
+        </svg>
+        <span class="concept-name">${this.escapeHtml(concept.displayName)}</span>
+        <span class="concept-region">${this.escapeHtml(this.formatRegionName(concept.bodyRegion))}</span>
+      </div>
+    `;
+  }
+
+  hideConceptHeader() {
+    if (!this.conceptHeader) return;
+    this.conceptHeader.classList.add('hidden');
+    this.conceptHeader.innerHTML = '';
+  }
+
+  formatRegionName(region) {
+    const names = {
+      neuro: 'Neuro',
+      spine: 'Spine',
+      chest: 'Chest',
+      abdomen: 'Abdomen',
+      msk: 'Musculoskeletal',
+      vascular: 'Vascular',
+      breast: 'Breast',
+      peds: 'Pediatric'
+    };
+    return names[region] || region;
+  }
+
+  // ========================================
+  // Phase Filter Chips
+  // ========================================
+  showPhaseFilterChips(phases, activePhase, onFilterChange) {
+    if (!this.phaseFilterChips) return;
+
+    this.phaseFilterChips.classList.remove('hidden');
+
+    // Generate chips HTML
+    const chipsHtml = phases.map(p => {
+      const isActive = activePhase === p.phase;
+      return `
+        <button class="filter-chip phase-chip ${isActive ? 'active' : ''}" data-phase="${this.escapeHtml(p.phase)}">
+          ${this.escapeHtml(p.phaseDisplay)}
+          <span class="phase-count">${p.count}</span>
+        </button>
+      `;
+    }).join('');
+
+    this.phaseFilterChips.innerHTML = `
+      <div class="phase-filter-label">Filter by phase:</div>
+      <div class="phase-chips-container">${chipsHtml}</div>
+    `;
+
+    // Bind click events
+    this.phaseFilterChips.querySelectorAll('.phase-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const phase = chip.dataset.phase;
+        onFilterChange(phase);
+      });
+    });
+  }
+
+  hidePhaseFilterChips() {
+    if (!this.phaseFilterChips) return;
+    this.phaseFilterChips.classList.add('hidden');
+    this.phaseFilterChips.innerHTML = '';
+  }
+
+  updatePhaseChipActive(activePhase) {
+    if (!this.phaseFilterChips) return;
+    this.phaseFilterChips.querySelectorAll('.phase-chip').forEach(chip => {
+      chip.classList.toggle('active', chip.dataset.phase === activePhase);
+    });
+  }
+
+  // ========================================
+  // Grouped Scenarios Rendering
+  // ========================================
+  renderGroupedScenarios(groups, onSelect) {
+    if (!groups || groups.length === 0) {
+      this.clearScenarios();
+      return;
+    }
+
+    // Count total scenarios
+    const totalScenarios = groups.reduce((sum, g) => sum + g.scenarios.length, 0);
+    this.resultCount.textContent = `${totalScenarios} result${totalScenarios !== 1 ? 's' : ''}`;
+
+    let html = '';
+
+    for (const group of groups) {
+      const scenarioCount = group.scenarios.length;
+      if (scenarioCount === 0) continue;
+
+      // Group header
+      html += `
+        <div class="scenario-phase-group" data-phase="${this.escapeHtml(group.phase)}">
+          <div class="phase-group-header">
+            <span class="phase-group-title">${this.escapeHtml(group.phaseDisplay)}</span>
+            <span class="phase-group-count">${scenarioCount}</span>
+          </div>
+          <div class="phase-group-scenarios">
+      `;
+
+      // Render scenarios in this group
+      for (let i = 0; i < group.scenarios.length; i++) {
+        const scenario = group.scenarios[i];
+        const formattedTitle = this.formatScenarioTitle(scenario.name);
+        const procCount = scenario.procedures?.length || 0;
+        const highRated = (scenario.procedures || []).filter(p => p.rating >= 7).length;
+
+        html += `
+          <div class="scenario-card" data-phase="${this.escapeHtml(group.phase)}" data-index="${i}">
+            <div class="scenario-title">${this.escapeHtml(formattedTitle)}</div>
+            <div class="scenario-meta">
+              ${highRated > 0 ? `<span class="high-rated-count">${highRated} recommended</span> - ` : ''}
+              ${procCount} imaging options
+            </div>
+          </div>
+        `;
+      }
+
+      html += `
+          </div>
+        </div>
+      `;
+    }
+
+    this.scenariosList.innerHTML = html;
+
+    // Build flat lookup for click handling
+    const flatScenarios = [];
+    const scenarioLookup = new Map();
+
+    groups.forEach(group => {
+      group.scenarios.forEach((scenario, idx) => {
+        scenarioLookup.set(`${group.phase}-${idx}`, scenario);
+        flatScenarios.push(scenario);
+      });
+    });
+
+    // Bind click events
+    this.scenariosList.querySelectorAll('.scenario-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const phase = card.dataset.phase;
+        const index = parseInt(card.dataset.index);
+        const key = `${phase}-${index}`;
+        const scenario = scenarioLookup.get(key);
+
+        if (scenario) {
+          // Update active state
+          if (this.activeScenarioCard) {
+            this.activeScenarioCard.classList.remove('active');
+          }
+          card.classList.add('active');
+          this.activeScenarioCard = card;
+
+          this.currentScenario = scenario;
+          onSelect(scenario);
+        }
+      });
+    });
+
+    // Auto-select first if only one result
+    if (totalScenarios === 1) {
+      this.scenariosList.querySelector('.scenario-card')?.click();
+    }
   }
 
   // ========================================

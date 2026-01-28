@@ -26,7 +26,7 @@
   <!-- Theme Color -->
   <meta name="theme-color" content="#9B5DE5">
 
-  <link rel="stylesheet" href="css/main.css?v=20260110">
+  <link rel="stylesheet" href="css/main.css?v=20260128c">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>R</text></svg>">
   <link rel="manifest" href="manifest.json">
 </head>
@@ -418,9 +418,29 @@
                 <path d="M18 6L6 18M6 6l12 12"/>
               </svg>
             </button>
+            <!-- Query History Dropdown -->
+            <div class="query-history-dropdown hidden" id="queryHistoryDropdown">
+              <div class="query-history-header">
+                <span>Recent Searches</span>
+                <button class="query-history-clear" id="queryHistoryClear" aria-label="Clear search history">Clear</button>
+              </div>
+              <ul class="query-history-list" id="queryHistoryList">
+                <!-- Dynamically populated -->
+              </ul>
+            </div>
           </div>
 
-          <!-- Clarifying Prompts -->
+          <!-- Concept Match Header (shows when concept search matches) -->
+          <div class="concept-header hidden" id="conceptHeader">
+            <!-- Dynamically populated: shows "Brain Tumor - Oncology" when concept matched -->
+          </div>
+
+          <!-- Phase Filter Chips (for concept search results) -->
+          <div class="phase-filter-chips hidden" id="phaseFilterChips">
+            <!-- Dynamically populated: [Screening (2)] [Initial (3)] [Surveillance (2)] -->
+          </div>
+
+          <!-- Clarifying Prompts (for keyword search) -->
           <div class="clarify-chips hidden" id="clarifyChips">
             <!-- Dynamically populated -->
           </div>
@@ -649,6 +669,23 @@
   </div>
 
   <!-- Scripts -->
-  <script type="module" src="js/app.js?v=20260110"></script>
+  <script>
+    // Force service worker update on version change
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        const currentVersion = 'radex-v2.1.0';
+        const storedVersion = localStorage.getItem('radex_sw_version');
+        if (storedVersion !== currentVersion) {
+          // Version mismatch - unregister old SW and clear caches
+          registrations.forEach(reg => reg.unregister());
+          caches.keys().then(names => names.forEach(name => caches.delete(name)));
+          localStorage.setItem('radex_sw_version', currentVersion);
+          // Reload after cache clear
+          if (storedVersion) location.reload(true);
+        }
+      });
+    }
+  </script>
+  <script type="module" src="js/app.js?v=20260128d"></script>
 </body>
 </html>

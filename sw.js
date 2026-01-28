@@ -1,4 +1,4 @@
-const CACHE_NAME = 'protohelp-v1.3.0';
+const CACHE_NAME = 'radex-v2.1.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -8,7 +8,12 @@ const STATIC_ASSETS = [
   '/js/data-loader.js',
   '/js/search-engine.js',
   '/js/radlite-api.js',
-  '/data/protocols/mri-protocols.json',
+  '/manifest.json'
+];
+
+// Data files - cached separately with longer lifetime
+const DATA_ASSETS = [
+  '/data/protocols.json',
   '/data/regions/neuro.json',
   '/data/regions/spine.json',
   '/data/regions/chest.json',
@@ -17,7 +22,8 @@ const STATIC_ASSETS = [
   '/data/regions/vascular.json',
   '/data/regions/breast.json',
   '/data/regions/peds.json',
-  '/manifest.json'
+  '/data/search/medical-synonyms.json',
+  '/data/search/concept_index.json'
 ];
 
 // External dependencies that should be cached
@@ -30,15 +36,24 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        // Caching static assets
         // Cache static assets first
         return cache.addAll(STATIC_ASSETS)
           .then(() => {
+            // Cache data assets with error handling (don't fail install if missing)
+            const dataPromises = DATA_ASSETS.map(url =>
+              cache.add(url).catch(error => {
+                console.warn('Failed to cache data asset:', url, error);
+                return Promise.resolve();
+              })
+            );
+            return Promise.all(dataPromises);
+          })
+          .then(() => {
             // Then cache external dependencies with error handling
-            const externalPromises = EXTERNAL_ASSETS.map(url => 
+            const externalPromises = EXTERNAL_ASSETS.map(url =>
               cache.add(url).catch(error => {
                 console.warn('Failed to cache external asset:', url, error);
-                return Promise.resolve(); // Don't fail installation if external assets fail
+                return Promise.resolve();
               })
             );
             return Promise.all(externalPromises);
@@ -66,42 +81,64 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - network-first for app files, cache-first for data
 self.addEventListener('fetch', event => {
   // Skip non-GET requests
   if (event.request.method !== 'GET') return;
-  
-  const url = event.request.url;
-  const isExternal = !url.startsWith(self.location.origin);
-  
-  // Handle both internal and external requests (like CDN dependencies)
+
+  const url = new URL(event.request.url);
+  const pathname = url.pathname;
+  const isExternal = url.origin !== self.location.origin;
+
+  // Determine if this is a data file (cache-first) or app file (network-first)
+  const isDataFile = pathname.startsWith('/data/');
+  const isAppFile = pathname.endsWith('.html') ||
+                    pathname.endsWith('.js') ||
+                    pathname.endsWith('.css') ||
+                    pathname === '/';
+
+  if (isAppFile && !isExternal) {
+    // Network-first for app files - ensures updates are picked up
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cache if network fails
+          return caches.match(event.request);
+        })
+    );
+    return;
+  }
+
+  // Cache-first for data files and external assets
   event.respondWith(
     caches.match(event.request)
       .then(cachedResponse => {
         if (cachedResponse) {
           return cachedResponse;
         }
-        
+
         return fetch(event.request)
           .then(response => {
-            // Check if response is valid
             if (!response || response.status !== 200) {
               return response;
             }
-            
+
             // For external resources, only cache if it's a known dependency
-            if (isExternal && !EXTERNAL_ASSETS.includes(url)) {
+            if (isExternal && !EXTERNAL_ASSETS.includes(event.request.url)) {
               return response;
             }
-            
-            // For internal resources, cache if response type is basic or cors
-            if (!isExternal && response.type !== 'basic') {
-              return response;
-            }
-            
-            // Clone the response for caching
+
+            // Cache the response
             const responseToCache = response.clone();
-            
             caches.open(CACHE_NAME)
               .then(cache => {
                 cache.put(event.request, responseToCache);
@@ -109,12 +146,11 @@ self.addEventListener('fetch', event => {
               .catch(error => {
                 console.warn('Failed to cache response:', error);
               });
-            
+
             return response;
           })
           .catch(error => {
             console.warn('Fetch failed:', error);
-            // For critical dependencies, you might want to return a fallback
             throw error;
           });
       })

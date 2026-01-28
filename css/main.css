@@ -462,6 +462,189 @@ input:focus, button:focus {
   height: 16px;
 }
 
+/* ========================================
+   Concept Header
+   ======================================== */
+.concept-header {
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: linear-gradient(135deg, var(--accent-muted) 0%, rgba(155, 93, 229, 0.05) 100%);
+  border: 1px solid var(--accent);
+  border-radius: var(--border-radius);
+  animation: fadeUp 0.3s ease;
+}
+
+.concept-match {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.concept-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.concept-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.concept-region {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 2px 8px;
+  background: var(--bg-elevated);
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+/* ========================================
+   Phase Filter Chips
+   ======================================== */
+.phase-filter-chips {
+  margin-top: var(--space-md);
+  animation: fadeUp 0.3s ease;
+}
+
+.phase-filter-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-xs);
+}
+
+.phase-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.filter-chip.phase-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-chip.phase-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-muted);
+}
+
+.filter-chip.phase-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg-primary);
+}
+
+.phase-count {
+  font-size: 11px;
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.filter-chip.phase-chip.active .phase-count {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================
+   Grouped Scenarios by Phase
+   ======================================== */
+.scenario-phase-group {
+  margin-bottom: var(--space-md);
+}
+
+.phase-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-xs) var(--space-sm);
+  margin-bottom: var(--space-xs);
+  background: var(--bg-elevated);
+  border-radius: var(--border-radius);
+  border-left: 3px solid var(--accent);
+}
+
+.phase-group-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.phase-group-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 2px 8px;
+  background: var(--bg-primary);
+  border-radius: 10px;
+}
+
+.phase-group-scenarios {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-left: var(--space-sm);
+}
+
+/* Phase-specific styling */
+.scenario-phase-group[data-phase="screening"] .phase-group-header {
+  border-left-color: var(--rating-high);
+}
+
+.scenario-phase-group[data-phase="screening"] .phase-group-title {
+  color: var(--rating-high);
+}
+
+.scenario-phase-group[data-phase="initial"] .phase-group-header {
+  border-left-color: #3b82f6;
+}
+
+.scenario-phase-group[data-phase="initial"] .phase-group-title {
+  color: #3b82f6;
+}
+
+.scenario-phase-group[data-phase="pretreatment"] .phase-group-header {
+  border-left-color: var(--rating-mid);
+}
+
+.scenario-phase-group[data-phase="pretreatment"] .phase-group-title {
+  color: var(--rating-mid);
+}
+
+.scenario-phase-group[data-phase="surveillance"] .phase-group-header {
+  border-left-color: var(--accent);
+}
+
+.scenario-phase-group[data-phase="surveillance"] .phase-group-title {
+  color: var(--accent);
+}
+
+.scenario-phase-group[data-phase="complication"] .phase-group-header {
+  border-left-color: var(--rating-low);
+}
+
+.scenario-phase-group[data-phase="complication"] .phase-group-title {
+  color: var(--rating-low);
+}
+
 /* Clarifying Chips */
 .clarify-chips {
   display: flex;
@@ -2606,4 +2789,344 @@ input:focus, button:focus {
 
 .main {
   flex: 1;
+}
+
+/* ========================================
+   Query History Dropdown
+   ======================================== */
+.search-input-wrap {
+  position: relative;
+}
+
+.query-history-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: var(--space-xs);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 50;
+  overflow: hidden;
+}
+
+.query-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.query-history-clear {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+}
+
+.query-history-clear:hover {
+  color: var(--accent);
+  background: var(--accent-muted);
+}
+
+.query-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.query-history-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.query-history-item:hover {
+  background: var(--bg-hover);
+}
+
+.query-history-item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.query-history-text {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ========================================
+   Print Styles
+   ======================================== */
+@media print {
+  /* Reset colors for print */
+  :root {
+    --bg-primary: #fff;
+    --bg-secondary: #fff;
+    --bg-elevated: #fff;
+    --text-primary: #000;
+    --text-secondary: #333;
+    --text-muted: #666;
+    --border: #ddd;
+    --accent: #6b46c1;
+  }
+
+  /* Hide non-essential elements */
+  .header,
+  .header-nav,
+  .mobile-menu-btn,
+  .back-btn,
+  .search-container,
+  .search-input-wrap,
+  .query-history-dropdown,
+  .clarify-chips,
+  .differential-card,
+  .anatomy-section,
+  .info-card,
+  .footer,
+  .protocol-filters,
+  .protocol-search-container,
+  .protocol-back-btn,
+  .quick-action-btn,
+  .protocol-quick-actions,
+  .filter-group,
+  .nav-link,
+  #protocolResults,
+  .scenarios-panel,
+  .mri-protocol-card,
+  .status-bar {
+    display: none !important;
+  }
+
+  /* Reset page layout */
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+
+  .app {
+    display: block;
+  }
+
+  .main {
+    padding: 0;
+    max-width: none;
+  }
+
+  /* Protocol detail print layout */
+  .protocol-detail {
+    display: block !important;
+    padding: 0;
+  }
+
+  .protocol-detail-header {
+    border-bottom: 2px solid #000;
+    padding-bottom: 12pt;
+    margin-bottom: 16pt;
+  }
+
+  .protocol-detail-name {
+    font-size: 18pt;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8pt;
+  }
+
+  .protocol-detail-meta {
+    display: flex;
+    gap: 12pt;
+  }
+
+  .contrast-badge,
+  .body-region-badge,
+  .scan-time-badge {
+    background: none;
+    border: 1px solid #333;
+    color: #000;
+    padding: 2pt 6pt;
+    font-size: 10pt;
+  }
+
+  .contrast-badge.with-contrast {
+    background: #eee;
+  }
+
+  /* Section styling */
+  .protocol-section {
+    margin-bottom: 14pt;
+    page-break-inside: avoid;
+  }
+
+  .protocol-section-title {
+    font-size: 12pt;
+    font-weight: 700;
+    color: #000;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4pt;
+    margin-bottom: 8pt;
+  }
+
+  .protocol-section-title svg {
+    display: none;
+  }
+
+  /* Sequences list */
+  .protocol-sequences-list {
+    columns: 2;
+    column-gap: 20pt;
+  }
+
+  .protocol-sequence-item {
+    display: flex;
+    align-items: center;
+    gap: 6pt;
+    padding: 4pt 0;
+    border-bottom: 1px dotted #ddd;
+    break-inside: avoid;
+    background: none;
+    border-radius: 0;
+  }
+
+  .sequence-number {
+    width: 18pt;
+    height: 18pt;
+    background: #eee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9pt;
+    font-weight: 600;
+  }
+
+  .sequence-name {
+    font-size: 10pt;
+  }
+
+  .sequence-contrast-label {
+    font-size: 8pt;
+    color: #666;
+    font-style: italic;
+  }
+
+  /* Hide timeline in print */
+  .sequence-timeline {
+    display: none;
+  }
+
+  /* Clinical pearls */
+  .clinical-pearls-list {
+    margin: 0;
+    padding-left: 16pt;
+  }
+
+  .clinical-pearl-item {
+    font-size: 10pt;
+    margin-bottom: 4pt;
+  }
+
+  /* Patient prep */
+  .patient-prep-grid {
+    columns: 2;
+    column-gap: 16pt;
+  }
+
+  .prep-badge {
+    display: inline-block;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 2pt 6pt;
+    font-size: 9pt;
+    margin: 2pt;
+    border-radius: 2pt;
+  }
+
+  .prep-badge.warning {
+    background: #fff3cd;
+    border-color: #ffc107;
+  }
+
+  /* Contraindications */
+  .contra-group {
+    margin-bottom: 8pt;
+  }
+
+  .contra-title {
+    font-size: 10pt;
+    font-weight: 600;
+    margin-bottom: 4pt;
+  }
+
+  .contra-title.absolute {
+    color: #c00;
+  }
+
+  .contra-group ul {
+    margin: 0;
+    padding-left: 14pt;
+    font-size: 10pt;
+  }
+
+  /* Red flags */
+  .red-flag-item {
+    font-size: 10pt;
+    color: #c00;
+  }
+
+  /* Related protocols - hide in print */
+  #protocolDetailRelatedSection {
+    display: none;
+  }
+
+  /* Page breaks */
+  .protocol-detail-content {
+    page-break-before: avoid;
+  }
+
+  #protocolDetailPearlsSection,
+  #protocolDetailPrepSection,
+  #protocolDetailContraSection {
+    page-break-inside: avoid;
+  }
+
+  /* Print header/footer */
+  @page {
+    margin: 0.75in;
+    size: letter;
+  }
+
+  /* Add print footer */
+  .protocol-detail::after {
+    content: "Radex - For educational purposes only. Verify with institutional protocols.";
+    display: block;
+    margin-top: 24pt;
+    padding-top: 8pt;
+    border-top: 1px solid #ccc;
+    font-size: 8pt;
+    color: #999;
+    text-align: center;
+  }
 }

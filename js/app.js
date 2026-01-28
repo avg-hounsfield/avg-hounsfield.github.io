@@ -5,6 +5,8 @@
  * Flow: Search -> Scenarios -> Procedures (ranked) -> MRI Protocol
  */
 
+console.log('[Radex] Loading app.js module...');
+
 import { SearchEngine } from './search-engine.js';
 import { DataLoader } from './data-loader.js';
 import { UI } from './ui.js';
@@ -24,8 +26,12 @@ class ProtocolHelpApp {
     this.protocolDebounceTimer = null;
     this.lastDifferentialQuery = '';
     this.baseQuery = ''; // Original query before clarification
-    this.activeFilter = null; // Currently selected filter
+    this.activeFilter = null; // Currently selected filter (for clarifying chips)
     this.allProtocols = null; // Cached protocols for protocol view
+
+    // Concept search state
+    this.activePhaseFilter = null; // Active phase filter for concept search
+    this.currentConcept = null; // Current matched concept
 
     // Protocol view state
     this.protocolFilters = {
@@ -36,8 +42,97 @@ class ProtocolHelpApp {
     this.protocolSearchQuery = '';
     this.currentProtocol = null; // Currently viewed protocol
     this.bookmarkedProtocols = this.loadBookmarks();
+    this.queryHistory = this.loadQueryHistory();
+    this.maxHistoryItems = 10;
 
     this.init();
+  }
+
+  loadQueryHistory() {
+    try {
+      return JSON.parse(localStorage.getItem('radex_query_history') || '[]');
+    } catch {
+      return [];
+    }
+  }
+
+  saveQueryHistory() {
+    localStorage.setItem('radex_query_history', JSON.stringify(this.queryHistory));
+  }
+
+  addToQueryHistory(query) {
+    const trimmed = query.trim();
+    if (!trimmed || trimmed.length < 2) return;
+
+    // Remove if already exists (will re-add at top)
+    this.queryHistory = this.queryHistory.filter(q => q.toLowerCase() !== trimmed.toLowerCase());
+
+    // Add to front
+    this.queryHistory.unshift(trimmed);
+
+    // Limit to max items
+    if (this.queryHistory.length > this.maxHistoryItems) {
+      this.queryHistory = this.queryHistory.slice(0, this.maxHistoryItems);
+    }
+
+    this.saveQueryHistory();
+  }
+
+  clearQueryHistory() {
+    this.queryHistory = [];
+    this.saveQueryHistory();
+    this.hideQueryHistory();
+  }
+
+  showQueryHistory() {
+    const dropdown = document.getElementById('queryHistoryDropdown');
+    const list = document.getElementById('queryHistoryList');
+    const input = document.getElementById('searchInput');
+
+    if (!dropdown || !list || this.queryHistory.length === 0) {
+      this.hideQueryHistory();
+      return;
+    }
+
+    // Only show if input is empty or focused
+    if (input.value.trim()) {
+      this.hideQueryHistory();
+      return;
+    }
+
+    list.innerHTML = this.queryHistory.map((query, index) => `
+      <li class="query-history-item" data-index="${index}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span class="query-history-text">${this.escapeHtml(query)}</span>
+      </li>
+    `).join('');
+
+    // Bind click events
+    list.querySelectorAll('.query-history-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const index = parseInt(item.dataset.index);
+        const query = this.queryHistory[index];
+        if (query) {
+          input.value = query;
+          this.hideQueryHistory();
+          this.handleSearch(query);
+        }
+      });
+    });
+
+    dropdown.classList.remove('hidden');
+  }
+
+  hideQueryHistory() {
+    const dropdown = document.getElementById('queryHistoryDropdown');
+    if (dropdown) {
+      dropdown.classList.add('hidden');
+    }
   }
 
   loadBookmarks() {
@@ -89,9 +184,36 @@ class ProtocolHelpApp {
     if (searchInput) {
       searchInput.addEventListener('input', (e) => this.handleSearch(e.target.value));
       searchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') this.clearSearch();
+        if (e.key === 'Escape') {
+          this.hideQueryHistory();
+          this.clearSearch();
+        }
+      });
+      searchInput.addEventListener('focus', () => {
+        if (!searchInput.value.trim()) {
+          this.showQueryHistory();
+        }
       });
     }
+
+    // Query history clear button
+    const queryHistoryClear = document.getElementById('queryHistoryClear');
+    if (queryHistoryClear) {
+      queryHistoryClear.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.clearQueryHistory();
+      });
+    }
+
+    // Hide query history on click outside
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('queryHistoryDropdown');
+      const searchWrap = document.querySelector('.search-input-wrap');
+      if (dropdown && !dropdown.contains(e.target) && !searchWrap?.contains(e.target)) {
+        this.hideQueryHistory();
+      }
+    });
 
     // Clear button
     const searchClear = document.getElementById('searchClear');
@@ -413,6 +535,11 @@ class ProtocolHelpApp {
     // Toggle clear button
     document.getElementById('searchClear').classList.toggle('hidden', !query);
 
+    // Hide query history when typing
+    if (query.trim()) {
+      this.hideQueryHistory();
+    }
+
     // Debounce search
     clearTimeout(this.debounceTimer);
     this.debounceTimer = setTimeout(() => this.executeSearch(query), 200);
@@ -476,9 +603,13 @@ class ProtocolHelpApp {
     if (!query.trim()) {
       this.ui.clearScenarios();
       this.ui.hideChips();
+      this.ui.hidePhaseFilterChips();
+      this.ui.hideConceptHeader();
       this.ui.hideMriProtocol();
       this.baseQuery = '';
       this.activeFilter = null;
+      this.activePhaseFilter = null;
+      this.currentConcept = null;
       return;
     }
 
@@ -489,39 +620,120 @@ class ProtocolHelpApp {
     this.ui.setStatus('Searching...', 'loading');
 
     try {
-      // Only check for ambiguity on fresh searches, not filter changes
+      // On fresh searches, reset filters
       if (!isFilterChange) {
         this.baseQuery = query;
         this.activeFilter = null;
-
-        const ambiguity = this.searchEngine.detectAmbiguity(query);
-        if (ambiguity.isAmbiguous) {
-          this.ui.showClarifyingChips(ambiguity.options, (selected, chipElement) => {
-            this.handleClarification(selected, chipElement);
-          });
-        } else {
-          this.ui.hideChips();
-        }
+        this.activePhaseFilter = null;
+        this.currentConcept = null;
       }
 
-      // Build effective query (base + filter)
-      const effectiveQuery = this.activeFilter
-        ? `${this.baseQuery} ${this.activeFilter}`
-        : query;
+      // Build search options
+      const searchOptions = {
+        limit: 30,
+        filters: {}
+      };
 
-      // Execute search - get scenarios
-      const scenarios = await this.searchEngine.search(effectiveQuery);
+      // Add phase filter if active
+      if (this.activePhaseFilter) {
+        searchOptions.filters.phase = this.activePhaseFilter;
+      }
 
-      // Render scenarios in left panel
-      this.ui.renderScenarios(scenarios, (scenario) => {
-        this.handleScenarioSelect(scenario);
-      });
+      // Execute search - returns { scenarios, grouped, concept, isConceptSearch }
+      const result = await this.searchEngine.search(this.baseQuery, searchOptions);
 
-      this.ui.setStatus(`${scenarios.length} scenarios found`);
+      if (result.isConceptSearch && result.concept) {
+        // Concept-based search - show concept header and phase filters
+        this.currentConcept = result.concept;
+
+        // Show concept header
+        this.ui.showConceptHeader(result.concept);
+
+        // Show phase filter chips if we have multiple phases
+        if (result.concept.availablePhases && result.concept.availablePhases.length > 1) {
+          this.ui.showPhaseFilterChips(
+            result.concept.availablePhases,
+            this.activePhaseFilter,
+            (phase) => this.handlePhaseFilterChange(phase)
+          );
+        } else {
+          this.ui.hidePhaseFilterChips();
+        }
+
+        // Hide clarifying chips for concept search
+        this.ui.hideChips();
+
+        // Render grouped scenarios if we have groups
+        if (result.grouped && result.grouped.length > 0 && !this.activePhaseFilter) {
+          this.ui.renderGroupedScenarios(result.grouped, (scenario) => {
+            this.handleScenarioSelect(scenario);
+          });
+        } else {
+          // Render flat list
+          this.ui.renderScenarios(result.scenarios, (scenario) => {
+            this.handleScenarioSelect(scenario);
+          });
+        }
+
+        this.ui.setStatus(`${result.scenarios.length} scenarios for "${result.concept.displayName}"`);
+      } else {
+        // Keyword search fallback
+        this.currentConcept = null;
+        this.ui.hideConceptHeader();
+        this.ui.hidePhaseFilterChips();
+
+        // Check for ambiguity on fresh searches
+        if (!isFilterChange) {
+          const ambiguity = this.searchEngine.detectAmbiguity(query);
+          if (ambiguity.isAmbiguous) {
+            this.ui.showClarifyingChips(ambiguity.options, (selected, chipElement) => {
+              this.handleClarification(selected, chipElement);
+            });
+          } else {
+            this.ui.hideChips();
+          }
+        }
+
+        // Build effective query (base + filter) for keyword search
+        const effectiveQuery = this.activeFilter
+          ? `${this.baseQuery} ${this.activeFilter}`
+          : this.baseQuery;
+
+        // Re-run keyword search with effective query if filter changed
+        let scenarios = result.scenarios;
+        if (isFilterChange && this.activeFilter) {
+          const keywordResult = await this.searchEngine.search(effectiveQuery, { limit: 30 });
+          scenarios = keywordResult.scenarios;
+        }
+
+        // Render scenarios in left panel
+        this.ui.renderScenarios(scenarios, (scenario) => {
+          this.handleScenarioSelect(scenario);
+        });
+
+        this.ui.setStatus(`${scenarios.length} scenarios found`);
+      }
+
+      // Add to query history if we got results
+      if (result.scenarios.length > 0 && !isFilterChange) {
+        this.addToQueryHistory(query);
+      }
     } catch (error) {
       console.error('Search error:', error);
       this.ui.setStatus('Search failed', 'error');
     }
+  }
+
+  handlePhaseFilterChange(phase) {
+    // Toggle filter - if same phase clicked, clear it
+    if (this.activePhaseFilter === phase) {
+      this.activePhaseFilter = null;
+    } else {
+      this.activePhaseFilter = phase;
+    }
+
+    // Re-run search with filter
+    this.executeSearch(this.baseQuery, true);
   }
 
   handleScenarioSelect(scenario) {
@@ -575,12 +787,16 @@ class ProtocolHelpApp {
     document.getElementById('searchClear').classList.add('hidden');
     this.ui.clearScenarios();
     this.ui.hideChips();
+    this.ui.hidePhaseFilterChips();
+    this.ui.hideConceptHeader();
     this.ui.hideDifferential();
     this.ui.hideMriProtocol();
     this.currentScenario = null;
     this.lastDifferentialQuery = '';
     this.baseQuery = '';
     this.activeFilter = null;
+    this.activePhaseFilter = null;
+    this.currentConcept = null;
     this.radlite.clearCache(); // Clear RadLITE cache
   }
 

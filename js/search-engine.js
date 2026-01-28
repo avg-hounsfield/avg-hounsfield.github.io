@@ -1,25 +1,48 @@
 /**
  * Search Engine - Handles semantic search with medical synonym expansion
+ * and concept-based search with clinical phase grouping
  */
 
 export class SearchEngine {
   constructor(regionData) {
     this.scenarios = regionData.scenarios || [];
+    this.regionName = regionData.region || null;
     this.embeddings = null;
     this.synonyms = null;
+    this.conceptIndex = null;
     this.initialized = false;
   }
 
   async init() {
     // Load medical synonyms for query expansion
     await this.loadSynonyms();
+    // Load concept index for concept-based search
+    await this.loadConceptIndex();
     this.buildIndex();
     this.initialized = true;
   }
 
+  async loadConceptIndex() {
+    try {
+      const cacheBuster = '20260128b';
+      const response = await fetch(`data/search/concept_index.json?v=${cacheBuster}`);
+      if (response.ok) {
+        this.conceptIndex = await response.json();
+        console.log('[SearchEngine] Concept index loaded:', Object.keys(this.conceptIndex.concepts).length, 'concepts');
+      } else {
+        console.warn('[SearchEngine] Failed to load concept index:', response.status);
+      }
+    } catch (error) {
+      console.warn('[SearchEngine] Could not load concept index:', error);
+      this.conceptIndex = null;
+    }
+  }
+
   async loadSynonyms() {
     try {
-      const response = await fetch('data/search/medical-synonyms.json');
+      // Cache buster to ensure fresh synonyms after updates
+      const cacheBuster = '20260128';
+      const response = await fetch(`data/search/medical-synonyms.json?v=${cacheBuster}`);
       if (response.ok) {
         const data = await response.json();
         this.synonyms = data.synonyms || {};
@@ -93,11 +116,232 @@ export class SearchEngine {
     return Array.from(expanded);
   }
 
-  async search(query, limit = 10) {
+  /**
+   * Main search method - tries concept search first, falls back to keyword
+   * @param {string} query - Search query
+   * @param {Object} options - Search options
+   * @param {number} options.limit - Max results
+   * @param {Object} options.filters - Active filters (phase, context, etc)
+   * @returns {Object} - { scenarios, grouped, concept, isConceptSearch }
+   */
+  async search(query, options = {}) {
+    const { limit = 20, filters = {} } = options;
+
     if (!this.initialized || this.scenarios.length === 0) {
-      return [];
+      return { scenarios: [], grouped: null, concept: null, isConceptSearch: false };
     }
 
+    // Try concept-based search first
+    const conceptResult = this.searchByConcept(query, filters);
+    if (conceptResult.scenarios.length > 0) {
+      return conceptResult;
+    }
+
+    // Fallback to keyword search
+    const scenarios = await this.keywordSearch(query, limit);
+    return {
+      scenarios,
+      grouped: null,
+      concept: null,
+      isConceptSearch: false
+    };
+  }
+
+  /**
+   * Concept-based search - looks up concepts and returns grouped results
+   */
+  searchByConcept(query, filters = {}) {
+    if (!this.conceptIndex) {
+      console.log('[SearchEngine] No concept index available');
+      return { scenarios: [], grouped: null, concept: null, isConceptSearch: false };
+    }
+
+    const queryLower = query.toLowerCase().trim();
+    console.log('[SearchEngine] Searching for concept:', queryLower, 'in region:', this.regionName);
+
+    // Try to find a matching concept via synonyms
+    let conceptId = this.conceptIndex.synonym_to_concept[queryLower];
+    console.log('[SearchEngine] Exact match:', conceptId);
+
+    // If no exact match, try to find partial matches
+    if (!conceptId) {
+      for (const [synonym, cId] of Object.entries(this.conceptIndex.synonym_to_concept)) {
+        if (queryLower.includes(synonym) || synonym.includes(queryLower)) {
+          conceptId = cId;
+          console.log('[SearchEngine] Partial match:', synonym, '->', cId);
+          break;
+        }
+      }
+    }
+
+    if (!conceptId || !this.conceptIndex.concepts[conceptId]) {
+      console.log('[SearchEngine] No concept found for query');
+      return { scenarios: [], grouped: null, concept: null, isConceptSearch: false };
+    }
+
+    const concept = this.conceptIndex.concepts[conceptId];
+    console.log('[SearchEngine] Found concept:', concept.display_name);
+
+    // Get scenario mappings, filtering by current region if set
+    let mappings = concept.scenario_mappings || [];
+    console.log('[SearchEngine] Total mappings:', mappings.length);
+
+    // Filter by region if we're in a specific region
+    if (this.regionName) {
+      const beforeFilter = mappings.length;
+      mappings = mappings.filter(m => m.region === this.regionName);
+      console.log('[SearchEngine] After region filter:', mappings.length, '(from', beforeFilter, ')');
+    }
+
+    // Apply phase filter if set
+    if (filters.phase) {
+      mappings = mappings.filter(m => m.metadata?.phase === filters.phase);
+    }
+
+    // Apply context filters
+    if (filters.context) {
+      for (const [key, value] of Object.entries(filters.context)) {
+        mappings = mappings.filter(m => m.metadata?.context?.[key] === value);
+      }
+    }
+
+    // Match mappings to actual loaded scenarios
+    const matchedScenarios = this.matchMappingsToScenarios(mappings);
+    console.log('[SearchEngine] Matched scenarios:', matchedScenarios.length);
+
+    // Group by phase
+    const grouped = this.groupByPhase(matchedScenarios, mappings);
+    console.log('[SearchEngine] Grouped into', grouped.length, 'phases');
+
+    // Generate filter chips from available phases
+    const availablePhases = this.getAvailablePhases(concept.scenario_mappings, this.regionName);
+
+    return {
+      scenarios: matchedScenarios,
+      grouped,
+      concept: {
+        id: conceptId,
+        displayName: concept.display_name,
+        bodyRegion: concept.body_region,
+        availablePhases
+      },
+      isConceptSearch: true
+    };
+  }
+
+  /**
+   * Match concept mappings to actual loaded scenarios
+   */
+  matchMappingsToScenarios(mappings) {
+    const matchedScenarios = [];
+    const scenarioById = new Map();
+
+    // Build lookup by ID
+    this.scenarios.forEach(s => {
+      if (s.id) scenarioById.set(s.id, s);
+    });
+
+    // Match mappings to scenarios
+    for (const mapping of mappings) {
+      const scenario = scenarioById.get(mapping.scenario_id);
+      if (scenario) {
+        // Attach metadata from mapping
+        const enrichedScenario = {
+          ...scenario,
+          _conceptMetadata: mapping.metadata,
+          _relevanceScore: mapping.relevance_score
+        };
+        matchedScenarios.push(enrichedScenario);
+      }
+    }
+
+    return matchedScenarios;
+  }
+
+  /**
+   * Group scenarios by clinical phase
+   */
+  groupByPhase(scenarios, mappings) {
+    const groups = {};
+    const phaseOrder = ['screening', 'initial', 'pretreatment', 'surveillance', 'complication'];
+
+    // Create mapping lookup
+    const mappingById = new Map();
+    mappings.forEach(m => mappingById.set(m.scenario_id, m));
+
+    // Group scenarios
+    for (const scenario of scenarios) {
+      const mapping = mappingById.get(scenario.id);
+      const phase = mapping?.metadata?.phase || scenario._conceptMetadata?.phase || 'initial';
+      const phaseDisplay = mapping?.metadata?.phase_display || scenario._conceptMetadata?.phase_display || 'Initial Workup';
+
+      if (!groups[phase]) {
+        groups[phase] = {
+          phase,
+          phaseDisplay,
+          scenarios: []
+        };
+      }
+      groups[phase].scenarios.push(scenario);
+    }
+
+    // Sort groups by phase order
+    const sortedGroups = [];
+    for (const phase of phaseOrder) {
+      if (groups[phase]) {
+        sortedGroups.push(groups[phase]);
+      }
+    }
+
+    // Add any remaining phases not in the order
+    for (const phase of Object.keys(groups)) {
+      if (!phaseOrder.includes(phase)) {
+        sortedGroups.push(groups[phase]);
+      }
+    }
+
+    return sortedGroups;
+  }
+
+  /**
+   * Get available phases for filter chips
+   */
+  getAvailablePhases(allMappings, regionName) {
+    const phaseCounts = {};
+
+    // Filter by region first
+    let mappings = allMappings;
+    if (regionName) {
+      mappings = mappings.filter(m => m.region === regionName);
+    }
+
+    // Count scenarios per phase
+    for (const mapping of mappings) {
+      const phase = mapping.metadata?.phase;
+      const phaseDisplay = mapping.metadata?.phase_display;
+      if (phase) {
+        if (!phaseCounts[phase]) {
+          phaseCounts[phase] = { phase, phaseDisplay, count: 0 };
+        }
+        phaseCounts[phase].count++;
+      }
+    }
+
+    // Convert to array and sort by order
+    const phaseOrder = ['screening', 'initial', 'pretreatment', 'surveillance', 'complication'];
+    const phases = Object.values(phaseCounts).sort((a, b) => {
+      const aIdx = phaseOrder.indexOf(a.phase);
+      const bIdx = phaseOrder.indexOf(b.phase);
+      return (aIdx === -1 ? 999 : aIdx) - (bIdx === -1 ? 999 : bIdx);
+    });
+
+    return phases;
+  }
+
+  /**
+   * Keyword-based search (original implementation)
+   */
+  async keywordSearch(query, limit = 10) {
     const queryLower = query.toLowerCase();
     const expandedTerms = this.expandQuery(query);
 
