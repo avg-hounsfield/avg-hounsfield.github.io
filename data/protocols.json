@@ -1342,9 +1342,10 @@
       "balance",
       "ear pain",
       "hearing",
-      "deafness"
+      "deafness",
+      "cholesteatoma"
     ],
-    "indications": "Used to evaluate symptoms like hearing loss, tinnitus, or vertigo. This exam focuses on the internal auditory canals and cranial nerves VII and VIII.",
+    "indications": "Used to evaluate symptoms like hearing loss, tinnitus, or vertigo. This exam focuses on the internal auditory canals and cranial nerves VII and VIII. For cholesteatoma evaluation, add DWI Propeller sequence.",
     "contrast_rationale": null,
     "canonical_procedure": "MRI IAC W/O Contrast",
     "sequences": [
@@ -1365,6 +1366,12 @@
         "sequence_name": "AX 3D SPACE (instead of AX 3D FIESTA)",
         "is_post_contrast": 0,
         "sort_order": 0
+      },
+      {
+        "scanner_type": "Cholesteatoma",
+        "sequence_name": "Add DWI Propeller for cholesteatoma rule out",
+        "is_post_contrast": 0,
+        "sort_order": 1
       }
     ],
     "scenario_matches": [
