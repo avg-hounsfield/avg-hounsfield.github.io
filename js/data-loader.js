@@ -282,31 +282,24 @@ export class DataLoader {
         const brain = protocols.find(p => p.name === 'BRAIN');
         if (brain) return brain;
       }
-      // Stress fracture / bone specific - route based on bone mentioned
-      if (scenarioName.includes('humerus') || scenarioName.includes('upper arm')) {
-        const shoulder = protocols.find(p => p.name === 'SHOULDER');
-        if (shoulder) return shoulder;
-      }
-      if (scenarioName.includes('femur') || scenarioName.includes('thigh')) {
-        const hip = protocols.find(p => p.name === 'HIP');
-        if (hip) return hip;
-      }
-      if (scenarioName.includes('tibia') || scenarioName.includes('fibula') || scenarioName.includes('lower leg')) {
-        const knee = protocols.find(p => p.name === 'KNEE');
-        if (knee) return knee;
-      }
-      if (scenarioName.includes('radius') || scenarioName.includes('ulna') || scenarioName.includes('forearm')) {
-        const elbow = protocols.find(p => p.name === 'ELBOW');
-        if (elbow) return elbow;
-      }
-      if (scenarioName.includes('metatarsal') || scenarioName.includes('calcaneus')) {
-        const ankle = protocols.find(p => p.name === 'ANKLE');
-        if (ankle) return ankle;
-      }
-      // Ribs -> CHEST protocol
-      if (scenarioName.includes('rib') || scenarioName.includes('costal')) {
-        const chest = protocols.find(p => p.name === 'CHEST');
-        if (chest) return chest;
+      // Bone-specific scenarios (fracture, lesion, tumor) -> BONE TUMOR protocol
+      // Joint protocols are for cartilage/ligaments, not bone pathology
+      const isBoneScenario = scenarioName.includes('humerus') || scenarioName.includes('femur') ||
+                             scenarioName.includes('tibia') || scenarioName.includes('fibula') ||
+                             scenarioName.includes('radius') || scenarioName.includes('ulna') ||
+                             scenarioName.includes('metatarsal') || scenarioName.includes('calcaneus') ||
+                             scenarioName.includes('rib') || scenarioName.includes('costal') ||
+                             scenarioName.includes('stress fracture') || scenarioName.includes('bone tumor') ||
+                             scenarioName.includes('bone lesion');
+      if (isBoneScenario) {
+        // Infection -> OSTEOMYELITIS
+        if (scenarioName.includes('infection') || scenarioName.includes('osteomyelitis')) {
+          const osteo = protocols.find(p => p.name === 'OSTEOMYELITIS');
+          if (osteo) return osteo;
+        }
+        // Tumor/lesion/fracture -> BONE TUMOR (has large FOV, appropriate sequences)
+        const boneTumor = protocols.find(p => p.name === 'BONE TUMOR');
+        if (boneTumor) return boneTumor;
       }
       // Vascular murmur - route to nearest joint
       if (scenarioName.includes('vascular murmur') || scenarioName.includes('bruit')) {
