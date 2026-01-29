@@ -469,6 +469,181 @@
       ],
       "scenario_keywords": ["osteomyelitis", "septic", "infection", "cellulitis", "abscess"]
     },
+    "mri_forearm_no_contrast": {
+      "canonical_display": "MRI Forearm Without Contrast",
+      "acr_name": "MRI forearm without IV contrast",
+      "body_region": "msk",
+      "body_part": "forearm",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "ELBOW",
+          "match_context": ["elbow", "proximal forearm"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "WRIST",
+          "match_context": ["wrist", "distal forearm", "default"],
+          "priority": 2
+        }
+      ]
+    },
+    "mri_forearm_both_contrast": {
+      "canonical_display": "MRI Forearm Without and With Contrast",
+      "acr_name": "MRI forearm without and with IV contrast",
+      "body_region": "msk",
+      "body_part": "forearm",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "OSTEOMYELITIS",
+          "match_context": ["osteomyelitis", "infection", "abscess", "septic"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "ELBOW",
+          "match_context": ["mass", "tumor", "elbow"],
+          "priority": 2
+        }
+      ]
+    },
+    "mri_upper_arm_no_contrast": {
+      "canonical_display": "MRI Upper Arm Without Contrast",
+      "acr_name": "MRI upper arm without IV contrast",
+      "body_region": "msk",
+      "body_part": "upper_arm",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "SHOULDER",
+          "match_context": ["shoulder", "proximal humerus", "default"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_upper_arm_both_contrast": {
+      "canonical_display": "MRI Upper Arm Without and With Contrast",
+      "acr_name": "MRI upper arm without and with IV contrast",
+      "body_region": "msk",
+      "body_part": "upper_arm",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "OSTEOMYELITIS",
+          "match_context": ["osteomyelitis", "infection", "abscess", "septic"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "SHOULDER",
+          "match_context": ["mass", "tumor", "default"],
+          "priority": 2
+        }
+      ]
+    },
+    "mri_thigh_no_contrast": {
+      "canonical_display": "MRI Thigh Without Contrast",
+      "acr_name": "MRI thigh without IV contrast",
+      "body_region": "msk",
+      "body_part": "thigh",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "FEMUR",
+          "match_context": ["femur", "thigh", "mass", "tumor"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_thigh_both_contrast": {
+      "canonical_display": "MRI Thigh Without and With Contrast",
+      "acr_name": "MRI thigh without and with IV contrast",
+      "body_region": "msk",
+      "body_part": "thigh",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "OSTEOMYELITIS",
+          "match_context": ["osteomyelitis", "infection", "abscess"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "FEMUR",
+          "match_context": ["mass", "tumor", "fracture"],
+          "priority": 2
+        }
+      ]
+    },
+    "mri_lower_leg_no_contrast": {
+      "canonical_display": "MRI Lower Leg Without Contrast",
+      "acr_name": "MRI lower leg without IV contrast",
+      "body_region": "msk",
+      "body_part": "lower_leg",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "TIB/FIB",
+          "match_context": ["tibia", "fibula", "lower leg", "stress fracture", "mass"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_lower_leg_both_contrast": {
+      "canonical_display": "MRI Lower Leg Without and With Contrast",
+      "acr_name": "MRI lower leg without and with IV contrast",
+      "body_region": "msk",
+      "body_part": "lower_leg",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "OSTEOMYELITIS",
+          "match_context": ["osteomyelitis", "infection", "abscess"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "TIB/FIB",
+          "match_context": ["mass", "tumor", "fracture"],
+          "priority": 2
+        }
+      ]
+    },
+    "mri_breast_abbreviated_no_contrast": {
+      "canonical_display": "MRI Breast Without Contrast (Abbreviated)",
+      "acr_name": "MRI breast without IV contrast abbreviated",
+      "body_region": "breast",
+      "body_part": "breast",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "BREAST",
+          "match_context": ["screening", "implant"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_breast_abbreviated_both_contrast": {
+      "canonical_display": "MRI Breast Without and With Contrast (Abbreviated)",
+      "acr_name": "MRI breast without and with IV contrast abbreviated",
+      "body_region": "breast",
+      "body_part": "breast",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "BREAST",
+          "match_context": ["screening", "high risk"],
+          "priority": 1
+        }
+      ]
+    },
     "mri_breast_both_contrast": {
       "canonical_display": "MRI Breast Without and With Contrast",
       "acr_name": "MRI breast without and with IV contrast",

@@ -2,8 +2,8 @@
   "version": "1.0",
   "description": "Smart routing from ACR procedures to scanner protocols",
   "procedure_count": 161,
-  "mapped_count": 125,
-  "unmapped_count": 36,
+  "mapped_count": 135,
+  "unmapped_count": 26,
   "routes": {
     "DOTATATE PET/MRI brain": {
       "canonical_display": "DOTATATE PET/MRI brain",
@@ -540,6 +540,23 @@
       ],
       "match_type": "exact"
     },
+    "MRI breast without IV contrast abbreviated": {
+      "canonical_display": "MRI Breast Without Contrast (Abbreviated)",
+      "body_region": "breast",
+      "body_part": "breast",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "BREAST",
+          "match_context": [
+            "screening",
+            "implant"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
     "MRI breast without and with IV contrast": {
       "canonical_display": "MRI Breast Without and With Contrast",
       "body_region": "breast",
@@ -553,6 +570,23 @@
             "screening",
             "mass",
             "implant",
+            "high risk"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI breast without and with IV contrast abbreviated": {
+      "canonical_display": "MRI Breast Without and With Contrast (Abbreviated)",
+      "body_region": "breast",
+      "body_part": "breast",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "BREAST",
+          "match_context": [
+            "screening",
             "high risk"
           ],
           "priority": 1
@@ -935,6 +969,60 @@
         }
       ],
       "match_type": "component"
+    },
+    "MRI forearm without IV contrast": {
+      "canonical_display": "MRI Forearm Without Contrast",
+      "body_region": "msk",
+      "body_part": "forearm",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "ELBOW",
+          "match_context": [
+            "elbow",
+            "proximal forearm"
+          ],
+          "priority": 1
+        },
+        {
+          "protocol_name": "WRIST",
+          "match_context": [
+            "wrist",
+            "distal forearm",
+            "default"
+          ],
+          "priority": 2
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI forearm without and with IV contrast": {
+      "canonical_display": "MRI Forearm Without and With Contrast",
+      "body_region": "msk",
+      "body_part": "forearm",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "OSTEOMYELITIS",
+          "match_context": [
+            "osteomyelitis",
+            "infection",
+            "abscess",
+            "septic"
+          ],
+          "priority": 1
+        },
+        {
+          "protocol_name": "ELBOW",
+          "match_context": [
+            "mass",
+            "tumor",
+            "elbow"
+          ],
+          "priority": 2
+        }
+      ],
+      "match_type": "exact"
     },
     "MRI functional (fMRI) head without IV contrast": {
       "canonical_display": "MRI functional (fMRI) head without IV contrast",
@@ -1680,6 +1768,53 @@
         }
       ],
       "match_type": "component"
+    },
+    "MRI lower leg without IV contrast": {
+      "canonical_display": "MRI Lower Leg Without Contrast",
+      "body_region": "msk",
+      "body_part": "lower_leg",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "TIB/FIB",
+          "match_context": [
+            "tibia",
+            "fibula",
+            "lower leg",
+            "stress fracture",
+            "mass"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI lower leg without and with IV contrast": {
+      "canonical_display": "MRI Lower Leg Without and With Contrast",
+      "body_region": "msk",
+      "body_part": "lower_leg",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "OSTEOMYELITIS",
+          "match_context": [
+            "osteomyelitis",
+            "infection",
+            "abscess"
+          ],
+          "priority": 1
+        },
+        {
+          "protocol_name": "TIB/FIB",
+          "match_context": [
+            "mass",
+            "tumor",
+            "fracture"
+          ],
+          "priority": 2
+        }
+      ],
+      "match_type": "exact"
     },
     "MRI lumbar spine with IV contrast": {
       "canonical_display": "MRI lumbar spine with IV contrast",
@@ -2502,6 +2637,52 @@
       ],
       "match_type": "component"
     },
+    "MRI thigh without IV contrast": {
+      "canonical_display": "MRI Thigh Without Contrast",
+      "body_region": "msk",
+      "body_part": "thigh",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "FEMUR",
+          "match_context": [
+            "femur",
+            "thigh",
+            "mass",
+            "tumor"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI thigh without and with IV contrast": {
+      "canonical_display": "MRI Thigh Without and With Contrast",
+      "body_region": "msk",
+      "body_part": "thigh",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "OSTEOMYELITIS",
+          "match_context": [
+            "osteomyelitis",
+            "infection",
+            "abscess"
+          ],
+          "priority": 1
+        },
+        {
+          "protocol_name": "FEMUR",
+          "match_context": [
+            "mass",
+            "tumor",
+            "fracture"
+          ],
+          "priority": 2
+        }
+      ],
+      "match_type": "exact"
+    },
     "MRI thoracic and lumbar spine with IV contrast": {
       "canonical_display": "MRI thoracic and lumbar spine with IV contrast",
       "body_region": "unknown",
@@ -2638,6 +2819,52 @@
             "tumor",
             "infection",
             "compression"
+          ],
+          "priority": 2
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI upper arm without IV contrast": {
+      "canonical_display": "MRI Upper Arm Without Contrast",
+      "body_region": "msk",
+      "body_part": "upper_arm",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "SHOULDER",
+          "match_context": [
+            "shoulder",
+            "proximal humerus",
+            "default"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI upper arm without and with IV contrast": {
+      "canonical_display": "MRI Upper Arm Without and With Contrast",
+      "body_region": "msk",
+      "body_part": "upper_arm",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "OSTEOMYELITIS",
+          "match_context": [
+            "osteomyelitis",
+            "infection",
+            "abscess",
+            "septic"
+          ],
+          "priority": 1
+        },
+        {
+          "protocol_name": "SHOULDER",
+          "match_context": [
+            "mass",
+            "tumor",
+            "default"
           ],
           "priority": 2
         }
@@ -2807,22 +3034,6 @@
       }
     },
     {
-      "acr_name": "MRI breast without IV contrast abbreviated",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "breast"
-      }
-    },
-    {
-      "acr_name": "MRI breast without and with IV contrast abbreviated",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "breast"
-      }
-    },
-    {
       "acr_name": "MRI chest with IV contrast",
       "components": {
         "modality": "MRI",
@@ -2879,22 +3090,6 @@
       }
     },
     {
-      "acr_name": "MRI forearm without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "forearm"
-      }
-    },
-    {
-      "acr_name": "MRI forearm without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "forearm"
-      }
-    },
-    {
       "acr_name": "MRI heart function with stress without IV contrast",
       "components": {
         "modality": "MRI",
@@ -2935,59 +3130,11 @@
       }
     },
     {
-      "acr_name": "MRI lower leg without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "lower_leg"
-      }
-    },
-    {
-      "acr_name": "MRI lower leg without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "lower_leg"
-      }
-    },
-    {
       "acr_name": "MRI maxillofacial with IV contrast",
       "components": {
         "modality": "MRI",
         "contrast": "with",
         "body_part": "maxillofacial"
-      }
-    },
-    {
-      "acr_name": "MRI thigh without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "thigh"
-      }
-    },
-    {
-      "acr_name": "MRI thigh without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "thigh"
-      }
-    },
-    {
-      "acr_name": "MRI upper arm without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "upper_arm"
-      }
-    },
-    {
-      "acr_name": "MRI upper arm without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "upper_arm"
       }
     },
     {
