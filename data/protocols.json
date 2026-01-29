@@ -17584,5 +17584,644 @@
         "acr_scenarios_count": 5
       }
     }
+  },
+  {
+    "name": "CHEST",
+    "display_name": "CHEST",
+    "uses_contrast": 1,
+    "section": "Chest Imaging",
+    "sections": [
+      "Chest Imaging"
+    ],
+    "body_region": "chest",
+    "body_part": "chest",
+    "is_pediatric": false,
+    "keywords": [
+      "chest wall mass",
+      "mediastinal mass",
+      "brachial plexus",
+      "thoracic outlet syndrome",
+      "TOS",
+      "chest MRI",
+      "mediastinum"
+    ],
+    "indications": "Evaluation of chest wall/mediastinal masses, brachial plexus pathology, thoracic outlet syndrome",
+    "contrast_rationale": "Contrast needed to assess mass enhancement characteristics and vascular involvement",
+    "canonical_procedure": "MRI Chest W/ & W/O Contrast",
+    "sequences": [
+      {
+        "sequence_name": "SAG T1",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "AX T1",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "AX T2 FS",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "COR STIR",
+        "is_post_contrast": 0,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "AX DWI",
+        "is_post_contrast": 0,
+        "sort_order": 5
+      },
+      {
+        "sequence_name": "AX T1 FS POST",
+        "is_post_contrast": 1,
+        "sort_order": 6
+      },
+      {
+        "sequence_name": "COR T1 FS POST",
+        "is_post_contrast": 1,
+        "sort_order": 7
+      }
+    ],
+    "scanner_notes": [
+      "Include lung apices through diaphragm",
+      "Include both axillae and shoulder regions for brachial plexus evaluation",
+      "Ensure thoracic inlet well covered on coronal sequences",
+      "Respiratory gating recommended for mediastinal sequences"
+    ],
+    "scenario_matches": [],
+    "_generated": {
+      "timestamp": "2026-01-29T20:32:54.307723+00:00",
+      "model": "anthropic/claude-3.5-sonnet",
+      "source": "build_missing_protocols.py"
+    }
+  },
+  {
+    "name": "CHEST W/O",
+    "display_name": "CHEST W/O",
+    "uses_contrast": 0,
+    "section": "Chest Imaging",
+    "sections": [
+      "Chest Imaging"
+    ],
+    "body_region": "chest",
+    "body_part": "chest",
+    "is_pediatric": false,
+    "keywords": [
+      "chest wall",
+      "ribs",
+      "sternum",
+      "thorax",
+      "chest mass",
+      "bone lesion",
+      "musculoskeletal"
+    ],
+    "indications": "Chest wall evaluation, rib lesion assessment, sternal abnormality",
+    "contrast_rationale": null,
+    "canonical_procedure": "MRI Chest W/O Contrast",
+    "sequences": [
+      {
+        "sequence_name": "LOC",
+        "is_post_contrast": 0,
+        "sort_order": 0
+      },
+      {
+        "sequence_name": "SAG T1",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "COR T1",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "AX T1",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "AX T2 FS",
+        "is_post_contrast": 0,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "COR STIR",
+        "is_post_contrast": 0,
+        "sort_order": 5
+      },
+      {
+        "sequence_name": "AX DWI",
+        "is_post_contrast": 0,
+        "sort_order": 6
+      }
+    ],
+    "scanner_notes": [
+      "Ensure complete coverage of chest wall and ribs",
+      "Center to area of concern if specified in requisition",
+      "Use respiratory gating when possible",
+      "Consider cardiac gating for anterior chest wall"
+    ],
+    "scenario_matches": [],
+    "_generated": {
+      "timestamp": "2026-01-29T20:33:05.329741+00:00",
+      "model": "anthropic/claude-3.5-sonnet",
+      "source": "build_missing_protocols.py"
+    }
+  },
+  {
+    "name": "CARDIAC STRESS",
+    "display_name": "CARDIAC STRESS",
+    "uses_contrast": 1,
+    "section": "Cardiac Imaging",
+    "sections": [
+      "Cardiac Imaging"
+    ],
+    "body_region": "chest",
+    "body_part": "heart",
+    "is_pediatric": false,
+    "keywords": [
+      "cardiac MRI",
+      "stress perfusion",
+      "ischemia",
+      "coronary artery disease",
+      "LGE",
+      "SSFP",
+      "adenosine",
+      "regadenoson"
+    ],
+    "indications": "Evaluation for myocardial ischemia under pharmacologic stress",
+    "contrast_rationale": "Gadolinium required for first-pass perfusion imaging and late gadolinium enhancement",
+    "canonical_procedure": "MRI Heart W/ & W/O Contrast",
+    "sequences": [
+      {
+        "sequence_name": "SCOUT",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "AX CINE SSFP",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "2CH CINE SSFP",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "4CH CINE SSFP",
+        "is_post_contrast": 0,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "SA STACK CINE SSFP",
+        "is_post_contrast": 0,
+        "sort_order": 5
+      },
+      {
+        "sequence_name": "STRESS PERFUSION",
+        "is_post_contrast": 1,
+        "sort_order": 6
+      },
+      {
+        "sequence_name": "REST PERFUSION",
+        "is_post_contrast": 1,
+        "sort_order": 7
+      },
+      {
+        "sequence_name": "LGE SA STACK",
+        "is_post_contrast": 1,
+        "sort_order": 8
+      }
+    ],
+    "scanner_notes": [
+      "Ensure IV access with two lines - one for contrast, one for stress agent",
+      "Monitor ECG throughout exam",
+      "Have resuscitation equipment readily available",
+      "Coordinate with pharmacist/nurse for stress agent administration",
+      "Ensure patient NPO for 12 hours from caffeine"
+    ],
+    "scenario_matches": [],
+    "_generated": {
+      "timestamp": "2026-01-29T20:33:17.613513+00:00",
+      "model": "anthropic/claude-3.5-sonnet",
+      "source": "build_missing_protocols.py"
+    }
+  },
+  {
+    "name": "WHOLE BODY",
+    "display_name": "WHOLE BODY",
+    "uses_contrast": 0,
+    "section": "MSK Imaging",
+    "sections": [
+      "MSK Imaging"
+    ],
+    "body_region": "msk",
+    "body_part": "whole_body",
+    "is_pediatric": false,
+    "keywords": [
+      "metastases",
+      "myeloma",
+      "bone lesions",
+      "FUO",
+      "whole body MRI",
+      "screening",
+      "WBMRI"
+    ],
+    "indications": "Screening for metastatic disease, multiple myeloma, systemic conditions",
+    "contrast_rationale": "Non-contrast protocol sufficient for screening. STIR and DWI provide excellent lesion detection.",
+    "canonical_procedure": "MRI Whole Body W/O Contrast",
+    "sequences": [
+      {
+        "sequence_name": "COR STIR Whole Body",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "COR T1 Whole Body",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "AX STIR Spine",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "SAG T1 Spine",
+        "is_post_contrast": 0,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "DWI Whole Body",
+        "is_post_contrast": 0,
+        "sort_order": 5
+      }
+    ],
+    "scanner_notes": [
+      "Use body coil and surface coils as needed for coverage",
+      "Perform in segments with table movement",
+      "Include skull vertex to mid-thigh",
+      "Optimize DWI for bone marrow assessment",
+      "Total scan time approximately 45 minutes"
+    ],
+    "scenario_matches": [],
+    "_generated": {
+      "timestamp": "2026-01-29T20:33:26.880122+00:00",
+      "model": "anthropic/claude-3.5-sonnet",
+      "source": "build_missing_protocols.py"
+    }
+  },
+  {
+    "name": "WHOLE BODY +C",
+    "display_name": "WHOLE BODY +C",
+    "uses_contrast": 1,
+    "section": "MSK Imaging",
+    "sections": [
+      "MSK Imaging"
+    ],
+    "body_region": "msk",
+    "body_part": "whole_body",
+    "is_pediatric": false,
+    "keywords": [
+      "oncology",
+      "metastasis",
+      "lymphoma",
+      "staging",
+      "whole body",
+      "tumor",
+      "surveillance",
+      "DWI"
+    ],
+    "indications": "Oncologic staging, evaluation for metastatic disease, lymphoma assessment, and tumor surveillance",
+    "contrast_rationale": "Contrast required for detection of enhancing lesions and improved characterization of metastatic disease",
+    "canonical_procedure": "MRI Whole Body W/ & W/O Contrast",
+    "sequences": [
+      {
+        "sequence_name": "COR STIR WHOLE BODY",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "AX T1 WHOLE BODY",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "AX DWI WHOLE BODY",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "COR T1 FS WHOLE BODY",
+        "is_post_contrast": 1,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "AX T1 FS WHOLE BODY",
+        "is_post_contrast": 1,
+        "sort_order": 5
+      }
+    ],
+    "scanner_notes": [
+      "Ensure complete coverage from skull base to mid-thigh",
+      "Use body coil with table movement for whole body coverage",
+      "Optimize DWI parameters to minimize distortion",
+      "Post-contrast timing: 3-5 minutes after injection"
+    ],
+    "scenario_matches": [],
+    "_generated": {
+      "timestamp": "2026-01-29T20:33:37.857798+00:00",
+      "model": "anthropic/claude-3.5-sonnet",
+      "source": "build_missing_protocols.py"
+    }
+  },
+  {
+    "name": "MR ARTHROGRAM",
+    "display_name": "MR ARTHROGRAM",
+    "uses_contrast": 1,
+    "section": "MSK Imaging",
+    "sections": [
+      "MSK Imaging"
+    ],
+    "body_region": "msk",
+    "body_part": "joint",
+    "is_pediatric": false,
+    "keywords": [
+      "arthrogram",
+      "labral tear",
+      "cartilage defect",
+      "ligament injury",
+      "intra-articular contrast",
+      "joint injection"
+    ],
+    "indications": "Evaluate for internal derangement, labral pathology, cartilage defects, and ligamentous injury after intra-articular contrast administration",
+    "contrast_rationale": "Intra-articular gadolinium provides detailed assessment of labral tears, cartilage defects and ligament injuries by outlining joint structures",
+    "canonical_procedure": "MRI Joint W/ & W/O Contrast",
+    "sequences": [
+      {
+        "sequence_name": "LOC",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "COR T1",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "COR PD FS",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "SAG T1",
+        "is_post_contrast": 0,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "SAG PD FS",
+        "is_post_contrast": 0,
+        "sort_order": 5
+      },
+      {
+        "sequence_name": "AX T1 FS",
+        "is_post_contrast": 1,
+        "sort_order": 6
+      },
+      {
+        "sequence_name": "COR T1 FS",
+        "is_post_contrast": 1,
+        "sort_order": 7
+      }
+    ],
+    "scanner_notes": [
+      "Ensure contrast is properly injected under fluoroscopic guidance before MRI",
+      "Begin scanning within 30 minutes of contrast injection",
+      "Use dedicated joint coil",
+      "Thin slice thickness (3mm or less)",
+      "Patient should limit joint movement between injection and scanning"
+    ],
+    "scenario_matches": [],
+    "_generated": {
+      "timestamp": "2026-01-29T20:33:49.374039+00:00",
+      "model": "anthropic/claude-3.5-sonnet",
+      "source": "build_missing_protocols.py"
+    }
+  },
+  {
+    "name": "MR ENTEROGRAPHY",
+    "display_name": "MR ENTEROGRAPHY",
+    "uses_contrast": 1,
+    "section": "Abdomen Imaging",
+    "sections": [
+      "Abdomen Imaging"
+    ],
+    "body_region": "abdomen",
+    "body_part": "small_bowel",
+    "is_pediatric": false,
+    "keywords": [
+      "enterography",
+      "Crohn's",
+      "IBD",
+      "small bowel",
+      "inflammation",
+      "obstruction",
+      "fistula",
+      "abscess"
+    ],
+    "indications": "Evaluation of small bowel inflammation, Crohn's disease activity, and complications",
+    "contrast_rationale": "IV contrast needed to assess bowel wall enhancement, inflammation, and complications",
+    "canonical_procedure": "MRI Small Bowel W/ & W/O Contrast",
+    "sequences": [
+      {
+        "sequence_name": "COR SSFSE",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "AX SSFSE",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "COR T2 FS",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "AX DWI",
+        "is_post_contrast": 0,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "COR T1 PRE",
+        "is_post_contrast": 0,
+        "sort_order": 5
+      },
+      {
+        "sequence_name": "COR T1 FS POST",
+        "is_post_contrast": 1,
+        "sort_order": 6
+      },
+      {
+        "sequence_name": "AX T1 FS POST",
+        "is_post_contrast": 1,
+        "sort_order": 7
+      }
+    ],
+    "scanner_notes": [
+      "Ensure patient has fasted 6 hours prior",
+      "Administer oral contrast (VoLumen or similar) 45-60 min before scan",
+      "Use respiratory triggering for motion compensation",
+      "Consider anti-peristaltic agent if needed"
+    ],
+    "scenario_matches": [],
+    "_generated": {
+      "timestamp": "2026-01-29T20:34:01.222656+00:00",
+      "model": "anthropic/claude-3.5-sonnet",
+      "source": "build_missing_protocols.py"
+    }
+  },
+  {
+    "name": "MR DEFECOGRAPHY",
+    "display_name": "MR DEFECOGRAPHY",
+    "uses_contrast": 0,
+    "section": "Abdomen Imaging",
+    "sections": [
+      "Abdomen Imaging"
+    ],
+    "body_region": "abdomen",
+    "body_part": "pelvis",
+    "is_pediatric": false,
+    "keywords": [
+      "defecography",
+      "pelvic floor",
+      "rectocele",
+      "prolapse",
+      "constipation",
+      "dynamic MRI",
+      "functional MRI"
+    ],
+    "indications": "Evaluation of pelvic floor dysfunction, including prolapse, rectocele, and defecation disorders",
+    "contrast_rationale": "Contrast not required for functional assessment of pelvic floor dynamics",
+    "canonical_procedure": "MRI Pelvis W/O Contrast",
+    "sequences": [
+      {
+        "sequence_name": "SAG T2",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "AX T2",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "COR T2",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "SAG T2 DYNAMIC REST",
+        "is_post_contrast": 0,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "SAG T2 DYNAMIC SQUEEZE",
+        "is_post_contrast": 0,
+        "sort_order": 5
+      },
+      {
+        "sequence_name": "SAG T2 DYNAMIC DEFECATION",
+        "is_post_contrast": 0,
+        "sort_order": 6
+      }
+    ],
+    "scanner_notes": [
+      "Position patient supine with adequate gel in rectum",
+      "Ensure patient understands breathing and bearing down instructions",
+      "Dynamic sequences should be acquired in real-time during rest, squeeze and defecation",
+      "Use rapid acquisition for dynamic sequences",
+      "Consider using cushions for patient comfort"
+    ],
+    "scenario_matches": [],
+    "_generated": {
+      "timestamp": "2026-01-29T20:34:13.503134+00:00",
+      "model": "anthropic/claude-3.5-sonnet",
+      "source": "build_missing_protocols.py"
+    }
+  },
+  {
+    "name": "FETAL",
+    "display_name": "FETAL MRI",
+    "uses_contrast": 0,
+    "section": "Abdomen Imaging",
+    "sections": [
+      "Abdomen Imaging"
+    ],
+    "body_region": "abdomen",
+    "body_part": "fetus",
+    "is_pediatric": false,
+    "keywords": [
+      "fetal",
+      "prenatal",
+      "placenta",
+      "congenital anomaly",
+      "fetal brain",
+      "fetal CNS",
+      "pregnancy"
+    ],
+    "indications": "Fetal anatomic evaluation, CNS assessment, and placental imaging",
+    "contrast_rationale": "Contrast not indicated for fetal imaging due to safety concerns",
+    "canonical_procedure": "MRI Fetus W/O Contrast",
+    "sequences": [
+      {
+        "sequence_name": "SAG SSFSE T2",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "COR SSFSE T2",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "AX SSFSE T2",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "AX DWI",
+        "is_post_contrast": 0,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "SAG T1 FSPGR",
+        "is_post_contrast": 0,
+        "sort_order": 5
+      },
+      {
+        "sequence_name": "AX EPI FETAL BRAIN",
+        "is_post_contrast": 0,
+        "sort_order": 6
+      }
+    ],
+    "scanner_notes": [
+      "Use respiratory triggering if available",
+      "Keep scan times under 30 seconds per sequence when possible",
+      "Position coil to cover entire uterus",
+      "Consider maternal left lateral decubitus position",
+      "Repeat sequences if significant fetal motion occurs"
+    ],
+    "scenario_matches": [],
+    "_generated": {
+      "timestamp": "2026-01-29T20:34:24.085309+00:00",
+      "model": "anthropic/claude-3.5-sonnet",
+      "source": "build_missing_protocols.py"
+    }
   }
 ]

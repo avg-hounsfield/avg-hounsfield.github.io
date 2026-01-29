@@ -984,6 +984,322 @@
           "priority": 1
         }
       ]
+    },
+    "mri_chest_no_contrast": {
+      "canonical_display": "MRI Chest Without Contrast",
+      "acr_name": "MRI chest without IV contrast",
+      "body_region": "chest",
+      "body_part": "chest",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "CHEST W/O",
+          "match_context": ["chest wall", "rib", "sternum", "thoracic"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_chest_with_contrast": {
+      "canonical_display": "MRI Chest With Contrast",
+      "acr_name": "MRI chest with IV contrast",
+      "body_region": "chest",
+      "body_part": "chest",
+      "modality": "MRI",
+      "contrast": "with",
+      "protocol_routes": [
+        {
+          "protocol_name": "CHEST",
+          "match_context": ["chest wall", "mediastinum", "mass", "tumor", "brachial plexus"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_chest_both_contrast": {
+      "canonical_display": "MRI Chest Without and With Contrast",
+      "acr_name": "MRI chest without and with IV contrast",
+      "body_region": "chest",
+      "body_part": "chest",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "CHEST",
+          "match_context": ["chest wall", "mediastinum", "mass", "tumor", "brachial plexus"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_whole_body_no_contrast": {
+      "canonical_display": "MRI Whole Body Without Contrast",
+      "acr_name": "MRI whole body without IV contrast",
+      "body_region": "msk",
+      "body_part": "whole_body",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "WHOLE BODY",
+          "match_context": ["metastases", "myeloma", "screening", "fever", "oncologic"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_whole_body_both_contrast": {
+      "canonical_display": "MRI Whole Body Without and With Contrast",
+      "acr_name": "MRI whole body without and with IV contrast",
+      "body_region": "msk",
+      "body_part": "whole_body",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "WHOLE BODY +C",
+          "match_context": ["lymphoma", "staging", "metastases", "oncologic"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_cardiac_stress_no_contrast": {
+      "canonical_display": "MRI Cardiac Stress Without Contrast",
+      "acr_name": "MRI heart function with stress without IV contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC STRESS",
+          "match_context": ["stress", "ischemia", "coronary", "wall motion"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_cardiac_stress_both_contrast": {
+      "canonical_display": "MRI Cardiac Stress Without and With Contrast",
+      "acr_name": "MRI heart function with stress without and with IV contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC STRESS",
+          "match_context": ["stress", "perfusion", "ischemia", "coronary", "viability"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_cardiac_inotropic_stress_no_contrast": {
+      "canonical_display": "MRI Cardiac Inotropic Stress Without Contrast",
+      "acr_name": "MRI heart with function and inotropic stress without IV contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC STRESS",
+          "match_context": ["dobutamine", "stress", "wall motion"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_cardiac_inotropic_stress_both_contrast": {
+      "canonical_display": "MRI Cardiac Inotropic Stress Without and With Contrast",
+      "acr_name": "MRI heart with function and inotropic stress without and with IV contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC STRESS",
+          "match_context": ["dobutamine", "stress", "viability"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_cardiac_vasodilator_stress": {
+      "canonical_display": "MRI Cardiac Vasodilator Stress With Contrast",
+      "acr_name": "MRI heart with function and vasodilator stress perfusion without and with IV contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC STRESS",
+          "match_context": ["adenosine", "regadenoson", "perfusion", "ischemia"],
+          "priority": 1
+        }
+      ]
+    },
+    "mr_enterography": {
+      "canonical_display": "MR Enterography",
+      "acr_name": "MR enterography",
+      "body_region": "abdomen",
+      "body_part": "small_bowel",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "MR ENTEROGRAPHY",
+          "match_context": ["crohn", "IBD", "small bowel", "inflammatory"],
+          "priority": 1
+        }
+      ]
+    },
+    "mr_enteroclysis": {
+      "canonical_display": "MR Enteroclysis",
+      "acr_name": "MR enteroclysis",
+      "body_region": "abdomen",
+      "body_part": "small_bowel",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "MR ENTEROGRAPHY",
+          "match_context": ["small bowel", "obstruction"],
+          "priority": 1
+        }
+      ]
+    },
+    "mr_defecography": {
+      "canonical_display": "MR Defecography",
+      "acr_name": "MR defecography",
+      "body_region": "abdomen",
+      "body_part": "pelvis",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "MR DEFECOGRAPHY",
+          "match_context": ["pelvic floor", "prolapse", "rectocele", "constipation", "defecation"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_fetal_no_contrast": {
+      "canonical_display": "MRI Fetal Without Contrast",
+      "acr_name": "MRI fetal without IV contrast",
+      "body_region": "abdomen",
+      "body_part": "fetus",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "FETAL",
+          "match_context": ["fetal", "prenatal", "pregnancy", "anomaly"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_fetal_both_contrast": {
+      "canonical_display": "MRI Fetal Without and With Contrast",
+      "acr_name": "MRI fetal without and with IV contrast",
+      "body_region": "abdomen",
+      "body_part": "fetus",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "FETAL",
+          "match_context": ["fetal", "placenta"],
+          "priority": 1,
+          "note": "Contrast rarely used in fetal MRI; typically reserved for placental evaluation"
+        }
+      ]
+    },
+    "mr_arthrography": {
+      "canonical_display": "MR Arthrography",
+      "acr_name": "MR arthrography area of interest",
+      "body_region": "msk",
+      "body_part": "joint",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "MR ARTHROGRAM",
+          "match_context": ["labral", "labrum", "cartilage", "loose bodies", "arthrogram"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "SHOULDER ARTHROGRAM",
+          "match_context": ["shoulder", "labral"],
+          "priority": 2
+        },
+        {
+          "protocol_name": "HIP ARTHROGRAM",
+          "match_context": ["hip", "labral"],
+          "priority": 2
+        },
+        {
+          "protocol_name": "WRIST ARTHROGRAM",
+          "match_context": ["wrist", "tfcc"],
+          "priority": 2
+        }
+      ]
+    },
+    "mri_extremity_area_no_contrast": {
+      "canonical_display": "MRI Extremity Without Contrast",
+      "acr_name": "MRI extremity area of interest without IV contrast",
+      "body_region": "msk",
+      "body_part": "extremity",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "FEMUR",
+          "match_context": ["thigh", "femur"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "TIB/FIB",
+          "match_context": ["lower leg", "tibia", "fibula", "calf"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_extremity_area_both_contrast": {
+      "canonical_display": "MRI Extremity Without and With Contrast",
+      "acr_name": "MRI extremity area of interest without and with IV contrast",
+      "body_region": "msk",
+      "body_part": "extremity",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "OSTEOMYELITIS",
+          "match_context": ["osteomyelitis", "infection", "abscess", "cellulitis"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "FEMUR",
+          "match_context": ["thigh", "femur", "tumor", "mass"],
+          "priority": 2
+        },
+        {
+          "protocol_name": "TIB/FIB",
+          "match_context": ["lower leg", "tibia", "tumor", "mass"],
+          "priority": 2
+        }
+      ]
+    },
+    "mri_maxillofacial_with_contrast": {
+      "canonical_display": "MRI Maxillofacial With Contrast",
+      "acr_name": "MRI maxillofacial with IV contrast",
+      "body_region": "neuro",
+      "body_part": "maxillofacial",
+      "modality": "MRI",
+      "contrast": "with",
+      "protocol_routes": [
+        {
+          "protocol_name": "CRANIAL NERVES/PAROTID",
+          "match_context": ["parotid", "salivary", "mass", "tumor", "mandible"],
+          "priority": 1
+        }
+      ]
     }
   }
 }

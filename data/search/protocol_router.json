@@ -2,8 +2,8 @@
   "version": "1.0",
   "description": "Smart routing from ACR procedures to scanner protocols",
   "procedure_count": 161,
-  "mapped_count": 135,
-  "unmapped_count": 26,
+  "mapped_count": 155,
+  "unmapped_count": 6,
   "routes": {
     "DOTATATE PET/MRI brain": {
       "canonical_display": "DOTATATE PET/MRI brain",
@@ -47,6 +47,20 @@
         },
         {
           "protocol_name": "SEIZURE",
+          "match_context": [],
+          "priority": 1
+        }
+      ],
+      "match_type": "component"
+    },
+    "FDG-PET/MRI heart": {
+      "canonical_display": "FDG-PET/MRI heart",
+      "body_region": "unknown",
+      "body_part": "heart",
+      "contrast": "unknown",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC STRESS",
           "match_context": [],
           "priority": 1
         }
@@ -104,6 +118,50 @@
         }
       ],
       "match_type": "component"
+    },
+    "MR arthrography area of interest": {
+      "canonical_display": "MR Arthrography",
+      "body_region": "msk",
+      "body_part": "joint",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "MR ARTHROGRAM",
+          "match_context": [
+            "labral",
+            "labrum",
+            "cartilage",
+            "loose bodies",
+            "arthrogram"
+          ],
+          "priority": 1
+        },
+        {
+          "protocol_name": "SHOULDER ARTHROGRAM",
+          "match_context": [
+            "shoulder",
+            "labral"
+          ],
+          "priority": 2
+        },
+        {
+          "protocol_name": "HIP ARTHROGRAM",
+          "match_context": [
+            "hip",
+            "labral"
+          ],
+          "priority": 2
+        },
+        {
+          "protocol_name": "WRIST ARTHROGRAM",
+          "match_context": [
+            "wrist",
+            "tfcc"
+          ],
+          "priority": 2
+        }
+      ],
+      "match_type": "exact"
     },
     "MR arthrography elbow": {
       "canonical_display": "MR arthrography elbow",
@@ -209,6 +267,26 @@
       ],
       "match_type": "component"
     },
+    "MR defecography": {
+      "canonical_display": "MR Defecography",
+      "body_region": "abdomen",
+      "body_part": "pelvis",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "MR DEFECOGRAPHY",
+          "match_context": [
+            "pelvic floor",
+            "prolapse",
+            "rectocele",
+            "constipation",
+            "defecation"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
     "MR elastography abdomen": {
       "canonical_display": "MR elastography abdomen",
       "body_region": "unknown",
@@ -227,6 +305,42 @@
         }
       ],
       "match_type": "component"
+    },
+    "MR enteroclysis": {
+      "canonical_display": "MR Enteroclysis",
+      "body_region": "abdomen",
+      "body_part": "small_bowel",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "MR ENTEROGRAPHY",
+          "match_context": [
+            "small bowel",
+            "obstruction"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MR enterography": {
+      "canonical_display": "MR Enterography",
+      "body_region": "abdomen",
+      "body_part": "small_bowel",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "MR ENTEROGRAPHY",
+          "match_context": [
+            "crohn",
+            "IBD",
+            "small bowel",
+            "inflammatory"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
     },
     "MR myelography complete spine": {
       "canonical_display": "MR myelography complete spine",
@@ -850,6 +964,65 @@
       ],
       "match_type": "component"
     },
+    "MRI chest with IV contrast": {
+      "canonical_display": "MRI Chest With Contrast",
+      "body_region": "chest",
+      "body_part": "chest",
+      "contrast": "with",
+      "protocol_routes": [
+        {
+          "protocol_name": "CHEST",
+          "match_context": [
+            "chest wall",
+            "mediastinum",
+            "mass",
+            "tumor",
+            "brachial plexus"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI chest without IV contrast": {
+      "canonical_display": "MRI Chest Without Contrast",
+      "body_region": "chest",
+      "body_part": "chest",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "CHEST W/O",
+          "match_context": [
+            "chest wall",
+            "rib",
+            "sternum",
+            "thoracic"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI chest without and with IV contrast": {
+      "canonical_display": "MRI Chest Without and With Contrast",
+      "body_region": "chest",
+      "body_part": "chest",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "CHEST",
+          "match_context": [
+            "chest wall",
+            "mediastinum",
+            "mass",
+            "tumor",
+            "brachial plexus"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
     "MRI complete spine with IV contrast": {
       "canonical_display": "MRI complete spine with IV contrast",
       "body_region": "unknown",
@@ -941,6 +1114,109 @@
         }
       ],
       "match_type": "component"
+    },
+    "MRI extremity area of interest without IV contrast": {
+      "canonical_display": "MRI Extremity Without Contrast",
+      "body_region": "msk",
+      "body_part": "extremity",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "FEMUR",
+          "match_context": [
+            "thigh",
+            "femur"
+          ],
+          "priority": 1
+        },
+        {
+          "protocol_name": "TIB/FIB",
+          "match_context": [
+            "lower leg",
+            "tibia",
+            "fibula",
+            "calf"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI extremity area of interest without and with IV contrast": {
+      "canonical_display": "MRI Extremity Without and With Contrast",
+      "body_region": "msk",
+      "body_part": "extremity",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "OSTEOMYELITIS",
+          "match_context": [
+            "osteomyelitis",
+            "infection",
+            "abscess",
+            "cellulitis"
+          ],
+          "priority": 1
+        },
+        {
+          "protocol_name": "FEMUR",
+          "match_context": [
+            "thigh",
+            "femur",
+            "tumor",
+            "mass"
+          ],
+          "priority": 2
+        },
+        {
+          "protocol_name": "TIB/FIB",
+          "match_context": [
+            "lower leg",
+            "tibia",
+            "tumor",
+            "mass"
+          ],
+          "priority": 2
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI fetal without IV contrast": {
+      "canonical_display": "MRI Fetal Without Contrast",
+      "body_region": "abdomen",
+      "body_part": "fetus",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "FETAL",
+          "match_context": [
+            "fetal",
+            "prenatal",
+            "pregnancy",
+            "anomaly"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI fetal without and with IV contrast": {
+      "canonical_display": "MRI Fetal Without and With Contrast",
+      "body_region": "abdomen",
+      "body_part": "fetus",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "FETAL",
+          "match_context": [
+            "fetal",
+            "placenta"
+          ],
+          "priority": 1,
+          "note": "Contrast rarely used in fetal MRI; typically reserved for placental evaluation"
+        }
+      ],
+      "match_type": "exact"
     },
     "MRI foot without IV contrast": {
       "canonical_display": "MRI foot without IV contrast",
@@ -1661,6 +1937,100 @@
       ],
       "match_type": "exact"
     },
+    "MRI heart function with stress without IV contrast": {
+      "canonical_display": "MRI Cardiac Stress Without Contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC STRESS",
+          "match_context": [
+            "stress",
+            "ischemia",
+            "coronary",
+            "wall motion"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI heart function with stress without and with IV contrast": {
+      "canonical_display": "MRI Cardiac Stress Without and With Contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC STRESS",
+          "match_context": [
+            "stress",
+            "perfusion",
+            "ischemia",
+            "coronary",
+            "viability"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI heart with function and inotropic stress without IV contrast": {
+      "canonical_display": "MRI Cardiac Inotropic Stress Without Contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC STRESS",
+          "match_context": [
+            "dobutamine",
+            "stress",
+            "wall motion"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI heart with function and inotropic stress without and with IV contrast": {
+      "canonical_display": "MRI Cardiac Inotropic Stress Without and With Contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC STRESS",
+          "match_context": [
+            "dobutamine",
+            "stress",
+            "viability"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI heart with function and vasodilator stress perfusion without and with IV contrast": {
+      "canonical_display": "MRI Cardiac Vasodilator Stress With Contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC STRESS",
+          "match_context": [
+            "adenosine",
+            "regadenoson",
+            "perfusion",
+            "ischemia"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
     "MRI hip without IV contrast": {
       "canonical_display": "MRI Hip Without Contrast",
       "body_region": "msk",
@@ -1928,6 +2298,26 @@
         }
       ],
       "match_type": "component"
+    },
+    "MRI maxillofacial with IV contrast": {
+      "canonical_display": "MRI Maxillofacial With Contrast",
+      "body_region": "neuro",
+      "body_part": "maxillofacial",
+      "contrast": "with",
+      "protocol_routes": [
+        {
+          "protocol_name": "CRANIAL NERVES/PAROTID",
+          "match_context": [
+            "parotid",
+            "salivary",
+            "mass",
+            "tumor",
+            "mandible"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
     },
     "MRI maxillofacial without IV contrast": {
       "canonical_display": "MRI Maxillofacial Without Contrast",
@@ -2286,6 +2676,11 @@
           "protocol_name": "PELVIS",
           "match_context": [],
           "priority": 1
+        },
+        {
+          "protocol_name": "MR DEFECOGRAPHY",
+          "match_context": [],
+          "priority": 1
         }
       ],
       "match_type": "component"
@@ -2300,6 +2695,11 @@
           "protocol_name": "PELVIS",
           "match_context": [],
           "priority": 1
+        },
+        {
+          "protocol_name": "MR DEFECOGRAPHY",
+          "match_context": [],
+          "priority": 1
         }
       ],
       "match_type": "component"
@@ -2312,6 +2712,11 @@
       "protocol_routes": [
         {
           "protocol_name": "PELVIS",
+          "match_context": [],
+          "priority": 1
+        },
+        {
+          "protocol_name": "MR DEFECOGRAPHY",
           "match_context": [],
           "priority": 1
         }
@@ -2899,6 +3304,45 @@
       ],
       "match_type": "component"
     },
+    "MRI whole body without IV contrast": {
+      "canonical_display": "MRI Whole Body Without Contrast",
+      "body_region": "msk",
+      "body_part": "whole_body",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "WHOLE BODY",
+          "match_context": [
+            "metastases",
+            "myeloma",
+            "screening",
+            "fever",
+            "oncologic"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI whole body without and with IV contrast": {
+      "canonical_display": "MRI Whole Body Without and With Contrast",
+      "body_region": "msk",
+      "body_part": "whole_body",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "WHOLE BODY +C",
+          "match_context": [
+            "lymphoma",
+            "staging",
+            "metastases",
+            "oncologic"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
     "MRI wrist without IV contrast": {
       "canonical_display": "MRI wrist without IV contrast",
       "body_region": "unknown",
@@ -2962,14 +3406,6 @@
       }
     },
     {
-      "acr_name": "FDG-PET/MRI heart",
-      "components": {
-        "modality": "PET/MRI",
-        "contrast": "unknown",
-        "body_part": "heart"
-      }
-    },
-    {
       "acr_name": "FDG-PET/MRI skull base to mid-thigh",
       "components": {
         "modality": "PET/MRI",
@@ -2994,163 +3430,11 @@
       }
     },
     {
-      "acr_name": "MR arthrography area of interest",
-      "components": {
-        "modality": "MRI",
-        "contrast": "unknown",
-        "body_part": null
-      }
-    },
-    {
-      "acr_name": "MR defecography",
-      "components": {
-        "modality": "MRI",
-        "contrast": "unknown",
-        "body_part": null
-      }
-    },
-    {
-      "acr_name": "MR enteroclysis",
-      "components": {
-        "modality": "MRI",
-        "contrast": "unknown",
-        "body_part": null
-      }
-    },
-    {
-      "acr_name": "MR enterography",
-      "components": {
-        "modality": "MRI",
-        "contrast": "unknown",
-        "body_part": null
-      }
-    },
-    {
       "acr_name": "MRI area of interest without IV contrast",
       "components": {
         "modality": "MRI",
         "contrast": "none",
         "body_part": null
-      }
-    },
-    {
-      "acr_name": "MRI chest with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "with",
-        "body_part": "chest"
-      }
-    },
-    {
-      "acr_name": "MRI chest without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "chest"
-      }
-    },
-    {
-      "acr_name": "MRI chest without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "chest"
-      }
-    },
-    {
-      "acr_name": "MRI extremity area of interest without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": null
-      }
-    },
-    {
-      "acr_name": "MRI extremity area of interest without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": null
-      }
-    },
-    {
-      "acr_name": "MRI fetal without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "fetal"
-      }
-    },
-    {
-      "acr_name": "MRI fetal without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "fetal"
-      }
-    },
-    {
-      "acr_name": "MRI heart function with stress without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "heart"
-      }
-    },
-    {
-      "acr_name": "MRI heart function with stress without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "heart"
-      }
-    },
-    {
-      "acr_name": "MRI heart with function and inotropic stress without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "heart"
-      }
-    },
-    {
-      "acr_name": "MRI heart with function and inotropic stress without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "heart"
-      }
-    },
-    {
-      "acr_name": "MRI heart with function and vasodilator stress perfusion without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "heart"
-      }
-    },
-    {
-      "acr_name": "MRI maxillofacial with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "with",
-        "body_part": "maxillofacial"
-      }
-    },
-    {
-      "acr_name": "MRI whole body without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "whole_body"
-      }
-    },
-    {
-      "acr_name": "MRI whole body without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "whole_body"
       }
     },
     {

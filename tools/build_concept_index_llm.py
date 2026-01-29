@@ -28,7 +28,7 @@ from collections import defaultdict
 # Configuration
 CACHE_DIR = Path(__file__).parent / "cache"
 CACHE_FILE = CACHE_DIR / "llm_classifications.json"
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = "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"
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 MODEL = "anthropic/claude-3.5-sonnet"  # OpenRouter model name
 MAX_RETRIES = 3
