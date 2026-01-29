@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radex-v2.7.2';
+const CACHE_NAME = 'radex-v2.8.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -8,6 +8,7 @@ const STATIC_ASSETS = [
   '/js/data-loader.js',
   '/js/search-engine.js',
   '/js/radlite-api.js',
+  '/js/protocol-builder.js',
   '/manifest.json'
 ];
 
@@ -23,7 +24,8 @@ const DATA_ASSETS = [
   '/data/regions/breast.json',
   '/data/regions/peds.json',
   '/data/search/medical-synonyms.json',
-  '/data/search/concept_index.json'
+  '/data/search/concept_index.json',
+  '/data/sequence-library.json'
 ];
 
 // External dependencies that should be cached

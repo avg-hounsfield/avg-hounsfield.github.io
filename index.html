@@ -26,7 +26,7 @@
   <!-- Theme Color -->
   <meta name="theme-color" content="#9B5DE5">
 
-  <link rel="stylesheet" href="css/main.css?v=20260129g">
+  <link rel="stylesheet" href="css/main.css?v=20260129h">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>R</text></svg>">
   <link rel="manifest" href="manifest.json">
 </head>
@@ -40,6 +40,7 @@
       <nav class="header-nav" role="navigation" aria-label="Main navigation">
         <button class="nav-link active" data-view="search" aria-pressed="true">Search</button>
         <button class="nav-link" data-view="protocols" aria-pressed="false">Protocols</button>
+        <button class="nav-link" data-view="builder" aria-pressed="false">Builder</button>
       </nav>
       <!-- Mobile menu button -->
       <button class="mobile-menu-btn hidden" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false">
@@ -514,6 +515,184 @@
             </div>
             <div class="protocol-rationale hidden" id="protocolRationale">
               <!-- Contrast rationale if applicable -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Builder Section -->
+      <section class="builder-section hidden" id="builderSection">
+        <div class="builder-header">
+          <h1 class="section-title">Protocol Builder</h1>
+          <p class="section-subtitle">Create custom MRI protocols for experimentation and learning</p>
+        </div>
+
+        <!-- My Protocols List -->
+        <div class="my-protocols-container" id="myProtocolsContainer">
+          <div class="my-protocols-header">
+            <h2 class="subsection-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+              </svg>
+              My Protocols
+            </h2>
+            <button class="btn-primary" id="newProtocolBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              New Protocol
+            </button>
+          </div>
+          <div class="my-protocols-grid" id="myProtocolsGrid">
+            <div class="empty-state" id="noProtocolsMessage">
+              <p>No custom protocols yet</p>
+              <p class="suggestion">Click "New Protocol" to create your first custom MRI protocol</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Protocol Editor (hidden until editing) -->
+        <div class="protocol-editor hidden" id="protocolEditor">
+          <div class="editor-header">
+            <button class="back-btn" id="editorBackBtn" aria-label="Cancel editing">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              Cancel
+            </button>
+            <h2 class="editor-title" id="editorTitle">New Protocol</h2>
+            <div class="editor-actions">
+              <button class="btn-secondary" id="saveProtocolBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                  <polyline points="17 21 17 13 7 13 7 21"/>
+                  <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                Save
+              </button>
+            </div>
+          </div>
+
+          <div class="editor-content">
+            <!-- Protocol Details Form -->
+            <div class="editor-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="protocolNameInput">Protocol Name *</label>
+                  <input type="text" id="protocolNameInput" placeholder="e.g., My Brain MS Protocol" required>
+                </div>
+              </div>
+              <div class="form-row two-col">
+                <div class="form-group">
+                  <label for="protocolRegionSelect">Body Region *</label>
+                  <select id="protocolRegionSelect">
+                    <option value="">Select region...</option>
+                    <option value="neuro">Neuro</option>
+                    <option value="spine">Spine</option>
+                    <option value="msk">MSK</option>
+                    <option value="abdomen">Abdomen</option>
+                    <option value="chest">Chest</option>
+                    <option value="vascular">Vascular</option>
+                    <option value="breast">Breast</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Uses Contrast?</label>
+                  <div class="toggle-group" id="contrastToggle">
+                    <button class="toggle-option active" data-contrast="false">No Contrast</button>
+                    <button class="toggle-option" data-contrast="true">With Contrast</button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="protocolIndicationsInput">Indications (optional)</label>
+                  <textarea id="protocolIndicationsInput" rows="2" placeholder="When would you use this protocol?"></textarea>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="protocolNotesInput">Personal Notes (optional)</label>
+                  <textarea id="protocolNotesInput" rows="2" placeholder="Any notes or reminders..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Two-Panel Sequence Editor -->
+            <div class="sequence-editor-layout">
+              <!-- Left Panel: Sequence Library Search -->
+              <div class="sequence-library-panel">
+                <div class="panel-header">
+                  <h3>Sequence Library</h3>
+                  <span class="library-count" id="libraryCount">0 sequences</span>
+                </div>
+                <div class="sequence-search-container">
+                  <div class="search-input-wrap">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="11" cy="11" r="8"/>
+                      <path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                    <input type="text" class="search-input" id="sequenceSearchInput" placeholder="Search sequences...">
+                    <button class="search-clear hidden" id="sequenceSearchClear">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <!-- Quick Filters -->
+                <div class="sequence-filters">
+                  <div class="filter-chips-row">
+                    <button class="filter-chip small active" data-filter="all">All</button>
+                    <button class="filter-chip small" data-filter="T1">T1</button>
+                    <button class="filter-chip small" data-filter="T2">T2</button>
+                    <button class="filter-chip small" data-filter="DWI">DWI</button>
+                    <button class="filter-chip small" data-filter="contrast">+C</button>
+                  </div>
+                </div>
+                <div class="sequence-library-list" id="sequenceLibraryList">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <!-- Right Panel: Protocol Sequences -->
+              <div class="protocol-sequences-panel">
+                <div class="panel-header">
+                  <h3>Protocol Sequences</h3>
+                  <span class="sequence-count" id="protocolSequenceCount">0 sequences</span>
+                </div>
+                <div class="protocol-sequences-drop-zone" id="protocolSequencesList">
+                  <div class="drop-placeholder" id="dropPlaceholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
+                      <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                    <p>Click sequences to add them here</p>
+                    <p class="hint">Drag to reorder - sequences run top to bottom</p>
+                  </div>
+                </div>
+                <!-- Protocol Summary -->
+                <div class="protocol-summary">
+                  <div class="summary-item">
+                    <span class="summary-label">Estimated Time:</span>
+                    <span class="summary-value" id="estimatedTime">~0 min</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rationale Panel (expandable) -->
+            <div class="rationale-panel hidden" id="rationalePanel">
+              <div class="rationale-header">
+                <h3 id="rationaleTitle">Sequence Rationale</h3>
+                <button class="rationale-close" id="rationaleClose">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="rationale-content" id="rationaleContent">
+                <!-- Dynamically populated -->
+              </div>
             </div>
           </div>
         </div>
