@@ -1095,6 +1095,24 @@ class ProtocolHelpApp {
     // Region badge
     document.getElementById('protocolDetailRegion').textContent = protocol.body_region || protocol.section || 'General';
 
+    // Source badge - indicate if protocol has AI-generated enrichment
+    const sourceBadge = document.getElementById('protocolDetailSource');
+    const sourceText = document.getElementById('protocolDetailSourceText');
+    if (sourceBadge && sourceText) {
+      const hasEnrichment = protocol.enrichment && Object.keys(protocol.enrichment).length > 0;
+      if (hasEnrichment) {
+        sourceBadge.classList.remove('curated');
+        sourceBadge.classList.add('suggested');
+        sourceBadge.title = 'Base protocol verified by radiologists, clinical details enhanced by AI';
+        sourceText.textContent = 'AI Enhanced';
+      } else {
+        sourceBadge.classList.remove('suggested');
+        sourceBadge.classList.add('curated');
+        sourceBadge.title = 'Protocol verified by radiologists';
+        sourceText.textContent = 'Human Verified';
+      }
+    }
+
     // Scan time badge
     document.getElementById('protocolDetailTime').textContent = this.estimateScanTime(protocol);
 
