@@ -15,7 +15,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20260129c';
+    const cacheBuster = '20260129d';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -284,29 +284,18 @@ export class DataLoader {
       if (osteo) return osteo;
     }
 
-    // Spine infection (discitis/osteomyelitis) -> appropriate spine protocol
+    // Spine infection (discitis/osteomyelitis) -> SPINE INFECTION protocol
+    // Uses contrast to evaluate for abscess and enhancement patterns
     // Only for spine procedures
     if (isSpineProcedure &&
         (scenarioName.includes('spine infection') ||
          scenarioName.includes('discitis') ||
          scenarioName.includes('epidural abscess') ||
+         scenarioName.includes('spondylodiscitis') ||
          (scenarioName.includes('infection') && scenarioName.includes('spine')))) {
-      // Choose spine protocol based on procedure location
-      if (procLower.includes('cervical')) {
-        const cspine = protocols.find(p => p.name === 'C-SPINE');
-        if (cspine) return cspine;
-      }
-      if (procLower.includes('thoracic')) {
-        const tspine = protocols.find(p => p.name === 'T-SPINE');
-        if (tspine) return tspine;
-      }
-      if (procLower.includes('lumbar') || procLower.includes('lumbosacral')) {
-        const lspine = protocols.find(p => p.name === 'L-SPINE');
-        if (lspine) return lspine;
-      }
-      // Fallback: if "complete spine" or unspecified, use screening spine
-      const screeningSpine = protocols.find(p => p.name === 'SCREENING SPINE');
-      if (screeningSpine) return screeningSpine;
+      // Use dedicated SPINE INFECTION protocol with contrast
+      const spineInfection = protocols.find(p => p.name === 'SPINE INFECTION');
+      if (spineInfection) return spineInfection;
     }
 
     return null; // No clinical rule matched

@@ -6170,6 +6170,73 @@
     }
   },
   {
+    "name": "SPINE INFECTION",
+    "display_name": "SPINE INFECTION",
+    "uses_contrast": 1,
+    "section": "Neuro Imaging",
+    "sections": [
+      "Neuro Imaging"
+    ],
+    "body_region": "neuro",
+    "body_part": "spine",
+    "is_pediatric": false,
+    "keywords": [
+      "discitis",
+      "osteomyelitis",
+      "epidural abscess",
+      "spine infection",
+      "vertebral infection",
+      "spondylodiscitis",
+      "paraspinal abscess",
+      "fever",
+      "back pain infection"
+    ],
+    "indications": "Evaluation of suspected spinal infection including discitis, vertebral osteomyelitis, epidural abscess, and paraspinal soft tissue infection. Contrast is essential to identify abscess formation and extent of inflammatory enhancement.",
+    "contrast_rationale": "IV contrast is required to evaluate for epidural abscess, phlegmon vs drainable collection, and extent of infection. Post-contrast fat-suppressed sequences are essential for detecting enhancement patterns.",
+    "canonical_procedure": "MRI Spine W/WO Contrast",
+    "sequences": [
+      {
+        "sequence_name": "SAG T1 (2 FOV)",
+        "is_post_contrast": 0,
+        "sort_order": 0
+      },
+      {
+        "sequence_name": "SAG STIR (2 FOV)",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "SAG T2",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "AX T2 (through level of interest)",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "SAG T1 FS POST (2 FOV)",
+        "is_post_contrast": 1,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "AX T1 FS POST (through level of interest)",
+        "is_post_contrast": 1,
+        "sort_order": 5
+      }
+    ],
+    "scanner_notes": [
+      {
+        "scanner_type": "All",
+        "sequence_name": "Extend axial coverage if clinical concern for extensive epidural collection",
+        "is_post_contrast": 0,
+        "sort_order": 0
+      }
+    ],
+    "scenario_matches": []
+  },
+  {
     "name": "SCOLIOSIS SPINE",
     "display_name": "SCOLIOSIS SPINE",
     "uses_contrast": 0,
