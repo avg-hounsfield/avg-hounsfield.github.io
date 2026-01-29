@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radex-v2.5.1';
+const CACHE_NAME = 'radex-v2.5.2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
