@@ -15,7 +15,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20260129i';
+    const cacheBuster = '20260129j';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -302,6 +302,22 @@ export class DataLoader {
     }
 
     // MSK joint-specific procedures
+    // IMPORTANT: Check for infection context FIRST before routing to joint protocols
+    const isMskJoint = isProcedureFor('knee') || isProcedureFor('shoulder') ||
+                       isProcedureFor('hip') || isProcedureFor('ankle') ||
+                       isProcedureFor('foot') || isProcedureFor('wrist') ||
+                       isProcedureFor('hand') || isProcedureFor('elbow');
+
+    if (isMskJoint) {
+      // Infection context -> OSTEOMYELITIS protocol (takes priority over joint protocols)
+      if (scenarioName.includes('osteomyelitis') || scenarioName.includes('infection') ||
+          scenarioName.includes('septic') || scenarioName.includes('abscess') ||
+          scenarioName.includes('cellulitis')) {
+        const osteo = protocols.find(p => p.name === 'OSTEOMYELITIS');
+        if (osteo) return osteo;
+      }
+    }
+
     if (isProcedureFor('knee')) {
       const knee = protocols.find(p => p.name === 'KNEE');
       if (knee) return knee;
