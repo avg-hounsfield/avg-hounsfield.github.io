@@ -26,7 +26,7 @@
   <!-- Theme Color -->
   <meta name="theme-color" content="#9B5DE5">
 
-  <link rel="stylesheet" href="css/main.css?v=20260129c">
+  <link rel="stylesheet" href="css/main.css?v=20260129d">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>R</text></svg>">
   <link rel="manifest" href="manifest.json">
 </head>
@@ -165,6 +165,16 @@
               <button class="toggle-btn active" data-contrast="all">All</button>
               <button class="toggle-btn" data-contrast="without">Without</button>
               <button class="toggle-btn" data-contrast="with">With</button>
+            </div>
+          </div>
+
+          <!-- Source Toggle (Human Verified vs AI Enhanced) -->
+          <div class="filter-group">
+            <span class="filter-label">Source:</span>
+            <div class="source-toggle" id="sourceToggle">
+              <button class="toggle-btn active" data-source="all">All</button>
+              <button class="toggle-btn" data-source="human">Human Verified</button>
+              <button class="toggle-btn" data-source="ai">AI Enhanced</button>
             </div>
           </div>
 

@@ -2253,8 +2253,8 @@
     }
   },
   {
-    "name": "*POST-OP",
-    "display_name": "*POST-OP",
+    "name": "PITUITARY POST-OP",
+    "display_name": "Pituitary Post-Op",
     "uses_contrast": 1,
     "section": "Neuro Imaging",
     "sections": [
@@ -2263,8 +2263,8 @@
     "body_region": "neuro",
     "body_part": "brain",
     "is_pediatric": false,
-    "keywords": [],
-    "indications": "Follow-up imaging after surgery, typically to assess for residual tumor, scarring, or other post-operative changes.",
+    "keywords": ["post-operative", "surgery", "pituitary", "sella", "transsphenoidal"],
+    "indications": "Post-operative pituitary imaging to assess for residual tumor, scarring, or other post-surgical changes following transsphenoidal or craniotomy approaches.",
     "contrast_rationale": "Contrast helps differentiate between non-enhancing scar tissue and enhancing residual or recurrent tumor. This is critical for assessing the success of surgery and planning future treatment.",
     "canonical_procedure": "MRI Pituitary W/O & W/ Contrast",
     "sequences": [

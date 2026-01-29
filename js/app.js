@@ -37,6 +37,7 @@ class ProtocolHelpApp {
     this.protocolFilters = {
       region: 'all',
       contrast: 'all',
+      source: 'all',
       viewMode: 'grid'
     };
     this.protocolSearchQuery = '';
@@ -295,6 +296,16 @@ class ProtocolHelpApp {
       });
     });
 
+    // Source toggle (Human Verified vs AI Enhanced)
+    document.querySelectorAll('#sourceToggle .toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#sourceToggle .toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        this.protocolFilters.source = btn.dataset.source;
+        this.applyProtocolFilters();
+      });
+    });
+
     // View toggle (grid/grouped)
     document.querySelectorAll('#viewToggle .toggle-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -335,6 +346,15 @@ class ProtocolHelpApp {
     if (this.protocolFilters.contrast !== 'all') {
       const wantsContrast = this.protocolFilters.contrast === 'with';
       filtered = filtered.filter(p => wantsContrast ? p.uses_contrast : !p.uses_contrast);
+    }
+
+    // Apply source filter (Human Verified vs AI Enhanced)
+    if (this.protocolFilters.source !== 'all') {
+      const wantsAI = this.protocolFilters.source === 'ai';
+      filtered = filtered.filter(p => {
+        const hasEnrichment = p.enrichment && Object.keys(p.enrichment).length > 0;
+        return wantsAI ? hasEnrichment : !hasEnrichment;
+      });
     }
 
     // Apply search query
