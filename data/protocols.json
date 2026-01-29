@@ -18356,5 +18356,162 @@
       "model": "anthropic/claude-3.5-sonnet",
       "source": "build_missing_protocols.py"
     }
+  },
+  {
+    "name": "BONE TUMOR",
+    "display_name": "BONE TUMOR",
+    "uses_contrast": 1,
+    "section": "MSK Imaging",
+    "sections": [
+      "MSK Imaging"
+    ],
+    "body_region": "msk",
+    "body_part": "extremity",
+    "is_pediatric": false,
+    "keywords": [
+      "bone tumor",
+      "soft tissue mass",
+      "sarcoma",
+      "metastasis",
+      "bone lesion",
+      "pathologic fracture",
+      "marrow replacement",
+      "osteosarcoma",
+      "chondrosarcoma",
+      "Ewing sarcoma"
+    ],
+    "indications": "Evaluation of primary bone tumors, soft tissue masses, and metastatic disease in the extremities. Used for tumor characterization, staging, and surgical planning.",
+    "contrast_rationale": "Gadolinium contrast is essential for tumor characterization, differentiating solid from cystic/necrotic components, evaluating tumor vascularity, and defining extent of disease.",
+    "canonical_procedure": "MRI Extremity W/WO Contrast",
+    "sequences": [
+      {
+        "sequence_name": "COR T1 (large FOV)",
+        "is_post_contrast": 0,
+        "sort_order": 0
+      },
+      {
+        "sequence_name": "COR STIR (large FOV)",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "AX T1",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "AX T2 FS",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "SAG T2 FS",
+        "is_post_contrast": 0,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "AX T1 FS POST",
+        "is_post_contrast": 1,
+        "sort_order": 5
+      },
+      {
+        "sequence_name": "COR T1 FS POST (large FOV)",
+        "is_post_contrast": 1,
+        "sort_order": 6
+      },
+      {
+        "sequence_name": "SAG T1 FS POST",
+        "is_post_contrast": 1,
+        "sort_order": 7
+      }
+    ],
+    "scanner_notes": [
+      {
+        "scanner_type": "All",
+        "sequence_name": "Use large FOV on coronal images to evaluate for skip lesions",
+        "is_post_contrast": 0,
+        "sort_order": 0
+      },
+      {
+        "scanner_type": "All",
+        "sequence_name": "Include adjacent joint in FOV for surgical planning",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      }
+    ],
+    "scenario_matches": []
+  },
+  {
+    "name": "OSTEONECROSIS",
+    "display_name": "OSTEONECROSIS",
+    "uses_contrast": 0,
+    "section": "MSK Imaging",
+    "sections": [
+      "MSK Imaging"
+    ],
+    "body_region": "msk",
+    "body_part": "extremity",
+    "is_pediatric": false,
+    "keywords": [
+      "osteonecrosis",
+      "avascular necrosis",
+      "AVN",
+      "bone infarct",
+      "steroid use",
+      "sickle cell",
+      "marrow infarct",
+      "femoral head necrosis",
+      "Legg-Calve-Perthes"
+    ],
+    "indications": "Evaluation for avascular necrosis (AVN) / osteonecrosis. MRI is the most sensitive imaging modality for early detection of AVN before radiographic changes occur.",
+    "contrast_rationale": null,
+    "canonical_procedure": "MRI Extremity W/O Contrast",
+    "sequences": [
+      {
+        "sequence_name": "COR T1",
+        "is_post_contrast": 0,
+        "sort_order": 0
+      },
+      {
+        "sequence_name": "COR STIR",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "COR T2",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "SAG T1",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "SAG STIR",
+        "is_post_contrast": 0,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "AX T2 FS",
+        "is_post_contrast": 0,
+        "sort_order": 5
+      }
+    ],
+    "scanner_notes": [
+      {
+        "scanner_type": "All",
+        "sequence_name": "Look for 'double line sign' on T2 - pathognomonic for AVN",
+        "is_post_contrast": 0,
+        "sort_order": 0
+      },
+      {
+        "scanner_type": "All",
+        "sequence_name": "For hip AVN, ensure both hips are imaged (often bilateral)",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      }
+    ],
+    "scenario_matches": []
   }
 ]

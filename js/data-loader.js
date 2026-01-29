@@ -15,7 +15,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20260129h';
+    const cacheBuster = '20260129i';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -332,43 +332,53 @@ export class DataLoader {
       if (elbow) return elbow;
     }
 
-    // Extremity procedures (route to nearest joint protocol)
-    // Thigh/femur -> HIP protocol
-    if (isProcedureFor('thigh') || isProcedureFor('femur')) {
-      const hip = protocols.find(p => p.name === 'HIP');
-      if (hip) return hip;
-    }
+    // Extremity bone procedures (thigh, forearm, humerus, tibia, etc.)
+    // These are BONE MRI, not joint MRI - need context-aware routing
+    const isExtremityBone = isProcedureFor('thigh') || isProcedureFor('femur') ||
+                            isProcedureFor('forearm') || isProcedureFor('humerus') ||
+                            isProcedureFor('upper arm') || isProcedureFor('lower leg') ||
+                            isProcedureFor('tibia') || isProcedureFor('fibula') ||
+                            isProcedureFor('lower extremity') || isProcedureFor('upper extremity');
 
-    // Lower leg/tibia/fibula -> ANKLE protocol (or KNEE if proximal)
-    if (isProcedureFor('lower leg') || isProcedureFor('tibia') || isProcedureFor('fibula')) {
-      const ankle = protocols.find(p => p.name === 'ANKLE' || p.name === 'KNEE');
-      if (ankle) return ankle;
-    }
+    if (isExtremityBone) {
+      // Context 1: Tumor/mass/metastasis -> BONE TUMOR protocol
+      if (scenarioName.includes('tumor') || scenarioName.includes('mass') ||
+          scenarioName.includes('metasta') || scenarioName.includes('sarcoma') ||
+          scenarioName.includes('cancer') || scenarioName.includes('malignant') ||
+          scenarioName.includes('neoplasm') || scenarioName.includes('lesion')) {
+        const boneTumor = protocols.find(p => p.name === 'BONE TUMOR');
+        if (boneTumor) return boneTumor;
+      }
 
-    // Forearm -> WRIST protocol (distal) or ELBOW (proximal)
-    if (isProcedureFor('forearm')) {
-      const wrist = protocols.find(p => p.name === 'WRIST' || p.name === 'ELBOW');
-      if (wrist) return wrist;
-    }
+      // Context 2: Osteonecrosis/AVN -> OSTEONECROSIS protocol
+      if (scenarioName.includes('osteonecrosis') || scenarioName.includes('avascular') ||
+          scenarioName.includes('avn') || scenarioName.includes('bone infarct')) {
+        const avn = protocols.find(p => p.name === 'OSTEONECROSIS');
+        if (avn) return avn;
+      }
 
-    // Upper arm/humerus -> SHOULDER protocol
-    if (isProcedureFor('upper arm') || isProcedureFor('humerus')) {
-      const shoulder = protocols.find(p => p.name === 'SHOULDER');
-      if (shoulder) return shoulder;
-    }
-
-    // Generic lower/upper extremity -> use OSTEOMYELITIS for infection or nearest joint
-    if (isProcedureFor('lower extremity') || isProcedureFor('upper extremity')) {
-      // Check infection context
-      if (scenarioName.includes('infection') || scenarioName.includes('osteomyelitis')) {
+      // Context 3: Infection -> OSTEOMYELITIS protocol
+      if (scenarioName.includes('infection') || scenarioName.includes('osteomyelitis') ||
+          scenarioName.includes('septic') || scenarioName.includes('abscess')) {
         const osteo = protocols.find(p => p.name === 'OSTEOMYELITIS');
         if (osteo) return osteo;
       }
-      // Default to HIP for lower, SHOULDER for upper
-      if (isProcedureFor('lower')) {
+
+      // Context 4: Stress fracture or trauma without tumor -> nearest joint
+      // Default fallback: route to nearest joint protocol
+      if (isProcedureFor('thigh') || isProcedureFor('femur') || isProcedureFor('lower extremity')) {
         const hip = protocols.find(p => p.name === 'HIP');
         if (hip) return hip;
-      } else {
+      }
+      if (isProcedureFor('lower leg') || isProcedureFor('tibia') || isProcedureFor('fibula')) {
+        const knee = protocols.find(p => p.name === 'KNEE');
+        if (knee) return knee;
+      }
+      if (isProcedureFor('forearm')) {
+        const elbow = protocols.find(p => p.name === 'ELBOW');
+        if (elbow) return elbow;
+      }
+      if (isProcedureFor('upper arm') || isProcedureFor('humerus') || isProcedureFor('upper extremity')) {
         const shoulder = protocols.find(p => p.name === 'SHOULDER');
         if (shoulder) return shoulder;
       }

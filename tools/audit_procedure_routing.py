@@ -138,25 +138,35 @@ def simulate_procedure_routing(proc_name, scenario_name, region, protocols):
     if is_procedure_for('elbow'):
         return ('ELBOW', 'procedure')
 
-    # Extremity procedures
-    if is_procedure_for('thigh') or is_procedure_for('femur'):
-        return ('HIP', 'procedure')
+    # Extremity bone procedures - context-aware routing
+    is_extremity_bone = is_procedure_for('thigh') or is_procedure_for('femur') or \
+                        is_procedure_for('forearm') or is_procedure_for('humerus') or \
+                        is_procedure_for('upper arm') or is_procedure_for('lower leg') or \
+                        is_procedure_for('tibia') or is_procedure_for('fibula') or \
+                        is_procedure_for('lower extremity') or is_procedure_for('upper extremity')
 
-    if is_procedure_for('lower leg') or is_procedure_for('tibia') or is_procedure_for('fibula'):
-        return ('ANKLE', 'procedure')
+    if is_extremity_bone:
+        # Tumor/mass/metastasis -> BONE TUMOR
+        if any(x in scenario_lower for x in ['tumor', 'mass', 'metasta', 'sarcoma', 'cancer', 'malignant', 'neoplasm', 'lesion']):
+            return ('BONE TUMOR', 'procedure+context')
 
-    if is_procedure_for('forearm'):
-        return ('WRIST', 'procedure')
+        # Osteonecrosis/AVN -> OSTEONECROSIS
+        if any(x in scenario_lower for x in ['osteonecrosis', 'avascular', 'avn', 'bone infarct']):
+            return ('OSTEONECROSIS', 'procedure+context')
 
-    if is_procedure_for('upper arm') or is_procedure_for('humerus'):
-        return ('SHOULDER', 'procedure')
-
-    if is_procedure_for('lower extremity') or is_procedure_for('upper extremity'):
-        if any(x in scenario_lower for x in ['infection', 'osteomyelitis']):
+        # Infection -> OSTEOMYELITIS
+        if any(x in scenario_lower for x in ['infection', 'osteomyelitis', 'septic', 'abscess']):
             return ('OSTEOMYELITIS', 'procedure+context')
-        if is_procedure_for('lower'):
+
+        # Fallback to nearest joint
+        if is_procedure_for('thigh') or is_procedure_for('femur') or is_procedure_for('lower extremity'):
             return ('HIP', 'procedure')
-        return ('SHOULDER', 'procedure')
+        if is_procedure_for('lower leg') or is_procedure_for('tibia') or is_procedure_for('fibula'):
+            return ('KNEE', 'procedure')
+        if is_procedure_for('forearm'):
+            return ('ELBOW', 'procedure')
+        if is_procedure_for('upper arm') or is_procedure_for('humerus') or is_procedure_for('upper extremity'):
+            return ('SHOULDER', 'procedure')
 
     # Spine procedures (by level)
     is_infection = any(x in scenario_lower for x in ['infection', 'discitis', 'abscess'])
