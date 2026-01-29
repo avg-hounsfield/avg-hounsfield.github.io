@@ -15,7 +15,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20260129f';
+    const cacheBuster = '20260129h';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -238,6 +238,15 @@ export class DataLoader {
     }
 
     // Neuro-specific procedures
+    // MRI head/brain -> BRAIN protocol (must be before other neuro checks)
+    if ((isProcedureFor('head') || isProcedureFor('brain')) &&
+        !isProcedureFor('orbit') && !isProcedureFor('iac') &&
+        !isProcedureFor('sella') && !isProcedureFor('tmj') &&
+        !isProcedureFor('neck')) {
+      const brain = protocols.find(p => p.name === 'BRAIN' && !p.uses_contrast);
+      if (brain) return brain;
+    }
+
     // Sella/Pituitary -> PITUITARY protocol
     if (isProcedureFor('sella') || isProcedureFor('pituitary')) {
       const pituitary = protocols.find(p => p.name === 'PITUITARY');
@@ -262,16 +271,28 @@ export class DataLoader {
       if (tmj) return tmj;
     }
 
-    // Breast procedures
-    if (isProcedureFor('breast')) {
-      const breast = protocols.find(p => p.name === 'BREAST SCREENING' || p.name === 'BREAST');
-      if (breast) return breast;
+    // Neck -> NECK SOFT TISSUE protocol
+    if (isProcedureFor('neck') && !isProcedureFor('orbit')) {
+      const neck = protocols.find(p => p.name === 'NECK SOFT TISSUE' || p.name === 'NECK');
+      if (neck) return neck;
     }
 
-    // Cardiac procedures
+    // Brachial plexus -> BRACHIAL PLEXUS protocol
+    if (isProcedureFor('brachial plexus')) {
+      const brachial = protocols.find(p => p.name === 'BRACHIAL PLEXUS');
+      if (brachial) return brachial;
+    }
+
+    // Cardiac procedures -> CARDIAC STRESS (only cardiac protocol we have)
     if (isProcedureFor('heart') || isProcedureFor('cardiac')) {
-      const cardiac = protocols.find(p => p.name === 'CARDIAC' || p.name === 'CARDIAC STRESS');
+      const cardiac = protocols.find(p => p.name === 'CARDIAC STRESS' || p.name === 'CARDIAC');
       if (cardiac) return cardiac;
+    }
+
+    // Breast procedures -> BREAST protocol
+    if (isProcedureFor('breast')) {
+      const breast = protocols.find(p => p.name === 'BREAST');
+      if (breast) return breast;
     }
 
     // Chest procedures (non-cardiac)
@@ -309,6 +330,48 @@ export class DataLoader {
     if (isProcedureFor('elbow')) {
       const elbow = protocols.find(p => p.name === 'ELBOW');
       if (elbow) return elbow;
+    }
+
+    // Extremity procedures (route to nearest joint protocol)
+    // Thigh/femur -> HIP protocol
+    if (isProcedureFor('thigh') || isProcedureFor('femur')) {
+      const hip = protocols.find(p => p.name === 'HIP');
+      if (hip) return hip;
+    }
+
+    // Lower leg/tibia/fibula -> ANKLE protocol (or KNEE if proximal)
+    if (isProcedureFor('lower leg') || isProcedureFor('tibia') || isProcedureFor('fibula')) {
+      const ankle = protocols.find(p => p.name === 'ANKLE' || p.name === 'KNEE');
+      if (ankle) return ankle;
+    }
+
+    // Forearm -> WRIST protocol (distal) or ELBOW (proximal)
+    if (isProcedureFor('forearm')) {
+      const wrist = protocols.find(p => p.name === 'WRIST' || p.name === 'ELBOW');
+      if (wrist) return wrist;
+    }
+
+    // Upper arm/humerus -> SHOULDER protocol
+    if (isProcedureFor('upper arm') || isProcedureFor('humerus')) {
+      const shoulder = protocols.find(p => p.name === 'SHOULDER');
+      if (shoulder) return shoulder;
+    }
+
+    // Generic lower/upper extremity -> use OSTEOMYELITIS for infection or nearest joint
+    if (isProcedureFor('lower extremity') || isProcedureFor('upper extremity')) {
+      // Check infection context
+      if (scenarioName.includes('infection') || scenarioName.includes('osteomyelitis')) {
+        const osteo = protocols.find(p => p.name === 'OSTEOMYELITIS');
+        if (osteo) return osteo;
+      }
+      // Default to HIP for lower, SHOULDER for upper
+      if (isProcedureFor('lower')) {
+        const hip = protocols.find(p => p.name === 'HIP');
+        if (hip) return hip;
+      } else {
+        const shoulder = protocols.find(p => p.name === 'SHOULDER');
+        if (shoulder) return shoulder;
+      }
     }
 
     // Spine procedures (by level)

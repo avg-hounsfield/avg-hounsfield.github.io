@@ -17799,6 +17799,72 @@
     }
   },
   {
+    "name": "BREAST",
+    "display_name": "BREAST",
+    "uses_contrast": 1,
+    "section": "Breast Imaging",
+    "sections": [
+      "Breast Imaging"
+    ],
+    "body_region": "breast",
+    "body_part": "breast",
+    "is_pediatric": false,
+    "keywords": [
+      "breast cancer",
+      "breast mass",
+      "breast screening",
+      "mammogram",
+      "BIRADS",
+      "breast lesion",
+      "implant",
+      "silicone"
+    ],
+    "indications": "Breast MRI for cancer screening in high-risk patients, characterization of suspicious lesions, evaluation of extent of disease, and assessment of treatment response. Also used for breast implant evaluation.",
+    "contrast_rationale": "Dynamic contrast enhancement is essential for detecting and characterizing breast lesions. Malignant lesions typically show rapid early enhancement with washout, while benign lesions show progressive enhancement.",
+    "canonical_procedure": "MRI Breast W/WO Contrast",
+    "sequences": [
+      {
+        "sequence_name": "AX T1 (bilateral)",
+        "is_post_contrast": 0,
+        "sort_order": 0
+      },
+      {
+        "sequence_name": "AX T2 FS (bilateral)",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "AX DWI (bilateral)",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "AX T1 FS PRE (bilateral)",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "AX T1 FS DYNAMIC (6 phases)",
+        "is_post_contrast": 1,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "SAG T1 FS POST (bilateral)",
+        "is_post_contrast": 1,
+        "sort_order": 5
+      }
+    ],
+    "scanner_notes": [
+      {
+        "scanner_type": "All",
+        "sequence_name": "Dedicated breast coil required",
+        "is_post_contrast": 0,
+        "sort_order": 0
+      }
+    ],
+    "scenario_matches": []
+  },
+  {
     "name": "CARDIAC STRESS",
     "display_name": "CARDIAC STRESS",
     "uses_contrast": 1,
