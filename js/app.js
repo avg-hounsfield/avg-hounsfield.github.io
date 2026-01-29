@@ -348,14 +348,14 @@ class ProtocolHelpApp {
       filtered = filtered.filter(p => wantsContrast ? p.uses_contrast : !p.uses_contrast);
     }
 
-    // Apply source filter (Human Verified vs AI Enhanced)
-    // AI Enhanced = has meaningful enrichment content (clinical_pearls, patient_prep, etc.)
-    // Human Verified = no enrichment or only basic fields like scan_time_minutes
+    // Apply source filter (Human Verified vs AI Generated)
+    // Human Verified = protocols created by humans (may have AI-enriched clinical details)
+    // AI Generated = protocols created de novo by AI (source: 'ai_generated')
     if (this.protocolFilters.source !== 'all') {
       const wantsAI = this.protocolFilters.source === 'ai';
       filtered = filtered.filter(p => {
-        const isAIEnhanced = this.hasAIEnrichment(p);
-        return wantsAI ? isAIEnhanced : !isAIEnhanced;
+        const isAI = this.isAIGenerated(p);
+        return wantsAI ? isAI : !isAI;
       });
     }
 
@@ -434,35 +434,12 @@ class ProtocolHelpApp {
   }
 
   /**
-   * Check if a protocol has meaningful AI-generated enrichment content
-   * Returns true if it has clinical pearls, patient prep, contraindications, etc.
-   * Returns false if no enrichment or only basic fields like scan_time_minutes
+   * Check if a protocol was AI-generated de novo (not just AI-enriched)
+   * Returns true if protocol.source === 'ai_generated'
+   * Human-created protocols with AI enrichment are still considered "Human Verified"
    */
-  hasAIEnrichment(protocol) {
-    if (!protocol.enrichment) return false;
-
-    const enrichment = protocol.enrichment;
-    // Check for meaningful AI-generated content fields
-    const aiFields = [
-      'clinical_pearls',
-      'patient_prep',
-      'contraindications',
-      'sequence_rationale',
-      'common_pitfalls',
-      'when_to_upgrade',
-      'when_to_downgrade',
-      'alternative_protocols',
-      'red_flags'
-    ];
-
-    return aiFields.some(field => {
-      const value = enrichment[field];
-      if (!value) return false;
-      // Check if it's an array with content or an object with content
-      if (Array.isArray(value)) return value.length > 0;
-      if (typeof value === 'object') return Object.keys(value).length > 0;
-      return false;
-    });
+  isAIGenerated(protocol) {
+    return protocol.source === 'ai_generated';
   }
 
   bindModalEvents() {
@@ -974,7 +951,7 @@ class ProtocolHelpApp {
       const scanTime = this.estimateScanTime(protocol);
       const isBookmarked = this.isBookmarked(protocol.name);
       const highlightedName = this.highlightSearchTerm(protocol.display_name || protocol.name);
-      const isAIEnhanced = this.hasAIEnrichment(protocol);
+      const isAIEnhanced = this.isAIGenerated(protocol);
 
       return `
         <div class="protocol-grid-card ${isBookmarked ? 'bookmarked' : ''}" data-index="${index}" style="position: relative;">
@@ -989,8 +966,8 @@ class ProtocolHelpApp {
           <div class="protocol-grid-card-meta">
             <span class="protocol-grid-card-region">${this.escapeHtml(region)}</span>
             ${hasContrast ? '<span class="contrast-badge with-contrast">Contrast</span>' : ''}
-            <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}" title="${isAIEnhanced ? 'Enhanced with AI-generated clinical details' : 'Base protocol verified by radiologists'}">
-              ${isAIEnhanced ? 'AI Enhanced' : 'Verified'}
+            <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}" title="${isAIEnhanced ? 'Protocol created by AI' : 'Protocol verified by radiologists'}">
+              ${isAIEnhanced ? 'AI Generated' : 'Verified'}
             </span>
           </div>
           ${indications ? `<div class="protocol-grid-card-indications">${this.escapeHtml(indications)}</div>` : ''}
@@ -1082,14 +1059,14 @@ class ProtocolHelpApp {
                     const hasContrast = protocol.uses_contrast;
                     const seqCount = protocol.sequences?.length || 0;
                     const isBookmarked = this.isBookmarked(protocol.name);
-                    const isAIEnhanced = this.hasAIEnrichment(protocol);
+                    const isAIEnhanced = this.isAIGenerated(protocol);
                     return `
                       <div class="protocol-list-item ${isBookmarked ? 'bookmarked' : ''}" data-region="${region}" data-index="${idx}">
                         <span class="protocol-list-item-name">${this.escapeHtml(protocol.display_name || protocol.name)}</span>
                         <div class="protocol-list-item-meta">
                           ${isBookmarked ? '<span class="contrast-badge with-contrast" style="background: var(--accent-muted); color: var(--accent);">Saved</span>' : ''}
                           ${hasContrast ? '<span class="contrast-badge with-contrast">Contrast</span>' : ''}
-                          <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}">${isAIEnhanced ? 'AI' : 'Verified'}</span>
+                          <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}">${isAIEnhanced ? 'AI Gen' : 'Verified'}</span>
                           <span class="protocol-grid-card-sequences"><span>${seqCount}</span> seq</span>
                         </div>
                       </div>
@@ -1155,16 +1132,16 @@ class ProtocolHelpApp {
     // Region badge
     document.getElementById('protocolDetailRegion').textContent = protocol.body_region || protocol.section || 'General';
 
-    // Source badge - indicate if protocol has AI-generated enrichment
+    // Source badge - indicate if protocol was AI-generated de novo
     const sourceBadge = document.getElementById('protocolDetailSource');
     const sourceText = document.getElementById('protocolDetailSourceText');
     if (sourceBadge && sourceText) {
-      const isAIEnhanced = this.hasAIEnrichment(protocol);
-      if (isAIEnhanced) {
+      const isAI = this.isAIGenerated(protocol);
+      if (isAI) {
         sourceBadge.classList.remove('curated');
         sourceBadge.classList.add('suggested');
-        sourceBadge.title = 'Base protocol verified by radiologists, clinical details enhanced by AI';
-        sourceText.textContent = 'AI Enhanced';
+        sourceBadge.title = 'Protocol created by AI based on clinical guidelines';
+        sourceText.textContent = 'AI Generated';
       } else {
         sourceBadge.classList.remove('suggested');
         sourceBadge.classList.add('curated');

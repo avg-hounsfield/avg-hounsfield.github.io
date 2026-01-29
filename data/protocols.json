@@ -6172,6 +6172,7 @@
   {
     "name": "SPINE INFECTION",
     "display_name": "SPINE INFECTION",
+    "source": "ai_generated",
     "uses_contrast": 1,
     "section": "Neuro Imaging",
     "sections": [
@@ -17801,6 +17802,7 @@
   {
     "name": "BREAST",
     "display_name": "BREAST",
+    "source": "ai_generated",
     "uses_contrast": 1,
     "section": "Breast Imaging",
     "sections": [
@@ -18360,6 +18362,7 @@
   {
     "name": "BONE TUMOR",
     "display_name": "BONE TUMOR",
+    "source": "ai_generated",
     "uses_contrast": 1,
     "section": "MSK Imaging",
     "sections": [
@@ -18444,6 +18447,7 @@
   {
     "name": "OSTEONECROSIS",
     "display_name": "OSTEONECROSIS",
+    "source": "ai_generated",
     "uses_contrast": 0,
     "section": "MSK Imaging",
     "sections": [
