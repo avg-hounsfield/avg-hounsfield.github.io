@@ -2,8 +2,8 @@
   "version": "1.0",
   "description": "Smart routing from ACR procedures to scanner protocols",
   "procedure_count": 161,
-  "mapped_count": 116,
-  "unmapped_count": 45,
+  "mapped_count": 120,
+  "unmapped_count": 41,
   "routes": {
     "DOTATATE PET/MRI brain": {
       "canonical_display": "DOTATATE PET/MRI brain",
@@ -1035,76 +1035,153 @@
       "match_type": "component"
     },
     "MRI head and orbits with IV contrast": {
-      "canonical_display": "MRI head and orbits with IV contrast",
-      "body_region": "unknown",
-      "body_part": "brain",
+      "canonical_display": "MRI Brain and Orbits With Contrast",
+      "body_region": "neuro",
+      "body_part": "brain orbits",
       "contrast": "with",
       "protocol_routes": [
         {
-          "protocol_name": "BRAIN",
-          "match_context": [],
+          "protocol_name": "ORBITS",
+          "match_context": [
+            "orbit",
+            "eye",
+            "optic neuritis",
+            "graves"
+          ],
           "priority": 1
         },
         {
           "protocol_name": "BRAIN TUMOR/INF",
-          "match_context": [],
-          "priority": 1
-        },
-        {
-          "protocol_name": "SEIZURE",
-          "match_context": [],
-          "priority": 1
+          "match_context": [
+            "tumor",
+            "mass",
+            "infection"
+          ],
+          "priority": 2
         }
       ],
-      "match_type": "component"
+      "match_type": "exact"
     },
     "MRI head and orbits without IV contrast": {
-      "canonical_display": "MRI head and orbits without IV contrast",
-      "body_region": "unknown",
-      "body_part": "brain",
+      "canonical_display": "MRI Brain and Orbits Without Contrast",
+      "body_region": "neuro",
+      "body_part": "brain orbits",
       "contrast": "none",
       "protocol_routes": [
         {
+          "protocol_name": "ORBITS",
+          "match_context": [
+            "orbit",
+            "eye",
+            "optic",
+            "graves"
+          ],
+          "priority": 1
+        },
+        {
           "protocol_name": "BRAIN",
-          "match_context": [],
-          "priority": 1
-        },
-        {
-          "protocol_name": "BRAIN TUMOR/INF",
-          "match_context": [],
-          "priority": 1
-        },
-        {
-          "protocol_name": "SEIZURE",
-          "match_context": [],
-          "priority": 1
+          "match_context": [
+            "default"
+          ],
+          "priority": 2
         }
       ],
-      "match_type": "component"
+      "match_type": "exact",
+      "supplemental_sequences": {
+        "context_based": [
+          {
+            "when": [
+              "orbit",
+              "eye"
+            ],
+            "sequences": [
+              "COR T1 ORBITS",
+              "COR T2 FS ORBITS",
+              "AX T1 FS ORBITS"
+            ],
+            "reason": "Orbital coverage"
+          }
+        ]
+      }
     },
     "MRI head and orbits without and with IV contrast": {
-      "canonical_display": "MRI head and orbits without and with IV contrast",
-      "body_region": "unknown",
-      "body_part": "brain",
+      "canonical_display": "MRI Brain and Orbits Without and With Contrast",
+      "body_region": "neuro",
+      "body_part": "brain orbits",
       "contrast": "both",
       "protocol_routes": [
         {
-          "protocol_name": "BRAIN",
-          "match_context": [],
+          "protocol_name": "CRANIAL NERVES/PAROTID",
+          "match_context": [
+            "cranial nerve",
+            "palsy",
+            "facial",
+            "trigeminal",
+            "abducens",
+            "oculomotor"
+          ],
+          "priority": 1
+        },
+        {
+          "protocol_name": "ORBITS",
+          "match_context": [
+            "orbit",
+            "eye",
+            "proptosis",
+            "diplopia",
+            "optic",
+            "graves",
+            "thyroid eye"
+          ],
           "priority": 1
         },
         {
           "protocol_name": "BRAIN TUMOR/INF",
-          "match_context": [],
-          "priority": 1
-        },
-        {
-          "protocol_name": "SEIZURE",
-          "match_context": [],
-          "priority": 1
+          "match_context": [
+            "tumor",
+            "mass",
+            "lesion",
+            "infection"
+          ],
+          "priority": 2
         }
       ],
-      "match_type": "component"
+      "match_type": "exact",
+      "supplemental_sequences": {
+        "always_add": [],
+        "context_based": [
+          {
+            "when": [
+              "orbit",
+              "eye",
+              "diplopia",
+              "proptosis"
+            ],
+            "add_from_protocol": "ORBITS",
+            "sequences": [
+              "COR T1 ORBITS",
+              "AX T1 FS ORBITS",
+              "COR T2 FS ORBITS"
+            ],
+            "reason": "Dedicated orbital imaging for eye/orbit pathology"
+          },
+          {
+            "when": [
+              "cranial nerve",
+              "palsy",
+              "facial",
+              "trigeminal"
+            ],
+            "add_from_protocol": "CRANIAL NERVES/PAROTID",
+            "sequences": [
+              "AX T1 (ORB-MANDIBLE)",
+              "COR T1 FS (CORD-FACE)",
+              "AX CISS/FIESTA"
+            ],
+            "reason": "High-resolution cranial nerve imaging"
+          }
+        ]
+      }
     },
     "MRI head perfusion with IV contrast": {
       "canonical_display": "MRI head perfusion with IV contrast",
@@ -1663,6 +1740,53 @@
       ],
       "match_type": "component"
     },
+    "MRI maxillofacial without IV contrast": {
+      "canonical_display": "MRI Maxillofacial Without Contrast",
+      "body_region": "neuro",
+      "body_part": "maxillofacial",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "TMJ",
+          "match_context": [
+            "tmj",
+            "jaw",
+            "temporomandibular"
+          ],
+          "priority": 1
+        },
+        {
+          "protocol_name": "CRANIAL NERVES/PAROTID",
+          "match_context": [
+            "parotid",
+            "salivary",
+            "mass"
+          ],
+          "priority": 2
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI maxillofacial without and with IV contrast": {
+      "canonical_display": "MRI Maxillofacial Without and With Contrast",
+      "body_region": "neuro",
+      "body_part": "maxillofacial",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "CRANIAL NERVES/PAROTID",
+          "match_context": [
+            "tumor",
+            "mass",
+            "parotid",
+            "salivary",
+            "sinus"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
     "MRI neck with IV contrast": {
       "canonical_display": "MRI neck with IV contrast",
       "body_region": "unknown",
@@ -1740,61 +1864,123 @@
       "match_type": "exact"
     },
     "MRI orbits face neck with IV contrast": {
-      "canonical_display": "MRI orbits face neck with IV contrast",
-      "body_region": "unknown",
-      "body_part": "orbits",
+      "canonical_display": "MRI Orbits, Face, and Neck With Contrast",
+      "body_region": "neuro",
+      "body_part": "orbits face neck",
       "contrast": "with",
       "protocol_routes": [
         {
-          "protocol_name": "ORBITS",
-          "match_context": [],
+          "protocol_name": "CRANIAL NERVES/PAROTID",
+          "match_context": [
+            "cranial",
+            "nerve",
+            "tumor",
+            "mass"
+          ],
           "priority": 1
         },
         {
-          "protocol_name": "ORBIT NEMMERS",
-          "match_context": [],
-          "priority": 1
+          "protocol_name": "ORBITS",
+          "match_context": [
+            "orbit",
+            "eye"
+          ],
+          "priority": 2
         }
       ],
-      "match_type": "component"
+      "match_type": "exact"
     },
     "MRI orbits face neck without IV contrast": {
-      "canonical_display": "MRI orbits face neck without IV contrast",
-      "body_region": "unknown",
-      "body_part": "orbits",
+      "canonical_display": "MRI Orbits, Face, and Neck Without Contrast",
+      "body_region": "neuro",
+      "body_part": "orbits face neck",
       "contrast": "none",
       "protocol_routes": [
         {
           "protocol_name": "ORBITS",
-          "match_context": [],
+          "match_context": [
+            "orbit",
+            "eye"
+          ],
           "priority": 1
         },
         {
-          "protocol_name": "ORBIT NEMMERS",
-          "match_context": [],
-          "priority": 1
+          "protocol_name": "CRANIAL NERVES/PAROTID",
+          "match_context": [
+            "cranial",
+            "nerve",
+            "parotid"
+          ],
+          "priority": 2
         }
       ],
-      "match_type": "component"
+      "match_type": "exact"
     },
     "MRI orbits face neck without and with IV contrast": {
-      "canonical_display": "MRI orbits face neck without and with IV contrast",
-      "body_region": "unknown",
-      "body_part": "orbits",
+      "canonical_display": "MRI Orbits, Face, and Neck Without and With Contrast",
+      "body_region": "neuro",
+      "body_part": "orbits face neck",
       "contrast": "both",
       "protocol_routes": [
         {
-          "protocol_name": "ORBITS",
-          "match_context": [],
+          "protocol_name": "CRANIAL NERVES/PAROTID",
+          "match_context": [
+            "cranial nerve",
+            "palsy",
+            "parotid",
+            "salivary",
+            "facial nerve",
+            "bell"
+          ],
           "priority": 1
         },
         {
-          "protocol_name": "ORBIT NEMMERS",
-          "match_context": [],
-          "priority": 1
+          "protocol_name": "ORBITS",
+          "match_context": [
+            "orbit",
+            "eye",
+            "proptosis"
+          ],
+          "priority": 2
         }
       ],
-      "match_type": "component"
+      "match_type": "exact",
+      "supplemental_sequences": {
+        "always_add": [
+          {
+            "reason": "Complete cranial nerve coverage requires orbital AND skull base sequences",
+            "sequences": [
+              "AX CISS/FIESTA (skull base)",
+              "COR T1 FS POST (skull base to mandible)"
+            ]
+          }
+        ],
+        "context_based": [
+          {
+            "when": [
+              "orbit",
+              "eye"
+            ],
+            "add_from_protocol": "ORBITS",
+            "sequences": [
+              "COR T2 FS ORBITS",
+              "AX T1 FS ORBITS POST"
+            ],
+            "reason": "Dedicated orbital sequences"
+          },
+          {
+            "when": [
+              "parotid",
+              "salivary"
+            ],
+            "sequences": [
+              "AX T2 FS PAROTID",
+              "COR T1 PAROTID"
+            ],
+            "reason": "Parotid gland evaluation"
+          }
+        ]
+      }
     },
     "MRI orbits with IV contrast": {
       "canonical_display": "MRI orbits with IV contrast",
@@ -1852,6 +2038,54 @@
         }
       ],
       "match_type": "component"
+    },
+    "MRI paranasal sinuses without IV contrast": {
+      "canonical_display": "MRI Paranasal Sinuses Without Contrast",
+      "body_region": "neuro",
+      "body_part": "sinuses",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "ORBITS",
+          "match_context": [
+            "sinus"
+          ],
+          "priority": 1
+        }
+      ],
+      "match_type": "exact"
+    },
+    "MRI paranasal sinuses without and with IV contrast": {
+      "canonical_display": "MRI Paranasal Sinuses Without and With Contrast",
+      "body_region": "neuro",
+      "body_part": "sinuses",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "ORBITS",
+          "match_context": [
+            "sinus",
+            "tumor",
+            "infection",
+            "fungal"
+          ],
+          "priority": 1,
+          "note": "Orbital protocol often includes sinus coverage; consider adding dedicated sinus sequences"
+        }
+      ],
+      "match_type": "exact",
+      "supplemental_sequences": {
+        "always_add": [
+          {
+            "reason": "Sinus-specific coverage",
+            "sequences": [
+              "COR T2 FS SINUSES",
+              "AX T1 SINUSES",
+              "COR T1 POST SINUSES"
+            ]
+          }
+        ]
+      }
     },
     "MRI pelvis dynamic maneuvers without defecation": {
       "canonical_display": "MRI pelvis dynamic maneuvers without defecation",
@@ -2664,38 +2898,6 @@
         "modality": "MRI",
         "contrast": "with",
         "body_part": "maxillofacial"
-      }
-    },
-    {
-      "acr_name": "MRI maxillofacial without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "maxillofacial"
-      }
-    },
-    {
-      "acr_name": "MRI maxillofacial without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "maxillofacial"
-      }
-    },
-    {
-      "acr_name": "MRI paranasal sinuses without IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "none",
-        "body_part": "sinuses"
-      }
-    },
-    {
-      "acr_name": "MRI paranasal sinuses without and with IV contrast",
-      "components": {
-        "modality": "MRI",
-        "contrast": "both",
-        "body_part": "sinuses"
       }
     },
     {

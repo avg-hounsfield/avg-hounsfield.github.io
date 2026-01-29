@@ -761,11 +761,12 @@ class ProtocolHelpApp {
         procedure
       );
 
-      // getProtocol now returns { protocol, matchType }
+      // getProtocol now returns { protocol, matchType, supplementalSequences }
       const protocol = result?.protocol || result; // Handle both old and new format
       const matchType = result?.matchType || 'suggested';
+      const supplementalSequences = result?.supplementalSequences || null;
 
-      this.ui.renderMriProtocol(protocol, procedure, matchType);
+      this.ui.renderMriProtocol(protocol, procedure, matchType, supplementalSequences);
       this.ui.setStatus('Ready');
     } catch (error) {
       console.error('Protocol load error:', error);

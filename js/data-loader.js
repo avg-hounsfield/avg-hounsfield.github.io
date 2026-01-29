@@ -6,6 +6,7 @@ export class DataLoader {
   constructor() {
     this.cache = new Map();
     this.protocols = null;
+    this.protocolRouter = null;
   }
 
   async loadRegion(region) {
@@ -54,22 +55,96 @@ export class DataLoader {
     }
   }
 
+  async loadProtocolRouter() {
+    if (this.protocolRouter) {
+      return this.protocolRouter;
+    }
+
+    try {
+      const response = await fetch('data/search/protocol_router.json');
+      if (!response.ok) {
+        throw new Error('Failed to load protocol router');
+      }
+      this.protocolRouter = await response.json();
+      return this.protocolRouter;
+    } catch (error) {
+      console.error('Error loading protocol router:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Get supplemental sequences for a procedure based on scenario context
+   */
+  getSupplementalSequences(routeEntry, scenarioName) {
+    if (!routeEntry || !routeEntry.supplemental_sequences) {
+      return null;
+    }
+
+    const supplements = routeEntry.supplemental_sequences;
+    const scenarioLower = (scenarioName || '').toLowerCase();
+    const result = {
+      always: [],
+      contextual: []
+    };
+
+    // Always-add sequences
+    if (supplements.always_add) {
+      for (const item of supplements.always_add) {
+        result.always.push({
+          reason: item.reason,
+          sequences: item.sequences
+        });
+      }
+    }
+
+    // Context-based sequences
+    if (supplements.context_based) {
+      for (const rule of supplements.context_based) {
+        const matches = rule.when.some(keyword => scenarioLower.includes(keyword.toLowerCase()));
+        if (matches) {
+          result.contextual.push({
+            reason: rule.reason,
+            sequences: rule.sequences,
+            fromProtocol: rule.add_from_protocol
+          });
+        }
+      }
+    }
+
+    // Return null if nothing to add
+    if (result.always.length === 0 && result.contextual.length === 0) {
+      return null;
+    }
+
+    return result;
+  }
+
   async getProtocol(region, scenario, procedure) {
     const protocols = await this.loadProtocols();
+    const router = await this.loadProtocolRouter();
 
     if (!protocols || protocols.length === 0) {
-      return { protocol: null, matchType: null };
+      return { protocol: null, matchType: null, supplementalSequences: null };
     }
 
     // Determine contrast needs from procedure
     const needsContrast = this.procedureNeedsContrast(procedure);
     const scenarioName = (scenario?.name || '').toLowerCase();
+    const procedureName = procedure?.name || '';
+
+    // Check router for supplemental sequences
+    let supplementalSequences = null;
+    if (router && router.routes && router.routes[procedureName]) {
+      const routeEntry = router.routes[procedureName];
+      supplementalSequences = this.getSupplementalSequences(routeEntry, scenario?.name);
+    }
 
     // FIRST: Apply clinical rules for specific conditions
     // These are explicitly coded rules, so they're "curated"
     const clinicalMatch = this.applyClinicalRules(protocols, scenarioName, needsContrast);
     if (clinicalMatch) {
-      return { protocol: clinicalMatch, matchType: 'curated' };
+      return { protocol: clinicalMatch, matchType: 'curated', supplementalSequences };
     }
 
     // SECOND: Check pre-computed scenario matches
@@ -78,7 +153,7 @@ export class DataLoader {
       const scenarioId = String(scenario.id);
       const preMatched = this.findPrecomputedMatch(protocols, scenarioId, needsContrast, scenarioName);
       if (preMatched) {
-        return { protocol: preMatched, matchType: 'curated' };
+        return { protocol: preMatched, matchType: 'curated', supplementalSequences };
       }
     }
 
@@ -97,16 +172,16 @@ export class DataLoader {
 
     // Return best match if score is high enough
     if (scored[0]?.score >= 10) {
-      return { protocol: scored[0].protocol, matchType: 'suggested' };
+      return { protocol: scored[0].protocol, matchType: 'suggested', supplementalSequences };
     }
 
     // Fallback: try to find any protocol in the right region
     const regionFallback = scored.find(s => s.score >= 5);
     if (regionFallback?.protocol) {
-      return { protocol: regionFallback.protocol, matchType: 'suggested' };
+      return { protocol: regionFallback.protocol, matchType: 'suggested', supplementalSequences };
     }
 
-    return { protocol: null, matchType: null };
+    return { protocol: null, matchType: null, supplementalSequences: null };
   }
 
   // Clinical intelligence for protocol selection

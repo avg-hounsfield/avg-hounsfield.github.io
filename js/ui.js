@@ -325,7 +325,7 @@ export class UI {
   // ========================================
   // MRI Protocol Card (Bottom)
   // ========================================
-  renderMriProtocol(protocol, procedure, matchType = 'suggested') {
+  renderMriProtocol(protocol, procedure, matchType = 'suggested', supplementalSequences = null) {
     if (!protocol) {
       this.showMriProtocolMessage(procedure);
       return;
@@ -356,11 +356,11 @@ export class UI {
 
     // Render sequences
     const sequences = protocol.sequences || [];
+    let html = '';
+
     if (sequences.length > 0) {
       const preContrast = sequences.filter(s => !s.is_post_contrast);
       const postContrast = sequences.filter(s => s.is_post_contrast);
-
-      let html = '';
 
       // Pre-contrast sequences
       preContrast.forEach(seq => {
@@ -381,11 +381,52 @@ export class UI {
           </div>
         `;
       });
-
-      this.sequencesGrid.innerHTML = html;
     } else {
-      this.sequencesGrid.innerHTML = '<p class="empty-state">No sequences defined</p>';
+      html = '<p class="empty-state">No sequences defined</p>';
     }
+
+    // Add supplemental sequences if available
+    if (supplementalSequences) {
+      const allSupplements = [
+        ...(supplementalSequences.always || []),
+        ...(supplementalSequences.contextual || [])
+      ];
+
+      if (allSupplements.length > 0) {
+        html += `
+          <div class="supplemental-sequences">
+            <div class="supplemental-header">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Consider Adding</span>
+            </div>
+        `;
+
+        allSupplements.forEach(supp => {
+          html += `<div class="supplemental-group">`;
+          if (supp.reason) {
+            html += `<div class="supplemental-reason">${this.escapeHtml(supp.reason)}</div>`;
+          }
+          html += `<div class="supplemental-seqs">`;
+          supp.sequences.forEach(seq => {
+            html += `
+              <div class="sequence-tag supplemental">
+                <span class="seq-marker"></span>
+                <span>${this.escapeHtml(seq)}</span>
+              </div>
+            `;
+          });
+          html += `</div></div>`;
+        });
+
+        html += `</div>`;
+      }
+    }
+
+    this.sequencesGrid.innerHTML = html;
 
     // Contrast rationale
     if (protocol.contrast_rationale && hasContrast) {

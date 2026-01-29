@@ -83,6 +83,9 @@ def extract_procedure_components(name):
     # Extract body part (simplified)
     body_part = None
     body_part_patterns = [
+        (r'\bhead and orbits\b', 'brain_orbits'),
+        (r'\borbits face neck\b', 'orbits_face_neck'),
+        (r'\borbits face\b', 'orbits_face'),
         (r'\b(head|brain)\b', 'brain'),
         (r'\bcervical spine\b', 'cervical_spine'),
         (r'\bthoracic spine\b', 'thoracic_spine'),
@@ -202,7 +205,7 @@ def build_router(project_root):
         for proc_id, proc_def in registry.get('procedures', {}).items():
             if proc_def.get('acr_name', '').lower() == acr_proc.lower():
                 # Found exact match
-                router['routes'][acr_proc] = {
+                route_entry = {
                     "canonical_display": proc_def['canonical_display'],
                     "body_region": proc_def['body_region'],
                     "body_part": proc_def['body_part'],
@@ -210,6 +213,10 @@ def build_router(project_root):
                     "protocol_routes": proc_def['protocol_routes'],
                     "match_type": "exact"
                 }
+                # Include supplemental sequences if defined
+                if 'supplemental_sequences' in proc_def:
+                    route_entry['supplemental_sequences'] = proc_def['supplemental_sequences']
+                router['routes'][acr_proc] = route_entry
                 router['mapped_count'] += 1
                 matched = True
                 break
