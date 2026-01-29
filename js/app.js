@@ -37,7 +37,6 @@ class ProtocolHelpApp {
     this.protocolFilters = {
       region: 'all',
       contrast: 'all',
-      source: 'all',
       viewMode: 'grid'
     };
     this.protocolSearchQuery = '';
@@ -296,16 +295,6 @@ class ProtocolHelpApp {
       });
     });
 
-    // Source toggle (Human Verified vs AI Enhanced)
-    document.querySelectorAll('#sourceToggle .toggle-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#sourceToggle .toggle-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this.protocolFilters.source = btn.dataset.source;
-        this.applyProtocolFilters();
-      });
-    });
-
     // View toggle (grid/grouped)
     document.querySelectorAll('#viewToggle .toggle-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -346,17 +335,6 @@ class ProtocolHelpApp {
     if (this.protocolFilters.contrast !== 'all') {
       const wantsContrast = this.protocolFilters.contrast === 'with';
       filtered = filtered.filter(p => wantsContrast ? p.uses_contrast : !p.uses_contrast);
-    }
-
-    // Apply source filter (Human Verified vs AI Generated)
-    // Human Verified = protocols created by humans (may have AI-enriched clinical details)
-    // AI Generated = protocols created de novo by AI (source: 'ai_generated')
-    if (this.protocolFilters.source !== 'all') {
-      const wantsAI = this.protocolFilters.source === 'ai';
-      filtered = filtered.filter(p => {
-        const isAI = this.isAIGenerated(p);
-        return wantsAI ? isAI : !isAI;
-      });
     }
 
     // Apply search query
