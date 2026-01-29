@@ -244,9 +244,9 @@ export class UI {
   // Procedures Panel (Right) - THE KEY INFO
   // ========================================
   renderProcedures(scenario, onProcedureSelect) {
-    // Format scenario name for display
+    // Format scenario name for display - show full text
     const displayName = this.formatScenarioTitle(scenario.name);
-    this.selectedScenario.textContent = displayName.substring(0, 50) + (displayName.length > 50 ? '...' : '');
+    this.selectedScenario.textContent = displayName;
 
     // Filter out malformed entries (empty names, "Other" modality with no info)
     const procedures = (scenario.procedures || []).filter(proc => {

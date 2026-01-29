@@ -15,7 +15,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20260129d';
+    const cacheBuster = '20260129e';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -195,18 +195,152 @@ export class DataLoader {
       return procLower.includes(bodyPart);
     };
 
-    // Only apply neuro rules if procedure is for head/brain
+    // ========================================
+    // PROCEDURE-BASED ROUTING (Primary)
+    // Match based on imaging recommendation title first
+    // ========================================
+
+    // Abdomen/Pelvis procedures
+    if (isProcedureFor('prostate')) {
+      const prostate = protocols.find(p => p.name === 'PROSTATE');
+      if (prostate) return prostate;
+    }
+
+    if (isProcedureFor('liver')) {
+      const liver = protocols.find(p => p.name === 'LIVER');
+      if (liver) return liver;
+    }
+
+    if (isProcedureFor('kidney') || isProcedureFor('renal')) {
+      const kidneys = protocols.find(p => p.name === 'KIDNEYS');
+      if (kidneys) return kidneys;
+    }
+
+    if (isProcedureFor('mrcp') || isProcedureFor('cholangiopancreatography')) {
+      const mrcp = protocols.find(p => p.name === 'MRCP');
+      if (mrcp) return mrcp;
+    }
+
+    if (isProcedureFor('enterography')) {
+      const entero = protocols.find(p => p.name === 'MR ENTEROGRAPHY');
+      if (entero) return entero;
+    }
+
+    if (isProcedureFor('pelvis') && !isProcedureFor('spine')) {
+      const pelvis = protocols.find(p => p.name === 'PELVIS');
+      if (pelvis) return pelvis;
+    }
+
+    // General abdomen -> LIVER as default abdomen protocol
+    if (isProcedureFor('abdomen') && !isProcedureFor('pelvis')) {
+      const liver = protocols.find(p => p.name === 'LIVER');
+      if (liver) return liver;
+    }
+
+    // Breast procedures
+    if (isProcedureFor('breast')) {
+      const breast = protocols.find(p => p.name === 'BREAST SCREENING' || p.name === 'BREAST');
+      if (breast) return breast;
+    }
+
+    // Cardiac procedures
+    if (isProcedureFor('heart') || isProcedureFor('cardiac')) {
+      const cardiac = protocols.find(p => p.name === 'CARDIAC' || p.name === 'CARDIAC STRESS');
+      if (cardiac) return cardiac;
+    }
+
+    // Chest procedures (non-cardiac)
+    if (isProcedureFor('chest') && !isProcedureFor('heart')) {
+      const chest = protocols.find(p => p.name === 'CHEST');
+      if (chest) return chest;
+    }
+
+    // MSK joint-specific procedures
+    if (isProcedureFor('knee')) {
+      const knee = protocols.find(p => p.name === 'KNEE');
+      if (knee) return knee;
+    }
+
+    if (isProcedureFor('shoulder')) {
+      const shoulder = protocols.find(p => p.name === 'SHOULDER');
+      if (shoulder) return shoulder;
+    }
+
+    if (isProcedureFor('hip') && !isProcedureFor('spine')) {
+      const hip = protocols.find(p => p.name === 'HIP');
+      if (hip) return hip;
+    }
+
+    if (isProcedureFor('ankle') || isProcedureFor('foot')) {
+      const ankle = protocols.find(p => p.name === 'ANKLE' || p.name === 'FOOT');
+      if (ankle) return ankle;
+    }
+
+    if (isProcedureFor('wrist') || isProcedureFor('hand')) {
+      const wrist = protocols.find(p => p.name === 'WRIST' || p.name === 'HAND');
+      if (wrist) return wrist;
+    }
+
+    if (isProcedureFor('elbow')) {
+      const elbow = protocols.find(p => p.name === 'ELBOW');
+      if (elbow) return elbow;
+    }
+
+    // Spine procedures (by level)
+    if (isProcedureFor('cervical') && isProcedureFor('spine')) {
+      // Check for infection context first
+      if (scenarioName.includes('infection') || scenarioName.includes('discitis') || scenarioName.includes('abscess')) {
+        const spineInf = protocols.find(p => p.name === 'SPINE INFECTION');
+        if (spineInf) return spineInf;
+      }
+      const cspine = protocols.find(p => p.name === 'C-SPINE');
+      if (cspine) return cspine;
+    }
+
+    if (isProcedureFor('thoracic') && isProcedureFor('spine')) {
+      if (scenarioName.includes('infection') || scenarioName.includes('discitis') || scenarioName.includes('abscess')) {
+        const spineInf = protocols.find(p => p.name === 'SPINE INFECTION');
+        if (spineInf) return spineInf;
+      }
+      const tspine = protocols.find(p => p.name === 'T-SPINE');
+      if (tspine) return tspine;
+    }
+
+    if (isProcedureFor('lumbar') && isProcedureFor('spine')) {
+      if (scenarioName.includes('infection') || scenarioName.includes('discitis') || scenarioName.includes('abscess')) {
+        const spineInf = protocols.find(p => p.name === 'SPINE INFECTION');
+        if (spineInf) return spineInf;
+      }
+      const lspine = protocols.find(p => p.name === 'L-SPINE');
+      if (lspine) return lspine;
+    }
+
+    // Multi-level spine or "complete spine"
+    if (isProcedureFor('spine') && (isProcedureFor('complete') || isProcedureFor('total') ||
+        (isProcedureFor('cervical') && isProcedureFor('lumbar')))) {
+      if (scenarioName.includes('infection') || scenarioName.includes('discitis') || scenarioName.includes('abscess')) {
+        const spineInf = protocols.find(p => p.name === 'SPINE INFECTION');
+        if (spineInf) return spineInf;
+      }
+      const screening = protocols.find(p => p.name === 'SCREENING SPINE');
+      if (screening) return screening;
+    }
+
+    // ========================================
+    // SCENARIO-BASED REFINEMENTS (Secondary)
+    // Refine based on clinical context
+    // ========================================
+
+    // Determine procedure type for scenario-based rules
     const isNeuroProcedure = isProcedureFor('head') || isProcedureFor('brain') ||
                              isProcedureFor('iac') || isProcedureFor('orbit') ||
                              isProcedureFor('sella') || isProcedureFor('pituitary') ||
                              region === 'neuro';
 
-    // Only apply spine rules if procedure is for spine
     const isSpineProcedure = isProcedureFor('spine') || isProcedureFor('cervical') ||
                              isProcedureFor('thoracic') || isProcedureFor('lumbar') ||
                              isProcedureFor('sacr') || region === 'spine';
 
-    // Only apply MSK rules if procedure is for MSK
     const isMskProcedure = isProcedureFor('knee') || isProcedureFor('shoulder') ||
                            isProcedureFor('hip') || isProcedureFor('ankle') ||
                            isProcedureFor('wrist') || isProcedureFor('elbow') ||
@@ -284,18 +418,21 @@ export class DataLoader {
       if (osteo) return osteo;
     }
 
-    // Spine infection (discitis/osteomyelitis) -> SPINE INFECTION protocol
-    // Uses contrast to evaluate for abscess and enhancement patterns
-    // Only for spine procedures
+    // Spine infection fallback (if not caught by procedure-based routing)
     if (isSpineProcedure &&
         (scenarioName.includes('spine infection') ||
          scenarioName.includes('discitis') ||
          scenarioName.includes('epidural abscess') ||
-         scenarioName.includes('spondylodiscitis') ||
-         (scenarioName.includes('infection') && scenarioName.includes('spine')))) {
-      // Use dedicated SPINE INFECTION protocol with contrast
+         scenarioName.includes('spondylodiscitis'))) {
       const spineInfection = protocols.find(p => p.name === 'SPINE INFECTION');
       if (spineInfection) return spineInfection;
+    }
+
+    // Generic spine procedure fallback
+    if (isSpineProcedure && isProcedureFor('spine')) {
+      // Default to L-SPINE for generic "spine" procedures
+      const lspine = protocols.find(p => p.name === 'L-SPINE');
+      if (lspine) return lspine;
     }
 
     return null; // No clinical rule matched

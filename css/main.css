@@ -718,10 +718,9 @@ input:focus, button:focus {
 .panel-subtitle {
   font-size: 11px;
   color: var(--text-muted);
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* Allow text to wrap for full visibility */
+  white-space: normal;
+  line-height: 1.3;
 }
 
 .result-count {
@@ -951,6 +950,9 @@ input:focus, button:focus {
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 2px;
+  /* Allow wrapping for long procedure names like "MRI without and with IV contrast" */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .procedure-level {
