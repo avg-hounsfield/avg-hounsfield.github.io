@@ -15,7 +15,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20260128';
+    const cacheBuster = '20260129';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -229,6 +229,20 @@ export class DataLoader {
     if (scenarioName.includes('pituitary') || scenarioName.includes('sellar')) {
       const pit = protocols.find(p => p.name === 'PITUITARY');
       if (pit) return pit;
+    }
+
+    // Osteomyelitis/infection (MSK) -> OSTEOMYELITIS protocol
+    if (scenarioName.includes('osteomyelitis') ||
+        scenarioName.includes('septic arthritis') ||
+        scenarioName.includes('soft tissue infection') ||
+        scenarioName.includes('cellulitis') ||
+        scenarioName.includes('abscess') ||
+        (scenarioName.includes('infection') &&
+         !scenarioName.includes('brain') &&
+         !scenarioName.includes('spine') &&
+         !scenarioName.includes('discitis'))) {
+      const osteo = protocols.find(p => p.name === 'OSTEOMYELITIS');
+      if (osteo) return osteo;
     }
 
     return null; // No clinical rule matched

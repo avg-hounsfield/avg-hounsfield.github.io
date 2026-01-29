@@ -10991,6 +10991,1695 @@
     }
   },
   {
+    "name": "OSTEOMYELITIS",
+    "display_name": "OSTEOMYELITIS",
+    "uses_contrast": 1,
+    "section": "MSK Imaging",
+    "sections": [
+      "MSK Imaging"
+    ],
+    "body_region": "msk",
+    "body_part": "extremity",
+    "is_pediatric": false,
+    "keywords": [
+      "osteomyelitis",
+      "bone infection",
+      "septic",
+      "diabetic foot",
+      "chronic wound",
+      "hardware infection",
+      "post-surgical infection",
+      "bone marrow edema",
+      "abscess"
+    ],
+    "indications": "Evaluation of suspected bone infection (osteomyelitis). Contrast is essential for assessing extent of infection, abscess formation, and soft tissue involvement. Used for diabetic foot infections, post-surgical infections, and hematogenous osteomyelitis.",
+    "contrast_rationale": "Contrast enhancement is critical for differentiating infection from reactive edema, identifying abscess collections, assessing soft tissue extension, and evaluating for sinus tracts. Post-contrast fat-saturated T1 sequences are the most sensitive for detecting enhancement patterns characteristic of infection.",
+    "canonical_procedure": "MRI Extremity W/ & W/O Contrast",
+    "sequences": [
+      {
+        "sequence_name": "AX T1",
+        "is_post_contrast": 0,
+        "sort_order": 0
+      },
+      {
+        "sequence_name": "SAG T1",
+        "is_post_contrast": 0,
+        "sort_order": 1
+      },
+      {
+        "sequence_name": "COR T1",
+        "is_post_contrast": 0,
+        "sort_order": 2
+      },
+      {
+        "sequence_name": "AX T2",
+        "is_post_contrast": 0,
+        "sort_order": 3
+      },
+      {
+        "sequence_name": "SAG T2",
+        "is_post_contrast": 0,
+        "sort_order": 4
+      },
+      {
+        "sequence_name": "COR T2",
+        "is_post_contrast": 0,
+        "sort_order": 5
+      },
+      {
+        "sequence_name": "AX T1 FS POST",
+        "is_post_contrast": 1,
+        "sort_order": 6
+      },
+      {
+        "sequence_name": "SAG T1 FS POST",
+        "is_post_contrast": 1,
+        "sort_order": 7
+      },
+      {
+        "sequence_name": "COR T1 FS POST",
+        "is_post_contrast": 1,
+        "sort_order": 8
+      }
+    ],
+    "scanner_notes": [
+      "FOV should cover entire region of clinical concern plus margin",
+      "Ensure adequate fat suppression on post-contrast sequences",
+      "Consider adding STIR if fat suppression is suboptimal"
+    ],
+    "scenario_matches": [
+      {
+        "scenario_id": "6486",
+        "scenario_name": "Osteomyelitis suspected, ankle, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6506",
+        "scenario_name": "Osteomyelitis suspected, ankle, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6481",
+        "scenario_name": "Osteomyelitis suspected, ankle, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6347",
+        "scenario_name": "Osteomyelitis suspected, ankle",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6449",
+        "scenario_name": "Osteomyelitis suspected, ankle, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6462",
+        "scenario_name": "Osteomyelitis suspected, ankle, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6487",
+        "scenario_name": "Osteomyelitis suspected, elbow, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6507",
+        "scenario_name": "Osteomyelitis suspected, elbow, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6482",
+        "scenario_name": "Osteomyelitis suspected, elbow, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6349",
+        "scenario_name": "Osteomyelitis suspected, elbow",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6451",
+        "scenario_name": "Osteomyelitis suspected, elbow, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6464",
+        "scenario_name": "Osteomyelitis suspected, elbow, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "4793",
+        "scenario_name": "Osteomyelitis suspected, foot, diabetic",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "8407",
+        "scenario_name": "Osteomyelitis suspected, foot, diabetic, metal instrumentation in the foot, radiography indeterminate for osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "8406",
+        "scenario_name": "Osteomyelitis suspected, foot, diabetic, metal instrumentation in the foot, radiography negative for osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "8403",
+        "scenario_name": "Osteomyelitis suspected, foot, diabetic, radiography indeterminate for osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "8404",
+        "scenario_name": "Osteomyelitis suspected, foot, diabetic, radiography negative for osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6378",
+        "scenario_name": "Osteomyelitis suspected, foot",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6453",
+        "scenario_name": "Osteomyelitis suspected, foot, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6466",
+        "scenario_name": "Osteomyelitis suspected, foot, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6352",
+        "scenario_name": "Osteomyelitis suspected, hand",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6455",
+        "scenario_name": "Osteomyelitis suspected, hand, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6468",
+        "scenario_name": "Osteomyelitis suspected, hand, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6488",
+        "scenario_name": "Osteomyelitis suspected, hip, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6508",
+        "scenario_name": "Osteomyelitis suspected, hip, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6483",
+        "scenario_name": "Osteomyelitis suspected, hip, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6353",
+        "scenario_name": "Osteomyelitis suspected, hip",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6456",
+        "scenario_name": "Osteomyelitis suspected, hip, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6469",
+        "scenario_name": "Osteomyelitis suspected, hip, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6489",
+        "scenario_name": "Osteomyelitis suspected, knee, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6509",
+        "scenario_name": "Osteomyelitis suspected, knee, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6484",
+        "scenario_name": "Osteomyelitis suspected, knee, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6355",
+        "scenario_name": "Osteomyelitis suspected, knee",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6458",
+        "scenario_name": "Osteomyelitis suspected, knee, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6471",
+        "scenario_name": "Osteomyelitis suspected, knee, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6490",
+        "scenario_name": "Osteomyelitis suspected, shoulder, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6510",
+        "scenario_name": "Osteomyelitis suspected, shoulder, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6485",
+        "scenario_name": "Osteomyelitis suspected, shoulder, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6357",
+        "scenario_name": "Osteomyelitis suspected, shoulder",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6460",
+        "scenario_name": "Osteomyelitis suspected, shoulder, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6473",
+        "scenario_name": "Osteomyelitis suspected, shoulder, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6476",
+        "scenario_name": "Osteomyelitis suspected, wrist, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6480",
+        "scenario_name": "Osteomyelitis suspected, wrist, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6475",
+        "scenario_name": "Osteomyelitis suspected, wrist, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6380",
+        "scenario_name": "Osteomyelitis suspected, wrist",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6447",
+        "scenario_name": "Osteomyelitis suspected, wrist, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6448",
+        "scenario_name": "Osteomyelitis suspected, wrist, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "8408",
+        "scenario_name": "Radiography positive for osteomyelitis of the foot, diabetic, metal instrumentation in the foot, next imaging study, pre-treatment planning",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "8405",
+        "scenario_name": "Radiography positive for osteomyelitis of the foot, diabetic, next imaging study, pretreatment planning",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6520",
+        "scenario_name": "Septic arthritis suspected, ankle, arthroplasty, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6525",
+        "scenario_name": "Septic arthritis suspected, ankle, arthroplasty, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6530",
+        "scenario_name": "Septic arthritis suspected, ankle, implanted intra articular surgical hardware, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6515",
+        "scenario_name": "Septic arthritis suspected, ankle, implanted intra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6359",
+        "scenario_name": "Septic arthritis suspected, ankle",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6431",
+        "scenario_name": "Septic arthritis suspected, ankle, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6385",
+        "scenario_name": "Septic arthritis suspected, ankle, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6442",
+        "scenario_name": "Septic arthritis suspected, ankle, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6521",
+        "scenario_name": "Septic arthritis suspected, elbow, arthroplasty, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6526",
+        "scenario_name": "Septic arthritis suspected, elbow, arthroplasty, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6531",
+        "scenario_name": "Septic arthritis suspected, elbow, implanted intra articular surgical hardware, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6516",
+        "scenario_name": "Septic arthritis suspected, elbow, implanted intra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6360",
+        "scenario_name": "Septic arthritis suspected, elbow",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6432",
+        "scenario_name": "Septic arthritis suspected, elbow, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6436",
+        "scenario_name": "Septic arthritis suspected, elbow, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6443",
+        "scenario_name": "Septic arthritis suspected, elbow, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6522",
+        "scenario_name": "Septic arthritis suspected, hip, arthroplasty, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6527",
+        "scenario_name": "Septic arthritis suspected, hip, arthroplasty, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6532",
+        "scenario_name": "Septic arthritis suspected, hip, implanted intra articular surgical hardware, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6517",
+        "scenario_name": "Septic arthritis suspected, hip, implanted intra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6361",
+        "scenario_name": "Septic arthritis suspected, hip",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6433",
+        "scenario_name": "Septic arthritis suspected, hip, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6437",
+        "scenario_name": "Septic arthritis suspected, hip, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6444",
+        "scenario_name": "Septic arthritis suspected, hip, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6523",
+        "scenario_name": "Septic arthritis suspected, knee, arthroplasty, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6528",
+        "scenario_name": "Septic arthritis suspected, knee, arthroplasty, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6533",
+        "scenario_name": "Septic arthritis suspected, knee, implanted intra articular surgical hardware, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6518",
+        "scenario_name": "Septic arthritis suspected, knee, implanted intra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6362",
+        "scenario_name": "Septic arthritis suspected, knee",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6434",
+        "scenario_name": "Septic arthritis suspected, knee, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6438",
+        "scenario_name": "Septic arthritis suspected, knee, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6445",
+        "scenario_name": "Septic arthritis suspected, knee, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6524",
+        "scenario_name": "Septic arthritis suspected, shoulder, arthroplasty, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6529",
+        "scenario_name": "Septic arthritis suspected, shoulder, arthroplasty, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6534",
+        "scenario_name": "Septic arthritis suspected, shoulder, implanted intra articular surgical hardware, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6519",
+        "scenario_name": "Septic arthritis suspected, shoulder, implanted intra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6363",
+        "scenario_name": "Septic arthritis suspected, shoulder",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6435",
+        "scenario_name": "Septic arthritis suspected, shoulder, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6439",
+        "scenario_name": "Septic arthritis suspected, shoulder, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6446",
+        "scenario_name": "Septic arthritis suspected, shoulder, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6513",
+        "scenario_name": "Septic arthritis suspected, wrist, arthroplasty, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6512",
+        "scenario_name": "Septic arthritis suspected, wrist, arthroplasty, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6511",
+        "scenario_name": "Septic arthritis suspected, wrist, implanted intra articular surgical hardware, radiography findings suggest septic arthritis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6514",
+        "scenario_name": "Septic arthritis suspected, wrist, implanted intra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6346",
+        "scenario_name": "Septic arthritis suspected, wrist",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6384",
+        "scenario_name": "Septic arthritis suspected, wrist, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6440",
+        "scenario_name": "Septic arthritis suspected, wrist, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6386",
+        "scenario_name": "Septic arthritis suspected, wrist, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6535",
+        "scenario_name": "Soft tissue infection suspected, ankle, hx of puncture wound, possible foreign body retained, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6496",
+        "scenario_name": "Soft tissue infection suspected, ankle, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6501",
+        "scenario_name": "Soft tissue infection suspected, ankle, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6491",
+        "scenario_name": "Soft tissue infection suspected, ankle, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6365",
+        "scenario_name": "Soft tissue infection suspected, ankle",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6389",
+        "scenario_name": "Soft tissue infection suspected, ankle, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6418",
+        "scenario_name": "Soft tissue infection suspected, ankle, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6555",
+        "scenario_name": "Soft tissue infection suspected, ankle, radiography normal, necrotizing fasciitis highly suspected, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6403",
+        "scenario_name": "Soft tissue infection suspected, ankle, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6570",
+        "scenario_name": "Soft tissue infection suspected, ankle, soft tissue gas on radiography, no puncture wound, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6539",
+        "scenario_name": "Soft tissue infection suspected, elbow, hx of puncture wound, possible foreign body retained, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6497",
+        "scenario_name": "Soft tissue infection suspected, elbow, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6502",
+        "scenario_name": "Soft tissue infection suspected, elbow, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6492",
+        "scenario_name": "Soft tissue infection suspected, elbow, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6367",
+        "scenario_name": "Soft tissue infection suspected, elbow",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6390",
+        "scenario_name": "Soft tissue infection suspected, elbow, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6420",
+        "scenario_name": "Soft tissue infection suspected, elbow, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6557",
+        "scenario_name": "Soft tissue infection suspected, elbow, radiography normal, necrotizing fasciitis highly suspected, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6405",
+        "scenario_name": "Soft tissue infection suspected, elbow, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6572",
+        "scenario_name": "Soft tissue infection suspected, elbow, soft tissue gas on radiography, no puncture wound, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6541",
+        "scenario_name": "Soft tissue infection suspected, foot, hx of puncture wound, possible foreign body retained, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6379",
+        "scenario_name": "Soft tissue infection suspected, foot",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6392",
+        "scenario_name": "Soft tissue infection suspected, foot, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6422",
+        "scenario_name": "Soft tissue infection suspected, foot, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6559",
+        "scenario_name": "Soft tissue infection suspected, foot, radiography normal, necrotizing fasciitis highly suspected, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6407",
+        "scenario_name": "Soft tissue infection suspected, foot, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6574",
+        "scenario_name": "Soft tissue infection suspected, foot, soft tissue gas on radiography, no puncture wound, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6393",
+        "scenario_name": "Soft tissue infection suspected, forearm, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6543",
+        "scenario_name": "Soft tissue infection suspected, hand, hx of puncture wound, possible foreign body retained, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6370",
+        "scenario_name": "Soft tissue infection suspected, hand",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6394",
+        "scenario_name": "Soft tissue infection suspected, hand, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6424",
+        "scenario_name": "Soft tissue infection suspected, hand, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6561",
+        "scenario_name": "Soft tissue infection suspected, hand, radiography normal, necrotizing fasciitis highly suspected, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6409",
+        "scenario_name": "Soft tissue infection suspected, hand, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6576",
+        "scenario_name": "Soft tissue infection suspected, hand, soft tissue gas on radiography, no puncture wound, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6544",
+        "scenario_name": "Soft tissue infection suspected, hip, hx of puncture wound, possible foreign body retained, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6498",
+        "scenario_name": "Soft tissue infection suspected, hip, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6503",
+        "scenario_name": "Soft tissue infection suspected, hip, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6493",
+        "scenario_name": "Soft tissue infection suspected, hip, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6371",
+        "scenario_name": "Soft tissue infection suspected, hip",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6395",
+        "scenario_name": "Soft tissue infection suspected, hip, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6425",
+        "scenario_name": "Soft tissue infection suspected, hip, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6562",
+        "scenario_name": "Soft tissue infection suspected, hip, radiography normal, necrotizing fasciitis highly suspected, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6410",
+        "scenario_name": "Soft tissue infection suspected, hip, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6577",
+        "scenario_name": "Soft tissue infection suspected, hip, soft tissue gas on radiography, no puncture wound, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6546",
+        "scenario_name": "Soft tissue infection suspected, knee, hx of puncture wound, possible foreign body retained, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6499",
+        "scenario_name": "Soft tissue infection suspected, knee, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6504",
+        "scenario_name": "Soft tissue infection suspected, knee, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6494",
+        "scenario_name": "Soft tissue infection suspected, knee, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6374",
+        "scenario_name": "Soft tissue infection suspected, knee",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6397",
+        "scenario_name": "Soft tissue infection suspected, knee, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6427",
+        "scenario_name": "Soft tissue infection suspected, knee, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6564",
+        "scenario_name": "Soft tissue infection suspected, knee, radiography normal, necrotizing fasciitis highly suspected, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6412",
+        "scenario_name": "Soft tissue infection suspected, knee, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6579",
+        "scenario_name": "Soft tissue infection suspected, knee, soft tissue gas on radiography, no puncture wound, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6400",
+        "scenario_name": "Soft tissue infection suspected, lower leg, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6388",
+        "scenario_name": "Soft tissue infection suspected, neck, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6548",
+        "scenario_name": "Soft tissue infection suspected, shoulder, hx of puncture wound, possible foreign body retained, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6500",
+        "scenario_name": "Soft tissue infection suspected, shoulder, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6505",
+        "scenario_name": "Soft tissue infection suspected, shoulder, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6495",
+        "scenario_name": "Soft tissue infection suspected, shoulder, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6376",
+        "scenario_name": "Soft tissue infection suspected, shoulder",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6399",
+        "scenario_name": "Soft tissue infection suspected, shoulder, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6429",
+        "scenario_name": "Soft tissue infection suspected, shoulder, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6566",
+        "scenario_name": "Soft tissue infection suspected, shoulder, radiography normal, necrotizing fasciitis highly suspected, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6414",
+        "scenario_name": "Soft tissue infection suspected, shoulder, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6581",
+        "scenario_name": "Soft tissue infection suspected, shoulder, soft tissue gas on radiography, no puncture wound, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6391",
+        "scenario_name": "Soft tissue infection suspected, thigh, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6396",
+        "scenario_name": "Soft tissue infection suspected, upper arm, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6550",
+        "scenario_name": "Soft tissue infection suspected, wrist, hx of puncture wound, possible foreign body retained, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6478",
+        "scenario_name": "Soft tissue infection suspected, wrist, implanted extra articular surgical hardware, radiography findings suggest osteomyelitis, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6479",
+        "scenario_name": "Soft tissue infection suspected, wrist, implanted extra articular surgical hardware, radiography findings suggest soft tissue infection, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6477",
+        "scenario_name": "Soft tissue infection suspected, wrist, implanted extra articular surgical hardware, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6345",
+        "scenario_name": "Soft tissue infection suspected, wrist",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6381",
+        "scenario_name": "Soft tissue infection suspected, wrist, radiography findings suggest joint effusion, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6383",
+        "scenario_name": "Soft tissue infection suspected, wrist, radiography findings suggest soft tissue swelling, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6551",
+        "scenario_name": "Soft tissue infection suspected, wrist, radiography normal, necrotizing fasciitis highly suspected, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6382",
+        "scenario_name": "Soft tissue infection suspected, wrist, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6552",
+        "scenario_name": "Soft tissue infection suspected, wrist, soft tissue gas on radiography, no puncture wound, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6089",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, ankle, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6145",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, ankle, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6133",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, ankle, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6077",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, ankle, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6090",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, elbow, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6146",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, elbow, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6134",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, elbow, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6078",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, elbow, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6091",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, femur, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6147",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, femur, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6135",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, femur, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6079",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, femur, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6092",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, foot, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6148",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, foot, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6136",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, foot, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6080",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, foot, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6093",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, forearm, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6149",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, forearm, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6137",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, forearm, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6081",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, forearm, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6094",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, hand, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6150",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, hand, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6138",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, hand, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6082",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, hand, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6095",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, hip, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6151",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, hip, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6139",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, hip, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6083",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, hip, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6096",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, humerus, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6152",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, humerus, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6140",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, humerus, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6084",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, humerus, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6097",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, knee, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6153",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, knee, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6141",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, knee, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6085",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, knee, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6098",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, shoulder, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6154",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, shoulder, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6142",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, shoulder, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6086",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, shoulder, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6099",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, tibia fibula, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6155",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, tibia fibula, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6143",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, tibia fibula, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6087",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, tibia fibula, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6100",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, wrist, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6156",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, wrist, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6144",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, wrist, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6088",
+        "scenario_name": "Osteomyelitis or septic arthritis suspected, wrist, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6076",
+        "scenario_name": "Osteomyelitis suspected, ankle, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6157",
+        "scenario_name": "Osteomyelitis suspected, ankle, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6034",
+        "scenario_name": "Osteomyelitis suspected, ankle",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6101",
+        "scenario_name": "Osteomyelitis suspected, ankle",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6121",
+        "scenario_name": "Osteomyelitis suspected, ankle, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6053",
+        "scenario_name": "Osteomyelitis suspected, ankle, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6158",
+        "scenario_name": "Osteomyelitis suspected, elbow, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6075",
+        "scenario_name": "Osteomyelitis suspected, elbow, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6102",
+        "scenario_name": "Osteomyelitis suspected, elbow",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6035",
+        "scenario_name": "Osteomyelitis suspected, elbow",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6054",
+        "scenario_name": "Osteomyelitis suspected, elbow, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6122",
+        "scenario_name": "Osteomyelitis suspected, elbow, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6073",
+        "scenario_name": "Osteomyelitis suspected, foot, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6160",
+        "scenario_name": "Osteomyelitis suspected, foot, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6104",
+        "scenario_name": "Osteomyelitis suspected, foot",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6033",
+        "scenario_name": "Osteomyelitis suspected, foot",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6131",
+        "scenario_name": "Osteomyelitis suspected, foot, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6056",
+        "scenario_name": "Osteomyelitis suspected, foot, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6071",
+        "scenario_name": "Osteomyelitis suspected, hand, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6162",
+        "scenario_name": "Osteomyelitis suspected, hand, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6106",
+        "scenario_name": "Osteomyelitis suspected, hand",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6038",
+        "scenario_name": "Osteomyelitis suspected, hand",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6129",
+        "scenario_name": "Osteomyelitis suspected, hand, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6058",
+        "scenario_name": "Osteomyelitis suspected, hand, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6070",
+        "scenario_name": "Osteomyelitis suspected, hip, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6163",
+        "scenario_name": "Osteomyelitis suspected, hip, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6039",
+        "scenario_name": "Osteomyelitis suspected, hip",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6107",
+        "scenario_name": "Osteomyelitis suspected, hip",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6128",
+        "scenario_name": "Osteomyelitis suspected, hip, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6059",
+        "scenario_name": "Osteomyelitis suspected, hip, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6068",
+        "scenario_name": "Osteomyelitis suspected, knee, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6165",
+        "scenario_name": "Osteomyelitis suspected, knee, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6041",
+        "scenario_name": "Osteomyelitis suspected, knee",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6109",
+        "scenario_name": "Osteomyelitis suspected, knee",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6126",
+        "scenario_name": "Osteomyelitis suspected, knee, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6061",
+        "scenario_name": "Osteomyelitis suspected, knee, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6067",
+        "scenario_name": "Osteomyelitis suspected, shoulder, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6166",
+        "scenario_name": "Osteomyelitis suspected, shoulder, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6110",
+        "scenario_name": "Osteomyelitis suspected, shoulder",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6043",
+        "scenario_name": "Osteomyelitis suspected, shoulder",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6125",
+        "scenario_name": "Osteomyelitis suspected, shoulder, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6062",
+        "scenario_name": "Osteomyelitis suspected, shoulder, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6065",
+        "scenario_name": "Osteomyelitis suspected, wrist, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6168",
+        "scenario_name": "Osteomyelitis suspected, wrist, findings suggestive of osteomyelitis on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6112",
+        "scenario_name": "Osteomyelitis suspected, wrist",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6042",
+        "scenario_name": "Osteomyelitis suspected, wrist",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6064",
+        "scenario_name": "Osteomyelitis suspected, wrist, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6123",
+        "scenario_name": "Osteomyelitis suspected, wrist, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6113",
+        "scenario_name": "Septic arthritis suspected, ankle",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6050",
+        "scenario_name": "Septic arthritis suspected, ankle",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6177",
+        "scenario_name": "Septic arthritis suspected, ankle, possible joint effusion on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6169",
+        "scenario_name": "Septic arthritis suspected, ankle, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6114",
+        "scenario_name": "Septic arthritis suspected, elbow",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6045",
+        "scenario_name": "Septic arthritis suspected, elbow",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6178",
+        "scenario_name": "Septic arthritis suspected, elbow, possible joint effusion on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6170",
+        "scenario_name": "Septic arthritis suspected, elbow, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6115",
+        "scenario_name": "Septic arthritis suspected, foot",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6051",
+        "scenario_name": "Septic arthritis suspected, foot",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6179",
+        "scenario_name": "Septic arthritis suspected, foot, possible joint effusion on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6171",
+        "scenario_name": "Septic arthritis suspected, foot, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6047",
+        "scenario_name": "Septic arthritis suspected, hand",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6117",
+        "scenario_name": "Septic arthritis suspected, hand",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6180",
+        "scenario_name": "Septic arthritis suspected, hand, possible joint effusion on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6172",
+        "scenario_name": "Septic arthritis suspected, hand, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6118",
+        "scenario_name": "Septic arthritis suspected, hip",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6048",
+        "scenario_name": "Septic arthritis suspected, hip",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6181",
+        "scenario_name": "Septic arthritis suspected, hip, possible joint effusion on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6173",
+        "scenario_name": "Septic arthritis suspected, hip, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6049",
+        "scenario_name": "Septic arthritis suspected, knee",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6116",
+        "scenario_name": "Septic arthritis suspected, knee",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6182",
+        "scenario_name": "Septic arthritis suspected, knee, possible joint effusion on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6174",
+        "scenario_name": "Septic arthritis suspected, knee, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6119",
+        "scenario_name": "Septic arthritis suspected, shoulder",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6044",
+        "scenario_name": "Septic arthritis suspected, shoulder",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6183",
+        "scenario_name": "Septic arthritis suspected, shoulder, possible joint effusion on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6175",
+        "scenario_name": "Septic arthritis suspected, shoulder, radiography normal, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6046",
+        "scenario_name": "Septic arthritis suspected, wrist",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6120",
+        "scenario_name": "Septic arthritis suspected, wrist",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6184",
+        "scenario_name": "Septic arthritis suspected, wrist, possible joint effusion on radiography, next imaging study",
+        "relevance_score": 90
+      },
+      {
+        "scenario_id": "6176",
+        "scenario_name": "Septic arthritis suspected, wrist, radiography normal, next imaging study",
+        "relevance_score": 90
+      }
+    ],
+    "clinical_context": {
+      "patient_prep": {
+        "fasting": false,
+        "fasting_duration_hours": null,
+        "hydration": "Normal hydration",
+        "medication_considerations": [
+          "Review renal function for contrast administration",
+          "Document any recent antibiotic use",
+          "Note any known allergies to contrast"
+        ],
+        "other_prep": []
+      },
+      "contraindications": {
+        "absolute": [
+          "MRI-incompatible implants or devices",
+          "Metallic foreign bodies in eye",
+          "Severe gadolinium allergy without premedication"
+        ],
+        "relative": [
+          "Renal impairment (GFR <30 for gadolinium)",
+          "Severe claustrophobia without sedation",
+          "Inability to remain still"
+        ],
+        "gfr_cutoff": 30,
+        "pregnancy_considerations": "Avoid gadolinium in pregnancy unless absolutely necessary"
+      },
+      "common_pitfalls": [
+        "Reactive marrow edema mimicking osteomyelitis",
+        "Neuropathic arthropathy (Charcot) confused with infection",
+        "Post-surgical changes vs active infection",
+        "Inadequate fat suppression obscuring enhancement"
+      ],
+      "sequence_rationale": [
+        {
+          "sequence": "AX/SAG/COR T1",
+          "purpose": "Baseline bone marrow signal assessment",
+          "key_findings": "Normal fatty marrow is bright; replacement by infection appears dark"
+        },
+        {
+          "sequence": "AX/SAG/COR T2",
+          "purpose": "Fluid-sensitive detection of edema and collections",
+          "key_findings": "Bone marrow edema, soft tissue edema, fluid collections, sinus tracts"
+        },
+        {
+          "sequence": "AX/SAG/COR T1 FS POST",
+          "purpose": "Enhancement pattern characterization",
+          "key_findings": "Rim-enhancing abscess, cortical destruction, soft tissue phlegmon, extent of infection"
+        }
+      ],
+      "clinical_pearls": [
+        "T1 signal loss in marrow is highly sensitive but not specific for osteomyelitis",
+        "Post-contrast T1 FS is most specific for active infection",
+        "Look for cortical destruction and periosteal reaction",
+        "Sinus tracts extending to bone are diagnostic of osteomyelitis",
+        "In diabetic foot, probe-to-bone test correlates with MRI findings"
+      ],
+      "critical_sequences": [
+        "COR T1",
+        "COR T2",
+        "COR T1 FS POST"
+      ],
+      "optional_sequences": [],
+      "red_flags": [
+        "Extensive bone destruction requiring surgical consultation",
+        "Gas within bone suggesting gas-forming organisms",
+        "Adjacent joint involvement (septic arthritis)",
+        "Vascular compromise in diabetic patients",
+        "Hardware loosening in post-surgical cases"
+      ],
+      "differential_considerations": [
+        "Neuropathic arthropathy (Charcot joint)",
+        "Stress fracture with reactive edema",
+        "Bone tumor (primary or metastatic)",
+        "Transient bone marrow edema syndrome",
+        "Post-traumatic changes"
+      ],
+      "acr_alignment": {
+        "supported_indications": [
+          "Suspected osteomyelitis, initial imaging",
+          "Osteomyelitis with hardware, evaluation",
+          "Diabetic foot infection assessment"
+        ],
+        "rating_notes": "ACR rates MRI without and with contrast as 8-9 (Usually Appropriate) for osteomyelitis evaluation"
+      },
+      "references": [
+        "ACR Appropriateness Criteria - Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection",
+        "ACR-SPR-SSR Practice Parameter for the Performance of Musculoskeletal MRI"
+      ]
+    }
+  },
+  {
     "name": "TIB/FIB",
     "display_name": "TIB/FIB",
     "uses_contrast": 0,
