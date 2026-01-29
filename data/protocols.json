@@ -320,8 +320,8 @@
     }
   },
   {
-    "name": "BRAIN TUMOR/INF",
-    "display_name": "BRAIN TUMOR/INF",
+    "name": "BRAIN TUMOR / INFECTION",
+    "display_name": "BRAIN TUMOR / INFECTION",
     "uses_contrast": 1,
     "section": "Neuro Imaging",
     "sections": [
@@ -2253,8 +2253,8 @@
     }
   },
   {
-    "name": "PITUITARY POST-OP",
-    "display_name": "Pituitary Post-Op",
+    "name": "PITUITARY POST OP",
+    "display_name": "PITUITARY POST OP",
     "uses_contrast": 1,
     "section": "Neuro Imaging",
     "sections": [

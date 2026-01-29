@@ -15,7 +15,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20260129j';
+    const cacheBuster = '20260129k';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -480,13 +480,13 @@ export class DataLoader {
       if (tia) return tia;
     }
 
-    // Brain tumor/mass -> BRAIN TUMOR/INF protocol
+    // Brain tumor/mass -> BRAIN TUMOR / INFECTION protocol
     // ONLY for neuro procedures (head/brain MRI)
     if (isNeuroProcedure &&
         (scenarioName.includes('tumor') || scenarioName.includes('mass') ||
          scenarioName.includes('lesion') || scenarioName.includes('metasta'))) {
       const tumorProtocol = protocols.find(p =>
-        p.name === 'BRAIN TUMOR/INF' ||
+        p.name === 'BRAIN TUMOR / INFECTION' ||
         (p.name.includes('TUMOR') && p.body_region === 'neuro')
       );
       if (tumorProtocol) return tumorProtocol;
