@@ -1031,6 +1031,45 @@ input:focus, button:focus {
   color: var(--accent);
 }
 
+/* Source badge - indicates if protocol is curated or suggested */
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.source-badge.curated {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.source-badge.curated svg {
+  stroke: #10b981;
+}
+
+.source-badge.suggested {
+  background: rgba(249, 115, 22, 0.15);
+  color: #ea580c;
+  border: 1px dashed rgba(249, 115, 22, 0.5);
+}
+
+.source-badge.suggested svg {
+  stroke: #ea580c;
+}
+
+.protocol-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .protocol-card-content {
   padding: var(--space-lg);
 }

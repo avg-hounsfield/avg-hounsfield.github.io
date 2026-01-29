@@ -755,13 +755,17 @@ class ProtocolHelpApp {
     this.ui.setStatus('Loading protocol...', 'loading');
 
     try {
-      const protocol = await this.dataLoader.getProtocol(
+      const result = await this.dataLoader.getProtocol(
         this.currentRegion,
         this.currentScenario,
         procedure
       );
 
-      this.ui.renderMriProtocol(protocol, procedure);
+      // getProtocol now returns { protocol, matchType }
+      const protocol = result?.protocol || result; // Handle both old and new format
+      const matchType = result?.matchType || 'suggested';
+
+      this.ui.renderMriProtocol(protocol, procedure, matchType);
       this.ui.setStatus('Ready');
     } catch (error) {
       console.error('Protocol load error:', error);

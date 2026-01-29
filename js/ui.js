@@ -15,6 +15,8 @@ export class UI {
     this.mriProtocolCard = document.getElementById('mriProtocolCard');
     this.protocolName = document.getElementById('protocolName');
     this.contrastBadge = document.getElementById('contrastBadge');
+    this.sourceBadge = document.getElementById('sourceBadge');
+    this.sourceBadgeText = document.getElementById('sourceBadgeText');
     this.sequencesGrid = document.getElementById('sequencesGrid');
     this.protocolRationale = document.getElementById('protocolRationale');
 
@@ -323,7 +325,7 @@ export class UI {
   // ========================================
   // MRI Protocol Card (Bottom)
   // ========================================
-  renderMriProtocol(protocol, procedure) {
+  renderMriProtocol(protocol, procedure, matchType = 'suggested') {
     if (!protocol) {
       this.showMriProtocolMessage(procedure);
       return;
@@ -333,6 +335,19 @@ export class UI {
 
     // Set protocol name
     this.protocolName.textContent = protocol.display_name || protocol.name;
+
+    // Set source badge (curated vs suggested)
+    if (this.sourceBadge) {
+      this.sourceBadge.classList.remove('hidden', 'curated', 'suggested');
+      this.sourceBadge.classList.add(matchType);
+      if (this.sourceBadgeText) {
+        this.sourceBadgeText.textContent = matchType === 'curated' ? 'Curated' : 'Suggested';
+      }
+      // Update tooltip
+      this.sourceBadge.title = matchType === 'curated'
+        ? 'Protocol verified for this specific scenario'
+        : 'Protocol suggested based on clinical context';
+    }
 
     // Set contrast badge
     const hasContrast = protocol.uses_contrast || (procedure && procedure.usesContrast);
@@ -391,6 +406,11 @@ export class UI {
     this.protocolName.textContent = procName;
     this.contrastBadge.textContent = procedure?.usesContrast ? 'With Contrast' : 'No Contrast';
     this.contrastBadge.className = `contrast-badge ${procedure?.usesContrast ? 'with-contrast' : 'no-contrast'}`;
+
+    // Hide source badge when no protocol found
+    if (this.sourceBadge) {
+      this.sourceBadge.classList.add('hidden');
+    }
 
     this.sequencesGrid.innerHTML = `
       <div class="empty-state" style="min-height: 100px;">

@@ -1,0 +1,552 @@
+{
+  "version": "1.0",
+  "description": "Maps ACR procedure names to canonical forms and scanner protocols",
+  "terminology_notes": {
+    "acr_uses": "head, without IV contrast, with IV contrast",
+    "institutions_may_use": "brain, w/o contrast, w/ contrast, non-contrast, +C"
+  },
+  "normalization_rules": {
+    "body_part_synonyms": {
+      "head": ["brain", "cranial", "intracranial"],
+      "cervical spine": ["c-spine", "neck spine"],
+      "thoracic spine": ["t-spine", "dorsal spine"],
+      "lumbar spine": ["l-spine", "lower spine"],
+      "complete spine": ["total spine", "whole spine", "screening spine"],
+      "temporomandibular": ["tmj", "jaw joint"],
+      "sacroiliac": ["si joint", "sij"]
+    },
+    "contrast_synonyms": {
+      "without IV contrast": ["w/o contrast", "non-contrast", "NC", "without gad", "pre-contrast", "unenhanced"],
+      "with IV contrast": ["w/ contrast", "+C", "with gad", "post-gad", "enhanced", "post-contrast"],
+      "without and with IV contrast": ["w/ & w/o contrast", "pre and post contrast", "with and without contrast", "w/wo contrast"]
+    },
+    "modality_synonyms": {
+      "MRI": ["MR", "magnetic resonance"],
+      "MRA": ["MR angiography", "magnetic resonance angiography"],
+      "MRV": ["MR venography"]
+    }
+  },
+  "procedures": {
+    "mri_head_no_contrast": {
+      "canonical_display": "MRI Brain Without Contrast",
+      "acr_name": "MRI head without IV contrast",
+      "body_region": "neuro",
+      "body_part": "brain",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "BRAIN",
+          "match_context": ["routine", "trauma", "headache", "default"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "SEIZURE",
+          "match_context": ["seizure", "epilepsy", "convulsion"],
+          "priority": 2
+        },
+        {
+          "protocol_name": "TIA",
+          "match_context": ["tia", "stroke", "ischemia", "infarct"],
+          "priority": 2
+        }
+      ]
+    },
+    "mri_head_with_contrast": {
+      "canonical_display": "MRI Brain With Contrast",
+      "acr_name": "MRI head with IV contrast",
+      "body_region": "neuro",
+      "body_part": "brain",
+      "modality": "MRI",
+      "contrast": "with",
+      "protocol_routes": [
+        {
+          "protocol_name": "BRAIN TUMOR/INF",
+          "match_context": ["tumor", "mass", "infection", "abscess", "metastasis", "cancer"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "BRAIN MS",
+          "match_context": ["ms", "multiple sclerosis", "demyelinating", "demyelination"],
+          "priority": 2
+        }
+      ]
+    },
+    "mri_head_both_contrast": {
+      "canonical_display": "MRI Brain Without and With Contrast",
+      "acr_name": "MRI head without and with IV contrast",
+      "body_region": "neuro",
+      "body_part": "brain",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "*POST-OP",
+          "match_context": ["post-op", "postop", "post-treatment", "treated", "resection", "surgery", "craniotomy", "surveillance"],
+          "priority": 1,
+          "note": "Post-op takes precedence when treatment history is mentioned"
+        },
+        {
+          "protocol_name": "BRAIN TUMOR/INF",
+          "match_context": ["tumor", "mass", "neoplasm", "metastasis", "cancer", "malignancy", "infection", "abscess", "pretreatment", "staging", "initial"],
+          "priority": 2
+        },
+        {
+          "protocol_name": "BRAIN MS",
+          "match_context": ["ms", "multiple sclerosis", "demyelinating", "white matter", "optic neuritis"],
+          "priority": 2
+        },
+        {
+          "protocol_name": "PITUITARY",
+          "match_context": ["pituitary", "sella", "adenoma", "prolactin", "acromegaly", "cushing", "hypopituitarism"],
+          "priority": 2
+        }
+      ]
+    },
+    "mri_iac_no_contrast": {
+      "canonical_display": "MRI Internal Auditory Canal Without Contrast",
+      "acr_name": "MRI internal auditory canal without IV contrast",
+      "body_region": "neuro",
+      "body_part": "iac",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "IAC",
+          "match_context": ["hearing", "tinnitus", "vestibular", "acoustic", "cholesteatoma"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_iac_both_contrast": {
+      "canonical_display": "MRI Internal Auditory Canal Without and With Contrast",
+      "acr_name": "MRI internal auditory canal without and with IV contrast",
+      "body_region": "neuro",
+      "body_part": "iac",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "IAC W/GAD",
+          "match_context": ["schwannoma", "neuroma", "tumor", "mass", "facial nerve"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_orbits_both_contrast": {
+      "canonical_display": "MRI Orbits Without and With Contrast",
+      "acr_name": "MRI orbits face and neck without and with IV contrast",
+      "body_region": "neuro",
+      "body_part": "orbits",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "ORBITS",
+          "match_context": ["orbit", "eye", "optic", "proptosis", "diplopia", "vision"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_cspine_no_contrast": {
+      "canonical_display": "MRI Cervical Spine Without Contrast",
+      "acr_name": "MRI cervical spine without IV contrast",
+      "body_region": "spine",
+      "body_part": "cervical spine",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "C-SPINE",
+          "match_context": ["radiculopathy", "stenosis", "disc", "herniation", "neck pain", "myelopathy"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_cspine_both_contrast": {
+      "canonical_display": "MRI Cervical Spine Without and With Contrast",
+      "acr_name": "MRI cervical spine without and with IV contrast",
+      "body_region": "spine",
+      "body_part": "cervical spine",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "C-SPINE MS",
+          "match_context": ["ms", "multiple sclerosis", "demyelinating", "myelitis"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "C-SPINE",
+          "match_context": ["tumor", "infection", "abscess", "discitis"],
+          "priority": 2
+        }
+      ]
+    },
+    "mri_tspine_no_contrast": {
+      "canonical_display": "MRI Thoracic Spine Without Contrast",
+      "acr_name": "MRI thoracic spine without IV contrast",
+      "body_region": "spine",
+      "body_part": "thoracic spine",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "T-SPINE",
+          "match_context": ["thoracic", "mid back", "kyphosis", "compression"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_lspine_no_contrast": {
+      "canonical_display": "MRI Lumbar Spine Without Contrast",
+      "acr_name": "MRI lumbar spine without IV contrast",
+      "body_region": "spine",
+      "body_part": "lumbar spine",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "L-SPINE",
+          "match_context": ["low back", "sciatica", "radiculopathy", "stenosis", "disc", "herniation"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_complete_spine_no_contrast": {
+      "canonical_display": "MRI Complete Spine Without Contrast",
+      "acr_name": "MRI complete spine without IV contrast",
+      "body_region": "spine",
+      "body_part": "complete spine",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "SCREENING SPINE",
+          "match_context": ["screening", "metastasis", "mets", "cancer", "scoliosis"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_complete_spine_both_contrast": {
+      "canonical_display": "MRI Complete Spine Without and With Contrast",
+      "acr_name": "MRI complete spine without and with IV contrast",
+      "body_region": "spine",
+      "body_part": "complete spine",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "SCREENING SPINE",
+          "match_context": ["metastasis", "mets", "cancer", "tumor", "drop mets"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_knee_no_contrast": {
+      "canonical_display": "MRI Knee Without Contrast",
+      "acr_name": "MRI knee without IV contrast",
+      "body_region": "msk",
+      "body_part": "knee",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "KNEE",
+          "match_context": ["acl", "meniscus", "ligament", "cartilage", "pain", "injury", "tear"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_shoulder_no_contrast": {
+      "canonical_display": "MRI Shoulder Without Contrast",
+      "acr_name": "MRI shoulder without IV contrast",
+      "body_region": "msk",
+      "body_part": "shoulder",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "SHOULDER",
+          "match_context": ["rotator cuff", "labrum", "impingement", "tear", "pain"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_hip_no_contrast": {
+      "canonical_display": "MRI Hip Without Contrast",
+      "acr_name": "MRI hip without IV contrast",
+      "body_region": "msk",
+      "body_part": "hip",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "HIP",
+          "match_context": ["labral", "avascular necrosis", "avn", "fai", "pain"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_abdomen_pelvis_both_contrast": {
+      "canonical_display": "MRI Abdomen and Pelvis Without and With Contrast",
+      "acr_name": "MRI abdomen and pelvis without and with IV contrast",
+      "body_region": "abdomen",
+      "body_part": "abdomen pelvis",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "ABDOMEN PELVIS",
+          "match_context": ["liver", "kidney", "pancreas", "mass", "tumor", "staging"],
+          "priority": 1
+        }
+      ]
+    },
+    "mrcp": {
+      "canonical_display": "MRCP",
+      "acr_name": "MRCP",
+      "body_region": "abdomen",
+      "body_part": "biliary",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "MRCP",
+          "match_context": ["bile duct", "biliary", "cholangitis", "stricture", "stone", "gallbladder"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_sella_both_contrast": {
+      "canonical_display": "MRI Pituitary Without and With Contrast",
+      "acr_name": "MRI sella without and with IV contrast",
+      "body_region": "neuro",
+      "body_part": "sella",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "PITUITARY",
+          "match_context": ["pituitary", "adenoma", "prolactin", "cushing", "acromegaly", "apoplexy"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_sella_with_contrast": {
+      "canonical_display": "MRI Pituitary With Contrast",
+      "acr_name": "MRI sella with IV contrast",
+      "body_region": "neuro",
+      "body_part": "sella",
+      "modality": "MRI",
+      "contrast": "with",
+      "protocol_routes": [
+        {
+          "protocol_name": "PITUITARY",
+          "match_context": ["pituitary", "adenoma", "microadenoma"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_sella_no_contrast": {
+      "canonical_display": "MRI Pituitary Without Contrast",
+      "acr_name": "MRI sella without IV contrast",
+      "body_region": "neuro",
+      "body_part": "sella",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "PITUITARY",
+          "match_context": ["pituitary", "empty sella"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_tmj_no_contrast": {
+      "canonical_display": "MRI TMJ Without Contrast",
+      "acr_name": "MRI temporomandibular joint without IV contrast",
+      "body_region": "neuro",
+      "body_part": "tmj",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "TMJ",
+          "match_context": ["tmj", "jaw", "disc", "click", "dysfunction"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_neck_both_contrast": {
+      "canonical_display": "MRI Neck Soft Tissue Without and With Contrast",
+      "acr_name": "MRI neck without and with IV contrast",
+      "body_region": "neuro",
+      "body_part": "neck",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "NECK SOFT TISSUE",
+          "match_context": ["mass", "tumor", "lymph node", "thyroid", "salivary"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_brachial_plexus_no_contrast": {
+      "canonical_display": "MRI Brachial Plexus Without Contrast",
+      "acr_name": "MRI brachial plexus without IV contrast",
+      "body_region": "neuro",
+      "body_part": "brachial plexus",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "BRACHIAL PLEXUS",
+          "match_context": ["plexus", "erb", "klumpke", "thoracic outlet", "pancoast"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_sacrum_no_contrast": {
+      "canonical_display": "MRI Sacrum Without Contrast",
+      "acr_name": "MRI sacrum without IV contrast",
+      "body_region": "spine",
+      "body_part": "sacrum",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "SACRUM",
+          "match_context": ["sacral", "coccyx", "tarlov", "chordoma"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_si_joint_no_contrast": {
+      "canonical_display": "MRI Sacroiliac Joints Without Contrast",
+      "acr_name": "MRI sacroiliac joints without IV contrast",
+      "body_region": "msk",
+      "body_part": "si joint",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "SI JOINTS",
+          "match_context": ["sacroiliitis", "ankylosing", "spondyloarthropathy", "inflammatory"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_si_joint_both_contrast": {
+      "canonical_display": "MRI Sacroiliac Joints Without and With Contrast",
+      "acr_name": "MRI sacroiliac joints without and with IV contrast",
+      "body_region": "msk",
+      "body_part": "si joint",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "SI JOINTS",
+          "match_context": ["sacroiliitis", "infection", "tumor"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_breast_both_contrast": {
+      "canonical_display": "MRI Breast Without and With Contrast",
+      "acr_name": "MRI breast without and with IV contrast",
+      "body_region": "breast",
+      "body_part": "breast",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "BREAST",
+          "match_context": ["breast cancer", "screening", "mass", "implant", "high risk"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_breast_no_contrast": {
+      "canonical_display": "MRI Breast Without Contrast",
+      "acr_name": "MRI breast without IV contrast",
+      "body_region": "breast",
+      "body_part": "breast",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "BREAST",
+          "match_context": ["implant", "rupture", "silicone"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_heart_both_contrast": {
+      "canonical_display": "MRI Cardiac Without and With Contrast",
+      "acr_name": "MRI heart function and morphology without and with IV contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC",
+          "match_context": ["cardiomyopathy", "viability", "infarct", "mass", "arvc"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_heart_no_contrast": {
+      "canonical_display": "MRI Cardiac Without Contrast",
+      "acr_name": "MRI heart function and morphology without IV contrast",
+      "body_region": "chest",
+      "body_part": "heart",
+      "modality": "MRI",
+      "contrast": "none",
+      "protocol_routes": [
+        {
+          "protocol_name": "CARDIAC",
+          "match_context": ["function", "valve", "congenital"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_lspine_both_contrast": {
+      "canonical_display": "MRI Lumbar Spine Without and With Contrast",
+      "acr_name": "MRI lumbar spine without and with IV contrast",
+      "body_region": "spine",
+      "body_part": "lumbar spine",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "L-SPINE",
+          "match_context": ["tumor", "infection", "discitis", "post-op", "failed back"],
+          "priority": 1
+        }
+      ]
+    },
+    "mri_tspine_both_contrast": {
+      "canonical_display": "MRI Thoracic Spine Without and With Contrast",
+      "acr_name": "MRI thoracic spine without and with IV contrast",
+      "body_region": "spine",
+      "body_part": "thoracic spine",
+      "modality": "MRI",
+      "contrast": "both",
+      "protocol_routes": [
+        {
+          "protocol_name": "T-SPINE MS",
+          "match_context": ["ms", "myelitis", "demyelinating"],
+          "priority": 1
+        },
+        {
+          "protocol_name": "T-SPINE",
+          "match_context": ["tumor", "infection", "compression"],
+          "priority": 2
+        }
+      ]
+    }
+  }
+}

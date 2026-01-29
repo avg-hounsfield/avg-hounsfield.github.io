@@ -26,7 +26,7 @@
   <!-- Theme Color -->
   <meta name="theme-color" content="#9B5DE5">
 
-  <link rel="stylesheet" href="css/main.css?v=20260128c">
+  <link rel="stylesheet" href="css/main.css?v=20260129a">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>R</text></svg>">
   <link rel="manifest" href="manifest.json">
 </head>
@@ -491,6 +491,13 @@
               <span id="protocolName">MRI Protocol</span>
             </div>
             <div class="protocol-card-meta">
+              <span class="source-badge curated hidden" id="sourceBadge" title="Protocol source">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <span id="sourceBadgeText">Curated</span>
+              </span>
               <span class="contrast-badge" id="contrastBadge">No Contrast</span>
             </div>
           </div>
@@ -686,6 +693,6 @@
       });
     }
   </script>
-  <script type="module" src="js/app.js?v=20260128d"></script>
+  <script type="module" src="js/app.js?v=20260129a"></script>
 </body>
 </html>

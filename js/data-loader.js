@@ -13,7 +13,9 @@ export class DataLoader {
       return this.cache.get(region);
     }
 
-    const scenariosPath = `data/regions/${region}.json`;
+    // Cache buster to ensure fresh data after updates
+    const cacheBuster = '20260128';
+    const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
       const response = await fetch(scenariosPath);
@@ -56,7 +58,7 @@ export class DataLoader {
     const protocols = await this.loadProtocols();
 
     if (!protocols || protocols.length === 0) {
-      return null;
+      return { protocol: null, matchType: null };
     }
 
     // Determine contrast needs from procedure
@@ -64,21 +66,24 @@ export class DataLoader {
     const scenarioName = (scenario?.name || '').toLowerCase();
 
     // FIRST: Apply clinical rules for specific conditions
+    // These are explicitly coded rules, so they're "curated"
     const clinicalMatch = this.applyClinicalRules(protocols, scenarioName, needsContrast);
     if (clinicalMatch) {
-      return clinicalMatch;
+      return { protocol: clinicalMatch, matchType: 'curated' };
     }
 
     // SECOND: Check pre-computed scenario matches
+    // If scenario is explicitly in protocol's scenario_matches, it's "curated"
     if (scenario?.id) {
       const scenarioId = String(scenario.id);
       const preMatched = this.findPrecomputedMatch(protocols, scenarioId, needsContrast, scenarioName);
       if (preMatched) {
-        return preMatched;
+        return { protocol: preMatched, matchType: 'curated' };
       }
     }
 
     // FALLBACK: Dynamic scoring based on terms
+    // This is algorithmic matching, so it's "suggested"
     const searchTerms = this.extractSearchTerms(scenario, procedure, region);
 
     // Score each protocol
@@ -92,12 +97,16 @@ export class DataLoader {
 
     // Return best match if score is high enough
     if (scored[0]?.score >= 10) {
-      return scored[0].protocol;
+      return { protocol: scored[0].protocol, matchType: 'suggested' };
     }
 
     // Fallback: try to find any protocol in the right region
     const regionFallback = scored.find(s => s.score >= 5);
-    return regionFallback?.protocol || null;
+    if (regionFallback?.protocol) {
+      return { protocol: regionFallback.protocol, matchType: 'suggested' };
+    }
+
+    return { protocol: null, matchType: null };
   }
 
   // Clinical intelligence for protocol selection
@@ -110,7 +119,9 @@ export class DataLoader {
     }
 
     // Explicitly mentions TIA -> TIA protocol
-    if (scenarioName.includes('tia') || scenarioName.includes('transient ischemic')) {
+    // Use word boundary to avoid matching 'tia' in 'initial', 'potential', etc.
+    const tiaRegex = /(^|[\s,;.\-])tia([\s,;.\-]|$)/i;
+    if (tiaRegex.test(scenarioName) || scenarioName.includes('transient ischemic')) {
       const tia = protocols.find(p => p.name === 'TIA');
       if (tia) return tia;
     }
