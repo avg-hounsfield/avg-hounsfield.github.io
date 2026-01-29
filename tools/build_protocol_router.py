@@ -225,9 +225,22 @@ def build_router(project_root):
             # Try component-based matching
             components = extract_procedure_components(acr_proc)
 
+            # Protocols that should NOT be used as generic fallbacks
+            # These are specialized protocols that require specific clinical context
+            EXCLUDE_FROM_FALLBACK = {
+                'OSTEOMYELITIS',  # Only for infection scenarios
+                'CARDIAC STRESS',  # Only for stress testing
+                'MR DEFECOGRAPHY',  # Specialized pelvic floor
+                'MR ENTEROGRAPHY',  # Specialized GI
+                'FETAL',  # Specialized prenatal
+            }
+
             # Look for a protocol that matches body part
             matching_protocols = []
             for protocol in protocols:
+                proto_name = protocol.get('name', '')
+                if proto_name in EXCLUDE_FROM_FALLBACK:
+                    continue  # Skip specialized protocols
                 proto_body = protocol.get('body_part', '').lower()
                 if components['body_part'] and components['body_part'].replace('_', ' ') in proto_body:
                     matching_protocols.append(protocol['name'])

@@ -2,8 +2,8 @@
   "version": "1.0",
   "description": "Smart routing from ACR procedures to scanner protocols",
   "procedure_count": 161,
-  "mapped_count": 155,
-  "unmapped_count": 6,
+  "mapped_count": 149,
+  "unmapped_count": 12,
   "routes": {
     "DOTATATE PET/MRI brain": {
       "canonical_display": "DOTATATE PET/MRI brain",
@@ -47,20 +47,6 @@
         },
         {
           "protocol_name": "SEIZURE",
-          "match_context": [],
-          "priority": 1
-        }
-      ],
-      "match_type": "component"
-    },
-    "FDG-PET/MRI heart": {
-      "canonical_display": "FDG-PET/MRI heart",
-      "body_region": "unknown",
-      "body_part": "heart",
-      "contrast": "unknown",
-      "protocol_routes": [
-        {
-          "protocol_name": "CARDIAC STRESS",
           "match_context": [],
           "priority": 1
         }
@@ -609,32 +595,6 @@
         }
       ],
       "match_type": "component"
-    },
-    "MRI area of interest without and with IV contrast": {
-      "canonical_display": "MRI Extremity Without and With Contrast (Infection)",
-      "body_region": "msk",
-      "body_part": "extremity",
-      "contrast": "both",
-      "protocol_routes": [
-        {
-          "protocol_name": "OSTEOMYELITIS",
-          "match_context": [
-            "osteomyelitis",
-            "bone infection",
-            "septic",
-            "hardware infection",
-            "diabetic foot",
-            "infected",
-            "soft tissue infection",
-            "cellulitis",
-            "abscess",
-            "necrotizing",
-            "fasciitis"
-          ],
-          "priority": 1
-        }
-      ],
-      "match_type": "exact"
     },
     "MRI breast without IV contrast": {
       "canonical_display": "MRI Breast Without Contrast",
@@ -2111,34 +2071,6 @@
       ],
       "match_type": "component"
     },
-    "MRI lower extremity without IV contrast": {
-      "canonical_display": "MRI lower extremity without IV contrast",
-      "body_region": "unknown",
-      "body_part": "lower_extremity",
-      "contrast": "none",
-      "protocol_routes": [
-        {
-          "protocol_name": "OSTEOMYELITIS",
-          "match_context": [],
-          "priority": 1
-        }
-      ],
-      "match_type": "component"
-    },
-    "MRI lower extremity without and with IV contrast": {
-      "canonical_display": "MRI lower extremity without and with IV contrast",
-      "body_region": "unknown",
-      "body_part": "lower_extremity",
-      "contrast": "both",
-      "protocol_routes": [
-        {
-          "protocol_name": "OSTEOMYELITIS",
-          "match_context": [],
-          "priority": 1
-        }
-      ],
-      "match_type": "component"
-    },
     "MRI lower leg without IV contrast": {
       "canonical_display": "MRI Lower Leg Without Contrast",
       "body_region": "msk",
@@ -2676,11 +2608,6 @@
           "protocol_name": "PELVIS",
           "match_context": [],
           "priority": 1
-        },
-        {
-          "protocol_name": "MR DEFECOGRAPHY",
-          "match_context": [],
-          "priority": 1
         }
       ],
       "match_type": "component"
@@ -2695,11 +2622,6 @@
           "protocol_name": "PELVIS",
           "match_context": [],
           "priority": 1
-        },
-        {
-          "protocol_name": "MR DEFECOGRAPHY",
-          "match_context": [],
-          "priority": 1
         }
       ],
       "match_type": "component"
@@ -2712,11 +2634,6 @@
       "protocol_routes": [
         {
           "protocol_name": "PELVIS",
-          "match_context": [],
-          "priority": 1
-        },
-        {
-          "protocol_name": "MR DEFECOGRAPHY",
           "match_context": [],
           "priority": 1
         }
@@ -3276,34 +3193,6 @@
       ],
       "match_type": "exact"
     },
-    "MRI upper extremity without IV contrast": {
-      "canonical_display": "MRI upper extremity without IV contrast",
-      "body_region": "unknown",
-      "body_part": "upper_extremity",
-      "contrast": "none",
-      "protocol_routes": [
-        {
-          "protocol_name": "OSTEOMYELITIS",
-          "match_context": [],
-          "priority": 1
-        }
-      ],
-      "match_type": "component"
-    },
-    "MRI upper extremity without and with IV contrast": {
-      "canonical_display": "MRI upper extremity without and with IV contrast",
-      "body_region": "unknown",
-      "body_part": "upper_extremity",
-      "contrast": "both",
-      "protocol_routes": [
-        {
-          "protocol_name": "OSTEOMYELITIS",
-          "match_context": [],
-          "priority": 1
-        }
-      ],
-      "match_type": "component"
-    },
     "MRI whole body without IV contrast": {
       "canonical_display": "MRI Whole Body Without Contrast",
       "body_region": "msk",
@@ -3406,6 +3295,14 @@
       }
     },
     {
+      "acr_name": "FDG-PET/MRI heart",
+      "components": {
+        "modality": "PET/MRI",
+        "contrast": "unknown",
+        "body_part": "heart"
+      }
+    },
+    {
       "acr_name": "FDG-PET/MRI skull base to mid-thigh",
       "components": {
         "modality": "PET/MRI",
@@ -3435,6 +3332,46 @@
         "modality": "MRI",
         "contrast": "none",
         "body_part": null
+      }
+    },
+    {
+      "acr_name": "MRI area of interest without and with IV contrast",
+      "components": {
+        "modality": "MRI",
+        "contrast": "both",
+        "body_part": null
+      }
+    },
+    {
+      "acr_name": "MRI lower extremity without IV contrast",
+      "components": {
+        "modality": "MRI",
+        "contrast": "none",
+        "body_part": "lower_extremity"
+      }
+    },
+    {
+      "acr_name": "MRI lower extremity without and with IV contrast",
+      "components": {
+        "modality": "MRI",
+        "contrast": "both",
+        "body_part": "lower_extremity"
+      }
+    },
+    {
+      "acr_name": "MRI upper extremity without IV contrast",
+      "components": {
+        "modality": "MRI",
+        "contrast": "none",
+        "body_part": "upper_extremity"
+      }
+    },
+    {
+      "acr_name": "MRI upper extremity without and with IV contrast",
+      "components": {
+        "modality": "MRI",
+        "contrast": "both",
+        "body_part": "upper_extremity"
       }
     },
     {

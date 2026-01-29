@@ -453,22 +453,6 @@
         }
       ]
     },
-    "mri_extremity_both_contrast_osteomyelitis": {
-      "canonical_display": "MRI Extremity Without and With Contrast (Infection)",
-      "acr_name": "MRI area of interest without and with IV contrast",
-      "body_region": "msk",
-      "body_part": "extremity",
-      "modality": "MRI",
-      "contrast": "both",
-      "protocol_routes": [
-        {
-          "protocol_name": "OSTEOMYELITIS",
-          "match_context": ["osteomyelitis", "bone infection", "septic", "hardware infection", "diabetic foot", "infected", "soft tissue infection", "cellulitis", "abscess", "necrotizing", "fasciitis"],
-          "priority": 1
-        }
-      ],
-      "scenario_keywords": ["osteomyelitis", "septic", "infection", "cellulitis", "abscess"]
-    },
     "mri_forearm_no_contrast": {
       "canonical_display": "MRI Forearm Without Contrast",
       "acr_name": "MRI forearm without IV contrast",
