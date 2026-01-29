@@ -15,7 +15,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20260129e';
+    const cacheBuster = '20260129f';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -235,6 +235,31 @@ export class DataLoader {
     if (isProcedureFor('abdomen') && !isProcedureFor('pelvis')) {
       const liver = protocols.find(p => p.name === 'LIVER');
       if (liver) return liver;
+    }
+
+    // Neuro-specific procedures
+    // Sella/Pituitary -> PITUITARY protocol
+    if (isProcedureFor('sella') || isProcedureFor('pituitary')) {
+      const pituitary = protocols.find(p => p.name === 'PITUITARY');
+      if (pituitary) return pituitary;
+    }
+
+    // IAC (internal auditory canal) -> IAC protocol
+    if (isProcedureFor('internal auditory') || isProcedureFor(' iac')) {
+      const iac = protocols.find(p => p.name === 'IAC');
+      if (iac) return iac;
+    }
+
+    // Orbits -> ORBITS protocol
+    if (isProcedureFor('orbit')) {
+      const orbits = protocols.find(p => p.name === 'ORBITS');
+      if (orbits) return orbits;
+    }
+
+    // TMJ -> TMJ protocol
+    if (isProcedureFor('temporomandibular') || isProcedureFor('tmj')) {
+      const tmj = protocols.find(p => p.name === 'TMJ');
+      if (tmj) return tmj;
     }
 
     // Breast procedures
