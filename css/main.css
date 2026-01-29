@@ -1033,7 +1033,7 @@ input:focus, button:focus {
   color: var(--accent);
 }
 
-/* Source badge - indicates if protocol is curated or suggested */
+/* Source badge - indicates if protocol is Human Verified or AI Generated */
 .source-badge {
   display: inline-flex;
   align-items: center;
