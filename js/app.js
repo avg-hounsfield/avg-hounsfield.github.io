@@ -944,8 +944,8 @@ class ProtocolHelpApp {
           <div class="protocol-grid-card-meta">
             <span class="protocol-grid-card-region">${this.escapeHtml(region)}</span>
             ${hasContrast ? '<span class="contrast-badge with-contrast">Contrast</span>' : ''}
-            <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}" title="${isAIEnhanced ? 'Protocol created by AI' : 'Protocol verified by radiologists'}">
-              ${isAIEnhanced ? 'AI Generated' : 'Verified'}
+            <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}" title="${isAIEnhanced ? 'Suggested protocol - verify before clinical use' : 'Protocol verified by radiologists'}">
+              ${isAIEnhanced ? 'Suggested' : 'Verified'}
             </span>
           </div>
           ${indications ? `<div class="protocol-grid-card-indications">${this.escapeHtml(indications)}</div>` : ''}
@@ -1044,7 +1044,7 @@ class ProtocolHelpApp {
                         <div class="protocol-list-item-meta">
                           ${isBookmarked ? '<span class="contrast-badge with-contrast" style="background: var(--accent-muted); color: var(--accent);">Saved</span>' : ''}
                           ${hasContrast ? '<span class="contrast-badge with-contrast">Contrast</span>' : ''}
-                          <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}">${isAIEnhanced ? 'AI Gen' : 'Verified'}</span>
+                          <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}">${isAIEnhanced ? 'Suggested' : 'Verified'}</span>
                           <span class="protocol-grid-card-sequences"><span>${seqCount}</span> seq</span>
                         </div>
                       </div>
@@ -1118,8 +1118,8 @@ class ProtocolHelpApp {
       if (isAI) {
         sourceBadge.classList.remove('curated');
         sourceBadge.classList.add('suggested');
-        sourceBadge.title = 'Protocol created by AI based on clinical guidelines';
-        sourceText.textContent = 'AI Generated';
+        sourceBadge.title = 'Suggested protocol - verify before clinical use';
+        sourceText.textContent = 'Suggested';
       } else {
         sourceBadge.classList.remove('suggested');
         sourceBadge.classList.add('curated');

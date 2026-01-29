@@ -18517,5 +18517,115 @@
       }
     ],
     "scenario_matches": []
+  },
+  {
+    "name": "SI JOINTS",
+    "display_name": "SI JOINTS",
+    "source": "ai_generated",
+    "uses_contrast": false,
+    "section": "MSK Imaging",
+    "sections": ["MSK Imaging"],
+    "body_region": "msk",
+    "body_part": "pelvis",
+    "is_pediatric": false,
+    "keywords": ["sacroiliac", "si joint", "spondyloarthritis", "ankylosing spondylitis", "sacroiliitis", "inflammatory back pain"],
+    "indications": "Evaluation of sacroiliac joint pathology including sacroiliitis, ankylosing spondylitis, axial spondyloarthropathy, and inflammatory back pain. MRI is the gold standard for detecting early inflammatory changes before radiographic changes appear.",
+    "contrast_rationale": "Contrast not typically required for initial evaluation. May add contrast if active inflammation vs chronic changes need differentiation.",
+    "canonical_procedure": "MRI Sacroiliac Joints",
+    "sequences": [
+      {"sequence_name": "COR T1 SI Joints", "is_post_contrast": 0, "sort_order": 0},
+      {"sequence_name": "COR STIR SI Joints", "is_post_contrast": 0, "sort_order": 1},
+      {"sequence_name": "AX T1 SI Joints", "is_post_contrast": 0, "sort_order": 2},
+      {"sequence_name": "AX STIR SI Joints", "is_post_contrast": 0, "sort_order": 3},
+      {"sequence_name": "SAG STIR Lumbar (optional)", "is_post_contrast": 0, "sort_order": 4}
+    ],
+    "scanner_notes": [
+      {"scanner_type": "All", "sequence_name": "Look for bone marrow edema on STIR - earliest sign of sacroiliitis", "is_post_contrast": 0, "sort_order": 0},
+      {"scanner_type": "All", "sequence_name": "Assess for erosions, sclerosis, and ankylosis on T1", "is_post_contrast": 0, "sort_order": 1}
+    ],
+    "scenario_matches": []
+  },
+  {
+    "name": "WHOLE BODY",
+    "display_name": "WHOLE BODY",
+    "source": "ai_generated",
+    "uses_contrast": false,
+    "section": "Body Imaging",
+    "sections": ["Body Imaging"],
+    "body_region": "abdomen",
+    "body_part": "whole body",
+    "is_pediatric": false,
+    "keywords": ["whole body", "metastatic survey", "tumor staging", "fever of unknown origin", "multifocal disease"],
+    "indications": "Whole body MRI for metastatic disease screening, fever of unknown origin, multifocal bone disease, or systemic conditions requiring comprehensive imaging. Alternative to PET-CT without radiation.",
+    "contrast_rationale": "Contrast may be added for better characterization of lesions, but non-contrast STIR/DWI often sufficient for screening.",
+    "canonical_procedure": "MRI Whole Body",
+    "sequences": [
+      {"sequence_name": "COR STIR Whole Body (multi-station)", "is_post_contrast": 0, "sort_order": 0},
+      {"sequence_name": "COR T1 Whole Body (multi-station)", "is_post_contrast": 0, "sort_order": 1},
+      {"sequence_name": "AX DWI Whole Body (multi-station)", "is_post_contrast": 0, "sort_order": 2},
+      {"sequence_name": "SAG T1 Spine", "is_post_contrast": 0, "sort_order": 3},
+      {"sequence_name": "SAG STIR Spine", "is_post_contrast": 0, "sort_order": 4}
+    ],
+    "scanner_notes": [
+      {"scanner_type": "All", "sequence_name": "Multi-station acquisition - ensure overlap between stations", "is_post_contrast": 0, "sort_order": 0},
+      {"scanner_type": "All", "sequence_name": "DWI with high b-value (800-1000) for lesion detection", "is_post_contrast": 0, "sort_order": 1}
+    ],
+    "scenario_matches": []
+  },
+  {
+    "name": "MAXILLOFACIAL",
+    "display_name": "MAXILLOFACIAL",
+    "source": "ai_generated",
+    "uses_contrast": true,
+    "section": "Neuro Imaging",
+    "sections": ["Neuro Imaging"],
+    "body_region": "neuro",
+    "body_part": "face",
+    "is_pediatric": false,
+    "keywords": ["face", "facial", "maxillofacial", "mandible", "maxilla", "tmj", "parotid", "salivary gland", "jaw"],
+    "indications": "Evaluation of facial soft tissue masses, salivary gland pathology, deep facial infections, facial nerve pathology, and pre-operative planning for facial surgery. Superior soft tissue contrast compared to CT.",
+    "contrast_rationale": "Contrast helps delineate tumor margins, identify perineural spread, and differentiate abscess from phlegmon.",
+    "canonical_procedure": "MRI Maxillofacial",
+    "sequences": [
+      {"sequence_name": "AX T1 Face", "is_post_contrast": 0, "sort_order": 0},
+      {"sequence_name": "AX T2 FS Face", "is_post_contrast": 0, "sort_order": 1},
+      {"sequence_name": "COR T1 Face", "is_post_contrast": 0, "sort_order": 2},
+      {"sequence_name": "COR T2 FS Face", "is_post_contrast": 0, "sort_order": 3},
+      {"sequence_name": "AX T1 FS POST Face", "is_post_contrast": 1, "sort_order": 4},
+      {"sequence_name": "COR T1 FS POST Face", "is_post_contrast": 1, "sort_order": 5}
+    ],
+    "scanner_notes": [
+      {"scanner_type": "All", "sequence_name": "Small FOV centered on region of interest", "is_post_contrast": 0, "sort_order": 0},
+      {"scanner_type": "All", "sequence_name": "Assess for perineural tumor spread along CN V and VII", "is_post_contrast": 0, "sort_order": 1}
+    ],
+    "scenario_matches": []
+  },
+  {
+    "name": "SINUSES",
+    "display_name": "SINUSES",
+    "source": "ai_generated",
+    "uses_contrast": true,
+    "section": "Neuro Imaging",
+    "sections": ["Neuro Imaging"],
+    "body_region": "neuro",
+    "body_part": "sinuses",
+    "is_pediatric": false,
+    "keywords": ["sinus", "paranasal", "sinusitis", "nasal", "ethmoid", "maxillary sinus", "frontal sinus", "sphenoid sinus"],
+    "indications": "Evaluation of complicated sinusitis with suspected orbital or intracranial extension, sinonasal tumors, and fungal sinusitis. MRI preferred over CT when soft tissue detail or intracranial extension assessment is needed.",
+    "contrast_rationale": "Contrast essential to evaluate for orbital cellulitis, intracranial abscess, cavernous sinus involvement, and tumor extent.",
+    "canonical_procedure": "MRI Paranasal Sinuses",
+    "sequences": [
+      {"sequence_name": "AX T1 Sinuses", "is_post_contrast": 0, "sort_order": 0},
+      {"sequence_name": "AX T2 FS Sinuses", "is_post_contrast": 0, "sort_order": 1},
+      {"sequence_name": "COR T2 FS Sinuses", "is_post_contrast": 0, "sort_order": 2},
+      {"sequence_name": "AX DWI Sinuses", "is_post_contrast": 0, "sort_order": 3},
+      {"sequence_name": "AX T1 FS POST Sinuses", "is_post_contrast": 1, "sort_order": 4},
+      {"sequence_name": "COR T1 FS POST Sinuses", "is_post_contrast": 1, "sort_order": 5}
+    ],
+    "scanner_notes": [
+      {"scanner_type": "All", "sequence_name": "DWI helps differentiate abscess (restricted) from mucocele (not restricted)", "is_post_contrast": 0, "sort_order": 0},
+      {"scanner_type": "All", "sequence_name": "Ensure coverage includes orbits and anterior cranial fossa", "is_post_contrast": 0, "sort_order": 1}
+    ],
+    "scenario_matches": []
   }
 ]

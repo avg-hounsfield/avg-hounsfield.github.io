@@ -15,7 +15,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20260129k';
+    const cacheBuster = '20260129m';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -199,6 +199,163 @@ export class DataLoader {
     // PROCEDURE-BASED ROUTING (Primary)
     // Match based on imaging recommendation title first
     // ========================================
+
+    // ========================================
+    // GENERIC "AREA OF INTEREST" ROUTING
+    // Parse scenario name to determine body part
+    // ========================================
+    if (isProcedureFor('area of interest') || isProcedureFor('extremity area of interest')) {
+      // Head/Brain
+      if (scenarioName.includes('head') || scenarioName.includes('brain') ||
+          scenarioName.includes('cranial') || scenarioName.includes('intracranial')) {
+        const brain = protocols.find(p => p.name === 'BRAIN' && !p.uses_contrast);
+        if (brain) return brain;
+      }
+      // Face/Maxillofacial
+      if (scenarioName.includes('face') || scenarioName.includes('facial') ||
+          scenarioName.includes('maxillofacial') || scenarioName.includes('mandib') ||
+          scenarioName.includes('orbit') || scenarioName.includes('sinus')) {
+        const face = protocols.find(p => p.name === 'MAXILLOFACIAL' || p.name === 'ORBITS');
+        if (face) return face;
+      }
+      // Neck
+      if (scenarioName.includes('neck') || scenarioName.includes('thyroid') ||
+          scenarioName.includes('laryn') || scenarioName.includes('pharyn')) {
+        const neck = protocols.find(p => p.name === 'NECK SOFT TISSUE' || p.name === 'NECK');
+        if (neck) return neck;
+      }
+      // Spine
+      if (scenarioName.includes('spine') || scenarioName.includes('vertebr') ||
+          scenarioName.includes('disc') || scenarioName.includes('spinal')) {
+        const spine = protocols.find(p => p.name === 'L-SPINE');
+        if (spine) return spine;
+      }
+      // Chest
+      if (scenarioName.includes('chest') || scenarioName.includes('thorax') ||
+          scenarioName.includes('lung') || scenarioName.includes('mediast')) {
+        const chest = protocols.find(p => p.name === 'CHEST');
+        if (chest) return chest;
+      }
+      // Abdomen
+      if (scenarioName.includes('abdomen') || scenarioName.includes('liver') ||
+          scenarioName.includes('kidney') || scenarioName.includes('pancrea') ||
+          scenarioName.includes('spleen') || scenarioName.includes('bowel')) {
+        const liver = protocols.find(p => p.name === 'LIVER');
+        if (liver) return liver;
+      }
+      // Pelvis
+      if (scenarioName.includes('pelvis') || scenarioName.includes('pelvic') ||
+          scenarioName.includes('bladder') || scenarioName.includes('rectum') ||
+          scenarioName.includes('uterus') || scenarioName.includes('ovary') ||
+          scenarioName.includes('prostate')) {
+        const pelvis = protocols.find(p => p.name === 'PELVIS');
+        if (pelvis) return pelvis;
+      }
+      // Extremity joints - parse from scenario
+      if (scenarioName.includes('shoulder')) {
+        const shoulder = protocols.find(p => p.name === 'SHOULDER');
+        if (shoulder) return shoulder;
+      }
+      if (scenarioName.includes('elbow')) {
+        const elbow = protocols.find(p => p.name === 'ELBOW');
+        if (elbow) return elbow;
+      }
+      if (scenarioName.includes('wrist') || scenarioName.includes('hand') || scenarioName.includes('carpal')) {
+        const wrist = protocols.find(p => p.name === 'WRIST' || p.name === 'HAND');
+        if (wrist) return wrist;
+      }
+      if (scenarioName.includes('hip')) {
+        const hip = protocols.find(p => p.name === 'HIP');
+        if (hip) return hip;
+      }
+      if (scenarioName.includes('knee')) {
+        const knee = protocols.find(p => p.name === 'KNEE');
+        if (knee) return knee;
+      }
+      if (scenarioName.includes('ankle') || scenarioName.includes('foot') || scenarioName.includes('tarsal')) {
+        const ankle = protocols.find(p => p.name === 'ANKLE' || p.name === 'FOOT');
+        if (ankle) return ankle;
+      }
+      // Vascular malformation - route to nearest joint based on location in scenario
+      if (scenarioName.includes('vascular malformation') || scenarioName.includes('hemangioma')) {
+        // Already checked specific joints above, fallback to generic
+        const brain = protocols.find(p => p.name === 'BRAIN');
+        if (brain) return brain;
+      }
+      // Stress fracture / bone specific - route based on bone mentioned
+      if (scenarioName.includes('humerus') || scenarioName.includes('upper arm')) {
+        const shoulder = protocols.find(p => p.name === 'SHOULDER');
+        if (shoulder) return shoulder;
+      }
+      if (scenarioName.includes('femur') || scenarioName.includes('thigh')) {
+        const hip = protocols.find(p => p.name === 'HIP');
+        if (hip) return hip;
+      }
+      if (scenarioName.includes('tibia') || scenarioName.includes('fibula') || scenarioName.includes('lower leg')) {
+        const knee = protocols.find(p => p.name === 'KNEE');
+        if (knee) return knee;
+      }
+      if (scenarioName.includes('radius') || scenarioName.includes('ulna') || scenarioName.includes('forearm')) {
+        const elbow = protocols.find(p => p.name === 'ELBOW');
+        if (elbow) return elbow;
+      }
+      if (scenarioName.includes('metatarsal') || scenarioName.includes('calcaneus')) {
+        const ankle = protocols.find(p => p.name === 'ANKLE');
+        if (ankle) return ankle;
+      }
+      // Ribs -> CHEST protocol
+      if (scenarioName.includes('rib') || scenarioName.includes('costal')) {
+        const chest = protocols.find(p => p.name === 'CHEST');
+        if (chest) return chest;
+      }
+      // Vascular murmur - route to nearest joint
+      if (scenarioName.includes('vascular murmur') || scenarioName.includes('bruit')) {
+        if (scenarioName.includes('forearm')) {
+          const elbow = protocols.find(p => p.name === 'ELBOW');
+          if (elbow) return elbow;
+        }
+      }
+    }
+
+    // MR enteroclysis -> MR ENTEROGRAPHY
+    if (isProcedureFor('enteroclysis')) {
+      const entero = protocols.find(p => p.name === 'MR ENTEROGRAPHY');
+      if (entero) return entero;
+    }
+
+    // Sacroiliac joints -> SI JOINTS protocol
+    if (isProcedureFor('sacroiliac')) {
+      const si = protocols.find(p => p.name === 'SI JOINTS');
+      if (si) return si;
+    }
+
+    // Whole body MRI
+    if (isProcedureFor('whole body')) {
+      const wb = protocols.find(p => p.name === 'WHOLE BODY');
+      if (wb) return wb;
+    }
+
+    // Maxillofacial
+    if (isProcedureFor('maxillofacial') || isProcedureFor('facial')) {
+      const face = protocols.find(p => p.name === 'MAXILLOFACIAL');
+      if (face) return face;
+    }
+
+    // Paranasal sinuses
+    if (isProcedureFor('sinus') || isProcedureFor('paranasal')) {
+      const sinus = protocols.find(p => p.name === 'SINUSES' || p.name === 'ORBITS');
+      if (sinus) return sinus;
+    }
+
+    // Sacrum -> route to spine
+    if (isProcedureFor('sacrum') && !isProcedureFor('sacroiliac')) {
+      if (scenarioName.includes('infection') || scenarioName.includes('abscess') || scenarioName.includes('decubitus')) {
+        const spineInf = protocols.find(p => p.name === 'SPINE INFECTION');
+        if (spineInf) return spineInf;
+      }
+      const lspine = protocols.find(p => p.name === 'L-SPINE');
+      if (lspine) return lspine;
+    }
 
     // Abdomen/Pelvis procedures
     if (isProcedureFor('prostate')) {
