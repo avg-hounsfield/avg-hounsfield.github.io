@@ -15,7 +15,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20260129';
+    const cacheBuster = '20260129b';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -142,7 +142,8 @@ export class DataLoader {
 
     // FIRST: Apply clinical rules for specific conditions
     // These are explicitly coded rules, so they're "curated"
-    const clinicalMatch = this.applyClinicalRules(protocols, scenarioName, needsContrast);
+    // Pass procedure name to make rules region-aware
+    const clinicalMatch = this.applyClinicalRules(protocols, scenarioName, needsContrast, procedureName, region);
     if (clinicalMatch) {
       return { protocol: clinicalMatch, matchType: 'curated', supplementalSequences };
     }
@@ -185,26 +186,57 @@ export class DataLoader {
   }
 
   // Clinical intelligence for protocol selection
-  applyClinicalRules(protocols, scenarioName, needsContrast) {
+  // Rules are now region/procedure-aware to avoid cross-region mismatches
+  applyClinicalRules(protocols, scenarioName, needsContrast, procedureName = '', region = '') {
+    const procLower = procedureName.toLowerCase();
+
+    // Helper to check if procedure is for a specific body region
+    const isProcedureFor = (bodyPart) => {
+      return procLower.includes(bodyPart);
+    };
+
+    // Only apply neuro rules if procedure is for head/brain
+    const isNeuroProcedure = isProcedureFor('head') || isProcedureFor('brain') ||
+                             isProcedureFor('iac') || isProcedureFor('orbit') ||
+                             isProcedureFor('sella') || isProcedureFor('pituitary') ||
+                             region === 'neuro';
+
+    // Only apply spine rules if procedure is for spine
+    const isSpineProcedure = isProcedureFor('spine') || isProcedureFor('cervical') ||
+                             isProcedureFor('thoracic') || isProcedureFor('lumbar') ||
+                             isProcedureFor('sacr') || region === 'spine';
+
+    // Only apply MSK rules if procedure is for MSK
+    const isMskProcedure = isProcedureFor('knee') || isProcedureFor('shoulder') ||
+                           isProcedureFor('hip') || isProcedureFor('ankle') ||
+                           isProcedureFor('wrist') || isProcedureFor('elbow') ||
+                           isProcedureFor('extremity') || isProcedureFor('foot') ||
+                           isProcedureFor('hand') || isProcedureFor('femur') ||
+                           isProcedureFor('tibia') || region === 'msk';
+
     // Acute stroke -> BRAIN protocol (has DWI), not TIA
-    if ((scenarioName.includes('stroke') || scenarioName.includes('ischemic')) &&
+    // Only for neuro procedures
+    if (isNeuroProcedure &&
+        (scenarioName.includes('stroke') || scenarioName.includes('ischemic')) &&
         scenarioName.includes('acute') && !scenarioName.includes('tia')) {
       const brain = protocols.find(p => p.name === 'BRAIN' && !p.uses_contrast);
       if (brain) return brain;
     }
 
     // Explicitly mentions TIA -> TIA protocol
-    // Use word boundary to avoid matching 'tia' in 'initial', 'potential', etc.
+    // Only for neuro procedures
     const tiaRegex = /(^|[\s,;.\-])tia([\s,;.\-]|$)/i;
-    if (tiaRegex.test(scenarioName) || scenarioName.includes('transient ischemic')) {
+    if (isNeuroProcedure &&
+        (tiaRegex.test(scenarioName) || scenarioName.includes('transient ischemic'))) {
       const tia = protocols.find(p => p.name === 'TIA');
       if (tia) return tia;
     }
 
     // Brain tumor/mass -> BRAIN TUMOR/INF protocol
-    if (scenarioName.includes('tumor') || scenarioName.includes('mass') ||
-        scenarioName.includes('lesion') || scenarioName.includes('metasta')) {
-      // Prefer with contrast for tumors
+    // ONLY for neuro procedures (head/brain MRI)
+    if (isNeuroProcedure &&
+        (scenarioName.includes('tumor') || scenarioName.includes('mass') ||
+         scenarioName.includes('lesion') || scenarioName.includes('metasta'))) {
       const tumorProtocol = protocols.find(p =>
         p.name === 'BRAIN TUMOR/INF' ||
         (p.name.includes('TUMOR') && p.body_region === 'neuro')
@@ -213,34 +245,41 @@ export class DataLoader {
     }
 
     // Seizure -> SEIZURE protocol
-    if (scenarioName.includes('seizure') || scenarioName.includes('epilep')) {
+    // Only for neuro procedures
+    if (isNeuroProcedure &&
+        (scenarioName.includes('seizure') || scenarioName.includes('epilep'))) {
       const seizure = protocols.find(p => p.name === 'SEIZURE');
       if (seizure) return seizure;
     }
 
     // MS/demyelinating -> BRAIN MS protocol
-    if (scenarioName.includes('multiple sclerosis') || scenarioName.includes(' ms ') ||
-        scenarioName.includes('demyelinat')) {
+    // Only for neuro procedures
+    if (isNeuroProcedure &&
+        (scenarioName.includes('multiple sclerosis') || scenarioName.includes(' ms ') ||
+         scenarioName.includes('demyelinat'))) {
       const ms = protocols.find(p => p.name === 'BRAIN MS');
       if (ms) return ms;
     }
 
     // Pituitary -> PITUITARY protocol
-    if (scenarioName.includes('pituitary') || scenarioName.includes('sellar')) {
+    // Only for neuro procedures
+    if (isNeuroProcedure &&
+        (scenarioName.includes('pituitary') || scenarioName.includes('sellar'))) {
       const pit = protocols.find(p => p.name === 'PITUITARY');
       if (pit) return pit;
     }
 
     // Osteomyelitis/infection (MSK) -> OSTEOMYELITIS protocol
-    if (scenarioName.includes('osteomyelitis') ||
-        scenarioName.includes('septic arthritis') ||
-        scenarioName.includes('soft tissue infection') ||
-        scenarioName.includes('cellulitis') ||
-        scenarioName.includes('abscess') ||
-        (scenarioName.includes('infection') &&
-         !scenarioName.includes('brain') &&
-         !scenarioName.includes('spine') &&
-         !scenarioName.includes('discitis'))) {
+    // Only for MSK procedures
+    if (isMskProcedure &&
+        (scenarioName.includes('osteomyelitis') ||
+         scenarioName.includes('septic arthritis') ||
+         scenarioName.includes('soft tissue infection') ||
+         scenarioName.includes('cellulitis') ||
+         scenarioName.includes('abscess') ||
+         (scenarioName.includes('infection') &&
+          !scenarioName.includes('brain') &&
+          !scenarioName.includes('discitis')))) {
       const osteo = protocols.find(p => p.name === 'OSTEOMYELITIS');
       if (osteo) return osteo;
     }
