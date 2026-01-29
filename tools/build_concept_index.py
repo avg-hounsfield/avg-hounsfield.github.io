@@ -18,25 +18,32 @@ import os
 from pathlib import Path
 from collections import defaultdict
 
-# Phase detection patterns
+# Phase detection patterns - order matters for priority
 PHASE_PATTERNS = {
     "screening": [
         r"\bscreening\b",
         r"\basymptomatic\b",
         r"\brisk factors?\b",
-        r"\bsurveillance.*(no|without).*(symptoms|recurrence)\b",
         r"\baverage risk\b",
         r"\bhigh risk\b(?!.*recurrence)",
-        r"\belevated risk\b"
+        r"\belevated risk\b",
+        r"\blifetime risk\b",
+        r"\bfamily h(x|istory)\b",
+        r"\bgenetic\b"
     ],
     "initial": [
         r"\binitial\b",
-        r"\bsuspected\b(?!.*treated|.*recurrence)",
+        r"\bsuspected\b",
         r"\bnew onset\b",
         r"\bfirst presentation\b",
-        r"\bdiagnosis\b(?!.*post|.*surveillance)",
-        r"\bevaluation\b(?!.*post|.*surveillance|.*follow)",
-        r"\bnewly diagnosed\b"
+        r"\bdiagnosis\b(?!.*post)",
+        r"\bevaluation\b(?!.*post|.*follow)",
+        r"\bnewly diagnosed\b",
+        r"\bcharacterization\b",
+        r"\bworkup\b",
+        r"\bacute\b(?!.*on chronic)",
+        r"\bpresenting\b",
+        r"\bunknown etiology\b"
     ],
     "pretreatment": [
         r"\bpretreatment\b",
@@ -46,7 +53,9 @@ PHASE_PATTERNS = {
         r"\bsurgical planning\b",
         r"\bpre-tx\b",
         r"\bneoadjuvant\b",
-        r"\bdetermining extent\b"
+        r"\bdetermining extent\b",
+        r"\bpreprocedure\b",
+        r"\bplanning\b"
     ],
     "surveillance": [
         r"\bsurveillance\b",
@@ -58,16 +67,21 @@ PHASE_PATTERNS = {
         r"\brestaging\b",
         r"\bmonitoring\b",
         r"\bpost[- ]?procedure\b",
-        r"\bafter.*(surgery|treatment|therapy|resection)\b"
+        r"\bafter.*(surgery|treatment|therapy|resection)\b",
+        r"\bresponse to therapy\b",
+        r"\bpost[- ]?operative\b",
+        r"\bknown\b.*\b(cancer|malignancy|tumor)\b"
     ],
     "complication": [
         r"\bcomplication\b",
         r"\benlarg\w+\s+lesion\b",
         r"\bnew lesion\b",
         r"\bprogression\b",
-        r"\bworsen\b",
+        r"\bworsen(ing)?\b",
         r"\bfailure\b",
-        r"\bno response\b"
+        r"\bno response\b",
+        r"\btreatment failure\b",
+        r"\badverse\b"
     ]
 }
 
@@ -110,9 +124,9 @@ CONCEPT_TAXONOMY = {
         "body_region": "neuro",
         "synonyms": ["stroke", "cva", "cerebrovascular accident", "ischemic stroke",
                      "hemorrhagic stroke", "brain infarct", "cerebral infarction",
-                     "acute stroke", "transient ischemic attack", "tia"],
+                     "acute stroke", "transient ischemic attack", "tia", "ischemic infarct"],
         "scenario_keywords": ["stroke", "ischemic", "hemorrhage", "cerebrovascular",
-                              "infarct", "transient ischemic"]
+                              "infarct", "transient ischemic", "ischemic infarct"]
     },
     "headache": {
         "display_name": "Headache",
@@ -163,7 +177,8 @@ CONCEPT_TAXONOMY = {
         "body_region": "spine",
         "synonyms": ["radiculopathy", "sciatica", "nerve root compression", "pinched nerve",
                      "disc herniation", "herniated disc", "bulging disc", "slipped disc"],
-        "scenario_keywords": ["radiculopathy", "sciatica", "nerve root", "disc herniat"]
+        "scenario_keywords": ["radiculopathy", "sciatica", "disc herniat", "degenerative"],
+        "negative_keywords": ["trauma", "injury", "fracture", "blunt"]
     },
     "spinal_stenosis": {
         "display_name": "Spinal Stenosis",
@@ -176,8 +191,10 @@ CONCEPT_TAXONOMY = {
         "display_name": "Spinal Tumor",
         "body_region": "spine",
         "synonyms": ["spinal tumor", "spine tumor", "spinal cord tumor", "vertebral tumor",
-                     "spine mass", "spinal metastasis", "spine mets"],
-        "scenario_keywords": ["spinal tumor", "spine tumor", "vertebral", "spinal cord"]
+                     "spine mass", "spinal metastasis", "spine mets", "bone tumor spine"],
+        "scenario_keywords": ["bone tumor", "spine tumor", "spinal tumor", "vertebral tumor",
+                              "spinal metasta", "spine mass", "cord tumor"],
+        "negative_keywords": ["cervical cancer"]  # Exclude uterine cervical cancer
     },
     "myelopathy": {
         "display_name": "Myelopathy",
@@ -239,7 +256,9 @@ CONCEPT_TAXONOMY = {
         "body_region": "abdomen",
         "synonyms": ["liver cancer", "hcc", "hepatocellular carcinoma", "hepatoma",
                      "liver malignancy", "cholangiocarcinoma"],
-        "scenario_keywords": ["hepatocellular", "hcc", "liver cancer", "cholangiocarcinoma"]
+        "scenario_keywords": ["hepatocellular carcinoma", "hcc", "liver cancer",
+                              "cholangiocarcinoma", "hepatoma", "liver malignancy"],
+        "negative_keywords": ["liver function test", "lfts", "hepatocellular predominance"]
     },
     "appendicitis": {
         "display_name": "Appendicitis",
@@ -259,8 +278,8 @@ CONCEPT_TAXONOMY = {
         "display_name": "Pancreatic Mass",
         "body_region": "abdomen",
         "synonyms": ["pancreatic mass", "pancreas mass", "pancreatic lesion", "pancreatic tumor",
-                     "pancreatic cancer", "pancreatic cyst"],
-        "scenario_keywords": ["pancrea"]
+                     "pancreatic cancer", "pancreatic adenocarcinoma", "pancreatic cyst"],
+        "scenario_keywords": ["pancreatic", "pancreas"]  # Broad match for pancreas scenarios
     },
     "kidney_mass": {
         "display_name": "Kidney Mass",
@@ -289,7 +308,9 @@ CONCEPT_TAXONOMY = {
         "body_region": "abdomen",
         "synonyms": ["cholecystitis", "gallbladder inflammation", "gallstones", "cholelithiasis",
                      "biliary colic", "ruq pain", "right upper quadrant pain"],
-        "scenario_keywords": ["cholecystitis", "gallbladder", "gallstone", "biliary"]
+        "scenario_keywords": ["cholecystitis", "gallbladder", "gallstone", "biliary colic",
+                              "ruq pain", "cholelithiasis"],
+        "negative_keywords": ["jaundice", "biliary obstruction"]  # Different from cholecystitis
     },
 
     # MSK concepts
@@ -297,22 +318,22 @@ CONCEPT_TAXONOMY = {
         "display_name": "Knee Pain",
         "body_region": "msk",
         "synonyms": ["knee pain", "knee injury", "knee trauma", "knee problem",
-                     "acl tear", "meniscus tear", "ligament injury"],
-        "scenario_keywords": ["knee"]
+                     "acl tear", "meniscus tear", "ligament injury", "knee arthritis"],
+        "scenario_keywords": ["knee"]  # Broad match - knee scenarios are relevant
     },
     "shoulder_pain": {
         "display_name": "Shoulder Pain",
         "body_region": "msk",
         "synonyms": ["shoulder pain", "shoulder injury", "rotator cuff", "shoulder trauma",
                      "rotator cuff tear", "shoulder impingement"],
-        "scenario_keywords": ["shoulder"]
+        "scenario_keywords": ["shoulder"]  # Broad match
     },
     "hip_pain": {
         "display_name": "Hip Pain",
         "body_region": "msk",
         "synonyms": ["hip pain", "hip injury", "hip trauma", "hip fracture",
                      "avascular necrosis", "avn", "hip avascular necrosis"],
-        "scenario_keywords": ["hip"]
+        "scenario_keywords": ["hip"]  # Broad match
     },
     "bone_tumor": {
         "display_name": "Bone Tumor",
@@ -337,34 +358,37 @@ CONCEPT_TAXONOMY = {
         "scenario_keywords": ["soft tissue mass", "soft tissue tumor"]
     },
 
-    # Vascular concepts
+    # Vascular/Aortic concepts - note: aortic scenarios are in chest region in ACR
     "aortic_aneurysm": {
         "display_name": "Aortic Aneurysm",
-        "body_region": "vascular",
+        "body_region": "chest",  # ACR puts aortic scenarios in chest
         "synonyms": ["aortic aneurysm", "aaa", "abdominal aortic aneurysm", "thoracic aneurysm",
                      "aortic dilation", "aneurysm"],
-        "scenario_keywords": ["aortic aneurysm", "aaa", "abdominal aortic", "thoracic aortic"]
+        "scenario_keywords": ["aortic aneurysm", "aaa", "abdominal aortic", "thoracic aortic",
+                              "aortic disease"]
     },
     "aortic_dissection": {
         "display_name": "Aortic Dissection",
-        "body_region": "vascular",
+        "body_region": "chest",  # ACR puts aortic scenarios in chest
         "synonyms": ["aortic dissection", "dissecting aneurysm", "type a dissection",
-                     "type b dissection"],
-        "scenario_keywords": ["aortic dissection", "dissecting"]
+                     "type b dissection", "acute aortic syndrome"],
+        "scenario_keywords": ["aortic dissection", "dissecting", "acute aortic syndrome"]
     },
     "dvt": {
         "display_name": "Deep Vein Thrombosis",
-        "body_region": "vascular",
+        "body_region": "msk",  # DVT scenarios are in MSK region in ACR
         "synonyms": ["dvt", "deep vein thrombosis", "deep venous thrombosis", "leg clot",
-                     "venous thrombosis", "lower extremity dvt"],
-        "scenario_keywords": ["deep vein", "dvt", "venous thrombosis"]
+                     "venous thrombosis", "lower extremity dvt", "leg swelling"],
+        "scenario_keywords": ["deep vein", "dvt", "venous thrombosis", "thrombosis",
+                              "extremity swelling", "leg swelling", "edema"]
     },
     "peripheral_vascular": {
         "display_name": "Peripheral Vascular Disease",
-        "body_region": "vascular",
+        "body_region": "msk",  # PVD scenarios are in MSK region in ACR
         "synonyms": ["peripheral vascular disease", "pvd", "peripheral arterial disease", "pad",
                      "claudication", "limb ischemia"],
-        "scenario_keywords": ["peripheral vascular", "peripheral arterial", "claudication"]
+        "scenario_keywords": ["peripheral vascular", "peripheral arterial", "claudication",
+                              "arterial occlusion", "extremity ischemia"]
     },
     "carotid_stenosis": {
         "display_name": "Carotid Stenosis",
@@ -447,9 +471,21 @@ def detect_context(scenario_name):
     return context
 
 
-def calculate_relevance(scenario_name, concept_keywords):
-    """Calculate relevance score between scenario and concept (0.0 to 1.0)."""
+def calculate_relevance(scenario_name, concept_keywords, negative_keywords=None):
+    """Calculate relevance score between scenario and concept (0.0 to 1.0).
+
+    Args:
+        scenario_name: The scenario name to check
+        concept_keywords: List of keywords that should match
+        negative_keywords: List of keywords that should NOT match (reduces score)
+    """
     name_lower = scenario_name.lower()
+
+    # Check negative keywords first - if present, significantly reduce relevance
+    if negative_keywords:
+        for neg_kw in negative_keywords:
+            if neg_kw.lower() in name_lower:
+                return 0.05  # Very low score, effectively excludes
 
     # Count keyword matches
     matches = 0
@@ -522,17 +558,20 @@ def build_concept_index(data_dir, output_path):
             scenario_name = scenario.get("name", "")
             scenario_region = scenario.get("_region", "")
 
+            # STRICT REGION FILTERING: Only include scenarios from concept's body region
+            # This prevents cross-anatomy contamination (e.g., stroke matching vascular scenarios)
+            concept_region = concept_def.get("body_region")
+            if concept_region and scenario_region != concept_region:
+                continue  # Skip scenarios from other regions
+
             # Check if scenario matches this concept
             keywords = concept_def.get("scenario_keywords", [])
-            relevance = calculate_relevance(scenario_name, keywords)
+            negative_keywords = concept_def.get("negative_keywords", [])
+            relevance = calculate_relevance(scenario_name, keywords, negative_keywords)
 
-            # Also check body region match
-            region_match = (concept_def.get("body_region") == scenario_region)
-
-            if relevance > 0.2 or (region_match and relevance > 0.1):
-                # Boost relevance for region match
-                if region_match:
-                    relevance = min(1.0, relevance + 0.2)
+            if relevance > 0.1:
+                # All scenarios here are from the correct region
+                relevance = min(1.0, relevance + 0.2)  # Boost since region matches
 
                 # Detect phase and context
                 phase = detect_phase(scenario_name)
