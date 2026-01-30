@@ -3,6 +3,8 @@
  * and concept-based search with clinical phase grouping
  */
 
+import { getIntentClassifier } from './intent-classifier.js';
+
 export class SearchEngine {
   constructor(regionData) {
     this.scenarios = regionData.scenarios || [];
@@ -10,6 +12,7 @@ export class SearchEngine {
     this.embeddings = null;
     this.synonyms = null;
     this.conceptIndex = null;
+    this.intentClassifier = null;
     this.initialized = false;
   }
 
@@ -18,8 +21,20 @@ export class SearchEngine {
     await this.loadSynonyms();
     // Load concept index for concept-based search
     await this.loadConceptIndex();
+    // Load intent classifier for query phase detection
+    await this.loadIntentClassifier();
     this.buildIndex();
     this.initialized = true;
+  }
+
+  async loadIntentClassifier() {
+    try {
+      this.intentClassifier = await getIntentClassifier();
+      console.log('[SearchEngine] Intent classifier loaded, ready:', this.intentClassifier.isReady());
+    } catch (error) {
+      console.warn('[SearchEngine] Could not load intent classifier:', error);
+      this.intentClassifier = null;
+    }
   }
 
   async loadConceptIndex() {
@@ -122,29 +137,90 @@ export class SearchEngine {
    * @param {Object} options - Search options
    * @param {number} options.limit - Max results
    * @param {Object} options.filters - Active filters (phase, context, etc)
-   * @returns {Object} - { scenarios, grouped, concept, isConceptSearch }
+   * @returns {Object} - { scenarios, grouped, concept, isConceptSearch, intent }
    */
   async search(query, options = {}) {
     const { limit = 20, filters = {} } = options;
 
     if (!this.initialized || this.scenarios.length === 0) {
-      return { scenarios: [], grouped: null, concept: null, isConceptSearch: false };
+      return { scenarios: [], grouped: null, concept: null, isConceptSearch: false, intent: null };
+    }
+
+    // Classify query intent for phase-aware ranking
+    let intent = null;
+    if (this.intentClassifier) {
+      try {
+        intent = await this.intentClassifier.classify(query);
+        console.log('[SearchEngine] Query intent:', intent);
+      } catch (error) {
+        console.warn('[SearchEngine] Intent classification failed:', error);
+      }
     }
 
     // Try concept-based search first
     const conceptResult = this.searchByConcept(query, filters);
     if (conceptResult.scenarios.length > 0) {
+      // Apply intent-based re-ranking to concept results
+      if (intent && intent.phase !== 'unknown') {
+        conceptResult.scenarios = this.applyIntentRanking(conceptResult.scenarios, intent);
+        // Re-group after re-ranking
+        if (conceptResult.grouped) {
+          conceptResult.grouped = this.reorderGroupsByIntent(conceptResult.grouped, intent);
+        }
+      }
+      conceptResult.intent = intent;
       return conceptResult;
     }
 
-    // Fallback to keyword search
-    const scenarios = await this.keywordSearch(query, limit);
+    // Fallback to keyword search with intent-aware ranking
+    const scenarios = await this.keywordSearch(query, limit, intent);
     return {
       scenarios,
       grouped: null,
       concept: null,
-      isConceptSearch: false
+      isConceptSearch: false,
+      intent
     };
+  }
+
+  /**
+   * Apply intent-based ranking boost to scenarios
+   */
+  applyIntentRanking(scenarios, intent) {
+    if (!this.intentClassifier || !intent) return scenarios;
+
+    // Score and sort scenarios based on intent match
+    const scoredScenarios = scenarios.map(scenario => {
+      const boost = this.intentClassifier.getScenarioBoost(scenario, intent);
+      return {
+        scenario,
+        boost,
+        originalScore: scenario._relevanceScore || 1
+      };
+    });
+
+    // Sort by boosted score
+    scoredScenarios.sort((a, b) => {
+      const scoreA = a.originalScore * a.boost;
+      const scoreB = b.originalScore * b.boost;
+      return scoreB - scoreA;
+    });
+
+    return scoredScenarios.map(s => s.scenario);
+  }
+
+  /**
+   * Reorder phase groups based on detected intent
+   */
+  reorderGroupsByIntent(groups, intent) {
+    if (!intent || intent.phase === 'unknown') return groups;
+
+    // Sort groups so that matching phase comes first
+    return groups.slice().sort((a, b) => {
+      const aMatches = a.phase === intent.phase ? 1 : 0;
+      const bMatches = b.phase === intent.phase ? 1 : 0;
+      return bMatches - aMatches;
+    });
   }
 
   /**
@@ -339,9 +415,9 @@ export class SearchEngine {
   }
 
   /**
-   * Keyword-based search (original implementation)
+   * Keyword-based search with intent-aware ranking
    */
-  async keywordSearch(query, limit = 10) {
+  async keywordSearch(query, limit = 10, intent = null) {
     const queryLower = query.toLowerCase();
     const expandedTerms = this.expandQuery(query);
 
@@ -387,6 +463,18 @@ export class SearchEngine {
         scores.set(idx, (scores.get(idx) || 0) + 2);
       }
     });
+
+    // Apply intent-based boost/penalty
+    if (intent && this.intentClassifier && intent.phase !== 'unknown') {
+      this.scenarios.forEach((scenario, idx) => {
+        if (!scores.has(idx)) return;
+
+        const boost = this.intentClassifier.getScenarioBoost(scenario, intent);
+        const currentScore = scores.get(idx);
+        // Apply boost as a multiplier to existing score
+        scores.set(idx, currentScore * boost);
+      });
+    }
 
     // Sort by score
     const results = Array.from(scores.entries())
