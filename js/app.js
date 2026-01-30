@@ -2220,44 +2220,145 @@ class ProtocolHelpApp {
 
   exportCurrentProtocol() {
     const sequences = this.protocolBuilder.selectedSequences;
-    const formData = {
-      name: document.getElementById('protocolNameInput')?.value || 'Untitled Protocol',
-      region: document.getElementById('protocolRegionSelect')?.value || '',
-      contrastMode: this.protocolBuilder.contrastMode,
-      scopeTags: this.protocolBuilder.scopeTags,
-      indications: document.getElementById('protocolIndicationsInput')?.value || '',
-      notes: document.getElementById('protocolNotesInput')?.value || ''
-    };
+    const name = document.getElementById('protocolNameInput')?.value || 'Untitled Protocol';
+    const region = this.formatRegionName(document.getElementById('protocolRegionSelect')?.value || '');
+    const contrastMode = this.protocolBuilder.contrastMode;
+    const scopeTags = this.protocolBuilder.scopeTags;
+    const indications = document.getElementById('protocolIndicationsInput')?.value || '';
+    const notes = document.getElementById('protocolNotesInput')?.value || '';
+    const totalTime = this.protocolBuilder.formatTime(this.protocolBuilder.calculateTotalTime());
 
-    const exportData = {
-      version: '1.0.0',
-      exported_at: new Date().toISOString(),
-      source: 'Radex Protocol Builder',
-      protocol: {
-        name: formData.name,
-        body_region: formData.region,
-        contrast_mode: formData.contrastMode,
-        scope_tags: formData.scopeTags,
-        indications: formData.indications,
-        notes: formData.notes,
-        sequences: sequences,
-        total_time_seconds: this.protocolBuilder.calculateTotalTime()
-      }
-    };
+    const contrastLabel = contrastMode === 'both' ? 'With + Without Contrast' :
+                          contrastMode === 'with' ? 'With Contrast' : 'Without Contrast';
 
-    const jsonStr = JSON.stringify(exportData, null, 2);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
+    // Check if jsPDF is available
+    if (typeof window.jspdf === 'undefined') {
+      alert('PDF library not loaded. Please try again.');
+      return;
+    }
 
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${formData.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_protocol.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-    this.ui.setStatus('Protocol exported');
+    let y = 20;
+    const leftMargin = 20;
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    // Title
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text(name, leftMargin, y);
+    y += 10;
+
+    // Metadata line
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100);
+    doc.text(`Region: ${region}  |  Contrast: ${contrastLabel}  |  Est. Time: ${totalTime}`, leftMargin, y);
+    y += 8;
+
+    // Scope tags
+    if (scopeTags.length > 0) {
+      doc.text(`Coverage: ${scopeTags.join(', ')}`, leftMargin, y);
+      y += 8;
+    }
+
+    // Indications
+    if (indications) {
+      y += 4;
+      doc.setTextColor(0);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Indications', leftMargin, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      const indicationLines = doc.splitTextToSize(indications, pageWidth - 40);
+      doc.text(indicationLines, leftMargin, y);
+      y += indicationLines.length * 5 + 4;
+    }
+
+    // Sequences header
+    y += 4;
+    doc.setTextColor(0);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text(`Sequences (${sequences.length})`, leftMargin, y);
+    y += 8;
+
+    // Table header
+    doc.setFillColor(240, 240, 240);
+    doc.rect(leftMargin, y - 4, pageWidth - 40, 7, 'F');
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('#', leftMargin + 2, y);
+    doc.text('Sequence', leftMargin + 15, y);
+    doc.text('Time', pageWidth - 35, y);
+    y += 6;
+
+    // Sequences
+    doc.setFont('helvetica', 'normal');
+    const preContrast = sequences.filter(s => !s.is_post_contrast);
+    const postContrast = sequences.filter(s => s.is_post_contrast);
+
+    preContrast.forEach((seq, i) => {
+      if (y > 270) { doc.addPage(); y = 20; }
+      doc.text(`${i + 1}`, leftMargin + 2, y);
+      doc.text(seq.sequence_name, leftMargin + 15, y);
+      doc.text(`~${this.protocolBuilder.formatTime(seq.time_seconds)}`, pageWidth - 35, y);
+      y += 6;
+    });
+
+    if (postContrast.length > 0) {
+      if (y > 260) { doc.addPage(); y = 20; }
+      y += 2;
+      doc.setFillColor(240, 230, 255);
+      doc.rect(leftMargin, y - 4, pageWidth - 40, 7, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.text('--- CONTRAST INJECTION ---', leftMargin + 50, y);
+      y += 8;
+      doc.setFont('helvetica', 'normal');
+
+      postContrast.forEach((seq, i) => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.text(`${preContrast.length + i + 1}`, leftMargin + 2, y);
+        doc.text(seq.sequence_name, leftMargin + 15, y);
+        doc.text(`~${this.protocolBuilder.formatTime(seq.time_seconds)}`, pageWidth - 35, y);
+        y += 6;
+      });
+    }
+
+    // Total time
+    y += 4;
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Total Estimated Time: ${totalTime}`, leftMargin, y);
+
+    // Notes
+    if (notes) {
+      y += 10;
+      if (y > 250) { doc.addPage(); y = 20; }
+      doc.setFont('helvetica', 'bold');
+      doc.text('Notes', leftMargin, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      const noteLines = doc.splitTextToSize(notes, pageWidth - 40);
+      doc.text(noteLines, leftMargin, y);
+    }
+
+    // Footer
+    const pageCount = doc.internal.getNumberOfPages();
+    doc.setFontSize(8);
+    doc.setTextColor(150);
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.text(`Generated by Radex Protocol Builder - ${new Date().toLocaleDateString()}`, leftMargin, 287);
+    }
+
+    // Save
+    const filename = `${name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_protocol.pdf`;
+    doc.save(filename);
+
+    this.ui.setStatus('Protocol exported as PDF');
   }
 
   printCurrentProtocol() {
