@@ -26,7 +26,7 @@
   <!-- Theme Color -->
   <meta name="theme-color" content="#9B5DE5">
 
-  <link rel="stylesheet" href="css/main.css?v=20260130">
+  <link rel="stylesheet" href="css/main.css?v=20260129l">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>R</text></svg>">
   <link rel="manifest" href="manifest.json">
 </head>
@@ -40,6 +40,7 @@
       <nav class="header-nav" role="navigation" aria-label="Main navigation">
         <button class="nav-link active" data-view="search" aria-pressed="true">Search</button>
         <button class="nav-link" data-view="protocols" aria-pressed="false">Protocols</button>
+        <button class="nav-link" data-view="builder" aria-pressed="false">Builder</button>
       </nav>
       <!-- Mobile menu button -->
       <button class="mobile-menu-btn hidden" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false">
@@ -51,9 +52,64 @@
 
     <!-- Main Content -->
     <main class="main">
-      <!-- Anatomy Selector -->
-      <section class="anatomy-section" aria-labelledby="region-title">
-        <h1 class="section-title" id="region-title">Select Body Region</h1>
+      <!-- Home Section -->
+      <section class="anatomy-section" aria-labelledby="quick-search-title">
+        <!-- Quick Search Hero -->
+        <div class="quick-search-hero">
+          <h1 class="quick-search-title" id="quick-search-title">ACR Appropriateness Quick Search</h1>
+          <p class="quick-search-subtitle">Get imaging recommendations for common clinical scenarios</p>
+          <div class="quick-search-container">
+            <input
+              type="text"
+              class="quick-search-input"
+              id="globalSearchInput"
+              placeholder="e.g., stroke, headache, chest pain, fracture..."
+              autocomplete="off"
+              aria-label="Quick search clinical scenarios"
+            >
+            <button class="quick-search-btn" id="globalSearchBtn" aria-label="Search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Global Search Result (Summary Card) -->
+        <div class="global-search-result hidden" id="globalSearchResult">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Info Card (Collapsible) -->
+        <details class="info-card-collapsible">
+          <summary class="info-card-toggle">
+            <span class="info-toggle-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+            </span>
+            <span class="info-toggle-label">What is Radex?</span>
+          </summary>
+          <div class="info-card-body">
+            <p class="info-card-text">
+              Radex provides imaging recommendations based on <strong>ACR Appropriateness Criteria</strong> -
+              evidence-based guidelines that help determine the most suitable imaging study for specific clinical conditions.
+            </p>
+            <p class="info-card-note">
+              For educational purposes only. Always verify with institutional protocols.
+            </p>
+          </div>
+        </details>
+
+        <!-- Advanced Search Divider -->
+        <div class="advanced-search-divider">
+          <span class="divider-line"></span>
+          <span class="divider-text">or search by body region</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <!-- Body Region Grid -->
         <div class="anatomy-grid" role="group" aria-label="Body region selection">
           <button class="anatomy-btn" data-region="neuro" aria-label="Neuro imaging">
             <svg class="anatomy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -109,28 +165,6 @@
             </svg>
             <span>Pediatric</span>
           </button>
-        </div>
-
-        <!-- Info Card -->
-        <div class="info-card">
-          <div class="info-card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M9 12h6M12 9v6"/>
-              <circle cx="12" cy="12" r="10"/>
-            </svg>
-          </div>
-          <div class="info-card-content">
-            <h2 class="info-card-title">What is Radex?</h2>
-            <p class="info-card-text">
-              Radex is a quick-reference tool for radiology residents and medical professionals.
-              Select a body region above to search clinical scenarios and see imaging recommendations
-              based on <strong>ACR Appropriateness Criteria</strong> - evidence-based guidelines that help
-              determine the most suitable imaging study for specific clinical conditions.
-            </p>
-            <p class="info-card-note">
-              For educational purposes only. Always verify with institutional protocols and clinical judgment.
-            </p>
-          </div>
         </div>
       </section>
 
@@ -245,6 +279,13 @@
               </div>
             </div>
             <div class="protocol-detail-meta">
+              <span class="source-badge curated" id="protocolDetailSource" title="Protocol verified by radiologists">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <span id="protocolDetailSourceText">Human Verified</span>
+              </span>
               <span class="contrast-badge" id="protocolDetailContrast">No Contrast</span>
               <span class="body-region-badge" id="protocolDetailRegion">Neuro</span>
               <span class="scan-time-badge" id="protocolDetailTime">~15 min</span>
@@ -435,6 +476,11 @@
             <!-- Dynamically populated: shows "Brain Tumor - Oncology" when concept matched -->
           </div>
 
+          <!-- Summary Card (shows quick consensus for common topics) -->
+          <div class="summary-card hidden" id="summaryCard">
+            <!-- Dynamically populated: shows consensus recommendation for common clinical topics -->
+          </div>
+
           <!-- Phase Filter Chips (for concept search results) -->
           <div class="phase-filter-chips hidden" id="phaseFilterChips">
             <!-- Dynamically populated: [Screening (2)] [Initial (3)] [Surveillance (2)] -->
@@ -448,11 +494,6 @@
           <!-- Differential Card (RadLITE) -->
           <div class="differential-card hidden" id="differentialCard">
             <!-- Dynamically populated -->
-          </div>
-
-          <!-- Quick Reference Card - Shows both clinical pathways -->
-          <div class="quick-reference-card hidden" id="quickReferenceCard">
-            <!-- Dynamically populated: shows top recommendations for both Acute/Initial AND Follow-up pathways -->
           </div>
         </div>
 
@@ -496,6 +537,13 @@
               <span id="protocolName">MRI Protocol</span>
             </div>
             <div class="protocol-card-meta">
+              <span class="source-badge curated hidden" id="sourceBadge" title="Protocol source">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <span id="sourceBadgeText">Human Verified</span>
+              </span>
               <span class="contrast-badge" id="contrastBadge">No Contrast</span>
             </div>
           </div>
@@ -505,6 +553,230 @@
             </div>
             <div class="protocol-rationale hidden" id="protocolRationale">
               <!-- Contrast rationale if applicable -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Builder Section -->
+      <section class="builder-section hidden" id="builderSection">
+        <div class="builder-header">
+          <h1 class="section-title">Protocol Builder</h1>
+          <p class="section-subtitle">Create custom MRI protocols for experimentation and learning</p>
+        </div>
+
+        <!-- Templates Section -->
+        <div class="templates-container" id="templatesContainer">
+          <div class="templates-header">
+            <h2 class="subsection-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+              </svg>
+              Start from Template
+            </h2>
+          </div>
+          <div class="templates-grid" id="templatesGrid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- My Protocols List -->
+        <div class="my-protocols-container" id="myProtocolsContainer">
+          <div class="my-protocols-header">
+            <h2 class="subsection-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+              </svg>
+              My Protocols
+            </h2>
+            <button class="btn-primary" id="newProtocolBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              Blank Protocol
+            </button>
+          </div>
+          <div class="my-protocols-grid" id="myProtocolsGrid">
+            <div class="empty-state" id="noProtocolsMessage">
+              <p>No saved protocols yet</p>
+              <p class="suggestion">Start from a template above or create a blank protocol</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Protocol Editor (hidden until editing) -->
+        <div class="protocol-editor hidden" id="protocolEditor">
+          <div class="editor-header">
+            <button class="back-btn" id="editorBackBtn" aria-label="Cancel editing">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+              Cancel
+            </button>
+            <h2 class="editor-title" id="editorTitle">New Protocol</h2>
+            <div class="editor-actions">
+              <button class="btn-secondary" id="saveProtocolBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                  <polyline points="17 21 17 13 7 13 7 21"/>
+                  <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                Save
+              </button>
+            </div>
+          </div>
+
+          <div class="editor-content">
+            <!-- Protocol Details Form -->
+            <div class="editor-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="protocolNameInput">Protocol Name *</label>
+                  <input type="text" id="protocolNameInput" placeholder="e.g., My Brain MS Protocol" required>
+                </div>
+              </div>
+              <div class="form-row two-col">
+                <div class="form-group">
+                  <label for="protocolRegionSelect">Body Region *</label>
+                  <select id="protocolRegionSelect">
+                    <option value="">Select region...</option>
+                    <option value="neuro">Neuro</option>
+                    <option value="spine">Spine</option>
+                    <option value="msk">MSK</option>
+                    <option value="abdomen">Abdomen</option>
+                    <option value="chest">Chest</option>
+                    <option value="vascular">Vascular</option>
+                    <option value="breast">Breast</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Contrast</label>
+                  <div class="toggle-group compact" id="builderContrastToggle">
+                    <button class="toggle-option active" data-contrast="without">Without</button>
+                    <button class="toggle-option" data-contrast="with">With</button>
+                    <button class="toggle-option" data-contrast="both">With + Without</button>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="protocolScopeInput">Scan Scope / Coverage</label>
+                  <div class="scope-tags-container" id="scopeTagsContainer">
+                    <div class="scope-tags" id="scopeTags"></div>
+                    <input type="text" id="protocolScopeInput" placeholder="Type to search (e.g., brain, knee, whole spine...)" autocomplete="off">
+                  </div>
+                  <div class="scope-suggestions hidden" id="scopeSuggestions"></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="protocolIndicationsInput">Indications (optional)</label>
+                  <textarea id="protocolIndicationsInput" rows="2" placeholder="When would you use this protocol?"></textarea>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="protocolNotesInput">Personal Notes (optional)</label>
+                  <textarea id="protocolNotesInput" rows="2" placeholder="Any notes or reminders..."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Two-Panel Sequence Editor -->
+            <div class="sequence-editor-layout">
+              <!-- Left Panel: Sequence Library Search -->
+              <div class="sequence-library-panel">
+                <div class="panel-header">
+                  <h3>Sequence Library</h3>
+                  <span class="library-count" id="libraryCount">0 sequences</span>
+                </div>
+                <div class="sequence-search-container">
+                  <div class="search-input-wrap">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="11" cy="11" r="8"/>
+                      <path d="M21 21l-4.35-4.35"/>
+                    </svg>
+                    <input type="text" class="search-input" id="sequenceSearchInput" placeholder="Search sequences...">
+                    <button class="search-clear hidden" id="sequenceSearchClear">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <!-- Quick Filters -->
+                <div class="sequence-filters">
+                  <div class="filter-chips-row">
+                    <button class="filter-chip small active" data-filter="all">All</button>
+                    <button class="filter-chip small" data-filter="T1">T1</button>
+                    <button class="filter-chip small" data-filter="T2">T2</button>
+                    <button class="filter-chip small" data-filter="DWI">DWI</button>
+                    <button class="filter-chip small" data-filter="contrast">+C</button>
+                  </div>
+                </div>
+                <div class="sequence-library-list" id="sequenceLibraryList">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <!-- Right Panel: Protocol Sequences -->
+              <div class="protocol-sequences-panel">
+                <div class="panel-header">
+                  <h3>Protocol Sequences</h3>
+                  <span class="sequence-count" id="protocolSequenceCount">0 sequences</span>
+                </div>
+                <div class="protocol-sequences-drop-zone" id="protocolSequencesList">
+                  <div class="drop-placeholder" id="dropPlaceholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
+                      <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                    <p>Click sequences to add them here</p>
+                    <p class="hint">Drag to reorder - sequences run top to bottom</p>
+                  </div>
+                </div>
+                <!-- Protocol Summary -->
+                <div class="protocol-summary">
+                  <div class="summary-item">
+                    <span class="summary-label">Estimated Time:</span>
+                    <span class="summary-value" id="estimatedTime">~0 min</span>
+                  </div>
+                  <div class="summary-actions">
+                    <button class="summary-action-btn" id="exportProtocolBtn" title="Export as PDF">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                      </svg>
+                      <span>PDF</span>
+                    </button>
+                    <button class="summary-action-btn" id="printProtocolBtn" title="Print protocol">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                      </svg>
+                      <span>Print</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Rationale Panel (expandable) -->
+            <div class="rationale-panel hidden" id="rationalePanel">
+              <div class="rationale-header">
+                <h3 id="rationaleTitle">Sequence Rationale</h3>
+                <button class="rationale-close" id="rationaleClose">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="rationale-content" id="rationaleContent">
+                <!-- Dynamically populated -->
+              </div>
             </div>
           </div>
         </div>
@@ -678,7 +950,7 @@
     // Force service worker update on version change
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
-        const currentVersion = 'radex-v2.1.0';
+        const currentVersion = 'radex-v2.14.0';
         const storedVersion = localStorage.getItem('radex_sw_version');
         if (storedVersion !== currentVersion) {
           // Version mismatch - unregister old SW and clear caches
@@ -691,8 +963,7 @@
       });
     }
   </script>
-  <!-- ONNX Runtime Web for intent classification (optional, falls back to rules) -->
-  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.0/dist/ort.min.js"></script>
-  <script type="module" src="js/app.js?v=20260130"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script type="module" src="js/app.js?v=20260129d"></script>
 </body>
 </html>

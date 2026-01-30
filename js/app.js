@@ -11,6 +11,8 @@ import { SearchEngine } from './search-engine.js';
 import { DataLoader } from './data-loader.js';
 import { UI } from './ui.js';
 import { RadLiteAPI } from './radlite-api.js';
+import { ProtocolBuilder } from './protocol-builder.js';
+import { SummaryCards } from './summary-cards.js';
 
 class ProtocolHelpApp {
   constructor() {
@@ -21,6 +23,8 @@ class ProtocolHelpApp {
     this.dataLoader = new DataLoader();
     this.ui = new UI();
     this.radlite = new RadLiteAPI();
+    this.protocolBuilder = new ProtocolBuilder();
+    this.summaryCards = new SummaryCards();
     this.debounceTimer = null;
     this.differentialTimer = null;
     this.protocolDebounceTimer = null;
@@ -42,6 +46,7 @@ class ProtocolHelpApp {
     this.protocolSearchQuery = '';
     this.currentProtocol = null; // Currently viewed protocol
     this.bookmarkedProtocols = this.loadBookmarks();
+    this.expandedSequenceRationale = null; // Track which sequence has rationale expanded
     this.queryHistory = this.loadQueryHistory();
     this.maxHistoryItems = 10;
 
@@ -164,10 +169,30 @@ class ProtocolHelpApp {
 
   async init() {
     this.bindEvents();
+    // Load summary cards for global quick search
+    this.summaryCards.load();
     this.ui.setStatus('Ready');
   }
 
   bindEvents() {
+    // Global quick search
+    const globalSearchInput = document.getElementById('globalSearchInput');
+    const globalSearchBtn = document.getElementById('globalSearchBtn');
+
+    if (globalSearchInput) {
+      globalSearchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          this.handleGlobalSearch(globalSearchInput.value);
+        }
+      });
+    }
+
+    if (globalSearchBtn && globalSearchInput) {
+      globalSearchBtn.addEventListener('click', () => {
+        this.handleGlobalSearch(globalSearchInput.value);
+      });
+    }
+
     // Anatomy buttons
     document.querySelectorAll('.anatomy-btn').forEach(btn => {
       btn.addEventListener('click', () => this.selectRegion(btn.dataset.region));
@@ -411,6 +436,15 @@ class ProtocolHelpApp {
     return minutes > 0 ? `~${minutes} min` : 'N/A';
   }
 
+  /**
+   * Check if a protocol was AI-generated de novo (not just AI-enriched)
+   * Returns true if protocol.source === 'ai_generated'
+   * Human-created protocols with AI enrichment are still considered "Human Verified"
+   */
+  isAIGenerated(protocol) {
+    return protocol.source === 'ai_generated';
+  }
+
   bindModalEvents() {
     // About button
     const aboutBtn = document.getElementById('aboutBtn');
@@ -499,8 +533,11 @@ class ProtocolHelpApp {
     document.getElementById('regionTitle').textContent = this.formatRegionName(region);
 
     try {
-      // Load region-specific data
-      const data = await this.dataLoader.loadRegion(region);
+      // Load region-specific data and summary cards in parallel
+      const [data] = await Promise.all([
+        this.dataLoader.loadRegion(region),
+        this.summaryCards.load() // Load summary cards (cached after first load)
+      ]);
 
       // Initialize search engine with region data
       this.searchEngine = new SearchEngine(data);
@@ -519,7 +556,17 @@ class ProtocolHelpApp {
     this.currentScenario = null;
     this.searchEngine = null;
     this.radlite.clearCache(); // Clear cache when going back
+    this.ui.hideSummaryCard();
     this.clearSearch();
+
+    // Reset global search state
+    const globalSearchInput = document.getElementById('globalSearchInput');
+    const globalResult = document.getElementById('globalSearchResult');
+    if (globalSearchInput) globalSearchInput.value = '';
+    if (globalResult) {
+      globalResult.classList.add('hidden');
+      globalResult.innerHTML = '';
+    }
 
     document.querySelector('.anatomy-section').classList.remove('hidden');
     document.getElementById('searchSection').classList.add('hidden');
@@ -531,9 +578,156 @@ class ProtocolHelpApp {
     this.ui.setStatus('Ready');
   }
 
+  // ========================================
+  // Global Quick Search
+  // ========================================
+  handleGlobalSearch(query) {
+    const resultContainer = document.getElementById('globalSearchResult');
+    if (!resultContainer) return;
+
+    const trimmed = query.trim();
+    if (!trimmed) {
+      resultContainer.classList.add('hidden');
+      resultContainer.innerHTML = '';
+      return;
+    }
+
+    // Find matching summary card
+    const card = this.summaryCards.findMatch(trimmed);
+
+    if (!card) {
+      // No match - show a hint to use advanced search
+      resultContainer.classList.remove('hidden');
+      resultContainer.innerHTML = `
+        <div class="global-result-card">
+          <div class="global-result-body">
+            <p class="global-result-recommendation">
+              No quick answer found for "<strong>${this.escapeHtml(trimmed)}</strong>".
+              Try the body region search below for more specific scenarios.
+            </p>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    // Render the card
+    this.renderGlobalSearchResult(card, resultContainer);
+  }
+
+  renderGlobalSearchResult(card, container) {
+    const rec = card.primary_recommendation;
+    const displayName = card.display_name || card.topic;
+    const equivProcs = rec.equivalent_procedures || [];
+
+    let bodyContent = '';
+
+    if (card.card_type === 'CLINICAL_FIRST') {
+      bodyContent = `
+        <div class="global-result-clinical">
+          <strong>${card.no_imaging_pct}%</strong> of scenarios suggest clinical assessment before imaging
+        </div>
+        ${rec.name ? `
+          <p class="global-result-recommendation">
+            When imaging is indicated: <strong>${this.escapeHtml(rec.name)}</strong>
+          </p>
+        ` : ''}
+      `;
+    } else if (card.card_type === 'HIGH_VARIANCE') {
+      bodyContent = `
+        <div class="global-result-clinical">
+          Recommendations vary significantly based on clinical context.
+          Use the body region search below for specific guidance.
+        </div>
+      `;
+    } else {
+      // STRONG or CONDITIONAL
+      const consensusClass = rec.consensus_pct >= 70 ? '' : (rec.consensus_pct >= 40 ? 'moderate' : 'low');
+
+      bodyContent = `
+        <div class="global-result-procedures">
+          ${equivProcs.length > 0
+            ? equivProcs.map((p, i) => `<span class="global-result-proc ${i === 0 ? 'primary' : ''}">${this.escapeHtml(this.truncateText(p, 35))}</span>`).join('')
+            : `<span class="global-result-proc primary">${this.escapeHtml(rec.name || 'None')}</span>`
+          }
+        </div>
+        <div class="global-result-consensus ${consensusClass}">
+          <span class="consensus-value">${rec.consensus_pct}%</span> consensus across ${card.scenario_count} scenarios
+        </div>
+        ${card.alternatives && card.alternatives.length > 0 ? `
+          <p class="global-result-recommendation" style="margin-top: var(--space-sm)">
+            Also consider: ${card.alternatives.slice(0, 2).map(a => `${this.escapeHtml(this.truncateText(a.name, 25))} (${a.percentage}%)`).join(', ')}
+          </p>
+        ` : ''}
+      `;
+    }
+
+    container.classList.remove('hidden');
+    container.innerHTML = `
+      <div class="global-result-card">
+        <div class="global-result-header">
+          <span class="global-result-topic">${this.escapeHtml(displayName)}</span>
+          <span class="global-result-meta">ACR Appropriateness Criteria</span>
+        </div>
+        <div class="global-result-body">
+          ${bodyContent}
+        </div>
+        <div class="global-result-footer">
+          <span class="global-result-source">Based on ${card.scenario_count} clinical scenarios</span>
+          <button class="global-result-action" data-region="${card.region}" data-topic="${card.topic}">
+            See detailed scenarios
+          </button>
+        </div>
+      </div>
+    `;
+
+    // Bind action button
+    const actionBtn = container.querySelector('.global-result-action');
+    if (actionBtn) {
+      actionBtn.addEventListener('click', () => {
+        const region = actionBtn.dataset.region;
+        const topic = actionBtn.dataset.topic;
+        this.navigateToRegionSearch(region, topic);
+      });
+    }
+  }
+
+  async navigateToRegionSearch(region, topic) {
+    // Hide global search result before navigating
+    const globalResult = document.getElementById('globalSearchResult');
+    if (globalResult) {
+      globalResult.classList.add('hidden');
+      globalResult.innerHTML = '';
+    }
+
+    // Select the region and pre-fill the search
+    await this.selectRegion(region);
+
+    // Pre-fill the search input and trigger search
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput && topic) {
+      searchInput.value = topic;
+      // Execute search directly instead of through debounced handler
+      this.executeSearch(topic);
+    }
+  }
+
+  truncateText(text, maxLen) {
+    if (!text || text.length <= maxLen) return text || '';
+    return text.substring(0, maxLen - 3) + '...';
+  }
+
+  escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   handleSearch(query) {
     // Toggle clear button
-    document.getElementById('searchClear').classList.toggle('hidden', !query);
+    const searchClear = document.getElementById('searchClear');
+    if (searchClear) searchClear.classList.toggle('hidden', !query);
 
     // Hide query history when typing
     if (query.trim()) {
@@ -605,6 +799,7 @@ class ProtocolHelpApp {
       this.ui.hideChips();
       this.ui.hidePhaseFilterChips();
       this.ui.hideConceptHeader();
+      this.ui.hideSummaryCard();
       this.ui.hideMriProtocol();
       this.baseQuery = '';
       this.activeFilter = null;
@@ -642,6 +837,19 @@ class ProtocolHelpApp {
       // Execute search - returns { scenarios, grouped, concept, isConceptSearch }
       const result = await this.searchEngine.search(this.baseQuery, searchOptions);
 
+      // Check for summary card match on fresh searches
+      if (!isFilterChange) {
+        const summaryCard = this.summaryCards.findMatch(this.baseQuery);
+        if (summaryCard) {
+          this.ui.showSummaryCard(summaryCard, (topic) => {
+            // "See detailed scenarios" clicked - do nothing special, results are already showing
+            this.ui.hideSummaryCard();
+          });
+        } else {
+          this.ui.hideSummaryCard();
+        }
+      }
+
       if (result.isConceptSearch && result.concept) {
         // Concept-based search - show concept header and phase filters
         this.currentConcept = result.concept;
@@ -663,14 +871,6 @@ class ProtocolHelpApp {
         // Hide clarifying chips for concept search
         this.ui.hideChips();
 
-        // Generate and show Quick Reference card (both pathways)
-        if (!this.activePhaseFilter && result.grouped && result.grouped.length > 0) {
-          const quickRefData = this.generateQuickReference(result.concept, result.grouped);
-          this.ui.renderQuickReference(quickRefData);
-        } else {
-          this.ui.hideQuickReference();
-        }
-
         // Render grouped scenarios if we have groups
         if (result.grouped && result.grouped.length > 0 && !this.activePhaseFilter) {
           this.ui.renderGroupedScenarios(result.grouped, (scenario) => {
@@ -689,7 +889,6 @@ class ProtocolHelpApp {
         this.currentConcept = null;
         this.ui.hideConceptHeader();
         this.ui.hidePhaseFilterChips();
-        this.ui.hideQuickReference();
 
         // Check for ambiguity on fresh searches
         if (!isFilterChange) {
@@ -745,64 +944,6 @@ class ProtocolHelpApp {
     this.executeSearch(this.baseQuery, true);
   }
 
-  /**
-   * Generate Quick Reference data from grouped scenarios
-   * Shows top recommendations for both Acute/Initial AND Follow-up pathways
-   */
-  generateQuickReference(concept, grouped) {
-    const acutePhases = ['initial', 'screening', 'pretreatment'];
-    const followupPhases = ['surveillance', 'complication'];
-
-    // Collect top procedures from each pathway
-    const acuteRecs = [];
-    const followupRecs = [];
-
-    for (const group of grouped) {
-      const phase = group.phase?.toLowerCase() || '';
-      const isAcute = acutePhases.includes(phase);
-      const isFollowup = followupPhases.includes(phase);
-
-      // Get top-rated procedures from scenarios in this group
-      for (const scenario of group.scenarios) {
-        const procedures = scenario.procedures || [];
-        const topProcs = procedures
-          .filter(p => p.rating >= 7 && p.name && p.modality)
-          .sort((a, b) => b.rating - a.rating)
-          .slice(0, 2);
-
-        for (const proc of topProcs) {
-          const rec = {
-            name: proc.name || `${proc.modality}`,
-            modality: proc.modality,
-            rating: proc.rating,
-            scenario: scenario.name
-          };
-
-          if (isAcute) {
-            // Avoid duplicates by modality+name
-            if (!acuteRecs.some(r => r.modality === rec.modality && r.name === rec.name)) {
-              acuteRecs.push(rec);
-            }
-          } else if (isFollowup) {
-            if (!followupRecs.some(r => r.modality === rec.modality && r.name === rec.name)) {
-              followupRecs.push(rec);
-            }
-          }
-        }
-      }
-    }
-
-    // Sort by rating and take top 3
-    acuteRecs.sort((a, b) => b.rating - a.rating);
-    followupRecs.sort((a, b) => b.rating - a.rating);
-
-    return {
-      conceptName: concept.displayName,
-      acute: acuteRecs.slice(0, 3),
-      followup: followupRecs.slice(0, 3)
-    };
-  }
-
   handleScenarioSelect(scenario) {
     this.currentScenario = scenario;
 
@@ -822,13 +963,18 @@ class ProtocolHelpApp {
     this.ui.setStatus('Loading protocol...', 'loading');
 
     try {
-      const protocol = await this.dataLoader.getProtocol(
+      const result = await this.dataLoader.getProtocol(
         this.currentRegion,
         this.currentScenario,
         procedure
       );
 
-      this.ui.renderMriProtocol(protocol, procedure);
+      // getProtocol now returns { protocol, matchType, supplementalSequences }
+      const protocol = result?.protocol || result; // Handle both old and new format
+      const matchType = result?.matchType || 'suggested';
+      const supplementalSequences = result?.supplementalSequences || null;
+
+      this.ui.renderMriProtocol(protocol, procedure, matchType, supplementalSequences);
       this.ui.setStatus('Ready');
     } catch (error) {
       console.error('Protocol load error:', error);
@@ -884,14 +1030,18 @@ class ProtocolHelpApp {
     const anatomySection = document.querySelector('.anatomy-section');
     const searchSection = document.getElementById('searchSection');
     const protocolsSection = document.getElementById('protocolsSection');
+    const builderSection = document.getElementById('builderSection');
 
     if (view === 'search') {
       // Switch to Search view
       protocolsSection.classList.add('fade-out');
+      builderSection.classList.add('fade-out');
 
       setTimeout(() => {
         protocolsSection.classList.add('hidden');
+        builderSection.classList.add('hidden');
         protocolsSection.classList.remove('fade-out');
+        builderSection.classList.remove('fade-out');
 
         // Show anatomy section (unless we're in a region search)
         if (!this.currentRegion) {
@@ -907,17 +1057,40 @@ class ProtocolHelpApp {
       // Switch to Protocols view
       anatomySection.classList.add('fade-out');
       searchSection.classList.add('fade-out');
+      builderSection.classList.add('fade-out');
 
       setTimeout(async () => {
         anatomySection.classList.add('hidden');
         searchSection.classList.add('hidden');
+        builderSection.classList.add('hidden');
         anatomySection.classList.remove('fade-out');
         searchSection.classList.remove('fade-out');
+        builderSection.classList.remove('fade-out');
 
         protocolsSection.classList.remove('hidden');
 
         // Load and display all protocols
         await this.loadProtocolsView();
+      }, 300);
+
+    } else if (view === 'builder') {
+      // Switch to Builder view
+      anatomySection.classList.add('fade-out');
+      searchSection.classList.add('fade-out');
+      protocolsSection.classList.add('fade-out');
+
+      setTimeout(async () => {
+        anatomySection.classList.add('hidden');
+        searchSection.classList.add('hidden');
+        protocolsSection.classList.add('hidden');
+        anatomySection.classList.remove('fade-out');
+        searchSection.classList.remove('fade-out');
+        protocolsSection.classList.remove('fade-out');
+
+        builderSection.classList.remove('hidden');
+
+        // Load builder view
+        await this.loadBuilderView();
       }, 300);
     }
   }
@@ -982,6 +1155,7 @@ class ProtocolHelpApp {
       const scanTime = this.estimateScanTime(protocol);
       const isBookmarked = this.isBookmarked(protocol.name);
       const highlightedName = this.highlightSearchTerm(protocol.display_name || protocol.name);
+      const isAIEnhanced = this.isAIGenerated(protocol);
 
       return `
         <div class="protocol-grid-card ${isBookmarked ? 'bookmarked' : ''}" data-index="${index}" style="position: relative;">
@@ -996,6 +1170,9 @@ class ProtocolHelpApp {
           <div class="protocol-grid-card-meta">
             <span class="protocol-grid-card-region">${this.escapeHtml(region)}</span>
             ${hasContrast ? '<span class="contrast-badge with-contrast">Contrast</span>' : ''}
+            <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}" title="${isAIEnhanced ? 'Suggested protocol - verify before clinical use' : 'Protocol verified by radiologists'}">
+              ${isAIEnhanced ? 'Suggested' : 'Verified'}
+            </span>
           </div>
           ${indications ? `<div class="protocol-grid-card-indications">${this.escapeHtml(indications)}</div>` : ''}
           <div class="protocol-grid-card-footer">
@@ -1086,12 +1263,14 @@ class ProtocolHelpApp {
                     const hasContrast = protocol.uses_contrast;
                     const seqCount = protocol.sequences?.length || 0;
                     const isBookmarked = this.isBookmarked(protocol.name);
+                    const isAIEnhanced = this.isAIGenerated(protocol);
                     return `
                       <div class="protocol-list-item ${isBookmarked ? 'bookmarked' : ''}" data-region="${region}" data-index="${idx}">
                         <span class="protocol-list-item-name">${this.escapeHtml(protocol.display_name || protocol.name)}</span>
                         <div class="protocol-list-item-meta">
                           ${isBookmarked ? '<span class="contrast-badge with-contrast" style="background: var(--accent-muted); color: var(--accent);">Saved</span>' : ''}
                           ${hasContrast ? '<span class="contrast-badge with-contrast">Contrast</span>' : ''}
+                          <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}">${isAIEnhanced ? 'Suggested' : 'Verified'}</span>
                           <span class="protocol-grid-card-sequences"><span>${seqCount}</span> seq</span>
                         </div>
                       </div>
@@ -1156,6 +1335,24 @@ class ProtocolHelpApp {
 
     // Region badge
     document.getElementById('protocolDetailRegion').textContent = protocol.body_region || protocol.section || 'General';
+
+    // Source badge - indicate if protocol was AI-generated de novo
+    const sourceBadge = document.getElementById('protocolDetailSource');
+    const sourceText = document.getElementById('protocolDetailSourceText');
+    if (sourceBadge && sourceText) {
+      const isAI = this.isAIGenerated(protocol);
+      if (isAI) {
+        sourceBadge.classList.remove('curated');
+        sourceBadge.classList.add('suggested');
+        sourceBadge.title = 'Suggested protocol - verify before clinical use';
+        sourceText.textContent = 'Suggested';
+      } else {
+        sourceBadge.classList.remove('suggested');
+        sourceBadge.classList.add('curated');
+        sourceBadge.title = 'Protocol verified by radiologists';
+        sourceText.textContent = 'Human Verified';
+      }
+    }
 
     // Scan time badge
     document.getElementById('protocolDetailTime').textContent = this.estimateScanTime(protocol);
@@ -1526,6 +1723,1115 @@ class ProtocolHelpApp {
       peds: 'Pediatric'
     };
     return names[region] || region;
+  }
+
+  // ==========================================
+  // Protocol Builder Methods
+  // ==========================================
+
+  async loadBuilderView() {
+    this.ui.setStatus('Loading builder...', 'loading');
+
+    try {
+      // Load sequence library
+      await this.protocolBuilder.loadSequenceLibrary();
+
+      // Render templates and my protocols list
+      this.renderTemplates();
+      this.renderMyProtocols();
+
+      // Bind builder events if not already bound
+      this.bindBuilderEvents();
+
+      this.ui.setStatus('Builder ready');
+    } catch (error) {
+      console.error('Failed to load builder:', error);
+      this.ui.setStatus('Failed to load builder', 'error');
+    }
+  }
+
+  bindBuilderEvents() {
+    // Only bind once
+    if (this.builderEventsBound) return;
+    this.builderEventsBound = true;
+
+    // New Protocol button
+    const newBtn = document.getElementById('newProtocolBtn');
+    if (newBtn) {
+      newBtn.addEventListener('click', () => this.startNewProtocol());
+    }
+
+    // Editor back button
+    const editorBackBtn = document.getElementById('editorBackBtn');
+    if (editorBackBtn) {
+      editorBackBtn.addEventListener('click', () => this.cancelProtocolEdit());
+    }
+
+    // Save button
+    const saveBtn = document.getElementById('saveProtocolBtn');
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => this.saveCurrentProtocol());
+    }
+
+    // Contrast toggle (updated for with/without/both) - Builder specific
+    const builderContrastToggle = document.getElementById('builderContrastToggle');
+    if (builderContrastToggle) {
+      builderContrastToggle.querySelectorAll('.toggle-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          builderContrastToggle.querySelectorAll('.toggle-option').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          this.protocolBuilder.contrastMode = btn.dataset.contrast; // 'without', 'with', or 'both'
+          // Re-render sequence library to show/hide contrast sequences
+          this.renderSequenceLibrary(document.getElementById('sequenceSearchInput')?.value || '');
+        });
+      });
+    }
+
+    // Scope tags input with auto-suggest
+    const scopeInput = document.getElementById('protocolScopeInput');
+    const scopeSuggestions = document.getElementById('scopeSuggestions');
+    if (scopeInput && scopeSuggestions) {
+      scopeInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim().toLowerCase();
+        if (query.length > 0) {
+          this.showScopeSuggestions(query);
+        } else {
+          scopeSuggestions.classList.add('hidden');
+        }
+      });
+
+      scopeInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const tag = scopeInput.value.trim().toLowerCase();
+          if (tag && !this.protocolBuilder.scopeTags.includes(tag)) {
+            this.protocolBuilder.addScopeTag(tag);
+            this.renderScopeTags();
+            this.renderProtocolSequences();
+          }
+          scopeInput.value = '';
+          scopeSuggestions.classList.add('hidden');
+        } else if (e.key === 'Escape') {
+          scopeSuggestions.classList.add('hidden');
+        }
+      });
+
+      scopeInput.addEventListener('blur', () => {
+        // Delay hide to allow click on suggestion
+        setTimeout(() => scopeSuggestions.classList.add('hidden'), 200);
+      });
+    }
+
+    // Sequence search
+    const seqSearch = document.getElementById('sequenceSearchInput');
+    if (seqSearch) {
+      seqSearch.addEventListener('input', (e) => this.filterSequenceLibrary(e.target.value));
+    }
+
+    const seqSearchClear = document.getElementById('sequenceSearchClear');
+    if (seqSearchClear) {
+      seqSearchClear.addEventListener('click', () => {
+        seqSearch.value = '';
+        seqSearchClear.classList.add('hidden');
+        this.filterSequenceLibrary('');
+      });
+    }
+
+    // Sequence filter chips
+    document.querySelectorAll('.sequence-filters .filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.sequence-filters .filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        this.currentSequenceFilter = chip.dataset.filter;
+        this.filterSequenceLibrary(seqSearch?.value || '');
+      });
+    });
+
+    // Rationale close button
+    const rationaleClose = document.getElementById('rationaleClose');
+    if (rationaleClose) {
+      rationaleClose.addEventListener('click', () => {
+        document.getElementById('rationalePanel').classList.add('hidden');
+        this.protocolBuilder.selectedRationale = null;
+      });
+    }
+
+    // Export protocol button
+    const exportBtn = document.getElementById('exportProtocolBtn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => this.exportCurrentProtocol());
+    }
+
+    // Print protocol button
+    const printBtn = document.getElementById('printProtocolBtn');
+    if (printBtn) {
+      printBtn.addEventListener('click', () => this.printCurrentProtocol());
+    }
+  }
+
+  renderMyProtocols() {
+    const grid = document.getElementById('myProtocolsGrid');
+    const protocols = this.protocolBuilder.getAllCustomProtocols();
+    const noProtocolsMsg = document.getElementById('noProtocolsMessage');
+
+    if (protocols.length === 0) {
+      grid.innerHTML = '';
+      grid.appendChild(noProtocolsMsg);
+      noProtocolsMsg.classList.remove('hidden');
+      return;
+    }
+
+    noProtocolsMsg.classList.add('hidden');
+
+    grid.innerHTML = protocols.map(protocol => {
+      const sequenceCount = protocol.sequences?.length || 0;
+      const timeStr = this.protocolBuilder.formatTime(protocol.total_time_seconds || 0);
+      const regionName = this.formatRegionName(protocol.body_region);
+      const contrastMode = protocol.contrast_mode || (protocol.uses_contrast ? 'with' : 'without');
+      const contrastLabel = contrastMode === 'both' ? 'With/Without' : (contrastMode === 'with' ? 'With Contrast' : 'No Contrast');
+      const scopeTags = protocol.scope_tags || [];
+
+      return `
+        <div class="custom-protocol-card" data-protocol-id="${protocol.id}">
+          <span class="custom-badge">Custom</span>
+          <div class="custom-protocol-card-name">${this.escapeHtml(protocol.name)}</div>
+          <div class="custom-protocol-card-meta">
+            <span class="meta-item">${regionName}</span>
+            <span class="meta-item">${contrastLabel}</span>
+          </div>
+          ${scopeTags.length > 0 ? `
+            <div class="custom-protocol-card-scope">
+              ${scopeTags.map(tag => `<span class="scope-tag-mini">${this.escapeHtml(tag)}</span>`).join('')}
+            </div>
+          ` : ''}
+          <div class="custom-protocol-card-sequences">
+            ${sequenceCount} sequence${sequenceCount !== 1 ? 's' : ''} - ${timeStr}
+          </div>
+          <div class="custom-protocol-card-actions">
+            <button class="card-action-btn edit-btn" data-id="${protocol.id}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              Edit
+            </button>
+            <button class="card-action-btn duplicate-btn" data-id="${protocol.id}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+              </svg>
+              Copy
+            </button>
+            <button class="card-action-btn delete delete-btn" data-id="${protocol.id}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+              </svg>
+              Delete
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Bind card action events
+    grid.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.editProtocol(btn.dataset.id);
+      });
+    });
+
+    grid.querySelectorAll('.duplicate-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.duplicateProtocol(btn.dataset.id);
+      });
+    });
+
+    grid.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.deleteProtocol(btn.dataset.id);
+      });
+    });
+  }
+
+  renderTemplates() {
+    const grid = document.getElementById('templatesGrid');
+    if (!grid) return;
+
+    const templates = this.protocolBuilder.getTemplates();
+
+    grid.innerHTML = templates.map(template => {
+      const regionName = this.formatRegionName(template.region);
+      const contrastLabel = template.contrast_mode === 'both' ? 'W/ + W/O Contrast' :
+                           (template.contrast_mode === 'with' ? 'With Contrast' : 'No Contrast');
+      const seqCount = template.sequences?.length || 0;
+
+      return `
+        <button class="template-card" data-template-id="${template.id}">
+          <div class="template-card-name">${this.escapeHtml(template.name)}</div>
+          <div class="template-card-desc">${this.escapeHtml(template.description)}</div>
+          <div class="template-card-meta">
+            <span class="meta-item">${regionName}</span>
+            <span class="meta-divider">-</span>
+            <span class="meta-item">${seqCount} seq</span>
+            <span class="meta-divider">-</span>
+            <span class="meta-item">${contrastLabel}</span>
+          </div>
+        </button>
+      `;
+    }).join('');
+
+    // Bind template click events
+    grid.querySelectorAll('.template-card').forEach(card => {
+      card.addEventListener('click', () => {
+        this.startFromTemplate(card.dataset.templateId);
+      });
+    });
+  }
+
+  startFromTemplate(templateId) {
+    const protocol = this.protocolBuilder.createFromTemplate(templateId);
+    if (protocol) {
+      this.showProtocolEditor('New Protocol');
+
+      // Fill in form values from template
+      document.getElementById('protocolNameInput').value = protocol.name || '';
+      document.getElementById('protocolRegionSelect').value = protocol.body_region || '';
+
+      // Set scope tags
+      this.renderScopeTags();
+
+      // Set contrast toggle
+      const contrastMode = protocol.contrast_mode || 'without';
+      document.querySelectorAll('#builderContrastToggle .toggle-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.contrast === contrastMode);
+      });
+
+      // Render sequences
+      this.renderSequenceLibrary();
+      this.renderProtocolSequences();
+
+      this.ui.setStatus(`Started from "${protocol.name}" template`);
+    }
+  }
+
+  startNewProtocol() {
+    this.protocolBuilder.createNewProtocol();
+    this.showProtocolEditor('New Protocol');
+  }
+
+  editProtocol(protocolId) {
+    const protocol = this.protocolBuilder.editProtocol(protocolId);
+    if (protocol) {
+      this.showProtocolEditor('Edit Protocol');
+      // Fill in form values
+      document.getElementById('protocolNameInput').value = protocol.name || '';
+      document.getElementById('protocolRegionSelect').value = protocol.body_region || '';
+      document.getElementById('protocolIndicationsInput').value = protocol.indications || '';
+      document.getElementById('protocolNotesInput').value = protocol.notes || '';
+
+      // Set scope tags
+      this.protocolBuilder.scopeTags = [...(protocol.scope_tags || [])];
+      this.renderScopeTags();
+
+      // Set contrast toggle (new mode: 'without', 'with', 'both')
+      const contrastMode = protocol.contrast_mode || (protocol.uses_contrast ? 'with' : 'without');
+      this.protocolBuilder.contrastMode = contrastMode;
+      document.querySelectorAll('#builderContrastToggle .toggle-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.contrast === contrastMode);
+      });
+
+      // Render sequences
+      this.renderProtocolSequences();
+    }
+  }
+
+  duplicateProtocol(protocolId) {
+    const newProtocol = this.protocolBuilder.duplicateProtocol(protocolId);
+    if (newProtocol) {
+      this.renderMyProtocols();
+      this.ui.setStatus('Protocol duplicated');
+    }
+  }
+
+  deleteProtocol(protocolId) {
+    if (confirm('Are you sure you want to delete this protocol?')) {
+      this.protocolBuilder.deleteProtocol(protocolId);
+      this.renderMyProtocols();
+      this.ui.setStatus('Protocol deleted');
+    }
+  }
+
+  showProtocolEditor(title) {
+    document.getElementById('myProtocolsContainer').classList.add('hidden');
+    document.getElementById('protocolEditor').classList.remove('hidden');
+    document.getElementById('editorTitle').textContent = title;
+
+    // Reset form if new
+    if (title === 'New Protocol') {
+      document.getElementById('protocolNameInput').value = '';
+      document.getElementById('protocolRegionSelect').value = '';
+      document.getElementById('protocolIndicationsInput').value = '';
+      document.getElementById('protocolNotesInput').value = '';
+
+      // Reset scope tags
+      this.protocolBuilder.scopeTags = [];
+      this.renderScopeTags();
+
+      // Reset contrast toggle to 'without'
+      this.protocolBuilder.contrastMode = 'without';
+      document.querySelectorAll('#builderContrastToggle .toggle-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.contrast === 'without');
+      });
+    }
+
+    // Render sequence library
+    this.renderSequenceLibrary();
+    this.renderProtocolSequences();
+
+    // Focus name input
+    document.getElementById('protocolNameInput').focus();
+  }
+
+  hideProtocolEditor() {
+    document.getElementById('protocolEditor').classList.add('hidden');
+    document.getElementById('myProtocolsContainer').classList.remove('hidden');
+    document.getElementById('rationalePanel').classList.add('hidden');
+  }
+
+  cancelProtocolEdit() {
+    this.protocolBuilder.cancelEdit();
+    this.hideProtocolEditor();
+  }
+
+  renderScopeTags() {
+    const container = document.getElementById('scopeTags');
+    if (!container) return;
+
+    container.innerHTML = this.protocolBuilder.scopeTags.map((tag, index) => `
+      <span class="scope-tag">
+        ${this.escapeHtml(tag)}
+        <button class="scope-tag-remove" data-index="${index}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </span>
+    `).join('');
+
+    // Bind remove buttons
+    container.querySelectorAll('.scope-tag-remove').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const index = parseInt(btn.dataset.index);
+        this.protocolBuilder.scopeTags.splice(index, 1);
+        this.renderScopeTags();
+        this.renderProtocolSequences();
+      });
+    });
+  }
+
+  showScopeSuggestions(query) {
+    const container = document.getElementById('scopeSuggestions');
+    if (!container) return;
+
+    const allScopes = this.protocolBuilder.getAllScopeTags();
+    const matches = allScopes.filter(scope =>
+      scope.toLowerCase().includes(query) &&
+      !this.protocolBuilder.scopeTags.includes(scope.toLowerCase())
+    ).slice(0, 8); // Limit to 8 suggestions
+
+    if (matches.length === 0) {
+      container.classList.add('hidden');
+      return;
+    }
+
+    container.innerHTML = matches.map(scope => `
+      <button class="scope-suggestion" data-tag="${scope.toLowerCase()}">${this.escapeHtml(scope)}</button>
+    `).join('');
+
+    // Bind click events
+    container.querySelectorAll('.scope-suggestion').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = btn.dataset.tag;
+        if (tag && !this.protocolBuilder.scopeTags.includes(tag)) {
+          this.protocolBuilder.addScopeTag(tag);
+          this.renderScopeTags();
+          this.renderProtocolSequences();
+        }
+        document.getElementById('protocolScopeInput').value = '';
+        container.classList.add('hidden');
+      });
+    });
+
+    container.classList.remove('hidden');
+  }
+
+  saveCurrentProtocol() {
+    const formData = {
+      name: document.getElementById('protocolNameInput').value,
+      region: document.getElementById('protocolRegionSelect').value,
+      contrastMode: this.protocolBuilder.contrastMode || 'without',
+      scopeTags: this.protocolBuilder.scopeTags || [],
+      indications: document.getElementById('protocolIndicationsInput').value,
+      notes: document.getElementById('protocolNotesInput').value
+    };
+
+    const result = this.protocolBuilder.saveProtocol(formData);
+
+    if (result.success) {
+      this.hideProtocolEditor();
+      this.renderMyProtocols();
+      this.ui.setStatus('Protocol saved');
+    } else {
+      alert('Please fix the following errors:\n' + result.errors.join('\n'));
+    }
+  }
+
+  renderSequenceLibrary(filter = '') {
+    const list = document.getElementById('sequenceLibraryList');
+    const sequenceTypes = this.protocolBuilder.searchSequenceTypes(filter, {
+      category: this.currentSequenceFilter || 'all',
+      contrastMode: this.protocolBuilder.contrastMode || 'without'
+    });
+
+    document.getElementById('libraryCount').textContent = `${sequenceTypes.length} sequence types`;
+
+    if (sequenceTypes.length === 0) {
+      list.innerHTML = '<div class="empty-state"><p>No sequences found</p></div>';
+      return;
+    }
+
+    const expandedType = this.protocolBuilder.expandedType;
+
+    list.innerHTML = sequenceTypes.map(seqType => {
+      const isExpanded = expandedType === seqType.id;
+      const timeStr = this.protocolBuilder.formatTime(seqType.time_seconds);
+      const timeRange = this.protocolBuilder.formatTimeRange(seqType.time_range);
+      const pulseSeq = seqType.pulse_sequence || '';
+
+      // Build plane buttons
+      const planes = seqType.planes || ['axial', 'sagittal', 'coronal'];
+      const planeButtons = planes.map(plane => {
+        const isAdded = this.protocolBuilder.isSequenceAdded(seqType.id, plane);
+        const planeLabel = this.protocolBuilder.getPlaneLabel(plane);
+        const abbrev = plane === '3d' ? '3D' : plane === '2d' ? '2D' : planeLabel.substring(0, 3).toUpperCase();
+        return `
+          <button class="plane-btn ${isAdded ? 'added' : ''}"
+                  data-type-id="${seqType.id}"
+                  data-plane="${plane}"
+                  ${isAdded ? 'disabled' : ''}>
+            ${abbrev}
+            ${isAdded ? '<svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>' : ''}
+          </button>
+        `;
+      }).join('');
+
+      return `
+        <div class="sequence-type-card ${isExpanded ? 'expanded' : ''}" data-type-id="${seqType.id}">
+          <div class="sequence-type-header" data-type-id="${seqType.id}">
+            <div class="sequence-type-main">
+              <span class="sequence-weighting-badge ${seqType.name.toLowerCase().replace(/[^a-z0-9]/g, '')}">${seqType.name}</span>
+              <div class="sequence-type-info">
+                <div class="sequence-type-name">${this.escapeHtml(seqType.display_name)}</div>
+                <div class="sequence-type-meta">
+                  <span class="sequence-type-time">~${timeStr}</span>
+                  ${pulseSeq ? `<span class="sequence-type-pulse">${pulseSeq}</span>` : ''}
+                </div>
+              </div>
+            </div>
+            <div class="sequence-type-actions">
+              <button class="sequence-info-btn" data-type-id="${seqType.id}" title="View rationale">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4M12 8h.01"/>
+                </svg>
+              </button>
+              <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </div>
+          </div>
+          <div class="sequence-type-planes">
+            <div class="plane-label">Add plane:</div>
+            <div class="plane-buttons">
+              ${planeButtons}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Bind header click to expand/collapse
+    list.querySelectorAll('.sequence-type-header').forEach(header => {
+      header.addEventListener('click', (e) => {
+        if (e.target.closest('.sequence-info-btn')) return;
+        const typeId = header.dataset.typeId;
+        this.protocolBuilder.toggleExpandedType(typeId);
+        this.renderSequenceLibrary(filter);
+      });
+    });
+
+    // Bind info button events
+    list.querySelectorAll('.sequence-info-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.showSequenceRationale(btn.dataset.typeId);
+      });
+    });
+
+    // Bind plane button events
+    list.querySelectorAll('.plane-btn:not([disabled])').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.addSequenceByPlane(btn.dataset.typeId, btn.dataset.plane);
+      });
+    });
+  }
+
+  filterSequenceLibrary(query) {
+    const clearBtn = document.getElementById('sequenceSearchClear');
+    clearBtn.classList.toggle('hidden', !query);
+    this.renderSequenceLibrary(query);
+  }
+
+  addSequenceByPlane(typeId, plane) {
+    const added = this.protocolBuilder.addSequenceByType(typeId, plane);
+    if (added) {
+      this.renderSequenceLibrary(document.getElementById('sequenceSearchInput')?.value || '');
+      this.renderProtocolSequences();
+    }
+  }
+
+  addSequenceToProtocol(sequenceId) {
+    // Legacy method - kept for compatibility
+    const added = this.protocolBuilder.addSequenceByType(sequenceId, 'axial');
+    if (added) {
+      this.renderSequenceLibrary(document.getElementById('sequenceSearchInput')?.value || '');
+      this.renderProtocolSequences();
+    }
+  }
+
+  removeSequenceFromProtocol(index) {
+    this.protocolBuilder.removeSequence(index);
+    this.renderSequenceLibrary(document.getElementById('sequenceSearchInput')?.value || '');
+    this.renderProtocolSequences();
+  }
+
+  renderProtocolSequences() {
+    const list = document.getElementById('protocolSequencesList');
+    const placeholder = document.getElementById('dropPlaceholder');
+    const sequences = this.protocolBuilder.selectedSequences;
+    const totalTime = this.protocolBuilder.calculateTotalTime();
+    const multiplier = this.protocolBuilder.getScopeMultiplier();
+
+    document.getElementById('protocolSequenceCount').textContent = `${sequences.length} sequence${sequences.length !== 1 ? 's' : ''}`;
+
+    // Show scope-adjusted time with indicator if multiplier is not 1.0
+    const timeDisplay = document.getElementById('estimatedTime');
+    if (multiplier !== 1.0 && sequences.length > 0) {
+      timeDisplay.textContent = `~${this.protocolBuilder.formatTime(totalTime)}`;
+      timeDisplay.title = `Adjusted for scan coverage (x${multiplier.toFixed(1)})`;
+    } else {
+      timeDisplay.textContent = `~${this.protocolBuilder.formatTime(totalTime)}`;
+      timeDisplay.title = 'Estimated scan time';
+    }
+
+    if (sequences.length === 0) {
+      list.innerHTML = '';
+      list.appendChild(placeholder);
+      placeholder.classList.remove('hidden');
+      return;
+    }
+
+    placeholder.classList.add('hidden');
+
+    // Separate pre and post contrast
+    const preContrast = sequences.filter(s => !s.is_post_contrast);
+    const postContrast = sequences.filter(s => s.is_post_contrast);
+
+    let html = '';
+
+    // Pre-contrast sequences
+    preContrast.forEach((seq, idx) => {
+      const originalIndex = sequences.indexOf(seq);
+      html += this.renderProtocolSequenceItem(seq, originalIndex);
+    });
+
+    // Contrast divider (if there are post-contrast sequences)
+    if (postContrast.length > 0) {
+      html += `
+        <div class="contrast-divider">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M2 12h20"/>
+          </svg>
+          CONTRAST INJECTION
+        </div>
+      `;
+    }
+
+    // Post-contrast sequences
+    postContrast.forEach((seq, idx) => {
+      const originalIndex = sequences.indexOf(seq);
+      html += this.renderProtocolSequenceItem(seq, originalIndex);
+    });
+
+    list.innerHTML = html;
+
+    // Bind remove button events
+    list.querySelectorAll('.sequence-remove-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.removeSequenceFromProtocol(parseInt(btn.dataset.index));
+      });
+    });
+
+    // Bind inline rationale toggle events
+    list.querySelectorAll('.sequence-rationale-toggle').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const typeId = btn.dataset.typeId;
+        const index = btn.dataset.index;
+        const key = `${index}_${typeId}`;
+
+        if (this.expandedSequenceRationale === key) {
+          this.expandedSequenceRationale = null;
+        } else {
+          this.expandedSequenceRationale = key;
+        }
+        this.renderProtocolSequences();
+      });
+    });
+
+    // Setup drag and drop
+    this.setupSequenceDragDrop();
+  }
+
+  renderProtocolSequenceItem(seq, index) {
+    const timeStr = this.protocolBuilder.formatTime(seq.time_seconds);
+    const orderNum = index + 1;
+    const typeId = seq.type_id || seq.sequence_id?.split('_')[0] || '';
+    const seqType = this.protocolBuilder.getSequenceTypeById(typeId);
+    const rationale = seqType?.rationale;
+    const isExpanded = this.expandedSequenceRationale === `${index}_${typeId}`;
+
+    let rationaleHtml = '';
+    if (rationale) {
+      rationaleHtml = `
+        <div class="sequence-inline-rationale ${isExpanded ? 'expanded' : ''}">
+          ${seqType.pulse_sequence ? `
+            <div class="inline-rationale-section">
+              <strong>Pulse Sequence:</strong> ${seqType.pulse_sequence}
+              ${seqType.pulse_sequence_info ? `<p class="pulse-info">${this.escapeHtml(seqType.pulse_sequence_info)}</p>` : ''}
+            </div>
+          ` : ''}
+          <div class="inline-rationale-section">
+            <strong>Purpose:</strong> ${this.escapeHtml(rationale.purpose)}
+          </div>
+          ${rationale.what_it_shows ? `
+            <div class="inline-rationale-section">
+              <strong>What It Shows:</strong>
+              <ul>${rationale.what_it_shows.map(item => `<li>${this.escapeHtml(item)}</li>`).join('')}</ul>
+            </div>
+          ` : ''}
+          ${rationale.clinical_pearls ? `
+            <div class="inline-rationale-section pearls">
+              <strong>Clinical Pearls:</strong>
+              <ul>${rationale.clinical_pearls.map(item => `<li>${this.escapeHtml(item)}</li>`).join('')}</ul>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="protocol-sequence-item-wrapper" data-wrapper-index="${index}">
+        <div class="protocol-sequence-item ${seq.is_post_contrast ? 'post-contrast' : ''} ${isExpanded ? 'rationale-open' : ''}"
+             data-index="${index}" draggable="true">
+          <svg class="sequence-drag-handle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="5" r="1"/><circle cx="15" cy="5" r="1"/>
+            <circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/>
+            <circle cx="9" cy="19" r="1"/><circle cx="15" cy="19" r="1"/>
+          </svg>
+          <span class="sequence-order-number">${orderNum}</span>
+          <div class="protocol-sequence-info">
+            <div class="protocol-sequence-name">${this.escapeHtml(seq.sequence_name)}</div>
+            <div class="protocol-sequence-time">~${timeStr}</div>
+          </div>
+          <div class="protocol-sequence-actions">
+            ${rationale ? `
+              <button class="sequence-rationale-toggle ${isExpanded ? 'active' : ''}" data-type-id="${typeId}" data-index="${index}" title="${isExpanded ? 'Hide rationale' : 'Show rationale'}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4M12 8h.01"/>
+                </svg>
+              </button>
+            ` : ''}
+            <button class="sequence-remove-btn" data-index="${index}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        ${rationaleHtml}
+      </div>
+    `;
+  }
+
+  setupSequenceDragDrop() {
+    const list = document.getElementById('protocolSequencesList');
+    const items = list.querySelectorAll('.protocol-sequence-item');
+
+    items.forEach(item => {
+      item.addEventListener('dragstart', (e) => {
+        item.classList.add('dragging');
+        e.dataTransfer.setData('text/plain', item.dataset.index);
+      });
+
+      item.addEventListener('dragend', () => {
+        item.classList.remove('dragging');
+      });
+
+      item.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        const dragging = list.querySelector('.dragging');
+        if (dragging && dragging !== item) {
+          const rect = item.getBoundingClientRect();
+          const midY = rect.top + rect.height / 2;
+          if (e.clientY < midY) {
+            list.insertBefore(dragging, item);
+          } else {
+            list.insertBefore(dragging, item.nextSibling);
+          }
+        }
+      });
+
+      item.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const oldIndex = parseInt(e.dataTransfer.getData('text/plain'));
+        const newIndex = parseInt(item.dataset.index);
+        if (oldIndex !== newIndex) {
+          this.protocolBuilder.moveSequence(oldIndex, newIndex);
+          this.renderProtocolSequences();
+        }
+      });
+    });
+  }
+
+  exportCurrentProtocol() {
+    const sequences = this.protocolBuilder.selectedSequences;
+    const name = document.getElementById('protocolNameInput')?.value || 'Untitled Protocol';
+    const region = this.formatRegionName(document.getElementById('protocolRegionSelect')?.value || '');
+    const contrastMode = this.protocolBuilder.contrastMode;
+    const scopeTags = this.protocolBuilder.scopeTags;
+    const indications = document.getElementById('protocolIndicationsInput')?.value || '';
+    const notes = document.getElementById('protocolNotesInput')?.value || '';
+    const totalTime = this.protocolBuilder.formatTime(this.protocolBuilder.calculateTotalTime());
+
+    const contrastLabel = contrastMode === 'both' ? 'With + Without Contrast' :
+                          contrastMode === 'with' ? 'With Contrast' : 'Without Contrast';
+
+    // Check if jsPDF is available
+    if (typeof window.jspdf === 'undefined') {
+      alert('PDF library not loaded. Please try again.');
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    let y = 20;
+    const leftMargin = 20;
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    // Title
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text(name, leftMargin, y);
+    y += 10;
+
+    // Metadata line
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100);
+    doc.text(`Region: ${region}  |  Contrast: ${contrastLabel}  |  Est. Time: ${totalTime}`, leftMargin, y);
+    y += 8;
+
+    // Scope tags
+    if (scopeTags.length > 0) {
+      doc.text(`Coverage: ${scopeTags.join(', ')}`, leftMargin, y);
+      y += 8;
+    }
+
+    // Indications
+    if (indications) {
+      y += 4;
+      doc.setTextColor(0);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Indications', leftMargin, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      const indicationLines = doc.splitTextToSize(indications, pageWidth - 40);
+      doc.text(indicationLines, leftMargin, y);
+      y += indicationLines.length * 5 + 4;
+    }
+
+    // Sequences header
+    y += 4;
+    doc.setTextColor(0);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text(`Sequences (${sequences.length})`, leftMargin, y);
+    y += 8;
+
+    // Table header
+    doc.setFillColor(240, 240, 240);
+    doc.rect(leftMargin, y - 4, pageWidth - 40, 7, 'F');
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('#', leftMargin + 2, y);
+    doc.text('Sequence', leftMargin + 15, y);
+    doc.text('Time', pageWidth - 35, y);
+    y += 6;
+
+    // Sequences
+    doc.setFont('helvetica', 'normal');
+    const preContrast = sequences.filter(s => !s.is_post_contrast);
+    const postContrast = sequences.filter(s => s.is_post_contrast);
+
+    preContrast.forEach((seq, i) => {
+      if (y > 270) { doc.addPage(); y = 20; }
+      doc.text(`${i + 1}`, leftMargin + 2, y);
+      doc.text(seq.sequence_name, leftMargin + 15, y);
+      doc.text(`~${this.protocolBuilder.formatTime(seq.time_seconds)}`, pageWidth - 35, y);
+      y += 6;
+    });
+
+    if (postContrast.length > 0) {
+      if (y > 260) { doc.addPage(); y = 20; }
+      y += 2;
+      doc.setFillColor(240, 230, 255);
+      doc.rect(leftMargin, y - 4, pageWidth - 40, 7, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.text('--- CONTRAST INJECTION ---', leftMargin + 50, y);
+      y += 8;
+      doc.setFont('helvetica', 'normal');
+
+      postContrast.forEach((seq, i) => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.text(`${preContrast.length + i + 1}`, leftMargin + 2, y);
+        doc.text(seq.sequence_name, leftMargin + 15, y);
+        doc.text(`~${this.protocolBuilder.formatTime(seq.time_seconds)}`, pageWidth - 35, y);
+        y += 6;
+      });
+    }
+
+    // Total time
+    y += 4;
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Total Estimated Time: ${totalTime}`, leftMargin, y);
+
+    // Notes
+    if (notes) {
+      y += 10;
+      if (y > 250) { doc.addPage(); y = 20; }
+      doc.setFont('helvetica', 'bold');
+      doc.text('Notes', leftMargin, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      const noteLines = doc.splitTextToSize(notes, pageWidth - 40);
+      doc.text(noteLines, leftMargin, y);
+    }
+
+    // Footer
+    const pageCount = doc.internal.getNumberOfPages();
+    doc.setFontSize(8);
+    doc.setTextColor(150);
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.text(`Generated by Radex Protocol Builder - ${new Date().toLocaleDateString()}`, leftMargin, 287);
+    }
+
+    // Save
+    const filename = `${name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_protocol.pdf`;
+    doc.save(filename);
+
+    this.ui.setStatus('Protocol exported as PDF');
+  }
+
+  printCurrentProtocol() {
+    const sequences = this.protocolBuilder.selectedSequences;
+    const name = document.getElementById('protocolNameInput')?.value || 'Untitled Protocol';
+    const region = this.formatRegionName(document.getElementById('protocolRegionSelect')?.value || '');
+    const contrastMode = this.protocolBuilder.contrastMode;
+    const scopeTags = this.protocolBuilder.scopeTags;
+    const indications = document.getElementById('protocolIndicationsInput')?.value || '';
+    const notes = document.getElementById('protocolNotesInput')?.value || '';
+    const totalTime = this.protocolBuilder.formatTime(this.protocolBuilder.calculateTotalTime());
+
+    const contrastLabel = contrastMode === 'both' ? 'With + Without Contrast' :
+                          contrastMode === 'with' ? 'With Contrast' : 'Without Contrast';
+
+    const preContrast = sequences.filter(s => !s.is_post_contrast);
+    const postContrast = sequences.filter(s => s.is_post_contrast);
+
+    let sequenceHtml = '';
+    preContrast.forEach((seq, i) => {
+      sequenceHtml += `<tr><td>${i + 1}</td><td>${this.escapeHtml(seq.sequence_name)}</td><td>~${this.protocolBuilder.formatTime(seq.time_seconds)}</td></tr>`;
+    });
+
+    if (postContrast.length > 0) {
+      sequenceHtml += `<tr class="contrast-row"><td colspan="3"><strong>--- CONTRAST INJECTION ---</strong></td></tr>`;
+      postContrast.forEach((seq, i) => {
+        sequenceHtml += `<tr><td>${preContrast.length + i + 1}</td><td>${this.escapeHtml(seq.sequence_name)}</td><td>~${this.protocolBuilder.formatTime(seq.time_seconds)}</td></tr>`;
+      });
+    }
+
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${this.escapeHtml(name)} - MRI Protocol</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
+          h1 { margin-bottom: 8px; }
+          .meta { color: #666; margin-bottom: 24px; }
+          .meta span { margin-right: 16px; }
+          .section { margin-bottom: 24px; }
+          .section-title { font-weight: 600; margin-bottom: 8px; color: #333; }
+          table { width: 100%; border-collapse: collapse; }
+          th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #ddd; }
+          th { background: #f5f5f5; }
+          .contrast-row td { background: #f0e6ff; text-align: center; }
+          .scope-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+          .scope-tag { padding: 4px 8px; background: #f0f0f0; border-radius: 4px; font-size: 12px; }
+          .total { margin-top: 16px; font-weight: 600; }
+          .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #ddd; font-size: 12px; color: #999; }
+          @media print { body { padding: 20px; } }
+        </style>
+      </head>
+      <body>
+        <h1>${this.escapeHtml(name)}</h1>
+        <div class="meta">
+          <span><strong>Region:</strong> ${region}</span>
+          <span><strong>Contrast:</strong> ${contrastLabel}</span>
+          <span><strong>Est. Time:</strong> ${totalTime}</span>
+        </div>
+
+        ${scopeTags.length > 0 ? `
+          <div class="section">
+            <div class="section-title">Scan Coverage</div>
+            <div class="scope-tags">${scopeTags.map(t => `<span class="scope-tag">${this.escapeHtml(t)}</span>`).join('')}</div>
+          </div>
+        ` : ''}
+
+        ${indications ? `
+          <div class="section">
+            <div class="section-title">Indications</div>
+            <p>${this.escapeHtml(indications)}</p>
+          </div>
+        ` : ''}
+
+        <div class="section">
+          <div class="section-title">Sequences (${sequences.length})</div>
+          <table>
+            <thead><tr><th>#</th><th>Sequence</th><th>Time</th></tr></thead>
+            <tbody>${sequenceHtml}</tbody>
+          </table>
+          <div class="total">Total Estimated Time: ${totalTime}</div>
+        </div>
+
+        ${notes ? `
+          <div class="section">
+            <div class="section-title">Notes</div>
+            <p>${this.escapeHtml(notes)}</p>
+          </div>
+        ` : ''}
+
+        <div class="footer">
+          Generated by Radex Protocol Builder - ${new Date().toLocaleDateString()}
+        </div>
+      </body>
+      </html>
+    `;
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => printWindow.print(), 250);
+  }
+
+  showSequenceRationale(typeId) {
+    const seqType = this.protocolBuilder.getSequenceTypeById(typeId);
+    if (!seqType || !seqType.rationale) return;
+
+    const panel = document.getElementById('rationalePanel');
+    const title = document.getElementById('rationaleTitle');
+    const content = document.getElementById('rationaleContent');
+
+    title.textContent = seqType.display_name || seqType.name;
+
+    const r = seqType.rationale;
+    const pulseSeq = seqType.pulse_sequence;
+    const pulseInfo = seqType.pulse_sequence_info;
+
+    content.innerHTML = `
+      ${pulseSeq ? `
+        <div class="rationale-section rationale-pulse-sequence">
+          <div class="rationale-section-title">Pulse Sequence: ${pulseSeq}</div>
+          ${pulseInfo ? `<p class="rationale-pulse-info">${this.escapeHtml(pulseInfo)}</p>` : ''}
+        </div>
+      ` : ''}
+
+      <div class="rationale-section">
+        <div class="rationale-section-title">Purpose</div>
+        <p class="rationale-purpose">${this.escapeHtml(r.purpose)}</p>
+      </div>
+
+      ${r.what_it_shows ? `
+        <div class="rationale-section">
+          <div class="rationale-section-title">What It Shows</div>
+          <ul class="rationale-list">
+            ${r.what_it_shows.map(item => `<li>${this.escapeHtml(item)}</li>`).join('')}
+          </ul>
+        </div>
+      ` : ''}
+
+      ${r.when_to_use ? `
+        <div class="rationale-section">
+          <div class="rationale-section-title">When To Use</div>
+          <ul class="rationale-list">
+            ${r.when_to_use.map(item => `<li>${this.escapeHtml(item)}</li>`).join('')}
+          </ul>
+        </div>
+      ` : ''}
+
+      ${r.limitations ? `
+        <div class="rationale-section">
+          <div class="rationale-section-title">Limitations</div>
+          <ul class="rationale-list">
+            ${r.limitations.map(item => `<li>${this.escapeHtml(item)}</li>`).join('')}
+          </ul>
+        </div>
+      ` : ''}
+
+      ${r.clinical_pearls ? `
+        <div class="rationale-section rationale-pearls">
+          <div class="rationale-section-title">Clinical Pearls</div>
+          <ul class="rationale-list">
+            ${r.clinical_pearls.map(item => `<li>${this.escapeHtml(item)}</li>`).join('')}
+          </ul>
+        </div>
+      ` : ''}
+    `;
+
+    panel.classList.remove('hidden');
+    this.protocolBuilder.selectedRationale = typeId;
   }
 }
 
