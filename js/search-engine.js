@@ -142,23 +142,87 @@ export class SearchEngine {
     const { limit = 20, filters = {} } = options;
 
     if (!this.initialized || this.scenarios.length === 0) {
-      return { scenarios: [], grouped: null, concept: null, isConceptSearch: false };
+      return { scenarios: [], grouped: null, concept: null, isConceptSearch: false, intent: null };
+    }
+
+    // Classify query intent for phase-aware ranking
+    let intent = null;
+    if (this.intentClassifier) {
+      try {
+        intent = await this.intentClassifier.classify(query);
+        console.log('[SearchEngine] Query intent:', intent);
+      } catch (error) {
+        console.warn('[SearchEngine] Intent classification failed:', error);
+      }
     }
 
     // Try concept-based search first
     const conceptResult = this.searchByConcept(query, filters);
     if (conceptResult.scenarios.length > 0) {
+      // Apply intent-based re-ranking
+      if (intent && intent.phase !== 'unknown') {
+        conceptResult.scenarios = this.applyIntentRanking(conceptResult.scenarios, intent);
+        // Re-order groups if present
+        if (conceptResult.grouped) {
+          conceptResult.grouped = this.reorderGroupsByIntent(conceptResult.grouped, intent);
+        }
+      }
+      conceptResult.intent = intent;
       return conceptResult;
     }
 
-    // Fallback to keyword search
-    const scenarios = await this.keywordSearch(query, limit);
+    // Fallback to keyword search with intent-aware ranking
+    let scenarios = await this.keywordSearch(query, limit);
+    if (intent && intent.phase !== 'unknown') {
+      scenarios = this.applyIntentRanking(scenarios, intent);
+    }
     return {
       scenarios,
       grouped: null,
       concept: null,
-      isConceptSearch: false
+      isConceptSearch: false,
+      intent
     };
+  }
+
+  /**
+   * Apply intent-based ranking boost to scenarios
+   */
+  applyIntentRanking(scenarios, intent) {
+    if (!this.intentClassifier || !intent) return scenarios;
+
+    // Score and sort scenarios based on intent match
+    const scoredScenarios = scenarios.map(scenario => {
+      const boost = this.intentClassifier.getScenarioBoost(scenario, intent);
+      return {
+        scenario,
+        boost,
+        originalScore: scenario._relevanceScore || 1
+      };
+    });
+
+    // Sort by boosted score
+    scoredScenarios.sort((a, b) => {
+      const scoreA = a.originalScore * a.boost;
+      const scoreB = b.originalScore * b.boost;
+      return scoreB - scoreA;
+    });
+
+    return scoredScenarios.map(s => s.scenario);
+  }
+
+  /**
+   * Reorder phase groups based on detected intent
+   */
+  reorderGroupsByIntent(groups, intent) {
+    if (!intent || intent.phase === 'unknown') return groups;
+
+    // Sort groups so matching phase comes first
+    return groups.slice().sort((a, b) => {
+      const aMatches = a.phase === intent.phase ? 1 : 0;
+      const bMatches = b.phase === intent.phase ? 1 : 0;
+      return bMatches - aMatches;
+    });
   }
 
   /**

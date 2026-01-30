@@ -29,6 +29,7 @@ export class UI {
     // Concept search elements
     this.conceptHeader = document.getElementById('conceptHeader');
     this.phaseFilterChips = document.getElementById('phaseFilterChips');
+    this.quickReferenceCard = document.getElementById('quickReferenceCard');
 
     // State
     this.activeScenarioCard = null;
@@ -901,6 +902,89 @@ export class UI {
     if (rating >= 7) return 'Usually Appropriate';
     if (rating >= 4) return 'May Be Appropriate';
     return 'Usually Not Appropriate';
+  }
+
+  // ========================================
+  // Quick Reference Card (Dual Pathway)
+  // ========================================
+
+  /**
+   * Render the Quick Reference card showing both clinical pathways
+   * @param {Object} data - { conceptName, acute: [...], followup: [...] }
+   */
+  renderQuickReference(data) {
+    if (!this.quickReferenceCard || !data) {
+      this.hideQuickReference();
+      return;
+    }
+
+    const { conceptName, acute, followup } = data;
+
+    // Don't show if we have no recommendations for either pathway
+    if ((!acute || acute.length === 0) && (!followup || followup.length === 0)) {
+      this.hideQuickReference();
+      return;
+    }
+
+    this.quickReferenceCard.classList.remove('hidden');
+
+    const renderRecommendations = (recs) => {
+      if (!recs || recs.length === 0) {
+        return '<div class="pathway-empty">No specific recommendations</div>';
+      }
+      return recs.slice(0, 3).map(rec => `
+        <div class="pathway-rec">
+          <span class="pathway-rec-name">${this.escapeHtml(rec.name)}</span>
+          <div class="pathway-rec-rating">
+            <span class="rating-badge ${this.getRatingClass(rec.rating)}">${rec.rating}</span>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    this.quickReferenceCard.innerHTML = `
+      <div class="quick-reference-header">
+        <div class="quick-reference-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          ${this.escapeHtml(conceptName)} - Quick Reference
+        </div>
+        <span class="quick-reference-badge">Both Pathways</span>
+      </div>
+      <div class="quick-reference-body">
+        <div class="pathway-section">
+          <div class="pathway-header">
+            <div class="pathway-indicator acute"></div>
+            <span class="pathway-title">Acute / Initial Workup</span>
+            <span class="pathway-subtitle">${acute?.length || 0} options</span>
+          </div>
+          <div class="pathway-recommendations">
+            ${renderRecommendations(acute)}
+          </div>
+        </div>
+        <div class="pathway-section">
+          <div class="pathway-header">
+            <div class="pathway-indicator followup"></div>
+            <span class="pathway-title">Follow-up / Surveillance</span>
+            <span class="pathway-subtitle">${followup?.length || 0} options</span>
+          </div>
+          <div class="pathway-recommendations">
+            ${renderRecommendations(followup)}
+          </div>
+        </div>
+      </div>
+      <div class="quick-reference-footer">
+        Select a scenario below for full details and MRI protocols
+      </div>
+    `;
+  }
+
+  hideQuickReference() {
+    if (this.quickReferenceCard) {
+      this.quickReferenceCard.classList.add('hidden');
+      this.quickReferenceCard.innerHTML = '';
+    }
   }
 
   escapeHtml(str) {

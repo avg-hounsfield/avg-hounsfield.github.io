@@ -871,6 +871,14 @@ class ProtocolHelpApp {
         // Hide clarifying chips for concept search
         this.ui.hideChips();
 
+        // Generate and show Quick Reference card (both pathways)
+        if (!this.activePhaseFilter && result.grouped && result.grouped.length > 0) {
+          const quickRefData = this.generateQuickReference(result.concept, result.grouped);
+          this.ui.renderQuickReference(quickRefData);
+        } else {
+          this.ui.hideQuickReference();
+        }
+
         // Render grouped scenarios if we have groups
         if (result.grouped && result.grouped.length > 0 && !this.activePhaseFilter) {
           this.ui.renderGroupedScenarios(result.grouped, (scenario) => {
@@ -889,6 +897,7 @@ class ProtocolHelpApp {
         this.currentConcept = null;
         this.ui.hideConceptHeader();
         this.ui.hidePhaseFilterChips();
+        this.ui.hideQuickReference();
 
         // Check for ambiguity on fresh searches
         if (!isFilterChange) {
@@ -942,6 +951,64 @@ class ProtocolHelpApp {
 
     // Re-run search with filter
     this.executeSearch(this.baseQuery, true);
+  }
+
+  /**
+   * Generate Quick Reference data from grouped scenarios
+   * Shows top recommendations for both Acute/Initial AND Follow-up pathways
+   */
+  generateQuickReference(concept, grouped) {
+    const acutePhases = ['initial', 'screening', 'pretreatment'];
+    const followupPhases = ['surveillance', 'complication'];
+
+    // Collect top procedures from each pathway
+    const acuteRecs = [];
+    const followupRecs = [];
+
+    for (const group of grouped) {
+      const phase = group.phase?.toLowerCase() || '';
+      const isAcute = acutePhases.includes(phase);
+      const isFollowup = followupPhases.includes(phase);
+
+      // Get top-rated procedures from scenarios in this group
+      for (const scenario of group.scenarios) {
+        const procedures = scenario.procedures || [];
+        const topProcs = procedures
+          .filter(p => p.rating >= 7 && p.name && p.modality)
+          .sort((a, b) => b.rating - a.rating)
+          .slice(0, 2);
+
+        for (const proc of topProcs) {
+          const rec = {
+            name: proc.name || `${proc.modality}`,
+            modality: proc.modality,
+            rating: proc.rating,
+            scenario: scenario.name
+          };
+
+          if (isAcute) {
+            // Avoid duplicates by modality+name
+            if (!acuteRecs.some(r => r.modality === rec.modality && r.name === rec.name)) {
+              acuteRecs.push(rec);
+            }
+          } else if (isFollowup) {
+            if (!followupRecs.some(r => r.modality === rec.modality && r.name === rec.name)) {
+              followupRecs.push(rec);
+            }
+          }
+        }
+      }
+    }
+
+    // Sort by rating and take top 3
+    acuteRecs.sort((a, b) => b.rating - a.rating);
+    followupRecs.sort((a, b) => b.rating - a.rating);
+
+    return {
+      conceptName: concept.displayName,
+      acute: acuteRecs.slice(0, 3),
+      followup: followupRecs.slice(0, 3)
+    };
   }
 
   handleScenarioSelect(scenario) {

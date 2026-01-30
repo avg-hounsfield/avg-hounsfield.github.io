@@ -26,7 +26,7 @@
   <!-- Theme Color -->
   <meta name="theme-color" content="#9B5DE5">
 
-  <link rel="stylesheet" href="css/main.css?v=20260130b">
+  <link rel="stylesheet" href="css/main.css?v=20260130c">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>R</text></svg>">
   <link rel="manifest" href="manifest.json">
 </head>
@@ -78,6 +78,13 @@
 
         <!-- Global Search Result (Summary Card) -->
         <div class="global-search-result hidden" id="globalSearchResult">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Quick Reference Card - Shows both Acute and Chronic pathways -->
+        <div class="quick-reference-card hidden" id="quickReferenceCard">
+          <!-- Dynamically populated: shows both Acute/Initial AND Follow-up recommendations -->
+        </div>
           <!-- Populated dynamically -->
         </div>
 
@@ -966,6 +973,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <!-- ONNX Runtime Web for intent classification (optional, falls back to rules) -->
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.0/dist/ort.min.js"></script>
-  <script type="module" src="js/app.js?v=20260130b"></script>
+  <script type="module" src="js/app.js?v=20260130c"></script>
 </body>
 </html>
