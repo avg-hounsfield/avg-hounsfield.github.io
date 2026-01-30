@@ -26,7 +26,7 @@
   <!-- Theme Color -->
   <meta name="theme-color" content="#9B5DE5">
 
-  <link rel="stylesheet" href="css/main.css?v=20260129h">
+  <link rel="stylesheet" href="css/main.css?v=20260129i">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>R</text></svg>">
   <link rel="manifest" href="manifest.json">
 </head>
@@ -527,6 +527,22 @@
           <p class="section-subtitle">Create custom MRI protocols for experimentation and learning</p>
         </div>
 
+        <!-- Templates Section -->
+        <div class="templates-container" id="templatesContainer">
+          <div class="templates-header">
+            <h2 class="subsection-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+              </svg>
+              Start from Template
+            </h2>
+          </div>
+          <div class="templates-grid" id="templatesGrid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
         <!-- My Protocols List -->
         <div class="my-protocols-container" id="myProtocolsContainer">
           <div class="my-protocols-header">
@@ -540,13 +556,13 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                 <path d="M12 5v14M5 12h14"/>
               </svg>
-              New Protocol
+              Blank Protocol
             </button>
           </div>
           <div class="my-protocols-grid" id="myProtocolsGrid">
             <div class="empty-state" id="noProtocolsMessage">
-              <p>No custom protocols yet</p>
-              <p class="suggestion">Click "New Protocol" to create your first custom MRI protocol</p>
+              <p>No saved protocols yet</p>
+              <p class="suggestion">Start from a template above or create a blank protocol</p>
             </div>
           </div>
         </div>

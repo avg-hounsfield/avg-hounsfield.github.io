@@ -127,6 +127,162 @@ export class ProtocolBuilder {
       'screening': 2.0
     };
 
+    // Protocol templates for common use cases
+    this.templates = [
+      {
+        id: 'brain_routine',
+        name: 'Brain Routine',
+        description: 'Standard brain MRI without contrast',
+        region: 'neuro',
+        contrast_mode: 'without',
+        scope_tags: ['brain'],
+        sequences: [
+          { type_id: 't1', plane: 'sagittal' },
+          { type_id: 't2', plane: 'axial' },
+          { type_id: 'flair', plane: 'axial' },
+          { type_id: 'dwi', plane: 'axial' },
+          { type_id: 't1', plane: 'axial' }
+        ]
+      },
+      {
+        id: 'brain_tumor',
+        name: 'Brain Tumor',
+        description: 'Pre/post contrast for tumor evaluation',
+        region: 'neuro',
+        contrast_mode: 'both',
+        scope_tags: ['brain'],
+        sequences: [
+          { type_id: 't1', plane: 'sagittal' },
+          { type_id: 't2', plane: 'axial' },
+          { type_id: 'flair', plane: 'axial' },
+          { type_id: 'dwi', plane: 'axial' },
+          { type_id: 'swi', plane: 'axial' },
+          { type_id: 't1', plane: 'axial' },
+          { type_id: 't1_post', plane: 'axial' },
+          { type_id: 't1_post', plane: 'sagittal' },
+          { type_id: 't1_post', plane: 'coronal' }
+        ]
+      },
+      {
+        id: 'brain_ms',
+        name: 'MS Protocol',
+        description: 'Multiple sclerosis evaluation',
+        region: 'neuro',
+        contrast_mode: 'both',
+        scope_tags: ['brain'],
+        sequences: [
+          { type_id: 't1', plane: 'sagittal' },
+          { type_id: 't2', plane: 'axial' },
+          { type_id: 'flair', plane: 'axial' },
+          { type_id: 'flair', plane: 'sagittal' },
+          { type_id: 'dwi', plane: 'axial' },
+          { type_id: 't1', plane: 'axial' },
+          { type_id: 't1_post', plane: 'axial' },
+          { type_id: 'flair', plane: 'coronal' }
+        ]
+      },
+      {
+        id: 'brain_stroke',
+        name: 'Stroke Protocol',
+        description: 'Acute stroke evaluation with MRA',
+        region: 'neuro',
+        contrast_mode: 'without',
+        scope_tags: ['brain'],
+        sequences: [
+          { type_id: 'dwi', plane: 'axial' },
+          { type_id: 'flair', plane: 'axial' },
+          { type_id: 't2', plane: 'axial' },
+          { type_id: 'swi', plane: 'axial' },
+          { type_id: 'mra_tof', plane: '3d' }
+        ]
+      },
+      {
+        id: 'c_spine',
+        name: 'C-Spine',
+        description: 'Cervical spine without contrast',
+        region: 'spine',
+        contrast_mode: 'without',
+        scope_tags: ['c-spine'],
+        sequences: [
+          { type_id: 't1', plane: 'sagittal' },
+          { type_id: 't2', plane: 'sagittal' },
+          { type_id: 'stir', plane: 'sagittal' },
+          { type_id: 't2', plane: 'axial' }
+        ]
+      },
+      {
+        id: 'l_spine',
+        name: 'L-Spine',
+        description: 'Lumbar spine without contrast',
+        region: 'spine',
+        contrast_mode: 'without',
+        scope_tags: ['l-spine'],
+        sequences: [
+          { type_id: 't1', plane: 'sagittal' },
+          { type_id: 't2', plane: 'sagittal' },
+          { type_id: 'stir', plane: 'sagittal' },
+          { type_id: 't2', plane: 'axial' }
+        ]
+      },
+      {
+        id: 'knee',
+        name: 'Knee',
+        description: 'Standard knee MRI',
+        region: 'msk',
+        contrast_mode: 'without',
+        scope_tags: ['knee'],
+        sequences: [
+          { type_id: 'pd_fs', plane: 'sagittal' },
+          { type_id: 'pd_fs', plane: 'coronal' },
+          { type_id: 'pd_fs', plane: 'axial' },
+          { type_id: 't1', plane: 'coronal' }
+        ]
+      },
+      {
+        id: 'shoulder',
+        name: 'Shoulder',
+        description: 'Standard shoulder MRI',
+        region: 'msk',
+        contrast_mode: 'without',
+        scope_tags: ['shoulder'],
+        sequences: [
+          { type_id: 't1', plane: 'coronal' },
+          { type_id: 'pd_fs', plane: 'coronal' },
+          { type_id: 'pd_fs', plane: 'sagittal' },
+          { type_id: 'pd_fs', plane: 'axial' }
+        ]
+      },
+      {
+        id: 'liver',
+        name: 'Liver',
+        description: 'Multiphasic liver MRI',
+        region: 'abdomen',
+        contrast_mode: 'both',
+        scope_tags: ['liver'],
+        sequences: [
+          { type_id: 't2_fs', plane: 'axial' },
+          { type_id: 't2_haste', plane: 'coronal' },
+          { type_id: 't1', plane: 'axial' },
+          { type_id: 'dwi', plane: 'axial' },
+          { type_id: 'dynamic', plane: 'axial' }
+        ]
+      },
+      {
+        id: 'mrcp',
+        name: 'MRCP',
+        description: 'Biliary/pancreatic duct imaging',
+        region: 'abdomen',
+        contrast_mode: 'without',
+        scope_tags: ['mrcp'],
+        sequences: [
+          { type_id: 't2_haste', plane: 'axial' },
+          { type_id: 't2_haste', plane: 'coronal' },
+          { type_id: 'mrcp', plane: '3d' },
+          { type_id: 't1', plane: 'axial' }
+        ]
+      }
+    ];
+
     // All available scope tags for auto-suggest (display names)
     this.allScopeTags = [
       // Neuro
@@ -172,6 +328,39 @@ export class ProtocolBuilder {
     return this.allScopeTags;
   }
 
+  // Get all protocol templates
+  getTemplates() {
+    return this.templates;
+  }
+
+  // Get template by ID
+  getTemplateById(templateId) {
+    return this.templates.find(t => t.id === templateId);
+  }
+
+  // Create new protocol from template
+  createFromTemplate(templateId) {
+    const template = this.getTemplateById(templateId);
+    if (!template) return null;
+
+    this.createNewProtocol();
+
+    // Set template values
+    this.currentProtocol.name = template.name;
+    this.currentProtocol.display_name = template.name;
+    this.currentProtocol.body_region = template.region;
+    this.currentProtocol.contrast_mode = template.contrast_mode;
+    this.contrastMode = template.contrast_mode;
+    this.scopeTags = [...(template.scope_tags || [])];
+
+    // Add sequences from template
+    for (const seq of template.sequences) {
+      this.addSequenceByType(seq.type_id, seq.plane);
+    }
+
+    return this.currentProtocol;
+  }
+
   // Add a scope tag (normalizes to lowercase)
   addScopeTag(tag) {
     const normalized = tag.toLowerCase().trim();
@@ -206,7 +395,7 @@ export class ProtocolBuilder {
     if (this.sequenceLibrary) return this.sequenceLibrary;
 
     try {
-      const response = await fetch('data/sequence-library.json?v=20260129d');
+      const response = await fetch('data/sequence-library.json?v=20260129e');
       this.sequenceLibrary = await response.json();
       return this.sequenceLibrary;
     } catch (error) {

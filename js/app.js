@@ -44,6 +44,7 @@ class ProtocolHelpApp {
     this.protocolSearchQuery = '';
     this.currentProtocol = null; // Currently viewed protocol
     this.bookmarkedProtocols = this.loadBookmarks();
+    this.expandedSequenceRationale = null; // Track which sequence has rationale expanded
     this.queryHistory = this.loadQueryHistory();
     this.maxHistoryItems = 10;
 
@@ -1539,7 +1540,8 @@ class ProtocolHelpApp {
       // Load sequence library
       await this.protocolBuilder.loadSequenceLibrary();
 
-      // Render my protocols list
+      // Render templates and my protocols list
+      this.renderTemplates();
       this.renderMyProtocols();
 
       // Bind builder events if not already bound
@@ -1757,6 +1759,67 @@ class ProtocolHelpApp {
         this.deleteProtocol(btn.dataset.id);
       });
     });
+  }
+
+  renderTemplates() {
+    const grid = document.getElementById('templatesGrid');
+    if (!grid) return;
+
+    const templates = this.protocolBuilder.getTemplates();
+
+    grid.innerHTML = templates.map(template => {
+      const regionName = this.formatRegionName(template.region);
+      const contrastLabel = template.contrast_mode === 'both' ? 'W/ + W/O Contrast' :
+                           (template.contrast_mode === 'with' ? 'With Contrast' : 'No Contrast');
+      const seqCount = template.sequences?.length || 0;
+
+      return `
+        <button class="template-card" data-template-id="${template.id}">
+          <div class="template-card-name">${this.escapeHtml(template.name)}</div>
+          <div class="template-card-desc">${this.escapeHtml(template.description)}</div>
+          <div class="template-card-meta">
+            <span class="meta-item">${regionName}</span>
+            <span class="meta-divider">-</span>
+            <span class="meta-item">${seqCount} seq</span>
+            <span class="meta-divider">-</span>
+            <span class="meta-item">${contrastLabel}</span>
+          </div>
+        </button>
+      `;
+    }).join('');
+
+    // Bind template click events
+    grid.querySelectorAll('.template-card').forEach(card => {
+      card.addEventListener('click', () => {
+        this.startFromTemplate(card.dataset.templateId);
+      });
+    });
+  }
+
+  startFromTemplate(templateId) {
+    const protocol = this.protocolBuilder.createFromTemplate(templateId);
+    if (protocol) {
+      this.showProtocolEditor('New Protocol');
+
+      // Fill in form values from template
+      document.getElementById('protocolNameInput').value = protocol.name || '';
+      document.getElementById('protocolRegionSelect').value = protocol.body_region || '';
+
+      // Set scope tags
+      this.renderScopeTags();
+
+      // Set contrast toggle
+      const contrastMode = protocol.contrast_mode || 'without';
+      document.querySelectorAll('#builderContrastToggle .toggle-option').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.contrast === contrastMode);
+      });
+
+      // Render sequences
+      this.renderSequenceLibrary();
+      this.renderProtocolSequences();
+
+      this.ui.setStatus(`Started from "${protocol.name}" template`);
+    }
   }
 
   startNewProtocol() {
@@ -2128,14 +2191,20 @@ class ProtocolHelpApp {
       });
     });
 
-    // Bind rationale button events for added sequences
-    list.querySelectorAll('.sequence-rationale-btn').forEach(btn => {
+    // Bind inline rationale toggle events
+    list.querySelectorAll('.sequence-rationale-toggle').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const typeId = btn.dataset.typeId;
-        if (typeId) {
-          this.showSequenceRationale(typeId);
+        const index = btn.dataset.index;
+        const key = `${index}_${typeId}`;
+
+        if (this.expandedSequenceRationale === key) {
+          this.expandedSequenceRationale = null;
+        } else {
+          this.expandedSequenceRationale = key;
         }
+        this.renderProtocolSequences();
       });
     });
 
@@ -2147,33 +2216,70 @@ class ProtocolHelpApp {
     const timeStr = this.protocolBuilder.formatTime(seq.time_seconds);
     const orderNum = index + 1;
     const typeId = seq.type_id || seq.sequence_id?.split('_')[0] || '';
+    const seqType = this.protocolBuilder.getSequenceTypeById(typeId);
+    const rationale = seqType?.rationale;
+    const isExpanded = this.expandedSequenceRationale === `${index}_${typeId}`;
+
+    let rationaleHtml = '';
+    if (rationale) {
+      rationaleHtml = `
+        <div class="sequence-inline-rationale ${isExpanded ? 'expanded' : ''}">
+          ${seqType.pulse_sequence ? `
+            <div class="inline-rationale-section">
+              <strong>Pulse Sequence:</strong> ${seqType.pulse_sequence}
+              ${seqType.pulse_sequence_info ? `<p class="pulse-info">${this.escapeHtml(seqType.pulse_sequence_info)}</p>` : ''}
+            </div>
+          ` : ''}
+          <div class="inline-rationale-section">
+            <strong>Purpose:</strong> ${this.escapeHtml(rationale.purpose)}
+          </div>
+          ${rationale.what_it_shows ? `
+            <div class="inline-rationale-section">
+              <strong>What It Shows:</strong>
+              <ul>${rationale.what_it_shows.map(item => `<li>${this.escapeHtml(item)}</li>`).join('')}</ul>
+            </div>
+          ` : ''}
+          ${rationale.clinical_pearls ? `
+            <div class="inline-rationale-section pearls">
+              <strong>Clinical Pearls:</strong>
+              <ul>${rationale.clinical_pearls.map(item => `<li>${this.escapeHtml(item)}</li>`).join('')}</ul>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
 
     return `
-      <div class="protocol-sequence-item ${seq.is_post_contrast ? 'post-contrast' : ''}"
-           data-index="${index}" draggable="true">
-        <svg class="sequence-drag-handle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="9" cy="5" r="1"/><circle cx="15" cy="5" r="1"/>
-          <circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/>
-          <circle cx="9" cy="19" r="1"/><circle cx="15" cy="19" r="1"/>
-        </svg>
-        <span class="sequence-order-number">${orderNum}</span>
-        <div class="protocol-sequence-info">
-          <div class="protocol-sequence-name">${this.escapeHtml(seq.sequence_name)}</div>
-          <div class="protocol-sequence-time">~${timeStr}</div>
+      <div class="protocol-sequence-item-wrapper" data-wrapper-index="${index}">
+        <div class="protocol-sequence-item ${seq.is_post_contrast ? 'post-contrast' : ''} ${isExpanded ? 'rationale-open' : ''}"
+             data-index="${index}" draggable="true">
+          <svg class="sequence-drag-handle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="5" r="1"/><circle cx="15" cy="5" r="1"/>
+            <circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/>
+            <circle cx="9" cy="19" r="1"/><circle cx="15" cy="19" r="1"/>
+          </svg>
+          <span class="sequence-order-number">${orderNum}</span>
+          <div class="protocol-sequence-info">
+            <div class="protocol-sequence-name">${this.escapeHtml(seq.sequence_name)}</div>
+            <div class="protocol-sequence-time">~${timeStr}</div>
+          </div>
+          <div class="protocol-sequence-actions">
+            ${rationale ? `
+              <button class="sequence-rationale-toggle ${isExpanded ? 'active' : ''}" data-type-id="${typeId}" data-index="${index}" title="${isExpanded ? 'Hide rationale' : 'Show rationale'}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4M12 8h.01"/>
+                </svg>
+              </button>
+            ` : ''}
+            <button class="sequence-remove-btn" data-index="${index}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
         </div>
-        <div class="protocol-sequence-actions">
-          <button class="sequence-rationale-btn" data-type-id="${typeId}" title="View rationale">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 16v-4M12 8h.01"/>
-            </svg>
-          </button>
-          <button class="sequence-remove-btn" data-index="${index}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
+        ${rationaleHtml}
       </div>
     `;
   }
