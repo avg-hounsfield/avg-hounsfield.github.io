@@ -559,6 +559,15 @@ class ProtocolHelpApp {
     this.ui.hideSummaryCard();
     this.clearSearch();
 
+    // Reset global search state
+    const globalSearchInput = document.getElementById('globalSearchInput');
+    const globalResult = document.getElementById('globalSearchResult');
+    if (globalSearchInput) globalSearchInput.value = '';
+    if (globalResult) {
+      globalResult.classList.add('hidden');
+      globalResult.innerHTML = '';
+    }
+
     document.querySelector('.anatomy-section').classList.remove('hidden');
     document.getElementById('searchSection').classList.add('hidden');
 
@@ -684,14 +693,22 @@ class ProtocolHelpApp {
   }
 
   async navigateToRegionSearch(region, topic) {
+    // Hide global search result before navigating
+    const globalResult = document.getElementById('globalSearchResult');
+    if (globalResult) {
+      globalResult.classList.add('hidden');
+      globalResult.innerHTML = '';
+    }
+
     // Select the region and pre-fill the search
     await this.selectRegion(region);
 
-    // Pre-fill the search input
+    // Pre-fill the search input and trigger search
     const searchInput = document.getElementById('searchInput');
     if (searchInput && topic) {
       searchInput.value = topic;
-      this.handleSearch(topic);
+      // Execute search directly instead of through debounced handler
+      this.executeSearch(topic);
     }
   }
 
@@ -709,7 +726,8 @@ class ProtocolHelpApp {
 
   handleSearch(query) {
     // Toggle clear button
-    document.getElementById('searchClear').classList.toggle('hidden', !query);
+    const searchClear = document.getElementById('searchClear');
+    if (searchClear) searchClear.classList.toggle('hidden', !query);
 
     // Hide query history when typing
     if (query.trim()) {
