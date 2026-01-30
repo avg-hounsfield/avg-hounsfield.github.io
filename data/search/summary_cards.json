@@ -694,19 +694,27 @@
     {
       "topic": "pneumonia",
       "display_name": "Pneumonia",
-      "card_type": "HIGH_VARIANCE",
+      "card_type": "STRONG",
       "scenario_count": 29,
       "region": "chest",
       "primary_recommendation": {
-        "name": "Radiography tibia and fibula",
-        "display": "Radiography tibia and fib OR Fluoroscopy fistulography OR US duplex Doppler hemodia",
+        "name": "Chest radiograph",
+        "display": "Chest X-ray (PA and Lateral)",
+        "modality": "XR",
+        "rating": 9,
+        "consensus_pct": 95,
         "equivalent_procedures": [
-          "Radiography tibia and fibula",
-          "Fluoroscopy fistulography hemodialysis access area of interest",
-          "US duplex Doppler hemodialysis access area of interest"
+          "Chest x-ray",
+          "CXR",
+          "Radiography chest"
         ],
-        "count": 4,
-        "consensus_pct": 14
+        "alternatives": [
+          {
+            "name": "CT chest",
+            "rating": 7,
+            "note": "If CXR equivocal or complications suspected"
+          }
+        ]
       },
       "alternatives": [],
       "no_imaging_pct": 28,
@@ -720,15 +728,26 @@
     {
       "topic": "head trauma",
       "display_name": "Head Trauma",
-      "card_type": "CLINICAL_FIRST",
+      "card_type": "STRONG",
       "scenario_count": 27,
       "region": "neuro",
       "primary_recommendation": {
-        "name": null,
-        "display": null,
-        "equivalent_procedures": [],
-        "count": 0,
-        "consensus_pct": 0
+        "name": "CT head without contrast",
+        "display": "CT Head (non-contrast)",
+        "modality": "CT",
+        "rating": 9,
+        "consensus_pct": 95,
+        "equivalent_procedures": [
+          "NCCT head",
+          "CT brain without contrast"
+        ],
+        "alternatives": [
+          {
+            "name": "CT cervical spine",
+            "rating": 9,
+            "note": "If c-spine injury suspected"
+          }
+        ]
       },
       "alternatives": [],
       "no_imaging_pct": 100,
@@ -970,15 +989,32 @@
       "scenario_count": 15,
       "region": "neuro",
       "primary_recommendation": {
-        "name": "MRI Brain W/O Contrast",
-        "display": "MRI Brain W/O Contrast OR CT Brain W/O Contrast OR MRA head without IV contr",
+        "name": "CT head without contrast",
+        "display": "CT Head (non-contrast) - STAT",
+        "modality": "CT",
+        "rating": 9,
+        "consensus_pct": 95,
         "equivalent_procedures": [
-          "MRI Brain W/O Contrast",
-          "CT Brain W/O Contrast",
-          "MRA head without IV contrast"
+          "NCCT head",
+          "CT brain without contrast"
         ],
-        "count": 15,
-        "consensus_pct": 100
+        "alternatives": [
+          {
+            "name": "CTA head and neck",
+            "rating": 9,
+            "note": "If LVO suspected"
+          },
+          {
+            "name": "CT perfusion",
+            "rating": 8,
+            "note": "For thrombectomy evaluation"
+          },
+          {
+            "name": "MRI brain",
+            "rating": 8,
+            "note": "For subacute or if CT negative"
+          }
+        ]
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -1046,13 +1082,27 @@
       "scenario_count": 15,
       "region": "abdomen",
       "primary_recommendation": {
-        "name": "Angiography and aspiration embolectomy",
-        "display": "Angiography and aspiration embolectomy",
+        "name": "CT abdomen and pelvis with contrast",
+        "display": "CT Abdomen/Pelvis with IV Contrast",
+        "modality": "CT",
+        "rating": 8,
+        "consensus_pct": 75,
         "equivalent_procedures": [
-          "Angiography and aspiration embolectomy"
+          "CT abdomen pelvis",
+          "CT A/P with contrast"
         ],
-        "count": 7,
-        "consensus_pct": 47
+        "alternatives": [
+          {
+            "name": "Ultrasound abdomen",
+            "rating": 8,
+            "note": "RUQ pain, pregnancy"
+          },
+          {
+            "name": "Radiography abdomen",
+            "rating": 6,
+            "note": "If obstruction suspected"
+          }
+        ]
       },
       "alternatives": [
         {
@@ -1157,17 +1207,23 @@
       "scenario_count": 12,
       "region": "chest",
       "primary_recommendation": {
-        "name": "US echocardiography transthoracic with IV contrast",
-        "display": "US echocardiography trans OR MRA pulmonary arteries wi OR CT Chest W/O Contrast",
+        "name": "CT chest low-dose",
+        "display": "Low-dose CT Chest",
+        "modality": "CT",
+        "rating": 9,
+        "consensus_pct": 90,
         "equivalent_procedures": [
-          "US echocardiography transthoracic with IV contrast",
-          "MRA pulmonary arteries without and with IV contrast",
-          "CT Chest W/O Contrast",
-          "CTA pulmonary arteries with IV contrast",
-          "Endobronchial ultrasound and biopsy"
+          "LDCT chest",
+          "CT chest without contrast",
+          "CT thorax"
         ],
-        "count": 2,
-        "consensus_pct": 70
+        "alternatives": [
+          {
+            "name": "PET/CT",
+            "rating": 8,
+            "note": "For nodules >8mm or suspicious features"
+          }
+        ]
       },
       "alternatives": [],
       "no_imaging_pct": 8,
