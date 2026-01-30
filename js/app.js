@@ -1575,46 +1575,52 @@ class ProtocolHelpApp {
       saveBtn.addEventListener('click', () => this.saveCurrentProtocol());
     }
 
-    // Contrast toggle (updated for with/without/both)
-    const contrastToggle = document.getElementById('contrastToggle');
-    if (contrastToggle) {
-      contrastToggle.querySelectorAll('.toggle-option').forEach(btn => {
+    // Contrast toggle (updated for with/without/both) - Builder specific
+    const builderContrastToggle = document.getElementById('builderContrastToggle');
+    if (builderContrastToggle) {
+      builderContrastToggle.querySelectorAll('.toggle-option').forEach(btn => {
         btn.addEventListener('click', () => {
-          contrastToggle.querySelectorAll('.toggle-option').forEach(b => b.classList.remove('active'));
+          builderContrastToggle.querySelectorAll('.toggle-option').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           this.protocolBuilder.contrastMode = btn.dataset.contrast; // 'without', 'with', or 'both'
         });
       });
     }
 
-    // Scope tags input
+    // Scope tags input with auto-suggest
     const scopeInput = document.getElementById('protocolScopeInput');
-    if (scopeInput) {
+    const scopeSuggestions = document.getElementById('scopeSuggestions');
+    if (scopeInput && scopeSuggestions) {
+      scopeInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim().toLowerCase();
+        if (query.length > 0) {
+          this.showScopeSuggestions(query);
+        } else {
+          scopeSuggestions.classList.add('hidden');
+        }
+      });
+
       scopeInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
           const tag = scopeInput.value.trim().toLowerCase();
           if (tag && !this.protocolBuilder.scopeTags.includes(tag)) {
-            this.protocolBuilder.scopeTags.push(tag);
+            this.protocolBuilder.addScopeTag(tag);
             this.renderScopeTags();
-            this.renderProtocolSequences(); // Update time display
+            this.renderProtocolSequences();
           }
           scopeInput.value = '';
+          scopeSuggestions.classList.add('hidden');
+        } else if (e.key === 'Escape') {
+          scopeSuggestions.classList.add('hidden');
         }
+      });
+
+      scopeInput.addEventListener('blur', () => {
+        // Delay hide to allow click on suggestion
+        setTimeout(() => scopeSuggestions.classList.add('hidden'), 200);
       });
     }
-
-    // Scope suggestion buttons
-    document.querySelectorAll('.scope-suggestion').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tag = btn.dataset.tag;
-        if (tag && !this.protocolBuilder.scopeTags.includes(tag)) {
-          this.protocolBuilder.scopeTags.push(tag);
-          this.renderScopeTags();
-          this.renderProtocolSequences();
-        }
-      });
-    });
 
     // Sequence search
     const seqSearch = document.getElementById('sequenceSearchInput');
@@ -1761,7 +1767,7 @@ class ProtocolHelpApp {
       // Set contrast toggle (new mode: 'without', 'with', 'both')
       const contrastMode = protocol.contrast_mode || (protocol.uses_contrast ? 'with' : 'without');
       this.protocolBuilder.contrastMode = contrastMode;
-      document.querySelectorAll('#contrastToggle .toggle-option').forEach(btn => {
+      document.querySelectorAll('#builderContrastToggle .toggle-option').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.contrast === contrastMode);
       });
 
@@ -1804,7 +1810,7 @@ class ProtocolHelpApp {
 
       // Reset contrast toggle to 'without'
       this.protocolBuilder.contrastMode = 'without';
-      document.querySelectorAll('#contrastToggle .toggle-option').forEach(btn => {
+      document.querySelectorAll('#builderContrastToggle .toggle-option').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.contrast === 'without');
       });
     }
@@ -1852,11 +1858,42 @@ class ProtocolHelpApp {
         this.renderProtocolSequences();
       });
     });
+  }
 
-    // Update suggestion button states
-    document.querySelectorAll('.scope-suggestion').forEach(btn => {
-      btn.classList.toggle('selected', this.protocolBuilder.scopeTags.includes(btn.dataset.tag));
+  showScopeSuggestions(query) {
+    const container = document.getElementById('scopeSuggestions');
+    if (!container) return;
+
+    const allScopes = this.protocolBuilder.getAllScopeTags();
+    const matches = allScopes.filter(scope =>
+      scope.toLowerCase().includes(query) &&
+      !this.protocolBuilder.scopeTags.includes(scope.toLowerCase())
+    ).slice(0, 8); // Limit to 8 suggestions
+
+    if (matches.length === 0) {
+      container.classList.add('hidden');
+      return;
+    }
+
+    container.innerHTML = matches.map(scope => `
+      <button class="scope-suggestion" data-tag="${scope.toLowerCase()}">${this.escapeHtml(scope)}</button>
+    `).join('');
+
+    // Bind click events
+    container.querySelectorAll('.scope-suggestion').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = btn.dataset.tag;
+        if (tag && !this.protocolBuilder.scopeTags.includes(tag)) {
+          this.protocolBuilder.addScopeTag(tag);
+          this.renderScopeTags();
+          this.renderProtocolSequences();
+        }
+        document.getElementById('protocolScopeInput').value = '';
+        container.classList.add('hidden');
+      });
     });
+
+    container.classList.remove('hidden');
   }
 
   saveCurrentProtocol() {

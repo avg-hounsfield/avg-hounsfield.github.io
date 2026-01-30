@@ -598,10 +598,10 @@
                 </div>
                 <div class="form-group">
                   <label>Contrast</label>
-                  <div class="toggle-group compact" id="contrastToggle">
+                  <div class="toggle-group compact" id="builderContrastToggle">
                     <button class="toggle-option active" data-contrast="without">Without</button>
                     <button class="toggle-option" data-contrast="with">With</button>
-                    <button class="toggle-option" data-contrast="both">Both</button>
+                    <button class="toggle-option" data-contrast="both">With + Without</button>
                   </div>
                 </div>
               </div>
@@ -610,26 +610,9 @@
                   <label for="protocolScopeInput">Scan Scope / Coverage</label>
                   <div class="scope-tags-container" id="scopeTagsContainer">
                     <div class="scope-tags" id="scopeTags"></div>
-                    <input type="text" id="protocolScopeInput" placeholder="Type and press Enter (e.g., brain, orbits, whole spine...)">
+                    <input type="text" id="protocolScopeInput" placeholder="Type to search (e.g., brain, knee, whole spine...)" autocomplete="off">
                   </div>
-                  <div class="scope-suggestions" id="scopeSuggestions">
-                    <button class="scope-suggestion" data-tag="brain">brain</button>
-                    <button class="scope-suggestion" data-tag="orbits">orbits</button>
-                    <button class="scope-suggestion" data-tag="IACs">IACs</button>
-                    <button class="scope-suggestion" data-tag="whole spine">whole spine</button>
-                    <button class="scope-suggestion" data-tag="c-spine">c-spine</button>
-                    <button class="scope-suggestion" data-tag="l-spine">l-spine</button>
-                    <button class="scope-suggestion" data-tag="knee">knee</button>
-                    <button class="scope-suggestion" data-tag="shoulder">shoulder</button>
-                    <button class="scope-suggestion" data-tag="hip">hip</button>
-                    <button class="scope-suggestion" data-tag="ankle">ankle</button>
-                    <button class="scope-suggestion" data-tag="wrist">wrist</button>
-                    <button class="scope-suggestion" data-tag="upper abdomen">upper abdomen</button>
-                    <button class="scope-suggestion" data-tag="liver">liver</button>
-                    <button class="scope-suggestion" data-tag="pelvis">pelvis</button>
-                    <button class="scope-suggestion" data-tag="prostate">prostate</button>
-                    <button class="scope-suggestion" data-tag="brachial plexus">brachial plexus</button>
-                  </div>
+                  <div class="scope-suggestions hidden" id="scopeSuggestions"></div>
                 </div>
               </div>
               <div class="form-row">

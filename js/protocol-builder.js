@@ -16,34 +16,170 @@ export class ProtocolBuilder {
     this.selectedRationale = null; // Currently expanded rationale
     this.expandedType = null; // Currently expanded sequence type
 
-    // Scope tag time multipliers (relative to standard brain FOV)
+    // Comprehensive scope tags with time multipliers (relative to standard single joint FOV)
     this.scopeMultipliers = {
+      // Neuro
       'brain': 1.0,
+      'brain with neck': 1.4,
       'orbits': 0.7,
       'iacs': 0.8,
-      'pituitary': 0.7,
+      'pituitary': 0.6,
+      'sella': 0.6,
+      'temporal lobes': 0.8,
+      'posterior fossa': 0.8,
+      'skull base': 0.9,
+      'face': 0.9,
+      'tmj': 0.7,
+      'sinuses': 0.7,
+      'nasopharynx': 0.8,
+      'neck soft tissue': 1.0,
+      'thyroid': 0.7,
+      'salivary glands': 0.8,
+      'parotid': 0.7,
+
+      // Spine
       'whole spine': 1.8,
       'c-spine': 0.9,
+      'cervical spine': 0.9,
       't-spine': 1.0,
+      'thoracic spine': 1.0,
       'l-spine': 0.9,
-      'knee': 0.8,
+      'lumbar spine': 0.9,
+      's-spine': 0.7,
+      'sacrum': 0.7,
+      'coccyx': 0.6,
+      'cervical and thoracic': 1.4,
+      'thoracic and lumbar': 1.4,
+      'lumbar and sacral': 1.2,
+      'brachial plexus': 1.3,
+      'lumbosacral plexus': 1.2,
+
+      // Upper Extremity
       'shoulder': 0.9,
-      'hip': 1.0,
-      'ankle': 0.7,
+      'bilateral shoulders': 1.5,
+      'rotator cuff': 0.9,
+      'elbow': 0.7,
+      'forearm': 0.8,
       'wrist': 0.6,
       'hand': 0.6,
-      'foot': 0.6,
-      'elbow': 0.7,
-      'upper abdomen': 1.2,
-      'liver': 1.1,
+      'fingers': 0.5,
+      'thumb': 0.5,
+
+      // Lower Extremity
+      'hip': 1.0,
+      'bilateral hips': 1.5,
       'pelvis': 1.1,
-      'prostate': 1.0,
-      'brachial plexus': 1.3,
+      'thigh': 1.0,
+      'knee': 0.8,
+      'bilateral knees': 1.4,
+      'leg': 0.9,
+      'calf': 0.8,
+      'ankle': 0.7,
+      'bilateral ankles': 1.2,
+      'foot': 0.6,
+      'toes': 0.5,
+      'achilles': 0.6,
+
+      // Abdomen/Pelvis
+      'liver': 1.0,
+      'hepatobiliary': 1.1,
+      'mrcp': 1.0,
+      'pancreas': 0.9,
+      'spleen': 0.8,
+      'kidneys': 1.0,
+      'adrenals': 0.8,
+      'upper abdomen': 1.2,
       'whole abdomen': 1.5,
+      'abdomen and pelvis': 1.6,
+      'enterography': 1.5,
+      'rectum': 0.9,
+      'prostate': 1.0,
+      'bladder': 0.8,
+      'uterus': 0.9,
+      'ovaries': 0.9,
+      'female pelvis': 1.1,
+      'male pelvis': 1.1,
+      'perineum': 0.8,
+      'scrotum': 0.7,
+      'penis': 0.6,
+
+      // Chest
       'chest': 1.2,
-      'bilateral hips': 1.4,
-      'bilateral knees': 1.6
+      'lungs': 1.1,
+      'mediastinum': 1.0,
+      'heart': 1.0,
+      'cardiac': 1.0,
+      'breast': 0.9,
+      'bilateral breasts': 1.3,
+      'axilla': 0.8,
+
+      // Vascular
+      'circle of willis': 0.8,
+      'carotids': 1.0,
+      'neck vessels': 1.0,
+      'aorta': 1.3,
+      'runoff': 1.8,
+      'upper extremity vessels': 1.2,
+      'lower extremity vessels': 1.5,
+
+      // Whole Body
+      'whole body': 2.5,
+      'screening': 2.0
     };
+
+    // All available scope tags for auto-suggest (display names)
+    this.allScopeTags = [
+      // Neuro
+      'Brain', 'Brain with Neck', 'Orbits', 'IACs', 'Pituitary', 'Sella',
+      'Temporal Lobes', 'Posterior Fossa', 'Skull Base', 'Face', 'TMJ',
+      'Sinuses', 'Nasopharynx', 'Neck Soft Tissue', 'Thyroid', 'Salivary Glands', 'Parotid',
+
+      // Spine
+      'Whole Spine', 'C-Spine', 'Cervical Spine', 'T-Spine', 'Thoracic Spine',
+      'L-Spine', 'Lumbar Spine', 'S-Spine', 'Sacrum', 'Coccyx',
+      'Cervical and Thoracic', 'Thoracic and Lumbar', 'Lumbar and Sacral',
+      'Brachial Plexus', 'Lumbosacral Plexus',
+
+      // Upper Extremity
+      'Shoulder', 'Bilateral Shoulders', 'Rotator Cuff', 'Elbow', 'Forearm',
+      'Wrist', 'Hand', 'Fingers', 'Thumb',
+
+      // Lower Extremity
+      'Hip', 'Bilateral Hips', 'Pelvis', 'Thigh', 'Knee', 'Bilateral Knees',
+      'Leg', 'Calf', 'Ankle', 'Bilateral Ankles', 'Foot', 'Toes', 'Achilles',
+
+      // Abdomen/Pelvis
+      'Liver', 'Hepatobiliary', 'MRCP', 'Pancreas', 'Spleen', 'Kidneys', 'Adrenals',
+      'Upper Abdomen', 'Whole Abdomen', 'Abdomen and Pelvis', 'Enterography',
+      'Rectum', 'Prostate', 'Bladder', 'Uterus', 'Ovaries',
+      'Female Pelvis', 'Male Pelvis', 'Perineum', 'Scrotum', 'Penis',
+
+      // Chest
+      'Chest', 'Lungs', 'Mediastinum', 'Heart', 'Cardiac',
+      'Breast', 'Bilateral Breasts', 'Axilla',
+
+      // Vascular
+      'Circle of Willis', 'Carotids', 'Neck Vessels', 'Aorta', 'Runoff',
+      'Upper Extremity Vessels', 'Lower Extremity Vessels',
+
+      // Whole Body
+      'Whole Body', 'Screening'
+    ];
+  }
+
+  // Get all available scope tags for auto-suggest
+  getAllScopeTags() {
+    return this.allScopeTags;
+  }
+
+  // Add a scope tag (normalizes to lowercase)
+  addScopeTag(tag) {
+    const normalized = tag.toLowerCase().trim();
+    if (normalized && !this.scopeTags.includes(normalized)) {
+      this.scopeTags.push(normalized);
+      return true;
+    }
+    return false;
   }
 
   // Load custom protocols from localStorage

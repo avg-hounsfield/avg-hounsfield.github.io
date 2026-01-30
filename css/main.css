@@ -3555,19 +3555,38 @@ input:focus, button:focus {
 }
 
 .scope-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-xs);
-  margin-top: var(--space-xs);
+  padding: var(--space-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  z-index: 100;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.scope-suggestions.hidden {
+  display: none;
+}
+
+.form-group:has(.scope-tags-container) {
+  position: relative;
 }
 
 .scope-suggestion {
-  padding: 4px 10px;
-  background: var(--bg-elevated);
+  padding: 6px 12px;
+  background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: 4px;
-  font-size: 11px;
-  color: var(--text-muted);
+  font-size: 12px;
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
@@ -3575,12 +3594,7 @@ input:focus, button:focus {
 .scope-suggestion:hover {
   border-color: var(--accent);
   color: var(--accent);
-}
-
-.scope-suggestion.selected {
   background: var(--accent-muted);
-  border-color: var(--accent);
-  color: var(--accent);
 }
 
 /* Mini scope tags for protocol cards */
@@ -4014,32 +4028,53 @@ input:focus, button:focus {
   height: 12px;
 }
 
-/* Additional sequence badge colors */
-.sequence-weighting-badge.t1 { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-.sequence-weighting-badge.t2 { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
-.sequence-weighting-badge.t2fs { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
-.sequence-weighting-badge.flair { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
-.sequence-weighting-badge.dwi { background: rgba(249, 115, 22, 0.2); color: #f97316; }
-.sequence-weighting-badge.swi { background: rgba(236, 72, 153, 0.2); color: #ec4899; }
-.sequence-weighting-badge.stir { background: rgba(20, 184, 166, 0.2); color: #14b8a6; }
-.sequence-weighting-badge.pdfs { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
-.sequence-weighting-badge.t1c { background: var(--accent-muted); color: var(--accent); }
-.sequence-weighting-badge.t1fsc { background: var(--accent-muted); color: var(--accent); }
-.sequence-weighting-badge.t1post { background: var(--accent-muted); color: var(--accent); }
-.sequence-weighting-badge.t1fspost { background: var(--accent-muted); color: var(--accent); }
-.sequence-weighting-badge.dynamic { background: var(--accent-muted); color: var(--accent); }
-.sequence-weighting-badge.mra { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
-.sequence-weighting-badge.mraneck { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
-.sequence-weighting-badge.mrv { background: rgba(6, 182, 212, 0.2); color: #06b6d4; }
-.sequence-weighting-badge.mrcp { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-.sequence-weighting-badge.haste { background: rgba(251, 146, 60, 0.2); color: #fb923c; }
-.sequence-weighting-badge.mprage { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-.sequence-weighting-badge.mpragec { background: var(--accent-muted); color: var(--accent); }
-.sequence-weighting-badge.t1mprage { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-.sequence-weighting-badge.t1mpragec { background: var(--accent-muted); color: var(--accent); }
-.sequence-weighting-badge.mratof { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
-.sequence-weighting-badge.t2haste { background: rgba(251, 146, 60, 0.2); color: #fb923c; }
-.sequence-weighting-badge.tof { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+/* Sequence badge colors - grouped by weighting type */
+/* T1-based sequences (blue) */
+.sequence-weighting-badge.t1,
+.sequence-weighting-badge.t1mprage,
+.sequence-weighting-badge.mprage,
+.sequence-weighting-badge.3dmprage {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+/* T2-based sequences (green) */
+.sequence-weighting-badge.t2,
+.sequence-weighting-badge.t2fs,
+.sequence-weighting-badge.t2haste,
+.sequence-weighting-badge.haste,
+.sequence-weighting-badge.flair,
+.sequence-weighting-badge.stir,
+.sequence-weighting-badge.pdfs,
+.sequence-weighting-badge.mrcp {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+/* Contrast-enhanced sequences (purple) */
+.sequence-weighting-badge.t1c,
+.sequence-weighting-badge.t1fsc,
+.sequence-weighting-badge.t1post,
+.sequence-weighting-badge.t1fspost,
+.sequence-weighting-badge.3dmpragec,
+.sequence-weighting-badge.mpragec,
+.sequence-weighting-badge.dynamic {
+  background: var(--accent-muted);
+  color: var(--accent);
+}
+
+/* Functional/Other sequences (teal) */
+.sequence-weighting-badge.dwi,
+.sequence-weighting-badge.swi,
+.sequence-weighting-badge.mra,
+.sequence-weighting-badge.mraneck,
+.sequence-weighting-badge.mrv,
+.sequence-weighting-badge.mratof,
+.sequence-weighting-badge.tof,
+.sequence-weighting-badge.3dtofmra {
+  background: rgba(20, 184, 166, 0.2);
+  color: #14b8a6;
+}
 
 /* Protocol Sequence Actions (rationale + remove buttons) */
 .protocol-sequence-actions {
