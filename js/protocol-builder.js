@@ -1,6 +1,7 @@
 /**
  * Protocol Builder Module
  * Handles custom protocol creation, storage, and management
+ * Version 2.0 - Grouped sequence types with plane selection
  */
 
 export class ProtocolBuilder {
@@ -10,8 +11,39 @@ export class ProtocolBuilder {
     this.currentProtocol = null;
     this.isEditing = false;
     this.selectedSequences = [];
-    this.usesContrast = false;
+    this.contrastMode = 'without'; // 'without', 'with', or 'both'
+    this.scopeTags = []; // Scope/coverage tags for time estimation
     this.selectedRationale = null; // Currently expanded rationale
+    this.expandedType = null; // Currently expanded sequence type
+
+    // Scope tag time multipliers (relative to standard brain FOV)
+    this.scopeMultipliers = {
+      'brain': 1.0,
+      'orbits': 0.7,
+      'iacs': 0.8,
+      'pituitary': 0.7,
+      'whole spine': 1.8,
+      'c-spine': 0.9,
+      't-spine': 1.0,
+      'l-spine': 0.9,
+      'knee': 0.8,
+      'shoulder': 0.9,
+      'hip': 1.0,
+      'ankle': 0.7,
+      'wrist': 0.6,
+      'hand': 0.6,
+      'foot': 0.6,
+      'elbow': 0.7,
+      'upper abdomen': 1.2,
+      'liver': 1.1,
+      'pelvis': 1.1,
+      'prostate': 1.0,
+      'brachial plexus': 1.3,
+      'whole abdomen': 1.5,
+      'chest': 1.2,
+      'bilateral hips': 1.4,
+      'bilateral knees': 1.6
+    };
   }
 
   // Load custom protocols from localStorage
@@ -38,7 +70,7 @@ export class ProtocolBuilder {
     if (this.sequenceLibrary) return this.sequenceLibrary;
 
     try {
-      const response = await fetch('data/sequence-library.json?v=20260129');
+      const response = await fetch('data/sequence-library.json?v=20260129c');
       this.sequenceLibrary = await response.json();
       return this.sequenceLibrary;
     } catch (error) {
@@ -47,10 +79,43 @@ export class ProtocolBuilder {
     }
   }
 
-  // Get sequence by ID
-  getSequenceById(id) {
+  // Get all sequence types
+  getSequenceTypes() {
+    if (!this.sequenceLibrary) return [];
+    return this.sequenceLibrary.sequence_types || [];
+  }
+
+  // Get sequence type by ID
+  getSequenceTypeById(typeId) {
     if (!this.sequenceLibrary) return null;
-    return this.sequenceLibrary.sequences.find(s => s.id === id);
+    return this.sequenceLibrary.sequence_types.find(t => t.id === typeId);
+  }
+
+  // Get plane label
+  getPlaneLabel(plane) {
+    if (!this.sequenceLibrary || !this.sequenceLibrary.plane_labels) {
+      const labels = { axial: 'Axial', sagittal: 'Sagittal', coronal: 'Coronal', '3d': '3D', '2d': '2D' };
+      return labels[plane] || plane;
+    }
+    return this.sequenceLibrary.plane_labels[plane] || plane;
+  }
+
+  // Generate sequence name from type and plane
+  generateSequenceName(seqType, plane) {
+    const planeAbbrev = {
+      axial: 'AX',
+      sagittal: 'SAG',
+      coronal: 'COR',
+      '3d': '3D',
+      '2d': '2D'
+    };
+    const abbrev = planeAbbrev[plane] || plane.toUpperCase();
+    return `${abbrev} ${seqType.name}`;
+  }
+
+  // Generate sequence ID from type and plane
+  generateSequenceId(typeId, plane) {
+    return `${typeId}_${plane}`;
   }
 
   // Create new protocol
@@ -60,7 +125,8 @@ export class ProtocolBuilder {
       name: '',
       display_name: '',
       body_region: '',
-      uses_contrast: false,
+      contrast_mode: 'without',
+      scope_tags: [],
       is_custom: true,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -70,9 +136,11 @@ export class ProtocolBuilder {
       total_time_seconds: 0
     };
     this.selectedSequences = [];
-    this.usesContrast = false;
+    this.contrastMode = 'without';
+    this.scopeTags = [];
     this.isEditing = true;
     this.selectedRationale = null;
+    this.expandedType = null;
     return this.currentProtocol;
   }
 
@@ -83,18 +151,20 @@ export class ProtocolBuilder {
 
     this.currentProtocol = JSON.parse(JSON.stringify(protocol)); // Deep copy
     this.selectedSequences = [...(protocol.sequences || [])];
-    this.usesContrast = protocol.uses_contrast;
+    this.contrastMode = protocol.contrast_mode || (protocol.uses_contrast ? 'with' : 'without');
+    this.scopeTags = [...(protocol.scope_tags || [])];
     this.isEditing = true;
     this.selectedRationale = null;
+    this.expandedType = null;
     return this.currentProtocol;
   }
 
-  // Add sequence to current protocol
-  addSequence(sequenceId) {
-    if (!this.sequenceLibrary) return null;
+  // Add sequence with type and plane
+  addSequenceByType(typeId, plane) {
+    const seqType = this.getSequenceTypeById(typeId);
+    if (!seqType) return null;
 
-    const libSequence = this.sequenceLibrary.sequences.find(s => s.id === sequenceId);
-    if (!libSequence) return null;
+    const sequenceId = this.generateSequenceId(typeId, plane);
 
     // Check if already added
     if (this.selectedSequences.some(s => s.sequence_id === sequenceId)) {
@@ -102,18 +172,26 @@ export class ProtocolBuilder {
     }
 
     const newSequence = {
-      sequence_id: libSequence.id,
-      sequence_name: libSequence.short_name,
-      full_name: libSequence.name,
-      is_post_contrast: libSequence.is_post_contrast || false,
+      sequence_id: sequenceId,
+      type_id: typeId,
+      plane: plane,
+      sequence_name: this.generateSequenceName(seqType, plane),
+      full_name: `${this.getPlaneLabel(plane)} ${seqType.display_name}`,
+      is_post_contrast: seqType.is_post_contrast || false,
       sort_order: this.selectedSequences.length,
-      time_seconds: libSequence.time_seconds,
-      weighting: libSequence.weighting
+      time_seconds: seqType.time_seconds,
+      weighting: seqType.name
     };
 
     this.selectedSequences.push(newSequence);
     this.reorderSequences();
     return newSequence;
+  }
+
+  // Check if a specific type+plane combination is added
+  isSequenceAdded(typeId, plane) {
+    const sequenceId = this.generateSequenceId(typeId, plane);
+    return this.selectedSequences.some(s => s.sequence_id === sequenceId);
   }
 
   // Remove sequence from current protocol
@@ -148,11 +226,30 @@ export class ProtocolBuilder {
     }
   }
 
-  // Calculate total scan time
+  // Get time multiplier based on scope tags
+  getScopeMultiplier() {
+    if (this.scopeTags.length === 0) return 1.0;
+
+    // Find the maximum multiplier from all tags (coverage determines time)
+    let maxMultiplier = 1.0;
+    for (const tag of this.scopeTags) {
+      const multiplier = this.scopeMultipliers[tag.toLowerCase()] || 1.0;
+      if (multiplier > maxMultiplier) {
+        maxMultiplier = multiplier;
+      }
+    }
+    return maxMultiplier;
+  }
+
+  // Calculate total scan time (with scope adjustment)
   calculateTotalTime() {
-    return this.selectedSequences.reduce((total, seq) => {
+    const baseTime = this.selectedSequences.reduce((total, seq) => {
       return total + (seq.time_seconds || 0);
     }, 0);
+
+    // Apply scope multiplier for more accurate estimation
+    const multiplier = this.getScopeMultiplier();
+    return Math.round(baseTime * multiplier);
   }
 
   // Format seconds to human readable time
@@ -203,12 +300,15 @@ export class ProtocolBuilder {
     this.currentProtocol.name = formData.name.trim();
     this.currentProtocol.display_name = formData.name.trim();
     this.currentProtocol.body_region = formData.region;
-    this.currentProtocol.uses_contrast = formData.usesContrast;
+    this.currentProtocol.contrast_mode = formData.contrastMode || 'without';
+    this.currentProtocol.scope_tags = formData.scopeTags || [];
     this.currentProtocol.indications = formData.indications || '';
     this.currentProtocol.notes = formData.notes || '';
     this.currentProtocol.sequences = JSON.parse(JSON.stringify(this.selectedSequences));
     this.currentProtocol.updated_at = new Date().toISOString();
     this.currentProtocol.total_time_seconds = this.calculateTotalTime();
+    // Legacy compatibility
+    this.currentProtocol.uses_contrast = formData.contrastMode === 'with' || formData.contrastMode === 'both';
 
     // Update or add to collection
     const existingIndex = this.customProtocols.findIndex(p => p.id === this.currentProtocol.id);
@@ -335,53 +435,39 @@ export class ProtocolBuilder {
     return protocol;
   }
 
-  // Search sequence library
-  searchSequences(query, filters = {}) {
+  // Search/filter sequence types
+  searchSequenceTypes(query, filters = {}) {
     if (!this.sequenceLibrary) return [];
 
-    let results = [...this.sequenceLibrary.sequences];
+    let results = [...(this.sequenceLibrary.sequence_types || [])];
 
     // Apply text search
     if (query && query.trim().length > 0) {
       const q = query.toLowerCase().trim();
-      results = results.filter(seq => {
-        return seq.name.toLowerCase().includes(q) ||
-               seq.short_name.toLowerCase().includes(q) ||
-               seq.weighting.toLowerCase().includes(q) ||
-               (seq.keywords && seq.keywords.some(k => k.toLowerCase().includes(q)));
+      results = results.filter(seqType => {
+        return seqType.name.toLowerCase().includes(q) ||
+               seqType.display_name.toLowerCase().includes(q) ||
+               (seqType.rationale && seqType.rationale.purpose.toLowerCase().includes(q));
       });
     }
 
-    // Apply weighting filter
-    if (filters.weighting && filters.weighting !== 'all') {
-      if (filters.weighting === 'contrast') {
-        results = results.filter(seq => seq.is_post_contrast);
+    // Apply category filter
+    if (filters.category && filters.category !== 'all') {
+      if (filters.category === 'contrast') {
+        results = results.filter(seqType => seqType.is_post_contrast);
       } else {
-        results = results.filter(seq => seq.weighting === filters.weighting);
+        results = results.filter(seqType => seqType.category === filters.category);
       }
     }
 
     // Apply region filter
     if (filters.region && filters.region !== 'all') {
-      results = results.filter(seq => seq.regions && seq.regions.includes(filters.region));
-    }
-
-    // Apply category filter
-    if (filters.category && filters.category !== 'all') {
-      results = results.filter(seq => seq.category === filters.category);
+      results = results.filter(seqType =>
+        seqType.regions && seqType.regions.includes(filters.region)
+      );
     }
 
     return results;
-  }
-
-  // Get sequences already added to current protocol
-  getAddedSequenceIds() {
-    return this.selectedSequences.map(s => s.sequence_id);
-  }
-
-  // Check if a sequence is already in the protocol
-  isSequenceAdded(sequenceId) {
-    return this.selectedSequences.some(s => s.sequence_id === sequenceId);
   }
 
   // Get all custom protocols sorted by last updated
@@ -402,22 +488,33 @@ export class ProtocolBuilder {
     this.selectedSequences = [];
     this.isEditing = false;
     this.selectedRationale = null;
+    this.expandedType = null;
+  }
+
+  // Toggle expanded sequence type
+  toggleExpandedType(typeId) {
+    if (this.expandedType === typeId) {
+      this.expandedType = null;
+    } else {
+      this.expandedType = typeId;
+    }
+    return this.expandedType;
   }
 
   // Set selected rationale for display
-  setSelectedRationale(sequenceId) {
-    if (this.selectedRationale === sequenceId) {
+  setSelectedRationale(typeId) {
+    if (this.selectedRationale === typeId) {
       this.selectedRationale = null; // Toggle off
     } else {
-      this.selectedRationale = sequenceId;
+      this.selectedRationale = typeId;
     }
     return this.selectedRationale;
   }
 
-  // Get rationale for a sequence
-  getRationale(sequenceId) {
-    const seq = this.getSequenceById(sequenceId);
-    return seq ? seq.rationale : null;
+  // Get rationale for a sequence type
+  getRationale(typeId) {
+    const seqType = this.getSequenceTypeById(typeId);
+    return seqType ? seqType.rationale : null;
   }
 
   // Get pre-contrast sequences

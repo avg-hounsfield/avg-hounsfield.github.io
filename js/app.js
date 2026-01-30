@@ -1575,12 +1575,44 @@ class ProtocolHelpApp {
       saveBtn.addEventListener('click', () => this.saveCurrentProtocol());
     }
 
-    // Contrast toggle
-    document.querySelectorAll('#contrastToggle .toggle-option').forEach(btn => {
+    // Contrast toggle (updated for with/without/both)
+    const contrastToggle = document.getElementById('contrastToggle');
+    if (contrastToggle) {
+      contrastToggle.querySelectorAll('.toggle-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          contrastToggle.querySelectorAll('.toggle-option').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          this.protocolBuilder.contrastMode = btn.dataset.contrast; // 'without', 'with', or 'both'
+        });
+      });
+    }
+
+    // Scope tags input
+    const scopeInput = document.getElementById('protocolScopeInput');
+    if (scopeInput) {
+      scopeInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const tag = scopeInput.value.trim().toLowerCase();
+          if (tag && !this.protocolBuilder.scopeTags.includes(tag)) {
+            this.protocolBuilder.scopeTags.push(tag);
+            this.renderScopeTags();
+            this.renderProtocolSequences(); // Update time display
+          }
+          scopeInput.value = '';
+        }
+      });
+    }
+
+    // Scope suggestion buttons
+    document.querySelectorAll('.scope-suggestion').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('#contrastToggle .toggle-option').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        this.protocolBuilder.usesContrast = btn.dataset.contrast === 'true';
+        const tag = btn.dataset.tag;
+        if (tag && !this.protocolBuilder.scopeTags.includes(tag)) {
+          this.protocolBuilder.scopeTags.push(tag);
+          this.renderScopeTags();
+          this.renderProtocolSequences();
+        }
       });
     });
 
@@ -1637,6 +1669,9 @@ class ProtocolHelpApp {
       const sequenceCount = protocol.sequences?.length || 0;
       const timeStr = this.protocolBuilder.formatTime(protocol.total_time_seconds || 0);
       const regionName = this.formatRegionName(protocol.body_region);
+      const contrastMode = protocol.contrast_mode || (protocol.uses_contrast ? 'with' : 'without');
+      const contrastLabel = contrastMode === 'both' ? 'With/Without' : (contrastMode === 'with' ? 'With Contrast' : 'No Contrast');
+      const scopeTags = protocol.scope_tags || [];
 
       return `
         <div class="custom-protocol-card" data-protocol-id="${protocol.id}">
@@ -1644,8 +1679,13 @@ class ProtocolHelpApp {
           <div class="custom-protocol-card-name">${this.escapeHtml(protocol.name)}</div>
           <div class="custom-protocol-card-meta">
             <span class="meta-item">${regionName}</span>
-            <span class="meta-item">${protocol.uses_contrast ? 'With Contrast' : 'No Contrast'}</span>
+            <span class="meta-item">${contrastLabel}</span>
           </div>
+          ${scopeTags.length > 0 ? `
+            <div class="custom-protocol-card-scope">
+              ${scopeTags.map(tag => `<span class="scope-tag-mini">${this.escapeHtml(tag)}</span>`).join('')}
+            </div>
+          ` : ''}
           <div class="custom-protocol-card-sequences">
             ${sequenceCount} sequence${sequenceCount !== 1 ? 's' : ''} - ${timeStr}
           </div>
@@ -1714,10 +1754,15 @@ class ProtocolHelpApp {
       document.getElementById('protocolIndicationsInput').value = protocol.indications || '';
       document.getElementById('protocolNotesInput').value = protocol.notes || '';
 
-      // Set contrast toggle
+      // Set scope tags
+      this.protocolBuilder.scopeTags = [...(protocol.scope_tags || [])];
+      this.renderScopeTags();
+
+      // Set contrast toggle (new mode: 'without', 'with', 'both')
+      const contrastMode = protocol.contrast_mode || (protocol.uses_contrast ? 'with' : 'without');
+      this.protocolBuilder.contrastMode = contrastMode;
       document.querySelectorAll('#contrastToggle .toggle-option').forEach(btn => {
-        const isContrast = btn.dataset.contrast === 'true';
-        btn.classList.toggle('active', isContrast === protocol.uses_contrast);
+        btn.classList.toggle('active', btn.dataset.contrast === contrastMode);
       });
 
       // Render sequences
@@ -1752,8 +1797,15 @@ class ProtocolHelpApp {
       document.getElementById('protocolRegionSelect').value = '';
       document.getElementById('protocolIndicationsInput').value = '';
       document.getElementById('protocolNotesInput').value = '';
+
+      // Reset scope tags
+      this.protocolBuilder.scopeTags = [];
+      this.renderScopeTags();
+
+      // Reset contrast toggle to 'without'
+      this.protocolBuilder.contrastMode = 'without';
       document.querySelectorAll('#contrastToggle .toggle-option').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.contrast === 'false');
+        btn.classList.toggle('active', btn.dataset.contrast === 'without');
       });
     }
 
@@ -1776,11 +1828,43 @@ class ProtocolHelpApp {
     this.hideProtocolEditor();
   }
 
+  renderScopeTags() {
+    const container = document.getElementById('scopeTags');
+    if (!container) return;
+
+    container.innerHTML = this.protocolBuilder.scopeTags.map((tag, index) => `
+      <span class="scope-tag">
+        ${this.escapeHtml(tag)}
+        <button class="scope-tag-remove" data-index="${index}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </span>
+    `).join('');
+
+    // Bind remove buttons
+    container.querySelectorAll('.scope-tag-remove').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const index = parseInt(btn.dataset.index);
+        this.protocolBuilder.scopeTags.splice(index, 1);
+        this.renderScopeTags();
+        this.renderProtocolSequences();
+      });
+    });
+
+    // Update suggestion button states
+    document.querySelectorAll('.scope-suggestion').forEach(btn => {
+      btn.classList.toggle('selected', this.protocolBuilder.scopeTags.includes(btn.dataset.tag));
+    });
+  }
+
   saveCurrentProtocol() {
     const formData = {
       name: document.getElementById('protocolNameInput').value,
       region: document.getElementById('protocolRegionSelect').value,
-      usesContrast: this.protocolBuilder.usesContrast,
+      contrastMode: this.protocolBuilder.contrastMode || 'without',
+      scopeTags: this.protocolBuilder.scopeTags || [],
       indications: document.getElementById('protocolIndicationsInput').value,
       notes: document.getElementById('protocolNotesInput').value
     };
@@ -1798,47 +1882,84 @@ class ProtocolHelpApp {
 
   renderSequenceLibrary(filter = '') {
     const list = document.getElementById('sequenceLibraryList');
-    const sequences = this.protocolBuilder.searchSequences(filter, {
-      weighting: this.currentSequenceFilter || 'all'
+    const sequenceTypes = this.protocolBuilder.searchSequenceTypes(filter, {
+      category: this.currentSequenceFilter || 'all'
     });
-    const addedIds = this.protocolBuilder.getAddedSequenceIds();
 
-    document.getElementById('libraryCount').textContent = `${sequences.length} sequences`;
+    document.getElementById('libraryCount').textContent = `${sequenceTypes.length} sequence types`;
 
-    if (sequences.length === 0) {
+    if (sequenceTypes.length === 0) {
       list.innerHTML = '<div class="empty-state"><p>No sequences found</p></div>';
       return;
     }
 
-    list.innerHTML = sequences.map(seq => {
-      const isAdded = addedIds.includes(seq.id);
-      const timeStr = this.protocolBuilder.formatTime(seq.time_seconds);
+    const expandedType = this.protocolBuilder.expandedType;
+
+    list.innerHTML = sequenceTypes.map(seqType => {
+      const isExpanded = expandedType === seqType.id;
+      const timeStr = this.protocolBuilder.formatTime(seqType.time_seconds);
+      const timeRange = this.protocolBuilder.formatTimeRange(seqType.time_range);
+      const pulseSeq = seqType.pulse_sequence || '';
+
+      // Build plane buttons
+      const planes = seqType.planes || ['axial', 'sagittal', 'coronal'];
+      const planeButtons = planes.map(plane => {
+        const isAdded = this.protocolBuilder.isSequenceAdded(seqType.id, plane);
+        const planeLabel = this.protocolBuilder.getPlaneLabel(plane);
+        const abbrev = plane === '3d' ? '3D' : plane === '2d' ? '2D' : planeLabel.substring(0, 3).toUpperCase();
+        return `
+          <button class="plane-btn ${isAdded ? 'added' : ''}"
+                  data-type-id="${seqType.id}"
+                  data-plane="${plane}"
+                  ${isAdded ? 'disabled' : ''}>
+            ${abbrev}
+            ${isAdded ? '<svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>' : ''}
+          </button>
+        `;
+      }).join('');
 
       return `
-        <div class="sequence-library-item ${isAdded ? 'added' : ''}" data-sequence-id="${seq.id}">
-          <span class="sequence-weighting-badge ${seq.weighting}">${seq.weighting}</span>
-          <div class="sequence-library-info">
-            <div class="sequence-library-name">${this.escapeHtml(seq.name)}</div>
-            <div class="sequence-library-time">~${timeStr}</div>
+        <div class="sequence-type-card ${isExpanded ? 'expanded' : ''}" data-type-id="${seqType.id}">
+          <div class="sequence-type-header" data-type-id="${seqType.id}">
+            <div class="sequence-type-main">
+              <span class="sequence-weighting-badge ${seqType.name.toLowerCase().replace(/[^a-z0-9]/g, '')}">${seqType.name}</span>
+              <div class="sequence-type-info">
+                <div class="sequence-type-name">${this.escapeHtml(seqType.display_name)}</div>
+                <div class="sequence-type-meta">
+                  <span class="sequence-type-time">~${timeStr}</span>
+                  ${pulseSeq ? `<span class="sequence-type-pulse">${pulseSeq}</span>` : ''}
+                </div>
+              </div>
+            </div>
+            <div class="sequence-type-actions">
+              <button class="sequence-info-btn" data-type-id="${seqType.id}" title="View rationale">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 16v-4M12 8h.01"/>
+                </svg>
+              </button>
+              <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+              </svg>
+            </div>
           </div>
-          <button class="sequence-info-btn" data-seq-id="${seq.id}" title="View rationale">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 16v-4M12 8h.01"/>
-            </svg>
-          </button>
-          <svg class="sequence-add-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 5v14M5 12h14"/>
-          </svg>
+          <div class="sequence-type-planes">
+            <div class="plane-label">Add plane:</div>
+            <div class="plane-buttons">
+              ${planeButtons}
+            </div>
+          </div>
         </div>
       `;
     }).join('');
 
-    // Bind click events
-    list.querySelectorAll('.sequence-library-item').forEach(item => {
-      item.addEventListener('click', (e) => {
+    // Bind header click to expand/collapse
+    list.querySelectorAll('.sequence-type-header').forEach(header => {
+      header.addEventListener('click', (e) => {
         if (e.target.closest('.sequence-info-btn')) return;
-        this.addSequenceToProtocol(item.dataset.sequenceId);
+        const typeId = header.dataset.typeId;
+        this.protocolBuilder.toggleExpandedType(typeId);
+        this.renderSequenceLibrary(filter);
       });
     });
 
@@ -1846,7 +1967,15 @@ class ProtocolHelpApp {
     list.querySelectorAll('.sequence-info-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        this.showSequenceRationale(btn.dataset.seqId);
+        this.showSequenceRationale(btn.dataset.typeId);
+      });
+    });
+
+    // Bind plane button events
+    list.querySelectorAll('.plane-btn:not([disabled])').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.addSequenceByPlane(btn.dataset.typeId, btn.dataset.plane);
       });
     });
   }
@@ -1857,8 +1986,17 @@ class ProtocolHelpApp {
     this.renderSequenceLibrary(query);
   }
 
+  addSequenceByPlane(typeId, plane) {
+    const added = this.protocolBuilder.addSequenceByType(typeId, plane);
+    if (added) {
+      this.renderSequenceLibrary(document.getElementById('sequenceSearchInput')?.value || '');
+      this.renderProtocolSequences();
+    }
+  }
+
   addSequenceToProtocol(sequenceId) {
-    const added = this.protocolBuilder.addSequence(sequenceId);
+    // Legacy method - kept for compatibility
+    const added = this.protocolBuilder.addSequenceByType(sequenceId, 'axial');
     if (added) {
       this.renderSequenceLibrary(document.getElementById('sequenceSearchInput')?.value || '');
       this.renderProtocolSequences();
@@ -1876,9 +2014,19 @@ class ProtocolHelpApp {
     const placeholder = document.getElementById('dropPlaceholder');
     const sequences = this.protocolBuilder.selectedSequences;
     const totalTime = this.protocolBuilder.calculateTotalTime();
+    const multiplier = this.protocolBuilder.getScopeMultiplier();
 
     document.getElementById('protocolSequenceCount').textContent = `${sequences.length} sequence${sequences.length !== 1 ? 's' : ''}`;
-    document.getElementById('estimatedTime').textContent = `~${this.protocolBuilder.formatTime(totalTime)}`;
+
+    // Show scope-adjusted time with indicator if multiplier is not 1.0
+    const timeDisplay = document.getElementById('estimatedTime');
+    if (multiplier !== 1.0 && sequences.length > 0) {
+      timeDisplay.textContent = `~${this.protocolBuilder.formatTime(totalTime)}`;
+      timeDisplay.title = `Adjusted for scan coverage (x${multiplier.toFixed(1)})`;
+    } else {
+      timeDisplay.textContent = `~${this.protocolBuilder.formatTime(totalTime)}`;
+      timeDisplay.title = 'Estimated scan time';
+    }
 
     if (sequences.length === 0) {
       list.innerHTML = '';
@@ -1921,10 +2069,21 @@ class ProtocolHelpApp {
 
     list.innerHTML = html;
 
-    // Bind events
+    // Bind remove button events
     list.querySelectorAll('.sequence-remove-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         this.removeSequenceFromProtocol(parseInt(btn.dataset.index));
+      });
+    });
+
+    // Bind rationale button events for added sequences
+    list.querySelectorAll('.sequence-rationale-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const typeId = btn.dataset.typeId;
+        if (typeId) {
+          this.showSequenceRationale(typeId);
+        }
       });
     });
 
@@ -1935,6 +2094,7 @@ class ProtocolHelpApp {
   renderProtocolSequenceItem(seq, index) {
     const timeStr = this.protocolBuilder.formatTime(seq.time_seconds);
     const orderNum = index + 1;
+    const typeId = seq.type_id || seq.sequence_id?.split('_')[0] || '';
 
     return `
       <div class="protocol-sequence-item ${seq.is_post_contrast ? 'post-contrast' : ''}"
@@ -1949,11 +2109,19 @@ class ProtocolHelpApp {
           <div class="protocol-sequence-name">${this.escapeHtml(seq.sequence_name)}</div>
           <div class="protocol-sequence-time">~${timeStr}</div>
         </div>
-        <button class="sequence-remove-btn" data-index="${index}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 6L6 18M6 6l12 12"/>
-          </svg>
-        </button>
+        <div class="protocol-sequence-actions">
+          <button class="sequence-rationale-btn" data-type-id="${typeId}" title="View rationale">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 16v-4M12 8h.01"/>
+            </svg>
+          </button>
+          <button class="sequence-remove-btn" data-index="${index}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
       </div>
     `;
   }
@@ -1998,18 +2166,28 @@ class ProtocolHelpApp {
     });
   }
 
-  showSequenceRationale(sequenceId) {
-    const seq = this.protocolBuilder.getSequenceById(sequenceId);
-    if (!seq || !seq.rationale) return;
+  showSequenceRationale(typeId) {
+    const seqType = this.protocolBuilder.getSequenceTypeById(typeId);
+    if (!seqType || !seqType.rationale) return;
 
     const panel = document.getElementById('rationalePanel');
     const title = document.getElementById('rationaleTitle');
     const content = document.getElementById('rationaleContent');
 
-    title.textContent = seq.name;
+    title.textContent = seqType.display_name || seqType.name;
 
-    const r = seq.rationale;
+    const r = seqType.rationale;
+    const pulseSeq = seqType.pulse_sequence;
+    const pulseInfo = seqType.pulse_sequence_info;
+
     content.innerHTML = `
+      ${pulseSeq ? `
+        <div class="rationale-section rationale-pulse-sequence">
+          <div class="rationale-section-title">Pulse Sequence: ${pulseSeq}</div>
+          ${pulseInfo ? `<p class="rationale-pulse-info">${this.escapeHtml(pulseInfo)}</p>` : ''}
+        </div>
+      ` : ''}
+
       <div class="rationale-section">
         <div class="rationale-section-title">Purpose</div>
         <p class="rationale-purpose">${this.escapeHtml(r.purpose)}</p>
@@ -2053,7 +2231,7 @@ class ProtocolHelpApp {
     `;
 
     panel.classList.remove('hidden');
-    this.protocolBuilder.selectedRationale = sequenceId;
+    this.protocolBuilder.selectedRationale = typeId;
   }
 }
 

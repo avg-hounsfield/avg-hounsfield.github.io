@@ -1,20 +1,18 @@
 {
-  "version": "1.0.0",
-  "sequences": [
+  "version": "2.1.0",
+  "sequence_types": [
     {
-      "id": "t1_ax",
-      "name": "Axial T1",
-      "short_name": "AX T1",
-      "weighting": "T1",
-      "plane": "axial",
+      "id": "t1",
+      "name": "T1",
+      "display_name": "T1-Weighted",
       "category": "anatomic",
-      "fat_sat": false,
+      "pulse_sequence": "FSE",
+      "pulse_sequence_info": "Fast Spin Echo (FSE/TSE) - Uses multiple 180-degree refocusing pulses to generate echoes. Produces clean images with reduced susceptibility artifacts.",
       "is_post_contrast": false,
       "time_seconds": 180,
       "time_range": [120, 240],
-      "common_slice_thickness": [3, 4, 5],
+      "planes": ["axial", "sagittal", "coronal"],
       "regions": ["neuro", "spine", "msk", "abdomen"],
-      "keywords": ["t1", "anatomy", "structural", "fat"],
       "rationale": {
         "purpose": "Provides excellent anatomic detail with high signal from fat and proteinaceous fluid",
         "what_it_shows": [
@@ -24,7 +22,7 @@
           "Hemorrhage (subacute) appears bright"
         ],
         "when_to_use": [
-          "Anatomic reference for all brain studies",
+          "Anatomic reference for all studies",
           "Detecting fat-containing lesions (dermoid, lipoma)",
           "Identifying subacute hemorrhage",
           "Pre-contrast baseline for enhancement assessment"
@@ -41,91 +39,17 @@
       }
     },
     {
-      "id": "t1_sag",
-      "name": "Sagittal T1",
-      "short_name": "SAG T1",
-      "weighting": "T1",
-      "plane": "sagittal",
+      "id": "t2",
+      "name": "T2",
+      "display_name": "T2-Weighted",
       "category": "anatomic",
-      "fat_sat": false,
-      "is_post_contrast": false,
-      "time_seconds": 180,
-      "time_range": [120, 240],
-      "common_slice_thickness": [3, 4],
-      "regions": ["neuro", "spine"],
-      "keywords": ["t1", "sagittal", "midline", "pituitary", "corpus callosum"],
-      "rationale": {
-        "purpose": "Midline anatomic assessment - essential for pituitary, corpus callosum, and spine",
-        "what_it_shows": [
-          "Pituitary gland and stalk",
-          "Corpus callosum morphology",
-          "Cerebellar vermis",
-          "Craniocervical junction"
-        ],
-        "when_to_use": [
-          "Pituitary/sellar pathology",
-          "Agenesis of corpus callosum",
-          "Chiari malformation assessment",
-          "Spine: disc and vertebral body evaluation"
-        ],
-        "limitations": [
-          "Single plane - always correlate with axial images"
-        ],
-        "clinical_pearls": [
-          "Posterior pituitary bright spot should be present on T1",
-          "Measure pituitary height on sagittal T1"
-        ]
-      }
-    },
-    {
-      "id": "t1_cor",
-      "name": "Coronal T1",
-      "short_name": "COR T1",
-      "weighting": "T1",
-      "plane": "coronal",
-      "category": "anatomic",
-      "fat_sat": false,
-      "is_post_contrast": false,
-      "time_seconds": 180,
-      "time_range": [120, 240],
-      "common_slice_thickness": [3, 4, 5],
-      "regions": ["neuro", "msk"],
-      "keywords": ["t1", "coronal", "temporal", "hippocampus"],
-      "rationale": {
-        "purpose": "Coronal anatomic assessment - useful for temporal lobes and symmetry",
-        "what_it_shows": [
-          "Hippocampal anatomy",
-          "Temporal lobe symmetry",
-          "Coronal sinus anatomy"
-        ],
-        "when_to_use": [
-          "Epilepsy protocols (hippocampal evaluation)",
-          "Temporal lobe pathology",
-          "Pituitary coronal imaging"
-        ],
-        "limitations": [
-          "Requires precise angulation for hippocampi"
-        ],
-        "clinical_pearls": [
-          "Angle perpendicular to hippocampus for epilepsy workup",
-          "Compare hippocampal volumes side-to-side"
-        ]
-      }
-    },
-    {
-      "id": "t2_ax",
-      "name": "Axial T2",
-      "short_name": "AX T2",
-      "weighting": "T2",
-      "plane": "axial",
-      "category": "anatomic",
-      "fat_sat": false,
+      "pulse_sequence": "FSE",
+      "pulse_sequence_info": "Fast Spin Echo (FSE/TSE) - Standard T2 uses spin echo technique for excellent fluid sensitivity with minimal susceptibility artifact.",
       "is_post_contrast": false,
       "time_seconds": 200,
       "time_range": [150, 280],
-      "common_slice_thickness": [3, 4, 5],
+      "planes": ["axial", "sagittal", "coronal"],
       "regions": ["neuro", "spine", "msk", "abdomen"],
-      "keywords": ["t2", "edema", "fluid", "pathology"],
       "rationale": {
         "purpose": "Highly sensitive to water/fluid content - the workhorse for detecting pathology",
         "what_it_shows": [
@@ -150,57 +74,54 @@
       }
     },
     {
-      "id": "t2_sag",
-      "name": "Sagittal T2",
-      "short_name": "SAG T2",
-      "weighting": "T2",
-      "plane": "sagittal",
+      "id": "t2_fs",
+      "name": "T2 FS",
+      "display_name": "T2 Fat Sat",
       "category": "anatomic",
-      "fat_sat": false,
+      "pulse_sequence": "FSE",
+      "pulse_sequence_info": "Fast Spin Echo with frequency-selective fat saturation. Fat sat pulse applied before each excitation to null fat signal.",
       "is_post_contrast": false,
-      "time_seconds": 200,
-      "time_range": [150, 280],
-      "common_slice_thickness": [3, 4],
-      "regions": ["spine", "neuro"],
-      "keywords": ["t2", "sagittal", "spine", "cord"],
+      "fat_sat": true,
+      "time_seconds": 220,
+      "time_range": [160, 300],
+      "planes": ["axial", "sagittal", "coronal"],
+      "regions": ["msk", "abdomen", "spine", "orbit"],
       "rationale": {
-        "purpose": "Sagittal spine imaging - essential for cord and disc evaluation",
+        "purpose": "T2 with fat signal suppressed - better visualization of edema in fatty tissues",
         "what_it_shows": [
-          "Spinal cord signal and morphology",
-          "Disc hydration and degeneration",
-          "CSF flow around cord",
-          "Vertebral body marrow signal"
+          "Bone marrow edema (bright against dark fat)",
+          "Soft tissue edema/inflammation",
+          "Orbital pathology (fat suppressed)",
+          "Muscle edema/strain"
         ],
         "when_to_use": [
-          "Spine: myelopathy workup",
-          "Disc herniation assessment",
-          "Cord lesion detection (MS, tumor)",
-          "Syrinx evaluation"
+          "Bone marrow pathology (stress fracture, infection)",
+          "Orbital imaging (inflammation, tumor)",
+          "MSK: muscle/tendon pathology",
+          "Spine: infection, metastases"
         ],
         "limitations": [
-          "CSF pulsation artifacts",
-          "Need axial for lateralization"
+          "Fat sat can fail near metal or air-tissue interfaces",
+          "May miss fat-containing lesions"
         ],
         "clinical_pearls": [
-          "Cord should be uniform intermediate signal",
-          "High T2 in cord = myelomalacia or edema"
+          "Essential for orbits - optic neuritis shows bright nerve on T2 FS",
+          "Bone marrow edema pattern helps date fractures"
         ]
       }
     },
     {
-      "id": "flair_ax",
-      "name": "Axial FLAIR",
-      "short_name": "AX FLAIR",
-      "weighting": "T2-FLAIR",
-      "plane": "axial",
+      "id": "flair",
+      "name": "FLAIR",
+      "display_name": "T2 FLAIR",
       "category": "anatomic",
-      "fat_sat": false,
+      "pulse_sequence": "FSE-IR",
+      "pulse_sequence_info": "Fast Spin Echo with Inversion Recovery. An inversion pulse nulls CSF signal at TI ~2000-2500ms, making periventricular lesions conspicuous.",
       "is_post_contrast": false,
       "time_seconds": 240,
       "time_range": [180, 320],
-      "common_slice_thickness": [3, 4, 5],
+      "planes": ["axial", "sagittal", "coronal"],
       "regions": ["neuro"],
-      "keywords": ["flair", "white matter", "ms", "lesion", "periventricular"],
       "rationale": {
         "purpose": "T2-weighted with CSF signal suppressed - ideal for periventricular and cortical lesions",
         "what_it_shows": [
@@ -221,59 +142,24 @@
         ],
         "clinical_pearls": [
           "Essential for MS protocols - count lesions on FLAIR",
-          "Bright FLAIR signal in sulci = SAH or meningitis"
+          "Bright FLAIR signal in sulci = SAH or meningitis",
+          "Sagittal FLAIR shows Dawson fingers at callososeptal interface"
         ]
       }
     },
     {
-      "id": "flair_sag",
-      "name": "Sagittal FLAIR",
-      "short_name": "SAG FLAIR",
-      "weighting": "T2-FLAIR",
-      "plane": "sagittal",
-      "category": "anatomic",
-      "fat_sat": false,
-      "is_post_contrast": false,
-      "time_seconds": 240,
-      "time_range": [180, 320],
-      "common_slice_thickness": [3, 4],
-      "regions": ["neuro"],
-      "keywords": ["flair", "sagittal", "corpus callosum", "ms"],
-      "rationale": {
-        "purpose": "Sagittal FLAIR for corpus callosum and callososeptal interface lesions",
-        "what_it_shows": [
-          "Corpus callosum lesions (MS 'Dawson fingers')",
-          "Callososeptal interface involvement",
-          "Midline lesions"
-        ],
-        "when_to_use": [
-          "MS protocol - callososeptal lesions",
-          "Corpus callosum pathology",
-          "Complement to axial FLAIR"
-        ],
-        "limitations": [
-          "Only useful for midline structures"
-        ],
-        "clinical_pearls": [
-          "Dawson fingers: perpendicular lesions at callososeptal interface",
-          "3D FLAIR can be reformatted in any plane"
-        ]
-      }
-    },
-    {
-      "id": "dwi_ax",
-      "name": "Axial DWI",
-      "short_name": "AX DWI",
-      "weighting": "DWI",
-      "plane": "axial",
+      "id": "dwi",
+      "name": "DWI",
+      "display_name": "Diffusion-Weighted",
       "category": "functional",
-      "fat_sat": false,
+      "pulse_sequence": "EPI",
+      "pulse_sequence_info": "Echo Planar Imaging (EPI) - Single-shot acquisition enabling rapid diffusion encoding. Very fast but prone to geometric distortion near air/bone interfaces.",
       "is_post_contrast": false,
       "time_seconds": 90,
       "time_range": [60, 120],
-      "common_slice_thickness": [4, 5],
+      "planes": ["axial", "sagittal", "coronal"],
+      "includes_adc": true,
       "regions": ["neuro", "abdomen"],
-      "keywords": ["dwi", "diffusion", "stroke", "restriction", "acute"],
       "rationale": {
         "purpose": "Detects restricted water diffusion - critical for acute stroke and high cellularity",
         "what_it_shows": [
@@ -295,60 +181,23 @@
         ],
         "clinical_pearls": [
           "Stroke protocol: DWI is the money sequence",
-          "Always look at ADC - bright DWI + bright ADC = T2 shine-through, not true restriction"
+          "Always look at ADC - bright DWI + bright ADC = T2 shine-through",
+          "ADC is auto-generated, no extra scan time"
         ]
       }
     },
     {
-      "id": "adc_ax",
-      "name": "Axial ADC Map",
-      "short_name": "AX ADC",
-      "weighting": "ADC",
-      "plane": "axial",
+      "id": "swi",
+      "name": "SWI",
+      "display_name": "Susceptibility-Weighted",
       "category": "functional",
-      "fat_sat": false,
-      "is_post_contrast": false,
-      "time_seconds": 0,
-      "time_range": [0, 0],
-      "common_slice_thickness": [4, 5],
-      "regions": ["neuro", "abdomen"],
-      "keywords": ["adc", "diffusion", "restriction", "quantitative"],
-      "rationale": {
-        "purpose": "Quantitative diffusion map - confirms true restriction vs T2 shine-through",
-        "what_it_shows": [
-          "True restriction = dark (low ADC value)",
-          "T2 shine-through = bright (normal ADC)",
-          "Quantitative values can be measured"
-        ],
-        "when_to_use": [
-          "Always review with DWI",
-          "Confirm acute stroke",
-          "Distinguish abscess from necrotic tumor"
-        ],
-        "limitations": [
-          "Calculated map, not acquired separately",
-          "Lower spatial resolution than source"
-        ],
-        "clinical_pearls": [
-          "ADC is generated from DWI - no additional scan time",
-          "Low ADC (dark) confirms true diffusion restriction"
-        ]
-      }
-    },
-    {
-      "id": "swi_ax",
-      "name": "Axial SWI/SWAN",
-      "short_name": "AX SWI",
-      "weighting": "SWI",
-      "plane": "axial",
-      "category": "functional",
-      "fat_sat": false,
+      "pulse_sequence": "GRE",
+      "pulse_sequence_info": "Gradient Recalled Echo (GRE) - Uses gradient refocusing instead of 180-degree pulse. Highly sensitive to magnetic susceptibility differences (blood, calcium, iron).",
       "is_post_contrast": false,
       "time_seconds": 300,
       "time_range": [240, 420],
-      "common_slice_thickness": [2, 3],
+      "planes": ["axial", "sagittal", "coronal"],
       "regions": ["neuro"],
-      "keywords": ["swi", "swan", "hemorrhage", "microbleed", "calcium", "veins"],
       "rationale": {
         "purpose": "Exquisitely sensitive to blood products, calcium, and iron deposition",
         "what_it_shows": [
@@ -375,57 +224,18 @@
       }
     },
     {
-      "id": "t2_fs_ax",
-      "name": "Axial T2 Fat Sat",
-      "short_name": "AX T2 FS",
-      "weighting": "T2",
-      "plane": "axial",
+      "id": "stir",
+      "name": "STIR",
+      "display_name": "STIR",
       "category": "anatomic",
-      "fat_sat": true,
+      "pulse_sequence": "FSE-IR",
+      "pulse_sequence_info": "Fast Spin Echo with Short Tau Inversion Recovery. TI ~150ms nulls fat signal. More robust fat suppression than frequency-selective methods, works near metal.",
       "is_post_contrast": false,
-      "time_seconds": 220,
-      "time_range": [160, 300],
-      "common_slice_thickness": [3, 4, 5],
-      "regions": ["msk", "abdomen", "spine", "orbit"],
-      "keywords": ["t2", "fat sat", "edema", "bone marrow", "orbits"],
-      "rationale": {
-        "purpose": "T2 with fat signal suppressed - better visualization of edema in fatty tissues",
-        "what_it_shows": [
-          "Bone marrow edema (bright against dark fat)",
-          "Soft tissue edema/inflammation",
-          "Orbital pathology (fat suppressed)",
-          "Muscle edema/strain"
-        ],
-        "when_to_use": [
-          "Bone marrow pathology (stress fracture, infection)",
-          "Orbital imaging (inflammation, tumor)",
-          "MSK: muscle/tendon pathology",
-          "Spine: infection, metastases"
-        ],
-        "limitations": [
-          "Fat sat can fail near metal or air-tissue interfaces",
-          "May miss fat-containing lesions"
-        ],
-        "clinical_pearls": [
-          "Essential for orbits - optic neuritis shows bright nerve on T2 FS",
-          "Bone marrow edema pattern helps date fractures"
-        ]
-      }
-    },
-    {
-      "id": "stir_cor",
-      "name": "Coronal STIR",
-      "short_name": "COR STIR",
-      "weighting": "STIR",
-      "plane": "coronal",
-      "category": "anatomic",
       "fat_sat": true,
-      "is_post_contrast": false,
       "time_seconds": 200,
       "time_range": [150, 280],
-      "common_slice_thickness": [3, 4, 5],
+      "planes": ["axial", "sagittal", "coronal"],
       "regions": ["msk", "spine"],
-      "keywords": ["stir", "edema", "bone marrow", "muscle", "whole body"],
       "rationale": {
         "purpose": "Robust fat suppression via inversion recovery - works even near metal",
         "what_it_shows": [
@@ -447,61 +257,24 @@
         ],
         "clinical_pearls": [
           "STIR is the workhorse for whole-body MRI screening",
-          "More reliable fat suppression than frequency-selective fat sat"
+          "More reliable fat suppression than frequency-selective fat sat",
+          "Acute compression fracture = bright marrow edema"
         ]
       }
     },
     {
-      "id": "stir_sag",
-      "name": "Sagittal STIR",
-      "short_name": "SAG STIR",
-      "weighting": "STIR",
-      "plane": "sagittal",
+      "id": "pd_fs",
+      "name": "PD FS",
+      "display_name": "Proton Density Fat Sat",
       "category": "anatomic",
-      "fat_sat": true,
+      "pulse_sequence": "FSE",
+      "pulse_sequence_info": "Fast Spin Echo with intermediate TE (short TE, long TR). Optimized for cartilage and meniscus evaluation with high SNR.",
       "is_post_contrast": false,
-      "time_seconds": 200,
-      "time_range": [150, 280],
-      "common_slice_thickness": [3, 4],
-      "regions": ["spine"],
-      "keywords": ["stir", "sagittal", "spine", "edema", "compression"],
-      "rationale": {
-        "purpose": "Sagittal spine with fat suppression - sensitive for marrow edema",
-        "what_it_shows": [
-          "Vertebral body edema (fracture, tumor, infection)",
-          "Cord edema/myelopathy",
-          "Paraspinal soft tissue pathology"
-        ],
-        "when_to_use": [
-          "Compression fracture (acute vs chronic)",
-          "Spinal metastases screening",
-          "Discitis/osteomyelitis",
-          "Cord pathology"
-        ],
-        "limitations": [
-          "Lower resolution than T2",
-          "CSF pulsation artifacts"
-        ],
-        "clinical_pearls": [
-          "Acute compression fracture = bright marrow edema",
-          "No edema = old/chronic fracture"
-        ]
-      }
-    },
-    {
-      "id": "pd_fs_sag",
-      "name": "Sagittal PD Fat Sat",
-      "short_name": "SAG PD FS",
-      "weighting": "PD",
-      "plane": "sagittal",
-      "category": "anatomic",
       "fat_sat": true,
-      "is_post_contrast": false,
       "time_seconds": 240,
       "time_range": [180, 320],
-      "common_slice_thickness": [3, 4],
+      "planes": ["axial", "sagittal", "coronal"],
       "regions": ["msk"],
-      "keywords": ["pd", "proton density", "cartilage", "meniscus", "ligament", "knee"],
       "rationale": {
         "purpose": "Optimal for cartilage and fibrocartilage evaluation - the MSK workhorse",
         "what_it_shows": [
@@ -511,7 +284,7 @@
           "Labral tears (shoulder, hip)"
         ],
         "when_to_use": [
-          "Knee: meniscus and cartilage",
+          "Knee: meniscus, cartilage, ligaments",
           "Shoulder: rotator cuff, labrum",
           "Hip: labrum",
           "Any joint cartilage assessment"
@@ -522,96 +295,23 @@
         ],
         "clinical_pearls": [
           "Meniscal tear = linear signal reaching articular surface",
-          "Cartilage is intermediate signal - focal defects are pathologic"
+          "Cartilage is intermediate signal - focal defects are pathologic",
+          "ACL should appear as a taut, low-signal band"
         ]
       }
     },
     {
-      "id": "pd_fs_ax",
-      "name": "Axial PD Fat Sat",
-      "short_name": "AX PD FS",
-      "weighting": "PD",
-      "plane": "axial",
-      "category": "anatomic",
-      "fat_sat": true,
-      "is_post_contrast": false,
-      "time_seconds": 240,
-      "time_range": [180, 320],
-      "common_slice_thickness": [3, 4],
-      "regions": ["msk"],
-      "keywords": ["pd", "proton density", "axial", "meniscus", "cruciate"],
-      "rationale": {
-        "purpose": "Axial PD for cruciate ligaments and meniscal root attachments",
-        "what_it_shows": [
-          "ACL and PCL integrity",
-          "Meniscal root attachments",
-          "Popliteal structures",
-          "Articular cartilage (axial plane)"
-        ],
-        "when_to_use": [
-          "Knee: cruciate ligament evaluation",
-          "Meniscal root tears",
-          "Patellofemoral cartilage"
-        ],
-        "limitations": [
-          "Requires proper positioning for cruciates"
-        ],
-        "clinical_pearls": [
-          "ACL should appear as a taut, low-signal band",
-          "Empty notch sign = ACL tear"
-        ]
-      }
-    },
-    {
-      "id": "pd_fs_cor",
-      "name": "Coronal PD Fat Sat",
-      "short_name": "COR PD FS",
-      "weighting": "PD",
-      "plane": "coronal",
-      "category": "anatomic",
-      "fat_sat": true,
-      "is_post_contrast": false,
-      "time_seconds": 240,
-      "time_range": [180, 320],
-      "common_slice_thickness": [3, 4],
-      "regions": ["msk"],
-      "keywords": ["pd", "coronal", "collateral", "meniscus body"],
-      "rationale": {
-        "purpose": "Coronal PD for collateral ligaments and meniscal body",
-        "what_it_shows": [
-          "MCL and LCL integrity",
-          "Meniscal body tears",
-          "Articular cartilage (coronal)",
-          "Bone marrow (limited)"
-        ],
-        "when_to_use": [
-          "Knee: collateral ligament evaluation",
-          "Meniscal body assessment",
-          "Medial/lateral compartment pathology"
-        ],
-        "limitations": [
-          "Less sensitive to marrow edema than STIR"
-        ],
-        "clinical_pearls": [
-          "MCL injury grading: I (strain), II (partial), III (complete)",
-          "Look for associated meniscal injury with MCL tears"
-        ]
-      }
-    },
-    {
-      "id": "t1_post_ax",
-      "name": "Axial T1 Post-Contrast",
-      "short_name": "AX T1+C",
-      "weighting": "T1",
-      "plane": "axial",
+      "id": "t1_post",
+      "name": "T1+C",
+      "display_name": "T1 Post-Contrast",
       "category": "contrast",
-      "fat_sat": false,
+      "pulse_sequence": "FSE",
+      "pulse_sequence_info": "Fast Spin Echo T1-weighted acquired after gadolinium administration. Enhancement indicates BBB breakdown or hypervascularity.",
       "is_post_contrast": true,
       "time_seconds": 180,
       "time_range": [120, 240],
-      "common_slice_thickness": [3, 4, 5],
+      "planes": ["axial", "sagittal", "coronal"],
       "regions": ["neuro", "spine", "msk", "abdomen"],
-      "keywords": ["t1", "contrast", "enhancement", "gadolinium", "post"],
       "rationale": {
         "purpose": "Detect blood-brain barrier breakdown and vascular lesions",
         "what_it_shows": [
@@ -638,91 +338,20 @@
       }
     },
     {
-      "id": "t1_post_sag",
-      "name": "Sagittal T1 Post-Contrast",
-      "short_name": "SAG T1+C",
-      "weighting": "T1",
-      "plane": "sagittal",
+      "id": "t1_fs_post",
+      "name": "T1 FS+C",
+      "display_name": "T1 Fat Sat Post-Contrast",
       "category": "contrast",
-      "fat_sat": false,
+      "pulse_sequence": "FSE",
+      "pulse_sequence_info": "Fast Spin Echo T1 with fat saturation, post-gadolinium. Fat suppression prevents fat from mimicking enhancement.",
       "is_post_contrast": true,
-      "time_seconds": 180,
-      "time_range": [120, 240],
-      "common_slice_thickness": [3, 4],
-      "regions": ["neuro", "spine"],
-      "keywords": ["t1", "contrast", "sagittal", "pituitary", "spine"],
-      "rationale": {
-        "purpose": "Sagittal post-contrast for pituitary and spine",
-        "what_it_shows": [
-          "Pituitary adenoma (delayed enhancement)",
-          "Spinal cord/meningeal enhancement",
-          "Vertebral body enhancement"
-        ],
-        "when_to_use": [
-          "Pituitary protocol",
-          "Spine tumor workup",
-          "Leptomeningeal disease"
-        ],
-        "limitations": [
-          "Need pre-contrast comparison"
-        ],
-        "clinical_pearls": [
-          "Pituitary adenoma: delayed enhancement vs normal gland",
-          "Dynamic imaging may be needed for microadenomas"
-        ]
-      }
-    },
-    {
-      "id": "t1_post_cor",
-      "name": "Coronal T1 Post-Contrast",
-      "short_name": "COR T1+C",
-      "weighting": "T1",
-      "plane": "coronal",
-      "category": "contrast",
-      "fat_sat": false,
-      "is_post_contrast": true,
-      "time_seconds": 180,
-      "time_range": [120, 240],
-      "common_slice_thickness": [3, 4],
-      "regions": ["neuro"],
-      "keywords": ["t1", "contrast", "coronal", "pituitary", "cavernous"],
-      "rationale": {
-        "purpose": "Coronal post-contrast for pituitary and parasellar region",
-        "what_it_shows": [
-          "Pituitary adenoma lateral extension",
-          "Cavernous sinus invasion",
-          "Optic chiasm relationship"
-        ],
-        "when_to_use": [
-          "Pituitary protocol (essential plane)",
-          "Parasellar masses",
-          "Cavernous sinus pathology"
-        ],
-        "limitations": [
-          "Limited FOV for whole-brain evaluation"
-        ],
-        "clinical_pearls": [
-          "Look for cavernous sinus invasion (Knosp grade)",
-          "Assess optic chiasm compression"
-        ]
-      }
-    },
-    {
-      "id": "t1_fs_post_ax",
-      "name": "Axial T1 Fat Sat Post-Contrast",
-      "short_name": "AX T1 FS+C",
-      "weighting": "T1",
-      "plane": "axial",
-      "category": "contrast",
       "fat_sat": true,
-      "is_post_contrast": true,
       "time_seconds": 200,
       "time_range": [150, 280],
-      "common_slice_thickness": [3, 4, 5],
+      "planes": ["axial", "sagittal", "coronal"],
       "regions": ["spine", "msk", "abdomen", "orbit"],
-      "keywords": ["t1", "fat sat", "contrast", "enhancement", "spine"],
       "rationale": {
-        "purpose": "Post-contrast imaging with fat suppression - better enhancement visibility in fatty tissues",
+        "purpose": "Post-contrast with fat suppression - better enhancement visibility in fatty tissues",
         "what_it_shows": [
           "Enhancement in spine (epidural, vertebral)",
           "Orbital enhancement",
@@ -746,56 +375,18 @@
       }
     },
     {
-      "id": "t1_fs_post_sag",
-      "name": "Sagittal T1 Fat Sat Post-Contrast",
-      "short_name": "SAG T1 FS+C",
-      "weighting": "T1",
-      "plane": "sagittal",
-      "category": "contrast",
-      "fat_sat": true,
-      "is_post_contrast": true,
-      "time_seconds": 200,
-      "time_range": [150, 280],
-      "common_slice_thickness": [3, 4],
-      "regions": ["spine"],
-      "keywords": ["t1", "fat sat", "contrast", "sagittal", "spine"],
-      "rationale": {
-        "purpose": "Sagittal spine post-contrast with fat suppression",
-        "what_it_shows": [
-          "Vertebral body enhancement (tumor, infection)",
-          "Epidural enhancement",
-          "Cord enhancement",
-          "Paraspinal soft tissue"
-        ],
-        "when_to_use": [
-          "Spine tumor evaluation",
-          "Discitis/osteomyelitis",
-          "Epidural abscess",
-          "Intramedullary lesions"
-        ],
-        "limitations": [
-          "Fat sat may fail at edges of FOV"
-        ],
-        "clinical_pearls": [
-          "Rim enhancement around vertebral body = infection",
-          "Solid enhancement = tumor more likely"
-        ]
-      }
-    },
-    {
       "id": "t1_mprage",
-      "name": "3D T1 MPRAGE",
-      "short_name": "T1 MPRAGE",
-      "weighting": "T1",
-      "plane": "3d",
+      "name": "3D MPRAGE",
+      "display_name": "3D T1 MPRAGE",
       "category": "anatomic",
-      "fat_sat": false,
+      "pulse_sequence": "GRE-IR",
+      "pulse_sequence_info": "3D Gradient Echo with Inversion Recovery preparation. Creates excellent gray-white contrast with thin isotropic slices for volumetric analysis.",
       "is_post_contrast": false,
+      "is_3d": true,
       "time_seconds": 300,
       "time_range": [240, 420],
-      "common_slice_thickness": [1],
+      "planes": ["3d"],
       "regions": ["neuro"],
-      "keywords": ["mprage", "3d", "volumetric", "thin slice", "reformat"],
       "rationale": {
         "purpose": "High-resolution 3D T1 for volumetric analysis and multiplanar reformats",
         "what_it_shows": [
@@ -823,18 +414,17 @@
     },
     {
       "id": "t1_mprage_post",
-      "name": "3D T1 MPRAGE Post-Contrast",
-      "short_name": "T1 MPRAGE+C",
-      "weighting": "T1",
-      "plane": "3d",
+      "name": "3D MPRAGE+C",
+      "display_name": "3D T1 MPRAGE Post-Contrast",
       "category": "contrast",
-      "fat_sat": false,
+      "pulse_sequence": "GRE-IR",
+      "pulse_sequence_info": "3D MPRAGE acquired after gadolinium. Thin slices improve small lesion detection (metastases, cranial nerve enhancement).",
       "is_post_contrast": true,
+      "is_3d": true,
       "time_seconds": 300,
       "time_range": [240, 420],
-      "common_slice_thickness": [1],
+      "planes": ["3d"],
       "regions": ["neuro"],
-      "keywords": ["mprage", "3d", "contrast", "metastases", "leptomeningeal"],
       "rationale": {
         "purpose": "High-resolution 3D post-contrast for small enhancing lesions",
         "what_it_shows": [
@@ -855,24 +445,23 @@
         ],
         "clinical_pearls": [
           "Higher sensitivity for small metastases than 2D",
-          "Double dose contrast may further improve detection"
+          "Can reformat in any plane post-acquisition"
         ]
       }
     },
     {
-      "id": "mra_tof_3d",
+      "id": "mra_tof",
       "name": "3D TOF MRA",
-      "short_name": "3D TOF MRA",
-      "weighting": "TOF",
-      "plane": "3d",
+      "display_name": "3D TOF MRA (Brain)",
       "category": "vascular",
-      "fat_sat": false,
+      "pulse_sequence": "GRE",
+      "pulse_sequence_info": "Time-of-Flight GRE using inflow enhancement. Fresh blood entering the slab appears bright (flow-related enhancement).",
       "is_post_contrast": false,
+      "is_3d": true,
       "time_seconds": 360,
       "time_range": [300, 480],
-      "common_slice_thickness": [1, 1.5],
+      "planes": ["3d"],
       "regions": ["neuro", "vascular"],
-      "keywords": ["mra", "tof", "angiography", "vessels", "aneurysm", "circle of willis"],
       "rationale": {
         "purpose": "Non-contrast arterial imaging using flow-related enhancement",
         "what_it_shows": [
@@ -901,18 +490,17 @@
     },
     {
       "id": "mra_neck",
-      "name": "3D TOF MRA Neck",
-      "short_name": "MRA NECK",
-      "weighting": "TOF",
-      "plane": "3d",
+      "name": "MRA Neck",
+      "display_name": "3D TOF MRA (Neck)",
       "category": "vascular",
-      "fat_sat": false,
+      "pulse_sequence": "GRE",
+      "pulse_sequence_info": "Time-of-Flight GRE for cervical vessels. Multiple overlapping thin slabs cover the neck vasculature.",
       "is_post_contrast": false,
+      "is_3d": true,
       "time_seconds": 300,
       "time_range": [240, 420],
-      "common_slice_thickness": [1.5, 2],
+      "planes": ["3d"],
       "regions": ["vascular"],
-      "keywords": ["mra", "neck", "carotid", "vertebral", "stenosis"],
       "rationale": {
         "purpose": "Non-contrast evaluation of cervical carotid and vertebral arteries",
         "what_it_shows": [
@@ -939,19 +527,17 @@
       }
     },
     {
-      "id": "mrv_2d",
-      "name": "2D PC MRV",
-      "short_name": "2D MRV",
-      "weighting": "PC",
-      "plane": "2d",
+      "id": "mrv",
+      "name": "MRV",
+      "display_name": "MR Venography",
       "category": "vascular",
-      "fat_sat": false,
+      "pulse_sequence": "GRE-PC",
+      "pulse_sequence_info": "Phase Contrast GRE - Uses velocity-encoding gradients to image flowing blood. Can be 2D (thick slab projection) or 3D (volumetric).",
       "is_post_contrast": false,
       "time_seconds": 180,
       "time_range": [120, 240],
-      "common_slice_thickness": [3, 4],
+      "planes": ["axial", "sagittal", "coronal"],
       "regions": ["neuro"],
-      "keywords": ["mrv", "venography", "veins", "thrombosis", "sinus"],
       "rationale": {
         "purpose": "Evaluate cerebral venous sinuses without contrast",
         "what_it_shows": [
@@ -976,59 +562,20 @@
       }
     },
     {
-      "id": "dynamic_liver",
-      "name": "Dynamic Liver",
-      "short_name": "DYNAMIC",
-      "weighting": "T1",
-      "plane": "axial",
-      "category": "contrast",
-      "fat_sat": true,
-      "is_post_contrast": true,
-      "time_seconds": 300,
-      "time_range": [240, 360],
-      "common_slice_thickness": [3, 4],
-      "regions": ["abdomen"],
-      "keywords": ["dynamic", "multiphasic", "liver", "hcc", "arterial", "portal venous"],
-      "rationale": {
-        "purpose": "Multiphasic imaging to characterize liver lesions by enhancement pattern",
-        "what_it_shows": [
-          "Arterial phase: hypervascular lesions (HCC, FNH)",
-          "Portal venous phase: most lesion detection",
-          "Delayed phase: washout pattern, fibrosis"
-        ],
-        "when_to_use": [
-          "HCC surveillance in cirrhosis",
-          "Liver lesion characterization",
-          "LI-RADS assessment",
-          "Metastatic disease evaluation"
-        ],
-        "limitations": [
-          "Timing is critical - need bolus tracking",
-          "Breathing artifacts",
-          "Hepatobiliary agents change timing"
-        ],
-        "clinical_pearls": [
-          "HCC: arterial enhancement + portal venous washout",
-          "Use LI-RADS criteria for standardized reporting"
-        ]
-      }
-    },
-    {
-      "id": "mrcp_3d",
-      "name": "3D MRCP",
-      "short_name": "3D MRCP",
-      "weighting": "T2",
-      "plane": "3d",
+      "id": "mrcp",
+      "name": "MRCP",
+      "display_name": "3D MRCP",
       "category": "specialized",
-      "fat_sat": false,
+      "pulse_sequence": "FSE",
+      "pulse_sequence_info": "Heavily T2-weighted 3D Fast Spin Echo. Very long TE makes static fluid (bile, pancreatic juice) appear bright while suppressing background tissue.",
       "is_post_contrast": false,
+      "is_3d": true,
       "time_seconds": 300,
       "time_range": [240, 420],
-      "common_slice_thickness": [1, 1.5],
+      "planes": ["3d"],
       "regions": ["abdomen"],
-      "keywords": ["mrcp", "biliary", "pancreatic", "cholangiography", "cbd", "stone"],
       "rationale": {
-        "purpose": "Non-invasive biliary and pancreatic duct imaging using heavily T2-weighted technique",
+        "purpose": "Non-invasive biliary and pancreatic duct imaging",
         "what_it_shows": [
           "Biliary tree and CBD anatomy",
           "Biliary stones (signal voids)",
@@ -1053,19 +600,53 @@
       }
     },
     {
-      "id": "t2_haste_ax",
-      "name": "Axial T2 HASTE",
-      "short_name": "AX HASTE",
-      "weighting": "T2",
-      "plane": "axial",
+      "id": "dynamic",
+      "name": "Dynamic",
+      "display_name": "Dynamic Multiphase",
+      "category": "contrast",
+      "pulse_sequence": "GRE",
+      "pulse_sequence_info": "Fast 3D Gradient Echo (VIBE/LAVA/THRIVE) with fat sat. Rapid acquisition enables multiphasic imaging during contrast wash-in and wash-out.",
+      "is_post_contrast": true,
+      "time_seconds": 300,
+      "time_range": [240, 360],
+      "planes": ["axial", "coronal"],
+      "regions": ["abdomen"],
+      "rationale": {
+        "purpose": "Multiphasic imaging to characterize lesions by enhancement pattern",
+        "what_it_shows": [
+          "Arterial phase: hypervascular lesions (HCC, FNH)",
+          "Portal venous phase: most lesion detection",
+          "Delayed phase: washout pattern, fibrosis"
+        ],
+        "when_to_use": [
+          "HCC surveillance in cirrhosis",
+          "Liver lesion characterization",
+          "LI-RADS assessment",
+          "Metastatic disease evaluation"
+        ],
+        "limitations": [
+          "Timing is critical - need bolus tracking",
+          "Breathing artifacts",
+          "Hepatobiliary agents change timing"
+        ],
+        "clinical_pearls": [
+          "HCC: arterial enhancement + portal venous washout",
+          "Use LI-RADS criteria for standardized reporting"
+        ]
+      }
+    },
+    {
+      "id": "t2_haste",
+      "name": "HASTE",
+      "display_name": "T2 HASTE (Single-shot)",
       "category": "anatomic",
-      "fat_sat": false,
+      "pulse_sequence": "SS-FSE",
+      "pulse_sequence_info": "Single-Shot Fast Spin Echo (HASTE/SS-TSE) - Entire k-space filled in one shot. Ultrafast acquisition (<1 sec/slice) reduces motion artifact.",
       "is_post_contrast": false,
       "time_seconds": 60,
       "time_range": [30, 90],
-      "common_slice_thickness": [5, 6],
+      "planes": ["axial", "sagittal", "coronal"],
       "regions": ["abdomen", "chest"],
-      "keywords": ["haste", "t2", "fast", "breath hold", "abdomen"],
       "rationale": {
         "purpose": "Ultrafast T2 imaging - single breath hold per slice",
         "what_it_shows": [
@@ -1091,12 +672,18 @@
       }
     }
   ],
+  "plane_labels": {
+    "axial": "Axial",
+    "sagittal": "Sagittal",
+    "coronal": "Coronal",
+    "3d": "3D Volume",
+    "2d": "2D"
+  },
   "categories": [
     { "id": "anatomic", "name": "Anatomic", "description": "Standard structural imaging" },
     { "id": "functional", "name": "Functional", "description": "DWI, perfusion, spectroscopy" },
     { "id": "contrast", "name": "Post-Contrast", "description": "After gadolinium administration" },
     { "id": "vascular", "name": "Vascular", "description": "MRA, MRV, angiography" },
     { "id": "specialized", "name": "Specialized", "description": "MRCP, cardiac, etc." }
-  ],
-  "weightings": ["T1", "T2", "T2-FLAIR", "PD", "DWI", "ADC", "SWI", "STIR", "TOF", "PC"]
+  ]
 }
