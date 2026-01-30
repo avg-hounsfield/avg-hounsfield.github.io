@@ -1181,18 +1181,32 @@
     {
       "topic": "pulmonary embolism",
       "display_name": "Pulmonary Embolism",
-      "card_type": "CLINICAL_FIRST",
+      "card_type": "STRONG",
       "scenario_count": 12,
       "region": "chest",
       "primary_recommendation": {
-        "name": "MRA chest with IV contrast",
-        "display": "MRA chest with IV contras OR CTA pulmonary arteries wi",
+        "name": "CTA pulmonary arteries",
+        "display": "CTA Pulmonary Arteries (CTPA)",
+        "modality": "CT",
+        "rating": 9,
+        "consensus_pct": 95,
         "equivalent_procedures": [
-          "MRA chest with IV contrast",
-          "CTA pulmonary arteries with IV contrast"
+          "CTA pulmonary arteries with IV contrast",
+          "CTPA",
+          "CT angiography chest"
         ],
-        "count": 2,
-        "consensus_pct": 17
+        "alternatives": [
+          {
+            "name": "V/Q scan",
+            "rating": 8,
+            "note": "If contrast contraindicated"
+          },
+          {
+            "name": "MRA chest",
+            "rating": 7,
+            "note": "For follow-up/surveillance"
+          }
+        ]
       },
       "alternatives": [],
       "no_imaging_pct": 83,
