@@ -1758,6 +1758,258 @@
         "Mesenteric ischemia, acute, suspected, initial exam",
         "Mesenteric ischemia, chronic, suspected, initial exam"
       ]
+    },
+    {
+      "topic": "hydrocephalus",
+      "display_name": "Hydrocephalus",
+      "card_type": "STRONG",
+      "region": "neuro",
+      "scenario_count": 50,
+      "primary_recommendation": {
+        "name": "MRI brain without contrast",
+        "display": "MRI Brain",
+        "modality": "MRI",
+        "rating": 9,
+        "consensus_pct": 90
+      }
+    },
+    {
+      "topic": "spinal stenosis",
+      "display_name": "Spinal Stenosis",
+      "card_type": "STRONG",
+      "region": "spine",
+      "scenario_count": 50,
+      "primary_recommendation": {
+        "name": "MRI spine without contrast",
+        "display": "MRI Spine",
+        "modality": "MRI",
+        "rating": 9,
+        "consensus_pct": 90
+      }
+    },
+    {
+      "topic": "aortic aneurysm",
+      "display_name": "Aortic Aneurysm",
+      "card_type": "STRONG",
+      "region": "chest",
+      "scenario_count": 50,
+      "primary_recommendation": {
+        "name": "CTA chest abdomen pelvis",
+        "display": "CTA Aorta",
+        "modality": "CT",
+        "rating": 9,
+        "consensus_pct": 95
+      }
+    },
+    {
+      "topic": "dvt",
+      "display_name": "Deep Vein Thrombosis (DVT)",
+      "card_type": "STRONG",
+      "region": "vascular",
+      "scenario_count": 50,
+      "primary_recommendation": {
+        "name": "Ultrasound duplex lower extremity venous",
+        "display": "Venous Duplex Ultrasound",
+        "modality": "US",
+        "rating": 9,
+        "consensus_pct": 95
+      }
+    },
+    {
+      "topic": "cholecystitis",
+      "display_name": "Cholecystitis / Gallbladder",
+      "card_type": "STRONG",
+      "region": "abdomen",
+      "scenario_count": 47,
+      "primary_recommendation": {
+        "name": "Ultrasound RUQ",
+        "display": "RUQ Ultrasound",
+        "modality": "US",
+        "rating": 9,
+        "consensus_pct": 95
+      }
+    },
+    {
+      "topic": "multiple sclerosis",
+      "display_name": "Multiple Sclerosis",
+      "card_type": "STRONG",
+      "region": "neuro",
+      "scenario_count": 26,
+      "primary_recommendation": {
+        "name": "MRI brain and spine with contrast",
+        "display": "MRI Brain/Spine with Contrast",
+        "modality": "MRI",
+        "rating": 9,
+        "consensus_pct": 95
+      }
+    },
+    {
+      "topic": "carotid stenosis",
+      "display_name": "Carotid Stenosis",
+      "card_type": "STRONG",
+      "region": "vascular",
+      "scenario_count": 26,
+      "primary_recommendation": {
+        "name": "Ultrasound carotid duplex",
+        "display": "Carotid Duplex Ultrasound",
+        "modality": "US",
+        "rating": 9,
+        "consensus_pct": 90
+      }
+    },
+    {
+      "topic": "kidney stone",
+      "display_name": "Kidney Stone / Renal Colic",
+      "card_type": "STRONG",
+      "region": "abdomen",
+      "scenario_count": 40,
+      "primary_recommendation": {
+        "name": "CT abdomen pelvis without contrast",
+        "display": "CT Stone Protocol (non-contrast)",
+        "modality": "CT",
+        "rating": 9,
+        "consensus_pct": 95
+      }
+    },
+    {
+      "topic": "thyroid nodule",
+      "display_name": "Thyroid Nodule",
+      "card_type": "STRONG",
+      "region": "neck",
+      "scenario_count": 30,
+      "primary_recommendation": {
+        "name": "Ultrasound thyroid",
+        "display": "Thyroid Ultrasound",
+        "modality": "US",
+        "rating": 9,
+        "consensus_pct": 95
+      }
+    },
+    {
+      "topic": "rotator cuff",
+      "display_name": "Rotator Cuff Injury",
+      "card_type": "CONDITIONAL",
+      "region": "msk",
+      "scenario_count": 35,
+      "primary_recommendation": {
+        "name": "MRI shoulder without contrast",
+        "display": "MRI Shoulder",
+        "modality": "MRI",
+        "rating": 9,
+        "consensus_pct": 85
+      }
+    },
+    {
+      "topic": "acl tear",
+      "display_name": "ACL / Knee Ligament Injury",
+      "card_type": "STRONG",
+      "region": "msk",
+      "scenario_count": 40,
+      "primary_recommendation": {
+        "name": "MRI knee without contrast",
+        "display": "MRI Knee",
+        "modality": "MRI",
+        "rating": 9,
+        "consensus_pct": 95
+      }
+    },
+    {
+      "topic": "meniscus tear",
+      "display_name": "Meniscus Tear",
+      "card_type": "STRONG",
+      "region": "msk",
+      "scenario_count": 40,
+      "primary_recommendation": {
+        "name": "MRI knee without contrast",
+        "display": "MRI Knee",
+        "modality": "MRI",
+        "rating": 9,
+        "consensus_pct": 95
+      }
+    },
+    {
+      "topic": "herniated disc",
+      "display_name": "Herniated Disc",
+      "card_type": "CONDITIONAL",
+      "region": "spine",
+      "scenario_count": 45,
+      "primary_recommendation": {
+        "name": "MRI spine without contrast",
+        "display": "MRI Spine",
+        "modality": "MRI",
+        "rating": 8,
+        "consensus_pct": 80
+      }
+    },
+    {
+      "topic": "pelvic pain",
+      "display_name": "Pelvic Pain (Female)",
+      "card_type": "STRONG",
+      "region": "pelvis",
+      "scenario_count": 35,
+      "primary_recommendation": {
+        "name": "Ultrasound pelvis transvaginal",
+        "display": "Pelvic Ultrasound",
+        "modality": "US",
+        "rating": 9,
+        "consensus_pct": 90
+      }
+    },
+    {
+      "topic": "testicular pain",
+      "display_name": "Testicular Pain / Mass",
+      "card_type": "STRONG",
+      "region": "pelvis",
+      "scenario_count": 30,
+      "primary_recommendation": {
+        "name": "Ultrasound scrotum",
+        "display": "Scrotal Ultrasound",
+        "modality": "US",
+        "rating": 9,
+        "consensus_pct": 95
+      }
+    },
+    {
+      "topic": "hematuria",
+      "display_name": "Hematuria",
+      "card_type": "STRONG",
+      "region": "abdomen",
+      "scenario_count": 40,
+      "primary_recommendation": {
+        "name": "CT urography",
+        "display": "CT Urography",
+        "modality": "CT",
+        "rating": 9,
+        "consensus_pct": 90
+      }
+    },
+    {
+      "topic": "cirrhosis",
+      "display_name": "Cirrhosis / Chronic Liver Disease",
+      "card_type": "STRONG",
+      "region": "abdomen",
+      "scenario_count": 35,
+      "primary_recommendation": {
+        "name": "Ultrasound abdomen with doppler",
+        "display": "Liver Ultrasound with Doppler",
+        "modality": "US",
+        "rating": 9,
+        "consensus_pct": 90
+      }
+    },
+    {
+      "topic": "jaundice",
+      "display_name": "Jaundice / Biliary Obstruction",
+      "card_type": "STRONG",
+      "region": "abdomen",
+      "scenario_count": 35,
+      "primary_recommendation": {
+        "name": "Ultrasound abdomen RUQ",
+        "display": "RUQ Ultrasound",
+        "modality": "US",
+        "rating": 9,
+        "consensus_pct": 90
+      }
     }
   ],
   "card_counts": {

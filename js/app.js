@@ -1778,6 +1778,134 @@ class ProtocolHelpApp {
     return div.innerHTML;
   }
 
+  // ========================================
+  // Real-time Search Suggestions
+  // ========================================
+  
+  initSearchSuggestions() {
+    const globalSearchInput = document.getElementById('globalSearchInput');
+    if (!globalSearchInput) return;
+
+    // Create suggestions dropdown
+    const suggestionsDiv = document.createElement('div');
+    suggestionsDiv.className = 'search-suggestions hidden';
+    suggestionsDiv.id = 'searchSuggestions';
+    globalSearchInput.parentNode.appendChild(suggestionsDiv);
+
+    // Debounced input handler
+    let debounceTimer;
+    globalSearchInput.addEventListener('input', (e) => {
+      clearTimeout(debounceTimer);
+      const query = e.target.value.trim().toLowerCase();
+      
+      if (query.length < 2) {
+        this.hideSuggestions();
+        return;
+      }
+
+      debounceTimer = setTimeout(() => {
+        this.showSuggestions(query);
+      }, 150);
+    });
+
+    // Hide on blur (with delay for click handling)
+    globalSearchInput.addEventListener('blur', () => {
+      setTimeout(() => this.hideSuggestions(), 200);
+    });
+
+    // Show on focus if has value
+    globalSearchInput.addEventListener('focus', (e) => {
+      const query = e.target.value.trim().toLowerCase();
+      if (query.length >= 2) {
+        this.showSuggestions(query);
+      }
+    });
+
+    // Keyboard navigation
+    globalSearchInput.addEventListener('keydown', (e) => {
+      const suggestions = document.getElementById('searchSuggestions');
+      if (!suggestions || suggestions.classList.contains('hidden')) return;
+
+      const items = suggestions.querySelectorAll('.suggestion-item');
+      const activeItem = suggestions.querySelector('.suggestion-item.active');
+      let activeIndex = Array.from(items).indexOf(activeItem);
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeIndex = Math.min(activeIndex + 1, items.length - 1);
+        this.setActiveSuggestion(items, activeIndex);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeIndex = Math.max(activeIndex - 1, 0);
+        this.setActiveSuggestion(items, activeIndex);
+      } else if (e.key === 'Enter' && activeItem) {
+        e.preventDefault();
+        activeItem.click();
+      } else if (e.key === 'Escape') {
+        this.hideSuggestions();
+      }
+    });
+  }
+
+  showSuggestions(query) {
+    const suggestions = document.getElementById('searchSuggestions');
+    if (!suggestions || !this.summaryCards) return;
+
+    // Find matching cards
+    const matches = this.summaryCards.cards
+      .filter(card => {
+        const topic = (card.topic || '').toLowerCase();
+        const display = (card.display_name || '').toLowerCase();
+        return topic.includes(query) || display.includes(query);
+      })
+      .slice(0, 6);
+
+    if (matches.length === 0) {
+      this.hideSuggestions();
+      return;
+    }
+
+    let html = '';
+    for (let i = 0; i < matches.length; i++) {
+      const card = matches[i];
+      const rec = card.primary_recommendation || {};
+      const modality = rec.modality || '';
+      const rating = rec.rating || '';
+      const displayName = card.display_name || card.topic;
+      const activeClass = i === 0 ? ' active' : '';
+      html += '<div class="suggestion-item' + activeClass + '" data-topic="' + card.topic + '">';
+      html += '<span class="suggestion-topic">' + displayName + '</span>';
+      html += '<span class="suggestion-meta">' + modality + (rating ? ' • ' + rating : '') + '</span>';
+      html += '</div>';
+    }
+    suggestions.innerHTML = html;
+
+    // Add click handlers
+    suggestions.querySelectorAll('.suggestion-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const topic = item.dataset.topic;
+        document.getElementById('globalSearchInput').value = topic;
+        this.handleGlobalSearch(topic);
+        this.hideSuggestions();
+      });
+    });
+
+    suggestions.classList.remove('hidden');
+  }
+
+  hideSuggestions() {
+    const suggestions = document.getElementById('searchSuggestions');
+    if (suggestions) {
+      suggestions.classList.add('hidden');
+    }
+  }
+
+  setActiveSuggestion(items, index) {
+    items.forEach((item, i) => {
+      item.classList.toggle('active', i === index);
+    });
+  }
+
   formatRegionName(region) {
     const names = {
       neuro: 'Neuro',
