@@ -1,15 +1,40 @@
 {
   "version": "3.0.0",
-  "generated_at": "2026-01-29T15:25:51.675613",
+  "generated_at": "2026-01-29T21:17:51.933839",
   "total_scenarios": 3226,
-  "matched_scenarios": 1845,
-  "match_rate_pct": 57,
+  "matched_scenarios": 2684,
+  "match_rate_pct": 83,
   "cards": [
+    {
+      "topic": "back pain",
+      "display_name": "Back Pain",
+      "card_type": "CLINICAL_FIRST",
+      "scenario_count": 274,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": "Radiography sacroiliac joints",
+        "display": "Radiography sacroiliac jo OR Radiography sacroiliac jo",
+        "equivalent_procedures": [
+          "Radiography sacroiliac joints",
+          "Radiography sacroiliac joints and spine area of interest"
+        ],
+        "count": 24,
+        "consensus_pct": 9
+      },
+      "alternatives": [],
+      "no_imaging_pct": 69,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Hip pain, chronic, low back pain, hip osteoarthritis on radiography, next imagin",
+        "Inflammatory back pain, buttock symptoms, axial spondyloarthritis suspected",
+        "Inflammatory back pain, buttock symptoms, axial spondyloarthritis suspected, rad"
+      ]
+    },
     {
       "topic": "fracture",
       "display_name": "Fracture",
       "card_type": "STRONG",
-      "scenario_count": 255,
+      "scenario_count": 240,
       "region": "msk",
       "primary_recommendation": {
         "name": "X-Ray",
@@ -17,8 +42,8 @@
         "equivalent_procedures": [
           "X-Ray"
         ],
-        "count": 207,
-        "consensus_pct": 81
+        "count": 205,
+        "consensus_pct": 85
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -30,34 +55,10 @@
       ]
     },
     {
-      "topic": "pneumonia",
-      "display_name": "Pneumonia",
-      "card_type": "CONDITIONAL",
-      "scenario_count": 225,
-      "region": "spine",
-      "primary_recommendation": {
-        "name": "X-Ray",
-        "display": "X-Ray",
-        "equivalent_procedures": [
-          "X-Ray"
-        ],
-        "count": 94,
-        "consensus_pct": 42
-      },
-      "alternatives": [],
-      "no_imaging_pct": 23,
-      "recommend_detailed_search": false,
-      "sample_scenarios": [
-        "Orbital infection suspected",
-        "Cervical spine pain, acute, no trauma, infection",
-        "Cervical spine pain, acute, no trauma, infection suspected"
-      ]
-    },
-    {
       "topic": "arthritis",
       "display_name": "Arthritis",
-      "card_type": "CONDITIONAL",
-      "scenario_count": 204,
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 168,
       "region": "msk",
       "primary_recommendation": {
         "name": "X-Ray",
@@ -65,16 +66,46 @@
         "equivalent_procedures": [
           "X-Ray"
         ],
-        "count": 88,
-        "consensus_pct": 43
+        "count": 66,
+        "consensus_pct": 39
       },
       "alternatives": [],
       "no_imaging_pct": 0,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Sacroiliac joint pain, idiopathic arthritis suspected",
+        "Sacroiliac joint pain, idiopathic arthritis, follow-up imaging",
+        "Hand pain, chronic, nonspecific arthritis findings on radiography, next imaging "
+      ]
+    },
+    {
+      "topic": "bone tumor",
+      "display_name": "Bone Tumor",
+      "card_type": "STRONG",
+      "scenario_count": 152,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "X-Ray",
+        "display": "X-Ray",
+        "equivalent_procedures": [
+          "X-Ray"
+        ],
+        "count": 126,
+        "consensus_pct": 83
+      },
+      "alternatives": [
+        {
+          "name": "CT Chest W/O Contrast",
+          "percentage": 17,
+          "count": 26
+        }
+      ],
+      "no_imaging_pct": 0,
       "recommend_detailed_search": false,
       "sample_scenarios": [
-        "Cervical and thoracic spine pain, idiopathic arthritis suspected",
-        "Cervical and thoracic spine pain, idiopathic arthritis, follow-up imaging",
-        "Cervical spine pain, idiopathic arthritis suspected"
+        "Primary bone tumor suspected, cervical spine",
+        "Primary bone tumor suspected, cervical spine, lesion on radiography, aggressive ",
+        "Primary bone tumor suspected, cervical spine, lesion on radiography, benign appe"
       ]
     },
     {
@@ -105,28 +136,43 @@
       ]
     },
     {
-      "topic": "back pain",
-      "display_name": "Back Pain",
-      "card_type": "HIGH_VARIANCE",
-      "scenario_count": 120,
-      "region": "spine",
+      "topic": "melanoma",
+      "display_name": "Melanoma",
+      "card_type": "STRONG",
+      "scenario_count": 132,
+      "region": "msk",
       "primary_recommendation": {
-        "name": "Radiography sacroiliac joints",
-        "display": "Radiography sacroiliac jo OR Radiography sacroiliac jo",
+        "name": "FDG-PET/CT whole body",
+        "display": "FDG-PET/CT whole body",
         "equivalent_procedures": [
-          "Radiography sacroiliac joints",
-          "Radiography sacroiliac joints and spine area of interest"
+          "FDG-PET/CT whole body"
         ],
-        "count": 24,
-        "consensus_pct": 20
+        "count": 108,
+        "consensus_pct": 82
       },
-      "alternatives": [],
-      "no_imaging_pct": 35,
-      "recommend_detailed_search": true,
+      "alternatives": [
+        {
+          "name": "MRI Brain W/O & W/ Contrast",
+          "percentage": 45,
+          "count": 60
+        },
+        {
+          "name": "CT Chest W/ Contrast",
+          "percentage": 45,
+          "count": 60
+        },
+        {
+          "name": "MRI abdomen and pelvis without and with IV contrast",
+          "percentage": 18,
+          "count": 24
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
       "sample_scenarios": [
-        "Hip pain, chronic, low back pain, hip osteoarthritis on radiography, next imagin",
-        "Inflammatory back pain, buttock symptoms, axial spondyloarthritis suspected",
-        "Inflammatory back pain, buttock symptoms, axial spondyloarthritis suspected, rad"
+        "Cutaneous melanoma, head, metastatic disease at initial diagnosis, surveillance",
+        "Cutaneous melanoma, head, negative clinical or surgical regional lymph nodes or ",
+        "Cutaneous melanoma, head, newly diagnosed, microscopic satellite on primary lesi"
       ]
     },
     {
@@ -154,25 +200,90 @@
       ]
     },
     {
+      "topic": "vascular malformation",
+      "display_name": "Vascular Malformation",
+      "card_type": "STRONG",
+      "scenario_count": 105,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "US area of interest",
+        "display": "US area of interest OR US duplex Doppler area of",
+        "equivalent_procedures": [
+          "US area of interest",
+          "US duplex Doppler area of interest"
+        ],
+        "count": 91,
+        "consensus_pct": 87
+      },
+      "alternatives": [
+        {
+          "name": "US duplex Doppler extremity area of interest",
+          "percentage": 11,
+          "count": 12
+        },
+        {
+          "name": "MRA extremity area of interest without and with IV contrast",
+          "percentage": 11,
+          "count": 12
+        },
+        {
+          "name": "MRI extremity area of interest without and with IV contrast",
+          "percentage": 11,
+          "count": 12
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Hemangioma suspected, head",
+        "Vascular malformation suspected on US, head, next imaging study",
+        "Vascular malformation suspected, head, hemangioma not suspected"
+      ]
+    },
+    {
+      "topic": "soft tissue infection",
+      "display_name": "Soft Tissue Infection",
+      "card_type": "STRONG",
+      "scenario_count": 100,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "X-Ray",
+        "display": "X-Ray",
+        "equivalent_procedures": [
+          "X-Ray"
+        ],
+        "count": 94,
+        "consensus_pct": 94
+      },
+      "alternatives": [],
+      "no_imaging_pct": 1,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Orbital cellulitis suspected, initial exam",
+        "PAVM suspected, brain abscess, lung nodule on chest radiography, next imaging st",
+        "Soft tissue infection suspected, ankle, hx of puncture wound, possible foreign b"
+      ]
+    },
+    {
       "topic": "child abuse",
       "display_name": "Child Abuse",
       "card_type": "STRONG",
-      "scenario_count": 97,
-      "region": "neuro",
+      "scenario_count": 91,
+      "region": "spine",
       "primary_recommendation": {
         "name": "CT Brain W/O Contrast",
         "display": "CT Brain W/O Contrast",
         "equivalent_procedures": [
           "CT Brain W/O Contrast"
         ],
-        "count": 68,
-        "consensus_pct": 70
+        "count": 65,
+        "consensus_pct": 71
       },
       "alternatives": [
         {
           "name": "Radiography skeletal survey",
           "percentage": 52,
-          "count": 50
+          "count": 47
         }
       ],
       "no_imaging_pct": 0,
@@ -181,6 +292,33 @@
         "Physical abuse suspected, concern for abdominal injury based on clinical present",
         "Physical abuse suspected, concern for abdominal injury based on clinical present",
         "Physical abuse suspected, concern for cervical and lumbar spine injury based on "
+      ]
+    },
+    {
+      "topic": "neck pain",
+      "display_name": "Neck Pain",
+      "card_type": "CLINICAL_FIRST",
+      "scenario_count": 91,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": "MRI spine area of interest without IV contrast",
+        "display": "MRI spine area of interes OR CT spine area of interest OR MRI C-Spine W/O & W/ Cont",
+        "equivalent_procedures": [
+          "MRI spine area of interest without IV contrast",
+          "CT spine area of interest without IV contrast",
+          "MRI C-Spine W/O & W/ Contrast",
+          "MRI Total Spine W/O & W/ Contrast"
+        ],
+        "count": 2,
+        "consensus_pct": 2
+      },
+      "alternatives": [],
+      "no_imaging_pct": 82,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Cervical spine pain, acute, no trauma, infection",
+        "Cervical spine pain, acute, no radiculopathy, no trauma, no red flags",
+        "Cervical spine pain, acute, no trauma, infection suspected"
       ]
     },
     {
@@ -215,6 +353,76 @@
       ]
     },
     {
+      "topic": "foot pain",
+      "display_name": "Foot Pain",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 58,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "MRI Foot W/O Contrast",
+        "display": "MRI Foot W/O Contrast",
+        "equivalent_procedures": [
+          "MRI Foot W/O Contrast"
+        ],
+        "count": 32,
+        "consensus_pct": 55
+      },
+      "alternatives": [
+        {
+          "name": "X-Ray",
+          "percentage": 26,
+          "count": 15
+        },
+        {
+          "name": "CT foot without IV contrast",
+          "percentage": 24,
+          "count": 14
+        },
+        {
+          "name": "US foot",
+          "percentage": 22,
+          "count": 13
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Physical abuse suspected, concern for foot injury based on clinical presentation",
+        "Physical abuse suspected, concern for foot injury based on clinical presentation",
+        "Midfoot pain, chronic, negative or equivocal radiography, occult fracture suspec"
+      ]
+    },
+    {
+      "topic": "knee pain",
+      "display_name": "Knee Pain",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 56,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "Radiography knee",
+        "display": "Radiography knee",
+        "equivalent_procedures": [
+          "Radiography knee"
+        ],
+        "count": 20,
+        "consensus_pct": 36
+      },
+      "alternatives": [
+        {
+          "name": "X-Ray",
+          "percentage": 27,
+          "count": 15
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Physical abuse suspected, concern for knee injury based on clinical presentation",
+        "Physical abuse suspected, concern for knee injury based on clinical presentation",
+        "Hip pain, chronic, knee pain, hip osteoarthritis on radiography, next imaging st"
+      ]
+    },
+    {
       "topic": "shoulder pain",
       "display_name": "Shoulder Pain",
       "card_type": "CONDITIONAL",
@@ -242,6 +450,31 @@
         "Physical abuse suspected, concern for shoulder injury based on clinical presenta",
         "Physical abuse suspected, concern for shoulder injury based on clinical presenta",
         "Shoulder pain, acute, any etiology"
+      ]
+    },
+    {
+      "topic": "elbow pain",
+      "display_name": "Elbow Pain",
+      "card_type": "STRONG",
+      "scenario_count": 49,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "X-Ray",
+        "display": "X-Ray OR Radiography elbow",
+        "equivalent_procedures": [
+          "X-Ray",
+          "Radiography elbow"
+        ],
+        "count": 24,
+        "consensus_pct": 70
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Physical abuse suspected, concern for elbow injury based on clinical presentatio",
+        "Physical abuse suspected, concern for elbow injury based on clinical presentatio",
+        "Elbow pain, acute, fracture suspected, radiography indeterminate, next imaging s"
       ]
     },
     {
@@ -273,6 +506,101 @@
         "Physical abuse suspected, concern for hip injury based on clinical presentation ",
         "Physical abuse suspected, concern for hip injury based on clinical presentation ",
         "Hip pain, acute, traumatic, fracture on radiography, next imaging study"
+      ]
+    },
+    {
+      "topic": "spine infection",
+      "display_name": "Spine Infection",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 48,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": null,
+        "display": null,
+        "equivalent_procedures": [],
+        "count": 0,
+        "consensus_pct": 0
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Spine infection suspected, cervical and lumbar, CT abnormal, next imaging study",
+        "Spine infection suspected, cervical and lumbar, decubitus ulcer",
+        "Spine infection suspected, cervical and lumbar, new neuro deficit"
+      ]
+    },
+    {
+      "topic": "osteonecrosis",
+      "display_name": "Osteonecrosis",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 48,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": null,
+        "display": null,
+        "equivalent_procedures": [],
+        "count": 0,
+        "consensus_pct": 0
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Osteonecrosis suspected, ankle",
+        "Osteonecrosis suspected, ankle, radiography normal, next imaging study",
+        "Osteonecrosis suspected, ankle, suspicious findings on radiography, next imaging"
+      ]
+    },
+    {
+      "topic": "spine trauma",
+      "display_name": "Spine Trauma",
+      "card_type": "CLINICAL_FIRST",
+      "scenario_count": 46,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": "Radiography cervical spine",
+        "display": "Radiography cervical spin OR Radiography skeletal surv OR CT Brain W/O Contrast",
+        "equivalent_procedures": [
+          "Radiography cervical spine",
+          "Radiography skeletal survey",
+          "CT Brain W/O Contrast"
+        ],
+        "count": 1,
+        "consensus_pct": 2
+      },
+      "alternatives": [],
+      "no_imaging_pct": 85,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Cervical spine trauma, acute, blunt, axial load to head",
+        "Physical abuse suspected, concern for cervical spine injury based on clinical pr",
+        "Physical abuse suspected, concern for cervical spine injury based on clinical pr"
+      ]
+    },
+    {
+      "topic": "ankle pain",
+      "display_name": "Ankle Pain",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 42,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "Radiography ankle",
+        "display": "Radiography ankle OR X-Ray",
+        "equivalent_procedures": [
+          "Radiography ankle",
+          "X-Ray"
+        ],
+        "count": 17,
+        "consensus_pct": 40
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Ankle trauma, neurologic disorder lower leg",
+        "Physical abuse suspected, concern for ankle injury based on clinical presentatio",
+        "Physical abuse suspected, concern for ankle injury based on clinical presentatio"
       ]
     },
     {
@@ -314,30 +642,6 @@
         "Cognitive impairment, recent stroke, vascular dementia suspected",
         "Ischemic stroke suspected, acute, focal neuro deficit",
         "Stroke suspected, acute non-sickle cell, <24 hrs from sx onset, emergent imaging"
-      ]
-    },
-    {
-      "topic": "knee pain",
-      "display_name": "Knee Pain",
-      "card_type": "HIGH_VARIANCE",
-      "scenario_count": 38,
-      "region": "msk",
-      "primary_recommendation": {
-        "name": "X-Ray",
-        "display": "X-Ray",
-        "equivalent_procedures": [
-          "X-Ray"
-        ],
-        "count": 15,
-        "consensus_pct": 39
-      },
-      "alternatives": [],
-      "no_imaging_pct": 0,
-      "recommend_detailed_search": true,
-      "sample_scenarios": [
-        "Physical abuse suspected, concern for knee injury based on clinical presentation",
-        "Physical abuse suspected, concern for knee injury based on clinical presentation",
-        "Hip pain, chronic, knee pain, hip osteoarthritis on radiography, next imaging st"
       ]
     },
     {
@@ -405,6 +709,56 @@
       ]
     },
     {
+      "topic": "sepsis",
+      "display_name": "Sepsis",
+      "card_type": "STRONG",
+      "scenario_count": 32,
+      "region": "chest",
+      "primary_recommendation": {
+        "name": "Chest X-Ray",
+        "display": "Chest X-Ray",
+        "equivalent_procedures": [
+          "Chest X-Ray"
+        ],
+        "count": 32,
+        "consensus_pct": 100
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Sepsis suspected, non specific symptoms, unknown origin, chest radiography equiv",
+        "Sepsis suspected, non specific symptoms, unknown origin, chest radiography nonsp",
+        "Sepsis suspected, non specific symptoms, unknown origin, chest radiography norma"
+      ]
+    },
+    {
+      "topic": "pneumonia",
+      "display_name": "Pneumonia",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 30,
+      "region": "chest",
+      "primary_recommendation": {
+        "name": "Radiography tibia and fibula",
+        "display": "Radiography tibia and fib OR Fluoroscopy fistulography OR US duplex Doppler hemodia",
+        "equivalent_procedures": [
+          "Radiography tibia and fibula",
+          "Fluoroscopy fistulography hemodialysis access area of interest",
+          "US duplex Doppler hemodialysis access area of interest"
+        ],
+        "count": 4,
+        "consensus_pct": 13
+      },
+      "alternatives": [],
+      "no_imaging_pct": 27,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Orbital infection suspected",
+        "Hip replaced, symptomatic, infection excluded, radiography performed, next imagi",
+        "Hip replaced, symptomatic, infection not excluded, radiography performed, next i"
+      ]
+    },
+    {
       "topic": "head trauma",
       "display_name": "Head Trauma",
       "card_type": "CLINICAL_FIRST",
@@ -424,30 +778,6 @@
         "Head trauma, acute, mild, GCS 13-15, imaging indicated per clinical decision rul",
         "Head trauma, acute, mild, GCS 13-15, imaging not indicated per clinical decision",
         "Head trauma, acute, moderate, GCS 9-12"
-      ]
-    },
-    {
-      "topic": "ankle pain",
-      "display_name": "Ankle Pain",
-      "card_type": "CONDITIONAL",
-      "scenario_count": 27,
-      "region": "msk",
-      "primary_recommendation": {
-        "name": "X-Ray",
-        "display": "X-Ray",
-        "equivalent_procedures": [
-          "X-Ray"
-        ],
-        "count": 15,
-        "consensus_pct": 56
-      },
-      "alternatives": [],
-      "no_imaging_pct": 0,
-      "recommend_detailed_search": false,
-      "sample_scenarios": [
-        "Physical abuse suspected, concern for ankle injury based on clinical presentatio",
-        "Physical abuse suspected, concern for ankle injury based on clinical presentatio",
-        "Ped <=5yo, acute limp, ankle pain"
       ]
     },
     {
@@ -506,27 +836,28 @@
       ]
     },
     {
-      "topic": "chest pain",
-      "display_name": "Chest Pain",
-      "card_type": "CONDITIONAL",
-      "scenario_count": 22,
-      "region": "chest",
+      "topic": "hemodialysis access",
+      "display_name": "Hemodialysis Access",
+      "card_type": "STRONG",
+      "scenario_count": 23,
+      "region": "msk",
       "primary_recommendation": {
-        "name": "Chest X-Ray",
-        "display": "Chest X-Ray",
+        "name": "Fluoroscopy fistulography hemodialysis access area of interest",
+        "display": "Fluoroscopy fistulography OR US duplex Doppler hemodia",
         "equivalent_procedures": [
-          "Chest X-Ray"
+          "Fluoroscopy fistulography hemodialysis access area of interest",
+          "US duplex Doppler hemodialysis access area of interest"
         ],
-        "count": 14,
-        "consensus_pct": 64
+        "count": 23,
+        "consensus_pct": 100
       },
       "alternatives": [],
       "no_imaging_pct": 0,
       "recommend_detailed_search": false,
       "sample_scenarios": [
-        "Chest pain, acute aortic syndrome suspected",
-        "Chest pain, acute, nonspecific, low probability CAD",
-        "Chest pain, chronic, low-mod prob of CAD"
+        "Clinical suspicion of central venous stenosis or occlusion suggested by swelling",
+        "Hemodialysis access cannulation site, lower extremity, abnormal skin changes, in",
+        "Hemodialysis access cannulation site, lower extremity, eschar, initial imaging, "
       ]
     },
     {
@@ -551,28 +882,6 @@
         "Otitis externa, immunosuppressed, seizures",
         "Otitis externa, poorly controlled diabetes, seizures",
         "Otitis media, seizures"
-      ]
-    },
-    {
-      "topic": "radiculopathy",
-      "display_name": "Radiculopathy",
-      "card_type": "HIGH_VARIANCE",
-      "scenario_count": 20,
-      "region": "spine",
-      "primary_recommendation": {
-        "name": null,
-        "display": null,
-        "equivalent_procedures": [],
-        "count": 0,
-        "consensus_pct": 0
-      },
-      "alternatives": [],
-      "no_imaging_pct": 30,
-      "recommend_detailed_search": true,
-      "sample_scenarios": [
-        "Lumbar spine trauma, acute, blunt, nerve root injury suspected, with or without ",
-        "Lumbar spine trauma, acute, blunt, nerve root injury, with or without trauma on ",
-        "Thoracic spine trauma, acute, blunt, nerve root injury suspected, with or withou"
       ]
     },
     {
@@ -641,6 +950,55 @@
       ]
     },
     {
+      "topic": "ovarian cancer",
+      "display_name": "Ovarian Cancer",
+      "card_type": "CLINICAL_FIRST",
+      "scenario_count": 17,
+      "region": "abdomen",
+      "primary_recommendation": {
+        "name": "CT Abdomen/Pelvis W/ Contrast",
+        "display": "CT Abdomen/Pelvis W/ Cont OR CT Chest W/ Contrast",
+        "equivalent_procedures": [
+          "CT Abdomen/Pelvis W/ Contrast",
+          "CT Chest W/ Contrast"
+        ],
+        "count": 5,
+        "consensus_pct": 29
+      },
+      "alternatives": [],
+      "no_imaging_pct": 71,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Ovarian cancer screening, postmenopausal, average risk",
+        "Ovarian cancer screening, postmenopausal, high risk, elevated CA-125",
+        "Ovarian cancer screening, postmenopausal, high risk, family hx of ovarian cancer"
+      ]
+    },
+    {
+      "topic": "hydronephrosis",
+      "display_name": "Hydronephrosis",
+      "card_type": "STRONG",
+      "scenario_count": 15,
+      "region": "peds",
+      "primary_recommendation": {
+        "name": "US kidneys and bladder",
+        "display": "US kidneys and bladder",
+        "equivalent_procedures": [
+          "US kidneys and bladder"
+        ],
+        "count": 13,
+        "consensus_pct": 87
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Hydronephrosis, antenatal, hydronephrosis and bladder wall thickening on initial",
+        "Hydronephrosis, antenatal, hydronephrosis and bladder wall thickening on initial",
+        "Hydronephrosis, unknown cause, solitary kidney, asymptomatic"
+      ]
+    },
+    {
       "topic": "liver mass",
       "display_name": "Liver Mass",
       "card_type": "STRONG",
@@ -664,6 +1022,28 @@
         "Liver lesion, <1cm, incidental finding on noncontrast MRI, chronic liver disease",
         "Liver lesion, <1cm, incidental finding on noncontrast or single phase CT, chroni",
         "Liver lesion, <1cm, incidental finding on US, chronic liver disease"
+      ]
+    },
+    {
+      "topic": "radiculopathy",
+      "display_name": "Radiculopathy",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 14,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": null,
+        "display": null,
+        "equivalent_procedures": [],
+        "count": 0,
+        "consensus_pct": 0
+      },
+      "alternatives": [],
+      "no_imaging_pct": 43,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Lumbar spine trauma, acute, blunt, nerve root injury suspected, with or without ",
+        "Lumbar spine trauma, acute, blunt, nerve root injury, with or without trauma on ",
+        "Thoracic spine trauma, acute, blunt, nerve root injury suspected, with or withou"
       ]
     },
     {
@@ -707,36 +1087,33 @@
       ]
     },
     {
-      "topic": "lung nodule",
-      "display_name": "Lung Nodule",
-      "card_type": "STRONG",
-      "scenario_count": 13,
+      "topic": "chest pain",
+      "display_name": "Chest Pain",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 14,
       "region": "chest",
       "primary_recommendation": {
-        "name": "US echocardiography transthoracic with IV contrast",
-        "display": "US echocardiography trans OR MRA pulmonary arteries wi OR CT Chest W/O Contrast",
+        "name": "Chest X-Ray",
+        "display": "Chest X-Ray",
         "equivalent_procedures": [
-          "US echocardiography transthoracic with IV contrast",
-          "MRA pulmonary arteries without and with IV contrast",
-          "CT Chest W/O Contrast",
-          "CTA pulmonary arteries with IV contrast"
+          "Chest X-Ray"
         ],
-        "count": 3,
-        "consensus_pct": 70
+        "count": 6,
+        "consensus_pct": 43
       },
       "alternatives": [
         {
-          "name": "Endobronchial ultrasound and biopsy",
-          "percentage": 15,
+          "name": "US echocardiography transthoracic resting",
+          "percentage": 14,
           "count": 2
         }
       ],
-      "no_imaging_pct": 8,
+      "no_imaging_pct": 0,
       "recommend_detailed_search": false,
       "sample_scenarios": [
-        "PAVM suspected, brain abscess, lung nodule on chest radiography, next imaging st",
-        "Pulmonary nodule on incomplete thoracic CT, incidental, indeterminate, next imag",
-        "Pulmonary nodule on chest CT, incidental, indeterminate, <6mm, next imaging stud"
+        "Chest pain, acute aortic syndrome suspected",
+        "Chest pain, acute, nonspecific, low probability CAD",
+        "Chest pain, chronic, low-mod prob of CAD"
       ]
     },
     {
@@ -786,6 +1163,34 @@
         "Myelopathy, acute, cervical and thoracic spine",
         "Myelopathy, acute, cervical spine",
         "Myelopathy, acute, complete spine"
+      ]
+    },
+    {
+      "topic": "lung nodule",
+      "display_name": "Lung Nodule",
+      "card_type": "STRONG",
+      "scenario_count": 12,
+      "region": "chest",
+      "primary_recommendation": {
+        "name": "US echocardiography transthoracic with IV contrast",
+        "display": "US echocardiography trans OR MRA pulmonary arteries wi OR CT Chest W/O Contrast",
+        "equivalent_procedures": [
+          "US echocardiography transthoracic with IV contrast",
+          "MRA pulmonary arteries without and with IV contrast",
+          "CT Chest W/O Contrast",
+          "CTA pulmonary arteries with IV contrast",
+          "Endobronchial ultrasound and biopsy"
+        ],
+        "count": 2,
+        "consensus_pct": 70
+      },
+      "alternatives": [],
+      "no_imaging_pct": 8,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Pulmonary nodule on incomplete thoracic CT, incidental, indeterminate, next imag",
+        "Pulmonary nodule on chest CT, incidental, indeterminate, <6mm, next imaging stud",
+        "Pulmonary nodule on chest CT, incidental, indeterminate, >=6mm, next imaging stu"
       ]
     },
     {
@@ -984,28 +1389,43 @@
       ]
     },
     {
-      "topic": "neck pain",
-      "display_name": "Neck Pain",
+      "topic": "peripheral arterial disease",
+      "display_name": "Peripheral Arterial Disease",
       "card_type": "STRONG",
-      "scenario_count": 4,
-      "region": "spine",
+      "scenario_count": 7,
+      "region": "vascular",
       "primary_recommendation": {
-        "name": "MRI spine area of interest without IV contrast",
-        "display": "MRI spine area of interes OR CT spine area of interest",
+        "name": "US duplex Doppler lower extremity",
+        "display": "US duplex Doppler lower extremity",
         "equivalent_procedures": [
-          "MRI spine area of interest without IV contrast",
-          "CT spine area of interest without IV contrast"
+          "US duplex Doppler lower extremity"
         ],
-        "count": 2,
-        "consensus_pct": 70
+        "count": 6,
+        "consensus_pct": 86
       },
-      "alternatives": [],
-      "no_imaging_pct": 50,
+      "alternatives": [
+        {
+          "name": "MRA abdomen and pelvis with bilateral lower extremity runoff with IV contrast",
+          "percentage": 14,
+          "count": 1
+        },
+        {
+          "name": "CTA abdomen and pelvis with bilateral lower extremity runoff with IV contrast",
+          "percentage": 14,
+          "count": 1
+        },
+        {
+          "name": "CTA abdomen and pelvis with bilateral lower extremity runoff without and with IV contrast",
+          "percentage": 14,
+          "count": 1
+        }
+      ],
+      "no_imaging_pct": 0,
       "recommend_detailed_search": false,
       "sample_scenarios": [
-        "Neck trauma, torticollis or neck pain",
-        "Neck pain, new, previously treated vertebral compression fracture",
-        "Neck pain, new, hx of multiple vertebral compression fractures"
+        "Adult. Long history of claudication. Acute-onset left lower-extremity pain. Abse",
+        "Adult. Nonsmoker, sedentary lifestyle. Left lower-extremity claudication on walk",
+        "Adult. Past medical history significant for diabetes mellitus, hypertension, and"
       ]
     },
     {
@@ -1057,9 +1477,9 @@
     }
   ],
   "card_counts": {
-    "STRONG": 16,
-    "CONDITIONAL": 12,
-    "HIGH_VARIANCE": 7,
-    "CLINICAL_FIRST": 3
+    "CLINICAL_FIRST": 7,
+    "STRONG": 24,
+    "HIGH_VARIANCE": 10,
+    "CONDITIONAL": 11
   }
 }
