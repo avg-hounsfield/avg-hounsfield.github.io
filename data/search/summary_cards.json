@@ -19,7 +19,8 @@
           "Radiography sacroiliac joints and spine area of interest"
         ],
         "count": 24,
-        "consensus_pct": 9
+        "consensus_pct": 9,
+        "rating": 5
       },
       "alternatives": [],
       "no_imaging_pct": 69,
@@ -43,7 +44,8 @@
           "X-Ray"
         ],
         "count": 205,
-        "consensus_pct": 85
+        "consensus_pct": 85,
+        "rating": 9
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -67,7 +69,8 @@
           "X-Ray"
         ],
         "count": 54,
-        "consensus_pct": 34
+        "consensus_pct": 34,
+        "rating": 6
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -91,7 +94,8 @@
           "X-Ray"
         ],
         "count": 126,
-        "consensus_pct": 83
+        "consensus_pct": 83,
+        "rating": 9
       },
       "alternatives": [
         {
@@ -124,7 +128,8 @@
           "MRI breast without and with IV contrast"
         ],
         "count": 27,
-        "consensus_pct": 18
+        "consensus_pct": 18,
+        "rating": 5
       },
       "alternatives": [],
       "no_imaging_pct": 14,
@@ -148,7 +153,8 @@
           "FDG-PET/CT whole body"
         ],
         "count": 108,
-        "consensus_pct": 82
+        "consensus_pct": 82,
+        "rating": 9
       },
       "alternatives": [
         {
@@ -188,7 +194,8 @@
           "X-Ray"
         ],
         "count": 66,
-        "consensus_pct": 55
+        "consensus_pct": 55,
+        "rating": 7
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -213,7 +220,8 @@
           "US duplex Doppler area of interest"
         ],
         "count": 91,
-        "consensus_pct": 87
+        "consensus_pct": 87,
+        "rating": 9
       },
       "alternatives": [
         {
@@ -253,7 +261,8 @@
           "X-Ray"
         ],
         "count": 94,
-        "consensus_pct": 95
+        "consensus_pct": 95,
+        "rating": 9
       },
       "alternatives": [],
       "no_imaging_pct": 1,
@@ -277,7 +286,8 @@
           "CT Brain W/O Contrast"
         ],
         "count": 65,
-        "consensus_pct": 71
+        "consensus_pct": 71,
+        "rating": 8
       },
       "alternatives": [
         {
@@ -310,7 +320,8 @@
           "MRI Total Spine W/O & W/ Contrast"
         ],
         "count": 2,
-        "consensus_pct": 2
+        "consensus_pct": 2,
+        "rating": 5
       },
       "alternatives": [],
       "no_imaging_pct": 82,
@@ -335,7 +346,8 @@
           "X-Ray"
         ],
         "count": 64,
-        "consensus_pct": 76
+        "consensus_pct": 76,
+        "rating": 8
       },
       "alternatives": [
         {
@@ -365,7 +377,8 @@
           "MRI Foot W/O Contrast"
         ],
         "count": 32,
-        "consensus_pct": 55
+        "consensus_pct": 55,
+        "rating": 7
       },
       "alternatives": [
         {
@@ -405,7 +418,8 @@
           "Radiography knee"
         ],
         "count": 20,
-        "consensus_pct": 36
+        "consensus_pct": 36,
+        "rating": 6
       },
       "alternatives": [
         {
@@ -435,7 +449,8 @@
           "Radiography shoulder"
         ],
         "count": 38,
-        "consensus_pct": 68
+        "consensus_pct": 68,
+        "rating": 8
       },
       "alternatives": [
         {
@@ -466,7 +481,8 @@
           "Radiography elbow"
         ],
         "count": 24,
-        "consensus_pct": 70
+        "consensus_pct": 70,
+        "rating": 8
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -491,7 +507,8 @@
           "Radiography pelvis"
         ],
         "count": 22,
-        "consensus_pct": 70
+        "consensus_pct": 70,
+        "rating": 8
       },
       "alternatives": [
         {
@@ -511,15 +528,27 @@
     {
       "topic": "osteonecrosis",
       "display_name": "Osteonecrosis",
-      "card_type": "HIGH_VARIANCE",
+      "card_type": "STRONG",
       "scenario_count": 48,
       "region": "msk",
       "primary_recommendation": {
-        "name": null,
-        "display": null,
-        "equivalent_procedures": [],
-        "count": 0,
-        "consensus_pct": 0
+        "name": "MRI affected joint",
+        "display": "MRI (most sensitive for early AVN)",
+        "modality": "MRI",
+        "rating": 9,
+        "consensus_pct": 85,
+        "equivalent_procedures": [
+          "MRI hip",
+          "MRI knee",
+          "MRI shoulder"
+        ],
+        "alternatives": [
+          {
+            "name": "Radiography",
+            "rating": 7,
+            "note": "Initial screening, less sensitive for early disease"
+          }
+        ]
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -533,15 +562,26 @@
     {
       "topic": "spine infection",
       "display_name": "Spine Infection",
-      "card_type": "HIGH_VARIANCE",
+      "card_type": "STRONG",
       "scenario_count": 46,
       "region": "spine",
       "primary_recommendation": {
-        "name": null,
-        "display": null,
-        "equivalent_procedures": [],
-        "count": 0,
-        "consensus_pct": 0
+        "name": "MRI spine with and without contrast",
+        "display": "MRI Spine with IV Contrast",
+        "modality": "MRI",
+        "rating": 9,
+        "consensus_pct": 95,
+        "equivalent_procedures": [
+          "MRI spine with contrast",
+          "MRI thoracic/lumbar with contrast"
+        ],
+        "alternatives": [
+          {
+            "name": "CT spine",
+            "rating": 7,
+            "note": "If MRI contraindicated"
+          }
+        ]
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -566,7 +606,8 @@
           "X-Ray"
         ],
         "count": 17,
-        "consensus_pct": 40
+        "consensus_pct": 40,
+        "rating": 7
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -592,7 +633,8 @@
           "CT Brain W/O Contrast"
         ],
         "count": 1,
-        "consensus_pct": 2
+        "consensus_pct": 2,
+        "rating": 5
       },
       "alternatives": [],
       "no_imaging_pct": 83,
@@ -616,7 +658,8 @@
           "CT Brain W/O Contrast"
         ],
         "count": 19,
-        "consensus_pct": 51
+        "consensus_pct": 51,
+        "rating": 7
       },
       "alternatives": [
         {
@@ -656,7 +699,8 @@
           "X-Ray"
         ],
         "count": 31,
-        "consensus_pct": 89
+        "consensus_pct": 89,
+        "rating": 9
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -680,7 +724,8 @@
           "Chest X-Ray"
         ],
         "count": 32,
-        "consensus_pct": 100
+        "consensus_pct": 100,
+        "rating": 9
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -771,7 +816,8 @@
           "Mammography diagnostic"
         ],
         "count": 13,
-        "consensus_pct": 54
+        "consensus_pct": 54,
+        "rating": 7
       },
       "alternatives": [
         {
@@ -802,7 +848,8 @@
           "Radiography sacroiliac joints and spine area of interest"
         ],
         "count": 23,
-        "consensus_pct": 100
+        "consensus_pct": 100,
+        "rating": 9
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -827,7 +874,8 @@
           "US duplex Doppler hemodialysis access area of interest"
         ],
         "count": 23,
-        "consensus_pct": 100
+        "consensus_pct": 100,
+        "rating": 9
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -851,7 +899,8 @@
           "MRI Brain W/O Contrast"
         ],
         "count": 8,
-        "consensus_pct": 40
+        "consensus_pct": 40,
+        "rating": 7
       },
       "alternatives": [],
       "no_imaging_pct": 20,
@@ -877,7 +926,8 @@
           "MRA chest abdomen pelvis without IV contrast"
         ],
         "count": 5,
-        "consensus_pct": 70
+        "consensus_pct": 70,
+        "rating": 8
       },
       "alternatives": [
         {
@@ -916,7 +966,8 @@
           "FDG-PET/CT skull base to mid-thigh"
         ],
         "count": 2,
-        "consensus_pct": 11
+        "consensus_pct": 11,
+        "rating": 5
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -941,7 +992,8 @@
           "CT Chest W/ Contrast"
         ],
         "count": 5,
-        "consensus_pct": 29
+        "consensus_pct": 29,
+        "rating": 6
       },
       "alternatives": [],
       "no_imaging_pct": 71,
@@ -965,7 +1017,8 @@
           "Chest X-Ray"
         ],
         "count": 6,
-        "consensus_pct": 38
+        "consensus_pct": 38,
+        "rating": 6
       },
       "alternatives": [
         {
@@ -1038,7 +1091,8 @@
           "US kidneys and bladder"
         ],
         "count": 13,
-        "consensus_pct": 87
+        "consensus_pct": 87,
+        "rating": 9
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -1064,7 +1118,8 @@
           "CT abdomen with IV contrast multiphase"
         ],
         "count": 15,
-        "consensus_pct": 100
+        "consensus_pct": 100,
+        "rating": 9
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -1132,15 +1187,26 @@
     {
       "topic": "radiculopathy",
       "display_name": "Radiculopathy",
-      "card_type": "HIGH_VARIANCE",
+      "card_type": "CONDITIONAL",
       "scenario_count": 14,
       "region": "spine",
       "primary_recommendation": {
-        "name": null,
-        "display": null,
-        "equivalent_procedures": [],
-        "count": 0,
-        "consensus_pct": 0
+        "name": "MRI spine without contrast",
+        "display": "MRI Spine (area of symptoms)",
+        "modality": "MRI",
+        "rating": 8,
+        "consensus_pct": 70,
+        "equivalent_procedures": [
+          "MRI lumbar spine",
+          "MRI cervical spine"
+        ],
+        "alternatives": [
+          {
+            "name": "CT myelography",
+            "rating": 7,
+            "note": "If MRI contraindicated"
+          }
+        ]
       },
       "alternatives": [],
       "no_imaging_pct": 43,
@@ -1149,7 +1215,8 @@
         "Lumbar spine trauma, acute, blunt, nerve root injury suspected, with or without ",
         "Lumbar spine trauma, acute, blunt, nerve root injury, with or without trauma on ",
         "Thoracic spine trauma, acute, blunt, nerve root injury suspected, with or withou"
-      ]
+      ],
+      "clinical_note": "Imaging often not needed for < 6 weeks of symptoms without red flags"
     },
     {
       "topic": "dementia",
@@ -1167,7 +1234,8 @@
           "PET/CT Brain FDG"
         ],
         "count": 11,
-        "consensus_pct": 92
+        "consensus_pct": 92,
+        "rating": 9
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -1181,15 +1249,26 @@
     {
       "topic": "myelopathy",
       "display_name": "Myelopathy",
-      "card_type": "HIGH_VARIANCE",
+      "card_type": "STRONG",
       "scenario_count": 12,
       "region": "spine",
       "primary_recommendation": {
-        "name": null,
-        "display": null,
-        "equivalent_procedures": [],
-        "count": 0,
-        "consensus_pct": 0
+        "name": "MRI spine with and without contrast",
+        "display": "MRI Cervical/Thoracic Spine",
+        "modality": "MRI",
+        "rating": 9,
+        "consensus_pct": 90,
+        "equivalent_procedures": [
+          "MRI cervical spine",
+          "MRI total spine"
+        ],
+        "alternatives": [
+          {
+            "name": "CT myelography",
+            "rating": 7,
+            "note": "If MRI contraindicated"
+          }
+        ]
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -1286,7 +1365,8 @@
           "CT temporal bone without IV contrast"
         ],
         "count": 2,
-        "consensus_pct": 18
+        "consensus_pct": 18,
+        "rating": 5
       },
       "alternatives": [],
       "no_imaging_pct": 82,
@@ -1312,7 +1392,8 @@
           "MRA chest abdomen pelvis without IV contrast"
         ],
         "count": 5,
-        "consensus_pct": 70
+        "consensus_pct": 70,
+        "rating": 8
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -1336,7 +1417,8 @@
           "CT Abdomen/Pelvis W/ Contrast"
         ],
         "count": 4,
-        "consensus_pct": 44
+        "consensus_pct": 44,
+        "rating": 7
       },
       "alternatives": [
         {
@@ -1368,7 +1450,8 @@
           "CT abdomen without and with IV contrast"
         ],
         "count": 3,
-        "consensus_pct": 70
+        "consensus_pct": 70,
+        "rating": 8
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -1392,7 +1475,8 @@
           "US Abdomen"
         ],
         "count": 6,
-        "consensus_pct": 67
+        "consensus_pct": 67,
+        "rating": 8
       },
       "alternatives": [
         {
@@ -1422,15 +1506,26 @@
     {
       "topic": "spinal cord injury",
       "display_name": "Spinal Cord Injury",
-      "card_type": "CLINICAL_FIRST",
+      "card_type": "STRONG",
       "scenario_count": 8,
       "region": "spine",
       "primary_recommendation": {
-        "name": null,
-        "display": null,
-        "equivalent_procedures": [],
-        "count": 0,
-        "consensus_pct": 0
+        "name": "MRI spine",
+        "display": "MRI Spine (level of injury)",
+        "modality": "MRI",
+        "rating": 9,
+        "consensus_pct": 90,
+        "equivalent_procedures": [
+          "MRI cervical spine",
+          "MRI thoracic spine"
+        ],
+        "alternatives": [
+          {
+            "name": "CT spine",
+            "rating": 8,
+            "note": "For acute bony injury assessment"
+          }
+        ]
       },
       "alternatives": [],
       "no_imaging_pct": 75,
@@ -1454,7 +1549,8 @@
           "US duplex Doppler lower extremity"
         ],
         "count": 7,
-        "consensus_pct": 88
+        "consensus_pct": 88,
+        "rating": 9
       },
       "alternatives": [
         {
@@ -1494,7 +1590,8 @@
           "MRI Brain W/O & W/ Contrast"
         ],
         "count": 7,
-        "consensus_pct": 100
+        "consensus_pct": 100,
+        "rating": 9
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -1508,15 +1605,31 @@
     {
       "topic": "pleural effusion",
       "display_name": "Pleural Effusion",
-      "card_type": "HIGH_VARIANCE",
+      "card_type": "STRONG",
       "scenario_count": 4,
       "region": "chest",
       "primary_recommendation": {
-        "name": null,
-        "display": null,
-        "equivalent_procedures": [],
-        "count": 0,
-        "consensus_pct": 0
+        "name": "Chest radiograph",
+        "display": "Chest X-ray (PA and Lateral)",
+        "modality": "XR",
+        "rating": 9,
+        "consensus_pct": 90,
+        "equivalent_procedures": [
+          "CXR",
+          "Chest x-ray"
+        ],
+        "alternatives": [
+          {
+            "name": "CT chest",
+            "rating": 8,
+            "note": "For characterization or if loculated"
+          },
+          {
+            "name": "Ultrasound chest",
+            "rating": 8,
+            "note": "For drainage guidance"
+          }
+        ]
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -1541,7 +1654,8 @@
           "CT Abdomen/Pelvis W/ Contrast"
         ],
         "count": 2,
-        "consensus_pct": 70
+        "consensus_pct": 70,
+        "rating": 8
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -1565,7 +1679,8 @@
           "CT orbits without IV contrast"
         ],
         "count": 1,
-        "consensus_pct": 33
+        "consensus_pct": 33,
+        "rating": 6
       },
       "alternatives": [],
       "no_imaging_pct": 33,
@@ -1591,7 +1706,8 @@
           "CTA lower extremity with IV contrast"
         ],
         "count": 2,
-        "consensus_pct": 70
+        "consensus_pct": 70,
+        "rating": 8
       },
       "alternatives": [],
       "no_imaging_pct": 0,
@@ -1615,7 +1731,8 @@
           "CTA abdomen and pelvis with IV contrast"
         ],
         "count": 2,
-        "consensus_pct": 67
+        "consensus_pct": 67,
+        "rating": 8
       },
       "alternatives": [
         {
