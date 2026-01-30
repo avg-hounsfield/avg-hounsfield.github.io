@@ -767,6 +767,82 @@ class ProtocolHelpApp {
   // ========================================
   // Search Suggestions (Autocomplete)
   // ========================================
+
+  // Medical abbreviations and layperson terms mapping
+  getSuggestionAliases() {
+    return {
+      // Medical abbreviations
+      'pe': ['pulmonary embolism'],
+      'cva': ['stroke'],
+      'tia': ['stroke'],
+      'mi': ['chest pain'],
+      'aaa': ['aortic aneurysm'],
+      'ms': ['multiple sclerosis'],
+      'acl': ['acl tear'],
+      'mcl': ['meniscus tear'],
+      'rotator': ['rotator cuff'],
+      'dvt': ['dvt'],
+      'oa': ['arthritis'],
+      'ra': ['arthritis'],
+      'avascular': ['osteonecrosis'],
+      'avn': ['osteonecrosis'],
+      'tbi': ['head trauma'],
+      'sci': ['spinal cord injury'],
+      'pad': ['peripheral arterial disease'],
+      'pvd': ['peripheral arterial disease'],
+      'gb': ['cholecystitis'],
+      'gallbladder': ['cholecystitis'],
+      'hcc': ['liver mass'],
+      'rcc': ['renal mass'],
+      'nsclc': ['lung cancer'],
+      'sclc': ['lung cancer'],
+
+      // Layperson terms
+      'heart attack': ['chest pain'],
+      'blood clot': ['pulmonary embolism', 'dvt'],
+      'clot': ['pulmonary embolism', 'dvt'],
+      'slipped disc': ['herniated disc'],
+      'bulging disc': ['herniated disc'],
+      'ruptured disc': ['herniated disc'],
+      'broken bone': ['fracture'],
+      'broken': ['fracture'],
+      'dizziness': ['vertigo'],
+      'dizzy': ['vertigo'],
+      'belly pain': ['abdominal pain'],
+      'stomach pain': ['abdominal pain'],
+      'tummy pain': ['abdominal pain'],
+      'lump': ['breast mass', 'soft tissue mass', 'thyroid nodule'],
+      'bump': ['soft tissue mass'],
+      'mass': ['breast mass', 'soft tissue mass', 'liver mass', 'renal mass'],
+      'tumor': ['brain tumor', 'bone tumor'],
+      'cancer': ['lung cancer', 'breast cancer', 'ovarian cancer', 'melanoma'],
+      'weakness': ['stroke', 'myelopathy'],
+      'numbness': ['stroke', 'radiculopathy', 'myelopathy'],
+      'tingling': ['radiculopathy', 'myelopathy'],
+      'paralysis': ['stroke', 'spinal cord injury'],
+      'confusion': ['dementia', 'stroke', 'head trauma'],
+      'memory': ['dementia'],
+      'forgetful': ['dementia'],
+      'gallstones': ['cholecystitis'],
+      'kidney stones': ['kidney stone'],
+      'stones': ['kidney stone', 'cholecystitis'],
+      'sciatica': ['radiculopathy', 'herniated disc'],
+      'pinched nerve': ['radiculopathy'],
+      'torn': ['acl tear', 'meniscus tear', 'rotator cuff'],
+      'tear': ['acl tear', 'meniscus tear', 'rotator cuff'],
+      'sprain': ['ankle pain', 'knee pain', 'wrist pain'],
+      'swelling': ['dvt', 'arthritis', 'soft tissue infection'],
+      'infection': ['soft tissue infection', 'spine infection', 'pneumonia', 'sepsis'],
+      'breathing': ['pulmonary embolism', 'pneumonia', 'pleural effusion'],
+      'shortness of breath': ['pulmonary embolism', 'pneumonia', 'pleural effusion'],
+      'sob': ['pulmonary embolism', 'pneumonia'],
+      'cough': ['pneumonia', 'lung cancer', 'lung nodule'],
+      'bleeding': ['head trauma'],
+      'bleed': ['head trauma', 'stroke'],
+      'aneurism': ['aneurysm', 'aortic aneurysm'], // common misspelling
+    };
+  }
+
   showSearchSuggestions(query) {
     const suggestionsEl = document.getElementById('searchSuggestions');
     if (!suggestionsEl) return;
@@ -777,20 +853,74 @@ class ProtocolHelpApp {
       return;
     }
 
-    // Filter matching cards
-    const matches = this.summaryCards.cards.filter(card => {
+    // Get alias mappings
+    const aliases = this.getSuggestionAliases();
+    const aliasTopics = new Set();
+
+    // Check for alias matches
+    for (const [alias, topics] of Object.entries(aliases)) {
+      if (alias.includes(trimmed) || trimmed.includes(alias)) {
+        topics.forEach(t => aliasTopics.add(t));
+      }
+    }
+
+    // Score and filter matching cards
+    const scored = this.summaryCards.cards.map(card => {
       const topic = card.topic.toLowerCase();
       const displayName = (card.display_name || card.topic).toLowerCase();
-      return topic.includes(trimmed) || displayName.includes(trimmed) || trimmed.includes(topic);
-    }).slice(0, 8); // Limit to 8 suggestions
+      const topicWords = topic.split(/\s+/);
+      const queryWords = trimmed.split(/\s+/);
 
-    if (matches.length === 0) {
+      let score = 0;
+
+      // Exact match (highest priority)
+      if (topic === trimmed || displayName === trimmed) {
+        score = 100;
+      }
+      // Topic starts with query
+      else if (topic.startsWith(trimmed) || displayName.startsWith(trimmed)) {
+        score = 80;
+      }
+      // Topic contains query as substring
+      else if (topic.includes(trimmed) || displayName.includes(trimmed)) {
+        score = 60;
+      }
+      // Query contains topic (user typed more than topic)
+      else if (trimmed.includes(topic)) {
+        score = 50;
+      }
+      // Alias match
+      else if (aliasTopics.has(topic)) {
+        score = 70;
+      }
+      // Word-level matching (any word matches)
+      else {
+        const matchedWords = queryWords.filter(qw =>
+          topicWords.some(tw => tw.includes(qw) || qw.includes(tw))
+        );
+        if (matchedWords.length > 0) {
+          score = 30 + (matchedWords.length * 10);
+        }
+      }
+
+      // Boost by scenario count for tiebreaking
+      if (score > 0) {
+        score += Math.min(card.scenario_count / 100, 5);
+      }
+
+      return { card, score };
+    })
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 8);
+
+    if (scored.length === 0) {
       this.hideSearchSuggestions();
       return;
     }
 
     // Render suggestions
-    suggestionsEl.innerHTML = matches.map((card, i) => {
+    suggestionsEl.innerHTML = scored.map(({ card }, i) => {
       const displayName = card.display_name || card.topic;
       const badge = card.card_type === 'STRONG' ? 'Strong' :
                     card.card_type === 'CLINICAL_FIRST' ? 'Clinical' : '';
