@@ -1,8 +1,8 @@
 {
   "version": "3.0.0",
-  "generated_at": "2026-01-29T21:17:51.933839",
+  "generated_at": "2026-01-29T21:43:00.163210",
   "total_scenarios": 3226,
-  "matched_scenarios": 2684,
+  "matched_scenarios": 2672,
   "match_rate_pct": 83,
   "cards": [
     {
@@ -55,10 +55,10 @@
       ]
     },
     {
-      "topic": "arthritis",
-      "display_name": "Arthritis",
+      "topic": "transverse myelitis",
+      "display_name": "Transverse Myelitis",
       "card_type": "HIGH_VARIANCE",
-      "scenario_count": 168,
+      "scenario_count": 159,
       "region": "msk",
       "primary_recommendation": {
         "name": "X-Ray",
@@ -66,16 +66,16 @@
         "equivalent_procedures": [
           "X-Ray"
         ],
-        "count": 66,
-        "consensus_pct": 39
+        "count": 54,
+        "consensus_pct": 34
       },
       "alternatives": [],
       "no_imaging_pct": 0,
       "recommend_detailed_search": true,
       "sample_scenarios": [
-        "Sacroiliac joint pain, idiopathic arthritis suspected",
-        "Sacroiliac joint pain, idiopathic arthritis, follow-up imaging",
-        "Hand pain, chronic, nonspecific arthritis findings on radiography, next imaging "
+        "Transverse myelitis suspected, acute sensorimotor symptoms below a spinal cord l",
+        "Transverse myelitis suspected, subacute sensorimotor symptoms below a spinal cor",
+        "Osteomyelitis suspected, ankle, implanted extra articular surgical hardware, rad"
       ]
     },
     {
@@ -176,10 +176,10 @@
       ]
     },
     {
-      "topic": "osteomyelitis",
-      "display_name": "Osteomyelitis",
+      "topic": "arthritis",
+      "display_name": "Arthritis",
       "card_type": "CONDITIONAL",
-      "scenario_count": 109,
+      "scenario_count": 120,
       "region": "msk",
       "primary_recommendation": {
         "name": "X-Ray",
@@ -187,16 +187,16 @@
         "equivalent_procedures": [
           "X-Ray"
         ],
-        "count": 54,
-        "consensus_pct": 50
+        "count": 66,
+        "consensus_pct": 55
       },
       "alternatives": [],
       "no_imaging_pct": 0,
       "recommend_detailed_search": false,
       "sample_scenarios": [
-        "Osteomyelitis suspected, ankle, implanted extra articular surgical hardware, rad",
-        "Osteomyelitis suspected, ankle, implanted extra articular surgical hardware, rad",
-        "Osteomyelitis suspected, ankle, implanted extra articular surgical hardware, rad"
+        "Sacroiliac joint pain, idiopathic arthritis suspected",
+        "Sacroiliac joint pain, idiopathic arthritis, follow-up imaging",
+        "Hand pain, chronic, nonspecific arthritis findings on radiography, next imaging "
       ]
     },
     {
@@ -244,7 +244,7 @@
       "topic": "soft tissue infection",
       "display_name": "Soft Tissue Infection",
       "card_type": "STRONG",
-      "scenario_count": 100,
+      "scenario_count": 99,
       "region": "msk",
       "primary_recommendation": {
         "name": "X-Ray",
@@ -253,15 +253,15 @@
           "X-Ray"
         ],
         "count": 94,
-        "consensus_pct": 94
+        "consensus_pct": 95
       },
       "alternatives": [],
       "no_imaging_pct": 1,
       "recommend_detailed_search": false,
       "sample_scenarios": [
-        "Orbital cellulitis suspected, initial exam",
         "PAVM suspected, brain abscess, lung nodule on chest radiography, next imaging st",
-        "Soft tissue infection suspected, ankle, hx of puncture wound, possible foreign b"
+        "Soft tissue infection suspected, ankle, hx of puncture wound, possible foreign b",
+        "Soft tissue infection suspected, ankle, implanted extra articular surgical hardw"
       ]
     },
     {
@@ -509,28 +509,6 @@
       ]
     },
     {
-      "topic": "spine infection",
-      "display_name": "Spine Infection",
-      "card_type": "HIGH_VARIANCE",
-      "scenario_count": 48,
-      "region": "spine",
-      "primary_recommendation": {
-        "name": null,
-        "display": null,
-        "equivalent_procedures": [],
-        "count": 0,
-        "consensus_pct": 0
-      },
-      "alternatives": [],
-      "no_imaging_pct": 0,
-      "recommend_detailed_search": true,
-      "sample_scenarios": [
-        "Spine infection suspected, cervical and lumbar, CT abnormal, next imaging study",
-        "Spine infection suspected, cervical and lumbar, decubitus ulcer",
-        "Spine infection suspected, cervical and lumbar, new neuro deficit"
-      ]
-    },
-    {
       "topic": "osteonecrosis",
       "display_name": "Osteonecrosis",
       "card_type": "HIGH_VARIANCE",
@@ -553,29 +531,25 @@
       ]
     },
     {
-      "topic": "spine trauma",
-      "display_name": "Spine Trauma",
-      "card_type": "CLINICAL_FIRST",
+      "topic": "spine infection",
+      "display_name": "Spine Infection",
+      "card_type": "HIGH_VARIANCE",
       "scenario_count": 46,
       "region": "spine",
       "primary_recommendation": {
-        "name": "Radiography cervical spine",
-        "display": "Radiography cervical spin OR Radiography skeletal surv OR CT Brain W/O Contrast",
-        "equivalent_procedures": [
-          "Radiography cervical spine",
-          "Radiography skeletal survey",
-          "CT Brain W/O Contrast"
-        ],
-        "count": 1,
-        "consensus_pct": 2
+        "name": null,
+        "display": null,
+        "equivalent_procedures": [],
+        "count": 0,
+        "consensus_pct": 0
       },
       "alternatives": [],
-      "no_imaging_pct": 85,
-      "recommend_detailed_search": false,
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": true,
       "sample_scenarios": [
-        "Cervical spine trauma, acute, blunt, axial load to head",
-        "Physical abuse suspected, concern for cervical spine injury based on clinical pr",
-        "Physical abuse suspected, concern for cervical spine injury based on clinical pr"
+        "Spine infection suspected, cervical and lumbar, CT abnormal, next imaging study",
+        "Spine infection suspected, cervical and lumbar, decubitus ulcer",
+        "Spine infection suspected, cervical and lumbar, new neuro deficit"
       ]
     },
     {
@@ -604,44 +578,29 @@
       ]
     },
     {
-      "topic": "stroke",
-      "display_name": "Stroke",
-      "card_type": "STRONG",
+      "topic": "spine trauma",
+      "display_name": "Spine Trauma",
+      "card_type": "CLINICAL_FIRST",
       "scenario_count": 41,
-      "region": "neuro",
+      "region": "spine",
       "primary_recommendation": {
-        "name": "MRI Brain W/O Contrast",
-        "display": "MRI Brain W/O Contrast OR CT Brain W/O Contrast",
+        "name": "Radiography cervical spine",
+        "display": "Radiography cervical spin OR Radiography skeletal surv OR CT Brain W/O Contrast",
         "equivalent_procedures": [
-          "MRI Brain W/O Contrast",
+          "Radiography cervical spine",
+          "Radiography skeletal survey",
           "CT Brain W/O Contrast"
         ],
-        "count": 18,
-        "consensus_pct": 70
+        "count": 1,
+        "consensus_pct": 2
       },
-      "alternatives": [
-        {
-          "name": "MRA head without IV contrast",
-          "percentage": 32,
-          "count": 13
-        },
-        {
-          "name": "US duplex Doppler carotid artery",
-          "percentage": 10,
-          "count": 4
-        },
-        {
-          "name": "CTA head with IV contrast",
-          "percentage": 10,
-          "count": 4
-        }
-      ],
-      "no_imaging_pct": 0,
+      "alternatives": [],
+      "no_imaging_pct": 83,
       "recommend_detailed_search": false,
       "sample_scenarios": [
-        "Cognitive impairment, recent stroke, vascular dementia suspected",
-        "Ischemic stroke suspected, acute, focal neuro deficit",
-        "Stroke suspected, acute non-sickle cell, <24 hrs from sx onset, emergent imaging"
+        "Cervical spine trauma, acute, blunt, axial load to head",
+        "Physical abuse suspected, concern for cervical spine injury based on clinical pr",
+        "Physical abuse suspected, concern for cervical spine injury based on clinical pr"
       ]
     },
     {
@@ -736,7 +695,7 @@
       "topic": "pneumonia",
       "display_name": "Pneumonia",
       "card_type": "HIGH_VARIANCE",
-      "scenario_count": 30,
+      "scenario_count": 29,
       "region": "chest",
       "primary_recommendation": {
         "name": "Radiography tibia and fibula",
@@ -747,15 +706,15 @@
           "US duplex Doppler hemodialysis access area of interest"
         ],
         "count": 4,
-        "consensus_pct": 13
+        "consensus_pct": 14
       },
       "alternatives": [],
-      "no_imaging_pct": 27,
+      "no_imaging_pct": 28,
       "recommend_detailed_search": true,
       "sample_scenarios": [
-        "Orbital infection suspected",
         "Hip replaced, symptomatic, infection excluded, radiography performed, next imagi",
-        "Hip replaced, symptomatic, infection not excluded, radiography performed, next i"
+        "Hip replaced, symptomatic, infection not excluded, radiography performed, next i",
+        "Shoulder replaced, symptomatic, loosening suspected, no infection, radiographs p"
       ]
     },
     {
@@ -975,6 +934,62 @@
       ]
     },
     {
+      "topic": "chest pain",
+      "display_name": "Chest Pain",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 16,
+      "region": "chest",
+      "primary_recommendation": {
+        "name": "Chest X-Ray",
+        "display": "Chest X-Ray",
+        "equivalent_procedures": [
+          "Chest X-Ray"
+        ],
+        "count": 6,
+        "consensus_pct": 38
+      },
+      "alternatives": [
+        {
+          "name": "US echocardiography transthoracic resting",
+          "percentage": 12,
+          "count": 2
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Chest pain, acute aortic syndrome suspected",
+        "Chest pain, acute, nonspecific, low probability CAD",
+        "Chest pain, chronic, high probability of CAD, ischemic heart disease, no prior d"
+      ]
+    },
+    {
+      "topic": "stroke",
+      "display_name": "Stroke",
+      "card_type": "STRONG",
+      "scenario_count": 15,
+      "region": "neuro",
+      "primary_recommendation": {
+        "name": "MRI Brain W/O Contrast",
+        "display": "MRI Brain W/O Contrast OR CT Brain W/O Contrast OR MRA head without IV contr",
+        "equivalent_procedures": [
+          "MRI Brain W/O Contrast",
+          "CT Brain W/O Contrast",
+          "MRA head without IV contrast"
+        ],
+        "count": 15,
+        "consensus_pct": 100
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Cognitive impairment, recent stroke, vascular dementia suspected",
+        "Ischemic stroke suspected, acute, focal neuro deficit",
+        "Stroke suspected, acute non-sickle cell, <24 hrs from sx onset, emergent imaging"
+      ]
+    },
+    {
       "topic": "hydronephrosis",
       "display_name": "Hydronephrosis",
       "card_type": "STRONG",
@@ -1025,6 +1040,46 @@
       ]
     },
     {
+      "topic": "abdominal pain",
+      "display_name": "Abdominal Pain",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 15,
+      "region": "abdomen",
+      "primary_recommendation": {
+        "name": "Angiography and aspiration embolectomy",
+        "display": "Angiography and aspiration embolectomy",
+        "equivalent_procedures": [
+          "Angiography and aspiration embolectomy"
+        ],
+        "count": 7,
+        "consensus_pct": 47
+      },
+      "alternatives": [
+        {
+          "name": "Chest X-Ray",
+          "percentage": 20,
+          "count": 3
+        },
+        {
+          "name": "CT Abdomen/Pelvis W/ Contrast",
+          "percentage": 20,
+          "count": 3
+        },
+        {
+          "name": "Radiography abdomen and pelvis",
+          "percentage": 13,
+          "count": 2
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Sepsis suspected, acute abdominal pain",
+        "Sepsis, acute abdominal pain",
+        "Abdominal pain after meals and CTA showing widely patent origins of SMA and IMA,"
+      ]
+    },
+    {
       "topic": "radiculopathy",
       "display_name": "Radiculopathy",
       "card_type": "HIGH_VARIANCE",
@@ -1044,76 +1099,6 @@
         "Lumbar spine trauma, acute, blunt, nerve root injury suspected, with or without ",
         "Lumbar spine trauma, acute, blunt, nerve root injury, with or without trauma on ",
         "Thoracic spine trauma, acute, blunt, nerve root injury suspected, with or withou"
-      ]
-    },
-    {
-      "topic": "abdominal pain",
-      "display_name": "Abdominal Pain",
-      "card_type": "CONDITIONAL",
-      "scenario_count": 14,
-      "region": "abdomen",
-      "primary_recommendation": {
-        "name": "Angiography and aspiration embolectomy",
-        "display": "Angiography and aspiration embolectomy",
-        "equivalent_procedures": [
-          "Angiography and aspiration embolectomy"
-        ],
-        "count": 6,
-        "consensus_pct": 43
-      },
-      "alternatives": [
-        {
-          "name": "Chest X-Ray",
-          "percentage": 21,
-          "count": 3
-        },
-        {
-          "name": "CT Abdomen/Pelvis W/ Contrast",
-          "percentage": 21,
-          "count": 3
-        },
-        {
-          "name": "Radiography abdomen and pelvis",
-          "percentage": 14,
-          "count": 2
-        }
-      ],
-      "no_imaging_pct": 0,
-      "recommend_detailed_search": false,
-      "sample_scenarios": [
-        "Sepsis suspected, acute abdominal pain",
-        "Sepsis, acute abdominal pain",
-        "Abdominal pain after meals and CTA showing widely patent origins of SMA and IMA,"
-      ]
-    },
-    {
-      "topic": "chest pain",
-      "display_name": "Chest Pain",
-      "card_type": "CONDITIONAL",
-      "scenario_count": 14,
-      "region": "chest",
-      "primary_recommendation": {
-        "name": "Chest X-Ray",
-        "display": "Chest X-Ray",
-        "equivalent_procedures": [
-          "Chest X-Ray"
-        ],
-        "count": 6,
-        "consensus_pct": 43
-      },
-      "alternatives": [
-        {
-          "name": "US echocardiography transthoracic resting",
-          "percentage": 14,
-          "count": 2
-        }
-      ],
-      "no_imaging_pct": 0,
-      "recommend_detailed_search": false,
-      "sample_scenarios": [
-        "Chest pain, acute aortic syndrome suspected",
-        "Chest pain, acute, nonspecific, low probability CAD",
-        "Chest pain, chronic, low-mod prob of CAD"
       ]
     },
     {
@@ -1365,6 +1350,68 @@
       ]
     },
     {
+      "topic": "spinal cord injury",
+      "display_name": "Spinal Cord Injury",
+      "card_type": "CLINICAL_FIRST",
+      "scenario_count": 8,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": null,
+        "display": null,
+        "equivalent_procedures": [],
+        "count": 0,
+        "consensus_pct": 0
+      },
+      "alternatives": [],
+      "no_imaging_pct": 75,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Lumbar spine trauma, acute, blunt, spinal cord injury suspected, with or without",
+        "Lumbar spine trauma, acute, blunt, spinal cord injury, with or without trauma on",
+        "Thoracic spine trauma, acute, blunt, spinal cord injury, with or without trauma "
+      ]
+    },
+    {
+      "topic": "peripheral arterial disease",
+      "display_name": "Peripheral Arterial Disease",
+      "card_type": "STRONG",
+      "scenario_count": 8,
+      "region": "vascular",
+      "primary_recommendation": {
+        "name": "US duplex Doppler lower extremity",
+        "display": "US duplex Doppler lower extremity",
+        "equivalent_procedures": [
+          "US duplex Doppler lower extremity"
+        ],
+        "count": 7,
+        "consensus_pct": 88
+      },
+      "alternatives": [
+        {
+          "name": "MRA abdomen and pelvis with bilateral lower extremity runoff with IV contrast",
+          "percentage": 12,
+          "count": 1
+        },
+        {
+          "name": "CTA abdomen and pelvis with bilateral lower extremity runoff with IV contrast",
+          "percentage": 12,
+          "count": 1
+        },
+        {
+          "name": "CTA abdomen and pelvis with bilateral lower extremity runoff without and with IV contrast",
+          "percentage": 12,
+          "count": 1
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Adult. Long history of claudication. Acute-onset left lower-extremity pain. Abse",
+        "Adult. Nonsmoker, sedentary lifestyle. Left lower-extremity claudication on walk",
+        "Adult. Past medical history significant for diabetes mellitus, hypertension, and"
+      ]
+    },
+    {
       "topic": "brain tumor",
       "display_name": "Brain Tumor",
       "card_type": "STRONG",
@@ -1386,46 +1433,6 @@
         "Brain tumor metastatic, screening, extracranial malignancy",
         "Brain tumor on prior imaging, extra-axial suspected, pretreatment evaluation",
         "Brain tumor on prior imaging, intra-axial suspected, pretreatment evaluation"
-      ]
-    },
-    {
-      "topic": "peripheral arterial disease",
-      "display_name": "Peripheral Arterial Disease",
-      "card_type": "STRONG",
-      "scenario_count": 7,
-      "region": "vascular",
-      "primary_recommendation": {
-        "name": "US duplex Doppler lower extremity",
-        "display": "US duplex Doppler lower extremity",
-        "equivalent_procedures": [
-          "US duplex Doppler lower extremity"
-        ],
-        "count": 6,
-        "consensus_pct": 86
-      },
-      "alternatives": [
-        {
-          "name": "MRA abdomen and pelvis with bilateral lower extremity runoff with IV contrast",
-          "percentage": 14,
-          "count": 1
-        },
-        {
-          "name": "CTA abdomen and pelvis with bilateral lower extremity runoff with IV contrast",
-          "percentage": 14,
-          "count": 1
-        },
-        {
-          "name": "CTA abdomen and pelvis with bilateral lower extremity runoff without and with IV contrast",
-          "percentage": 14,
-          "count": 1
-        }
-      ],
-      "no_imaging_pct": 0,
-      "recommend_detailed_search": false,
-      "sample_scenarios": [
-        "Adult. Long history of claudication. Acute-onset left lower-extremity pain. Abse",
-        "Adult. Nonsmoker, sedentary lifestyle. Left lower-extremity claudication on walk",
-        "Adult. Past medical history significant for diabetes mellitus, hypertension, and"
       ]
     },
     {
@@ -1474,12 +1481,102 @@
         "Vomiting, proximal bowel obstruction or atresia suspected on radiography, next i",
         "Small bowel obstruction suspected, acute presentation"
       ]
+    },
+    {
+      "topic": "orbital emergency",
+      "display_name": "Orbital Emergency",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 3,
+      "region": "neuro",
+      "primary_recommendation": {
+        "name": "CT orbits without IV contrast",
+        "display": "CT orbits without IV contrast",
+        "equivalent_procedures": [
+          "CT orbits without IV contrast"
+        ],
+        "count": 1,
+        "consensus_pct": 33
+      },
+      "alternatives": [],
+      "no_imaging_pct": 33,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Orbital cellulitis suspected, initial exam",
+        "Rhinosinusitis, acute, orbital complication suspected",
+        "Orbital infection suspected"
+      ]
+    },
+    {
+      "topic": "acute limb ischemia",
+      "display_name": "Acute Limb Ischemia",
+      "card_type": "STRONG",
+      "scenario_count": 3,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "US duplex Doppler lower extremity",
+        "display": "US duplex Doppler lower e OR MRA lower extremity witho OR CTA lower extremity with ",
+        "equivalent_procedures": [
+          "US duplex Doppler lower extremity",
+          "MRA lower extremity without and with IV contrast",
+          "CTA lower extremity with IV contrast"
+        ],
+        "count": 2,
+        "consensus_pct": 70
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Lower extremity arterial dissection",
+        "Lower extremity arterial dissection suspected",
+        "Critical limb ischemia, prior revasc, initial exam"
+      ]
+    },
+    {
+      "topic": "mesenteric ischemia",
+      "display_name": "Mesenteric Ischemia",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 3,
+      "region": "abdomen",
+      "primary_recommendation": {
+        "name": "CTA abdomen and pelvis with IV contrast",
+        "display": "CTA abdomen and pelvis with IV contrast",
+        "equivalent_procedures": [
+          "CTA abdomen and pelvis with IV contrast"
+        ],
+        "count": 2,
+        "consensus_pct": 67
+      },
+      "alternatives": [
+        {
+          "name": "US echocardiography transesophageal",
+          "percentage": 33,
+          "count": 1
+        },
+        {
+          "name": "US echocardiography transthoracic resting",
+          "percentage": 33,
+          "count": 1
+        },
+        {
+          "name": "MRA chest without and with IV contrast",
+          "percentage": 33,
+          "count": 1
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Arterial occlusion, mesenteric arterial system, embolic etiology suspected, next",
+        "Mesenteric ischemia, acute, suspected, initial exam",
+        "Mesenteric ischemia, chronic, suspected, initial exam"
+      ]
     }
   ],
   "card_counts": {
-    "CLINICAL_FIRST": 7,
-    "STRONG": 24,
-    "HIGH_VARIANCE": 10,
+    "CLINICAL_FIRST": 8,
+    "STRONG": 25,
+    "HIGH_VARIANCE": 12,
     "CONDITIONAL": 11
   }
 }

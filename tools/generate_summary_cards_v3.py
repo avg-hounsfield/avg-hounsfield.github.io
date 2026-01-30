@@ -76,7 +76,7 @@ def build_topic_patterns(synonyms, concept_synonyms):
     BASE_TOPICS = {
         # Neuro
         'headache': ['headache', 'cephalgia', 'migraine', 'head pain'],
-        'stroke': ['stroke', 'cva', 'cerebrovascular accident', 'infarct', 'ischemic stroke'],
+        'stroke': ['stroke', 'cva', 'cerebrovascular accident', 'cerebral infarct', 'ischemic stroke', 'brain attack'],
         'tia': ['transient ischemic attack', 'mini-stroke'],
         'seizure': ['seizure', 'epilepsy', 'convulsion', 'ictal'],
         'dementia': ['dementia', 'alzheimer', 'cognitive decline', 'cognitive impairment'],
@@ -87,12 +87,15 @@ def build_topic_patterns(synonyms, concept_synonyms):
         'multiple sclerosis': ['multiple sclerosis', 'demyelinating'],
         'meningitis': ['meningitis', 'meningeal'],
         'hydrocephalus': ['hydrocephalus', 'ventriculomegaly'],
+        'transverse myelitis': ['transverse myelitis', 'myelitis', 'acute sensorimotor'],
+        'orbital emergency': ['orbital cellulitis', 'orbital infection', 'orbital complication', 'orbital abscess'],
 
         # Spine - expanded patterns
         'back pain': ['back pain', 'low back pain', 'lumbar pain', 'lumbago', 'lumbar spine pain', 'thoracic spine pain'],
         'neck pain': ['neck pain', 'cervical pain', 'cervicalgia', 'cervical spine pain'],
         'radiculopathy': ['radiculopathy', 'radicular pain', 'sciatica', 'nerve root'],
-        'myelopathy': ['myelopathy', 'cord compression'],
+        'myelopathy': ['myelopathy', 'cord compression', 'spinal cord compression'],
+        'spinal cord injury': ['spinal cord injury', 'cord injury', 'cauda equina'],
         'disc herniation': ['disc herniation', 'herniated disc', 'bulging disc', 'prolapsed disc'],
         'spinal stenosis': ['spinal stenosis', 'canal stenosis'],
         'spondylosis': ['spondylosis', 'degenerative disc', 'spondyloarthritis'],
@@ -132,6 +135,7 @@ def build_topic_patterns(synonyms, concept_synonyms):
 
         # Chest
         'chest pain': ['chest pain', 'thoracic pain'],
+        'acute coronary syndrome': ['acute coronary syndrome', 'myocardial infarction', 'heart attack', 'coronary artery disease', 'cardiac ischemia'],
         'pulmonary embolism': ['pulmonary embolism', 'pe suspected', 'lung clot', 'pulmonary emboli'],
         'pneumonia': ['pneumonia', 'lung infection', 'consolidation'],
         'lung nodule': ['lung nodule', 'pulmonary nodule', 'lung mass'],
@@ -144,7 +148,9 @@ def build_topic_patterns(synonyms, concept_synonyms):
         'dvt': ['dvt', 'deep vein thrombosis', 'deep venous thrombosis', 'leg clot'],
         'carotid stenosis': ['carotid stenosis', 'carotid disease', 'carotid plaque'],
         'vascular malformation': ['vascular malformation', 'avm', 'arteriovenous malformation', 'hemangioma', 'vascular tumor', 'vascular lesion'],
-        'peripheral arterial disease': ['peripheral arterial disease', 'pad', 'claudication', 'limb ischemia'],
+        'peripheral arterial disease': ['peripheral arterial disease', 'pad', 'claudication'],
+        'mesenteric ischemia': ['mesenteric ischemia', 'mesenteric', 'bowel ischemia', 'intestinal ischemia'],
+        'acute limb ischemia': ['acute limb ischemia', 'limb ischemia', 'acute limb', 'acute lower extremity', 'extremity arterial'],
         'hemodialysis access': ['hemodialysis access', 'dialysis access', 'av fistula', 'av graft'],
 
         # Breast
@@ -159,16 +165,27 @@ def build_topic_patterns(synonyms, concept_synonyms):
         'child abuse': ['child abuse', 'physical abuse', 'non-accidental trauma', 'nat', 'abuse suspected'],
     }
 
+    # Terms that are too broad to add via synonym expansion
+    BROAD_TERMS_BLOCKLIST = {
+        'ischemia', 'ischemic', 'infarct', 'infarction',  # Too generic - matches many conditions
+        'pain', 'mass', 'lesion', 'tumor',  # Generic descriptors
+        'acute', 'chronic',  # Temporal modifiers
+    }
+
     # Expand with synonyms from semantic dictionary
     for topic, patterns in BASE_TOPICS.items():
         expanded = set(patterns)
         for pattern in patterns:
             # Check if this pattern has synonyms
             if pattern in synonyms:
-                expanded.update(synonyms[pattern])
+                for syn in synonyms[pattern]:
+                    if syn.lower() not in BROAD_TERMS_BLOCKLIST:
+                        expanded.add(syn)
             # Also check concept synonyms
             if pattern in concept_synonyms:
-                expanded.add(concept_synonyms[pattern])
+                syn = concept_synonyms[pattern]
+                if syn.lower() not in BROAD_TERMS_BLOCKLIST:
+                    expanded.add(syn)
         BASE_TOPICS[topic] = list(expanded)
 
     return BASE_TOPICS
