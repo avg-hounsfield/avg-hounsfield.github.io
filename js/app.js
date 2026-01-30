@@ -178,20 +178,60 @@ class ProtocolHelpApp {
     // Global quick search
     const globalSearchInput = document.getElementById('globalSearchInput');
     const globalSearchBtn = document.getElementById('globalSearchBtn');
+    this.activeSuggestionIndex = -1;
 
     if (globalSearchInput) {
+      // Show suggestions as user types
+      globalSearchInput.addEventListener('input', (e) => {
+        this.showSearchSuggestions(e.target.value);
+      });
+
       globalSearchInput.addEventListener('keydown', (e) => {
+        const suggestionsEl = document.getElementById('searchSuggestions');
+        const items = suggestionsEl?.querySelectorAll('.suggestion-item') || [];
+
         if (e.key === 'Enter') {
-          this.handleGlobalSearch(globalSearchInput.value);
+          e.preventDefault();
+          if (this.activeSuggestionIndex >= 0 && items[this.activeSuggestionIndex]) {
+            items[this.activeSuggestionIndex].click();
+          } else {
+            this.handleGlobalSearch(globalSearchInput.value);
+          }
+          this.hideSearchSuggestions();
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          this.activeSuggestionIndex = Math.min(this.activeSuggestionIndex + 1, items.length - 1);
+          this.updateActiveSuggestion(items);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          this.activeSuggestionIndex = Math.max(this.activeSuggestionIndex - 1, -1);
+          this.updateActiveSuggestion(items);
+        } else if (e.key === 'Escape') {
+          this.hideSearchSuggestions();
+        }
+      });
+
+      globalSearchInput.addEventListener('focus', () => {
+        if (globalSearchInput.value.trim().length >= 2) {
+          this.showSearchSuggestions(globalSearchInput.value);
         }
       });
     }
 
     if (globalSearchBtn && globalSearchInput) {
       globalSearchBtn.addEventListener('click', () => {
+        this.hideSearchSuggestions();
         this.handleGlobalSearch(globalSearchInput.value);
       });
     }
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', (e) => {
+      const container = document.querySelector('.quick-search-container');
+      if (container && !container.contains(e.target)) {
+        this.hideSearchSuggestions();
+      }
+    });
 
     // Anatomy buttons
     document.querySelectorAll('.anatomy-btn').forEach(btn => {
@@ -722,6 +762,80 @@ class ProtocolHelpApp {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+  }
+
+  // ========================================
+  // Search Suggestions (Autocomplete)
+  // ========================================
+  showSearchSuggestions(query) {
+    const suggestionsEl = document.getElementById('searchSuggestions');
+    if (!suggestionsEl) return;
+
+    const trimmed = query.trim().toLowerCase();
+    if (trimmed.length < 2 || !this.summaryCards?.cards?.length) {
+      this.hideSearchSuggestions();
+      return;
+    }
+
+    // Filter matching cards
+    const matches = this.summaryCards.cards.filter(card => {
+      const topic = card.topic.toLowerCase();
+      const displayName = (card.display_name || card.topic).toLowerCase();
+      return topic.includes(trimmed) || displayName.includes(trimmed) || trimmed.includes(topic);
+    }).slice(0, 8); // Limit to 8 suggestions
+
+    if (matches.length === 0) {
+      this.hideSearchSuggestions();
+      return;
+    }
+
+    // Render suggestions
+    suggestionsEl.innerHTML = matches.map((card, i) => {
+      const displayName = card.display_name || card.topic;
+      const badge = card.card_type === 'STRONG' ? 'Strong' :
+                    card.card_type === 'CLINICAL_FIRST' ? 'Clinical' : '';
+      return `
+        <div class="suggestion-item" data-topic="${this.escapeHtml(card.topic)}" data-index="${i}">
+          <span class="suggestion-topic">${this.escapeHtml(displayName)}</span>
+          <span class="suggestion-meta">
+            ${badge ? `<span class="suggestion-badge">${badge}</span>` : ''}
+            ${card.scenario_count} scenarios
+          </span>
+        </div>
+      `;
+    }).join('');
+
+    // Bind click events
+    suggestionsEl.querySelectorAll('.suggestion-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const topic = item.dataset.topic;
+        document.getElementById('globalSearchInput').value = topic;
+        this.hideSearchSuggestions();
+        this.handleGlobalSearch(topic);
+      });
+    });
+
+    suggestionsEl.classList.remove('hidden');
+    this.activeSuggestionIndex = -1;
+  }
+
+  hideSearchSuggestions() {
+    const suggestionsEl = document.getElementById('searchSuggestions');
+    if (suggestionsEl) {
+      suggestionsEl.classList.add('hidden');
+      suggestionsEl.innerHTML = '';
+    }
+    this.activeSuggestionIndex = -1;
+  }
+
+  updateActiveSuggestion(items) {
+    items.forEach((item, i) => {
+      item.classList.toggle('active', i === this.activeSuggestionIndex);
+    });
+    // Scroll active item into view
+    if (this.activeSuggestionIndex >= 0 && items[this.activeSuggestionIndex]) {
+      items[this.activeSuggestionIndex].scrollIntoView({ block: 'nearest' });
+    }
   }
 
   handleSearch(query) {
@@ -1875,7 +1989,7 @@ class ProtocolHelpApp {
       const activeClass = i === 0 ? ' active' : '';
       html += '<div class="suggestion-item' + activeClass + '" data-topic="' + card.topic + '">';
       html += '<span class="suggestion-topic">' + displayName + '</span>';
-      html += '<span class="suggestion-meta">' + modality + (rating ? ' • ' + rating : '') + '</span>';
+      html += '<span class="suggestion-meta">' + modality + (rating ? ' ï¿½ ' + rating : '') + '</span>';
       html += '</div>';
     }
     suggestions.innerHTML = html;
