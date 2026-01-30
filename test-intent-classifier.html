@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Intent Classifier Test</title>
+  <style>
+    body { font-family: system-ui; max-width: 800px; margin: 40px auto; padding: 20px; }
+    .test-case { margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+    .pass { background: #d4edda; }
+    .fail { background: #f8d7da; }
+    .result { font-family: monospace; margin-top: 5px; font-size: 12px; }
+    input { width: 60%; padding: 8px; margin-right: 10px; }
+    button { padding: 8px 16px; }
+  </style>
+</head>
+<body>
+  <h1>Intent Classifier Test</h1>
+  <p id="status">Loading...</p>
+
+  <div style="margin: 20px 0;">
+    <input type="text" id="queryInput" placeholder="Enter a query to test...">
+    <button onclick="testQuery()">Test</button>
+  </div>
+  <div id="customResult"></div>
+
+  <h2>Test Cases</h2>
+  <div id="results"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.0/dist/ort.min.js"></script>
+  <script type="module">
+    import { getIntentClassifier } from './js/intent-classifier.js';
+
+    const testCases = [
+      { query: 'pulmonary embolism', expectedPhase: 'initial', expectedUrgency: 'acute' },
+      { query: 'suspected PE', expectedPhase: 'initial', expectedUrgency: 'acute' },
+      { query: 'DVT', expectedPhase: 'initial', expectedUrgency: 'acute' },
+      { query: 'history of PE follow-up', expectedPhase: 'surveillance', expectedUrgency: null },
+      { query: 'known DVT surveillance', expectedPhase: 'surveillance', expectedUrgency: null },
+      { query: 'aortic dissection', expectedPhase: 'initial', expectedUrgency: 'acute' },
+      { query: 'stroke', expectedPhase: 'initial', expectedUrgency: 'acute' },
+      { query: 'brain tumor staging', expectedPhase: 'initial', expectedUrgency: null },
+      { query: 'lung cancer follow-up', expectedPhase: 'surveillance', expectedUrgency: null },
+      { query: 'routine screening mammogram', expectedPhase: 'surveillance', expectedUrgency: 'routine' },
+    ];
+
+    let classifier;
+
+    async function init() {
+      try {
+        classifier = await getIntentClassifier();
+        document.getElementById('status').textContent =
+          `Classifier loaded: Model ready=${classifier.isReady()}`;
+
+        // Run tests
+        await runTests();
+      } catch (error) {
+        document.getElementById('status').textContent = `Error: ${error.message}`;
+        console.error(error);
+      }
+    }
+
+    async function runTests() {
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      let passed = 0;
+      let total = testCases.length;
+
+      for (const tc of testCases) {
+        const result = await classifier.classify(tc.query);
+
+        const phaseMatch = !tc.expectedPhase || result.phase === tc.expectedPhase;
+        const urgencyMatch = !tc.expectedUrgency || result.urgency === tc.expectedUrgency;
+        const pass = phaseMatch && urgencyMatch;
+
+        if (pass) passed++;
+
+        const div = document.createElement('div');
+        div.className = `test-case ${pass ? 'pass' : 'fail'}`;
+        div.innerHTML = `
+          <strong>${tc.query}</strong>
+          <div class="result">
+            Phase: ${result.phase} (expected: ${tc.expectedPhase || 'any'}) ${phaseMatch ? '✓' : '✗'}
+            | Urgency: ${result.urgency} (expected: ${tc.expectedUrgency || 'any'}) ${urgencyMatch ? '✓' : '✗'}
+            | Confidence: ${(result.phaseConfidence * 100).toFixed(0)}%
+            | Source: ${result.source}
+          </div>
+        `;
+        resultsDiv.appendChild(div);
+      }
+
+      document.getElementById('status').textContent += ` | Tests: ${passed}/${total} passed`;
+    }
+
+    window.testQuery = async function() {
+      const query = document.getElementById('queryInput').value;
+      if (!query || !classifier) return;
+
+      const result = await classifier.classify(query);
+      document.getElementById('customResult').innerHTML = `
+        <div class="test-case">
+          <strong>${query}</strong>
+          <div class="result">
+            Phase: ${result.phase} (${(result.phaseConfidence * 100).toFixed(0)}%)
+            | Urgency: ${result.urgency} (${(result.urgencyConfidence * 100).toFixed(0)}%)
+            | Source: ${result.source}
+          </div>
+        </div>
+      `;
+    };
+
+    init();
+  </script>
+</body>
+</html>

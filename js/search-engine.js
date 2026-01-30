@@ -2,6 +2,7 @@
  * Search Engine - Handles semantic search with medical synonym expansion
  * and concept-based search with clinical phase grouping
  */
+import { getIntentClassifier } from './intent-classifier.js';
 
 export class SearchEngine {
   constructor(regionData) {
@@ -10,6 +11,7 @@ export class SearchEngine {
     this.embeddings = null;
     this.synonyms = null;
     this.conceptIndex = null;
+    this.intentClassifier = null;
     this.initialized = false;
   }
 
@@ -18,8 +20,20 @@ export class SearchEngine {
     await this.loadSynonyms();
     // Load concept index for concept-based search
     await this.loadConceptIndex();
+    // Load intent classifier for query phase detection
+    await this.loadIntentClassifier();
     this.buildIndex();
     this.initialized = true;
+  }
+
+  async loadIntentClassifier() {
+    try {
+      this.intentClassifier = await getIntentClassifier();
+      console.log('[SearchEngine] Intent classifier loaded, ready:', this.intentClassifier.isReady());
+    } catch (error) {
+      console.warn('[SearchEngine] Could not load intent classifier:', error);
+      this.intentClassifier = null;
+    }
   }
 
   async loadConceptIndex() {
