@@ -975,7 +975,7 @@ export class UI {
         </div>
       </div>
       <div class="quick-reference-footer">
-        Select a scenario below for full details and MRI protocols
+        Top imaging recommendations by clinical context
       </div>
     `;
   }
