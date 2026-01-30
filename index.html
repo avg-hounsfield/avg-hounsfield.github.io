@@ -26,7 +26,7 @@
   <!-- Theme Color -->
   <meta name="theme-color" content="#9B5DE5">
 
-  <link rel="stylesheet" href="css/main.css?v=20260129i">
+  <link rel="stylesheet" href="css/main.css?v=20260129l">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>R</text></svg>">
   <link rel="manifest" href="manifest.json">
 </head>
@@ -52,9 +52,64 @@
 
     <!-- Main Content -->
     <main class="main">
-      <!-- Anatomy Selector -->
-      <section class="anatomy-section" aria-labelledby="region-title">
-        <h1 class="section-title" id="region-title">Select Body Region</h1>
+      <!-- Home Section -->
+      <section class="anatomy-section" aria-labelledby="quick-search-title">
+        <!-- Quick Search Hero -->
+        <div class="quick-search-hero">
+          <h1 class="quick-search-title" id="quick-search-title">ACR Appropriateness Quick Search</h1>
+          <p class="quick-search-subtitle">Get imaging recommendations for common clinical scenarios</p>
+          <div class="quick-search-container">
+            <input
+              type="text"
+              class="quick-search-input"
+              id="globalSearchInput"
+              placeholder="e.g., stroke, headache, chest pain, fracture..."
+              autocomplete="off"
+              aria-label="Quick search clinical scenarios"
+            >
+            <button class="quick-search-btn" id="globalSearchBtn" aria-label="Search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Global Search Result (Summary Card) -->
+        <div class="global-search-result hidden" id="globalSearchResult">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Info Card (Collapsible) -->
+        <details class="info-card-collapsible">
+          <summary class="info-card-toggle">
+            <span class="info-toggle-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+            </span>
+            <span class="info-toggle-label">What is Radex?</span>
+          </summary>
+          <div class="info-card-body">
+            <p class="info-card-text">
+              Radex provides imaging recommendations based on <strong>ACR Appropriateness Criteria</strong> -
+              evidence-based guidelines that help determine the most suitable imaging study for specific clinical conditions.
+            </p>
+            <p class="info-card-note">
+              For educational purposes only. Always verify with institutional protocols.
+            </p>
+          </div>
+        </details>
+
+        <!-- Advanced Search Divider -->
+        <div class="advanced-search-divider">
+          <span class="divider-line"></span>
+          <span class="divider-text">or search by body region</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <!-- Body Region Grid -->
         <div class="anatomy-grid" role="group" aria-label="Body region selection">
           <button class="anatomy-btn" data-region="neuro" aria-label="Neuro imaging">
             <svg class="anatomy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
@@ -110,28 +165,6 @@
             </svg>
             <span>Pediatric</span>
           </button>
-        </div>
-
-        <!-- Info Card -->
-        <div class="info-card">
-          <div class="info-card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M9 12h6M12 9v6"/>
-              <circle cx="12" cy="12" r="10"/>
-            </svg>
-          </div>
-          <div class="info-card-content">
-            <h2 class="info-card-title">What is Radex?</h2>
-            <p class="info-card-text">
-              Radex is a quick-reference tool for radiology residents and medical professionals.
-              Select a body region above to search clinical scenarios and see imaging recommendations
-              based on <strong>ACR Appropriateness Criteria</strong> - evidence-based guidelines that help
-              determine the most suitable imaging study for specific clinical conditions.
-            </p>
-            <p class="info-card-note">
-              For educational purposes only. Always verify with institutional protocols and clinical judgment.
-            </p>
-          </div>
         </div>
       </section>
 
@@ -441,6 +474,11 @@
           <!-- Concept Match Header (shows when concept search matches) -->
           <div class="concept-header hidden" id="conceptHeader">
             <!-- Dynamically populated: shows "Brain Tumor - Oncology" when concept matched -->
+          </div>
+
+          <!-- Summary Card (shows quick consensus for common topics) -->
+          <div class="summary-card hidden" id="summaryCard">
+            <!-- Dynamically populated: shows consensus recommendation for common clinical topics -->
           </div>
 
           <!-- Phase Filter Chips (for concept search results) -->
@@ -912,7 +950,7 @@
     // Force service worker update on version change
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
-        const currentVersion = 'radex-v2.1.0';
+        const currentVersion = 'radex-v2.14.0';
         const storedVersion = localStorage.getItem('radex_sw_version');
         if (storedVersion !== currentVersion) {
           // Version mismatch - unregister old SW and clear caches
@@ -926,6 +964,6 @@
     }
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script type="module" src="js/app.js?v=20260129c"></script>
+  <script type="module" src="js/app.js?v=20260129d"></script>
 </body>
 </html>

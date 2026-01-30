@@ -538,6 +538,137 @@ export class UI {
     this.conceptHeader.innerHTML = '';
   }
 
+  // ========================================
+  // Summary Card (Quick Consensus)
+  // ========================================
+  showSummaryCard(card, onDetailedSearch) {
+    const summaryCard = document.getElementById('summaryCard');
+    if (!summaryCard || !card) return;
+
+    const cardTypeClass = `card-type-${card.card_type.toLowerCase().replace('_', '-')}`;
+    summaryCard.className = `summary-card ${cardTypeClass}`;
+    summaryCard.classList.remove('hidden');
+
+    const cardTypeLabels = {
+      'STRONG': 'Strong Consensus',
+      'CONDITIONAL': 'Conditional',
+      'HIGH_VARIANCE': 'High Variance',
+      'CLINICAL_FIRST': 'Clinical First'
+    };
+
+    const cardTypeIcons = {
+      'STRONG': '<path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/>',
+      'CONDITIONAL': '<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>',
+      'HIGH_VARIANCE': '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+      'CLINICAL_FIRST': '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>'
+    };
+
+    const rec = card.primary_recommendation;
+    const displayName = card.display_name || card.topic;
+
+    let bodyContent = '';
+
+    if (card.card_type === 'CLINICAL_FIRST') {
+      bodyContent = `
+        <div class="summary-card-clinical-msg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+          <span><strong>${card.no_imaging_pct}%</strong> of scenarios suggest clinical assessment before imaging</span>
+        </div>
+        ${rec.name ? `
+          <div class="summary-card-recommendation" style="margin-top: var(--space-sm)">
+            <span class="summary-card-rec-label">When imaging needed:</span>
+            <span class="summary-card-rec-primary">${this.escapeHtml(rec.name)}</span>
+          </div>
+        ` : ''}
+      `;
+    } else if (card.card_type === 'HIGH_VARIANCE') {
+      bodyContent = `
+        <div class="summary-card-clinical-msg" style="background: rgba(244, 67, 54, 0.08)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--rating-low)">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+            <path d="M12 17h.01"/>
+          </svg>
+          <span>Recommendations vary significantly based on clinical context</span>
+        </div>
+      `;
+    } else {
+      // STRONG or CONDITIONAL
+      const equivProcs = rec.equivalent_procedures || [];
+
+      bodyContent = `
+        <div class="summary-card-recommendation">
+          <span class="summary-card-rec-label">Primary:</span>
+          <span class="summary-card-rec-primary">${this.escapeHtml(rec.name || 'None')}</span>
+          ${rec.consensus_pct ? `<span class="summary-card-rec-consensus">(${rec.consensus_pct}% consensus)</span>` : ''}
+        </div>
+        ${equivProcs.length > 1 ? `
+          <div class="summary-card-equivalents">
+            ${equivProcs.map(p => `<span class="summary-card-equiv-chip">${this.escapeHtml(this.truncateProcedure(p, 30))}</span>`).join('')}
+          </div>
+        ` : ''}
+        ${card.alternatives && card.alternatives.length > 0 ? `
+          <div class="summary-card-alternatives">
+            <strong>Also consider:</strong>
+            ${card.alternatives.slice(0, 2).map(a => `${this.escapeHtml(this.truncateProcedure(a.name, 25))} (${a.percentage}%)`).join(', ')}
+          </div>
+        ` : ''}
+      `;
+    }
+
+    summaryCard.innerHTML = `
+      <div class="summary-card-header">
+        <div class="summary-card-title-row">
+          <svg class="summary-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            ${cardTypeIcons[card.card_type] || cardTypeIcons['CONDITIONAL']}
+          </svg>
+          <span class="summary-card-title">${this.escapeHtml(displayName)}</span>
+          <span class="summary-card-badge">${cardTypeLabels[card.card_type] || card.card_type}</span>
+        </div>
+        <button class="summary-card-dismiss" title="Dismiss">&times;</button>
+      </div>
+      <div class="summary-card-meta">Based on ${card.scenario_count} ACR scenarios</div>
+      <div class="summary-card-body">
+        ${bodyContent}
+      </div>
+      <div class="summary-card-footer">
+        <span class="summary-card-source">ACR Appropriateness Criteria</span>
+        ${card.recommend_detailed_search || card.card_type === 'HIGH_VARIANCE' ? `
+          <button class="summary-card-action" id="summaryDetailedSearch">
+            See detailed scenarios &rarr;
+          </button>
+        ` : ''}
+      </div>
+    `;
+
+    // Bind dismiss button
+    const dismissBtn = summaryCard.querySelector('.summary-card-dismiss');
+    if (dismissBtn) {
+      dismissBtn.addEventListener('click', () => this.hideSummaryCard());
+    }
+
+    // Bind detailed search button
+    const detailBtn = summaryCard.querySelector('#summaryDetailedSearch');
+    if (detailBtn && onDetailedSearch) {
+      detailBtn.addEventListener('click', () => onDetailedSearch(card.topic));
+    }
+  }
+
+  hideSummaryCard() {
+    const summaryCard = document.getElementById('summaryCard');
+    if (summaryCard) {
+      summaryCard.classList.add('hidden');
+      summaryCard.innerHTML = '';
+    }
+  }
+
+  truncateProcedure(name, maxLen = 30) {
+    if (!name || name.length <= maxLen) return name || '';
+    return name.substring(0, maxLen - 3) + '...';
+  }
+
   formatRegionName(region) {
     const names = {
       neuro: 'Neuro',

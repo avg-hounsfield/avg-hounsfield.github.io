@@ -1,0 +1,1065 @@
+{
+  "version": "3.0.0",
+  "generated_at": "2026-01-29T15:25:51.675613",
+  "total_scenarios": 3226,
+  "matched_scenarios": 1845,
+  "match_rate_pct": 57,
+  "cards": [
+    {
+      "topic": "fracture",
+      "display_name": "Fracture",
+      "card_type": "STRONG",
+      "scenario_count": 255,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "X-Ray",
+        "display": "X-Ray",
+        "equivalent_procedures": [
+          "X-Ray"
+        ],
+        "count": 207,
+        "consensus_pct": 81
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Sacrum stress fracture on radiography, next imaging study, associated complicati",
+        "Sacrum stress fracture on radiography, next imaging study, determining extent",
+        "Sacrum stress fracture suspected, pregnant, radiography indeterminate, next imag"
+      ]
+    },
+    {
+      "topic": "pneumonia",
+      "display_name": "Pneumonia",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 225,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": "X-Ray",
+        "display": "X-Ray",
+        "equivalent_procedures": [
+          "X-Ray"
+        ],
+        "count": 94,
+        "consensus_pct": 42
+      },
+      "alternatives": [],
+      "no_imaging_pct": 23,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Orbital infection suspected",
+        "Cervical spine pain, acute, no trauma, infection",
+        "Cervical spine pain, acute, no trauma, infection suspected"
+      ]
+    },
+    {
+      "topic": "arthritis",
+      "display_name": "Arthritis",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 204,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "X-Ray",
+        "display": "X-Ray",
+        "equivalent_procedures": [
+          "X-Ray"
+        ],
+        "count": 88,
+        "consensus_pct": 43
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Cervical and thoracic spine pain, idiopathic arthritis suspected",
+        "Cervical and thoracic spine pain, idiopathic arthritis, follow-up imaging",
+        "Cervical spine pain, idiopathic arthritis suspected"
+      ]
+    },
+    {
+      "topic": "breast cancer",
+      "display_name": "Breast Cancer",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 147,
+      "region": "breast",
+      "primary_recommendation": {
+        "name": "Mammography screening",
+        "display": "Mammography screening OR US Breast OR Mammography diagnostic",
+        "equivalent_procedures": [
+          "Mammography screening",
+          "US Breast",
+          "Mammography diagnostic",
+          "MRI breast without and with IV contrast"
+        ],
+        "count": 27,
+        "consensus_pct": 18
+      },
+      "alternatives": [],
+      "no_imaging_pct": 14,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Breast cancer screening, thoracic radiation therapy at 10-30yo",
+        "Breast cancer screening, thoracic radiation therapy at 10-30yo",
+        "Ovarian cancer screening, postmenopausal, high risk, family hx of breast cancer"
+      ]
+    },
+    {
+      "topic": "back pain",
+      "display_name": "Back Pain",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 120,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": "Radiography sacroiliac joints",
+        "display": "Radiography sacroiliac jo OR Radiography sacroiliac jo",
+        "equivalent_procedures": [
+          "Radiography sacroiliac joints",
+          "Radiography sacroiliac joints and spine area of interest"
+        ],
+        "count": 24,
+        "consensus_pct": 20
+      },
+      "alternatives": [],
+      "no_imaging_pct": 35,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Hip pain, chronic, low back pain, hip osteoarthritis on radiography, next imagin",
+        "Inflammatory back pain, buttock symptoms, axial spondyloarthritis suspected",
+        "Inflammatory back pain, buttock symptoms, axial spondyloarthritis suspected, rad"
+      ]
+    },
+    {
+      "topic": "osteomyelitis",
+      "display_name": "Osteomyelitis",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 109,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "X-Ray",
+        "display": "X-Ray",
+        "equivalent_procedures": [
+          "X-Ray"
+        ],
+        "count": 54,
+        "consensus_pct": 50
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Osteomyelitis suspected, ankle, implanted extra articular surgical hardware, rad",
+        "Osteomyelitis suspected, ankle, implanted extra articular surgical hardware, rad",
+        "Osteomyelitis suspected, ankle, implanted extra articular surgical hardware, rad"
+      ]
+    },
+    {
+      "topic": "child abuse",
+      "display_name": "Child Abuse",
+      "card_type": "STRONG",
+      "scenario_count": 97,
+      "region": "neuro",
+      "primary_recommendation": {
+        "name": "CT Brain W/O Contrast",
+        "display": "CT Brain W/O Contrast",
+        "equivalent_procedures": [
+          "CT Brain W/O Contrast"
+        ],
+        "count": 68,
+        "consensus_pct": 70
+      },
+      "alternatives": [
+        {
+          "name": "Radiography skeletal survey",
+          "percentage": 52,
+          "count": 50
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Physical abuse suspected, concern for abdominal injury based on clinical present",
+        "Physical abuse suspected, concern for abdominal injury based on clinical present",
+        "Physical abuse suspected, concern for cervical and lumbar spine injury based on "
+      ]
+    },
+    {
+      "topic": "soft tissue mass",
+      "display_name": "Soft Tissue Mass",
+      "card_type": "STRONG",
+      "scenario_count": 84,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "US area of interest",
+        "display": "US area of interest OR X-Ray",
+        "equivalent_procedures": [
+          "US area of interest",
+          "X-Ray"
+        ],
+        "count": 64,
+        "consensus_pct": 76
+      },
+      "alternatives": [
+        {
+          "name": "CT Chest W/O Contrast",
+          "percentage": 24,
+          "count": 20
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Primary soft tissue tumor, aggressive, ankle, local recurrence surveillance",
+        "Primary soft tissue tumor, aggressive, elbow, local recurrence surveillance",
+        "Primary soft tissue tumor, aggressive, foot, local recurrence surveillance"
+      ]
+    },
+    {
+      "topic": "shoulder pain",
+      "display_name": "Shoulder Pain",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 56,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "Radiography shoulder",
+        "display": "Radiography shoulder",
+        "equivalent_procedures": [
+          "Radiography shoulder"
+        ],
+        "count": 38,
+        "consensus_pct": 68
+      },
+      "alternatives": [
+        {
+          "name": "X-Ray",
+          "percentage": 27,
+          "count": 15
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Physical abuse suspected, concern for shoulder injury based on clinical presenta",
+        "Physical abuse suspected, concern for shoulder injury based on clinical presenta",
+        "Shoulder pain, acute, any etiology"
+      ]
+    },
+    {
+      "topic": "hip pain",
+      "display_name": "Hip Pain",
+      "card_type": "STRONG",
+      "scenario_count": 49,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "Radiography hip",
+        "display": "Radiography hip OR Radiography pelvis",
+        "equivalent_procedures": [
+          "Radiography hip",
+          "Radiography pelvis"
+        ],
+        "count": 22,
+        "consensus_pct": 70
+      },
+      "alternatives": [
+        {
+          "name": "X-Ray",
+          "percentage": 27,
+          "count": 13
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Physical abuse suspected, concern for hip injury based on clinical presentation ",
+        "Physical abuse suspected, concern for hip injury based on clinical presentation ",
+        "Hip pain, acute, traumatic, fracture on radiography, next imaging study"
+      ]
+    },
+    {
+      "topic": "stroke",
+      "display_name": "Stroke",
+      "card_type": "STRONG",
+      "scenario_count": 41,
+      "region": "neuro",
+      "primary_recommendation": {
+        "name": "MRI Brain W/O Contrast",
+        "display": "MRI Brain W/O Contrast OR CT Brain W/O Contrast",
+        "equivalent_procedures": [
+          "MRI Brain W/O Contrast",
+          "CT Brain W/O Contrast"
+        ],
+        "count": 18,
+        "consensus_pct": 70
+      },
+      "alternatives": [
+        {
+          "name": "MRA head without IV contrast",
+          "percentage": 32,
+          "count": 13
+        },
+        {
+          "name": "US duplex Doppler carotid artery",
+          "percentage": 10,
+          "count": 4
+        },
+        {
+          "name": "CTA head with IV contrast",
+          "percentage": 10,
+          "count": 4
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Cognitive impairment, recent stroke, vascular dementia suspected",
+        "Ischemic stroke suspected, acute, focal neuro deficit",
+        "Stroke suspected, acute non-sickle cell, <24 hrs from sx onset, emergent imaging"
+      ]
+    },
+    {
+      "topic": "knee pain",
+      "display_name": "Knee Pain",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 38,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "X-Ray",
+        "display": "X-Ray",
+        "equivalent_procedures": [
+          "X-Ray"
+        ],
+        "count": 15,
+        "consensus_pct": 39
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Physical abuse suspected, concern for knee injury based on clinical presentation",
+        "Physical abuse suspected, concern for knee injury based on clinical presentation",
+        "Hip pain, chronic, knee pain, hip osteoarthritis on radiography, next imaging st"
+      ]
+    },
+    {
+      "topic": "headache",
+      "display_name": "Headache",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 37,
+      "region": "neuro",
+      "primary_recommendation": {
+        "name": "CT Brain W/O Contrast",
+        "display": "CT Brain W/O Contrast",
+        "equivalent_procedures": [
+          "CT Brain W/O Contrast"
+        ],
+        "count": 19,
+        "consensus_pct": 51
+      },
+      "alternatives": [
+        {
+          "name": "MRI Total Spine W/O & W/ Contrast",
+          "percentage": 22,
+          "count": 8
+        },
+        {
+          "name": "MRI complete spine without IV contrast",
+          "percentage": 22,
+          "count": 8
+        },
+        {
+          "name": "MRI Brain W/O & W/ Contrast",
+          "percentage": 22,
+          "count": 8
+        }
+      ],
+      "no_imaging_pct": 24,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Headache, cancer hx",
+        "Headache, cervicogenic suspected, no neuro deficit",
+        "Headache, chronic, daily, intracranial hypotension suspected, initial imaging ne"
+      ]
+    },
+    {
+      "topic": "wrist pain",
+      "display_name": "Wrist Pain",
+      "card_type": "STRONG",
+      "scenario_count": 35,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "X-Ray",
+        "display": "X-Ray",
+        "equivalent_procedures": [
+          "X-Ray"
+        ],
+        "count": 31,
+        "consensus_pct": 89
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Physical abuse suspected, concern for wrist injury based on clinical presentatio",
+        "Physical abuse suspected, concern for wrist injury based on clinical presentatio",
+        "Wrist pain, chronic, carpal tunnel syndrome suspected, radiography indeterminate"
+      ]
+    },
+    {
+      "topic": "head trauma",
+      "display_name": "Head Trauma",
+      "card_type": "CLINICAL_FIRST",
+      "scenario_count": 27,
+      "region": "neuro",
+      "primary_recommendation": {
+        "name": null,
+        "display": null,
+        "equivalent_procedures": [],
+        "count": 0,
+        "consensus_pct": 0
+      },
+      "alternatives": [],
+      "no_imaging_pct": 100,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Head trauma, acute, mild, GCS 13-15, imaging indicated per clinical decision rul",
+        "Head trauma, acute, mild, GCS 13-15, imaging not indicated per clinical decision",
+        "Head trauma, acute, moderate, GCS 9-12"
+      ]
+    },
+    {
+      "topic": "ankle pain",
+      "display_name": "Ankle Pain",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 27,
+      "region": "msk",
+      "primary_recommendation": {
+        "name": "X-Ray",
+        "display": "X-Ray",
+        "equivalent_procedures": [
+          "X-Ray"
+        ],
+        "count": 15,
+        "consensus_pct": 56
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Physical abuse suspected, concern for ankle injury based on clinical presentatio",
+        "Physical abuse suspected, concern for ankle injury based on clinical presentatio",
+        "Ped <=5yo, acute limp, ankle pain"
+      ]
+    },
+    {
+      "topic": "breast mass",
+      "display_name": "Breast Mass",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 24,
+      "region": "breast",
+      "primary_recommendation": {
+        "name": "Mammography diagnostic",
+        "display": "Mammography diagnostic",
+        "equivalent_procedures": [
+          "Mammography diagnostic"
+        ],
+        "count": 13,
+        "consensus_pct": 54
+      },
+      "alternatives": [
+        {
+          "name": "Mammography screening",
+          "percentage": 21,
+          "count": 5
+        }
+      ],
+      "no_imaging_pct": 25,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Breast mass palpable, breast cancer suspected",
+        "Breast mass palpable, initial exam (male<25y)",
+        "Breast mass palpable, initial exam (male>=25y)"
+      ]
+    },
+    {
+      "topic": "spondylosis",
+      "display_name": "Spondylosis",
+      "card_type": "STRONG",
+      "scenario_count": 23,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": "Radiography sacroiliac joints",
+        "display": "Radiography sacroiliac jo OR Radiography sacroiliac jo",
+        "equivalent_procedures": [
+          "Radiography sacroiliac joints",
+          "Radiography sacroiliac joints and spine area of interest"
+        ],
+        "count": 23,
+        "consensus_pct": 100
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Axial spondyloarthritis, cervical and lumbar spine, disease progression, follow ",
+        "Axial spondyloarthritis, cervical and lumbar spine, treatment response, follow u",
+        "Axial spondyloarthritis, cervical and thoracic spine, disease progression, follo"
+      ]
+    },
+    {
+      "topic": "chest pain",
+      "display_name": "Chest Pain",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 22,
+      "region": "chest",
+      "primary_recommendation": {
+        "name": "Chest X-Ray",
+        "display": "Chest X-Ray",
+        "equivalent_procedures": [
+          "Chest X-Ray"
+        ],
+        "count": 14,
+        "consensus_pct": 64
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Chest pain, acute aortic syndrome suspected",
+        "Chest pain, acute, nonspecific, low probability CAD",
+        "Chest pain, chronic, low-mod prob of CAD"
+      ]
+    },
+    {
+      "topic": "seizure",
+      "display_name": "Seizure",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 20,
+      "region": "neuro",
+      "primary_recommendation": {
+        "name": "MRI Brain W/O Contrast",
+        "display": "MRI Brain W/O Contrast",
+        "equivalent_procedures": [
+          "MRI Brain W/O Contrast"
+        ],
+        "count": 8,
+        "consensus_pct": 40
+      },
+      "alternatives": [],
+      "no_imaging_pct": 20,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Otitis externa, immunosuppressed, seizures",
+        "Otitis externa, poorly controlled diabetes, seizures",
+        "Otitis media, seizures"
+      ]
+    },
+    {
+      "topic": "radiculopathy",
+      "display_name": "Radiculopathy",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 20,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": null,
+        "display": null,
+        "equivalent_procedures": [],
+        "count": 0,
+        "consensus_pct": 0
+      },
+      "alternatives": [],
+      "no_imaging_pct": 30,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Lumbar spine trauma, acute, blunt, nerve root injury suspected, with or without ",
+        "Lumbar spine trauma, acute, blunt, nerve root injury, with or without trauma on ",
+        "Thoracic spine trauma, acute, blunt, nerve root injury suspected, with or withou"
+      ]
+    },
+    {
+      "topic": "aneurysm",
+      "display_name": "Aneurysm",
+      "card_type": "STRONG",
+      "scenario_count": 18,
+      "region": "chest",
+      "primary_recommendation": {
+        "name": "CTA chest abdomen pelvis with IV contrast",
+        "display": "CTA chest abdomen pelvis  OR MRA chest abdomen pelvis  OR MRA chest abdomen pelvis ",
+        "equivalent_procedures": [
+          "CTA chest abdomen pelvis with IV contrast",
+          "MRA chest abdomen pelvis without and with IV contrast",
+          "MRA chest abdomen pelvis without IV contrast"
+        ],
+        "count": 5,
+        "consensus_pct": 70
+      },
+      "alternatives": [
+        {
+          "name": "Fluoroscopy fistulography hemodialysis access area of interest",
+          "percentage": 17,
+          "count": 3
+        },
+        {
+          "name": "US duplex Doppler hemodialysis access area of interest",
+          "percentage": 17,
+          "count": 3
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Cerebral aneurysm screening, high risk",
+        "Cerebral aneurysm, treated, surveillance",
+        "Cerebral aneurysm, untreated, surveillance"
+      ]
+    },
+    {
+      "topic": "lung cancer",
+      "display_name": "Lung Cancer",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 18,
+      "region": "chest",
+      "primary_recommendation": {
+        "name": "Chest X-Ray",
+        "display": "Chest X-Ray OR MRI Brain W/O & W/ Contra OR CT Chest W/ Contrast",
+        "equivalent_procedures": [
+          "Chest X-Ray",
+          "MRI Brain W/O & W/ Contrast",
+          "CT Chest W/ Contrast",
+          "CT Chest W/O Contrast",
+          "FDG-PET/CT skull base to mid-thigh"
+        ],
+        "count": 2,
+        "consensus_pct": 11
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Cough, chronic, >8 wks, increased lung cancer risk",
+        "Cough, chronic, >8 wks, no lung cancer risk factors",
+        "Lung cancer screening, <20 pack yrs smoking history, no family hx of lung cancer"
+      ]
+    },
+    {
+      "topic": "liver mass",
+      "display_name": "Liver Mass",
+      "card_type": "STRONG",
+      "scenario_count": 15,
+      "region": "abdomen",
+      "primary_recommendation": {
+        "name": "US abdomen with IV contrast",
+        "display": "US abdomen with IV contra OR MRI abdomen without and w OR CT abdomen with IV contra",
+        "equivalent_procedures": [
+          "US abdomen with IV contrast",
+          "MRI abdomen without and with IV contrast",
+          "CT abdomen with IV contrast multiphase"
+        ],
+        "count": 15,
+        "consensus_pct": 100
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Liver lesion, <1cm, incidental finding on noncontrast MRI, chronic liver disease",
+        "Liver lesion, <1cm, incidental finding on noncontrast or single phase CT, chroni",
+        "Liver lesion, <1cm, incidental finding on US, chronic liver disease"
+      ]
+    },
+    {
+      "topic": "abdominal pain",
+      "display_name": "Abdominal Pain",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 14,
+      "region": "abdomen",
+      "primary_recommendation": {
+        "name": "Angiography and aspiration embolectomy",
+        "display": "Angiography and aspiration embolectomy",
+        "equivalent_procedures": [
+          "Angiography and aspiration embolectomy"
+        ],
+        "count": 6,
+        "consensus_pct": 43
+      },
+      "alternatives": [
+        {
+          "name": "Chest X-Ray",
+          "percentage": 21,
+          "count": 3
+        },
+        {
+          "name": "CT Abdomen/Pelvis W/ Contrast",
+          "percentage": 21,
+          "count": 3
+        },
+        {
+          "name": "Radiography abdomen and pelvis",
+          "percentage": 14,
+          "count": 2
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Sepsis suspected, acute abdominal pain",
+        "Sepsis, acute abdominal pain",
+        "Abdominal pain after meals and CTA showing widely patent origins of SMA and IMA,"
+      ]
+    },
+    {
+      "topic": "lung nodule",
+      "display_name": "Lung Nodule",
+      "card_type": "STRONG",
+      "scenario_count": 13,
+      "region": "chest",
+      "primary_recommendation": {
+        "name": "US echocardiography transthoracic with IV contrast",
+        "display": "US echocardiography trans OR MRA pulmonary arteries wi OR CT Chest W/O Contrast",
+        "equivalent_procedures": [
+          "US echocardiography transthoracic with IV contrast",
+          "MRA pulmonary arteries without and with IV contrast",
+          "CT Chest W/O Contrast",
+          "CTA pulmonary arteries with IV contrast"
+        ],
+        "count": 3,
+        "consensus_pct": 70
+      },
+      "alternatives": [
+        {
+          "name": "Endobronchial ultrasound and biopsy",
+          "percentage": 15,
+          "count": 2
+        }
+      ],
+      "no_imaging_pct": 8,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "PAVM suspected, brain abscess, lung nodule on chest radiography, next imaging st",
+        "Pulmonary nodule on incomplete thoracic CT, incidental, indeterminate, next imag",
+        "Pulmonary nodule on chest CT, incidental, indeterminate, <6mm, next imaging stud"
+      ]
+    },
+    {
+      "topic": "dementia",
+      "display_name": "Dementia",
+      "card_type": "STRONG",
+      "scenario_count": 12,
+      "region": "neuro",
+      "primary_recommendation": {
+        "name": "MRI Brain W/O Contrast",
+        "display": "MRI Brain W/O Contrast OR Amyloid PET/CT brain OR CT Brain W/O Contrast",
+        "equivalent_procedures": [
+          "MRI Brain W/O Contrast",
+          "Amyloid PET/CT brain",
+          "CT Brain W/O Contrast",
+          "PET/CT Brain FDG"
+        ],
+        "count": 11,
+        "consensus_pct": 92
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Alzheimer disease, antiamyloid monoclonal antibodies therapy, posttreatment imag",
+        "Alzheimer disease, antiamyloid monoclonal antibodies therapy, pretreatment imagi",
+        "Cognitive impairment, behavioral abnormalities, frontotemporal dementia suspecte"
+      ]
+    },
+    {
+      "topic": "myelopathy",
+      "display_name": "Myelopathy",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 12,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": null,
+        "display": null,
+        "equivalent_procedures": [],
+        "count": 0,
+        "consensus_pct": 0
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Myelopathy, acute, cervical and thoracic spine",
+        "Myelopathy, acute, cervical spine",
+        "Myelopathy, acute, complete spine"
+      ]
+    },
+    {
+      "topic": "pulmonary embolism",
+      "display_name": "Pulmonary Embolism",
+      "card_type": "CLINICAL_FIRST",
+      "scenario_count": 12,
+      "region": "chest",
+      "primary_recommendation": {
+        "name": "MRA chest with IV contrast",
+        "display": "MRA chest with IV contras OR CTA pulmonary arteries wi",
+        "equivalent_procedures": [
+          "MRA chest with IV contrast",
+          "CTA pulmonary arteries with IV contrast"
+        ],
+        "count": 2,
+        "consensus_pct": 17
+      },
+      "alternatives": [],
+      "no_imaging_pct": 83,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Pulmonary embolism suspected, high pretest probability",
+        "Pulmonary embolism suspected, intermediate pretest probability, negative D-dimer",
+        "Pulmonary embolism suspected, intermediate pretest probability, positive D-dimer"
+      ]
+    },
+    {
+      "topic": "vertigo",
+      "display_name": "Vertigo",
+      "card_type": "CLINICAL_FIRST",
+      "scenario_count": 11,
+      "region": "neuro",
+      "primary_recommendation": {
+        "name": "CT temporal bone without IV contrast",
+        "display": "CT temporal bone without IV contrast",
+        "equivalent_procedures": [
+          "CT temporal bone without IV contrast"
+        ],
+        "count": 2,
+        "consensus_pct": 18
+      },
+      "alternatives": [],
+      "no_imaging_pct": 82,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Dizziness, nonspecific, without vertigo, ataxia, or other neuro deficits",
+        "Otitis media, vertigo",
+        "Vertigo, acute, persistent, abnormal neuro exam"
+      ]
+    },
+    {
+      "topic": "aortic dissection",
+      "display_name": "Aortic Dissection",
+      "card_type": "STRONG",
+      "scenario_count": 10,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": "CTA chest abdomen pelvis with IV contrast",
+        "display": "CTA chest abdomen pelvis  OR MRA chest abdomen pelvis  OR MRA chest abdomen pelvis ",
+        "equivalent_procedures": [
+          "CTA chest abdomen pelvis with IV contrast",
+          "MRA chest abdomen pelvis without and with IV contrast",
+          "MRA chest abdomen pelvis without IV contrast"
+        ],
+        "count": 5,
+        "consensus_pct": 70
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Thoracic aortic dissection, open repair, surveillance",
+        "Thoracic aortic dissection, preprocedure planning, open repair",
+        "Thoracic aortic dissection, preprocedure planning, TEVAR"
+      ]
+    },
+    {
+      "topic": "appendicitis",
+      "display_name": "Appendicitis",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 9,
+      "region": "abdomen",
+      "primary_recommendation": {
+        "name": "CT Abdomen/Pelvis W/ Contrast",
+        "display": "CT Abdomen/Pelvis W/ Contrast",
+        "equivalent_procedures": [
+          "CT Abdomen/Pelvis W/ Contrast"
+        ],
+        "count": 4,
+        "consensus_pct": 44
+      },
+      "alternatives": [
+        {
+          "name": "CT Chest W/ Contrast",
+          "percentage": 22,
+          "count": 2
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Appendicitis suspected, complication suspected on imaging",
+        "Appendicitis suspected, high clinical risk, initial exam",
+        "Appendicitis suspected, intermediate clinical risk, initial exam"
+      ]
+    },
+    {
+      "topic": "renal mass",
+      "display_name": "Renal Mass",
+      "card_type": "STRONG",
+      "scenario_count": 9,
+      "region": "abdomen",
+      "primary_recommendation": {
+        "name": "US abdomen with IV contrast",
+        "display": "US abdomen with IV contra OR MRI abdomen without and w OR CT abdomen without and wi",
+        "equivalent_procedures": [
+          "US abdomen with IV contrast",
+          "MRI abdomen without and with IV contrast",
+          "CT abdomen without and with IV contrast"
+        ],
+        "count": 3,
+        "consensus_pct": 70
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Adrenal mass, <4cm on imaging, no benign features, hx of malignancy, adrenal spe",
+        "Adrenal mass, >=4cm on imaging, no benign features, hx of malignancy, adrenal sp",
+        "Adrenal mass, indeterminate, <1cm on imaging, no benign features, no hx of malig"
+      ]
+    },
+    {
+      "topic": "pancreatitis",
+      "display_name": "Pancreatitis",
+      "card_type": "CONDITIONAL",
+      "scenario_count": 9,
+      "region": "abdomen",
+      "primary_recommendation": {
+        "name": "US Abdomen",
+        "display": "US Abdomen",
+        "equivalent_procedures": [
+          "US Abdomen"
+        ],
+        "count": 6,
+        "consensus_pct": 67
+      },
+      "alternatives": [
+        {
+          "name": "CT Abdomen/Pelvis W/ Contrast",
+          "percentage": 33,
+          "count": 3
+        },
+        {
+          "name": "MRI abdomen without and with IV contrast with MRCP",
+          "percentage": 22,
+          "count": 2
+        },
+        {
+          "name": "CT abdomen and pelvis without and with IV contrast",
+          "percentage": 22,
+          "count": 2
+        }
+      ],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Pancreatitis necrotizing, significant clinical deterioration",
+        "Pancreatitis suspected, atypical presentation",
+        "Pancreatitis suspected, typical presentation"
+      ]
+    },
+    {
+      "topic": "brain tumor",
+      "display_name": "Brain Tumor",
+      "card_type": "STRONG",
+      "scenario_count": 7,
+      "region": "neuro",
+      "primary_recommendation": {
+        "name": "MRI Brain W/O & W/ Contrast",
+        "display": "MRI Brain W/O & W/ Contrast",
+        "equivalent_procedures": [
+          "MRI Brain W/O & W/ Contrast"
+        ],
+        "count": 7,
+        "consensus_pct": 100
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Brain tumor metastatic, screening, extracranial malignancy",
+        "Brain tumor on prior imaging, extra-axial suspected, pretreatment evaluation",
+        "Brain tumor on prior imaging, intra-axial suspected, pretreatment evaluation"
+      ]
+    },
+    {
+      "topic": "neck pain",
+      "display_name": "Neck Pain",
+      "card_type": "STRONG",
+      "scenario_count": 4,
+      "region": "spine",
+      "primary_recommendation": {
+        "name": "MRI spine area of interest without IV contrast",
+        "display": "MRI spine area of interes OR CT spine area of interest",
+        "equivalent_procedures": [
+          "MRI spine area of interest without IV contrast",
+          "CT spine area of interest without IV contrast"
+        ],
+        "count": 2,
+        "consensus_pct": 70
+      },
+      "alternatives": [],
+      "no_imaging_pct": 50,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Neck trauma, torticollis or neck pain",
+        "Neck pain, new, previously treated vertebral compression fracture",
+        "Neck pain, new, hx of multiple vertebral compression fractures"
+      ]
+    },
+    {
+      "topic": "pleural effusion",
+      "display_name": "Pleural Effusion",
+      "card_type": "HIGH_VARIANCE",
+      "scenario_count": 4,
+      "region": "chest",
+      "primary_recommendation": {
+        "name": null,
+        "display": null,
+        "equivalent_procedures": [],
+        "count": 0,
+        "consensus_pct": 0
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": true,
+      "sample_scenarios": [
+        "Pleural effusion, incidental, incomplete thoracic imaging, next imaging study",
+        "Pleural effusion suspected, noninfectious, cough",
+        "Pleural effusion suspected, noninfectious, dyspnea"
+      ]
+    },
+    {
+      "topic": "bowel obstruction",
+      "display_name": "Bowel Obstruction",
+      "card_type": "STRONG",
+      "scenario_count": 4,
+      "region": "abdomen",
+      "primary_recommendation": {
+        "name": "Radiography abdomen",
+        "display": "Radiography abdomen OR CT Abdomen/Pelvis W/ Cont",
+        "equivalent_procedures": [
+          "Radiography abdomen",
+          "CT Abdomen/Pelvis W/ Contrast"
+        ],
+        "count": 2,
+        "consensus_pct": 70
+      },
+      "alternatives": [],
+      "no_imaging_pct": 0,
+      "recommend_detailed_search": false,
+      "sample_scenarios": [
+        "Vomiting, distal bowel obstruction on radiography, next imaging study",
+        "Vomiting, proximal bowel obstruction or atresia suspected on radiography, next i",
+        "Small bowel obstruction suspected, acute presentation"
+      ]
+    }
+  ],
+  "card_counts": {
+    "STRONG": 16,
+    "CONDITIONAL": 12,
+    "HIGH_VARIANCE": 7,
+    "CLINICAL_FIRST": 3
+  }
+}

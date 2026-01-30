@@ -12,6 +12,7 @@ import { DataLoader } from './data-loader.js';
 import { UI } from './ui.js';
 import { RadLiteAPI } from './radlite-api.js';
 import { ProtocolBuilder } from './protocol-builder.js';
+import { SummaryCards } from './summary-cards.js';
 
 class ProtocolHelpApp {
   constructor() {
@@ -23,6 +24,7 @@ class ProtocolHelpApp {
     this.ui = new UI();
     this.radlite = new RadLiteAPI();
     this.protocolBuilder = new ProtocolBuilder();
+    this.summaryCards = new SummaryCards();
     this.debounceTimer = null;
     this.differentialTimer = null;
     this.protocolDebounceTimer = null;
@@ -167,10 +169,30 @@ class ProtocolHelpApp {
 
   async init() {
     this.bindEvents();
+    // Load summary cards for global quick search
+    this.summaryCards.load();
     this.ui.setStatus('Ready');
   }
 
   bindEvents() {
+    // Global quick search
+    const globalSearchInput = document.getElementById('globalSearchInput');
+    const globalSearchBtn = document.getElementById('globalSearchBtn');
+
+    if (globalSearchInput) {
+      globalSearchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          this.handleGlobalSearch(globalSearchInput.value);
+        }
+      });
+    }
+
+    if (globalSearchBtn && globalSearchInput) {
+      globalSearchBtn.addEventListener('click', () => {
+        this.handleGlobalSearch(globalSearchInput.value);
+      });
+    }
+
     // Anatomy buttons
     document.querySelectorAll('.anatomy-btn').forEach(btn => {
       btn.addEventListener('click', () => this.selectRegion(btn.dataset.region));
@@ -511,8 +533,11 @@ class ProtocolHelpApp {
     document.getElementById('regionTitle').textContent = this.formatRegionName(region);
 
     try {
-      // Load region-specific data
-      const data = await this.dataLoader.loadRegion(region);
+      // Load region-specific data and summary cards in parallel
+      const [data] = await Promise.all([
+        this.dataLoader.loadRegion(region),
+        this.summaryCards.load() // Load summary cards (cached after first load)
+      ]);
 
       // Initialize search engine with region data
       this.searchEngine = new SearchEngine(data);
@@ -531,6 +556,7 @@ class ProtocolHelpApp {
     this.currentScenario = null;
     this.searchEngine = null;
     this.radlite.clearCache(); // Clear cache when going back
+    this.ui.hideSummaryCard();
     this.clearSearch();
 
     document.querySelector('.anatomy-section').classList.remove('hidden');
@@ -541,6 +567,144 @@ class ProtocolHelpApp {
     });
 
     this.ui.setStatus('Ready');
+  }
+
+  // ========================================
+  // Global Quick Search
+  // ========================================
+  handleGlobalSearch(query) {
+    const resultContainer = document.getElementById('globalSearchResult');
+    if (!resultContainer) return;
+
+    const trimmed = query.trim();
+    if (!trimmed) {
+      resultContainer.classList.add('hidden');
+      resultContainer.innerHTML = '';
+      return;
+    }
+
+    // Find matching summary card
+    const card = this.summaryCards.findMatch(trimmed);
+
+    if (!card) {
+      // No match - show a hint to use advanced search
+      resultContainer.classList.remove('hidden');
+      resultContainer.innerHTML = `
+        <div class="global-result-card">
+          <div class="global-result-body">
+            <p class="global-result-recommendation">
+              No quick answer found for "<strong>${this.escapeHtml(trimmed)}</strong>".
+              Try the body region search below for more specific scenarios.
+            </p>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    // Render the card
+    this.renderGlobalSearchResult(card, resultContainer);
+  }
+
+  renderGlobalSearchResult(card, container) {
+    const rec = card.primary_recommendation;
+    const displayName = card.display_name || card.topic;
+    const equivProcs = rec.equivalent_procedures || [];
+
+    let bodyContent = '';
+
+    if (card.card_type === 'CLINICAL_FIRST') {
+      bodyContent = `
+        <div class="global-result-clinical">
+          <strong>${card.no_imaging_pct}%</strong> of scenarios suggest clinical assessment before imaging
+        </div>
+        ${rec.name ? `
+          <p class="global-result-recommendation">
+            When imaging is indicated: <strong>${this.escapeHtml(rec.name)}</strong>
+          </p>
+        ` : ''}
+      `;
+    } else if (card.card_type === 'HIGH_VARIANCE') {
+      bodyContent = `
+        <div class="global-result-clinical">
+          Recommendations vary significantly based on clinical context.
+          Use the body region search below for specific guidance.
+        </div>
+      `;
+    } else {
+      // STRONG or CONDITIONAL
+      const consensusClass = rec.consensus_pct >= 70 ? '' : (rec.consensus_pct >= 40 ? 'moderate' : 'low');
+
+      bodyContent = `
+        <div class="global-result-procedures">
+          ${equivProcs.length > 0
+            ? equivProcs.map((p, i) => `<span class="global-result-proc ${i === 0 ? 'primary' : ''}">${this.escapeHtml(this.truncateText(p, 35))}</span>`).join('')
+            : `<span class="global-result-proc primary">${this.escapeHtml(rec.name || 'None')}</span>`
+          }
+        </div>
+        <div class="global-result-consensus ${consensusClass}">
+          <span class="consensus-value">${rec.consensus_pct}%</span> consensus across ${card.scenario_count} scenarios
+        </div>
+        ${card.alternatives && card.alternatives.length > 0 ? `
+          <p class="global-result-recommendation" style="margin-top: var(--space-sm)">
+            Also consider: ${card.alternatives.slice(0, 2).map(a => `${this.escapeHtml(this.truncateText(a.name, 25))} (${a.percentage}%)`).join(', ')}
+          </p>
+        ` : ''}
+      `;
+    }
+
+    container.classList.remove('hidden');
+    container.innerHTML = `
+      <div class="global-result-card">
+        <div class="global-result-header">
+          <span class="global-result-topic">${this.escapeHtml(displayName)}</span>
+          <span class="global-result-meta">ACR Appropriateness Criteria</span>
+        </div>
+        <div class="global-result-body">
+          ${bodyContent}
+        </div>
+        <div class="global-result-footer">
+          <span class="global-result-source">Based on ${card.scenario_count} clinical scenarios</span>
+          <button class="global-result-action" data-region="${card.region}" data-topic="${card.topic}">
+            See detailed scenarios
+          </button>
+        </div>
+      </div>
+    `;
+
+    // Bind action button
+    const actionBtn = container.querySelector('.global-result-action');
+    if (actionBtn) {
+      actionBtn.addEventListener('click', () => {
+        const region = actionBtn.dataset.region;
+        const topic = actionBtn.dataset.topic;
+        this.navigateToRegionSearch(region, topic);
+      });
+    }
+  }
+
+  async navigateToRegionSearch(region, topic) {
+    // Select the region and pre-fill the search
+    await this.selectRegion(region);
+
+    // Pre-fill the search input
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput && topic) {
+      searchInput.value = topic;
+      this.handleSearch(topic);
+    }
+  }
+
+  truncateText(text, maxLen) {
+    if (!text || text.length <= maxLen) return text || '';
+    return text.substring(0, maxLen - 3) + '...';
+  }
+
+  escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   handleSearch(query) {
@@ -617,6 +781,7 @@ class ProtocolHelpApp {
       this.ui.hideChips();
       this.ui.hidePhaseFilterChips();
       this.ui.hideConceptHeader();
+      this.ui.hideSummaryCard();
       this.ui.hideMriProtocol();
       this.baseQuery = '';
       this.activeFilter = null;
@@ -653,6 +818,19 @@ class ProtocolHelpApp {
 
       // Execute search - returns { scenarios, grouped, concept, isConceptSearch }
       const result = await this.searchEngine.search(this.baseQuery, searchOptions);
+
+      // Check for summary card match on fresh searches
+      if (!isFilterChange) {
+        const summaryCard = this.summaryCards.findMatch(this.baseQuery);
+        if (summaryCard) {
+          this.ui.showSummaryCard(summaryCard, (topic) => {
+            // "See detailed scenarios" clicked - do nothing special, results are already showing
+            this.ui.hideSummaryCard();
+          });
+        } else {
+          this.ui.hideSummaryCard();
+        }
+      }
 
       if (result.isConceptSearch && result.concept) {
         // Concept-based search - show concept header and phase filters
