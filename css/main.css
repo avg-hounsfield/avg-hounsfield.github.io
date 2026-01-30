@@ -4283,8 +4283,37 @@ input:focus, button:focus {
   background: var(--bg-primary);
   border-top: 1px solid var(--border);
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   gap: var(--space-lg);
+}
+
+.summary-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.summary-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.summary-action-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.summary-action-btn svg {
+  flex-shrink: 0;
 }
 
 .summary-item {

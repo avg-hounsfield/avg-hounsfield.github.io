@@ -1583,6 +1583,8 @@ class ProtocolHelpApp {
           builderContrastToggle.querySelectorAll('.toggle-option').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           this.protocolBuilder.contrastMode = btn.dataset.contrast; // 'without', 'with', or 'both'
+          // Re-render sequence library to show/hide contrast sequences
+          this.renderSequenceLibrary(document.getElementById('sequenceSearchInput')?.value || '');
         });
       });
     }
@@ -1654,6 +1656,18 @@ class ProtocolHelpApp {
         document.getElementById('rationalePanel').classList.add('hidden');
         this.protocolBuilder.selectedRationale = null;
       });
+    }
+
+    // Export protocol button
+    const exportBtn = document.getElementById('exportProtocolBtn');
+    if (exportBtn) {
+      exportBtn.addEventListener('click', () => this.exportCurrentProtocol());
+    }
+
+    // Print protocol button
+    const printBtn = document.getElementById('printProtocolBtn');
+    if (printBtn) {
+      printBtn.addEventListener('click', () => this.printCurrentProtocol());
     }
   }
 
@@ -1920,7 +1934,8 @@ class ProtocolHelpApp {
   renderSequenceLibrary(filter = '') {
     const list = document.getElementById('sequenceLibraryList');
     const sequenceTypes = this.protocolBuilder.searchSequenceTypes(filter, {
-      category: this.currentSequenceFilter || 'all'
+      category: this.currentSequenceFilter || 'all',
+      contrastMode: this.protocolBuilder.contrastMode || 'without'
     });
 
     document.getElementById('libraryCount').textContent = `${sequenceTypes.length} sequence types`;
@@ -2201,6 +2216,151 @@ class ProtocolHelpApp {
         }
       });
     });
+  }
+
+  exportCurrentProtocol() {
+    const sequences = this.protocolBuilder.selectedSequences;
+    const formData = {
+      name: document.getElementById('protocolNameInput')?.value || 'Untitled Protocol',
+      region: document.getElementById('protocolRegionSelect')?.value || '',
+      contrastMode: this.protocolBuilder.contrastMode,
+      scopeTags: this.protocolBuilder.scopeTags,
+      indications: document.getElementById('protocolIndicationsInput')?.value || '',
+      notes: document.getElementById('protocolNotesInput')?.value || ''
+    };
+
+    const exportData = {
+      version: '1.0.0',
+      exported_at: new Date().toISOString(),
+      source: 'Radex Protocol Builder',
+      protocol: {
+        name: formData.name,
+        body_region: formData.region,
+        contrast_mode: formData.contrastMode,
+        scope_tags: formData.scopeTags,
+        indications: formData.indications,
+        notes: formData.notes,
+        sequences: sequences,
+        total_time_seconds: this.protocolBuilder.calculateTotalTime()
+      }
+    };
+
+    const jsonStr = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${formData.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_protocol.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    this.ui.setStatus('Protocol exported');
+  }
+
+  printCurrentProtocol() {
+    const sequences = this.protocolBuilder.selectedSequences;
+    const name = document.getElementById('protocolNameInput')?.value || 'Untitled Protocol';
+    const region = this.formatRegionName(document.getElementById('protocolRegionSelect')?.value || '');
+    const contrastMode = this.protocolBuilder.contrastMode;
+    const scopeTags = this.protocolBuilder.scopeTags;
+    const indications = document.getElementById('protocolIndicationsInput')?.value || '';
+    const notes = document.getElementById('protocolNotesInput')?.value || '';
+    const totalTime = this.protocolBuilder.formatTime(this.protocolBuilder.calculateTotalTime());
+
+    const contrastLabel = contrastMode === 'both' ? 'With + Without Contrast' :
+                          contrastMode === 'with' ? 'With Contrast' : 'Without Contrast';
+
+    const preContrast = sequences.filter(s => !s.is_post_contrast);
+    const postContrast = sequences.filter(s => s.is_post_contrast);
+
+    let sequenceHtml = '';
+    preContrast.forEach((seq, i) => {
+      sequenceHtml += `<tr><td>${i + 1}</td><td>${this.escapeHtml(seq.sequence_name)}</td><td>~${this.protocolBuilder.formatTime(seq.time_seconds)}</td></tr>`;
+    });
+
+    if (postContrast.length > 0) {
+      sequenceHtml += `<tr class="contrast-row"><td colspan="3"><strong>--- CONTRAST INJECTION ---</strong></td></tr>`;
+      postContrast.forEach((seq, i) => {
+        sequenceHtml += `<tr><td>${preContrast.length + i + 1}</td><td>${this.escapeHtml(seq.sequence_name)}</td><td>~${this.protocolBuilder.formatTime(seq.time_seconds)}</td></tr>`;
+      });
+    }
+
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${this.escapeHtml(name)} - MRI Protocol</title>
+        <style>
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
+          h1 { margin-bottom: 8px; }
+          .meta { color: #666; margin-bottom: 24px; }
+          .meta span { margin-right: 16px; }
+          .section { margin-bottom: 24px; }
+          .section-title { font-weight: 600; margin-bottom: 8px; color: #333; }
+          table { width: 100%; border-collapse: collapse; }
+          th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #ddd; }
+          th { background: #f5f5f5; }
+          .contrast-row td { background: #f0e6ff; text-align: center; }
+          .scope-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+          .scope-tag { padding: 4px 8px; background: #f0f0f0; border-radius: 4px; font-size: 12px; }
+          .total { margin-top: 16px; font-weight: 600; }
+          .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #ddd; font-size: 12px; color: #999; }
+          @media print { body { padding: 20px; } }
+        </style>
+      </head>
+      <body>
+        <h1>${this.escapeHtml(name)}</h1>
+        <div class="meta">
+          <span><strong>Region:</strong> ${region}</span>
+          <span><strong>Contrast:</strong> ${contrastLabel}</span>
+          <span><strong>Est. Time:</strong> ${totalTime}</span>
+        </div>
+
+        ${scopeTags.length > 0 ? `
+          <div class="section">
+            <div class="section-title">Scan Coverage</div>
+            <div class="scope-tags">${scopeTags.map(t => `<span class="scope-tag">${this.escapeHtml(t)}</span>`).join('')}</div>
+          </div>
+        ` : ''}
+
+        ${indications ? `
+          <div class="section">
+            <div class="section-title">Indications</div>
+            <p>${this.escapeHtml(indications)}</p>
+          </div>
+        ` : ''}
+
+        <div class="section">
+          <div class="section-title">Sequences (${sequences.length})</div>
+          <table>
+            <thead><tr><th>#</th><th>Sequence</th><th>Time</th></tr></thead>
+            <tbody>${sequenceHtml}</tbody>
+          </table>
+          <div class="total">Total Estimated Time: ${totalTime}</div>
+        </div>
+
+        ${notes ? `
+          <div class="section">
+            <div class="section-title">Notes</div>
+            <p>${this.escapeHtml(notes)}</p>
+          </div>
+        ` : ''}
+
+        <div class="footer">
+          Generated by Radex Protocol Builder - ${new Date().toLocaleDateString()}
+        </div>
+      </body>
+      </html>
+    `;
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => printWindow.print(), 250);
   }
 
   showSequenceRationale(typeId) {

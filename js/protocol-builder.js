@@ -206,7 +206,7 @@ export class ProtocolBuilder {
     if (this.sequenceLibrary) return this.sequenceLibrary;
 
     try {
-      const response = await fetch('data/sequence-library.json?v=20260129c');
+      const response = await fetch('data/sequence-library.json?v=20260129d');
       this.sequenceLibrary = await response.json();
       return this.sequenceLibrary;
     } catch (error) {
@@ -587,13 +587,38 @@ export class ProtocolBuilder {
       });
     }
 
-    // Apply category filter
+    // Apply weighting/type filter (T1, T2, DWI, contrast)
     if (filters.category && filters.category !== 'all') {
-      if (filters.category === 'contrast') {
+      const filterLower = filters.category.toLowerCase();
+      if (filterLower === 'contrast' || filterLower === '+c') {
         results = results.filter(seqType => seqType.is_post_contrast);
+      } else if (filterLower === 't1') {
+        results = results.filter(seqType =>
+          seqType.name.toLowerCase().startsWith('t1') ||
+          seqType.name.toLowerCase().includes('mprage')
+        );
+      } else if (filterLower === 't2') {
+        results = results.filter(seqType =>
+          (seqType.name.toLowerCase().startsWith('t2') ||
+           seqType.name.toLowerCase() === 'flair' ||
+           seqType.name.toLowerCase() === 'stir' ||
+           seqType.name.toLowerCase().includes('haste')) &&
+          !seqType.is_post_contrast
+        );
+      } else if (filterLower === 'dwi') {
+        results = results.filter(seqType =>
+          seqType.name.toLowerCase() === 'dwi' ||
+          seqType.name.toLowerCase() === 'swi'
+        );
       } else {
+        // Generic category filter
         results = results.filter(seqType => seqType.category === filters.category);
       }
+    }
+
+    // Filter based on contrast mode - hide post-contrast when "without" is selected
+    if (filters.contrastMode === 'without') {
+      results = results.filter(seqType => !seqType.is_post_contrast);
     }
 
     // Apply region filter
