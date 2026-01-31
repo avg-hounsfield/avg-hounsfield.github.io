@@ -450,16 +450,17 @@ export class IntentClassifier {
       }
     }
 
-    // Final fallback: Apply condition-based default urgency
-    // This catches cases where explicit urgency keywords are missing
-    // but the condition itself implies urgency (e.g., "PE" -> acute)
-    if (result.urgency === 'unknown' || result.urgencyConfidence < 0.7) {
-      const conditionUrgency = this.getConditionBasedUrgency(query);
-      if (conditionUrgency) {
+    // Always check for condition match to enable UI banner display
+    // This sets matchedCondition for known conditions regardless of urgency source
+    const conditionUrgency = this.getConditionBasedUrgency(query);
+    if (conditionUrgency) {
+      result.matchedCondition = conditionUrgency.condition;
+
+      // Only update urgency if it wasn't already confidently determined
+      if (result.urgency === 'unknown' || result.urgencyConfidence < 0.7) {
         result.urgency = conditionUrgency.urgency;
         result.urgencyConfidence = conditionUrgency.confidence;
         result.source = result.source + '+condition-default';
-        result.matchedCondition = conditionUrgency.condition;
       }
     }
 
