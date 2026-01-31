@@ -31,10 +31,111 @@ export class UI {
     this.phaseFilterChips = document.getElementById('phaseFilterChips');
     this.quickReferenceCard = document.getElementById('quickReferenceCard');
 
+    // Assumed context banner elements
+    this.assumedContextBanner = document.getElementById('assumedContextBanner');
+    this.assumedContextText = document.getElementById('assumedContextText');
+    this.assumedContextChange = document.getElementById('assumedContextChange');
+
     // State
     this.activeScenarioCard = null;
     this.activeProcedureCard = null;
     this.currentScenario = null;
+  }
+
+  /**
+   * Deduplicate equivalent procedures that are semantically the same
+   * e.g., "CT head without contrast", "CT brain without contrast", "NCCT head" are all the same
+   */
+  deduplicateEquivalentProcedures(procedures, primaryName) {
+    if (!procedures || procedures.length <= 1) return procedures;
+
+    // Normalize a procedure name for comparison
+    const normalize = (name) => {
+      let n = name.toLowerCase().replace(/\s+/g, ' ').trim();
+
+      // Expand common abbreviations FIRST (before other replacements)
+      // These abbreviations encode both modality and contrast status
+      n = n.replace(/\bncct\b/gi, 'ct noncontrast');
+      n = n.replace(/\bcect\b/gi, 'ct contrast');
+      n = n.replace(/\bnchct\b/gi, 'ct noncontrast');
+      n = n.replace(/\bchct\b/gi, 'ct contrast');
+      n = n.replace(/\bctpa\b/gi, 'cta pulmonary arteries');
+      n = n.replace(/\bhrct\b/gi, 'ct highresolution');
+      n = n.replace(/\bmrcp\b/gi, 'mr cholangiopancreatography');
+      n = n.replace(/\bmrv\b/gi, 'mr venography');
+      n = n.replace(/\bctv\b/gi, 'ct venography');
+
+      // Normalize contrast terminology
+      n = n.replace(/without contrast|w\/o contrast|non-contrast|noncontrast|non contrast/gi, 'NC');
+      n = n.replace(/with contrast|w\/ contrast|w contrast|contrast enhanced|with iv contrast/gi, '+C');
+
+      // Normalize anatomy terms (brain = head for imaging)
+      n = n.replace(/\bbrain\b/gi, 'head');
+      n = n.replace(/\bcranial\b/gi, 'head');
+
+      // Normalize other anatomy
+      n = n.replace(/\babdomen\b/gi, 'abd');
+      n = n.replace(/\babdominal\b/gi, 'abd');
+      n = n.replace(/\bpelvis\b/gi, 'pelv');
+      n = n.replace(/\bchest\b/gi, 'thorax');
+      n = n.replace(/\bthoracic\b/gi, 'thorax');
+      n = n.replace(/\bcervical spine\b/gi, 'cspine');
+      n = n.replace(/\bc-spine\b/gi, 'cspine');
+      n = n.replace(/\blumbar spine\b/gi, 'lspine');
+      n = n.replace(/\bl-spine\b/gi, 'lspine');
+      n = n.replace(/\bthoracic spine\b/gi, 'tspine');
+      n = n.replace(/\bt-spine\b/gi, 'tspine');
+
+      // Normalize modality terms
+      n = n.replace(/computed tomography/gi, 'ct');
+      n = n.replace(/magnetic resonance imaging/gi, 'mri');
+      n = n.replace(/magnetic resonance/gi, 'mr');
+      n = n.replace(/\bultrasound\b/gi, 'us');
+      n = n.replace(/\bsonography\b/gi, 'us');
+      n = n.replace(/\bradiograph(s|y)?\b/gi, 'xr');
+      n = n.replace(/\bx-ray(s)?\b/gi, 'xr');
+      n = n.replace(/\bplain film(s)?\b/gi, 'xr');
+
+      // Remove common filler words
+      n = n.replace(/\b(of|the|and|or)\b/gi, '');
+
+      // Collapse multiple spaces and sort words for order-independent comparison
+      n = n.replace(/\s+/g, ' ').trim();
+
+      // Sort words so "ct head NC" and "ct NC head" become the same
+      return n.split(' ').sort().join(' ');
+    };
+
+    const primaryNorm = normalize(primaryName || '');
+    const seen = new Set();
+    seen.add(primaryNorm);  // Always exclude things identical to primary
+
+    const unique = [];
+    for (const proc of procedures) {
+      const norm = normalize(proc);
+      // Skip if same as primary or already seen
+      if (norm === primaryNorm) continue;
+      if (seen.has(norm)) continue;
+
+      // Also check for very similar names (one contains the other after normalization)
+      let isDupe = false;
+      for (const seenNorm of seen) {
+        if (seenNorm.includes(norm) || norm.includes(seenNorm)) {
+          // If lengths are similar (within 5 chars), likely the same thing
+          if (Math.abs(seenNorm.length - norm.length) < 5) {
+            isDupe = true;
+            break;
+          }
+        }
+      }
+
+      if (!isDupe) {
+        seen.add(norm);
+        unique.push(proc);
+      }
+    }
+
+    return unique;
   }
 
   setStatus(text, state = 'ready') {
@@ -49,6 +150,58 @@ export class UI {
       } else if (state === 'error') {
         this.statusIndicator.classList.add('error');
       }
+    }
+  }
+
+  /**
+   * Show assumed context banner when condition-based urgency is applied
+   * @param {Object} intent - The intent classification result
+   * @param {Function} onChangeClick - Callback when "change" is clicked
+   */
+  showAssumedContextBanner(intent, onChangeClick) {
+    if (!this.assumedContextBanner || !intent || !intent.matchedCondition) {
+      this.hideAssumedContextBanner();
+      return;
+    }
+
+    const urgency = intent.urgency;
+    const condition = intent.matchedCondition;
+
+    // Format the urgency label
+    const urgencyLabels = {
+      'acute': 'Acute',
+      'routine': 'Routine',
+      'chronic': 'Chronic'
+    };
+    const urgencyLabel = urgencyLabels[urgency] || urgency;
+
+    // Update banner content
+    this.assumedContextText.innerHTML = `Assumed <strong>${urgencyLabel}</strong> context based on "<strong>${condition}</strong>"`;
+
+    // Set data attribute for styling
+    this.assumedContextBanner.setAttribute('data-urgency', urgency);
+
+    // Show banner
+    this.assumedContextBanner.classList.remove('hidden');
+
+    // Set up change button handler
+    if (this.assumedContextChange && onChangeClick) {
+      // Remove any existing listener
+      this.assumedContextChange.replaceWith(this.assumedContextChange.cloneNode(true));
+      this.assumedContextChange = document.getElementById('assumedContextChange');
+
+      this.assumedContextChange.addEventListener('click', () => {
+        onChangeClick(intent);
+      });
+    }
+  }
+
+  /**
+   * Hide the assumed context banner
+   */
+  hideAssumedContextBanner() {
+    if (this.assumedContextBanner) {
+      this.assumedContextBanner.classList.add('hidden');
     }
   }
 
@@ -597,7 +750,9 @@ export class UI {
       `;
     } else {
       // STRONG or CONDITIONAL
-      const equivProcs = rec.equivalent_procedures || [];
+      const rawEquivProcs = rec.equivalent_procedures || [];
+      // Deduplicate equivalent procedures (removes redundant namings like "CT brain" vs "CT head")
+      const equivProcs = this.deduplicateEquivalentProcedures(rawEquivProcs, rec.name);
 
       bodyContent = `
         <div class="summary-card-recommendation">
@@ -605,7 +760,7 @@ export class UI {
           <span class="summary-card-rec-primary">${this.escapeHtml(rec.name || 'None')}</span>
           ${rec.consensus_pct ? `<span class="summary-card-rec-consensus">(${rec.consensus_pct}% consensus)</span>` : ''}
         </div>
-        ${equivProcs.length > 1 ? `
+        ${equivProcs.length > 0 ? `
           <div class="summary-card-equivalents">
             ${equivProcs.map(p => `<span class="summary-card-equiv-chip">${this.escapeHtml(this.truncateProcedure(p, 30))}</span>`).join('')}
           </div>

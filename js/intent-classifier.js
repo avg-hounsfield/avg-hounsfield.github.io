@@ -21,6 +21,158 @@ export class IntentClassifier {
     // Labels (must match training)
     this.phases = ['initial', 'surveillance', 'treatment', 'unknown'];
     this.urgencies = ['acute', 'chronic', 'routine', 'unknown'];
+
+    // Condition-based default urgency mapping
+    // These conditions have inherent urgency regardless of query phrasing
+    this.conditionDefaultUrgency = {
+      // Inherently ACUTE conditions (medical emergencies)
+      'pe': 'acute',
+      'pulmonary embolism': 'acute',
+      'stroke': 'acute',
+      'cva': 'acute',
+      'tia': 'acute',
+      'dvt': 'acute',
+      'deep vein thrombosis': 'acute',
+      'aortic dissection': 'acute',
+      'dissection': 'acute',
+      'appendicitis': 'acute',
+      'bowel obstruction': 'acute',
+      'sbo': 'acute',
+      'small bowel obstruction': 'acute',
+      'heart attack': 'acute',
+      'mi': 'acute',
+      'myocardial infarction': 'acute',
+      'acs': 'acute',
+      'stemi': 'acute',
+      'nstemi': 'acute',
+      'trauma': 'acute',
+      'head trauma': 'acute',
+      'tbi': 'acute',
+      'traumatic brain injury': 'acute',
+      'concussion': 'acute',
+      'subdural': 'acute',
+      'epidural': 'acute',
+      'subarachnoid': 'acute',
+      'sah': 'acute',
+      'ich': 'acute',
+      'hemorrhage': 'acute',
+      'bleeding': 'acute',
+      'ruptured': 'acute',
+      'rupture': 'acute',
+      'aaa rupture': 'acute',
+      'mesenteric ischemia': 'acute',
+      'testicular torsion': 'acute',
+      'ovarian torsion': 'acute',
+      'ectopic pregnancy': 'acute',
+      'cauda equina': 'acute',
+      'cord compression': 'acute',
+      'spinal cord injury': 'acute',
+      'seizure': 'acute',
+      'new onset seizure': 'acute',
+      'first seizure': 'acute',
+      'thunderclap headache': 'acute',
+      'worst headache': 'acute',
+      'sudden hearing loss': 'acute',
+      'acute vertigo': 'acute',
+      'pneumonia': 'acute',
+      'cholecystitis': 'acute',
+      'pancreatitis': 'acute',
+      'diverticulitis': 'acute',
+      'pyelonephritis': 'acute',
+      'kidney stone': 'acute',
+      'renal colic': 'acute',
+      'ureteral stone': 'acute',
+      'biliary obstruction': 'acute',
+      'choledocholithiasis': 'acute',
+      'fracture': 'acute',
+      'dislocation': 'acute',
+      'compartment syndrome': 'acute',
+      'necrotizing fasciitis': 'acute',
+      'septic arthritis': 'acute',
+      'osteomyelitis': 'acute',
+      'abscess': 'acute',
+      'empyema': 'acute',
+
+      // Inherently ROUTINE conditions (elective/outpatient)
+      'screening': 'routine',
+      'cancer screening': 'routine',
+      'lung cancer screening': 'routine',
+      'breast cancer screening': 'routine',
+      'colon cancer screening': 'routine',
+      'mammogram': 'routine',
+      'mammography': 'routine',
+      'nodule': 'routine',
+      'lung nodule': 'routine',
+      'thyroid nodule': 'routine',
+      'incidental': 'routine',
+      'incidentaloma': 'routine',
+      'staging': 'routine',
+      'restaging': 'routine',
+      'surveillance': 'routine',
+      'follow-up': 'routine',
+      'follow up': 'routine',
+      'monitoring': 'routine',
+      'dementia': 'routine',
+      'memory loss': 'routine',
+      'cognitive decline': 'routine',
+      'alzheimer': 'routine',
+      'ms workup': 'routine',
+      'multiple sclerosis': 'routine',
+      'carpal tunnel': 'routine',
+      'rotator cuff': 'routine',
+      'meniscus': 'routine',
+      'acl': 'routine',
+      'labral tear': 'routine',
+      'plantar fasciitis': 'routine',
+      'morton neuroma': 'routine',
+      'ganglion cyst': 'routine',
+      'baker cyst': 'routine',
+      'lipoma': 'routine',
+      'hemangioma': 'routine',
+      'fibroid': 'routine',
+      'endometriosis': 'routine',
+      'adenomyosis': 'routine',
+      'pcos': 'routine',
+      'varicocele': 'routine',
+      'hydrocele': 'routine',
+      'hernia': 'routine',
+      'hemorrhoids': 'routine',
+      'cirrhosis': 'routine',
+      'fatty liver': 'routine',
+      'nafld': 'routine',
+      'hepatic steatosis': 'routine',
+      'cyst': 'routine',
+      'renal cyst': 'routine',
+      'ovarian cyst': 'routine',
+      'hepatic cyst': 'routine',
+
+      // Inherently CHRONIC conditions
+      'osteoarthritis': 'chronic',
+      'degenerative': 'chronic',
+      'degenerative disc': 'chronic',
+      'ddd': 'chronic',
+      'spondylosis': 'chronic',
+      'spinal stenosis': 'chronic',
+      'chronic pain': 'chronic',
+      'chronic back pain': 'chronic',
+      'chronic headache': 'chronic',
+      'fibromyalgia': 'chronic',
+      'rheumatoid arthritis': 'chronic',
+      'psoriatic arthritis': 'chronic',
+      'ankylosing spondylitis': 'chronic',
+      'lupus': 'chronic',
+      'sle': 'chronic',
+      'copd': 'chronic',
+      'emphysema': 'chronic',
+      'bronchiectasis': 'chronic',
+      'interstitial lung disease': 'chronic',
+      'pulmonary fibrosis': 'chronic',
+      'chf': 'chronic',
+      'heart failure': 'chronic',
+      'cardiomyopathy': 'chronic',
+      'avascular necrosis': 'chronic',
+      'avn': 'chronic'
+    };
   }
 
   /**
@@ -127,6 +279,30 @@ export class IntentClassifier {
       urgencyConfidence: urgencyProbs[urgencyIdx],
       source: 'model'
     };
+  }
+
+  /**
+   * Apply condition-based default urgency
+   * Returns urgency and confidence if a known condition is detected
+   */
+  getConditionBasedUrgency(query) {
+    const q = query.toLowerCase();
+
+    // Check for each condition pattern
+    for (const [condition, urgency] of Object.entries(this.conditionDefaultUrgency)) {
+      // Create a word-boundary aware pattern
+      const pattern = new RegExp(`\\b${condition.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+      if (pattern.test(q)) {
+        // Check if this is overridden by surveillance/follow-up context
+        if (/\b(follow-up|follow up|f\/u|surveillance|monitoring|known|history of|hx of|h\/o|post-treatment|restaging)\b/i.test(q)) {
+          // Surveillance context overrides default urgency to routine
+          return { urgency: 'routine', confidence: 0.75, condition: condition };
+        }
+        return { urgency: urgency, confidence: 0.85, condition: condition };
+      }
+    }
+
+    return null;
   }
 
   /**
@@ -271,6 +447,19 @@ export class IntentClassifier {
       if (rulesResult.urgency !== 'unknown' && rulesResult.urgencyConfidence > 0.6) {
         result.urgency = rulesResult.urgency;
         result.urgencyConfidence = rulesResult.urgencyConfidence;
+      }
+    }
+
+    // Final fallback: Apply condition-based default urgency
+    // This catches cases where explicit urgency keywords are missing
+    // but the condition itself implies urgency (e.g., "PE" -> acute)
+    if (result.urgency === 'unknown' || result.urgencyConfidence < 0.7) {
+      const conditionUrgency = this.getConditionBasedUrgency(query);
+      if (conditionUrgency) {
+        result.urgency = conditionUrgency.urgency;
+        result.urgencyConfidence = conditionUrgency.confidence;
+        result.source = result.source + '+condition-default';
+        result.matchedCondition = conditionUrgency.condition;
       }
     }
 

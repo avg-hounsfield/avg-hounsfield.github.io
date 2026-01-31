@@ -7,12 +7,12 @@
 
 console.log('[Radex] Loading app.js module...');
 
-import { SearchEngine } from './search-engine.js';
-import { DataLoader } from './data-loader.js';
-import { UI } from './ui.js';
-import { RadLiteAPI } from './radlite-api.js';
-import { ProtocolBuilder } from './protocol-builder.js';
-import { SummaryCards } from './summary-cards.js';
+import { SearchEngine } from './search-engine.js?v=20260130g';
+import { DataLoader } from './data-loader.js?v=20260130g';
+import { UI } from './ui.js?v=20260130g';
+import { RadLiteAPI } from './radlite-api.js?v=20260130g';
+import { ProtocolBuilder } from './protocol-builder.js?v=20260130g';
+import { SummaryCards } from './summary-cards.js?v=20260130g';
 
 class ProtocolHelpApp {
   constructor() {
@@ -658,7 +658,9 @@ class ProtocolHelpApp {
   renderGlobalSearchResult(card, container) {
     const rec = card.primary_recommendation;
     const displayName = card.display_name || card.topic;
-    const equivProcs = rec.equivalent_procedures || [];
+    // Deduplicate equivalent procedures (removes redundant namings like "CT brain" vs "CT head")
+    const rawEquivProcs = rec.equivalent_procedures || [];
+    const equivProcs = this.ui.deduplicateEquivalentProcedures(rawEquivProcs, rec.name);
 
     let bodyContent = '';
 
@@ -684,12 +686,13 @@ class ProtocolHelpApp {
       // STRONG or CONDITIONAL
       const consensusClass = rec.consensus_pct >= 70 ? '' : (rec.consensus_pct >= 40 ? 'moderate' : 'low');
 
+      // Show primary procedure, then deduplicated equivalents as alternatives
+      const primaryProc = rec.name || 'None';
+
       bodyContent = `
         <div class="global-result-procedures">
-          ${equivProcs.length > 0
-            ? equivProcs.map((p, i) => `<span class="global-result-proc ${i === 0 ? 'primary' : ''}">${this.escapeHtml(this.truncateText(p, 35))}</span>`).join('')
-            : `<span class="global-result-proc primary">${this.escapeHtml(rec.name || 'None')}</span>`
-          }
+          <span class="global-result-proc primary">${this.escapeHtml(this.truncateText(primaryProc, 35))}</span>
+          ${equivProcs.map(p => `<span class="global-result-proc">${this.escapeHtml(this.truncateText(p, 35))}</span>`).join('')}
         </div>
         <div class="global-result-consensus ${consensusClass}">
           <span class="consensus-value">${rec.consensus_pct}%</span> consensus across ${card.scenario_count} scenarios
@@ -1078,8 +1081,17 @@ class ProtocolHelpApp {
         searchOptions.filters.phase = this.activePhaseFilter;
       }
 
-      // Execute search - returns { scenarios, grouped, concept, isConceptSearch }
+      // Execute search - returns { scenarios, grouped, concept, isConceptSearch, intent }
       const result = await this.searchEngine.search(this.baseQuery, searchOptions);
+
+      // Show assumed context banner if condition-based urgency was applied
+      if (result.intent && result.intent.matchedCondition) {
+        this.ui.showAssumedContextBanner(result.intent, (intent) => {
+          this.handleUrgencyOverride(intent);
+        });
+      } else {
+        this.ui.hideAssumedContextBanner();
+      }
 
       // Check for summary card match on fresh searches
       if (!isFilterChange) {
@@ -1306,6 +1318,86 @@ class ProtocolHelpApp {
     this.executeSearch(this.baseQuery, true);
   }
 
+  /**
+   * Handle urgency override when user clicks "change" on assumed context banner
+   * Shows a simple dialog to let user select different urgency
+   */
+  handleUrgencyOverride(intent) {
+    const currentUrgency = intent.urgency;
+    const condition = intent.matchedCondition;
+
+    // Create urgency options
+    const urgencies = [
+      { value: 'acute', label: 'Acute / Emergent', desc: 'Immediate workup needed' },
+      { value: 'routine', label: 'Routine / Elective', desc: 'Standard outpatient workup' },
+      { value: 'chronic', label: 'Chronic / Ongoing', desc: 'Longstanding condition' }
+    ];
+
+    // Build option buttons HTML
+    const optionsHtml = urgencies.map(u => {
+      const isSelected = u.value === currentUrgency ? 'selected' : '';
+      return `
+        <button class="urgency-option ${isSelected}" data-urgency="${u.value}">
+          <strong>${u.label}</strong>
+          <span>${u.desc}</span>
+        </button>
+      `;
+    }).join('');
+
+    // Create modal overlay
+    const modal = document.createElement('div');
+    modal.className = 'urgency-override-modal';
+    modal.innerHTML = `
+      <div class="urgency-override-dialog">
+        <div class="urgency-override-header">
+          <h3>Change Context for "${condition}"</h3>
+          <button class="urgency-override-close">&times;</button>
+        </div>
+        <div class="urgency-override-body">
+          <p>Select the clinical context that best matches your search:</p>
+          <div class="urgency-options">
+            ${optionsHtml}
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Handle option selection
+    modal.querySelectorAll('.urgency-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const selectedUrgency = btn.dataset.urgency;
+
+        // Update the search with explicit urgency modifier
+        const urgencyKeyword = selectedUrgency === 'acute' ? 'acute' :
+                              selectedUrgency === 'routine' ? 'routine outpatient' :
+                              'chronic';
+
+        // Add urgency to search query
+        const newQuery = `${urgencyKeyword} ${this.baseQuery}`;
+        document.getElementById('searchInput').value = newQuery;
+        this.baseQuery = newQuery;
+
+        // Close modal and re-search
+        modal.remove();
+        this.executeSearch(newQuery, false);
+      });
+    });
+
+    // Handle close
+    modal.querySelector('.urgency-override-close').addEventListener('click', () => {
+      modal.remove();
+    });
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.remove();
+      }
+    });
+  }
+
   clearSearch() {
     document.getElementById('searchInput').value = '';
     document.getElementById('searchClear').classList.add('hidden');
@@ -1313,6 +1405,7 @@ class ProtocolHelpApp {
     this.ui.hideChips();
     this.ui.hidePhaseFilterChips();
     this.ui.hideConceptHeader();
+    this.ui.hideAssumedContextBanner();
     this.ui.hideDifferential();
     this.ui.hideMriProtocol();
     this.currentScenario = null;

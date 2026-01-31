@@ -494,6 +494,23 @@
             <!-- Dynamically populated: [Screening (2)] [Initial (3)] [Surveillance (2)] -->
           </div>
 
+          <!-- Assumed Context Indicator (shows when condition-based defaults are applied) -->
+          <div class="assumed-context-banner hidden" id="assumedContextBanner">
+            <span class="assumed-context-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </span>
+            <span class="assumed-context-text" id="assumedContextText">
+              <!-- Dynamically populated: "Assumed Acute context based on 'PE'" -->
+            </span>
+            <button class="assumed-context-change" id="assumedContextChange" title="Click to change">
+              change
+            </button>
+          </div>
+
           <!-- Clarifying Prompts (for keyword search) -->
           <div class="clarify-chips hidden" id="clarifyChips">
             <!-- Dynamically populated -->
@@ -974,6 +991,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <!-- ONNX Runtime Web for intent classification (optional, falls back to rules) -->
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.0/dist/ort.min.js"></script>
-  <script type="module" src="js/app.js?v=20260130f"></script>
+  <script type="module" src="js/app.js?v=20260130g"></script>
 </body>
 </html>
