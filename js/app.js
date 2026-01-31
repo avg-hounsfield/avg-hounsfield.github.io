@@ -7,12 +7,12 @@
 
 console.log('[Radex] Loading app.js module...');
 
-import { SearchEngine } from './search-engine.js?v=20260130g';
-import { DataLoader } from './data-loader.js?v=20260130g';
-import { UI } from './ui.js?v=20260130g';
-import { RadLiteAPI } from './radlite-api.js?v=20260130g';
-import { ProtocolBuilder } from './protocol-builder.js?v=20260130g';
-import { SummaryCards } from './summary-cards.js?v=20260130g';
+import { SearchEngine } from './search-engine.js?v=20260130h';
+import { DataLoader } from './data-loader.js?v=20260130h';
+import { UI } from './ui.js?v=20260130h';
+import { RadLiteAPI } from './radlite-api.js?v=20260130h';
+import { ProtocolBuilder } from './protocol-builder.js?v=20260130h';
+import { SummaryCards } from './summary-cards.js?v=20260130h';
 
 class ProtocolHelpApp {
   constructor() {
