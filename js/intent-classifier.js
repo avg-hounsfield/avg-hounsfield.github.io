@@ -453,8 +453,10 @@ export class IntentClassifier {
     // Always check for condition match to enable UI banner display
     // This sets matchedCondition for known conditions regardless of urgency source
     const conditionUrgency = this.getConditionBasedUrgency(query);
+    console.log('[IntentClassifier] Condition check for query:', query, '-> Result:', conditionUrgency);
     if (conditionUrgency) {
       result.matchedCondition = conditionUrgency.condition;
+      console.log('[IntentClassifier] Set matchedCondition:', conditionUrgency.condition);
 
       // Only update urgency if it wasn't already confidently determined
       if (result.urgency === 'unknown' || result.urgencyConfidence < 0.7) {

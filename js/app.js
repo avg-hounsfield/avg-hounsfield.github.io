@@ -1085,7 +1085,9 @@ class ProtocolHelpApp {
       const result = await this.searchEngine.search(this.baseQuery, searchOptions);
 
       // Show assumed context banner if condition-based urgency was applied
+      console.log('[Radex] Intent result:', result.intent);
       if (result.intent && result.intent.matchedCondition) {
+        console.log('[Radex] Showing assumed context banner for:', result.intent.matchedCondition);
         this.ui.showAssumedContextBanner(result.intent, (intent) => {
           this.handleUrgencyOverride(intent);
         });
