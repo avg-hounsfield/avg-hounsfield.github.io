@@ -7,12 +7,12 @@
 
 console.log('[Radex] Loading app.js module...');
 
-import { SearchEngine } from './search-engine.js?v=20260130h';
-import { DataLoader } from './data-loader.js?v=20260130h';
-import { UI } from './ui.js?v=20260130h';
-import { RadLiteAPI } from './radlite-api.js?v=20260130h';
-import { ProtocolBuilder } from './protocol-builder.js?v=20260130h';
-import { SummaryCards } from './summary-cards.js?v=20260130h';
+import { SearchEngine } from './search-engine.js';
+import { DataLoader } from './data-loader.js';
+import { UI } from './ui.js';
+import { RadLiteAPI } from './radlite-api.js';
+import { ProtocolBuilder } from './protocol-builder.js';
+import { SummaryCards } from './summary-cards.js';
 
 class ProtocolHelpApp {
   constructor() {
@@ -1085,9 +1085,7 @@ class ProtocolHelpApp {
       const result = await this.searchEngine.search(this.baseQuery, searchOptions);
 
       // Show assumed context banner if condition-based urgency was applied
-      console.log('[Radex] Intent result:', result.intent);
       if (result.intent && result.intent.matchedCondition) {
-        console.log('[Radex] Showing assumed context banner for:', result.intent.matchedCondition);
         this.ui.showAssumedContextBanner(result.intent, (intent) => {
           this.handleUrgencyOverride(intent);
         });

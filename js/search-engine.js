@@ -2,7 +2,7 @@
  * Search Engine - Handles semantic search with medical synonym expansion
  * and concept-based search with clinical phase grouping
  */
-import { getIntentClassifier } from './intent-classifier.js?v=20260130h';
+import { getIntentClassifier } from './intent-classifier.js';
 
 export class SearchEngine {
   constructor(regionData) {

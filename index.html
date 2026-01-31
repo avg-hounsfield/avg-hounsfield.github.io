@@ -973,9 +973,10 @@
   <!-- Scripts -->
   <script>
     // Force service worker update on version change
+    // Keep this version in sync with CACHE_NAME in sw.js
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
-        const currentVersion = 'radex-v2.14.0';
+        const currentVersion = 'radex-v2.16.0';
         const storedVersion = localStorage.getItem('radex_sw_version');
         if (storedVersion !== currentVersion) {
           // Version mismatch - unregister old SW and clear caches
@@ -991,6 +992,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <!-- ONNX Runtime Web for intent classification (optional, falls back to rules) -->
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.0/dist/ort.min.js"></script>
-  <script type="module" src="js/app.js?v=20260130h"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
