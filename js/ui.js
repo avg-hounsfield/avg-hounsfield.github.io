@@ -695,7 +695,7 @@ export class UI {
   // ========================================
   // Summary Card (Quick Consensus)
   // ========================================
-  showSummaryCard(card, onDetailedSearch) {
+  showSummaryCard(card, onDetailedSearch, intent = null) {
     const summaryCard = document.getElementById('summaryCard');
     if (!summaryCard || !card) return;
 
@@ -774,6 +774,20 @@ export class UI {
       `;
     }
 
+    // Build assumed context indicator if intent has a matched condition
+    let contextIndicator = '';
+    if (intent && intent.matchedCondition) {
+      const urgencyLabels = { 'acute': 'Acute', 'routine': 'Routine', 'chronic': 'Chronic' };
+      const urgencyColors = { 'acute': '#dc3545', 'routine': '#28a745', 'chronic': '#ffc107' };
+      const urgencyLabel = urgencyLabels[intent.urgency] || intent.urgency;
+      const urgencyColor = urgencyColors[intent.urgency] || '#6c757d';
+      contextIndicator = `
+        <div class="summary-card-context" style="background: ${urgencyColor}15; border-left: 3px solid ${urgencyColor}; padding: 6px 10px; margin-bottom: 8px; font-size: 12px; color: ${urgencyColor};">
+          <strong>${urgencyLabel}</strong> context assumed for "${intent.matchedCondition}"
+        </div>
+      `;
+    }
+
     summaryCard.innerHTML = `
       <div class="summary-card-header">
         <div class="summary-card-title-row">
@@ -786,6 +800,7 @@ export class UI {
         <button class="summary-card-dismiss" title="Dismiss">&times;</button>
       </div>
       <div class="summary-card-meta">Based on ${card.scenario_count} ACR scenarios</div>
+      ${contextIndicator}
       <div class="summary-card-body">
         ${bodyContent}
       </div>

@@ -976,7 +976,7 @@
     // Keep this version in sync with CACHE_NAME in sw.js
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
-        const currentVersion = 'radex-v2.16.0';
+        const currentVersion = 'radex-v2.17.0';
         const storedVersion = localStorage.getItem('radex_sw_version');
         if (storedVersion !== currentVersion) {
           // Version mismatch - unregister old SW and clear caches

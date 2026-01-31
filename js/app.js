@@ -13,6 +13,7 @@ import { UI } from './ui.js';
 import { RadLiteAPI } from './radlite-api.js';
 import { ProtocolBuilder } from './protocol-builder.js';
 import { SummaryCards } from './summary-cards.js';
+import { getIntentClassifier } from './intent-classifier.js';
 
 class ProtocolHelpApp {
   constructor() {
@@ -621,7 +622,7 @@ class ProtocolHelpApp {
   // ========================================
   // Global Quick Search
   // ========================================
-  handleGlobalSearch(query) {
+  async handleGlobalSearch(query) {
     const resultContainer = document.getElementById('globalSearchResult');
     if (!resultContainer) return;
 
@@ -651,16 +652,41 @@ class ProtocolHelpApp {
       return;
     }
 
-    // Render the card
-    this.renderGlobalSearchResult(card, resultContainer);
+    // Classify intent to get assumed context
+    let intent = null;
+    try {
+      const classifier = await getIntentClassifier();
+      if (classifier) {
+        intent = await classifier.classify(trimmed);
+      }
+    } catch (e) {
+      // Intent classification is optional
+    }
+
+    // Render the card with intent context
+    this.renderGlobalSearchResult(card, resultContainer, intent);
   }
 
-  renderGlobalSearchResult(card, container) {
+  renderGlobalSearchResult(card, container, intent = null) {
     const rec = card.primary_recommendation;
     const displayName = card.display_name || card.topic;
     // Deduplicate equivalent procedures (removes redundant namings like "CT brain" vs "CT head")
     const rawEquivProcs = rec.equivalent_procedures || [];
     const equivProcs = this.ui.deduplicateEquivalentProcedures(rawEquivProcs, rec.name);
+
+    // Build assumed context indicator if intent has a matched condition
+    let contextIndicator = '';
+    if (intent && intent.matchedCondition) {
+      const urgencyLabels = { 'acute': 'Acute', 'routine': 'Routine', 'chronic': 'Chronic' };
+      const urgencyColors = { 'acute': '#dc3545', 'routine': '#28a745', 'chronic': '#ffc107' };
+      const urgencyLabel = urgencyLabels[intent.urgency] || intent.urgency;
+      const urgencyColor = urgencyColors[intent.urgency] || '#6c757d';
+      contextIndicator = `
+        <div class="global-result-context" style="background: ${urgencyColor}15; border-left: 3px solid ${urgencyColor}; padding: 6px 10px; margin-bottom: 8px; font-size: 12px; color: ${urgencyColor};">
+          <strong>${urgencyLabel}</strong> context assumed for "${intent.matchedCondition}"
+        </div>
+      `;
+    }
 
     let bodyContent = '';
 
@@ -712,6 +738,7 @@ class ProtocolHelpApp {
           <span class="global-result-topic">${this.escapeHtml(displayName)}</span>
           <span class="global-result-meta">ACR Appropriateness Criteria</span>
         </div>
+        ${contextIndicator}
         <div class="global-result-body">
           ${bodyContent}
         </div>
@@ -1100,7 +1127,7 @@ class ProtocolHelpApp {
           this.ui.showSummaryCard(summaryCard, (topic) => {
             // "See detailed scenarios" clicked - do nothing special, results are already showing
             this.ui.hideSummaryCard();
-          });
+          }, result.intent);
         } else {
           this.ui.hideSummaryCard();
         }
