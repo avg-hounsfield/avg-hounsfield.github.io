@@ -102,3 +102,45 @@ def make_unique_slugs(protocols):
             result[i] = candidate
 
     return result
+
+
+def make_display_name(canonical_procedure, display_name):
+    """
+    Returns title-cased h1 text for a protocol page.
+    Appends display_name in parens if it does not appear in canonical_procedure.
+    """
+    title = canonical_procedure.title()
+    if display_name.lower() not in canonical_procedure.lower():
+        title = f"{title} ({display_name.title()})"
+    return title
+
+
+def load_data():
+    """
+    Reads all JSON inputs and returns a dict:
+      {
+        'protocols': [...],
+        'cards': [...],
+        'region_counts': { 'neuro': 1234, ... }
+      }
+    """
+    protocols_path = REPO_ROOT / "data" / "protocols.json"
+    cards_path = REPO_ROOT / "data" / "search" / "summary_cards.json"
+
+    with open(protocols_path, encoding="utf-8") as f:
+        protocols = json.load(f)
+
+    with open(cards_path, encoding="utf-8") as f:
+        cards_data = json.load(f)
+    cards = cards_data["cards"]
+
+    region_counts = {}
+    for region in REGION_DISPLAY:
+        region_file = REPO_ROOT / "data" / "regions" / f"{region}.json"
+        if region_file.exists():
+            with open(region_file, encoding="utf-8") as f:
+                region_counts[region] = json.load(f).get("count", 0)
+        else:
+            region_counts[region] = 0
+
+    return {"protocols": protocols, "cards": cards, "region_counts": region_counts}

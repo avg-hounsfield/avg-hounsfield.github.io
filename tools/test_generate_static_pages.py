@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
-from generate_static_pages import slugify, make_unique_slugs
+from generate_static_pages import slugify, make_unique_slugs, make_display_name
 
 class TestSlugify(unittest.TestCase):
     def test_basic(self):
@@ -66,6 +66,24 @@ class TestMakeUniqueSlugs(unittest.TestCase):
         ]
         result = make_unique_slugs(protocols)
         self.assertEqual(len(set(result.values())), 3)
+
+class TestMakeDisplayName(unittest.TestCase):
+    def test_display_name_is_substring_no_parens(self):
+        # "brain" IS in "mri brain w/o contrast"
+        result = make_display_name("MRI Brain W/O Contrast", "BRAIN")
+        self.assertNotIn("(", result)
+        self.assertIn("Brain", result)
+
+    def test_display_name_not_substring_adds_parens(self):
+        # "seizure" is NOT in "mri brain w/o contrast"
+        result = make_display_name("MRI Brain W/O Contrast", "SEIZURE")
+        self.assertIn("(Seizure)", result)
+
+    def test_title_case_applied(self):
+        result = make_display_name("MRI BRAIN W/O CONTRAST", "BRAIN")
+        self.assertTrue(result[0].isupper())
+        # Not all-caps
+        self.assertFalse(result == result.upper())
 
 if __name__ == "__main__":
     unittest.main()
