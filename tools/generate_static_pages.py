@@ -223,3 +223,369 @@ def write_file(rel_path, html):
     full_path = REPO_ROOT / rel_path
     full_path.parent.mkdir(parents=True, exist_ok=True)
     full_path.write_text(html, encoding="utf-8")
+
+
+def render_protocol(protocol, slug):
+    """Returns complete HTML string for one protocol page."""
+    region = protocol.get("body_region", "")
+    region_label = REGION_DISPLAY.get(region, region.title())
+    region_url = f"/regions/{region}/" if region in REGION_DISPLAY else "/"
+
+    display_name = make_display_name(
+        protocol.get("canonical_procedure", protocol.get("name", "")),
+        protocol.get("display_name", protocol.get("name", ""))
+    )
+
+    # Indications - strip any accidental HTML tags, truncate for meta
+    indications_raw = protocol.get("indications") or ""
+    indications_text = re.sub(r"<[^>]+>", "", indications_raw).strip()
+    meta_desc = indications_text[:155] if indications_text else f"{display_name} MRI protocol sequences and clinical indications."
+
+    canonical = f"{BASE_URL}/protocols/{slug}/"
+
+    jsonld = {
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        "name": f"{display_name} Protocol",
+        "url": canonical,
+        "specialty": {"@type": "MedicalSpecialty", "name": "Radiology"},
+        "medicalAudience": {"@type": "MedicalAudience", "audienceType": "Clinician"},
+        "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL}
+    }
+
+    title = f"{display_name} Protocol - Sequences & Indications | Radex"
+    head = shared_head(title, meta_desc, canonical, jsonld)
+
+    # Breadcrumb
+    breadcrumb = f"""<nav class="breadcrumb" aria-label="Breadcrumb" style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;">
+  <a href="/" style="color:var(--text-muted)">Radex</a>
+  <span style="margin:0 6px">></span>
+  <a href="{region_url}" style="color:var(--text-muted)">{region_label}</a>
+  <span style="margin:0 6px">></span>
+  <span>{display_name}</span>
+</nav>"""
+
+    # Sequences table
+    sequences = sorted(protocol.get("sequences", []), key=lambda s: s.get("sort_order", 0))
+    seq_rows = ""
+    for seq in sequences:
+        contrast_label = "Post-contrast" if seq.get("is_post_contrast") == 1 else "Pre-contrast"
+        seq_rows += f"<tr><td>{seq.get('sequence_name','')}</td><td>{contrast_label}</td></tr>\n"
+
+    seq_table = f"""<table style="width:100%;border-collapse:collapse;margin:1rem 0;">
+  <thead>
+    <tr style="border-bottom:1px solid var(--border);">
+      <th style="text-align:left;padding:8px 4px;color:var(--text-muted);font-size:13px;">Sequence</th>
+      <th style="text-align:left;padding:8px 4px;color:var(--text-muted);font-size:13px;">Contrast</th>
+    </tr>
+  </thead>
+  <tbody>
+{seq_rows}  </tbody>
+</table>""" if sequences else "<p style='color:var(--text-muted);font-size:13px;'>No sequence data available.</p>"
+
+    # Top 5 related scenarios
+    matches = sorted(
+        protocol.get("scenario_matches", []),
+        key=lambda m: m.get("relevance_score", 0),
+        reverse=True
+    )[:5]
+    scenario_items = "".join(
+        f"<li style='margin-bottom:6px;font-size:14px;'>{m.get('scenario_name','')}</li>"
+        for m in matches
+    )
+    scenarios_section = f"""<h2 style="margin-top:2rem;">Related Clinical Scenarios</h2>
+<ul style="padding-left:1.5rem;">
+{scenario_items}
+</ul>""" if matches else ""
+
+    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
+  {breadcrumb}
+  <h1>{display_name}</h1>
+  <p style="color:var(--text-muted);font-size:14px;">Protocol &bull; {region_label}</p>
+
+  <h2>Indications</h2>
+  <p>{indications_text or "See full protocol in Radex."}</p>
+
+  <h2>Sequences</h2>
+  {seq_table}
+
+  {scenarios_section}
+
+  <div style="margin-top:2.5rem;">
+    <a href="{BASE_URL}/#protocols" class="nav-link active" style="display:inline-block;padding:10px 20px;border-radius:8px;">
+      Open in Radex
+    </a>
+  </div>
+</div>"""
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+{head}
+<body>
+  <div class="app">
+    {shared_header()}
+    <main class="main">
+      <section class="anatomy-section">
+        {body}
+      </section>
+    </main>
+    {shared_footer()}
+  </div>
+</body>
+</html>"""
+
+
+def render_region(region, cards, region_protocols, slug_map, protocols, scenario_count):
+    """Returns complete HTML string for one regional landing page."""
+    label = REGION_DISPLAY[region]
+    canonical = f"{BASE_URL}/regions/{region}/"
+
+    # Meta description
+    topic_examples = [c["topic"] for c in cards[:3]]
+    if topic_examples:
+        topics_str = ", ".join(topic_examples[:-1]) + f", and {topic_examples[-1]}" if len(topic_examples) > 1 else topic_examples[0]
+        meta_desc = (
+            f"ACR Appropriateness Criteria for {label.lower()} imaging. "
+            f"Evidence-based recommendations for {scenario_count} clinical scenarios "
+            f"including {topics_str}."
+        )
+    else:
+        meta_desc = (
+            f"ACR Appropriateness Criteria for {label.lower()} imaging. "
+            f"Evidence-based recommendations for {scenario_count} clinical scenarios."
+        )
+    meta_desc = meta_desc[:160]
+
+    jsonld = {
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        "name": f"{label} Imaging Appropriateness",
+        "url": canonical,
+        "specialty": {"@type": "MedicalSpecialty", "name": "Radiology"},
+        "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL}
+    }
+
+    title = f"{label} Imaging - ACR Appropriateness Criteria | Radex"
+    head = shared_head(title, meta_desc, canonical, jsonld)
+
+    # Topic cards section
+    cards_html = ""
+    if cards:
+        card_items = ""
+        for card in cards:
+            primary = card.get("primary_recommendation") or {}
+            consensus = primary.get("consensus_pct", 0)
+            rec_name = primary.get("name", "Clinical assessment")
+            card_type = card.get("card_type", "")
+            badge_colors = {
+                "STRONG": "#22c55e",
+                "CONDITIONAL": "#f59e0b",
+                "CLINICAL_FIRST": "#9B5DE5",
+                "HIGH_VARIANCE": "#6b7280",
+            }
+            badge_color = badge_colors.get(card_type, "#6b7280")
+            card_items += f"""<div style="border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:0.75rem;">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+    <span style="font-weight:600;font-size:14px;">{card.get('display_name','')}</span>
+    <span style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:20px;color:{badge_color};border:1px solid {badge_color};">{card_type}</span>
+  </div>
+  <p style="font-size:13px;color:var(--text-muted);margin:0;">{rec_name} &mdash; {consensus}% consensus</p>
+  <a href="{BASE_URL}/#search" style="font-size:12px;color:var(--accent);text-decoration:none;display:inline-block;margin-top:6px;">Search in Radex &rarr;</a>
+</div>"""
+        cards_html = f"""<h2>Clinical Topics</h2>
+<div style="margin:1rem 0;">
+{card_items}
+</div>"""
+
+    # Protocols section
+    protocols_html = ""
+    if region_protocols:
+        proto_items = ""
+        for i, p in enumerate(protocols):
+            if p.get("body_region") == region:
+                p_slug = slug_map[i]
+                p_name = make_display_name(
+                    p.get("canonical_procedure", p.get("name", "")),
+                    p.get("display_name", p.get("name", ""))
+                )
+                proto_items += f'<li style="margin-bottom:6px;"><a href="/protocols/{p_slug}/" style="color:var(--accent);text-decoration:none;">{p_name}</a></li>\n'
+        protocols_html = f"""<h2>MRI Protocols</h2>
+<ul style="padding-left:1.5rem;">
+{proto_items}</ul>"""
+
+    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
+  <h1>{label} Imaging Appropriateness</h1>
+  <p>{REGION_INTRO[region]}</p>
+
+  {cards_html}
+
+  {protocols_html}
+
+  <div style="margin-top:2rem;">
+    <a href="{BASE_URL}/#search" class="nav-link active" style="display:inline-block;padding:10px 20px;border-radius:8px;">
+      Search {label} Scenarios in Radex
+    </a>
+  </div>
+</div>"""
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+{head}
+<body>
+  <div class="app">
+    {shared_header()}
+    <main class="main">
+      <section class="anatomy-section">
+        {body}
+      </section>
+    </main>
+    {shared_footer()}
+  </div>
+</body>
+</html>"""
+
+
+def render_about():
+    """Returns complete HTML string for the about page."""
+    canonical = f"{BASE_URL}/about/"
+    title = "About Radex - ACR Imaging Appropriateness Tool | CoreGRAI"
+    meta_desc = (
+        "Radex is a free, browser-based ACR Appropriateness Criteria reference tool "
+        "built for radiology residents. 3,200+ clinical scenarios, 72+ MRI protocols."
+    )
+
+    jsonld = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebApplication",
+                "name": "Radex",
+                "url": BASE_URL,
+                "applicationCategory": "MedicalApplication",
+                "isAccessibleForFree": True,
+                "author": {"@type": "Organization", "name": "CoreGRAI", "url": "https://coregrai.com"}
+            },
+            {
+                "@type": "Organization",
+                "name": "CoreGRAI",
+                "url": "https://coregrai.com",
+                "email": "contact@coregrai.com"
+            }
+        ]
+    }
+
+    head = shared_head(title, meta_desc, canonical, jsonld)
+
+    region_links = "\n".join(
+        f'<li><a href="/regions/{r}/" style="color:var(--accent);text-decoration:none;">{label} Imaging</a></li>'
+        for r, label in REGION_DISPLAY.items()
+    )
+
+    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
+  <h1>About Radex</h1>
+
+  <p>
+    Radex is an educational reference tool designed for radiology residents and medical professionals
+    to quickly access imaging appropriateness criteria and MRI protocol information.
+  </p>
+
+  <h2>Key Statistics</h2>
+  <ul style="padding-left:1.5rem;">
+    <li>3,200+ ACR clinical scenarios</li>
+    <li>72+ MRI protocols with sequence-level guidance</li>
+    <li>83% ACR scenario coverage via quick-answer cards</li>
+    <li>Client-side AI inference - fully private, no data sent to servers</li>
+    <li>Offline-capable via Progressive Web App (PWA)</li>
+  </ul>
+
+  <h2>Data Sources</h2>
+  <p>
+    <strong>Appropriateness Criteria:</strong> Based on the ACR Appropriateness Criteria,
+    evidence-based guidelines developed by the American College of Radiology to assist referring
+    physicians and other providers in making the most appropriate imaging decisions.
+  </p>
+  <p>
+    <strong>MRI Protocols:</strong> Sample protocols based on common clinical practice.
+    Your institution may have different sequences, parameters, or protocols based on
+    scanner hardware, software versions, radiologist preferences, and institutional policies.
+  </p>
+
+  <h2>Browse by Region</h2>
+  <ul style="padding-left:1.5rem;">
+{region_links}
+  </ul>
+
+  <h2>Important Notice</h2>
+  <p>
+    This tool is provided for <strong>educational purposes only</strong>. It is not a substitute
+    for clinical judgment, institutional protocols, or direct consultation with radiologists.
+    Imaging decisions should always be made in the context of individual patient circumstances.
+  </p>
+
+  <h2>Also by CoreGRAI</h2>
+  <p>
+    <a href="https://coregrai.com" target="_blank" rel="noopener" style="color:var(--accent);">GRAi</a>
+    is an AI-powered radiology clinical reference and decision support platform.
+  </p>
+
+  <h2>Contact</h2>
+  <p>Questions or suggestions? <a href="mailto:contact@coregrai.com" style="color:var(--accent);">contact@coregrai.com</a></p>
+
+  <div style="margin-top:2rem;">
+    <a href="{BASE_URL}/" class="nav-link active" style="display:inline-block;padding:10px 20px;border-radius:8px;">
+      Open Radex
+    </a>
+  </div>
+</div>"""
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+{head}
+<body>
+  <div class="app">
+    {shared_header()}
+    <main class="main">
+      <section class="anatomy-section">
+        {body}
+      </section>
+    </main>
+    {shared_footer()}
+  </div>
+</body>
+</html>"""
+
+
+def main():
+    data = load_data()
+    protocols = data["protocols"]
+    cards = data["cards"]
+    region_counts = data["region_counts"]
+    slug_map = make_unique_slugs(protocols)
+
+    count = 0
+
+    # Protocol pages
+    for i, protocol in enumerate(protocols):
+        slug = slug_map[i]
+        html = render_protocol(protocol, slug)
+        write_file(Path("protocols") / slug / "index.html", html)
+        count += 1
+
+    # Regional pages
+    for region in REGION_DISPLAY:
+        region_cards = [c for c in cards if c.get("region") == region]
+        region_protocols = [p for p in protocols if p.get("body_region") == region]
+        scenario_count = region_counts.get(region, 0)
+        html = render_region(region, region_cards, region_protocols, slug_map, protocols, scenario_count)
+        write_file(Path("regions") / region / "index.html", html)
+        count += 1
+
+    # About page
+    write_file(Path("about") / "index.html", render_about())
+    count += 1
+
+    print(f"Written {count} files")
+
+
+if __name__ == "__main__":
+    main()
