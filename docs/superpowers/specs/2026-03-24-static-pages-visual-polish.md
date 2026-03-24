@@ -280,7 +280,7 @@ Add a `/* ========================================\n   Static Pages\n   ========
 
 ### CSS Version
 
-Update `CSS_VERSION = "20260324a"` (was `"20260323a"`).
+Update `CSS_VERSION = "20260324a"` (was `"20260323a"`). Also update the `<link rel="stylesheet">` in `index.html` from `css/main.css?v=20260323a` to `css/main.css?v=20260324a`.
 
 ### Region SVG Icons
 
@@ -319,10 +319,12 @@ REGION_ICONS = {
   {for card in cards:}
   <div class="topic-card">
     <div class="topic-card-header">
-      <span class="topic-card-name">{card.display_name}</span>
+      <span class="topic-card-name">{card['display_name']}</span>
+      {if consensus_pct:}
       <span class="topic-badge topic-badge-{badge_class}">{consensus_pct}%</span>
+      {/if}
     </div>
-    <p class="topic-card-meta">{recommendation_name} &bull; {card_type}</p>
+    <p class="topic-card-meta">{card['primary_recommendation']['name']} &bull; {card['card_type']}</p>
   </div>
   {/for}
 </div>
@@ -346,21 +348,39 @@ REGION_ICONS = {
 </a>
 ```
 
-**Badge class mapping** (from card_type field):
+**Badge class mapping** (from `card['card_type']` field):
 - `"STRONG"` -> `topic-badge-strong`
 - `"CONDITIONAL"` -> `topic-badge-cond`
 - `"CLINICAL_FIRST"` -> `topic-badge-clinical`
+- `"HIGH_VARIANCE"` -> `topic-badge-variance`
 - Any other -> `topic-badge-variance`
 
-**Consensus % display:** use `card['consensus_pct']` if present, otherwise omit the badge value and show only the badge class color.
+**Consensus % display:** access as `card['primary_recommendation']['consensus_pct']` with a null guard:
+```python
+primary = card.get("primary_recommendation") or {}
+consensus_pct = primary.get("consensus_pct", "")
+```
+If `consensus_pct` is empty string or 0, omit the badge entirely.
 
 ### `render_protocol()` HTML structure
+
+The breadcrumb conditionally includes the region link:
+
+```python
+region_label = REGION_DISPLAY.get(body_region)
+if region_label:
+    region_crumb = f'<a href="/regions/{body_region}/" class="...">{region_label}</a><span ...>&rsaquo;</span>'
+else:
+    region_crumb = ""
+```
 
 ```
 <nav class="static-breadcrumb" aria-label="Breadcrumb">
   <a href="/">Radex</a>
+  {if body_region in REGION_DISPLAY:}
   <span class="static-breadcrumb-sep">&rsaquo;</span>
   <a href="/regions/{body_region}/">{REGION_DISPLAY[body_region]}</a>
+  {/if}
   <span class="static-breadcrumb-sep">&rsaquo;</span>
   <span>{h1}</span>
 </nav>
@@ -397,32 +417,70 @@ REGION_ICONS = {
 </a>
 ```
 
-**Note:** If `body_region` is not in `REGION_DISPLAY` (e.g. `"neck"`), omit the breadcrumb region link and show only `Radex > {h1}`.
+The conditional is already captured in the pseudocode above. When `body_region` is not in `REGION_DISPLAY` (e.g. `"neck"`), the region crumb is omitted and breadcrumb renders as `Radex > {h1}`.
 
 ### `render_about()` HTML structure
 
-- Replace the `<ul>` region links with `.protocol-list` + `.protocol-list-item` rows
-- Replace the `<ul>` stats list with a simple `<div>` of `.scenario-pill` items
-- Section headings use `.static-section-label`
+Apply `.static-section-label` only to the list-paired headings: "Key Statistics", "Browse by Region", and "Also by CoreGRAI". Leave "Data Sources", "Important Notice", and "Contact" as plain `<h2>` (they introduce prose paragraphs, not lists, so the uppercase label style would be inappropriate).
+
+- "Key Statistics" `<h2 class="static-section-label">` + replace `<ul>` with `<div>` of `.scenario-pill` items
+- "Browse by Region" `<h2 class="static-section-label">` + replace `<ul>` with `.protocol-list` + `.protocol-list-item` rows
+- "Also by CoreGRAI" `<h2 class="static-section-label">` + plain paragraph
+- "Data Sources", "Important Notice", "Contact" remain plain `<h2>` (no class)
 
 ---
 
-## Section 3: index.html Anatomy Button Changes
+## Section 3: index.html + app.js Anatomy Button Changes
 
-Each of the 8 `.anatomy-btn` elements gains a "view all" link as the last child:
+### Approach: Progressive Enhancement
+
+Nesting an `<a>` inside a `<button>` is invalid HTML (interactive content cannot be nested inside interactive content). Instead, convert each `<button class="anatomy-btn">` to an `<a class="anatomy-btn">` with a real `href`. The JS handler calls `event.preventDefault()` to keep SPA behavior when JavaScript is active. When JS is inactive (or for Googlebot), the link navigates directly to the static region page.
+
+### index.html change
+
+Convert each `<button>` to `<a>`. Example for neuro:
 
 ```html
+<!-- Before -->
 <button class="anatomy-btn" data-region="neuro" aria-label="Neuro imaging">
   <svg class="anatomy-icon" ...>...</svg>
   <span>Neuro</span>
-  <a href="/regions/neuro/" class="anatomy-btn-region-link"
-     onclick="event.stopPropagation()" tabindex="-1">view all</a>
 </button>
+
+<!-- After -->
+<a href="/regions/neuro/" class="anatomy-btn" data-region="neuro" aria-label="Neuro imaging">
+  <svg class="anatomy-icon" ...>...</svg>
+  <span>Neuro</span>
+</a>
 ```
 
-`tabindex="-1"` keeps the link out of the tab order so keyboard nav still uses the button. `onclick="event.stopPropagation()"` prevents the link click from triggering the button's JS handler.
+All 8 elements, with `href` values:
+- `neuro` -> `/regions/neuro/`
+- `spine` -> `/regions/spine/`
+- `chest` -> `/regions/chest/`
+- `abdomen` -> `/regions/abdomen/`
+- `msk` -> `/regions/msk/`
+- `vascular` -> `/regions/vascular/`
+- `breast` -> `/regions/breast/`
+- `peds` -> `/regions/peds/`
 
-All 8 regions: `neuro`, `spine`, `chest`, `abdomen`, `msk`, `vascular`, `breast`, `peds`.
+### app.js change
+
+Line ~239 currently:
+```js
+btn.addEventListener('click', () => this.selectRegion(btn.dataset.region));
+```
+
+Change to:
+```js
+btn.addEventListener('click', (e) => { e.preventDefault(); this.selectRegion(btn.dataset.region); });
+```
+
+This one-line change preserves all existing SPA behavior. The `querySelectorAll('.anatomy-btn')` selector still matches `<a>` elements with that class.
+
+### CSS note
+
+Remove `.anatomy-btn-region-link` from the new CSS block (no longer needed). The existing `.anatomy-btn` style already handles hover/active states for the converted `<a>` elements since CSS does not distinguish `<button>` from `<a>` by tag name when class selectors are used.
 
 ---
 
@@ -438,12 +496,6 @@ This overwrites all 80+ files in `protocols/`, `regions/`, `about/`, and regener
 
 ---
 
-## CSS Version
-
-`CSS_VERSION` in `generate_static_pages.py` bumped to `"20260324a"`. Also update the `<link rel="stylesheet">` in `index.html` from `css/main.css?v=20260323a` to `css/main.css?v=20260324a`.
-
----
-
 ## Success Criteria
 
 - Static region pages display a purple hero card with icon at top
@@ -452,6 +504,8 @@ This overwrites all 80+ files in `protocols/`, `regions/`, `about/`, and regener
 - Sequence table uses alternating row backgrounds
 - Related scenarios render as gray pills, not list items
 - Protocol CTA at page bottom uses purple gradient banner
-- All 8 anatomy buttons in `index.html` have a working "view all" link to the correct region page
+- All 8 anatomy buttons in `index.html` converted to `<a>` tags with `href` to correct region page
+- Clicking an anatomy button still triggers the SPA region view (JS `preventDefault()` in `app.js`)
+- Anatomy buttons are valid HTML (no nested interactive elements)
 - Re-running the generator produces identical output (idempotent)
 - `css/main.css` version query string bumped so browsers fetch updated styles
