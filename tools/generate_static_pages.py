@@ -555,6 +555,40 @@ def render_about():
 </html>"""
 
 
+def build_sitemap(protocol_slugs):
+    """Returns a complete sitemap XML string for all generated pages."""
+    today = date.today().isoformat()
+
+    entries = []
+
+    def entry(loc, priority, changefreq):
+        entries.append(
+            f"  <url>\n"
+            f"    <loc>{BASE_URL}{loc}</loc>\n"
+            f"    <lastmod>{today}</lastmod>\n"
+            f"    <changefreq>{changefreq}</changefreq>\n"
+            f"    <priority>{priority}</priority>\n"
+            f"  </url>"
+        )
+
+    entry("/", "1.0", "weekly")
+    entry("/about/", "0.5", "monthly")
+    entry("/privacy-policy.html", "0.3", "yearly")
+
+    for region in REGION_DISPLAY:
+        entry(f"/regions/{region}/", "0.8", "monthly")
+
+    for slug in protocol_slugs:
+        entry(f"/protocols/{slug}/", "0.7", "monthly")
+
+    urls_block = "\n".join(entries)
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{urls_block}
+</urlset>
+"""
+
+
 def main():
     data = load_data()
     protocols = data["protocols"]
@@ -582,6 +616,11 @@ def main():
 
     # About page
     write_file(Path("about") / "index.html", render_about())
+    count += 1
+
+    # Sitemap
+    sitemap_xml = build_sitemap(list(slug_map.values()))
+    write_file(Path("sitemap.xml"), sitemap_xml)
     count += 1
 
     print(f"Written {count} files")
