@@ -39,3 +39,6 @@ data/search/tfidf-index-debug.json
 
 # Claude local settings variants
 .claude/settings.local-*.json
+
+# Brainstorming session files (visual companion server output)
+.superpowers/
