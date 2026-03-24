@@ -144,3 +144,82 @@ def load_data():
             region_counts[region] = 0
 
     return {"protocols": protocols, "cards": cards, "region_counts": region_counts}
+
+
+def shared_head(title, description, canonical, jsonld_dict):
+    import json as _json
+    jsonld_str = _json.dumps(jsonld_dict, indent=2)
+    return f"""<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content="{description}">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="CoreGRAI">
+  <link rel="canonical" href="{canonical}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{title}">
+  <meta property="og:description" content="{description}">
+  <meta property="og:url" content="{canonical}">
+  <meta property="og:site_name" content="Radex">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{title}">
+  <meta name="twitter:description" content="{description}">
+  <meta name="theme-color" content="#9B5DE5">
+  <link rel="stylesheet" href="/css/main.css?v={CSS_VERSION}">
+  <link rel="manifest" href="/manifest.json">
+  <script type="application/ld+json">
+{jsonld_str}
+  </script>
+</head>"""
+
+
+def shared_header():
+    return """<header class="header" role="banner">
+  <div class="header-brand">
+    <a href="https://www.protocolinfo.com/" style="text-decoration:none;">
+      <span class="brand-text">Radex</span>
+    </a>
+  </div>
+  <nav class="header-nav" role="navigation" aria-label="Main navigation">
+    <a href="https://www.protocolinfo.com/" class="nav-link">Back to Radex</a>
+  </nav>
+</header>"""
+
+
+def shared_footer():
+    return """<footer class="site-footer" role="contentinfo">
+  <div class="footer-content">
+    <div class="footer-links">
+      <a href="/about/" class="footer-link">About</a>
+      <span class="footer-divider">|</span>
+      <a href="/privacy-policy.html" class="footer-link">Terms</a>
+      <span class="footer-divider">|</span>
+      <a href="https://www.acr.org/Clinical-Resources/Clinical-Tools-and-Reference/Appropriateness-Criteria" target="_blank" rel="noopener" class="footer-link">ACR Guidelines</a>
+      <span class="footer-divider">|</span>
+      <a href="https://www.radsreview.net" target="_blank" rel="noopener" class="footer-link">RadsReview</a>
+      <span class="footer-divider">|</span>
+      <a href="https://coregrai.com" target="_blank" rel="noopener" class="footer-link">CoreGRAI</a>
+    </div>
+    <div class="footer-promo">
+      <a href="https://coregrai.com" target="_blank" rel="noopener" class="footer-promo-card">
+        <span class="footer-promo-badge">Also by CoreGRAI</span>
+        <div class="footer-promo-text">
+          <p class="footer-promo-title">GRAi - Radiology Clinical Reference</p>
+          <p class="footer-promo-desc">AI-powered clinical decision support platform for diagnostic radiology</p>
+        </div>
+        <svg class="footer-promo-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+    <p class="footer-copyright">&copy; 2025 CoreGRAI. Educational use only.</p>
+  </div>
+</footer>"""
+
+
+def write_file(rel_path, html):
+    """Write html to REPO_ROOT/rel_path, creating parent dirs as needed."""
+    full_path = REPO_ROOT / rel_path
+    full_path.parent.mkdir(parents=True, exist_ok=True)
+    full_path.write_text(html, encoding="utf-8")
