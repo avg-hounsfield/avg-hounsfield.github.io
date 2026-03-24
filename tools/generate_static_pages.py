@@ -73,3 +73,32 @@ def slugify(text):
     s = re.sub(r"-+", "-", s)
     s = s.strip("-")
     return s
+
+
+def make_unique_slugs(protocols):
+    """
+    Returns dict mapping protocol index (int) -> unique slug string.
+    Collision resolution: append slugified display_name, then numeric suffix.
+    """
+    seen = {}      # slug -> first index that claimed it
+    result = {}    # index -> slug
+
+    for i, p in enumerate(protocols):
+        base = slugify(p["canonical_procedure"])
+        candidate = base
+
+        if candidate not in seen:
+            seen[candidate] = i
+            result[i] = candidate
+        else:
+            # append discriminator from display_name
+            discriminator = slugify(p["display_name"])
+            candidate = f"{base}-{discriminator}"
+            counter = 2
+            while candidate in seen:
+                candidate = f"{base}-{discriminator}-{counter}"
+                counter += 1
+            seen[candidate] = i
+            result[i] = candidate
+
+    return result
