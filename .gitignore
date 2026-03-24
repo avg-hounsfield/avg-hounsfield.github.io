@@ -1,2 +1,38 @@
 # Capstone report files
 CAPSTONE_PROJECT_REPORT.*
+
+# Development tools and build scripts
+tools/
+
+# ML models
+models/
+
+# Archive and scratch folders
+_archive/
+_ul
+_ul-*
+workers/
+
+# Variant/experimental branches (ManuMele, Otto)
+*-ManuMele*
+*-Otto*
+
+# Database files
+*.db
+
+# Backup files
+*.bak
+
+# Data files not served to users
+data/source/
+data/training/
+data/schema/
+data/protocols-enriched*.json
+
+# Search index build artifacts
+data/search/scenario_embeddings_layperson.npy
+data/search/*layperson*
+data/search/tfidf-index-debug.json
+
+# Claude local settings variants
+.claude/settings.local-*.json

@@ -1,0 +1,1735 @@
+{
+  "ct": [
+    "computed tomography",
+    "cat scan",
+    "ct scan"
+  ],
+  "mri": [
+    "magnetic resonance imaging",
+    "mr imaging",
+    "mr",
+    "nmr"
+  ],
+  "xray": [
+    "radiograph",
+    "plain film",
+    "x-ray",
+    "roentgenogram",
+    "plain radiograph"
+  ],
+  "x-ray": [
+    "radiograph",
+    "plain film",
+    "xray",
+    "roentgenogram"
+  ],
+  "ultrasound": [
+    "sonography",
+    "us",
+    "ultrasonography",
+    "sono"
+  ],
+  "pet": [
+    "positron emission tomography",
+    "pet scan",
+    "positron annihilation"
+  ],
+  "mammogram": [
+    "mammography",
+    "breast imaging"
+  ],
+  "fluoro": [
+    "fluoroscopy",
+    "fluoroscopic"
+  ],
+  "angio": [
+    "angiography",
+    "angiogram",
+    "arteriography"
+  ],
+  "cta": [
+    "ct angiography",
+    "ct angiogram"
+  ],
+  "mra": [
+    "mr angiography",
+    "mr angiogram"
+  ],
+  "tumor": [
+    "mass",
+    "neoplasm",
+    "lesion",
+    "malignancy",
+    "growth"
+  ],
+  "cancer": [
+    "malignancy",
+    "carcinoma",
+    "neoplasm",
+    "tumor"
+  ],
+  "fracture": [
+    "break",
+    "fx",
+    "disruption",
+    "broken"
+  ],
+  "hemorrhage": [
+    "bleeding",
+    "hematoma",
+    "blood",
+    "haemorrhage"
+  ],
+  "bleed": [
+    "hemorrhage",
+    "bleeding",
+    "hematoma"
+  ],
+  "infarct": [
+    "ischemia",
+    "stroke",
+    "infarction",
+    "ischemic"
+  ],
+  "stroke": [
+    "cva",
+    "infarct",
+    "cerebrovascular accident",
+    "ischemia"
+  ],
+  "pneumonia": [
+    "consolidation",
+    "infiltrate",
+    "infection",
+    "pneumonitis"
+  ],
+  "edema": [
+    "swelling",
+    "oedema",
+    "fluid accumulation"
+  ],
+  "effusion": [
+    "fluid collection",
+    "fluid accumulation"
+  ],
+  "abscess": [
+    "collection",
+    "infected fluid",
+    "purulent collection"
+  ],
+  "thrombus": [
+    "clot",
+    "thrombosis",
+    "blood clot"
+  ],
+  "embolism": [
+    "embolus",
+    "pe",
+    "emboli"
+  ],
+  "stenosis": [
+    "narrowing",
+    "stricture"
+  ],
+  "aneurysm": [
+    "dilatation",
+    "outpouching",
+    "aneurysmal"
+  ],
+  "dissection": [
+    "intimal tear",
+    "dissecting"
+  ],
+  "metastasis": [
+    "mets",
+    "metastases",
+    "metastatic",
+    "secondary"
+  ],
+  "liver": [
+    "hepatic",
+    "hepar"
+  ],
+  "kidney": [
+    "renal",
+    "nephric",
+    "nephro"
+  ],
+  "heart": [
+    "cardiac",
+    "myocardial",
+    "cardiovascular"
+  ],
+  "lung": [
+    "pulmonary",
+    "pulmonic"
+  ],
+  "brain": [
+    "cerebral",
+    "intracranial",
+    "encephalic"
+  ],
+  "spine": [
+    "spinal",
+    "vertebral",
+    "rachis"
+  ],
+  "bone": [
+    "osseous",
+    "skeletal"
+  ],
+  "bowel": [
+    "intestine",
+    "gut",
+    "intestinal",
+    "enteric"
+  ],
+  "stomach": [
+    "gastric"
+  ],
+  "pancreas": [
+    "pancreatic"
+  ],
+  "spleen": [
+    "splenic"
+  ],
+  "gallbladder": [
+    "gb",
+    "cholecyst"
+  ],
+  "aorta": [
+    "aortic"
+  ],
+  "ivc": [
+    "inferior vena cava"
+  ],
+  "svc": [
+    "superior vena cava"
+  ],
+  "brachiocephalic vein": [
+    "innominate vein"
+  ],
+  "abducens nerve": [
+    "cn vi",
+    "nerve vi",
+    "sixth cranial nerve"
+  ],
+  "accessory nerve": [
+    "cn xi",
+    "nerve xi",
+    "eleventh cranial nerve"
+  ],
+  "antrum": [
+    "pyloric antrum",
+    "gastric antrum",
+    "antrum of stomach"
+  ],
+  "brainstem": [
+    "brain stem",
+    "truncus encephali"
+  ],
+  "cartilage": [
+    "cartilaginous tissue",
+    "hyaline cartilage"
+  ],
+  "annular tear": [
+    "annulus tear",
+    "annular fissure",
+    "high intensity zone",
+    "hiz"
+  ],
+  "intervertebral disc": [
+    "ivd",
+    "disc",
+    "disk"
+  ],
+  "prostatic capsule": [
+    "capsule of prostate",
+    "prostate capsule"
+  ],
+  "peripheral zone": [
+    "pz",
+    "peripheral zone of prostate"
+  ],
+  "transition zone": [
+    "tz",
+    "transition zone of prostate"
+  ],
+  "central zone": [
+    "cz",
+    "central zone of prostate"
+  ],
+  "fibromuscular stroma": [
+    "anterior fibromuscular stroma",
+    "afms"
+  ],
+  "auditory cortex": [
+    "primary auditory area",
+    "heschls gyrus"
+  ],
+  "arcuate nucleus": [
+    "arcuate hypothalamic nucleus",
+    "nucleus infundibularis"
+  ],
+  "thalamic radiation": [
+    "anterior thalamic radiation",
+    "posterior thalamic radiation"
+  ],
+  "birads": [
+    "bi-rads",
+    "breast imaging reporting",
+    "birads category"
+  ],
+  "bi-rads": [
+    "birads",
+    "breast imaging reporting"
+  ],
+  "lungrads": [
+    "lung-rads",
+    "lung imaging reporting"
+  ],
+  "lung-rads": [
+    "lungrads",
+    "lung ct screening"
+  ],
+  "pirads": [
+    "pi-rads",
+    "prostate imaging reporting"
+  ],
+  "pi-rads": [
+    "pirads",
+    "prostate mri"
+  ],
+  "tirads": [
+    "ti-rads",
+    "thyroid imaging reporting"
+  ],
+  "ti-rads": [
+    "tirads",
+    "thyroid nodule"
+  ],
+  "lirads": [
+    "li-rads",
+    "liver imaging reporting"
+  ],
+  "li-rads": [
+    "lirads",
+    "liver lesion"
+  ],
+  "kvp": [
+    "kilovoltage",
+    "tube voltage",
+    "peak voltage",
+    "kilovolt peak",
+    "kv"
+  ],
+  "mas": [
+    "milliampere-seconds",
+    "tube current",
+    "ma",
+    "milliamperage",
+    "tube output"
+  ],
+  "ma": [
+    "milliampere",
+    "tube current",
+    "milliamperage"
+  ],
+  "tube current": [
+    "ma",
+    "milliampere",
+    "mas",
+    "filament current"
+  ],
+  "focal spot": [
+    "focal spot size",
+    "focus",
+    "target spot"
+  ],
+  "anode": [
+    "target",
+    "anode angle",
+    "rotating anode",
+    "stationary anode"
+  ],
+  "cathode": [
+    "filament",
+    "electron source"
+  ],
+  "heel effect": [
+    "anode heel effect",
+    "intensity variation"
+  ],
+  "characteristic radiation": [
+    "characteristic x-rays",
+    "k-shell radiation"
+  ],
+  "bremsstrahlung": [
+    "braking radiation",
+    "continuous spectrum"
+  ],
+  "filtration": [
+    "added filtration",
+    "inherent filtration",
+    "beam hardening filter",
+    "aluminum filter",
+    "copper filter"
+  ],
+  "half value layer": [
+    "hvl",
+    "beam quality",
+    "penetrability"
+  ],
+  "exposure": [
+    "air kerma",
+    "entrance skin exposure",
+    "ese"
+  ],
+  "hounsfield": [
+    "hu",
+    "ct number",
+    "density units",
+    "hounsfield unit",
+    "attenuation value"
+  ],
+  "ct number": [
+    "hounsfield unit",
+    "hu",
+    "attenuation coefficient"
+  ],
+  "snr": [
+    "signal to noise",
+    "signal-to-noise ratio",
+    "signal noise ratio"
+  ],
+  "cnr": [
+    "contrast to noise",
+    "contrast-to-noise ratio",
+    "contrast noise ratio"
+  ],
+  "spatial resolution": [
+    "high contrast resolution",
+    "detail resolution",
+    "line pairs per mm",
+    "lp/mm",
+    "mtf"
+  ],
+  "contrast resolution": [
+    "low contrast resolution",
+    "soft tissue resolution",
+    "detectability"
+  ],
+  "temporal resolution": [
+    "time resolution",
+    "rotation time",
+    "gantry speed"
+  ],
+  "noise": [
+    "image noise",
+    "quantum noise",
+    "electronic noise",
+    "standard deviation"
+  ],
+  "pitch": [
+    "helical pitch",
+    "detector pitch",
+    "beam pitch",
+    "table feed"
+  ],
+  "slice thickness": [
+    "collimation",
+    "section thickness",
+    "detector width"
+  ],
+  "reconstruction": [
+    "image reconstruction",
+    "filtered back projection",
+    "fbp",
+    "iterative reconstruction",
+    "ir"
+  ],
+  "kernel": [
+    "reconstruction kernel",
+    "filter kernel",
+    "convolution kernel",
+    "algorithm"
+  ],
+  "window": [
+    "window level",
+    "window width",
+    "windowing",
+    "ww",
+    "wl",
+    "display settings"
+  ],
+  "ctdi": [
+    "ct dose index",
+    "ctdivol",
+    "ctdiw",
+    "dose index"
+  ],
+  "dlp": [
+    "dose length product",
+    "scan dlp"
+  ],
+  "beam hardening": [
+    "cupping artifact",
+    "beam hardening artifact",
+    "polychromatic artifact"
+  ],
+  "streak artifact": [
+    "metal artifact",
+    "photon starvation",
+    "high attenuation artifact"
+  ],
+  "motion artifact": [
+    "patient motion",
+    "motion blur",
+    "respiratory motion"
+  ],
+  "partial volume": [
+    "partial volume averaging",
+    "partial volume effect",
+    "volume averaging"
+  ],
+  "ring artifact": [
+    "detector artifact",
+    "calibration artifact",
+    "ring pattern"
+  ],
+  "aliasing": [
+    "aliasing artifact",
+    "sampling artifact",
+    "moirae pattern"
+  ],
+  "windmill artifact": [
+    "cone beam artifact",
+    "helical artifact"
+  ],
+  "truncation artifact": [
+    "field of view artifact",
+    "out of field artifact"
+  ],
+  "t1": [
+    "t1-weighted",
+    "t1w",
+    "t1 weighted",
+    "spin-lattice relaxation",
+    "longitudinal relaxation"
+  ],
+  "t2": [
+    "t2-weighted",
+    "t2w",
+    "t2 weighted",
+    "spin-spin relaxation",
+    "transverse relaxation"
+  ],
+  "t2 star": [
+    "t2*",
+    "t2 star weighted",
+    "gradient echo decay"
+  ],
+  "proton density": [
+    "pd",
+    "pd-weighted",
+    "proton density weighted"
+  ],
+  "flair": [
+    "fluid attenuated",
+    "fluid-attenuated inversion recovery",
+    "dark fluid"
+  ],
+  "stir": [
+    "short tau inversion recovery",
+    "fat suppressed inversion recovery"
+  ],
+  "dwi": [
+    "diffusion weighted",
+    "diffusion-weighted imaging",
+    "diffusion imaging",
+    "diffusion weighted imaging",
+    "diffusion"
+  ],
+  "adc": [
+    "apparent diffusion coefficient",
+    "adc map",
+    "diffusion coefficient"
+  ],
+  "b value": [
+    "b-value",
+    "diffusion weighting factor",
+    "diffusion gradient strength"
+  ],
+  "tr": [
+    "repetition time",
+    "time to repeat"
+  ],
+  "te": [
+    "echo time",
+    "time to echo"
+  ],
+  "ti": [
+    "inversion time",
+    "time from inversion"
+  ],
+  "flip angle": [
+    "tip angle",
+    "excitation angle",
+    "alpha"
+  ],
+  "nex": [
+    "number of excitations",
+    "nsa",
+    "averages",
+    "acquisitions"
+  ],
+  "fov": [
+    "field of view",
+    "imaging field"
+  ],
+  "matrix": [
+    "acquisition matrix",
+    "image matrix",
+    "matrix size"
+  ],
+  "bandwidth": [
+    "receiver bandwidth",
+    "sampling bandwidth",
+    "readout bandwidth"
+  ],
+  "spin echo": [
+    "se",
+    "conventional spin echo",
+    "cse"
+  ],
+  "fast spin echo": [
+    "fse",
+    "turbo spin echo",
+    "tse",
+    "rare"
+  ],
+  "gradient echo": [
+    "gre",
+    "gradient recalled echo",
+    "field echo",
+    "fe"
+  ],
+  "spoiled gradient echo": [
+    "spgr",
+    "flash",
+    "t1 fft",
+    "spoiled gre"
+  ],
+  "steady state": [
+    "ssfp",
+    "fiesta",
+    "trufi",
+    "balanced fft",
+    "bssfp"
+  ],
+  "echo planar": [
+    "epi",
+    "echo planar imaging",
+    "single shot epi"
+  ],
+  "inversion recovery": [
+    "ir",
+    "inversion prepared"
+  ],
+  "magnetization transfer": [
+    "mt",
+    "mtc",
+    "magnetization transfer contrast"
+  ],
+  "chemical shift": [
+    "fat water shift",
+    "dixon",
+    "in phase",
+    "out of phase",
+    "opposed phase"
+  ],
+  "fat saturation": [
+    "fat sat",
+    "chemsat",
+    "spectral fat suppression",
+    "spir",
+    "special"
+  ],
+  "parallel imaging": [
+    "sense",
+    "grappa",
+    "ipat",
+    "asset",
+    "acceleration factor"
+  ],
+  "k-space": [
+    "fourier space",
+    "frequency domain",
+    "raw data"
+  ],
+  "susceptibility": [
+    "susceptibility artifact",
+    "magnetic susceptibility",
+    "field inhomogeneity"
+  ],
+  "chemical shift artifact": [
+    "fat water misregistration",
+    "lipid water shift"
+  ],
+  "ghosting": [
+    "phase ghosting",
+    "motion ghosting",
+    "respiratory ghosting"
+  ],
+  "aliasing mri": [
+    "wrap around",
+    "foldover",
+    "phase wrap"
+  ],
+  "zipper artifact": [
+    "rf leak",
+    "rf interference",
+    "herringbone"
+  ],
+  "truncation mri": [
+    "gibbs ringing",
+    "gibbs artifact",
+    "truncation artifact"
+  ],
+  "dielectric effect": [
+    "standing wave artifact",
+    "conductivity artifact"
+  ],
+  "magic angle": [
+    "magic angle artifact",
+    "55 degree artifact"
+  ],
+  "sar": [
+    "specific absorption rate",
+    "rf heating",
+    "rf deposition"
+  ],
+  "mri safe": [
+    "mr safe",
+    "mri compatible"
+  ],
+  "mri conditional": [
+    "mr conditional"
+  ],
+  "magnetic field": [
+    "b0",
+    "main field",
+    "static field",
+    "field strength"
+  ],
+  "gradient field": [
+    "gradient coil",
+    "magnetic gradient"
+  ],
+  "rf field": [
+    "b1",
+    "rf coil",
+    "transmit field"
+  ],
+  "quench": [
+    "magnet quench",
+    "helium quench"
+  ],
+  "projectile": [
+    "projectile effect",
+    "missile effect",
+    "ferromagnetic attraction"
+  ],
+  "frequency us": [
+    "transducer frequency",
+    "ultrasound frequency",
+    "mhz"
+  ],
+  "transducer": [
+    "probe",
+    "ultrasound probe",
+    "array"
+  ],
+  "linear transducer": [
+    "linear array",
+    "linear probe",
+    "high frequency probe"
+  ],
+  "curvilinear": [
+    "curved array",
+    "convex probe",
+    "abdominal probe"
+  ],
+  "phased array": [
+    "sector probe",
+    "cardiac probe"
+  ],
+  "piezoelectric": [
+    "piezoelectric crystal",
+    "piezoelectric element"
+  ],
+  "acoustic impedance": [
+    "z value",
+    "impedance mismatch"
+  ],
+  "attenuation us": [
+    "ultrasound attenuation",
+    "absorption",
+    "depth penetration"
+  ],
+  "reflection": [
+    "specular reflection",
+    "echo",
+    "acoustic interface"
+  ],
+  "refraction": [
+    "acoustic refraction",
+    "beam bending"
+  ],
+  "acoustic shadowing": [
+    "posterior shadowing",
+    "shadow"
+  ],
+  "posterior enhancement": [
+    "through transmission",
+    "posterior acoustic enhancement"
+  ],
+  "reverberation": [
+    "reverberation artifact",
+    "comet tail",
+    "ring down"
+  ],
+  "side lobe": [
+    "side lobe artifact",
+    "lateral artifact"
+  ],
+  "speckle": [
+    "speckle artifact",
+    "speckle pattern",
+    "granular noise"
+  ],
+  "doppler": [
+    "doppler ultrasound",
+    "doppler effect",
+    "doppler shift"
+  ],
+  "color doppler": [
+    "color flow",
+    "cfi",
+    "color flow imaging"
+  ],
+  "power doppler": [
+    "amplitude doppler",
+    "energy doppler"
+  ],
+  "spectral doppler": [
+    "pulsed wave doppler",
+    "continuous wave doppler",
+    "pw doppler",
+    "cw doppler"
+  ],
+  "prf": [
+    "pulse repetition frequency",
+    "prf doppler"
+  ],
+  "nyquist": [
+    "nyquist limit",
+    "aliasing doppler",
+    "velocity aliasing"
+  ],
+  "tgc": [
+    "time gain compensation",
+    "depth gain compensation",
+    "dgc"
+  ],
+  "activity": [
+    "radioactivity",
+    "becquerel",
+    "curie",
+    "mci",
+    "mbq"
+  ],
+  "half life": [
+    "physical half life",
+    "t1/2",
+    "decay constant"
+  ],
+  "decay": [
+    "radioactive decay",
+    "disintegration",
+    "nuclear decay"
+  ],
+  "gamma ray": [
+    "gamma photon",
+    "gamma emission",
+    "photopeak"
+  ],
+  "photomultiplier": [
+    "pmt",
+    "photomultiplier tube",
+    "detector"
+  ],
+  "collimator": [
+    "parallel hole",
+    "pinhole",
+    "converging",
+    "diverging collimator"
+  ],
+  "energy window": [
+    "photopeak window",
+    "scatter window"
+  ],
+  "scatter nm": [
+    "compton scatter",
+    "scatter correction",
+    "scatter fraction"
+  ],
+  "attenuation correction": [
+    "ac",
+    "attenuation map",
+    "ct attenuation correction"
+  ],
+  "suv": [
+    "standardized uptake value",
+    "suv max"
+  ],
+  "spect": [
+    "single photon emission ct"
+  ],
+  "annihilation": [
+    "positron annihilation",
+    "511 kev",
+    "coincidence detection"
+  ],
+  "time of flight": [
+    "tof",
+    "tof pet",
+    "timing resolution"
+  ],
+  "radiation dose": [
+    "absorbed dose",
+    "dose",
+    "exposure"
+  ],
+  "gray": [
+    "gy",
+    "absorbed dose unit",
+    "rad"
+  ],
+  "sievert": [
+    "sv",
+    "equivalent dose",
+    "rem",
+    "effective dose"
+  ],
+  "kerma": [
+    "kinetic energy released",
+    "air kerma"
+  ],
+  "alara": [
+    "as low as reasonably achievable",
+    "dose optimization"
+  ],
+  "effective dose": [
+    "whole body dose",
+    "stochastic risk"
+  ],
+  "organ dose": [
+    "tissue dose",
+    "absorbed organ dose"
+  ],
+  "drl": [
+    "diagnostic reference level",
+    "reference dose"
+  ],
+  "scatter radiation": [
+    "scattered radiation",
+    "secondary radiation",
+    "room scatter"
+  ],
+  "shielding": [
+    "lead shielding",
+    "protective barrier",
+    "lead apron",
+    "thyroid shield"
+  ],
+  "dosimeter": [
+    "badge",
+    "tld",
+    "osl",
+    "radiation monitor"
+  ],
+  "linear no threshold": [
+    "lnt",
+    "stochastic effects"
+  ],
+  "deterministic": [
+    "deterministic effects",
+    "threshold effects",
+    "tissue reactions"
+  ],
+  "stochastic": [
+    "stochastic effects",
+    "probabilistic effects",
+    "cancer risk"
+  ],
+  "resolution": [
+    "spatial resolution",
+    "detail",
+    "sharpness"
+  ],
+  "contrast": [
+    "contrast media",
+    "contrast agent",
+    "contrast material"
+  ],
+  "noise image": [
+    "quantum mottle",
+    "graininess",
+    "random noise"
+  ],
+  "mtf": [
+    "modulation transfer function",
+    "spatial frequency response"
+  ],
+  "dqe": [
+    "detective quantum efficiency",
+    "detector efficiency"
+  ],
+  "dynamic range": [
+    "latitude",
+    "exposure latitude",
+    "bit depth"
+  ],
+  "histogram": [
+    "image histogram",
+    "pixel distribution"
+  ],
+  "roi": [
+    "region of interest",
+    "measurement region"
+  ],
+  "digital radiography": [
+    "dr",
+    "direct radiography",
+    "digital detector"
+  ],
+  "computed radiography": [
+    "cr",
+    "photostimulable phosphor",
+    "psp",
+    "imaging plate"
+  ],
+  "flat panel detector": [
+    "fpd",
+    "amorphous silicon",
+    "amorphous selenium"
+  ],
+  "pixel": [
+    "picture element",
+    "pixel size",
+    "del"
+  ],
+  "bit depth": [
+    "gray scale",
+    "dynamic range",
+    "pixel depth"
+  ],
+  "dicom": [
+    "digital imaging communications",
+    "dicom standard"
+  ],
+  "pacs": [
+    "picture archiving",
+    "image storage",
+    "archive system"
+  ],
+  "lossy compression": [
+    "irreversible compression",
+    "jpeg"
+  ],
+  "lossless compression": [
+    "reversible compression",
+    "jpeg2000"
+  ],
+  "aliasing artifact": [
+    "folding artifact",
+    "wraparound artifact",
+    "fold over artifact"
+  ],
+  "arrhythmia artifact": [
+    "arrhythmia",
+    "cardiac motion artifact"
+  ],
+  "digitization artifact": [
+    "spike artifact",
+    "crisscross artifact",
+    "spike noise artifact"
+  ],
+  "dce mri": [
+    "dynamic contrast enhanced mri",
+    "dce magnetic resonance imaging",
+    "perfusion mri"
+  ],
+  "dose area product": [
+    "dap",
+    "kerma area product",
+    "kap"
+  ],
+  "double contrast": [
+    "double contrast imaging",
+    "air contrast"
+  ],
+  "fringe artifact": [
+    "zebra stripe artifact",
+    "moire artifact",
+    "moire fringes"
+  ],
+  "fmri": [
+    "functional mri",
+    "functional magnetic resonance imaging",
+    "bold imaging"
+  ],
+  "fourier reconstruction": [
+    "fourier transform reconstruction",
+    "fft reconstruction"
+  ],
+  "helmholtz coil": [
+    "helmholtz pair",
+    "head coil"
+  ],
+  "endorectal coil": [
+    "rectal coil",
+    "endorectal surface coil"
+  ],
+  "surface coil": [
+    "local coil",
+    "receive coil",
+    "phased array coil"
+  ],
+  "body coil": [
+    "whole body coil",
+    "transmit coil"
+  ],
+  "nme": [
+    "non-mass enhancement",
+    "non-mass-like enhancement"
+  ],
+  "magnitude reconstruction": [
+    "modulus reconstruction"
+  ],
+  "gibbs artifact": [
+    "truncation artifact",
+    "gibbs ringing",
+    "spectral leakage"
+  ],
+  "partial volume artifact": [
+    "partial volume effect",
+    "volume averaging artifact"
+  ],
+  "phase encoding": [
+    "frequency encoding",
+    "readout direction"
+  ],
+  "receive bandwidth": [
+    "sampling bandwidth",
+    "acquisition bandwidth"
+  ],
+  "shimming": [
+    "field shimming",
+    "b0 shimming",
+    "homogeneity adjustment"
+  ],
+  "sniff test": [
+    "diaphragm fluoroscopy",
+    "diaphragm function"
+  ],
+  "star artifact": [
+    "star burst artifact",
+    "radial artifact"
+  ],
+  "stair step artifact": [
+    "stair stepping",
+    "step artifact",
+    "z-axis resolution"
+  ],
+  "pe": [
+    "pulmonary embolism",
+    "pulmonary embolus",
+    "lung clot"
+  ],
+  "dvt": [
+    "deep vein thrombosis",
+    "deep venous thrombosis",
+    "leg clot"
+  ],
+  "aaa": [
+    "abdominal aortic aneurysm"
+  ],
+  "sbo": [
+    "small bowel obstruction",
+    "small bowel ileus"
+  ],
+  "lbo": [
+    "large bowel obstruction",
+    "colonic obstruction"
+  ],
+  "appy": [
+    "appendicitis",
+    "acute appendicitis"
+  ],
+  "chole": [
+    "cholecystitis",
+    "acute cholecystitis"
+  ],
+  "panc": [
+    "pancreatitis"
+  ],
+  "mi": [
+    "myocardial infarction",
+    "heart attack"
+  ],
+  "chf": [
+    "congestive heart failure",
+    "heart failure"
+  ],
+  "copd": [
+    "chronic obstructive pulmonary disease"
+  ],
+  "ild": [
+    "interstitial lung disease"
+  ],
+  "ipf": [
+    "idiopathic pulmonary fibrosis"
+  ],
+  "hcc": [
+    "hepatocellular carcinoma",
+    "liver cancer",
+    "hepatoma"
+  ],
+  "rcc": [
+    "renal cell carcinoma",
+    "kidney cancer",
+    "renal carcinoma",
+    "hypernephroma"
+  ],
+  "nsclc": [
+    "non-small cell lung cancer"
+  ],
+  "sclc": [
+    "small cell lung cancer"
+  ],
+  "sdh": [
+    "subdural hematoma",
+    "subdural hemorrhage"
+  ],
+  "edh": [
+    "epidural hematoma",
+    "epidural hemorrhage"
+  ],
+  "sah": [
+    "subarachnoid hemorrhage"
+  ],
+  "ich": [
+    "intracerebral hemorrhage",
+    "intraparenchymal hemorrhage",
+    "brain bleed",
+    "intracranial hemorrhage"
+  ],
+  "ivh": [
+    "intraventricular hemorrhage"
+  ],
+  "tbi": [
+    "traumatic brain injury"
+  ],
+  "dti": [
+    "diffusion tensor imaging"
+  ],
+  "mrs": [
+    "mr spectroscopy",
+    "magnetic resonance spectroscopy"
+  ],
+  "swi": [
+    "susceptibility weighted imaging"
+  ],
+  "gre": [
+    "gradient echo",
+    "gradient recalled echo"
+  ],
+  "ms": [
+    "multiple sclerosis",
+    "demyelinating disease"
+  ],
+  "glioma": [
+    "glial tumor",
+    "astrocytoma",
+    "oligodendroglioma"
+  ],
+  "meningioma": [
+    "meningeal tumor",
+    "dural based mass"
+  ],
+  "schwannoma": [
+    "vestibular schwannoma",
+    "acoustic neuroma"
+  ],
+  "pituitary": [
+    "pituitary adenoma",
+    "sellar mass",
+    "hypophyseal"
+  ],
+  "acl": [
+    "anterior cruciate ligament"
+  ],
+  "pcl": [
+    "posterior cruciate ligament"
+  ],
+  "mcl": [
+    "medial collateral ligament"
+  ],
+  "lcl": [
+    "lateral collateral ligament"
+  ],
+  "meniscus": [
+    "meniscal",
+    "meniscal tear"
+  ],
+  "rotator cuff": [
+    "supraspinatus",
+    "infraspinatus",
+    "subscapularis",
+    "teres minor"
+  ],
+  "labrum": [
+    "labral",
+    "labral tear",
+    "slap lesion"
+  ],
+  "bankart": [
+    "bankart lesion",
+    "anterior labral tear"
+  ],
+  "hill-sachs": [
+    "hill sachs deformity",
+    "posterolateral humeral head"
+  ],
+  "avascular necrosis": [
+    "avn",
+    "osteonecrosis",
+    "bone infarct"
+  ],
+  "stress fracture": [
+    "insufficiency fracture",
+    "fatigue fracture"
+  ],
+  "osteomyelitis": [
+    "bone infection",
+    "osteomyelitic"
+  ],
+  "septic arthritis": [
+    "joint infection",
+    "pyarthrosis"
+  ],
+  "cabg": [
+    "coronary artery bypass graft",
+    "bypass surgery"
+  ],
+  "pci": [
+    "percutaneous coronary intervention",
+    "angioplasty",
+    "stent"
+  ],
+  "tavr": [
+    "transcatheter aortic valve replacement"
+  ],
+  "lvef": [
+    "left ventricular ejection fraction"
+  ],
+  "lad": [
+    "left anterior descending",
+    "left anterior descending artery"
+  ],
+  "rca": [
+    "right coronary artery"
+  ],
+  "lcx": [
+    "left circumflex",
+    "circumflex artery"
+  ],
+  "pericardial effusion": [
+    "pericardial fluid",
+    "cardiac tamponade"
+  ],
+  "atelectasis": [
+    "lung collapse",
+    "collapsed lung",
+    "subsegmental atelectasis"
+  ],
+  "bronchiectasis": [
+    "bronchial dilatation",
+    "dilated bronchi"
+  ],
+  "emphysema": [
+    "copd",
+    "bullous disease",
+    "hyperinflation"
+  ],
+  "fibrosis": [
+    "pulmonary fibrosis",
+    "scarring",
+    "honeycombing"
+  ],
+  "ground glass": [
+    "ggo",
+    "ground glass opacity",
+    "ground-glass"
+  ],
+  "tree-in-bud": [
+    "tree in bud",
+    "centrilobular nodules"
+  ],
+  "crazy paving": [
+    "crazy-paving pattern",
+    "paving stone"
+  ],
+  "cirrhosis": [
+    "liver cirrhosis",
+    "hepatic cirrhosis",
+    "end stage liver"
+  ],
+  "ascites": [
+    "abdominal fluid",
+    "peritoneal fluid"
+  ],
+  "portal hypertension": [
+    "portal htn",
+    "varices"
+  ],
+  "crohn": [
+    "crohns disease",
+    "regional enteritis"
+  ],
+  "uc": [
+    "ulcerative colitis"
+  ],
+  "ibd": [
+    "inflammatory bowel disease"
+  ],
+  "gist": [
+    "gastrointestinal stromal tumor"
+  ],
+  "diverticulitis": [
+    "sigmoid diverticulitis",
+    "diverticular disease"
+  ],
+  "volvulus": [
+    "sigmoid volvulus",
+    "cecal volvulus",
+    "bowel twist"
+  ],
+  "intussusception": [
+    "telescoping bowel",
+    "target sign"
+  ],
+  "mesenteric ischemia": [
+    "bowel ischemia",
+    "ami",
+    "sma occlusion"
+  ],
+  "hydronephrosis": [
+    "dilated collecting system",
+    "renal obstruction"
+  ],
+  "nephrolithiasis": [
+    "kidney stone",
+    "renal calculus",
+    "urolithiasis"
+  ],
+  "pyelonephritis": [
+    "kidney infection",
+    "renal infection"
+  ],
+  "bph": [
+    "benign prostatic hyperplasia",
+    "enlarged prostate"
+  ],
+  "prostate cancer": [
+    "prostatic carcinoma",
+    "prostate ca"
+  ],
+  "ovarian cyst": [
+    "adnexal cyst",
+    "functional cyst"
+  ],
+  "ectopic pregnancy": [
+    "tubal pregnancy",
+    "extrauterine pregnancy"
+  ],
+  "torsion": [
+    "ovarian torsion",
+    "testicular torsion"
+  ],
+  "bone scan": [
+    "skeletal scintigraphy",
+    "tc-99m mdp"
+  ],
+  "thyroid scan": [
+    "thyroid scintigraphy",
+    "i-123"
+  ],
+  "lung scan": [
+    "v/q scan",
+    "ventilation perfusion"
+  ],
+  "gfr": [
+    "glomerular filtration rate",
+    "renal function"
+  ],
+  "hepatobiliary scan": [
+    "hida scan",
+    "cholescintigraphy"
+  ],
+  "embolization": [
+    "embolotherapy",
+    "coiling"
+  ],
+  "tace": [
+    "transarterial chemoembolization"
+  ],
+  "tare": [
+    "transarterial radioembolization",
+    "y90"
+  ],
+  "tips": [
+    "transjugular intrahepatic portosystemic shunt"
+  ],
+  "rfa": [
+    "radiofrequency ablation"
+  ],
+  "mwa": [
+    "microwave ablation"
+  ],
+  "cryoablation": [
+    "cryotherapy",
+    "cryosurgery"
+  ],
+  "biopsy": [
+    "tissue sampling",
+    "core biopsy",
+    "fna"
+  ],
+  "drainage": [
+    "abscess drainage",
+    "catheter drainage"
+  ],
+  "nec": [
+    "necrotizing enterocolitis"
+  ],
+  "pyloric stenosis": [
+    "hypertrophic pyloric stenosis",
+    "hps"
+  ],
+  "wilms": [
+    "wilms tumor",
+    "nephroblastoma"
+  ],
+  "neuroblastoma": [
+    "neural crest tumor",
+    "adrenal neuroblastoma"
+  ],
+  "ddh": [
+    "developmental dysplasia of hip",
+    "hip dysplasia"
+  ],
+  "nah": [
+    "non-accidental injury",
+    "child abuse"
+  ],
+  "iodinated": [
+    "iodine contrast",
+    "iodinated contrast"
+  ],
+  "gadolinium": [
+    "gad",
+    "gadolinium contrast",
+    "gd-dtpa"
+  ],
+  "nephrogenic systemic fibrosis": [
+    "nsf",
+    "gadolinium toxicity"
+  ],
+  "contrast reaction": [
+    "allergic reaction",
+    "anaphylaxis",
+    "contrast allergy"
+  ],
+  "ggo": [
+    "ground glass opacity",
+    "ground glass",
+    "ground-glass opacity",
+    "ground-glass"
+  ],
+  "ground glass opacity": [
+    "ggo",
+    "ground glass",
+    "ground-glass opacity",
+    "ggo pattern"
+  ],
+  "pulmonary embolism": [
+    "pe",
+    "pulmonary embolus",
+    "lung embolism"
+  ],
+  "renal cell carcinoma": [
+    "rcc",
+    "kidney cancer",
+    "renal carcinoma",
+    "clear cell carcinoma"
+  ],
+  "renal": [
+    "kidney",
+    "nephro"
+  ],
+  "hepatocellular carcinoma": [
+    "hcc",
+    "liver cancer",
+    "hepatoma"
+  ],
+  "hepatic": [
+    "liver"
+  ],
+  "multiple sclerosis": [
+    "ms",
+    "demyelinating disease",
+    "demyelination"
+  ],
+  "cva": [
+    "stroke",
+    "cerebrovascular accident",
+    "infarct",
+    "brain attack"
+  ],
+  "tia": [
+    "transient ischemic attack",
+    "mini stroke"
+  ],
+  "restricted diffusion": [
+    "dwi bright",
+    "dwi hyperintense",
+    "diffusion restriction",
+    "bright on dwi"
+  ],
+  "bilateral": [
+    "both",
+    "both sides",
+    "bibasilar",
+    "both lungs"
+  ],
+  "both": [
+    "bilateral",
+    "both sides"
+  ],
+  "both lungs": [
+    "bilateral",
+    "bilateral lungs",
+    "both sides"
+  ],
+  "appendiceal": [
+    "appendix",
+    "appendicitis",
+    "periappendiceal"
+  ],
+  "appendix": [
+    "appendiceal",
+    "vermiform appendix"
+  ],
+  "periappendiceal": [
+    "appendiceal",
+    "around appendix",
+    "peri-appendiceal"
+  ],
+  "enhancing": [
+    "enhancement",
+    "enhances",
+    "contrast enhancing",
+    "contrast enhancement"
+  ],
+  "enhancement": [
+    "enhancing",
+    "enhances",
+    "contrast enhancement"
+  ],
+  "thickening": [
+    "thickened",
+    "thick",
+    "wall thickening"
+  ],
+  "thickened": [
+    "thickening",
+    "thick"
+  ],
+  "dilated": [
+    "dilation",
+    "distended",
+    "distension",
+    "enlarged"
+  ],
+  "enlarged": [
+    "enlargement",
+    "dilated",
+    "increased size"
+  ],
+  "laceration": [
+    "tear",
+    "injury",
+    "rupture",
+    "disruption"
+  ],
+  "hemoperitoneum": [
+    "free fluid",
+    "blood in abdomen",
+    "intraperitoneal hemorrhage",
+    "abdominal hemorrhage"
+  ],
+  "splenic": [
+    "spleen"
+  ],
+  "lesion": [
+    "mass",
+    "abnormality",
+    "finding",
+    "tumor"
+  ],
+  "mass": [
+    "lesion",
+    "tumor",
+    "nodule",
+    "growth"
+  ],
+  "nodule": [
+    "nodular",
+    "node",
+    "small mass"
+  ],
+  "solid": [
+    "solid mass",
+    "enhancing",
+    "non-cystic"
+  ],
+  "cystic": [
+    "cyst",
+    "cyst-like",
+    "fluid-filled"
+  ],
+  "covid": [
+    "covid-19",
+    "sars-cov-2",
+    "coronavirus"
+  ],
+  "covid-19": [
+    "covid",
+    "sars-cov-2",
+    "coronavirus",
+    "corona"
+  ]
+}
