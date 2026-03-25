@@ -58,7 +58,18 @@ REGION_INTRO = {
     ),
 }
 
-CSS_VERSION = "20260323a"
+REGION_ICONS = {
+    "neuro":    '<circle cx="12" cy="8" r="5"/><path d="M12 13v4M8 21h8"/>',
+    "spine":    '<path d="M12 2v20M9 5h6M9 9h6M9 13h6M9 17h6"/>',
+    "msk":      '<path d="M8 2v8l-3 12M16 2v8l3 12"/><circle cx="12" cy="6" r="2"/>',
+    "abdomen":  '<ellipse cx="12" cy="12" rx="7" ry="8"/><path d="M8 10c0 2 4 2 4 0M12 10c0 2 4 2 4 0"/>',
+    "chest":    '<path d="M12 4c-4 0-7 3-7 7v6h14v-6c0-4-3-7-7-7z"/><path d="M9 11h6M12 11v4"/>',
+    "vascular": '<path d="M12 2c0 4-4 6-4 10a4 4 0 108 0c0-4-4-6-4-10z"/>',
+    "breast":   '<circle cx="8" cy="12" r="4"/><circle cx="16" cy="12" r="4"/>',
+    "peds":     '<circle cx="12" cy="6" r="4"/><path d="M12 10v6M8 22l4-6 4 6"/>',
+}
+
+CSS_VERSION = "20260324a"
 
 
 def slugify(text):

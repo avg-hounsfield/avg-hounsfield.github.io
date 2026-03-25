@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
-from generate_static_pages import slugify, make_unique_slugs, make_display_name
+from generate_static_pages import slugify, make_unique_slugs, make_display_name, REGION_ICONS, CSS_VERSION
 
 class TestSlugify(unittest.TestCase):
     def test_basic(self):
@@ -84,6 +84,19 @@ class TestMakeDisplayName(unittest.TestCase):
         self.assertTrue(result[0].isupper())
         # Not all-caps
         self.assertFalse(result == result.upper())
+
+class TestConstants(unittest.TestCase):
+    def test_region_icons_has_all_8_regions(self):
+        expected = {"neuro", "spine", "msk", "abdomen", "chest", "vascular", "breast", "peds"}
+        self.assertEqual(set(REGION_ICONS.keys()), expected)
+
+    def test_region_icons_values_are_nonempty_strings(self):
+        for region, svg in REGION_ICONS.items():
+            self.assertIsInstance(svg, str, f"REGION_ICONS[{region!r}] is not a string")
+            self.assertTrue(len(svg) > 0, f"REGION_ICONS[{region!r}] is empty")
+
+    def test_css_version_updated(self):
+        self.assertEqual(CSS_VERSION, "20260324a")
 
 if __name__ == "__main__":
     unittest.main()
