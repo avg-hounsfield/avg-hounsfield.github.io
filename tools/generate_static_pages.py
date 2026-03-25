@@ -379,34 +379,46 @@ def render_region(region, cards, region_protocols, slug_map, protocols, scenario
     title = f"{label} Imaging - ACR Appropriateness Criteria | Radex"
     head = shared_head(title, meta_desc, canonical, jsonld)
 
+    # Hero
+    icon_paths = REGION_ICONS.get(region, "")
+    hero = f"""<div class="static-hero">
+  <svg class="static-hero-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+    {icon_paths}
+  </svg>
+  <div>
+    <h1 class="static-hero-title">{label} Imaging Appropriateness</h1>
+    <p class="static-hero-desc">{REGION_INTRO[region]}</p>
+  </div>
+</div>"""
+
     # Topic cards section
     cards_html = ""
     if cards:
+        badge_classes = {
+            "STRONG":         "topic-badge-strong",
+            "CONDITIONAL":    "topic-badge-cond",
+            "CLINICAL_FIRST": "topic-badge-clinical",
+            "HIGH_VARIANCE":  "topic-badge-variance",
+        }
         card_items = ""
         for card in cards:
             primary = card.get("primary_recommendation") or {}
-            consensus = primary.get("consensus_pct", 0)
+            consensus = primary.get("consensus_pct", "")
             rec_name = primary.get("name", "Clinical assessment")
             card_type = card.get("card_type", "")
-            badge_colors = {
-                "STRONG": "#22c55e",
-                "CONDITIONAL": "#f59e0b",
-                "CLINICAL_FIRST": "#9B5DE5",
-                "HIGH_VARIANCE": "#6b7280",
-            }
-            badge_color = badge_colors.get(card_type, "#6b7280")
-            card_items += f"""<div style="border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:0.75rem;">
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-    <span style="font-weight:600;font-size:14px;">{card.get('display_name','')}</span>
-    <span style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:20px;color:{badge_color};border:1px solid {badge_color};">{card_type}</span>
+            badge_cls = badge_classes.get(card_type, "topic-badge-variance")
+            badge_html = f'<span class="topic-badge {badge_cls}">{consensus}%</span>' if consensus else ""
+            card_items += f"""<div class="topic-card">
+  <div class="topic-card-header">
+    <span class="topic-card-name">{card.get('display_name', '')}</span>
+    {badge_html}
   </div>
-  <p style="font-size:13px;color:var(--text-muted);margin:0;">{rec_name} &mdash; {consensus}% consensus</p>
-  <a href="{BASE_URL}/#search" style="font-size:12px;color:var(--accent);text-decoration:none;display:inline-block;margin-top:6px;">Search in Radex &rarr;</a>
-</div>"""
-        cards_html = f"""<h2>Clinical Topics</h2>
-<div style="margin:1rem 0;">
-{card_items}
-</div>"""
+  <p class="topic-card-meta">{rec_name} &bull; {card_type}</p>
+</div>
+"""
+        cards_html = f"""<h2 class="static-section-label">Clinical Topics</h2>
+<div class="topic-grid">
+{card_items}</div>"""
 
     # Protocols section
     protocols_html = ""
@@ -419,24 +431,22 @@ def render_region(region, cards, region_protocols, slug_map, protocols, scenario
                     p.get("canonical_procedure", p.get("name", "")),
                     p.get("display_name", p.get("name", ""))
                 )
-                proto_items += f'<li style="margin-bottom:6px;"><a href="/protocols/{p_slug}/" style="color:var(--accent);text-decoration:none;">{p_name}</a></li>\n'
-        protocols_html = f"""<h2>MRI Protocols</h2>
-<ul style="padding-left:1.5rem;">
-{proto_items}</ul>"""
+                proto_items += f'<a href="/protocols/{p_slug}/" class="protocol-list-item"><span>{p_name}</span><span class="protocol-list-arrow">&rsaquo;</span></a>\n'
+        protocols_html = f"""<h2 class="static-section-label">MRI Protocols</h2>
+<div class="protocol-list">
+{proto_items}</div>"""
 
     body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
-  <h1>{label} Imaging Appropriateness</h1>
-  <p>{REGION_INTRO[region]}</p>
+  {hero}
 
   {cards_html}
 
   {protocols_html}
 
-  <div style="margin-top:2rem;">
-    <a href="{BASE_URL}/#search" class="nav-link active" style="display:inline-block;padding:10px 20px;border-radius:8px;">
-      Search {label} Scenarios in Radex
-    </a>
-  </div>
+  <a href="{BASE_URL}/#search" class="protocol-cta">
+    <span class="protocol-cta-label">Search {label} scenarios</span>
+    <span class="protocol-cta-action">Open Radex &rarr;</span>
+  </a>
 </div>"""
 
     return f"""<!DOCTYPE html>

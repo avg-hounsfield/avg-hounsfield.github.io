@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
-from generate_static_pages import slugify, make_unique_slugs, make_display_name, REGION_ICONS, CSS_VERSION
+from generate_static_pages import slugify, make_unique_slugs, make_display_name, REGION_ICONS, CSS_VERSION, render_region
 
 class TestSlugify(unittest.TestCase):
     def test_basic(self):
@@ -97,6 +97,79 @@ class TestConstants(unittest.TestCase):
 
     def test_css_version_updated(self):
         self.assertEqual(CSS_VERSION, "20260324a")
+
+class TestRenderRegion(unittest.TestCase):
+    def _make_card(self, topic="Headache", card_type="STRONG", consensus=95, rec_name="CT Head"):
+        return {
+            "display_name": topic,
+            "topic": topic,
+            "region": "neuro",
+            "card_type": card_type,
+            "primary_recommendation": {"name": rec_name, "consensus_pct": consensus},
+        }
+
+    def _render(self, cards=None, protocols=None):
+        if cards is None:
+            cards = [self._make_card()]
+        if protocols is None:
+            protocols = []
+        slug_map = {}
+        return render_region("neuro", cards, protocols, slug_map, [], 100)
+
+    def test_uses_static_hero_class(self):
+        html = self._render()
+        self.assertIn('class="static-hero"', html)
+
+    def test_hero_contains_svg_icon(self):
+        html = self._render()
+        self.assertIn('class="static-hero-icon"', html)
+        # neuro icon path
+        self.assertIn('circle cx="12" cy="8"', html)
+
+    def test_uses_topic_grid_class(self):
+        html = self._render()
+        self.assertIn('class="topic-grid"', html)
+
+    def test_uses_topic_card_class(self):
+        html = self._render()
+        self.assertIn('class="topic-card"', html)
+
+    def test_strong_badge_class(self):
+        html = self._render(cards=[self._make_card(card_type="STRONG")])
+        self.assertIn("topic-badge-strong", html)
+
+    def test_conditional_badge_class(self):
+        html = self._render(cards=[self._make_card(card_type="CONDITIONAL")])
+        self.assertIn("topic-badge-cond", html)
+
+    def test_consensus_pct_displayed(self):
+        html = self._render(cards=[self._make_card(consensus=95)])
+        self.assertIn("95%", html)
+
+    def test_zero_consensus_badge_omitted(self):
+        html = self._render(cards=[self._make_card(consensus=0)])
+        self.assertNotIn("0%", html)
+
+    def test_protocols_use_protocol_list_class(self):
+        protos = [{"canonical_procedure": "MRI Brain W/O Contrast",
+                   "display_name": "BRAIN", "body_region": "neuro"}]
+        slug_map = {0: "mri-brain-wo-contrast"}
+        html = render_region("neuro", [], protos, slug_map, protos, 100)
+        self.assertIn('class="protocol-list"', html)
+        self.assertIn('class="protocol-list-item"', html)
+
+    def test_no_protocols_section_when_empty(self):
+        html = render_region("neuro", [], [], {}, [], 100)
+        self.assertNotIn('class="protocol-list"', html)
+
+    def test_no_cards_section_when_empty(self):
+        html = render_region("neuro", [], [], {}, [], 100)
+        self.assertNotIn('class="topic-grid"', html)
+
+    def test_uses_protocol_cta(self):
+        html = self._render()
+        self.assertIn('class="protocol-cta"', html)
+
 
 if __name__ == "__main__":
     unittest.main()
