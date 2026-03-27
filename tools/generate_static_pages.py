@@ -240,14 +240,12 @@ def render_protocol(protocol, slug):
     """Returns complete HTML string for one protocol page."""
     region = protocol.get("body_region", "")
     region_label = REGION_DISPLAY.get(region, region.title())
-    region_url = f"/regions/{region}/" if region in REGION_DISPLAY else "/"
 
     display_name = make_display_name(
         protocol.get("canonical_procedure", protocol.get("name", "")),
         protocol.get("display_name", protocol.get("name", ""))
     )
 
-    # Indications - strip any accidental HTML tags, truncate for meta
     indications_raw = protocol.get("indications") or ""
     indications_text = re.sub(r"<[^>]+>", "", indications_raw).strip()
     meta_desc = indications_text[:155] if indications_text else f"{display_name} MRI protocol sequences and clinical indications."
@@ -267,12 +265,19 @@ def render_protocol(protocol, slug):
     title = f"{display_name} Protocol - Sequences & Indications | Radex"
     head = shared_head(title, meta_desc, canonical, jsonld)
 
-    # Breadcrumb
-    breadcrumb = f"""<nav class="breadcrumb" aria-label="Breadcrumb" style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;">
-  <a href="/" style="color:var(--text-muted)">Radex</a>
-  <span style="margin:0 6px">></span>
-  <a href="{region_url}" style="color:var(--text-muted)">{region_label}</a>
-  <span style="margin:0 6px">></span>
+    # Breadcrumb - region link only when region is in REGION_DISPLAY
+    if region in REGION_DISPLAY:
+        region_crumb = (
+            f'<span class="static-breadcrumb-sep">&rsaquo;</span>'
+            f'<a href="/regions/{region}/">{region_label}</a>'
+            f'<span class="static-breadcrumb-sep">&rsaquo;</span>'
+        )
+    else:
+        region_crumb = '<span class="static-breadcrumb-sep">&rsaquo;</span>'
+
+    breadcrumb = f"""<nav class="static-breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Radex</a>
+  {region_crumb}
   <span>{display_name}</span>
 </nav>"""
 
@@ -281,52 +286,55 @@ def render_protocol(protocol, slug):
     seq_rows = ""
     for seq in sequences:
         contrast_label = "Post-contrast" if seq.get("is_post_contrast") == 1 else "Pre-contrast"
-        seq_rows += f"<tr><td>{seq.get('sequence_name','')}</td><td>{contrast_label}</td></tr>\n"
+        seq_rows += f"    <tr><td>{seq.get('sequence_name', '')}</td><td>{contrast_label}</td></tr>\n"
 
-    seq_table = f"""<table style="width:100%;border-collapse:collapse;margin:1rem 0;">
+    if sequences:
+        seq_table = f"""<table class="sequence-table">
   <thead>
-    <tr style="border-bottom:1px solid var(--border);">
-      <th style="text-align:left;padding:8px 4px;color:var(--text-muted);font-size:13px;">Sequence</th>
-      <th style="text-align:left;padding:8px 4px;color:var(--text-muted);font-size:13px;">Contrast</th>
-    </tr>
+    <tr><th>Sequence</th><th>Contrast</th></tr>
   </thead>
   <tbody>
 {seq_rows}  </tbody>
-</table>""" if sequences else "<p style='color:var(--text-muted);font-size:13px;'>No sequence data available.</p>"
+</table>"""
+    else:
+        seq_table = '<p style="color:var(--text-muted);font-size:0.875rem;">No sequence data available.</p>'
 
-    # Top 5 related scenarios
+    # Top 5 related scenarios as pills
     matches = sorted(
         protocol.get("scenario_matches", []),
         key=lambda m: m.get("relevance_score", 0),
         reverse=True
     )[:5]
-    scenario_items = "".join(
-        f"<li style='margin-bottom:6px;font-size:14px;'>{m.get('scenario_name','')}</li>"
-        for m in matches
-    )
-    scenarios_section = f"""<h2 style="margin-top:2rem;">Related Clinical Scenarios</h2>
-<ul style="padding-left:1.5rem;">
-{scenario_items}
-</ul>""" if matches else ""
+    scenarios_section = ""
+    if matches:
+        pills = "".join(
+            f'<div class="scenario-pill">{m.get("scenario_name", "")}</div>\n'
+            for m in matches
+        )
+        scenarios_section = f"""<h2 class="static-section-label" style="margin-top:1.75rem;">Related Clinical Scenarios</h2>
+<div>
+{pills}</div>"""
 
     body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
   {breadcrumb}
-  <h1>{display_name}</h1>
-  <p style="color:var(--text-muted);font-size:14px;">Protocol &bull; {region_label}</p>
+  <h1 style="margin-bottom:0.5rem;">{display_name}</h1>
+  <div style="margin-bottom:1.5rem;">
+    <span class="protocol-type-badge">MRI Protocol</span>
+    <span class="protocol-region-tag">{region_label}</span>
+  </div>
 
-  <h2>Indications</h2>
-  <p>{indications_text or "See full protocol in Radex."}</p>
+  <h2 class="static-section-label">Indications</h2>
+  <p style="color:var(--text-secondary);font-size:0.9375rem;line-height:1.6;margin-bottom:1.75rem;">{indications_text or "See full protocol in Radex."}</p>
 
-  <h2>Sequences</h2>
+  <h2 class="static-section-label">Sequences</h2>
   {seq_table}
 
   {scenarios_section}
 
-  <div style="margin-top:2.5rem;">
-    <a href="{BASE_URL}/#protocols" class="nav-link active" style="display:inline-block;padding:10px 20px;border-radius:8px;">
-      Open in Radex
-    </a>
-  </div>
+  <a href="{BASE_URL}/#protocols" class="protocol-cta">
+    <span class="protocol-cta-label">View full protocol in the Radex app</span>
+    <span class="protocol-cta-action">Open in Radex &rarr;</span>
+  </a>
 </div>"""
 
     return f"""<!DOCTYPE html>

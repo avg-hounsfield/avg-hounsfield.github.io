@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
-from generate_static_pages import slugify, make_unique_slugs, make_display_name, REGION_ICONS, CSS_VERSION, render_region
+from generate_static_pages import slugify, make_unique_slugs, make_display_name, REGION_ICONS, CSS_VERSION, render_region, render_protocol
 
 class TestSlugify(unittest.TestCase):
     def test_basic(self):
@@ -169,6 +169,72 @@ class TestRenderRegion(unittest.TestCase):
     def test_uses_protocol_cta(self):
         html = self._render()
         self.assertIn('class="protocol-cta"', html)
+
+
+class TestRenderProtocol(unittest.TestCase):
+    def _make_protocol(self, region="neuro", sequences=None, matches=None):
+        return {
+            "canonical_procedure": "MRI Brain W/O Contrast",
+            "display_name": "BRAIN",
+            "body_region": region,
+            "indications": "General neurological evaluation.",
+            "sequences": sequences or [
+                {"sequence_name": "SAG T1", "sort_order": 1, "is_post_contrast": 0},
+                {"sequence_name": "AX T2", "sort_order": 2, "is_post_contrast": 0},
+            ],
+            "scenario_matches": matches or [
+                {"scenario_name": "Headache, acute onset", "relevance_score": 0.9},
+            ],
+        }
+
+    def _render(self, region="neuro", sequences=None, matches=None):
+        return render_protocol(self._make_protocol(region, sequences, matches), "mri-brain-wo-contrast")
+
+    def test_uses_static_breadcrumb_class(self):
+        html = self._render()
+        self.assertIn('class="static-breadcrumb"', html)
+
+    def test_breadcrumb_includes_region_link_for_known_region(self):
+        html = self._render(region="neuro")
+        self.assertIn('href="/regions/neuro/"', html)
+
+    def test_breadcrumb_omits_region_link_for_unknown_region(self):
+        html = self._render(region="neck")
+        self.assertNotIn('href="/regions/neck/"', html)
+
+    def test_uses_protocol_type_badge(self):
+        html = self._render()
+        self.assertIn('class="protocol-type-badge"', html)
+
+    def test_uses_sequence_table_class(self):
+        html = self._render()
+        self.assertIn('class="sequence-table"', html)
+
+    def test_sequences_rendered_as_table_rows(self):
+        html = self._render()
+        self.assertIn("<tr>", html)
+        self.assertIn("SAG T1", html)
+        self.assertIn("Pre-contrast", html)
+
+    def test_uses_scenario_pill_class(self):
+        html = self._render()
+        self.assertIn('class="scenario-pill"', html)
+
+    def test_scenario_name_displayed(self):
+        html = self._render()
+        self.assertIn("Headache, acute onset", html)
+
+    def test_uses_protocol_cta_class(self):
+        html = self._render()
+        self.assertIn('class="protocol-cta"', html)
+
+    def test_no_old_inline_table_styles(self):
+        html = self._render()
+        self.assertNotIn("border-collapse:collapse", html)
+
+    def test_uses_static_section_label(self):
+        html = self._render()
+        self.assertIn('class="static-section-label"', html)
 
 
 if __name__ == "__main__":
