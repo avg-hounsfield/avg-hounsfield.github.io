@@ -236,7 +236,7 @@ class ProtocolHelpApp {
 
     // Anatomy buttons
     document.querySelectorAll('.anatomy-btn').forEach(btn => {
-      btn.addEventListener('click', () => this.selectRegion(btn.dataset.region));
+      btn.addEventListener('click', (e) => { e.preventDefault(); this.selectRegion(btn.dataset.region); });
     });
 
     // Back button
