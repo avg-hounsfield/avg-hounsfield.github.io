@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
-from generate_static_pages import slugify, make_unique_slugs, make_display_name, REGION_ICONS, CSS_VERSION, render_region, render_protocol
+from generate_static_pages import slugify, make_unique_slugs, make_display_name, REGION_ICONS, CSS_VERSION, render_region, render_protocol, render_about
 
 class TestSlugify(unittest.TestCase):
     def test_basic(self):
@@ -235,6 +235,33 @@ class TestRenderProtocol(unittest.TestCase):
     def test_uses_static_section_label(self):
         html = self._render()
         self.assertIn('class="static-section-label"', html)
+
+
+class TestRenderAbout(unittest.TestCase):
+    def test_key_stats_uses_scenario_pill(self):
+        html = render_about()
+        self.assertIn('class="scenario-pill"', html)
+
+    def test_region_links_use_protocol_list_item(self):
+        html = render_about()
+        self.assertIn('class="protocol-list-item"', html)
+        self.assertIn('href="/regions/neuro/"', html)
+        self.assertIn('href="/regions/peds/"', html)
+
+    def test_list_headings_use_static_section_label(self):
+        html = render_about()
+        self.assertIn('class="static-section-label"', html)
+
+    def test_prose_headings_do_not_use_static_section_label(self):
+        html = render_about()
+        for heading in ["Data Sources", "Important Notice", "Contact"]:
+            self.assertNotIn(f'class="static-section-label">{heading}', html)
+
+    def test_all_8_regions_linked(self):
+        html = render_about()
+        from generate_static_pages import REGION_DISPLAY
+        for region in REGION_DISPLAY:
+            self.assertIn(f'href="/regions/{region}/"', html)
 
 
 if __name__ == "__main__":

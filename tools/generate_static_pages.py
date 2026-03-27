@@ -505,66 +505,74 @@ def render_about():
 
     head = shared_head(title, meta_desc, canonical, jsonld)
 
+    stats_pills = "\n".join([
+        '<div class="scenario-pill">3,200+ ACR clinical scenarios</div>',
+        '<div class="scenario-pill">72+ MRI protocols with sequence-level guidance</div>',
+        '<div class="scenario-pill">83% ACR scenario coverage via quick-answer cards</div>',
+        '<div class="scenario-pill">Client-side AI inference - fully private, no data sent to servers</div>',
+        '<div class="scenario-pill">Offline-capable via Progressive Web App (PWA)</div>',
+    ])
+
     region_links = "\n".join(
-        f'<li><a href="/regions/{r}/" style="color:var(--accent);text-decoration:none;">{label} Imaging</a></li>'
+        f'<a href="/regions/{r}/" class="protocol-list-item">'
+        f'<span>{label} Imaging</span>'
+        f'<span class="protocol-list-arrow">&rsaquo;</span>'
+        f'</a>'
         for r, label in REGION_DISPLAY.items()
     )
 
     body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
-  <h1>About Radex</h1>
+  <h1 style="margin-bottom:1.5rem;">About Radex</h1>
 
-  <p>
+  <p style="color:var(--text-secondary);font-size:0.9375rem;line-height:1.6;margin-bottom:1.75rem;">
     Radex is an educational reference tool designed for radiology residents and medical professionals
     to quickly access imaging appropriateness criteria and MRI protocol information.
   </p>
 
-  <h2>Key Statistics</h2>
-  <ul style="padding-left:1.5rem;">
-    <li>3,200+ ACR clinical scenarios</li>
-    <li>72+ MRI protocols with sequence-level guidance</li>
-    <li>83% ACR scenario coverage via quick-answer cards</li>
-    <li>Client-side AI inference - fully private, no data sent to servers</li>
-    <li>Offline-capable via Progressive Web App (PWA)</li>
-  </ul>
+  <h2 class="static-section-label">Key Statistics</h2>
+  <div style="margin-bottom:1.75rem;">
+{stats_pills}
+  </div>
 
-  <h2>Data Sources</h2>
-  <p>
+  <h2 style="margin-bottom:0.75rem;font-size:1rem;">Data Sources</h2>
+  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
     <strong>Appropriateness Criteria:</strong> Based on the ACR Appropriateness Criteria,
     evidence-based guidelines developed by the American College of Radiology to assist referring
     physicians and other providers in making the most appropriate imaging decisions.
   </p>
-  <p>
+  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:1.75rem;">
     <strong>MRI Protocols:</strong> Sample protocols based on common clinical practice.
     Your institution may have different sequences, parameters, or protocols based on
     scanner hardware, software versions, radiologist preferences, and institutional policies.
   </p>
 
-  <h2>Browse by Region</h2>
-  <ul style="padding-left:1.5rem;">
+  <h2 class="static-section-label">Browse by Region</h2>
+  <div class="protocol-list" style="margin-bottom:1.75rem;">
 {region_links}
-  </ul>
+  </div>
 
-  <h2>Important Notice</h2>
-  <p>
+  <h2 style="margin-bottom:0.75rem;font-size:1rem;">Important Notice</h2>
+  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:1.75rem;">
     This tool is provided for <strong>educational purposes only</strong>. It is not a substitute
     for clinical judgment, institutional protocols, or direct consultation with radiologists.
     Imaging decisions should always be made in the context of individual patient circumstances.
   </p>
 
-  <h2>Also by CoreGRAI</h2>
-  <p>
+  <h2 class="static-section-label">Also by CoreGRAI</h2>
+  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:1.75rem;">
     <a href="https://coregrai.com" target="_blank" rel="noopener" style="color:var(--accent);">GRAi</a>
     is an AI-powered radiology clinical reference and decision support platform.
   </p>
 
-  <h2>Contact</h2>
-  <p>Questions or suggestions? <a href="mailto:contact@coregrai.com" style="color:var(--accent);">contact@coregrai.com</a></p>
+  <h2 style="margin-bottom:0.75rem;font-size:1rem;">Contact</h2>
+  <p style="color:var(--text-secondary);font-size:0.875rem;margin-bottom:2rem;">
+    Questions or suggestions? <a href="mailto:contact@coregrai.com" style="color:var(--accent);">contact@coregrai.com</a>
+  </p>
 
-  <div style="margin-top:2rem;">
-    <a href="{BASE_URL}/" class="nav-link active" style="display:inline-block;padding:10px 20px;border-radius:8px;">
-      Open Radex
-    </a>
-  </div>
+  <a href="{BASE_URL}/" class="protocol-cta">
+    <span class="protocol-cta-label">Try Radex - free, browser-based</span>
+    <span class="protocol-cta-action">Open Radex &rarr;</span>
+  </a>
 </div>"""
 
     return f"""<!DOCTYPE html>
