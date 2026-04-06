@@ -276,46 +276,6 @@ body {
 }
 
 /* Filter bar */
-.footer-directory {
-    margin-top: var(--space-6);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-3);
-    font-size: 0.65rem;
-    color: var(--neutral-500);
-    letter-spacing: 0.05em;
-}
-
-.directory-link {
-    color: var(--neutral-600);
-    text-decoration: none;
-    text-transform: uppercase;
-    font-weight: 500;
-    transition: color var(--transition-fast);
-}
-
-.directory-link:hover {
-    color: var(--primary-500);
-    text-decoration: none;
-}
-
-.directory-label {
-    font-weight: 600;
-    margin-right: var(--space-1);
-    color: var(--neutral-400);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-/* Ensure a tags as buttons look correct */
-a.nav-link, a.footer-link {
-    text-decoration: none !important;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-}
-
 
 .filter-chip {
     padding: var(--space-2) var(--space-3);
