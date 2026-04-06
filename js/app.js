@@ -490,13 +490,20 @@ class ProtocolHelpApp {
     // About button
     const aboutBtn = document.getElementById('aboutBtn');
     if (aboutBtn) {
-      aboutBtn.addEventListener('click', () => this.showModal('aboutModal'));
+      aboutBtn.addEventListener('click', (e) => {
+        // If it's a real link to about/ we might want to still show the modal on the home page
+        // but for SEO we keep the href.
+        e.preventDefault();
+        this.showModal('aboutModal');
+      });
     }
 
-    // Terms button
     const termsBtn = document.getElementById('termsBtn');
     if (termsBtn) {
-      termsBtn.addEventListener('click', () => this.showModal('termsModal'));
+      termsBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.showModal('termsModal');
+      });
     }
 
     // Close modal on backdrop click or close button
@@ -1445,16 +1452,33 @@ class ProtocolHelpApp {
   }
 
   handleNavClick(e) {
-    const view = e.target.dataset.view;
+    const link = e.target.closest('.nav-link');
+    if (!link) return;
+
+    const view = link.dataset.view;
+    if (!view) return;
+
+    // Prevent default navigation for SPA views, but allow normal navigation for others if needed
+    // In our case, all .nav-links are part of the SPA state
+    e.preventDefault();
+
     if (view === this.currentView) return;
 
     // Update nav button states
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.classList.toggle('active', link.dataset.view === view);
+    document.querySelectorAll('.nav-link').forEach(l => {
+      l.classList.toggle('active', l.dataset.view === view);
+      l.setAttribute('aria-pressed', l.dataset.view === view);
     });
 
     this.currentView = view;
     this.switchView(view);
+
+    // Update URL hash if needed for deep linking (optional, but good for UX)
+    if (view !== 'search') {
+      window.location.hash = view;
+    } else {
+      history.pushState("", document.title, window.location.pathname + window.location.search);
+    }
   }
 
   async switchView(view) {
