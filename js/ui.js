@@ -400,7 +400,20 @@ export class UI {
   renderProcedures(scenario, onProcedureSelect) {
     // Format scenario name for display - show full text
     const displayName = this.formatScenarioTitle(scenario.name);
-    this.selectedScenario.textContent = displayName;
+
+    // Get differentiating context that distinguishes this variant
+    const differentiator = this.getDifferentiator(scenario, displayName);
+
+    // Show differentiator if it adds meaningful context beyond the formatted title
+    const hasMeaningfulDifferentiator = differentiator &&
+      differentiator.toLowerCase() !== displayName.toLowerCase() &&
+      !displayName.toLowerCase().includes(differentiator.toLowerCase());
+
+    if (hasMeaningfulDifferentiator) {
+      this.selectedScenario.innerHTML = `${this.escapeHtml(displayName)}<span class="scenario-differentiator">${this.escapeHtml(differentiator)}</span>`;
+    } else {
+      this.selectedScenario.textContent = displayName;
+    }
 
     // Filter out malformed entries (empty names, "Other" modality with no info)
     const procedures = (scenario.procedures || []).filter(proc => {
