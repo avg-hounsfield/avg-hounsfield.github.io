@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /test-intent-classifier.html
+Disallow: /workers/
+Disallow: /tools/
+Disallow: /models/
+Disallow: /_archive/
 
 Sitemap: https://www.protocolinfo.com/sitemap.xml
