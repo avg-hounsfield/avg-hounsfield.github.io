@@ -282,18 +282,21 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     gap: var(--space-3);
-    font-size: 0.7rem;
-    color: var(--neutral-400);
+    font-size: 0.65rem;
+    color: var(--neutral-500);
+    letter-spacing: 0.05em;
 }
 
 .directory-link {
-    color: var(--neutral-500);
+    color: var(--neutral-600);
     text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 500;
     transition: color var(--transition-fast);
 }
 
 .directory-link:hover {
-    color: var(--primary-400);
+    color: var(--primary-500);
     text-decoration: none;
 }
 
