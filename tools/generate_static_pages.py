@@ -86,6 +86,36 @@ def slugify(text):
     return s
 
 
+# Medical acronyms that .title() corrupts - map title-cased form to correct all-caps
+_ACRONYM_FIXES = {
+    "Mri": "MRI",
+    "Ct": "CT",
+    "Mrcp": "MRCP",
+    "Mra": "MRA",
+    "Pet": "PET",
+    "Stir": "STIR",
+    "Flair": "FLAIR",
+    "Dwi": "DWI",
+    "Swi": "SWI",
+    "Dce": "DCE",
+    "Dti": "DTI",
+}
+
+
+def normalize_procedure_name(text):
+    """
+    Convert a canonical_procedure string to a human-readable display name.
+    Expands W/O -> Without and W/ -> With before title-casing, then
+    restores medical acronyms that .title() lowercases incorrectly.
+    """
+    text = re.sub(r"\bW/O\b", "Without", text, flags=re.IGNORECASE)
+    text = re.sub(r"\bW/(?!O)", "With", text, flags=re.IGNORECASE)
+    text = text.title()
+    for wrong, right in _ACRONYM_FIXES.items():
+        text = re.sub(r"\b" + wrong + r"\b", right, text)
+    return text
+
+
 def make_unique_slugs(protocols):
     """
     Returns dict mapping protocol index (int) -> unique slug string.
