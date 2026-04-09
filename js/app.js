@@ -487,24 +487,7 @@ class ProtocolHelpApp {
   }
 
   bindModalEvents() {
-    // About button
-    const aboutBtn = document.getElementById('aboutBtn');
-    if (aboutBtn) {
-      aboutBtn.addEventListener('click', (e) => {
-        // If it's a real link to about/ we might want to still show the modal on the home page
-        // but for SEO we keep the href.
-        e.preventDefault();
-        this.showModal('aboutModal');
-      });
-    }
-
-    const termsBtn = document.getElementById('termsBtn');
-    if (termsBtn) {
-      termsBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        this.showModal('termsModal');
-      });
-    }
+    // About and Terms buttons navigate to their static pages via href - no JS needed
 
     // Close modal on backdrop click or close button
     document.querySelectorAll('.modal').forEach(modal => {
