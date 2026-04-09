@@ -147,12 +147,12 @@ def make_unique_slugs(protocols):
 
 def make_display_name(canonical_procedure, display_name):
     """
-    Returns title-cased h1 text for a protocol page.
+    Returns normalized h1 text for a protocol page.
     Appends display_name in parens if it does not appear in canonical_procedure.
     """
-    title = canonical_procedure.title()
+    title = normalize_procedure_name(canonical_procedure)
     if display_name.lower() not in canonical_procedure.lower():
-        title = f"{title} ({display_name.title()})"
+        title = f"{title} ({normalize_procedure_name(display_name)})"
     return title
 
 
@@ -196,7 +196,7 @@ def shared_head(title, description, canonical, jsonld_dict):
   <title>{title}</title>
   <meta name="description" content="{description}">
   <meta name="robots" content="index, follow">
-  <meta name="author" content="CoreGRAI">
+  <meta name="author" content="Patrick Matulich, DO - CoreGRAI">
   <link rel="canonical" href="{canonical}">
   <meta property="og:type" content="website">
   <meta property="og:title" content="{title}">
@@ -289,6 +289,12 @@ def render_protocol(protocol, slug):
         "url": canonical,
         "specialty": {"@type": "MedicalSpecialty", "name": "Radiology"},
         "medicalAudience": {"@type": "MedicalAudience", "audienceType": "Clinician"},
+        "author": {
+            "@type": "Person",
+            "name": "Patrick Matulich",
+            "honorificSuffix": "DO",
+            "jobTitle": "Radiology Resident"
+        },
         "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL}
     }
 
@@ -411,6 +417,12 @@ def render_region(region, cards, region_protocols, slug_map, protocols, scenario
         "name": f"{label} Imaging Appropriateness",
         "url": canonical,
         "specialty": {"@type": "MedicalSpecialty", "name": "Radiology"},
+        "author": {
+            "@type": "Person",
+            "name": "Patrick Matulich",
+            "honorificSuffix": "DO",
+            "jobTitle": "Radiology Resident"
+        },
         "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL}
     }
 
