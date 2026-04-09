@@ -655,8 +655,9 @@ def render_about():
     <a href="https://coregrai.com" target="_blank" rel="noopener" style="color:var(--accent);">GRAi</a>
     is an AI-powered radiology study and clinical reference platform built for residents
     preparing for the ABR Core Exam. It provides AI-assisted Q&amp;A across radiology topics,
-    RAG-based medical literature search, differential diagnosis support, and structured lesson
-    content - all through a conversational interface. Also built by Patrick Matulich, DO.
+    radiology corpus search powered by a proprietary knowledge base and custom retrieval model,
+    differential diagnosis support, and structured lesson content - all through a conversational
+    interface. Also built by Patrick Matulich, DO.
   </p>
 
   <h2 style="margin-bottom:0.75rem;font-size:1rem;">Contact</h2>
