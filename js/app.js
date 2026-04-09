@@ -170,9 +170,36 @@ class ProtocolHelpApp {
 
   async init() {
     this.bindEvents();
+    this.initInstallPrompt();
     // Load summary cards for global quick search
     this.summaryCards.load();
     this.ui.setStatus('Ready');
+  }
+
+  initInstallPrompt() {
+    const installBtn = document.getElementById('installBtn');
+    if (!installBtn) return;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      this._installPromptEvent = e;
+      installBtn.classList.remove('hidden');
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (!this._installPromptEvent) return;
+      this._installPromptEvent.prompt();
+      const { outcome } = await this._installPromptEvent.userChoice;
+      if (outcome === 'accepted') {
+        installBtn.classList.add('hidden');
+      }
+      this._installPromptEvent = null;
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installBtn.classList.add('hidden');
+      this._installPromptEvent = null;
+    });
   }
 
   bindEvents() {

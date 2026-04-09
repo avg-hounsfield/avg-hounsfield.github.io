@@ -83,6 +83,12 @@
         <a href="/" class="nav-link active" data-view="search" aria-pressed="true">Search</a>
         <a href="/about/" class="nav-link" data-view="protocols" aria-pressed="false">Protocols</a>
         <a href="#builder" class="nav-link" data-view="builder" aria-pressed="false">Builder</a>
+        <button class="install-btn hidden" id="installBtn" aria-label="Install Radex for offline use">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          Install
+        </button>
       </nav>
       <!-- Mobile menu button -->
       <button class="mobile-menu-btn hidden" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false">
@@ -148,6 +154,9 @@
             </p>
             <p class="info-card-note">
               For educational purposes only. Always verify with institutional protocols.
+            </p>
+            <p class="info-card-note" style="margin-top:0.5rem;">
+              Works offline after first load. Install as an app for quick access without internet.
             </p>
           </div>
         </details>
