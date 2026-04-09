@@ -89,6 +89,7 @@ def slugify(text):
 # Medical acronyms that .title() corrupts - map title-cased form to correct all-caps
 _ACRONYM_FIXES = {
     "Mri": "MRI",
+    "Mr": "MR",
     "Ct": "CT",
     "Mrcp": "MRCP",
     "Mra": "MRA",
@@ -534,13 +535,26 @@ def render_about():
                 "url": BASE_URL,
                 "applicationCategory": "MedicalApplication",
                 "isAccessibleForFree": True,
-                "author": {"@type": "Organization", "name": "CoreGRAI", "url": "https://coregrai.com"}
+                "author": {
+                    "@type": "Person",
+                    "name": "Patrick Matulich",
+                    "honorificSuffix": "DO",
+                    "jobTitle": "Radiology Resident",
+                    "worksFor": {"@type": "Organization", "name": "CoreGRAI", "url": "https://coregrai.com"}
+                }
             },
             {
                 "@type": "Organization",
                 "name": "CoreGRAI",
                 "url": "https://coregrai.com",
-                "email": "contact@coregrai.com"
+                "email": "support@coregrai.com"
+            },
+            {
+                "@type": "Person",
+                "name": "Patrick Matulich",
+                "honorificSuffix": "DO",
+                "jobTitle": "Radiology Resident",
+                "worksFor": {"@type": "Organization", "name": "CoreGRAI", "url": "https://coregrai.com"}
             }
         ]
     }
@@ -571,21 +585,56 @@ def render_about():
     to quickly access imaging appropriateness criteria and MRI protocol information.
   </p>
 
+  <h2 class="static-section-label">Built By</h2>
+  <div style="margin-bottom:1.75rem;">
+    <p style="font-weight:600;font-size:0.9375rem;margin-bottom:0.25rem;">Patrick Matulich, DO</p>
+    <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:0.75rem;">Radiology Resident | CoreGRAI</p>
+    <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;">
+      Radex was developed as a capstone project in radiology AI, motivated by a recurring challenge
+      in clinical training: imaging appropriateness guidelines exist, but accessing them quickly at
+      the point of care remains cumbersome. Built on the ACR Appropriateness Criteria and validated
+      through systematic testing against 202 clinical queries, Radex is designed to reduce
+      time-to-answer from minutes to seconds without sacrificing evidence fidelity.
+    </p>
+  </div>
+
   <h2 class="static-section-label">Key Statistics</h2>
   <div style="margin-bottom:1.75rem;">
 {stats_pills}
   </div>
 
-  <h2 style="margin-bottom:0.75rem;font-size:1rem;">Data Sources</h2>
+  <h2 class="static-section-label">Data Sources &amp; Methodology</h2>
   <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
     <strong>Appropriateness Criteria:</strong> Based on the ACR Appropriateness Criteria,
     evidence-based guidelines developed by the American College of Radiology to assist referring
     physicians and other providers in making the most appropriate imaging decisions.
+    The database covers 3,226 clinical scenarios across 10 body regions.
   </p>
-  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:1.75rem;">
+  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
     <strong>MRI Protocols:</strong> Sample protocols based on common clinical practice.
     Your institution may have different sequences, parameters, or protocols based on
     scanner hardware, software versions, radiologist preferences, and institutional policies.
+  </p>
+  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
+    <strong>Consensus Algorithm:</strong> Each of the 74 quick-answer topic cards aggregates
+    all related ACR scenarios for that topic, scores imaging procedures by how often they appear
+    as the top-rated option, and classifies the result: Strong Consensus (&ge;70% agreement),
+    Conditional (40-69%), High Variance (&lt;40%), or Clinical Assessment First.
+    This transforms 3,226 individual scenarios into quick-answer summaries without losing the
+    underlying evidence base.
+  </p>
+  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
+    <strong>Manual Validation:</strong> All 74 topic cards were individually reviewed by a
+    clinical domain expert prior to publication. This audit step corrects cases where frequency
+    counting produces a mathematically correct but clinically incorrect primary recommendation
+    (for example, when surveillance scenarios dilute consensus for initial workup).
+  </p>
+  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:1.75rem;">
+    <strong>AI Methodology:</strong> The search system uses a hybrid architecture combining a
+    708 KB intent classifier (a custom 2-layer transformer quantized to INT8 for browser
+    deployment), explicit rule-based patterns, and a 375-term radiology semantic dictionary.
+    The hybrid approach achieves 82.2% phase accuracy and 86.6% urgency accuracy across 202
+    test queries, compared to 52% for rules alone.
   </p>
 
   <h2 class="static-section-label">Browse by Region</h2>
@@ -603,12 +652,15 @@ def render_about():
   <h2 class="static-section-label">Also by CoreGRAI</h2>
   <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:1.75rem;">
     <a href="https://coregrai.com" target="_blank" rel="noopener" style="color:var(--accent);">GRAi</a>
-    is an AI-powered radiology clinical reference and decision support platform.
+    is an AI-powered radiology study and clinical reference platform built for residents
+    preparing for the ABR Core Exam. It provides AI-assisted Q&amp;A across radiology topics,
+    RAG-based medical literature search, differential diagnosis support, and structured lesson
+    content - all through a conversational interface. Also built by Patrick Matulich, DO.
   </p>
 
   <h2 style="margin-bottom:0.75rem;font-size:1rem;">Contact</h2>
   <p style="color:var(--text-secondary);font-size:0.875rem;margin-bottom:2rem;">
-    Questions or suggestions? <a href="mailto:contact@coregrai.com" style="color:var(--accent);">contact@coregrai.com</a>
+    Questions or suggestions? <a href="mailto:support@coregrai.com" style="color:var(--accent);">support@coregrai.com</a>
   </p>
 
   <a href="{BASE_URL}/" class="protocol-cta">
