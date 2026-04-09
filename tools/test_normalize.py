@@ -31,13 +31,16 @@ def test_mixed_case_input():
 def test_no_change_needed():
     assert normalize_procedure_name("MRI Shoulder") == "MRI Shoulder"
 
+def test_wwo_expansion():
+    assert normalize_procedure_name("MRI Breast W/WO Contrast") == "MRI Breast With And Without Contrast"
+
 if __name__ == "__main__":
     passed = 0
     failed = 0
     tests = [
         test_mri_expansion, test_with_expansion, test_acronym_ct,
         test_lowercase_mri, test_mrcp, test_mra, test_flair,
-        test_mixed_case_input, test_no_change_needed
+        test_mixed_case_input, test_no_change_needed, test_wwo_expansion
     ]
     for t in tests:
         try:

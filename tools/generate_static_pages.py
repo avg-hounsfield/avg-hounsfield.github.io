@@ -109,6 +109,7 @@ def normalize_procedure_name(text):
     Expands W/O -> Without and W/ -> With before title-casing, then
     restores medical acronyms that .title() lowercases incorrectly.
     """
+    text = re.sub(r"\bW/WO\b", "With and Without", text, flags=re.IGNORECASE)
     text = re.sub(r"\bW/O\b", "Without", text, flags=re.IGNORECASE)
     text = re.sub(r"\bW/(?!O)", "With", text, flags=re.IGNORECASE)
     text = text.title()
