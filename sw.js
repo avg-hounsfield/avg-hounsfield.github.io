@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radex-v2.17.0';
+const CACHE_NAME = 'radex-v2.18.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -14,7 +14,7 @@ const STATIC_ASSETS = [
   '/manifest.json'
 ];
 
-// Data files - cached separately with longer lifetime
+// Data files cached on install - includes full scenario search indexes for offline search
 const DATA_ASSETS = [
   '/data/protocols.json',
   '/data/regions/neuro.json',
@@ -28,6 +28,9 @@ const DATA_ASSETS = [
   '/data/search/medical-synonyms.json',
   '/data/search/concept_index.json',
   '/data/search/summary_cards.json',
+  '/data/search/lunr-scenarios.json',
+  '/data/search/tfidf-index.json',
+  '/data/search/scenario_metadata.json',
   '/data/sequence-library.json'
 ];
 
@@ -36,36 +39,34 @@ const EXTERNAL_ASSETS = [
   'https://unpkg.com/lunr@2.3.9/lunr.min.js'
 ];
 
-// Install event - cache static assets
+// Send progress message to all window clients (including uncontrolled during install)
+async function notifyProgress(loaded, total) {
+  const clients = await self.clients.matchAll({ includeUncontrolled: true, type: 'window' });
+  for (const client of clients) {
+    client.postMessage({ type: 'SW_INSTALL_PROGRESS', loaded, total });
+  }
+}
+
+// Install event - cache all assets sequentially with progress reporting
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        // Cache static assets first
-        return cache.addAll(STATIC_ASSETS)
-          .then(() => {
-            // Cache data assets with error handling (don't fail install if missing)
-            const dataPromises = DATA_ASSETS.map(url =>
-              cache.add(url).catch(error => {
-                console.warn('Failed to cache data asset:', url, error);
-                return Promise.resolve();
-              })
-            );
-            return Promise.all(dataPromises);
-          })
-          .then(() => {
-            // Then cache external dependencies with error handling
-            const externalPromises = EXTERNAL_ASSETS.map(url =>
-              cache.add(url).catch(error => {
-                console.warn('Failed to cache external asset:', url, error);
-                return Promise.resolve();
-              })
-            );
-            return Promise.all(externalPromises);
-          });
-      })
-      .then(() => self.skipWaiting())
-  );
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    const allAssets = [...STATIC_ASSETS, ...DATA_ASSETS, ...EXTERNAL_ASSETS];
+    const total = allAssets.length;
+    let loaded = 0;
+
+    for (const url of allAssets) {
+      try {
+        await cache.add(url);
+      } catch (e) {
+        console.warn('Failed to cache:', url, e);
+      }
+      loaded++;
+      await notifyProgress(loaded, total);
+    }
+
+    await self.skipWaiting();
+  })());
 });
 
 // Activate event - clean up old caches

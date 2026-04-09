@@ -96,6 +96,36 @@ input:focus, button:focus {
 }
 
 /* ========================================
+   SW Install Progress Bar
+   ======================================== */
+.sw-install-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  height: 3px;
+  background: var(--bg-secondary);
+  transition: opacity 0.4s ease;
+}
+
+.sw-install-bar.hidden {
+  display: none;
+}
+
+.sw-install-bar--done {
+  opacity: 0;
+}
+
+.sw-install-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.35s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ========================================
    Layout
    ======================================== */
 .app {

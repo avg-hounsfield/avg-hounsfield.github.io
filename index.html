@@ -68,11 +68,16 @@
   <!-- Theme Color -->
   <meta name="theme-color" content="#9B5DE5">
 
-  <link rel="stylesheet" href="css/main.css?v=20260324a">
+  <link rel="stylesheet" href="css/main.css?v=20260408a">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>R</text></svg>">
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <!-- Offline install progress bar (visible on first load while SW caches assets) -->
+  <div class="sw-install-bar hidden" id="swInstallBar" aria-hidden="true">
+    <div class="sw-install-fill" id="swInstallFill"></div>
+  </div>
+
   <div class="app">
     <!-- Header -->
     <header class="header" role="banner">
@@ -1048,20 +1053,47 @@
 
   <!-- Scripts -->
   <script>
-    // Force service worker update on version change
-    // Keep this version in sync with CACHE_NAME in sw.js
+    // Service worker registration and install progress
+    // Keep CURRENT_SW_VERSION in sync with CACHE_NAME in sw.js
+    const CURRENT_SW_VERSION = 'radex-v2.18.0';
+
     if ('serviceWorker' in navigator) {
+      // Listen for install progress messages from the SW
+      navigator.serviceWorker.addEventListener('message', event => {
+        if (event.data && event.data.type === 'SW_INSTALL_PROGRESS') {
+          const { loaded, total } = event.data;
+          const bar = document.getElementById('swInstallBar');
+          const fill = document.getElementById('swInstallFill');
+          if (!bar || !fill) return;
+          bar.classList.remove('hidden');
+          bar.setAttribute('aria-hidden', 'false');
+          fill.style.width = Math.round((loaded / total) * 100) + '%';
+          if (loaded >= total) {
+            setTimeout(() => {
+              bar.classList.add('sw-install-bar--done');
+              setTimeout(() => {
+                bar.classList.add('hidden');
+                bar.setAttribute('aria-hidden', 'true');
+              }, 600);
+            }, 400);
+          }
+        }
+      });
+
+      // Clear old caches on version change, then register
       navigator.serviceWorker.getRegistrations().then(registrations => {
-        const currentVersion = 'radex-v2.17.0';
         const storedVersion = localStorage.getItem('radex_sw_version');
-        if (storedVersion !== currentVersion) {
-          // Version mismatch - unregister old SW and clear caches
+        if (storedVersion !== CURRENT_SW_VERSION) {
           registrations.forEach(reg => reg.unregister());
           caches.keys().then(names => names.forEach(name => caches.delete(name)));
-          localStorage.setItem('radex_sw_version', currentVersion);
-          // Reload after cache clear
+          localStorage.setItem('radex_sw_version', CURRENT_SW_VERSION);
           if (storedVersion) location.reload(true);
         }
+      });
+
+      // Register service worker
+      navigator.serviceWorker.register('/sw.js').catch(err => {
+        console.warn('SW registration failed:', err);
       });
     }
   </script>
