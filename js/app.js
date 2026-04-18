@@ -7,13 +7,13 @@
 
 console.log('[Radex] Loading app.js module...');
 
-import { SearchEngine } from './search-engine.js';
-import { DataLoader } from './data-loader.js';
-import { UI } from './ui.js';
-import { RadLiteAPI } from './radlite-api.js';
-import { ProtocolBuilder } from './protocol-builder.js';
-import { SummaryCards } from './summary-cards.js';
-import { getIntentClassifier } from './intent-classifier.js';
+import { SearchEngine } from './search-engine.js?v=20260417a';
+import { DataLoader } from './data-loader.js?v=20260417a';
+import { UI } from './ui.js?v=20260417a';
+import { RadLiteAPI } from './radlite-api.js?v=20260417a';
+import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
+import { SummaryCards } from './summary-cards.js?v=20260417a';
+import { getIntentClassifier } from './intent-classifier.js?v=20260417a';
 
 class ProtocolHelpApp {
   constructor() {
@@ -654,7 +654,15 @@ class ProtocolHelpApp {
     const card = this.summaryCards.findMatch(trimmed);
 
     if (!card) {
-      // No match - show a hint to use advanced search
+      // Fall back to the concept_index (myositis, guillain_barre, ...)
+      // and render a "Did you mean" row for fuzzy hits when even concept lookup misses.
+      const conceptHit = await this._globalConceptLookup(trimmed);
+      if (conceptHit) {
+        this._renderGlobalConceptResult(conceptHit, resultContainer);
+        return;
+      }
+
+      const suggestions = await this._globalSuggestSimilar(trimmed, 3);
       resultContainer.classList.remove('hidden');
       resultContainer.innerHTML = `
         <div class="global-result-card">
@@ -663,9 +671,23 @@ class ProtocolHelpApp {
               No quick answer found for "<strong>${this.escapeHtml(trimmed)}</strong>".
               Try the body region search below for more specific scenarios.
             </p>
+            ${suggestions.length > 0 ? `
+              <div class="dym-row" style="margin-top: var(--space-md)">
+                <span class="dym-label">Did you mean:</span>
+                ${suggestions.map(s => `<button type="button" class="dym-chip" data-term="${this.escapeHtml(s.term)}">${this.escapeHtml(s.term)}</button>`).join('')}
+              </div>
+            ` : ''}
           </div>
         </div>
       `;
+      const globalInput = document.getElementById('globalSearchInput');
+      resultContainer.querySelectorAll('.dym-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const term = btn.getAttribute('data-term') || '';
+          if (globalInput) globalInput.value = term;
+          this.handleGlobalSearch(term);
+        });
+      });
       return;
     }
 
@@ -1188,7 +1210,7 @@ class ProtocolHelpApp {
           // Render flat list
           this.ui.renderScenarios(result.scenarios, (scenario) => {
             this.handleScenarioSelect(scenario);
-          });
+          }, this._buildEmptyState(this.baseQuery));
         }
 
         this.ui.setStatus(`${result.scenarios.length} scenarios for "${result.concept.displayName}"`);
@@ -1226,7 +1248,7 @@ class ProtocolHelpApp {
         // Render scenarios in left panel
         this.ui.renderScenarios(scenarios, (scenario) => {
           this.handleScenarioSelect(scenario);
-        });
+        }, this._buildEmptyState(effectiveQuery || this.baseQuery));
 
         this.ui.setStatus(`${scenarios.length} scenarios found`);
       }
@@ -1239,6 +1261,171 @@ class ProtocolHelpApp {
       console.error('Search error:', error);
       this.ui.setStatus('Search failed', 'error');
     }
+  }
+
+  _conceptNorm(s) {
+    if (!s) return '';
+    return String(s)
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[-_/]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  _conceptLevenshtein(a, b, cap = 1) {
+    if (a === b) return 0;
+    if (Math.abs(a.length - b.length) > cap) return cap + 1;
+    const m = a.length, n = b.length;
+    let prev = Array.from({ length: n + 1 }, (_, i) => i);
+    for (let i = 1; i <= m; i++) {
+      const curr = [i];
+      let rowMin = i;
+      for (let j = 1; j <= n; j++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        const v = Math.min(curr[j - 1] + 1, prev[j] + 1, prev[j - 1] + cost);
+        curr.push(v);
+        if (v < rowMin) rowMin = v;
+      }
+      if (rowMin > cap) return cap + 1;
+      prev = curr;
+    }
+    return prev[n];
+  }
+
+  async _ensureGlobalConceptIndex() {
+    if (this._globalConceptIdx) return this._globalConceptIdx;
+    if (this._globalConceptIdxPromise) return this._globalConceptIdxPromise;
+    this._globalConceptIdxPromise = (async () => {
+      try {
+        const res = await fetch('data/search/concept_index.json?v=20260417a');
+        if (!res.ok) return null;
+        const ci = await res.json();
+        const normMap = {};
+        for (const [term, conceptId] of Object.entries(ci.synonym_to_concept || {})) {
+          const k = this._conceptNorm(term);
+          if (k) normMap[k] = conceptId;
+        }
+        this._globalConceptIdx = { ci, normMap };
+        return this._globalConceptIdx;
+      } catch (e) {
+        console.warn('[App] global concept index load failed', e);
+        return null;
+      }
+    })();
+    return this._globalConceptIdxPromise;
+  }
+
+  async _globalConceptLookup(query) {
+    const idx = await this._ensureGlobalConceptIndex();
+    if (!idx) return null;
+    const q = this._conceptNorm(query);
+    let conceptId = idx.normMap[q];
+    if (!conceptId) {
+      for (const [syn, cId] of Object.entries(idx.normMap)) {
+        if (q.includes(syn) || syn.includes(q)) { conceptId = cId; break; }
+      }
+    }
+    if (!conceptId && q.length >= 6) {
+      const sug = await this._globalSuggestSimilar(query, 1);
+      if (sug.length > 0) conceptId = sug[0].conceptId;
+    }
+    if (!conceptId) return null;
+    const concept = idx.ci.concepts && idx.ci.concepts[conceptId];
+    if (!concept) return null;
+    return { conceptId, concept };
+  }
+
+  async _globalSuggestSimilar(query, max = 3) {
+    const idx = await this._ensureGlobalConceptIndex();
+    if (!idx) return [];
+    const q = this._conceptNorm(query);
+    if (q.length < 6) return [];
+    const hits = [];
+    for (const term of Object.keys(idx.normMap)) {
+      if (Math.abs(term.length - q.length) > 1) continue;
+      const d = this._conceptLevenshtein(q, term, 1);
+      if (d > 0 && d <= 1) hits.push({ term, conceptId: idx.normMap[term], distance: d });
+    }
+    hits.sort((a, b) => a.distance - b.distance || a.term.length - b.term.length);
+    const seen = new Set();
+    const out = [];
+    for (const h of hits) {
+      if (seen.has(h.conceptId)) continue;
+      seen.add(h.conceptId);
+      out.push(h);
+      if (out.length >= max) break;
+    }
+    return out;
+  }
+
+  _renderGlobalConceptResult({ concept }, container) {
+    const mappings = Array.isArray(concept.scenario_mappings) ? concept.scenario_mappings : [];
+    // Pick the first region as primary; collect distinct regions for region chips.
+    const regions = [];
+    for (const m of mappings) {
+      if (m && m.region && !regions.includes(m.region)) regions.push(m.region);
+    }
+    const primaryRegion = regions[0] || concept.body_region || 'neuro';
+    const displayName = concept.display_name || '';
+
+    container.classList.remove('hidden');
+    container.innerHTML = `
+      <div class="global-result-card">
+        <div class="global-result-header">
+          <span class="global-result-topic">${this.escapeHtml(displayName)}</span>
+          <span class="global-result-meta">Matched concept</span>
+        </div>
+        <div class="global-result-body">
+          <p class="global-result-recommendation">
+            ${mappings.length} clinical scenario${mappings.length === 1 ? '' : 's'} mapped${regions.length ? ` across ${regions.length} region${regions.length === 1 ? '' : 's'}` : ''}.
+          </p>
+          ${regions.length > 1 ? `
+            <div class="dym-row" style="margin-top: var(--space-sm)">
+              <span class="dym-label">Open in:</span>
+              ${regions.map(r => `<button type="button" class="dym-chip" data-region="${this.escapeHtml(r)}" data-topic="${this.escapeHtml(displayName)}">${this.escapeHtml(r)}</button>`).join('')}
+            </div>
+          ` : ''}
+        </div>
+        <div class="global-result-footer">
+          <span class="global-result-source">From concept index</span>
+          <button class="global-result-action" data-region="${this.escapeHtml(primaryRegion)}" data-topic="${this.escapeHtml(displayName)}">
+            See scenarios
+          </button>
+        </div>
+      </div>
+    `;
+    const fire = (btn) => {
+      const region = btn.getAttribute('data-region');
+      const topic = btn.getAttribute('data-topic') || displayName;
+      if (region) this.navigateToRegionSearch(region, topic);
+    };
+    container.querySelectorAll('.dym-chip').forEach(btn => btn.addEventListener('click', () => fire(btn)));
+    const action = container.querySelector('.global-result-action');
+    if (action) action.addEventListener('click', () => fire(action));
+  }
+
+  _buildEmptyState(query) {
+    const q = (query || '').trim();
+    let suggestions = [];
+    if (this.searchEngine && typeof this.searchEngine.suggestSimilar === 'function' && q) {
+      try {
+        suggestions = this.searchEngine.suggestSimilar(q, 3) || [];
+      } catch (e) {
+        suggestions = [];
+      }
+    }
+    return {
+      query: q,
+      suggestions,
+      onSuggestion: (term) => {
+        const input = document.getElementById('searchInput');
+        if (input) input.value = term;
+        this.baseQuery = term;
+        this.executeSearch(term);
+      },
+      onBrowseRegions: () => this.goBack()
+    };
   }
 
   handlePhaseFilterChange(phase) {

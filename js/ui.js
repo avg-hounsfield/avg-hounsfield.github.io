@@ -262,15 +262,11 @@ export class UI {
     return parts.slice(1).join(', ');
   }
 
-  renderScenarios(scenarios, onSelect) {
+  renderScenarios(scenarios, onSelect, emptyState = null) {
     this.resultCount.textContent = `${scenarios.length} result${scenarios.length !== 1 ? 's' : ''}`;
 
     if (scenarios.length === 0) {
-      this.scenariosList.innerHTML = `
-        <div class="empty-state">
-          <p>No matching scenarios found</p>
-        </div>
-      `;
+      this.renderEmptyScenarios(emptyState);
       this.clearProcedures();
       return;
     }
@@ -379,6 +375,52 @@ export class UI {
     // Auto-select first if only one result
     if (scenarios.length === 1) {
       this.scenariosList.querySelector('.scenario-card').click();
+    }
+  }
+
+  // Empty-state with optional Did-you-mean chips and "browse by region" fallback.
+  // emptyState shape: { query, suggestions: [{term, conceptId, distance}], onSuggestion, onBrowseRegions }
+  renderEmptyScenarios(emptyState) {
+    const query = emptyState && emptyState.query ? emptyState.query.trim() : '';
+    const suggestions = (emptyState && Array.isArray(emptyState.suggestions)) ? emptyState.suggestions : [];
+
+    const queryHtml = query ? ` for "<strong>${this.escapeHtml(query)}</strong>"` : '';
+    let chipsHtml = '';
+    if (suggestions.length > 0) {
+      const chips = suggestions.map(s => {
+        const term = (s && s.term) ? s.term : '';
+        return `<button type="button" class="dym-chip" data-term="${this.escapeHtml(term)}">${this.escapeHtml(term)}</button>`;
+      }).join('');
+      chipsHtml = `
+        <div class="dym-row">
+          <span class="dym-label">Did you mean:</span>
+          ${chips}
+        </div>
+      `;
+    }
+    const browseHtml = (emptyState && typeof emptyState.onBrowseRegions === 'function')
+      ? `<div class="dym-row"><button type="button" class="dym-browse">Browse by body region</button></div>`
+      : '';
+
+    this.scenariosList.innerHTML = `
+      <div class="empty-state">
+        <p>No matching scenarios found${queryHtml}.</p>
+        ${chipsHtml}
+        ${browseHtml}
+      </div>
+    `;
+
+    if (emptyState && typeof emptyState.onSuggestion === 'function') {
+      this.scenariosList.querySelectorAll('.dym-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const term = btn.getAttribute('data-term') || '';
+          emptyState.onSuggestion(term);
+        });
+      });
+    }
+    if (emptyState && typeof emptyState.onBrowseRegions === 'function') {
+      const browseBtn = this.scenariosList.querySelector('.dym-browse');
+      if (browseBtn) browseBtn.addEventListener('click', () => emptyState.onBrowseRegions());
     }
   }
 

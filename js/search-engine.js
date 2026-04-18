@@ -10,9 +10,80 @@ export class SearchEngine {
     this.regionName = regionData.region || null;
     this.embeddings = null;
     this.synonyms = null;
+    this.normSynonyms = null;
     this.conceptIndex = null;
+    this.normSynonymToConcept = null;
     this.intentClassifier = null;
     this.initialized = false;
+  }
+
+  // Normalize text for matching: lowercase, NFD-strip diacritics, hyphens/underscores/slashes -> space, collapse spaces.
+  // Makes "Guillain-Barre" == "guillain barre" and lets fuzzy match work cross-form.
+  _norm(s) {
+    if (!s) return '';
+    return String(s)
+      .toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[-_/]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  // Bounded Levenshtein. Returns Infinity if distance exceeds maxDist (early exit).
+  _levenshtein(a, b, maxDist = 2) {
+    if (a === b) return 0;
+    const la = a.length, lb = b.length;
+    if (Math.abs(la - lb) > maxDist) return Infinity;
+    if (la === 0) return lb;
+    if (lb === 0) return la;
+    let prev = new Array(lb + 1);
+    let curr = new Array(lb + 1);
+    for (let j = 0; j <= lb; j++) prev[j] = j;
+    for (let i = 1; i <= la; i++) {
+      curr[0] = i;
+      let rowMin = curr[0];
+      const ai = a.charCodeAt(i - 1);
+      for (let j = 1; j <= lb; j++) {
+        const cost = ai === b.charCodeAt(j - 1) ? 0 : 1;
+        curr[j] = Math.min(
+          prev[j] + 1,
+          curr[j - 1] + 1,
+          prev[j - 1] + cost
+        );
+        if (curr[j] < rowMin) rowMin = curr[j];
+      }
+      if (rowMin > maxDist) return Infinity;
+      [prev, curr] = [curr, prev];
+    }
+    return prev[lb];
+  }
+
+  // Suggest closest concept-index synonyms for a query that didn't resolve.
+  // Conservative: only returns matches with edit distance <= 1, and only if the
+  // normalized query is >= 6 chars (avoids false matches on short codes like "ms" / "ct").
+  suggestSimilar(query, max = 3) {
+    if (!this.normSynonymToConcept) return [];
+    const q = this._norm(query);
+    if (q.length < 6) return [];
+    const hits = [];
+    for (const term of Object.keys(this.normSynonymToConcept)) {
+      if (Math.abs(term.length - q.length) > 1) continue;
+      const d = this._levenshtein(q, term, 1);
+      if (d <= 1 && d > 0) {
+        hits.push({ term, conceptId: this.normSynonymToConcept[term], distance: d });
+      }
+    }
+    hits.sort((a, b) => a.distance - b.distance || a.term.length - b.term.length);
+    // De-duplicate by conceptId so we don't show 3 chips that all resolve to the same concept.
+    const seen = new Set();
+    const out = [];
+    for (const h of hits) {
+      if (seen.has(h.conceptId)) continue;
+      seen.add(h.conceptId);
+      out.push(h);
+      if (out.length >= max) break;
+    }
+    return out;
   }
 
   async init() {
@@ -38,11 +109,19 @@ export class SearchEngine {
 
   async loadConceptIndex() {
     try {
-      const cacheBuster = '20260128b';
+      const cacheBuster = '20260417a';
       const response = await fetch(`data/search/concept_index.json?v=${cacheBuster}`);
       if (response.ok) {
         this.conceptIndex = await response.json();
-        console.log('[SearchEngine] Concept index loaded:', Object.keys(this.conceptIndex.concepts).length, 'concepts');
+        // Pre-normalize synonym keys once at load so per-keystroke lookup is O(1)
+        // and matches diacritic/hyphen variants without re-normalizing the index each time.
+        this.normSynonymToConcept = {};
+        const raw = this.conceptIndex.synonym_to_concept || {};
+        for (const [term, conceptId] of Object.entries(raw)) {
+          const k = this._norm(term);
+          if (k) this.normSynonymToConcept[k] = conceptId;
+        }
+        console.log('[SearchEngine] Concept index loaded:', Object.keys(this.conceptIndex.concepts).length, 'concepts,', Object.keys(this.normSynonymToConcept).length, 'normalized synonyms');
       } else {
         console.warn('[SearchEngine] Failed to load concept index:', response.status);
       }
@@ -55,15 +134,22 @@ export class SearchEngine {
   async loadSynonyms() {
     try {
       // Cache buster to ensure fresh synonyms after updates
-      const cacheBuster = '20260128';
+      const cacheBuster = '20260417a';
       const response = await fetch(`data/search/medical-synonyms.json?v=${cacheBuster}`);
       if (response.ok) {
         const data = await response.json();
         this.synonyms = data.synonyms || {};
+        // Pre-normalize keys once so query-expansion lookup is normalization-aware.
+        this.normSynonyms = {};
+        for (const [term, list] of Object.entries(this.synonyms)) {
+          const k = this._norm(term);
+          if (k) this.normSynonyms[k] = list;
+        }
       }
     } catch (error) {
       console.warn('Could not load medical synonyms:', error);
       this.synonyms = {};
+      this.normSynonyms = {};
     }
   }
 
@@ -73,8 +159,8 @@ export class SearchEngine {
     this.phraseIndex = new Map(); // For multi-word terms
 
     this.scenarios.forEach((scenario, idx) => {
-      const text = `${scenario.name} ${scenario.description || ''}`.toLowerCase();
-      const words = text.split(/\W+/).filter(w => w.length > 2);
+      const text = this._norm(`${scenario.name} ${scenario.description || ''}`);
+      const words = text.split(/\s+/).filter(w => w.length >= 2);
 
       // Index single words
       words.forEach(word => {
@@ -84,9 +170,9 @@ export class SearchEngine {
         this.index.get(word).add(idx);
       });
 
-      // Index bigrams and trigrams for phrase matching
-      const nameLower = scenario.name.toLowerCase();
-      const nameWords = nameLower.split(/\W+/).filter(w => w.length > 2);
+      // Index bigrams for phrase matching
+      const nameNorm = this._norm(scenario.name);
+      const nameWords = nameNorm.split(/\s+/).filter(w => w.length >= 2);
       for (let i = 0; i < nameWords.length - 1; i++) {
         const bigram = `${nameWords[i]} ${nameWords[i + 1]}`;
         if (!this.phraseIndex.has(bigram)) {
@@ -98,30 +184,31 @@ export class SearchEngine {
   }
 
   expandQuery(query) {
-    // Expand query with medical synonyms
-    const queryLower = query.toLowerCase();
+    // Expand query with medical synonyms (diacritic/hyphen-normalized)
+    const queryNorm = this._norm(query);
     const expanded = new Set();
 
     // Add original terms
-    const originalWords = queryLower.split(/\W+/).filter(w => w.length > 2);
+    const originalWords = queryNorm.split(/\s+/).filter(w => w.length >= 2);
     originalWords.forEach(w => expanded.add(w));
 
-    // Check for phrase matches in synonyms
-    if (this.synonyms) {
+    // Use the pre-normalized synonyms map; fall back to raw if not built yet.
+    const synMap = this.normSynonyms || this.synonyms;
+    if (synMap) {
       // Try to find phrase matches first (e.g., "heart attack")
-      for (const [term, synonymList] of Object.entries(this.synonyms)) {
-        if (queryLower.includes(term)) {
+      for (const [term, synonymList] of Object.entries(synMap)) {
+        if (queryNorm.includes(term)) {
           synonymList.forEach(syn => {
-            syn.split(/\s+/).forEach(w => expanded.add(w));
+            this._norm(syn).split(/\s+/).forEach(w => { if (w) expanded.add(w); });
           });
         }
       }
 
       // Then expand individual words
       originalWords.forEach(word => {
-        if (this.synonyms[word]) {
-          this.synonyms[word].forEach(syn => {
-            syn.split(/\s+/).forEach(w => expanded.add(w));
+        if (synMap[word]) {
+          synMap[word].forEach(syn => {
+            this._norm(syn).split(/\s+/).forEach(w => { if (w) expanded.add(w); });
           });
         }
       });
@@ -234,21 +321,32 @@ export class SearchEngine {
       return { scenarios: [], grouped: null, concept: null, isConceptSearch: false };
     }
 
-    const queryLower = query.toLowerCase().trim();
-    console.log('[SearchEngine] Searching for concept:', queryLower, 'in region:', this.regionName);
+    const queryNorm = this._norm(query);
+    console.log('[SearchEngine] Searching for concept:', queryNorm, 'in region:', this.regionName);
 
-    // Try to find a matching concept via synonyms
-    let conceptId = this.conceptIndex.synonym_to_concept[queryLower];
+    const synMap = this.normSynonymToConcept || {};
+
+    // Try exact match against the pre-normalized synonym index
+    let conceptId = synMap[queryNorm];
     console.log('[SearchEngine] Exact match:', conceptId);
 
-    // If no exact match, try to find partial matches
+    // If no exact match, try substring matches (either direction)
     if (!conceptId) {
-      for (const [synonym, cId] of Object.entries(this.conceptIndex.synonym_to_concept)) {
-        if (queryLower.includes(synonym) || synonym.includes(queryLower)) {
+      for (const [synonym, cId] of Object.entries(synMap)) {
+        if (queryNorm.includes(synonym) || synonym.includes(queryNorm)) {
           conceptId = cId;
           console.log('[SearchEngine] Partial match:', synonym, '->', cId);
           break;
         }
+      }
+    }
+
+    // Last resort: conservative fuzzy match for typos (edit distance <=1, query length >=6)
+    if (!conceptId) {
+      const suggestions = this.suggestSimilar(query, 1);
+      if (suggestions.length > 0) {
+        conceptId = suggestions[0].conceptId;
+        console.log('[SearchEngine] Fuzzy match:', suggestions[0].term, '->', conceptId, '(distance', suggestions[0].distance + ')');
       }
     }
 
@@ -420,7 +518,7 @@ export class SearchEngine {
    * Keyword-based search (original implementation)
    */
   async keywordSearch(query, limit = 10) {
-    const queryLower = query.toLowerCase();
+    const queryNorm = this._norm(query);
     const expandedTerms = this.expandQuery(query);
 
     // Score scenarios
@@ -445,10 +543,10 @@ export class SearchEngine {
       }
     });
 
-    // Boost for exact phrase in title/name
+    // Boost for exact phrase in title/name (normalized)
     this.scenarios.forEach((scenario, idx) => {
-      const nameLower = scenario.name.toLowerCase();
-      if (nameLower.includes(queryLower)) {
+      const nameNorm = this._norm(scenario.name);
+      if (queryNorm && nameNorm.includes(queryNorm)) {
         scores.set(idx, (scores.get(idx) || 0) + 15);
       }
     });
