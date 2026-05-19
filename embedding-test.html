@@ -34,7 +34,7 @@
   <pre id="log" style="margin-top:1rem"></pre>
 
   <script type="module">
-    import * as embeddingSearch from './js/embedding-search.js?v=20260519c';
+    import * as embeddingSearch from './js/embedding-search.js?v=20260519d';
 
     const logEl = document.getElementById('log');
     const statusEl = document.getElementById('status');
@@ -109,7 +109,8 @@
         const POOL = 30;
         const hits = await embeddingSearch.search(q, POOL);
         const dt = (performance.now() - t0).toFixed(0);
-        const ALPHA = 0.6;
+        // Additive bonus with lambda=0.05 (matches js/app.js production)
+        const LAMBDA = 0.05;
         const qN = norm(q);
         const qTok = qN.split(/\s+/).filter(t => t.length >= 3);
 
@@ -122,7 +123,7 @@
             region: s ? s.region : '',
             emb: h.score,
             lex,
-            fused: ALPHA * h.score + (1 - ALPHA) * lex,
+            fused: h.score + LAMBDA * lex,
           };
         });
 

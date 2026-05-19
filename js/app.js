@@ -1429,18 +1429,23 @@ class ProtocolHelpApp {
     return { conceptId, concept };
   }
 
-  // Semantic search using the distilled radiology student model + lexical
-  // re-ranking (hybrid score). Embedding gives broad semantic recall but
-  // can under-weight critical anatomic locators ("LLQ" vs "RLQ"); the
-  // lexical pass fixes that by rewarding token + abbreviation overlap with
-  // scenario name and keywords.
+  // Semantic search using the distilled radiology student model + an
+  // additive lexical bonus. Pulls a candidate pool from the embedding
+  // model then nudges candidates that share specific tokens or anatomic
+  // abbreviations with the query.
   //
-  // Final score = ALPHA * embedding_cosine + (1-ALPHA) * lexical_score
-  // where lexical_score is in [0, 1] from tanh(weighted_overlap_count).
+  //     fused = cosine + LAMBDA * lexical_score
+  //
+  // LAMBDA=0.05 came from tools/sweep_hybrid_alpha.py: across 4 fusion
+  // strategies (weighted-avg, additive, thresholded-additive, RRF) and
+  // ~50 parameter settings, additive bonus with small lambda was the only
+  // hybrid that didn't degrade MRR vs pure embedding on the 500-query
+  // teacher-pseudo-gold eval. It still lets a strong lex signal (eg "LLQ"
+  // <-> "left lower quadrant" abbr match, +3 each) pull a candidate past
+  // a cosine-rival, without penalizing candidates that have no lex match.
   async _globalEmbeddingSearch(query, max = 8) {
     const idx = await this._ensureGlobalConceptIndex();
     if (!idx || !idx.scenarioIndex) return [];
-    // Pull more candidates than we need so re-ranking has room to reorder.
     const POOL = Math.max(max * 4, 30);
     const hits = await embeddingSearch.search(query, POOL);
     if (!this._scenarioById) {
@@ -1451,14 +1456,14 @@ class ProtocolHelpApp {
     const qNorm = this._conceptNorm(query);
     const qTokens = qNorm.split(/\s+/).filter(t => t.length >= 3);
 
-    const ALPHA = 0.6; // weight on embedding score (the rest goes to lexical)
+    const LAMBDA = 0.05;
 
     const reranked = [];
     for (const h of hits) {
       const s = this._scenarioById.get(String(h.id));
       if (!s) continue;
       const lex = this._lexicalScore(qNorm, qTokens, s);
-      const fused = ALPHA * h.score + (1 - ALPHA) * lex;
+      const fused = h.score + LAMBDA * lex;
       reranked.push({ ...s, score: fused, embScore: h.score, lexScore: lex });
     }
     reranked.sort((a, b) => b.score - a.score);
