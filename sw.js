@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radex-v2.21.0';
+const CACHE_NAME = 'radex-v2.22.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -8,6 +8,7 @@ const STATIC_ASSETS = [
   '/js/data-loader.js',
   '/js/search-engine.js',
   '/js/intent-classifier.js',
+  '/js/embedding-search.js',
   '/js/radlite-api.js',
   '/js/protocol-builder.js',
   '/js/summary-cards.js',
@@ -28,11 +29,22 @@ const DATA_ASSETS = [
   '/data/search/medical-synonyms.json',
   '/data/search/concept_index.json',
   '/data/search/scenario_names.json',
+  '/data/search/scenario_embeddings_v3.bin',
+  '/data/search/scenario_embeddings_v3_ids.json',
   '/data/search/summary_cards.json',
   '/data/search/lunr-scenarios.json',
   '/data/search/tfidf-index.json',
   '/data/search/scenario_metadata.json',
-  '/data/sequence-library.json'
+  '/data/sequence-library.json',
+  // Distilled student model bundle for in-browser semantic search.
+  // Added in v2.22.0; ~35MB total adds noticeably to install time but enables
+  // semantic fallback to work offline once cached.
+  '/models/student-radiology/config.json',
+  '/models/student-radiology/tokenizer.json',
+  '/models/student-radiology/tokenizer_config.json',
+  '/models/student-radiology/special_tokens_map.json',
+  '/models/student-radiology/vocab.txt',
+  '/models/student-radiology/onnx/model_quantized.onnx'
 ];
 
 // External dependencies that should be cached

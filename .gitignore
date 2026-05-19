@@ -8,7 +8,9 @@ tools/
 !tools/test_generate_static_pages.py
 !tools/test_normalize.py
 
-# ML models
+# ML models (large binaries kept out of git by default).
+# Tracked exceptions (added via `git add -f`): models/acr-minilm/,
+# models/intent-classifier/, models/student-radiology/.
 models/
 
 # Archive and scratch folders

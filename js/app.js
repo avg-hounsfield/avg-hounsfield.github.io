@@ -13,6 +13,7 @@ import { UI } from './ui.js?v=20260417a';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
 import { SummaryCards } from './summary-cards.js?v=20260417a';
+import * as embeddingSearch from './embedding-search.js?v=20260519a';
 import { getIntentClassifier } from './intent-classifier.js?v=20260417a';
 
 class ProtocolHelpApp {
@@ -678,6 +679,20 @@ class ProtocolHelpApp {
       if (nameMatches.length > 0) {
         this._renderGlobalScenarioListResult(trimmed, nameMatches, resultContainer);
         return;
+      }
+
+      // Embedding fallback: distilled radiology student model finds semantically
+      // similar scenarios when concept/keyword/name all miss. Loads on first use
+      // (~1-2s warmup); subsequent queries are fast. If model load fails (offline,
+      // CSP block), this silently falls through to the did-you-mean chips below.
+      try {
+        const embHits = await this._globalEmbeddingSearch(trimmed, 8);
+        if (embHits.length > 0) {
+          this._renderGlobalScenarioListResult(trimmed, embHits, resultContainer);
+          return;
+        }
+      } catch (e) {
+        console.warn('[App] embedding search unavailable:', e?.message || e);
       }
 
       // Final fallback: "no quick answer" with did-you-mean chips
@@ -1412,6 +1427,30 @@ class ProtocolHelpApp {
     const concept = idx.ci.concepts && idx.ci.concepts[conceptId];
     if (!concept) return null;
     return { conceptId, concept };
+  }
+
+  // Semantic search using the distilled radiology student model. Returns
+  // scenario objects in the same shape as _globalScenarioNameSearch so
+  // _renderGlobalScenarioListResult can render them. Looks up IDs from the
+  // loaded scenarioIndex; entries without a matching scenario are skipped.
+  async _globalEmbeddingSearch(query, max = 8) {
+    const idx = await this._ensureGlobalConceptIndex();
+    if (!idx || !idx.scenarioIndex) return [];
+    const hits = await embeddingSearch.search(query, max * 2);
+    // scenarioIndex is keyed by name; we need a quick id->entry map
+    if (!this._scenarioById) {
+      const m = new Map();
+      for (const s of idx.scenarioIndex) m.set(String(s.id), s);
+      this._scenarioById = m;
+    }
+    const out = [];
+    for (const h of hits) {
+      const s = this._scenarioById.get(String(h.id));
+      if (!s) continue;
+      out.push({ ...s, score: h.score });
+      if (out.length >= max) break;
+    }
+    return out;
   }
 
   // Exact-only concept synonym lookup: used to short-circuit overly-greedy

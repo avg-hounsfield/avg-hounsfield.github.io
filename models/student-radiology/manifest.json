@@ -1,0 +1,14 @@
+{
+  "name": "embed-student-v1",
+  "base": "BAAI/bge-small-en-v1.5",
+  "teacher": "BGE-large-LoRA v1 (coregrai)",
+  "dim": 384,
+  "max_seq_length": 256,
+  "pooling": "cls",
+  "normalize": true,
+  "files": {
+    "fp32": "model.onnx",
+    "int8": "model_quantized.onnx",
+    "tokenizer": "tokenizer.json"
+  }
+}
