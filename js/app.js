@@ -1347,6 +1347,7 @@ class ProtocolHelpApp {
               normKeywords: Array.isArray(s.keywords) && s.keywords.length
                 ? this._conceptNorm(s.keywords.join(' '))
                 : '',
+              topProcedure: s.top_procedure || null,
             }));
           } catch (e) {
             console.warn('[App] scenario_names.json parse failed', e);
@@ -1518,6 +1519,33 @@ class ProtocolHelpApp {
     return out;
   }
 
+  // Build the inline procedure chip for a scenario preview row.
+  // Returns HTML string (empty if no procedure).
+  // Desktop shows full short-name + rating; mobile collapses to rating + modality
+  // via CSS classes (.proc-chip-text hides under 600px).
+  _renderProcedureChip(proc) {
+    if (!proc) return '';
+    const rating = proc.rating || 0;
+    const ratingClass = rating >= 7 ? 'rating-strong'
+                      : rating >= 4 ? 'rating-moderate'
+                      : 'rating-low';
+    const modality = (proc.modality || '').toUpperCase();
+    const procName = proc.name || '';
+    const contrastBadge = proc.usesContrast === 2 ? 'W/O+W contrast'
+                        : proc.usesContrast === 1 ? 'W contrast'
+                        : '';
+    return `
+      <div class="proc-chip ${ratingClass}">
+        <span class="proc-chip-rating" aria-label="ACR rating ${rating} of 9">${rating}</span>
+        <span class="proc-chip-text">
+          <span class="proc-chip-name">${this.escapeHtml(procName)}</span>
+          ${contrastBadge ? `<span class="proc-chip-contrast">${this.escapeHtml(contrastBadge)}</span>` : ''}
+        </span>
+        ${modality ? `<span class="proc-chip-modality">${this.escapeHtml(modality)}</span>` : ''}
+      </div>
+    `;
+  }
+
   _renderGlobalConceptResult({ concept }, container) {
     const mappings = Array.isArray(concept.scenario_mappings) ? concept.scenario_mappings : [];
     // Pick the first region as primary; collect distinct regions for region chips.
@@ -1548,8 +1576,11 @@ class ProtocolHelpApp {
                   <button type="button" class="scenario-preview-btn"
                           data-region="${this.escapeHtml(p.region || primaryRegion)}"
                           data-name="${this.escapeHtml(p.scenario_name || '')}">
-                    <span class="scenario-preview-name">${this.escapeHtml(p.scenario_name || '')}</span>
-                    <span class="scenario-preview-region">${this.escapeHtml(p.region || primaryRegion)}</span>
+                    <div class="scenario-preview-row">
+                      <span class="scenario-preview-name">${this.escapeHtml(p.scenario_name || '')}</span>
+                      <span class="scenario-preview-region">${this.escapeHtml(p.region || primaryRegion)}</span>
+                    </div>
+                    ${this._renderProcedureChip(p.top_procedure)}
                   </button>
                 </li>
               `).join('')}
@@ -1611,8 +1642,11 @@ class ProtocolHelpApp {
                 <button type="button" class="scenario-preview-btn"
                         data-region="${this.escapeHtml(s.region)}"
                         data-name="${this.escapeHtml(s.name)}">
-                  <span class="scenario-preview-name">${this.escapeHtml(s.name)}</span>
-                  <span class="scenario-preview-region">${this.escapeHtml(s.region)}</span>
+                  <div class="scenario-preview-row">
+                    <span class="scenario-preview-name">${this.escapeHtml(s.name)}</span>
+                    <span class="scenario-preview-region">${this.escapeHtml(s.region)}</span>
+                  </div>
+                  ${this._renderProcedureChip(s.topProcedure)}
                 </button>
               </li>
             `).join('')}

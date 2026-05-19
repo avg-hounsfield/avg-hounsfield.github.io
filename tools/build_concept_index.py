@@ -607,6 +607,45 @@ CONCEPT_TAXONOMY = {
 }
 
 
+def pick_top_procedure(procedures):
+    """Pick the inline-display procedure: highest rating, then modality
+    preference (US > MRI no contrast > CT no contrast > MRI w/c > CT w/c
+    > Radiography > other), then shortest name."""
+    if not procedures:
+        return None
+
+    def modality_pref(p):
+        m = (p.get("modality") or "").upper()
+        c = p.get("usesContrast") or 0
+        if m == "US": return (0,)
+        if m == "MRI" and c == 0: return (1,)
+        if m == "CT" and c == 0: return (2,)
+        if m == "MRI": return (3,)
+        if m == "CT": return (4,)
+        if m == "RADIOGRAPHY": return (5,)
+        return (9,)
+
+    top = sorted(
+        procedures,
+        key=lambda p: (
+            -(p.get("rating") or 0),
+            modality_pref(p),
+            len(p.get("shortName") or p.get("name") or ""),
+        ),
+    )[0]
+    out = {
+        "name": top.get("shortName") or top.get("name") or "",
+        "modality": top.get("modality") or "",
+        "rating": top.get("rating") or 0,
+        "ratingLevel": top.get("ratingLevel") or "",
+        "usesContrast": top.get("usesContrast") or 0,
+        "radiationDose": top.get("radiationDose") or "",
+    }
+    if (top.get("rating") or 0) < 7:
+        out["noStrong"] = True
+    return out
+
+
 def detect_phase(scenario_name):
     """Detect clinical phase from scenario name."""
     name_lower = scenario_name.lower()
@@ -748,7 +787,8 @@ def build_concept_index(data_dir, output_path):
                 scenario_region = sc.get("_region", "")
                 procedures = sc.get("procedures", [])
                 high_rated = [p for p in procedures if p.get("rating", 0) >= 7]
-                scenario_mappings.append({
+                top_proc = pick_top_procedure(procedures)
+                mapping = {
                     "scenario_id": sid,
                     "scenario_name": scenario_name,
                     "relevance_score": round(relevance, 2),
@@ -760,7 +800,10 @@ def build_concept_index(data_dir, output_path):
                         "procedure_count": len(procedures),
                         "high_rated_count": len(high_rated)
                     }
-                })
+                }
+                if top_proc:
+                    mapping["top_procedure"] = top_proc
+                scenario_mappings.append(mapping)
 
         # KEYWORD-BASED MATCHING: scan scenarios in body_region (and additional_regions if set)
         concept_region = concept_def.get("body_region")
@@ -803,6 +846,7 @@ def build_concept_index(data_dir, output_path):
                 procedures = scenario.get("procedures", [])
                 high_rated = [p for p in procedures if p.get("rating", 0) >= 7]
 
+                top_proc = pick_top_procedure(procedures)
                 mapping = {
                     "scenario_id": scenario.get("id"),
                     "scenario_name": scenario_name,
@@ -816,6 +860,8 @@ def build_concept_index(data_dir, output_path):
                         "high_rated_count": len(high_rated)
                     }
                 }
+                if top_proc:
+                    mapping["top_procedure"] = top_proc
 
                 scenario_mappings.append(mapping)
 

@@ -1778,6 +1778,105 @@ input:focus, button:focus {
   flex-shrink: 0;
 }
 
+/* The preview button is now two-line: scenario row on top, procedure chip below.
+   Override the flex-row layout it inherited so the chip renders beneath. */
+.scenario-preview-btn {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.scenario-preview-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+/* Inline procedure chip: ACR rating + procedure short-name + modality */
+.proc-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 2px 0 0;
+}
+
+.proc-chip-rating {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 4px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.proc-chip.rating-strong .proc-chip-rating {
+  background: #1f8b4c; /* Usually Appropriate (7-9) */
+}
+.proc-chip.rating-moderate .proc-chip-rating {
+  background: #d68f1c; /* May Be Appropriate (4-6) */
+}
+.proc-chip.rating-low .proc-chip-rating {
+  background: #b53b3b; /* Usually Not Appropriate (1-3) */
+}
+
+.proc-chip-text {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.proc-chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary);
+}
+
+.proc-chip-contrast {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.proc-chip-modality {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  background: var(--bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* Mobile: collapse procedure chip to rating + modality only.
+   Procedure name hides since the scenario name is already on the row above. */
+@media (max-width: 600px) {
+  .proc-chip-text {
+    display: none;
+  }
+  .proc-chip {
+    gap: 6px;
+  }
+  .scenario-preview-name {
+    /* On mobile, allow scenario name to wrap rather than ellipsize hard */
+    white-space: normal;
+    line-height: 1.3;
+  }
+}
+
 /* ========================================
    Scenario Cards (Left Panel)
    ======================================== */
