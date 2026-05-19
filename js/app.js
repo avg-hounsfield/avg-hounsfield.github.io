@@ -1429,28 +1429,94 @@ class ProtocolHelpApp {
     return { conceptId, concept };
   }
 
-  // Semantic search using the distilled radiology student model. Returns
-  // scenario objects in the same shape as _globalScenarioNameSearch so
-  // _renderGlobalScenarioListResult can render them. Looks up IDs from the
-  // loaded scenarioIndex; entries without a matching scenario are skipped.
+  // Semantic search using the distilled radiology student model + lexical
+  // re-ranking (hybrid score). Embedding gives broad semantic recall but
+  // can under-weight critical anatomic locators ("LLQ" vs "RLQ"); the
+  // lexical pass fixes that by rewarding token + abbreviation overlap with
+  // scenario name and keywords.
+  //
+  // Final score = ALPHA * embedding_cosine + (1-ALPHA) * lexical_score
+  // where lexical_score is in [0, 1] from tanh(weighted_overlap_count).
   async _globalEmbeddingSearch(query, max = 8) {
     const idx = await this._ensureGlobalConceptIndex();
     if (!idx || !idx.scenarioIndex) return [];
-    const hits = await embeddingSearch.search(query, max * 2);
-    // scenarioIndex is keyed by name; we need a quick id->entry map
+    // Pull more candidates than we need so re-ranking has room to reorder.
+    const POOL = Math.max(max * 4, 30);
+    const hits = await embeddingSearch.search(query, POOL);
     if (!this._scenarioById) {
       const m = new Map();
       for (const s of idx.scenarioIndex) m.set(String(s.id), s);
       this._scenarioById = m;
     }
-    const out = [];
+    const qNorm = this._conceptNorm(query);
+    const qTokens = qNorm.split(/\s+/).filter(t => t.length >= 3);
+
+    const ALPHA = 0.6; // weight on embedding score (the rest goes to lexical)
+
+    const reranked = [];
     for (const h of hits) {
       const s = this._scenarioById.get(String(h.id));
       if (!s) continue;
-      out.push({ ...s, score: h.score });
-      if (out.length >= max) break;
+      const lex = this._lexicalScore(qNorm, qTokens, s);
+      const fused = ALPHA * h.score + (1 - ALPHA) * lex;
+      reranked.push({ ...s, score: fused, embScore: h.score, lexScore: lex });
     }
-    return out;
+    reranked.sort((a, b) => b.score - a.score);
+    return reranked.slice(0, max);
+  }
+
+  // Lexical overlap between a normalized query and a scenario's normName +
+  // normKeywords. Bidirectional anatomic abbreviation expansion so "LLQ"
+  // in a scenario name matches "left lower quadrant" in the query and
+  // vice versa. Returns a score in [0, 1].
+  _lexicalScore(qNorm, qTokens, scenario) {
+    const name = scenario.normName || '';
+    const kw = scenario.normKeywords || '';
+    let weight = 0;
+    // Token-level overlap. Name match is weighted higher than keyword match.
+    for (const t of qTokens) {
+      if (name.includes(t)) weight += 2;
+      else if (kw && kw.includes(t)) weight += 1;
+    }
+    // Anatomic-locator abbreviation expansions. If the query phrases
+    // these as full words and the scenario uses the abbreviation, or
+    // vice versa, count it as a strong signal.
+    const ABBR_PAIRS = this._anatomyAbbrPairs();
+    for (const [abbr, full] of ABBR_PAIRS) {
+      const inName = name.includes(abbr) || name.includes(full);
+      const inKw = kw && (kw.includes(abbr) || kw.includes(full));
+      const inQuery = qNorm.includes(abbr) || qNorm.includes(full);
+      if (inQuery && (inName || inKw)) weight += 3;
+    }
+    return Math.tanh(weight / 4);
+  }
+
+  _anatomyAbbrPairs() {
+    if (!this._anatomyAbbrPairsCache) {
+      this._anatomyAbbrPairsCache = [
+        ['llq', 'left lower quadrant'],
+        ['rlq', 'right lower quadrant'],
+        ['luq', 'left upper quadrant'],
+        ['ruq', 'right upper quadrant'],
+        ['mi',  'myocardial infarction'],
+        ['pe',  'pulmonary embolism'],
+        ['dvt', 'deep vein thrombosis'],
+        ['sah', 'subarachnoid hemorrhage'],
+        ['sdh', 'subdural hematoma'],
+        ['gca', 'giant cell arteritis'],
+        ['ich', 'intracerebral hemorrhage'],
+        ['ms',  'multiple sclerosis'],
+        ['ra',  'rheumatoid arthritis'],
+        ['oa',  'osteoarthritis'],
+        ['ibd', 'inflammatory bowel disease'],
+        ['hcc', 'hepatocellular carcinoma'],
+        ['rcc', 'renal cell carcinoma'],
+        ['copd', 'chronic obstructive pulmonary disease'],
+        ['als', 'amyotrophic lateral sclerosis'],
+        ['fuo', 'fever of unknown origin'],
+      ];
+    }
+    return this._anatomyAbbrPairsCache;
   }
 
   // Exact-only concept synonym lookup: used to short-circuit overly-greedy

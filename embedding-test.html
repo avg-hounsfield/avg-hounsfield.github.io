@@ -4,57 +4,161 @@
   <meta charset="utf-8">
   <title>Embedding search smoke test</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
     input { width: 100%; padding: 8px; font-size: 16px; }
-    button { padding: 8px 16px; font-size: 16px; margin-top: 8px; }
+    button { padding: 8px 16px; font-size: 16px; margin: 8px 4px 0 0; }
     pre { background: #f4f4f4; padding: 8px; overflow-x: auto; font-size: 12px; }
-    .result { padding: 6px 0; border-bottom: 1px solid #eee; }
-    .score { color: #666; font-size: 12px; }
+    .columns { display: flex; gap: 16px; }
+    .col { flex: 1; min-width: 0; }
+    .col h3 { margin: 0 0 8px; padding-bottom: 4px; border-bottom: 1px solid #ccc; }
+    .result { padding: 6px 0; border-bottom: 1px solid #eee; font-size: 13px; }
+    .score { color: #666; font-size: 11px; display: block; margin-top: 2px; }
+    .moved-up { color: #1a7a3a; font-weight: 600; }
+    .moved-down { color: #999; }
   </style>
 </head>
 <body>
   <h1>Embedding search smoke test</h1>
-  <p>Loads the distilled student model + scenario embeddings and runs a single query. Open DevTools console for timing.</p>
+  <p>Compares <strong>raw embedding ranking</strong> (left) vs <strong>hybrid rerank</strong> (embedding + lexical overlap, what the app actually uses).</p>
   <input id="q" value="patient with sudden left lower quadrant pain and fever" />
   <button id="go">Search</button>
+  <button id="prev1">LLQ pain fever</button>
+  <button id="prev2">cough and weight loss</button>
+  <button id="prev3">jaundice and itching</button>
+  <button id="prev4">sudden severe headache</button>
   <p id="status"></p>
-  <div id="out"></div>
-  <pre id="log"></pre>
+  <div class="columns">
+    <div class="col"><h3>Embedding only</h3><div id="outA"></div></div>
+    <div class="col"><h3>Hybrid (emb + lexical)</h3><div id="outB"></div></div>
+  </div>
+  <pre id="log" style="margin-top:1rem"></pre>
 
   <script type="module">
-    import * as embeddingSearch from './js/embedding-search.js';
+    import * as embeddingSearch from './js/embedding-search.js?v=20260519c';
 
     const logEl = document.getElementById('log');
     const statusEl = document.getElementById('status');
-    const outEl = document.getElementById('out');
+    const outA = document.getElementById('outA');
+    const outB = document.getElementById('outB');
     const origLog = console.log;
     console.log = (...args) => {
       origLog(...args);
       logEl.textContent += args.map(a => typeof a === 'string' ? a : JSON.stringify(a)).join(' ') + '\n';
     };
 
+    // Cached corpus lookup so we can show scenario names
+    let scenarioIndex = null;
+    async function loadScenarioIndex() {
+      if (scenarioIndex) return scenarioIndex;
+      const res = await fetch('data/search/scenario_names.json?v=20260519c');
+      const data = await res.json();
+      const byId = new Map();
+      for (const s of data.scenarios) {
+        if (!byId.has(String(s.id))) byId.set(String(s.id), s);
+      }
+      scenarioIndex = byId;
+      return byId;
+    }
+
+    // Minimal normalization that matches js/app.js _conceptNorm
+    function norm(s) {
+      if (!s) return '';
+      let n = s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+      n = n.replace(/[-_/]/g, ' ').replace(/\s+/g, ' ');
+      return n.trim().toLowerCase();
+    }
+
+    const ABBR_PAIRS = [
+      ['llq','left lower quadrant'],['rlq','right lower quadrant'],
+      ['luq','left upper quadrant'],['ruq','right upper quadrant'],
+      ['mi','myocardial infarction'],['pe','pulmonary embolism'],
+      ['dvt','deep vein thrombosis'],['sah','subarachnoid hemorrhage'],
+      ['sdh','subdural hematoma'],['gca','giant cell arteritis'],
+      ['ich','intracerebral hemorrhage'],['ms','multiple sclerosis'],
+      ['ra','rheumatoid arthritis'],['oa','osteoarthritis'],
+      ['ibd','inflammatory bowel disease'],['hcc','hepatocellular carcinoma'],
+      ['rcc','renal cell carcinoma'],['copd','chronic obstructive pulmonary disease'],
+      ['als','amyotrophic lateral sclerosis'],['fuo','fever of unknown origin'],
+    ];
+
+    function lexicalScore(qNorm, qTokens, s) {
+      const name = norm(s.name || '');
+      const kw = s.keywords ? norm(s.keywords.join(' ')) : '';
+      let w = 0;
+      for (const t of qTokens) {
+        if (name.includes(t)) w += 2;
+        else if (kw && kw.includes(t)) w += 1;
+      }
+      for (const [abbr, full] of ABBR_PAIRS) {
+        const inHit = name.includes(abbr) || name.includes(full) ||
+                      (kw && (kw.includes(abbr) || kw.includes(full)));
+        const inQuery = qNorm.includes(abbr) || qNorm.includes(full);
+        if (inQuery && inHit) w += 3;
+      }
+      return Math.tanh(w / 4);
+    }
+
     async function run() {
       const q = document.getElementById('q').value.trim();
       if (!q) return;
       statusEl.textContent = 'Loading model and embeddings... (first run takes ~1-2s)';
-      outEl.innerHTML = '';
+      outA.innerHTML = ''; outB.innerHTML = '';
+      const idx = await loadScenarioIndex();
       const t0 = performance.now();
       try {
-        const hits = await embeddingSearch.search(q, 10);
+        const POOL = 30;
+        const hits = await embeddingSearch.search(q, POOL);
         const dt = (performance.now() - t0).toFixed(0);
-        statusEl.textContent = `Done in ${dt}ms. ${hits.length} hits.`;
-        outEl.innerHTML = hits.map(h => `
-          <div class="result">
-            <strong>id ${h.id}</strong>
-            <span class="score">score ${h.score.toFixed(4)}</span>
-          </div>
-        `).join('');
+        const ALPHA = 0.6;
+        const qN = norm(q);
+        const qTok = qN.split(/\s+/).filter(t => t.length >= 3);
+
+        const enriched = hits.map(h => {
+          const s = idx.get(String(h.id));
+          const lex = s ? lexicalScore(qN, qTok, s) : 0;
+          return {
+            id: h.id,
+            name: s ? s.name : '(unknown id)',
+            region: s ? s.region : '',
+            emb: h.score,
+            lex,
+            fused: ALPHA * h.score + (1 - ALPHA) * lex,
+          };
+        });
+
+        const rawTop = [...enriched].slice(0, 10);
+        const hybridTop = [...enriched].sort((a, b) => b.fused - a.fused).slice(0, 10);
+
+        // Track each scenario's position change for highlighting
+        const rawRank = new Map(rawTop.map((r, i) => [r.id, i]));
+        const hybridRank = new Map(hybridTop.map((r, i) => [r.id, i]));
+
+        function render(rows, col, otherRanks) {
+          col.innerHTML = rows.map((r, i) => {
+            const otherI = otherRanks.get(r.id);
+            const moved = otherI === undefined ? '' :
+              otherI > i ? 'moved-up' : (otherI < i ? 'moved-down' : '');
+            return `<div class="result ${moved}">
+              <strong>#${i+1}</strong> [${r.region || '?'}] ${r.name.slice(0,90)}
+              <span class="score">id=${r.id} | emb=${r.emb.toFixed(3)} | lex=${r.lex.toFixed(3)} | fused=${r.fused.toFixed(3)}</span>
+            </div>`;
+          }).join('');
+        }
+        render(rawTop, outA, hybridRank);
+        render(hybridTop, outB, rawRank);
+        statusEl.textContent = `Done in ${dt}ms. Green = ranked higher in the other column.`;
       } catch (e) {
         statusEl.textContent = 'ERROR: ' + (e?.message || e);
         console.log('error:', e);
       }
     }
     document.getElementById('go').addEventListener('click', run);
+    document.querySelectorAll('button[id^=prev]').forEach(b => {
+      b.addEventListener('click', () => {
+        document.getElementById('q').value = b.textContent;
+        run();
+      });
+    });
     // Warm up on load
     embeddingSearch.warmup();
   </script>
