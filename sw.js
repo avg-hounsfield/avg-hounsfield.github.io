@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radex-v2.19.1';
+const CACHE_NAME = 'radex-v2.20.1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -27,6 +27,7 @@ const DATA_ASSETS = [
   '/data/regions/peds.json',
   '/data/search/medical-synonyms.json',
   '/data/search/concept_index.json',
+  '/data/search/scenario_names.json',
   '/data/search/summary_cards.json',
   '/data/search/lunr-scenarios.json',
   '/data/search/tfidf-index.json',

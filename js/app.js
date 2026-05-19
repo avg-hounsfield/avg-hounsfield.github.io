@@ -651,17 +651,36 @@ class ProtocolHelpApp {
     }
 
     // Find matching summary card
-    const card = this.summaryCards.findMatch(trimmed);
+    let card = this.summaryCards.findMatch(trimmed);
+
+    // If the summary card was matched by substring (not exact), check whether the
+    // user typed an exact concept synonym. Exact synonym beats substring card
+    // (e.g. "septic arthritis" should beat the generic "Arthritis" card).
+    if (card && card.topic.toLowerCase() !== trimmed.toLowerCase()) {
+      const exactConcept = await this._globalConceptLookupExact(trimmed);
+      if (exactConcept) {
+        this._renderGlobalConceptResult(exactConcept, resultContainer);
+        return;
+      }
+    }
 
     if (!card) {
       // Fall back to the concept_index (myositis, guillain_barre, ...)
-      // and render a "Did you mean" row for fuzzy hits when even concept lookup misses.
       const conceptHit = await this._globalConceptLookup(trimmed);
       if (conceptHit) {
         this._renderGlobalConceptResult(conceptHit, resultContainer);
         return;
       }
 
+      // Then scan scenario names directly — surfaces any scenario whose title
+      // contains the query, even when no concept covers it.
+      const nameMatches = await this._globalScenarioNameSearch(trimmed, 8);
+      if (nameMatches.length > 0) {
+        this._renderGlobalScenarioListResult(trimmed, nameMatches, resultContainer);
+        return;
+      }
+
+      // Final fallback: "no quick answer" with did-you-mean chips
       const suggestions = await this._globalSuggestSimilar(trimmed, 3);
       resultContainer.classList.remove('hidden');
       resultContainer.innerHTML = `
@@ -1298,15 +1317,43 @@ class ProtocolHelpApp {
     if (this._globalConceptIdxPromise) return this._globalConceptIdxPromise;
     this._globalConceptIdxPromise = (async () => {
       try {
-        const res = await fetch('data/search/concept_index.json?v=20260417a');
-        if (!res.ok) return null;
-        const ci = await res.json();
+        const [ciRes, snRes] = await Promise.all([
+          fetch('data/search/concept_index.json?v=20260518a'),
+          fetch('data/search/scenario_names.json?v=20260518a'),
+        ]);
+        if (!ciRes.ok) return null;
+        const ci = await ciRes.json();
         const normMap = {};
         for (const [term, conceptId] of Object.entries(ci.synonym_to_concept || {})) {
           const k = this._conceptNorm(term);
           if (k) normMap[k] = conceptId;
         }
-        this._globalConceptIdx = { ci, normMap };
+
+        // Scenario-name fallback index (optional - degrades gracefully if missing)
+        // Includes a normalized "keywords" string built from clinical terms
+        // extracted at build time from each scenario's source clinical_summary,
+        // so disease names like "cholangitis" find scenarios whose actual ACR
+        // name is symptom-based ("Jaundice, biliary obstruction suspected").
+        let scenarioIndex = null;
+        if (snRes.ok) {
+          try {
+            const sn = await snRes.json();
+            const scenarios = Array.isArray(sn?.scenarios) ? sn.scenarios : [];
+            scenarioIndex = scenarios.map(s => ({
+              id: s.id,
+              name: s.name,
+              region: s.region,
+              normName: this._conceptNorm(s.name),
+              normKeywords: Array.isArray(s.keywords) && s.keywords.length
+                ? this._conceptNorm(s.keywords.join(' '))
+                : '',
+            }));
+          } catch (e) {
+            console.warn('[App] scenario_names.json parse failed', e);
+          }
+        }
+
+        this._globalConceptIdx = { ci, normMap, scenarioIndex };
         return this._globalConceptIdx;
       } catch (e) {
         console.warn('[App] global concept index load failed', e);
@@ -1321,9 +1368,39 @@ class ProtocolHelpApp {
     if (!idx) return null;
     const q = this._conceptNorm(query);
     let conceptId = idx.normMap[q];
-    if (!conceptId) {
+    // For very short queries (<=3 chars / single-letter abbreviations), only the
+    // exact synonym match is trustworthy. "pe" should NOT substring-match
+    // "pseudotumor cerebri", "ms" should NOT match "transverse myelitis", etc.
+    if (!conceptId && q.length > 3) {
+      // Prefer the longest synonym substring match so e.g. "vertebral osteomyelitis"
+      // routes to spine_infection (22) over "osteomyelitis" -> bone_infection (13).
+      // Word-boundary required on both sides so "renal mass" doesn't match inside
+      // "adrenal mass" and "pe" doesn't match inside "appendicitus".
+      let bestLen = -1;
+      const tokens = q.split(' ');
       for (const [syn, cId] of Object.entries(idx.normMap)) {
-        if (q.includes(syn) || syn.includes(q)) { conceptId = cId; break; }
+        let matches;
+        if (syn.length <= 3) {
+          matches = tokens.includes(syn);
+        } else if (q.includes(syn)) {
+          // Require word boundaries around the synonym inside q
+          const i = q.indexOf(syn);
+          const before = i === 0 || q[i - 1] === ' ';
+          const afterIdx = i + syn.length;
+          const after = afterIdx === q.length || q[afterIdx] === ' ';
+          matches = before && after;
+        } else if (syn.includes(q)) {
+          // Reverse direction: query is a piece of the synonym. Require q to be
+          // a whole word inside syn too.
+          const i = syn.indexOf(q);
+          const before = i === 0 || syn[i - 1] === ' ';
+          const afterIdx = i + q.length;
+          const after = afterIdx === syn.length || syn[afterIdx] === ' ';
+          matches = before && after;
+        }
+        if (matches && syn.length > bestLen) {
+          conceptId = cId; bestLen = syn.length;
+        }
       }
     }
     if (!conceptId && q.length >= 6) {
@@ -1334,6 +1411,88 @@ class ProtocolHelpApp {
     const concept = idx.ci.concepts && idx.ci.concepts[conceptId];
     if (!concept) return null;
     return { conceptId, concept };
+  }
+
+  // Exact-only concept synonym lookup: used to short-circuit overly-greedy
+  // summary-card substring matches (e.g. "septic arthritis" -> "Arthritis" card).
+  async _globalConceptLookupExact(query) {
+    const idx = await this._ensureGlobalConceptIndex();
+    if (!idx) return null;
+    const q = this._conceptNorm(query);
+    const cid = idx.normMap[q];
+    if (!cid) return null;
+    const concept = idx.ci.concepts && idx.ci.concepts[cid];
+    if (!concept) return null;
+    return { conceptId: cid, concept };
+  }
+
+  // Search across all scenario names (and extracted clinical keywords) for
+  // queries that don't hit a concept synonym. Returns up to `max` ranked matches.
+  // Keyword matches score lower than name matches so name hits surface first.
+  async _globalScenarioNameSearch(query, max = 8) {
+    const idx = await this._ensureGlobalConceptIndex();
+    if (!idx || !idx.scenarioIndex) return [];
+    const q = this._conceptNorm(query);
+    if (q.length < 3) return [];
+    const tokens = q.split(/\s+/).filter(t => t.length >= 2);
+    if (tokens.length === 0) return [];
+
+    const hits = [];
+    for (const entry of idx.scenarioIndex) {
+      const name = entry.normName;
+      const kw = entry.normKeywords || '';
+      if (!name && !kw) continue;
+
+      let score = 0;
+      // 1. Name-level match (preferred)
+      if (name.includes(q)) {
+        if (name === q) score = 100;
+        else if (name.startsWith(q + ' ') || name.startsWith(q + ',')) score = 80;
+        else score = 60;
+      } else {
+        let matched = 0;
+        for (const t of tokens) {
+          if (name.includes(t)) matched++;
+        }
+        if (matched === tokens.length) {
+          score = 30 + matched * 5;
+        } else if (matched >= Math.max(1, tokens.length - 1) && tokens.length >= 2) {
+          score = 15 + matched * 4;
+        }
+      }
+
+      // 2. Keyword (description-derived) match - lower base score so name hits win.
+      // Only consider keyword match if name match was weak (score < 30).
+      if (score < 30 && kw) {
+        if (kw.includes(q)) {
+          // Word-boundary check on keyword string (keywords are space-separated)
+          const i = kw.indexOf(q);
+          const before = i === 0 || kw[i - 1] === ' ';
+          const afterIdx = i + q.length;
+          const after = afterIdx === kw.length || kw[afterIdx] === ' ';
+          if (before && after) {
+            score = Math.max(score, 45);
+          }
+        } else if (tokens.length >= 2) {
+          let matched = 0;
+          for (const t of tokens) {
+            if (kw.includes(t)) matched++;
+          }
+          if (matched === tokens.length) {
+            score = Math.max(score, 25 + matched * 3);
+          }
+        }
+      }
+
+      if (score > 0) {
+        // Shorter names rank higher (less specific clinical context = more generic match)
+        score -= Math.min(15, Math.floor(name.length / 20));
+        hits.push({ ...entry, score });
+      }
+    }
+
+    hits.sort((a, b) => b.score - a.score || a.name.length - b.name.length);
+    return hits.slice(0, max);
   }
 
   async _globalSuggestSimilar(query, max = 3) {
@@ -1368,6 +1527,8 @@ class ProtocolHelpApp {
     }
     const primaryRegion = regions[0] || concept.body_region || 'neuro';
     const displayName = concept.display_name || '';
+    const previewCount = Math.min(5, mappings.length);
+    const previews = mappings.slice(0, previewCount);
 
     container.classList.remove('hidden');
     container.innerHTML = `
@@ -1380,6 +1541,20 @@ class ProtocolHelpApp {
           <p class="global-result-recommendation">
             ${mappings.length} clinical scenario${mappings.length === 1 ? '' : 's'} mapped${regions.length ? ` across ${regions.length} region${regions.length === 1 ? '' : 's'}` : ''}.
           </p>
+          ${previews.length > 0 ? `
+            <ul class="scenario-preview-list" style="list-style:none;padding:0;margin:var(--space-sm) 0 0">
+              ${previews.map(p => `
+                <li class="scenario-preview-item">
+                  <button type="button" class="scenario-preview-btn"
+                          data-region="${this.escapeHtml(p.region || primaryRegion)}"
+                          data-name="${this.escapeHtml(p.scenario_name || '')}">
+                    <span class="scenario-preview-name">${this.escapeHtml(p.scenario_name || '')}</span>
+                    <span class="scenario-preview-region">${this.escapeHtml(p.region || primaryRegion)}</span>
+                  </button>
+                </li>
+              `).join('')}
+            </ul>
+          ` : ''}
           ${regions.length > 1 ? `
             <div class="dym-row" style="margin-top: var(--space-sm)">
               <span class="dym-label">Open in:</span>
@@ -1390,19 +1565,71 @@ class ProtocolHelpApp {
         <div class="global-result-footer">
           <span class="global-result-source">From concept index</span>
           <button class="global-result-action" data-region="${this.escapeHtml(primaryRegion)}" data-topic="${this.escapeHtml(displayName)}">
-            See scenarios
+            See all ${mappings.length} scenarios
           </button>
         </div>
       </div>
     `;
-    const fire = (btn) => {
+    const fireConcept = (btn) => {
       const region = btn.getAttribute('data-region');
       const topic = btn.getAttribute('data-topic') || displayName;
       if (region) this.navigateToRegionSearch(region, topic);
     };
-    container.querySelectorAll('.dym-chip').forEach(btn => btn.addEventListener('click', () => fire(btn)));
+    container.querySelectorAll('.dym-chip').forEach(btn => btn.addEventListener('click', () => fireConcept(btn)));
     const action = container.querySelector('.global-result-action');
-    if (action) action.addEventListener('click', () => fire(action));
+    if (action) action.addEventListener('click', () => fireConcept(action));
+    // Per-scenario click-through: navigate to the scenario's region and pre-fill its full name
+    container.querySelectorAll('.scenario-preview-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const region = btn.getAttribute('data-region');
+        const name = btn.getAttribute('data-name') || '';
+        if (region) this.navigateToRegionSearch(region, name);
+      });
+    });
+  }
+
+  _renderGlobalScenarioListResult(query, scenarios, container) {
+    // Group by region for region buttons
+    const regions = [];
+    for (const s of scenarios) {
+      if (s.region && !regions.includes(s.region)) regions.push(s.region);
+    }
+    container.classList.remove('hidden');
+    container.innerHTML = `
+      <div class="global-result-card">
+        <div class="global-result-header">
+          <span class="global-result-topic">${this.escapeHtml(query)}</span>
+          <span class="global-result-meta">Scenario matches</span>
+        </div>
+        <div class="global-result-body">
+          <p class="global-result-recommendation">
+            ${scenarios.length} scenario${scenarios.length === 1 ? '' : 's'} matched "<strong>${this.escapeHtml(query)}</strong>"${regions.length ? ` across ${regions.length} region${regions.length === 1 ? '' : 's'}` : ''}.
+          </p>
+          <ul class="scenario-preview-list" style="list-style:none;padding:0;margin:var(--space-sm) 0 0">
+            ${scenarios.map(s => `
+              <li class="scenario-preview-item">
+                <button type="button" class="scenario-preview-btn"
+                        data-region="${this.escapeHtml(s.region)}"
+                        data-name="${this.escapeHtml(s.name)}">
+                  <span class="scenario-preview-name">${this.escapeHtml(s.name)}</span>
+                  <span class="scenario-preview-region">${this.escapeHtml(s.region)}</span>
+                </button>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+        <div class="global-result-footer">
+          <span class="global-result-source">Direct scenario match</span>
+        </div>
+      </div>
+    `;
+    container.querySelectorAll('.scenario-preview-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const region = btn.getAttribute('data-region');
+        const name = btn.getAttribute('data-name') || '';
+        if (region) this.navigateToRegionSearch(region, name);
+      });
+    });
   }
 
   _buildEmptyState(query) {
