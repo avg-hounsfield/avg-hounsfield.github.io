@@ -13,7 +13,7 @@ import { UI } from './ui.js?v=20260417a';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
 import { SummaryCards } from './summary-cards.js?v=20260417a';
-import * as embeddingSearch from './embedding-search.js?v=20260519a';
+import * as embeddingSearch from './embedding-search.js?v=20260519b';
 import { getIntentClassifier } from './intent-classifier.js?v=20260417a';
 
 class ProtocolHelpApp {
