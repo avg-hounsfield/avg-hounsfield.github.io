@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Embedding search smoke test</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+    input { width: 100%; padding: 8px; font-size: 16px; }
+    button { padding: 8px 16px; font-size: 16px; margin-top: 8px; }
+    pre { background: #f4f4f4; padding: 8px; overflow-x: auto; font-size: 12px; }
+    .result { padding: 6px 0; border-bottom: 1px solid #eee; }
+    .score { color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Embedding search smoke test</h1>
+  <p>Loads the distilled student model + scenario embeddings and runs a single query. Open DevTools console for timing.</p>
+  <input id="q" value="patient with sudden left lower quadrant pain and fever" />
+  <button id="go">Search</button>
+  <p id="status"></p>
+  <div id="out"></div>
+  <pre id="log"></pre>
+
+  <script type="module">
+    import * as embeddingSearch from './js/embedding-search.js';
+
+    const logEl = document.getElementById('log');
+    const statusEl = document.getElementById('status');
+    const outEl = document.getElementById('out');
+    const origLog = console.log;
+    console.log = (...args) => {
+      origLog(...args);
+      logEl.textContent += args.map(a => typeof a === 'string' ? a : JSON.stringify(a)).join(' ') + '\n';
+    };
+
+    async function run() {
+      const q = document.getElementById('q').value.trim();
+      if (!q) return;
+      statusEl.textContent = 'Loading model and embeddings... (first run takes ~1-2s)';
+      outEl.innerHTML = '';
+      const t0 = performance.now();
+      try {
+        const hits = await embeddingSearch.search(q, 10);
+        const dt = (performance.now() - t0).toFixed(0);
+        statusEl.textContent = `Done in ${dt}ms. ${hits.length} hits.`;
+        outEl.innerHTML = hits.map(h => `
+          <div class="result">
+            <strong>id ${h.id}</strong>
+            <span class="score">score ${h.score.toFixed(4)}</span>
+          </div>
+        `).join('');
+      } catch (e) {
+        statusEl.textContent = 'ERROR: ' + (e?.message || e);
+        console.log('error:', e);
+      }
+    }
+    document.getElementById('go').addEventListener('click', run);
+    // Warm up on load
+    embeddingSearch.warmup();
+  </script>
+</body>
+</html>

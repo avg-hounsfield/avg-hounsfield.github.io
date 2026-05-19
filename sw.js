@@ -44,7 +44,7 @@ const DATA_ASSETS = [
   '/models/student-radiology/tokenizer_config.json',
   '/models/student-radiology/special_tokens_map.json',
   '/models/student-radiology/vocab.txt',
-  '/models/student-radiology/onnx/model_quantized.onnx'
+  '/models/student-radiology/onnx/model_q8.onnx'
 ];
 
 // External dependencies that should be cached

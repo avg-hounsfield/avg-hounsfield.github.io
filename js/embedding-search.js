@@ -12,10 +12,12 @@
  * stored at data/search/scenario_embeddings_v3.bin (FP16, shape [N, 384]).
  */
 
-const MODEL_PATH = 'models/student-radiology';
+// Model name relative to env.localModelPath (set below).
+const MODEL_NAME = 'student-radiology';
 const EMBEDDINGS_BIN = 'data/search/scenario_embeddings_v3.bin';
 const EMBEDDINGS_IDS = 'data/search/scenario_embeddings_v3_ids.json';
-const TRANSFORMERS_CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0';
+// jsdelivr forces an ESM build with /+esm; pinned to a major version.
+const TRANSFORMERS_CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0/+esm';
 
 let _model = null;        // Transformers.js pipeline
 let _scenarioEmb = null;  // Float32Array of shape (N, 384) flattened
@@ -26,11 +28,12 @@ let _loadingPromise = null;
 async function _loadTransformersJs() {
   // Dynamic import via CDN; happens once per page load.
   const mod = await import(/* webpackIgnore: true */ TRANSFORMERS_CDN);
-  // Use only local model files (no Hub fallback)
-  mod.env.allowRemoteModels = false;
-  mod.env.localModelPath = '';
-  // ONNX runtime should also stay local
+  // Resolve model files from /models/<name>/ on this origin only - no Hub.
   mod.env.allowLocalModels = true;
+  mod.env.allowRemoteModels = false;
+  mod.env.localModelPath = '/models/';
+  // Use the same origin for the WASM backend (ort wasm files are served by
+  // Transformers.js's own CDN by default; that's fine for online use).
   return mod;
 }
 
@@ -87,9 +90,9 @@ export async function ensureReady() {
     // pipeline('feature-extraction') uses BERT mean pooling by default; we
     // need CLS pooling for BGE family. Use AutoModel directly to control.
     const { AutoTokenizer, AutoModel } = tf;
-    const tokenizer = await AutoTokenizer.from_pretrained(MODEL_PATH);
-    const model = await AutoModel.from_pretrained(MODEL_PATH, {
-      quantized: true,  // load onnx/model_quantized.onnx
+    const tokenizer = await AutoTokenizer.from_pretrained(MODEL_NAME);
+    const model = await AutoModel.from_pretrained(MODEL_NAME, {
+      dtype: 'q8',  // load onnx/model_quantized.onnx (Transformers.js v3 API)
     });
     _model = { tokenizer, model };
     const meta = await _loadScenarioEmbeddings();
