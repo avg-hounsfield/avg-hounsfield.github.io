@@ -35,6 +35,12 @@ data/regions.backup/
 # Stray empty file
 link
 
+# wandb runs from local training experiments
+wandb/
+
+# Local training checkpoints (real checkpoints live in radiology-ai-assistant repo)
+checkpoints/
+
 # Data files not served to users
 data/source/
 data/training/
