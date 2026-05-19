@@ -27,6 +27,12 @@ workers/
 # Backup files
 *.bak
 
+# Local snapshot taken by tools/reorganize_regions.py
+data/regions.backup/
+
+# Stray empty file
+link
+
 # Data files not served to users
 data/source/
 data/training/

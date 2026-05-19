@@ -120,7 +120,7 @@ CONCEPT_TAXONOMY = {
                               "meningioma", "brain mets", "brain metasta"]
     },
     "stroke": {
-        "display_name": "Stroke",
+        "display_name": "Stroke/CVA",
         "body_region": "neuro",
         "synonyms": ["stroke", "cva", "cerebrovascular accident", "ischemic stroke",
                      "hemorrhagic stroke", "brain infarct", "cerebral infarction",
@@ -132,18 +132,20 @@ CONCEPT_TAXONOMY = {
         "display_name": "Headache",
         "body_region": "neuro",
         "synonyms": ["headache", "head pain", "cephalgia", "migraine", "tension headache",
-                     "cluster headache", "chronic headache", "new headache"],
+                     "cluster headache", "chronic headache", "new headache",
+                     "intracranial hypotension", "csf leak", "iih", "pseudotumor cerebri",
+                     "idiopathic intracranial hypertension"],
         "scenario_keywords": ["headache", "head pain", "migraine", "cephalgia"]
     },
     "dementia": {
-        "display_name": "Dementia",
+        "display_name": "Dementia/Cognitive Decline",
         "body_region": "neuro",
         "synonyms": ["dementia", "alzheimer", "cognitive decline", "memory loss",
                      "neurodegenerative", "cognitive impairment"],
         "scenario_keywords": ["dementia", "alzheimer", "cognitive", "memory"]
     },
     "seizure": {
-        "display_name": "Seizure",
+        "display_name": "Seizure/Epilepsy",
         "body_region": "neuro",
         "synonyms": ["seizure", "epilepsy", "convulsion", "fits", "new onset seizure",
                      "epileptic", "seizure disorder"],
@@ -153,15 +155,32 @@ CONCEPT_TAXONOMY = {
         "display_name": "Multiple Sclerosis",
         "body_region": "neuro",
         "synonyms": ["multiple sclerosis", "ms", "demyelinating disease", "demyelination",
-                     "white matter disease"],
+                     "white matter disease", "transverse myelitis", "myelitis",
+                     "optic neuritis", "neuromyelitis optica", "nmo", "adem",
+                     "acute disseminated encephalomyelitis"],
         "scenario_keywords": ["multiple sclerosis", "demyelinat"]
     },
     "hydrocephalus": {
         "display_name": "Hydrocephalus",
         "body_region": "neuro",
         "synonyms": ["hydrocephalus", "ventriculomegaly", "enlarged ventricles",
-                     "csf obstruction", "normal pressure hydrocephalus", "nph"],
+                     "csf obstruction", "normal pressure hydrocephalus", "nph",
+                     "chiari malformation", "chiari"],
         "scenario_keywords": ["hydrocephalus", "ventriculomegaly", "ventricle"]
+    },
+    "intracranial_hemorrhage": {
+        "display_name": "Intracranial Hemorrhage",
+        "body_region": "neuro",
+        "synonyms": ["intracranial hemorrhage", "intracranial bleed",
+                     "subdural hematoma", "subdural hemorrhage", "sdh",
+                     "epidural hematoma", "epidural hemorrhage", "edh",
+                     "subarachnoid hemorrhage", "sah",
+                     "intracerebral hemorrhage", "ich",
+                     "hemorrhagic stroke", "brain bleed", "brain hemorrhage",
+                     "intraventricular hemorrhage", "ivh"],
+        "scenario_keywords": ["subarachnoid hemorrhage", "intracranial hemorrhage",
+                              "subdural", "epidural hematoma",
+                              "hemorrhagic stroke"]
     },
 
     # Spine concepts
@@ -169,14 +188,19 @@ CONCEPT_TAXONOMY = {
         "display_name": "Back Pain",
         "body_region": "spine",
         "synonyms": ["back pain", "low back pain", "lbp", "lumbar pain", "spine pain",
-                     "backache", "thoracic pain", "cervical pain", "neck pain"],
+                     "backache", "back ache", "back hurts", "back is sore",
+                     "thoracic pain", "cervical pain", "neck pain",
+                     "enthesitis", "sacroiliitis", "axial spondyloarthritis",
+                     "ankylosing spondylitis"],
         "scenario_keywords": ["back pain", "low back", "lumbar pain", "spine pain"]
     },
     "radiculopathy": {
-        "display_name": "Radiculopathy",
+        "display_name": "Radiculopathy/Sciatica",
         "body_region": "spine",
         "synonyms": ["radiculopathy", "sciatica", "nerve root compression", "pinched nerve",
-                     "disc herniation", "herniated disc", "bulging disc", "slipped disc"],
+                     "disc herniation", "herniated disc", "bulging disc", "slipped disc",
+                     "arachnoiditis", "brachial neuritis", "parsonage turner",
+                     "parsonage-turner", "brachial plexopathy", "lumbosacral plexopathy"],
         "scenario_keywords": ["radiculopathy", "sciatica", "disc herniat", "degenerative"],
         "negative_keywords": ["trauma", "injury", "fracture", "blunt"]
     },
@@ -200,7 +224,9 @@ CONCEPT_TAXONOMY = {
         "display_name": "Myelopathy",
         "body_region": "spine",
         "synonyms": ["myelopathy", "spinal cord compression", "cervical myelopathy",
-                     "cord compression"],
+                     "cord compression", "syringomyelia", "syrinx", "als",
+                     "amyotrophic lateral sclerosis", "motor neuron disease",
+                     "conus medullaris syndrome", "tethered cord"],
         "scenario_keywords": ["myelopathy", "spinal cord compress", "cord compress"]
     },
 
@@ -209,7 +235,7 @@ CONCEPT_TAXONOMY = {
         "display_name": "Lung Nodule",
         "body_region": "chest",
         "synonyms": ["lung nodule", "pulmonary nodule", "lung lesion", "solitary pulmonary nodule",
-                     "spn", "lung mass", "pulmonary mass"],
+                     "spn", "lung mass", "pulmonary mass", "sarcoidosis"],
         "scenario_keywords": ["lung nodule", "pulmonary nodule", "lung mass", "pulmonary mass"]
     },
     "lung_cancer": {
@@ -223,9 +249,10 @@ CONCEPT_TAXONOMY = {
     "pulmonary_embolism": {
         "display_name": "Pulmonary Embolism",
         "body_region": "chest",
-        "synonyms": ["pulmonary embolism", "pe", "blood clot in lung", "lung clot",
-                     "pulmonary thromboembolism"],
-        "scenario_keywords": ["pulmonary embol", "suspected pe", "venous thromboembol"]
+        "synonyms": ["pulmonary embolism", "pulmonary embolus", "pe",
+                     "blood clot in lung", "lung clot", "blood clot lung",
+                     "pulmonary thromboembolism", "vte chest"],
+        "scenario_keywords": ["pulmonary embol", "venous thromboembol"]
     },
     "pneumonia": {
         "display_name": "Pneumonia",
@@ -238,7 +265,9 @@ CONCEPT_TAXONOMY = {
         "display_name": "Chest Pain",
         "body_region": "chest",
         "synonyms": ["chest pain", "thoracic pain", "angina", "cardiac chest pain",
-                     "non-cardiac chest pain", "atypical chest pain"],
+                     "non-cardiac chest pain", "atypical chest pain",
+                     "mi", "myocardial infarction", "stemi", "nstemi",
+                     "acute coronary syndrome", "acs", "heart attack"],
         "scenario_keywords": ["chest pain", "thoracic pain", "angina"]
     },
 
@@ -252,7 +281,7 @@ CONCEPT_TAXONOMY = {
                               "focal liver"]
     },
     "liver_cancer": {
-        "display_name": "Liver Cancer",
+        "display_name": "Liver Cancer/HCC",
         "body_region": "abdomen",
         "synonyms": ["liver cancer", "hcc", "hepatocellular carcinoma", "hepatoma",
                      "liver malignancy", "cholangiocarcinoma"],
@@ -287,7 +316,59 @@ CONCEPT_TAXONOMY = {
         "synonyms": ["kidney mass", "renal mass", "kidney lesion", "renal lesion",
                      "kidney tumor", "renal tumor", "kidney cancer", "renal cell carcinoma",
                      "rcc"],
-        "scenario_keywords": ["kidney", "renal mass", "renal cell", "renal lesion"]
+        "scenario_keywords": ["kidney", "renal mass", "renal cell", "renal lesion"],
+        # "adrenal mass" contains "renal mass" as a substring -> wrong routing.
+        "negative_keywords": ["adrenal"]
+    },
+    "adrenal_mass": {
+        "display_name": "Adrenal Mass",
+        "body_region": "abdomen",
+        "synonyms": ["adrenal mass", "adrenal nodule", "adrenal lesion",
+                     "adrenal incidentaloma", "adrenal tumor", "adrenal adenoma",
+                     "pheochromocytoma", "adrenal hyperplasia"],
+        "scenario_keywords": ["adrenal"]
+    },
+    "pyelonephritis": {
+        "display_name": "Pyelonephritis / Kidney Infection",
+        "body_region": "abdomen",
+        "synonyms": ["pyelonephritis", "kidney infection", "renal infection",
+                     "uti with fever", "complicated uti", "perinephric abscess",
+                     "renal abscess"],
+        "scenario_keywords": ["pyelonephritis", "renal abscess", "perinephric"]
+    },
+    "inflammatory_bowel_disease": {
+        "display_name": "Inflammatory Bowel Disease / Crohn",
+        "body_region": "abdomen",
+        "synonyms": ["inflammatory bowel disease", "ibd", "crohn", "crohn disease",
+                     "crohns", "crohns disease", "ulcerative colitis", "uc",
+                     "colitis"],
+        "scenario_keywords": ["crohn", "ulcerative colitis", "inflammatory bowel"]
+    },
+    "prostate": {
+        "display_name": "Prostate Cancer / PSA Workup",
+        "body_region": "abdomen",
+        "synonyms": ["prostate", "prostate cancer", "prostate mass", "prostate carcinoma",
+                     "elevated psa", "high psa", "psa elevation", "prostate biopsy"],
+        "scenario_keywords": ["prostate"]
+    },
+    "heart_failure": {
+        "display_name": "Heart Failure",
+        "body_region": "chest",
+        "synonyms": ["heart failure", "congestive heart failure", "chf", "cardiomyopathy",
+                     "reduced ejection fraction", "hfref", "hfpef", "diastolic dysfunction",
+                     "pulmonary edema"],
+        "scenario_keywords": ["heart failure", "cardiomyopathy"]
+    },
+    "thyroid_neck_mass": {
+        "display_name": "Thyroid / Neck Mass",
+        "body_region": "neuro",
+        # Neck-mass and thyroid scenarios came from "other" via reorganize rules,
+        # plus the existing "thyroid_nodule" summary card covers some of them.
+        "additional_regions": ["other"],
+        "synonyms": ["thyroid mass", "neck mass", "goiter", "thyroid nodule",
+                     "thyroid lesion", "thyroid cancer", "parathyroid",
+                     "hyperparathyroidism", "lump in neck", "neck lump"],
+        "scenario_keywords": ["thyroid", "neck mass", "goiter", "parathyroid"]
     },
     "bowel_obstruction": {
         "display_name": "Bowel Obstruction",
@@ -296,15 +377,23 @@ CONCEPT_TAXONOMY = {
                      "large bowel obstruction", "ileus"],
         "scenario_keywords": ["bowel obstruction", "intestinal obstruction", "ileus"]
     },
+    "diverticulitis": {
+        "display_name": "Diverticulitis / LLQ Pain",
+        "body_region": "abdomen",
+        "synonyms": ["diverticulitis", "diverticular disease", "diverticulosis",
+                     "llq pain", "left lower quadrant pain",
+                     "diverticular abscess", "perforated diverticulitis"],
+        "scenario_keywords": ["diverticulitis", "llq pain"]
+    },
     "colon_cancer": {
-        "display_name": "Colon Cancer",
+        "display_name": "Colon/Colorectal Cancer",
         "body_region": "abdomen",
         "synonyms": ["colon cancer", "colorectal cancer", "rectal cancer", "colorectal carcinoma",
                      "colonic mass", "colon mass"],
         "scenario_keywords": ["colon", "colorectal", "rectal cancer"]
     },
     "cholecystitis": {
-        "display_name": "Cholecystitis",
+        "display_name": "Cholecystitis/Gallbladder",
         "body_region": "abdomen",
         "synonyms": ["cholecystitis", "gallbladder inflammation", "gallstones", "cholelithiasis",
                      "biliary colic", "ruq pain", "right upper quadrant pain"],
@@ -315,25 +404,29 @@ CONCEPT_TAXONOMY = {
 
     # MSK concepts
     "knee_pain": {
-        "display_name": "Knee Pain",
+        "display_name": "Knee Pain/Injury",
         "body_region": "msk",
         "synonyms": ["knee pain", "knee injury", "knee trauma", "knee problem",
                      "acl tear", "meniscus tear", "ligament injury", "knee arthritis"],
-        "scenario_keywords": ["knee"]  # Broad match - knee scenarios are relevant
+        "scenario_keywords": ["knee"],  # Broad match - knee scenarios are relevant
+        "negative_keywords": ["osteomyelitis", "septic arthritis"]  # Route to bone_infection
     },
     "shoulder_pain": {
-        "display_name": "Shoulder Pain",
+        "display_name": "Shoulder Pain/Injury",
         "body_region": "msk",
         "synonyms": ["shoulder pain", "shoulder injury", "rotator cuff", "shoulder trauma",
-                     "rotator cuff tear", "shoulder impingement"],
-        "scenario_keywords": ["shoulder"]  # Broad match
+                     "rotator cuff tear", "shoulder impingement",
+                     "polymyalgia rheumatica", "pmr"],
+        "scenario_keywords": ["shoulder"],  # Broad match
+        "negative_keywords": ["osteomyelitis", "septic arthritis"]
     },
     "hip_pain": {
-        "display_name": "Hip Pain",
+        "display_name": "Hip Pain/Injury",
         "body_region": "msk",
         "synonyms": ["hip pain", "hip injury", "hip trauma", "hip fracture",
                      "avascular necrosis", "avn", "hip avascular necrosis"],
-        "scenario_keywords": ["hip"]  # Broad match
+        "scenario_keywords": ["hip"],  # Broad match
+        "negative_keywords": ["osteomyelitis", "septic arthritis"]
     },
     "bone_tumor": {
         "display_name": "Bone Tumor",
@@ -343,19 +436,69 @@ CONCEPT_TAXONOMY = {
         "scenario_keywords": ["bone tumor", "bone mass", "bone lesion", "osteosarcoma",
                               "primary bone"]
     },
+    "bone_infection": {
+        "display_name": "Bone Infection / Osteomyelitis",
+        "body_region": "msk",
+        # Pelvic osteomyelitis is in abdomen, chest-wall osteomyelitis is in chest.
+        "additional_regions": ["abdomen", "chest"],
+        "synonyms": ["osteomyelitis", "bone infection", "septic arthritis", "septic joint",
+                     "joint infection", "osteo"],
+        "scenario_keywords": ["osteomyelitis", "septic arthritis"]
+    },
+    "spine_infection": {
+        "display_name": "Spine Infection / Vertebral Osteomyelitis",
+        "body_region": "spine",
+        "synonyms": ["spine infection", "vertebral osteomyelitis", "spinal infection",
+                     "discitis", "diskitis", "epidural abscess", "spondylodiscitis",
+                     "spinal epidural abscess", "vertebral discitis"],
+        "scenario_keywords": ["spine infection", "spinal infection", "discitis", "diskitis",
+                              "epidural abscess"]
+    },
+    "soft_tissue_infection": {
+        "display_name": "Soft Tissue Infection / Abscess",
+        "body_region": "msk",
+        "additional_regions": ["abdomen", "chest"],
+        # "fasciitis" alone removed - was wrongly catching "plantar fasciitis".
+        # "abscess" alone removed - too generic (catches liver abscess etc).
+        "synonyms": ["soft tissue infection", "cellulitis", "necrotizing fasciitis",
+                     "soft tissue abscess", "skin infection", "wound infection"],
+        "scenario_keywords": ["soft tissue infection", "necrotizing fasciitis"]
+    },
     "fracture": {
         "display_name": "Fracture",
         "body_region": "msk",
         "synonyms": ["fracture", "broken bone", "bone fracture", "stress fracture",
-                     "pathologic fracture", "insufficiency fracture"],
+                     "pathologic fracture", "insufficiency fracture",
+                     # Layperson "broken X" phrasings -> route to fracture
+                     "broken hip", "broken arm", "broken leg", "broken wrist",
+                     "broken ankle", "broken foot", "broken finger", "broken hand",
+                     "hip fracture", "wrist fracture", "ankle fracture"],
         "scenario_keywords": ["fracture"]
     },
     "soft_tissue_mass": {
         "display_name": "Soft Tissue Mass",
         "body_region": "msk",
+        # "hematoma" alone removed - was substring-matching "subdural/epidural
+        # hematoma" (intracranial bleeds). Kept "muscle hematoma" instead.
         "synonyms": ["soft tissue mass", "soft tissue tumor", "soft tissue sarcoma",
-                     "muscle mass", "subcutaneous mass", "lipoma"],
+                     "muscle mass", "subcutaneous mass", "lipoma",
+                     "crps", "complex regional pain syndrome",
+                     "muscle hematoma", "soft tissue hematoma",
+                     "muscle tear", "muscle strain"],
         "scenario_keywords": ["soft tissue mass", "soft tissue tumor"]
+    },
+    "lymphadenopathy": {
+        "display_name": "Lymphadenopathy / Axillary Adenopathy",
+        "body_region": "spine",
+        # ACR's lymphadenopathy scenarios are spine-anchored (back-pain workup with
+        # lymphadenopathy) and breast-anchored (axillary). Allow both.
+        "additional_regions": ["breast"],
+        "synonyms": ["lymphadenopathy", "adenopathy", "axillary adenopathy",
+                     "swollen lymph nodes", "swollen glands", "enlarged lymph nodes",
+                     "lumps in armpit", "lump in armpit", "armpit lump",
+                     "neck lump", "groin lump", "supraclavicular lymph node",
+                     "lymph node enlargement"],
+        "scenario_keywords": ["lymphadenopathy", "axillary adenopathy"]
     },
 
     # Vascular/Aortic concepts - note: aortic scenarios are in chest region in ACR
@@ -421,20 +564,45 @@ CONCEPT_TAXONOMY = {
         "scenario_keywords": ["screening", "mammogra", "dense breast"]
     },
 
-    # Peds concepts
-    "pediatric_abdominal_pain": {
-        "display_name": "Pediatric Abdominal Pain",
-        "body_region": "peds",
-        "synonyms": ["pediatric abdominal pain", "child belly pain", "child stomach ache",
-                     "pediatric appendicitis"],
-        "scenario_keywords": ["abdominal pain", "appendicitis"]
+    # Curated neuromuscular / atypical concepts (hand-curated scenario lists)
+    "myositis": {
+        "display_name": "Myositis / Inflammatory Myopathy",
+        "body_region": "msk",
+        "synonyms": ["myositis", "polymyositis", "dermatomyositis", "inflammatory myopathy",
+                     "muscle inflammation", "idiopathic inflammatory myopathy",
+                     "pyomyositis", "rhabdomyolysis", "denervation atrophy"],
+        # Curated mapping: route to nonsuperficial soft tissue mass MR protocols
+        "manual_scenario_ids": [
+            {"id": "6979", "relevance_score": 0.8},  # Soft tissue mass, hip, nonsuperficial
+            {"id": "6974", "relevance_score": 0.8},  # knee
+            {"id": "6975", "relevance_score": 0.8},  # lower leg
+            {"id": "6970", "relevance_score": 0.7},  # elbow
+            {"id": "6972", "relevance_score": 0.7},  # forearm
+            {"id": "6968", "relevance_score": 0.7},  # ankle
+            {"id": "6971", "relevance_score": 0.7},  # foot
+        ]
     },
-    "pediatric_head_injury": {
-        "display_name": "Pediatric Head Injury",
-        "body_region": "peds",
-        "synonyms": ["pediatric head injury", "child head trauma", "pediatric head trauma",
-                     "child concussion"],
-        "scenario_keywords": ["head injury", "head trauma", "concussion"]
+    "guillain_barre": {
+        "display_name": "Guillain-Barre Syndrome / Polyradiculopathy",
+        "body_region": "spine",
+        "synonyms": ["guillain barre", "guillain-barre", "guillain barre syndrome",
+                     "gbs", "aidp", "cidp",
+                     "acute inflammatory demyelinating polyneuropathy",
+                     "chronic inflammatory demyelinating polyneuropathy",
+                     "ascending paralysis", "polyradiculopathy", "polyradiculoneuropathy",
+                     "lumbar plexitis",
+                     # Common misspellings of Guillain-Barre
+                     "guillian", "guillian barre", "guillian-barre", "guillian-barr",
+                     "guillain barr"],
+        "manual_scenario_ids": [
+            {"id": "5623", "relevance_score": 1.0},  # Low back pain, cauda equina
+            {"id": "5841", "relevance_score": 0.9},  # Spine infection lumbar cauda equina
+            {"id": "5835", "relevance_score": 0.8},  # Spine infection lumbar neuro deficit
+            {"id": "8108", "relevance_score": 0.7},  # Lumbar spine pain, neuro deficit
+            {"id": "7807", "relevance_score": 0.6},  # Thoracic back pain, radiculopathy
+            {"id": "4689", "relevance_score": 0.5},  # Cervical spine pain, acute radic
+            {"id": "7971", "relevance_score": 0.6},  # Cervical spine radic infection
+        ]
     }
 }
 
@@ -547,6 +715,13 @@ def build_concept_index(data_dir, output_path):
         "synonym_to_concept": {}
     }
 
+    # Index scenarios by ID for fast lookup (for manual_scenario_ids)
+    scenarios_by_id = {}
+    for sc in all_scenarios:
+        sid = sc.get("id")
+        if sid is not None and sid not in scenarios_by_id:
+            scenarios_by_id[sid] = sc
+
     # Process each concept
     for concept_id, concept_def in CONCEPT_TAXONOMY.items():
         print(f"Processing concept: {concept_def['display_name']}")
@@ -554,15 +729,62 @@ def build_concept_index(data_dir, output_path):
         # Find matching scenarios
         scenario_mappings = []
 
+        # MANUAL MAPPINGS: if a concept lists specific scenario IDs, use those directly
+        # (useful for concepts where keyword matching doesn't apply, e.g. myositis -> soft tissue mass)
+        manual_ids = concept_def.get("manual_scenario_ids", [])
+        if manual_ids:
+            for entry in manual_ids:
+                # Accept either a bare id or {"id": ..., "relevance_score": ...}
+                if isinstance(entry, dict):
+                    sid = str(entry.get("id"))
+                    relevance = float(entry.get("relevance_score", 0.8))
+                else:
+                    sid = str(entry)
+                    relevance = 0.8
+                sc = scenarios_by_id.get(sid)
+                if not sc:
+                    continue
+                scenario_name = sc.get("name", "")
+                scenario_region = sc.get("_region", "")
+                procedures = sc.get("procedures", [])
+                high_rated = [p for p in procedures if p.get("rating", 0) >= 7]
+                scenario_mappings.append({
+                    "scenario_id": sid,
+                    "scenario_name": scenario_name,
+                    "relevance_score": round(relevance, 2),
+                    "region": scenario_region,
+                    "metadata": {
+                        "phase": detect_phase(scenario_name),
+                        "phase_display": get_phase_display(detect_phase(scenario_name)),
+                        "context": detect_context(scenario_name),
+                        "procedure_count": len(procedures),
+                        "high_rated_count": len(high_rated)
+                    }
+                })
+
+        # KEYWORD-BASED MATCHING: scan scenarios in body_region (and additional_regions if set)
+        concept_region = concept_def.get("body_region")
+        additional_regions = concept_def.get("additional_regions", [])
+        allowed_regions = set()
+        if concept_region:
+            allowed_regions.add(concept_region)
+        allowed_regions.update(additional_regions)
+
+        # Track ids already mapped manually so we don't duplicate
+        already_mapped = {m["scenario_id"] for m in scenario_mappings}
+
         for scenario in all_scenarios:
             scenario_name = scenario.get("name", "")
             scenario_region = scenario.get("_region", "")
+            scenario_id = scenario.get("id")
 
-            # STRICT REGION FILTERING: Only include scenarios from concept's body region
+            if scenario_id in already_mapped:
+                continue
+
+            # STRICT REGION FILTERING: Only include scenarios from concept's allowed regions
             # This prevents cross-anatomy contamination (e.g., stroke matching vascular scenarios)
-            concept_region = concept_def.get("body_region")
-            if concept_region and scenario_region != concept_region:
-                continue  # Skip scenarios from other regions
+            if allowed_regions and scenario_region not in allowed_regions:
+                continue
 
             # Check if scenario matches this concept
             keywords = concept_def.get("scenario_keywords", [])
