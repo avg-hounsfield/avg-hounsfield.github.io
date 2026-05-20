@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-05-19T08:38:56.062843+00:00",
+  "generated_at": "2026-05-20T11:44:08.354263+00:00",
   "concepts": {
     "brain_neoplasm": {
       "display_name": "Brain Tumor",
@@ -30655,6 +30655,132 @@
           }
         },
         {
+          "scenario_id": "8012",
+          "scenario_name": "Thoracic aortic aneurysm, open repair, surveillance",
+          "relevance_score": 0.6,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "8007",
+          "scenario_name": "Thoracic aortic aneurysm, preprocedure planning, open repair",
+          "relevance_score": 0.6,
+          "region": "chest",
+          "metadata": {
+            "phase": "pretreatment",
+            "phase_display": "Pretreatment Staging",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTA chest abdomen pelvis W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "30-100 mSv"
+          }
+        },
+        {
+          "scenario_id": "2472",
+          "scenario_name": "Thoracic aortic aneurysm, without repair, with or without symptoms, follow-up imaging",
+          "relevance_score": 0.6,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "8012",
+          "scenario_name": "Thoracic aortic aneurysm, open repair, surveillance",
+          "relevance_score": 0.6,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "8007",
+          "scenario_name": "Thoracic aortic aneurysm, preprocedure planning, open repair",
+          "relevance_score": 0.6,
+          "region": "chest",
+          "metadata": {
+            "phase": "pretreatment",
+            "phase_display": "Pretreatment Staging",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTA chest abdomen pelvis W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "30-100 mSv"
+          }
+        },
+        {
+          "scenario_id": "2472",
+          "scenario_name": "Thoracic aortic aneurysm, without repair, with or without symptoms, follow-up imaging",
+          "relevance_score": 0.6,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
           "scenario_id": "6834",
           "scenario_name": "Thoracoabdominal aortic dissection, post open repair, follow up imaging",
           "relevance_score": 0.4,
@@ -31156,6 +31282,132 @@
             "ratingLevel": "Usually Appropriate",
             "usesContrast": 1,
             "radiationDose": "10-30 mSv"
+          }
+        },
+        {
+          "scenario_id": "8013",
+          "scenario_name": "Thoracic aortic dissection, open repair, surveillance",
+          "relevance_score": 0.4,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "8009",
+          "scenario_name": "Thoracic aortic dissection, preprocedure planning, open repair",
+          "relevance_score": 0.4,
+          "region": "chest",
+          "metadata": {
+            "phase": "pretreatment",
+            "phase_display": "Pretreatment Staging",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTA chest abdomen pelvis W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "30-100 mSv"
+          }
+        },
+        {
+          "scenario_id": "8006",
+          "scenario_name": "Thoracic aortic dissection, without repair, with or without symptoms, follow-up imaging",
+          "relevance_score": 0.4,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "8013",
+          "scenario_name": "Thoracic aortic dissection, open repair, surveillance",
+          "relevance_score": 0.4,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "8009",
+          "scenario_name": "Thoracic aortic dissection, preprocedure planning, open repair",
+          "relevance_score": 0.4,
+          "region": "chest",
+          "metadata": {
+            "phase": "pretreatment",
+            "phase_display": "Pretreatment Staging",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTA chest abdomen pelvis W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "30-100 mSv"
+          }
+        },
+        {
+          "scenario_id": "8006",
+          "scenario_name": "Thoracic aortic dissection, without repair, with or without symptoms, follow-up imaging",
+          "relevance_score": 0.4,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
           }
         }
       ]
@@ -31425,6 +31677,132 @@
             "ratingLevel": "Usually Appropriate",
             "usesContrast": 1,
             "radiationDose": "30-100 mSv"
+          }
+        },
+        {
+          "scenario_id": "8013",
+          "scenario_name": "Thoracic aortic dissection, open repair, surveillance",
+          "relevance_score": 0.53,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "8009",
+          "scenario_name": "Thoracic aortic dissection, preprocedure planning, open repair",
+          "relevance_score": 0.53,
+          "region": "chest",
+          "metadata": {
+            "phase": "pretreatment",
+            "phase_display": "Pretreatment Staging",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTA chest abdomen pelvis W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "30-100 mSv"
+          }
+        },
+        {
+          "scenario_id": "8006",
+          "scenario_name": "Thoracic aortic dissection, without repair, with or without symptoms, follow-up imaging",
+          "relevance_score": 0.53,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "8013",
+          "scenario_name": "Thoracic aortic dissection, open repair, surveillance",
+          "relevance_score": 0.53,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "8009",
+          "scenario_name": "Thoracic aortic dissection, preprocedure planning, open repair",
+          "relevance_score": 0.53,
+          "region": "chest",
+          "metadata": {
+            "phase": "pretreatment",
+            "phase_display": "Pretreatment Staging",
+            "context": {},
+            "procedure_count": 12,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTA chest abdomen pelvis W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "30-100 mSv"
+          }
+        },
+        {
+          "scenario_id": "8006",
+          "scenario_name": "Thoracic aortic dissection, without repair, with or without symptoms, follow-up imaging",
+          "relevance_score": 0.53,
+          "region": "chest",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "CTA chest W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
           }
         }
       ]

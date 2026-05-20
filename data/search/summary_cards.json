@@ -1382,7 +1382,7 @@
       "display_name": "Aortic Dissection",
       "card_type": "STRONG",
       "scenario_count": 10,
-      "region": "spine",
+      "region": "chest",
       "primary_recommendation": {
         "name": "CTA chest abdomen pelvis with IV contrast",
         "display": "CTA chest abdomen pelvis  OR MRA chest abdomen pelvis  OR MRA chest abdomen pelvis ",
