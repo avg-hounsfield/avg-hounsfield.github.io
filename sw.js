@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radex-v2.23.0';
+const CACHE_NAME = 'radex-v2.24.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -9,6 +9,7 @@ const STATIC_ASSETS = [
   '/js/search-engine.js',
   '/js/intent-classifier.js',
   '/js/embedding-search.js',
+  '/js/ce-rerank.js',
   '/js/radlite-api.js',
   '/js/protocol-builder.js',
   '/js/summary-cards.js',
@@ -44,7 +45,14 @@ const DATA_ASSETS = [
   '/models/student-radiology/tokenizer_config.json',
   '/models/student-radiology/special_tokens_map.json',
   '/models/student-radiology/vocab.txt',
-  '/models/student-radiology/onnx/model_quantized.onnx'
+  '/models/student-radiology/onnx/model_quantized.onnx',
+  // Cross-encoder for in-browser rerank (graise-ce, ~23MB INT8).
+  '/models/student-radiology-ce/config.json',
+  '/models/student-radiology-ce/tokenizer.json',
+  '/models/student-radiology-ce/tokenizer_config.json',
+  '/models/student-radiology-ce/special_tokens_map.json',
+  '/models/student-radiology-ce/vocab.txt',
+  '/models/student-radiology-ce/onnx/model_quantized.onnx'
 ];
 
 // External dependencies that should be cached

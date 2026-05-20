@@ -1,0 +1,12 @@
+{
+  "name": "graise-ce-lora",
+  "base": "cross-encoder/ms-marco-MiniLM-L-6-v2",
+  "task": "text-classification",
+  "head": "single-score regression",
+  "max_length": 384,
+  "files": {
+    "int8": "onnx/model_quantized.onnx",
+    "tokenizer": "tokenizer.json"
+  },
+  "purpose": "Pairwise (query, scenario) relevance reranking after embedding shortlist."
+}
