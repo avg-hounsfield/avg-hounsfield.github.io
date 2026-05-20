@@ -14,7 +14,6 @@ import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
 import { SummaryCards } from './summary-cards.js?v=20260417a';
 import * as embeddingSearch from './embedding-search.js?v=20260519b';
-import * as ceRerank from './ce-rerank.js?v=20260519a';
 import { getIntentClassifier } from './intent-classifier.js?v=20260417a';
 
 class ProtocolHelpApp {
@@ -1430,16 +1429,20 @@ class ProtocolHelpApp {
     return { conceptId, concept };
   }
 
-  // Semantic search: embedding shortlist -> CE rerank -> top-N.
+  // Semantic search: embedding shortlist + additive lexical bonus.
   //
-  // 1. Distilled student model (BGE-small fine-tune, ~34MB) returns top-30
-  //    by cosine similarity.
-  // 2. Cross-encoder (graise-ce, ~23MB) scores each (query, scenario) pair
-  //    in the shortlist and blends with student rank-position at alpha=0.3
-  //    (matches coregrai's production setting; CE alone is noisy, blend wins).
-  // 3. If CE fails to load (offline first-visit, CSP block, etc.), falls back
-  //    to the additive-lexical hybrid (LAMBDA=0.05) which is metric-neutral
-  //    but adds anatomic abbreviation pairs ("LLQ" <-> "left lower quadrant").
+  // Pulls top-30 from the distilled student model and re-ranks with a small
+  // additive lexical bonus (anatomic abbreviation expansion). LAMBDA=0.05
+  // was the only hybrid weight that didn't regress vs pure embedding on the
+  // teacher pseudo-gold sweep, while still bumping anatomically-precise
+  // matches ("LLQ" <-> "left lower quadrant") above near-rivals.
+  //
+  // We previously tried in-browser cross-encoder rerank (graise-ce, 23MB).
+  // Sweep on the CE-blend held-out gold (tools/eval_student_plus_ce.py)
+  // showed it adds at most +0.003 MRR at alpha=0.05 and actively hurts at
+  // higher alphas - because the student was distilled on CE-blend gold and
+  // has already internalized the CE's preferences. Reverted; not worth the
+  // PWA bundle hit.
   async _globalEmbeddingSearch(query, max = 8) {
     const idx = await this._ensureGlobalConceptIndex();
     if (!idx || !idx.scenarioIndex) return [];
@@ -1450,41 +1453,18 @@ class ProtocolHelpApp {
       for (const s of idx.scenarioIndex) m.set(String(s.id), s);
       this._scenarioById = m;
     }
-    // Materialize hits to full scenario records (with name, keywords, etc.)
-    const candidates = [];
+    const qNorm = this._conceptNorm(query);
+    const qTokens = qNorm.split(/\s+/).filter(t => t.length >= 3);
+
+    const LAMBDA = 0.05;
+    const reranked = [];
     for (const h of hits) {
       const s = this._scenarioById.get(String(h.id));
       if (!s) continue;
-      // CE input: scenario name + first few keywords (no clinical_summary in
-      // browser; keywords carry the distinctive terms the CE benefits from).
-      const kwTail = Array.isArray(s.keywords) && s.keywords.length
-        ? ', ' + s.keywords.slice(0, 5).join(', ')
-        : '';
-      candidates.push({
-        ...s,
-        text: (s.name || '') + kwTail,
-        embScore: h.score,
-      });
+      const lex = this._lexicalScore(qNorm, qTokens, s);
+      const fused = h.score + LAMBDA * lex;
+      reranked.push({ ...s, score: fused, embScore: h.score, lexScore: lex });
     }
-
-    // Try CE rerank (preferred, +significant MRR if available).
-    try {
-      const ceRanked = await ceRerank.rerankBlend(query, candidates, 0.3, { maxN: POOL });
-      if (ceRanked && ceRanked.length > 0) {
-        return ceRanked.slice(0, max);
-      }
-    } catch (e) {
-      console.warn('[App] CE rerank unavailable, falling back to lexical hybrid:', e?.message || e);
-    }
-
-    // Fallback: additive lexical hybrid
-    const qNorm = this._conceptNorm(query);
-    const qTokens = qNorm.split(/\s+/).filter(t => t.length >= 3);
-    const LAMBDA = 0.05;
-    const reranked = candidates.map(c => {
-      const lex = this._lexicalScore(qNorm, qTokens, c);
-      return { ...c, score: c.embScore + LAMBDA * lex, lexScore: lex };
-    });
     reranked.sort((a, b) => b.score - a.score);
     return reranked.slice(0, max);
   }
