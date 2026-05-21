@@ -14,6 +14,7 @@ import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
 import { SummaryCards } from './summary-cards.js?v=20260417a';
 import * as embeddingSearch from './embedding-search.js?v=20260519b';
+import * as lunrSearch from './lunr-scenario-search.js?v=20260521a';
 import { getIntentClassifier } from './intent-classifier.js?v=20260417a';
 
 class ProtocolHelpApp {
@@ -1539,9 +1540,48 @@ class ProtocolHelpApp {
   // Search across all scenario names (and extracted clinical keywords) for
   // queries that don't hit a concept synonym. Returns up to `max` ranked matches.
   // Keyword matches score lower than name matches so name hits surface first.
+  //
+  // First tries Lunr (TF-IDF over all 3929 scenario names with stemming +
+  // fuzzy fallback). Lunr has much better recall than the ad-hoc substring
+  // matching below, especially for the 76% of ACR scenarios that don't have
+  // concept coverage. If Lunr returns hits, they're enriched with the
+  // scenarioIndex metadata (keywords, top_procedure) and returned.
+  // Falls back to substring matching only if Lunr is unavailable or empty.
   async _globalScenarioNameSearch(query, max = 8) {
     const idx = await this._ensureGlobalConceptIndex();
     if (!idx || !idx.scenarioIndex) return [];
+
+    // ------- Stage 1: Lunr (TF-IDF) -------
+    try {
+      const lunrHits = await lunrSearch.search(query, max * 2);
+      if (lunrHits && lunrHits.length > 0) {
+        if (!this._scenarioById) {
+          const m = new Map();
+          for (const s of idx.scenarioIndex) m.set(String(s.id), s);
+          this._scenarioById = m;
+        }
+        const enriched = [];
+        for (const h of lunrHits) {
+          const meta = this._scenarioById.get(String(h.id));
+          if (meta) {
+            enriched.push({ ...meta, score: h.score });
+          } else {
+            // Lunr returned an id we don't have scenario_names metadata for.
+            // Still surface it so the user gets a result.
+            enriched.push({
+              id: h.id, name: h.name, region: h.region,
+              score: h.score,
+            });
+          }
+          if (enriched.length >= max) break;
+        }
+        return enriched;
+      }
+    } catch (e) {
+      console.warn('[App] Lunr scenario search failed, falling back to substring:', e?.message || e);
+    }
+
+    // ------- Stage 2: legacy substring + keyword matching (fallback) -------
     const q = this._conceptNorm(query);
     if (q.length < 3) return [];
     const tokens = q.split(/\s+/).filter(t => t.length >= 2);
