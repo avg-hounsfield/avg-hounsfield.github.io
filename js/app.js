@@ -674,18 +674,10 @@ class ProtocolHelpApp {
         return;
       }
 
-      // Then scan scenario names directly — surfaces any scenario whose title
-      // contains the query, even when no concept covers it.
-      const nameMatches = await this._globalScenarioNameSearch(trimmed, 8);
-      if (nameMatches.length > 0) {
-        this._renderGlobalScenarioListResult(trimmed, nameMatches, resultContainer);
-        return;
-      }
-
-      // Embedding fallback: distilled radiology student model finds semantically
-      // similar scenarios when concept/keyword/name all miss. Loads on first use
-      // (~1-2s warmup); subsequent queries are fast. If model load fails (offline,
-      // CSP block), this silently falls through to the did-you-mean chips below.
+      // Embedding fallback first (semantically aware, ~39% accurate on
+      // long-tail queries per eval). Distilled radiology student model finds
+      // semantically similar scenarios when concept misses. Loads on first
+      // use (~1-2s warmup); subsequent queries are fast.
       try {
         const embHits = await this._globalEmbeddingSearch(trimmed, 8);
         if (embHits.length > 0) {
@@ -694,6 +686,15 @@ class ProtocolHelpApp {
         }
       } catch (e) {
         console.warn('[App] embedding search unavailable:', e?.message || e);
+      }
+
+      // Last-resort scenario-name + Lunr TF-IDF. Catches queries where the
+      // embedding also returned nothing. Lunr scores are noisier than
+      // embedding on the full eval, so it runs AFTER embedding, not before.
+      const nameMatches = await this._globalScenarioNameSearch(trimmed, 8);
+      if (nameMatches.length > 0) {
+        this._renderGlobalScenarioListResult(trimmed, nameMatches, resultContainer);
+        return;
       }
 
       // Final fallback: "no quick answer" with did-you-mean chips
