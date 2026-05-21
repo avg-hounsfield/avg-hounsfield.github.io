@@ -1,0 +1,5952 @@
+[
+  {
+    "persona": "rad_med_student",
+    "query": "mammography screening guidelines",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging of multiple sclerosis plaques",
+    "expected_concept_id": "multiple_sclerosis",
+    "anatomic_region": "neuro",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "CT signs of bowel obstruction",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "MRI for lumbar disc herniation",
+    "expected_concept_id": "radiculopathy",
+    "anatomic_region": "spine",
+    "notes": "disc herniation causing sciatica"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging features of osteomyelitis",
+    "expected_concept_id": "bone_infection",
+    "anatomic_region": "msk",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "what does a torn ACL look like on MRI",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "ACL tear -> knee imaging"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging findings of pneumonia",
+    "expected_concept_id": "pneumonia",
+    "anatomic_region": "chest",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "ddx for liver lesion on CT",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging of hepatocellular carcinoma",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "HCC"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "abdominal aortic aneurysm screening",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "chest",
+    "notes": "AAA screening"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "how to image suspected aortic dissection",
+    "expected_concept_id": "aortic_dissection",
+    "anatomic_region": "chest",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging of acute pancreatitis",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "pancreatitis routes to pancreas workup"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "what does a hip fracture look like on X-ray",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "fracture"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "DVT ultrasound findings",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging of seizure first episode",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "neuro",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "carotid duplex for stroke workup",
+    "expected_concept_id": "carotid_stenosis",
+    "anatomic_region": "vascular",
+    "notes": "carotid US"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging of breast cancer staging",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "ddx for pediatric headache",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "general headache"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging features of Crohn disease",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "what does a soft tissue sarcoma look like on MRI",
+    "expected_concept_id": "soft_tissue_mass",
+    "anatomic_region": "msk",
+    "notes": "STS -> soft tissue mass"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging of suspected diverticulitis",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "colon cancer staging CT",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging of dementia workup",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "what does normal pressure hydrocephalus look like",
+    "expected_concept_id": "hydrocephalus",
+    "anatomic_region": "neuro",
+    "notes": "NPH"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging of thyroid nodule",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "shoulder MRI rotator cuff tear",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "RCT -> shoulder"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "prostate cancer imaging workup",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "abdomen",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "31yo with RLQ pain, US protocol?",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "RLQ -> appy"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "fever and back pain, imaging?",
+    "expected_concept_id": "spine_infection",
+    "anatomic_region": "spine",
+    "notes": "discitis/osteo"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "smoker with hemoptysis, what to image",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "hemoptysis in smoker"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "elderly fall, hip pain, no fx on xray",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "occult hip fx"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "kid with limping, no trauma",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "pediatric limp"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "cough fever and infiltrate on chest xray",
+    "expected_concept_id": "pneumonia",
+    "anatomic_region": "chest",
+    "notes": "PNA"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "diabetic foot ulcer, concern for infection",
+    "expected_concept_id": "bone_infection",
+    "anatomic_region": "msk",
+    "notes": "diabetic foot osteo"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "young male with testicular pain",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "testicular torsion not in taxonomy"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "weight loss night sweats lymph nodes",
+    "expected_concept_id": "lymphadenopathy",
+    "anatomic_region": "spine",
+    "notes": "B-symptoms -> LAD"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "palpable breast lump in 40 year old",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "left lower quadrant pain elderly",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "LLQ -> divertic"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "post stroke imaging followup",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "followup imaging"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "abdominal pain and distension, no BMs",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "SBO"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "neck mass painless growing",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "neck mass"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "patient cant move arm after fall",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "shoulder injury"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "chest pain ddx imaging",
+    "expected_concept_id": "chest_pain",
+    "anatomic_region": "chest",
+    "notes": "general"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "concerning rectal bleeding workup",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "BRBPR in adult -> CRC workup"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "incidental adrenal lesion on CT, next step",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "incidental adrenal"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "leg pain when walking elderly diabetic",
+    "expected_concept_id": "peripheral_vascular",
+    "anatomic_region": "msk",
+    "notes": "claudication -> PAD"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "weakness in legs ascending",
+    "expected_concept_id": "guillain_barre",
+    "anatomic_region": "spine",
+    "notes": "GBS scenario"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "muscle weakness elevated CK",
+    "expected_concept_id": "myositis",
+    "anatomic_region": "msk",
+    "notes": "myositis"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "patient with TIA, carotid eval",
+    "expected_concept_id": "carotid_stenosis",
+    "anatomic_region": "vascular",
+    "notes": "carotid"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "ohh which CT for trauma",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "vague trauma not in list"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "back pain with leg weakness urinary retention",
+    "expected_concept_id": "myelopathy",
+    "anatomic_region": "spine",
+    "notes": "cauda/cord syndrome"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "incidental renal mass 1.5cm",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "incidental"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "patient short of breath, leg swelling",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "CHF presentation"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "what to order for suspected pancreatic cancer",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "what is the next imaging after equivocal abdominal US",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "next step after US"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "ACR appropriateness acute abdominal pain",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "ACR"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "CTPA contraindication alternatives",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "PE alt imaging"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "MRI knee for meniscus tear protocol",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "knee MR"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "appropriate imaging for first time hematuria",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "hematuria"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "MRI brain seizure protocol",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "neuro",
+    "notes": "epilepsy MR"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "CT abd pelvis with IV contrast for acute abdomen",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "general AAP"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "ultrasound vs MRI for appendicitis pediatric",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "peds appy"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "best imaging for suspected aortic dissection",
+    "expected_concept_id": "aortic_dissection",
+    "anatomic_region": "chest",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "MRI hip avascular necrosis protocol",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "AVN"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "follow up interval for 6mm pulmonary nodule",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "Fleischner"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "RUQ US findings for cholecystitis",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "MRI multiple sclerosis protocol",
+    "expected_concept_id": "multiple_sclerosis",
+    "anatomic_region": "neuro",
+    "notes": "MS protocol"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "CT thorax for chronic cough",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "chronic cough -> rule out"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "first imaging for dementia workup",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "CT for suspected SBO protocol",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "SBO"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "noncon vs con CT for kidney stone",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "stone protocol not in taxonomy"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "MRI shoulder for rotator cuff",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "RCT"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "best imaging for thyroid nodule risk stratification",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "TIRADS"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "noncontrast vs contrast MRI for spine infection",
+    "expected_concept_id": "spine_infection",
+    "anatomic_region": "spine",
+    "notes": "discitis"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "AAA followup interval 4.5cm",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "chest",
+    "notes": "AAA surveillance"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "DVT US vs venogram",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "modality"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "appropriate imaging for breast lump less than 30",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "young patient -> US"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "MR enterography for IBD",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "MRE"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "imaging followup of incidental adrenal nodule",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "incidentaloma"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "CT vs MR for prostate workup",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "abdomen",
+    "notes": "mpMRI"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "MR brain for trigeminal neuralgia",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "TN MR -> ambiguous, route to headache"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "appropriateness criteria for chest pain low risk",
+    "expected_concept_id": "chest_pain",
+    "anatomic_region": "chest",
+    "notes": "ACR"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "imaging of suspected myelopathy",
+    "expected_concept_id": "myelopathy",
+    "anatomic_region": "spine",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "CT abdomen for diverticulitis followup",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "MRI for soft tissue mass extremity",
+    "expected_concept_id": "soft_tissue_mass",
+    "anatomic_region": "msk",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "CT chest w/ contrast for staging NSCLC",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "lung CA staging"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI lumbar spine cauda equina",
+    "expected_concept_id": "myelopathy",
+    "anatomic_region": "spine",
+    "notes": "CES"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI brain with and without contrast for new HA red flags",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "secondary HA workup"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "CT triphasic liver for HCC screening",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "LI-RADS"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "ultrasound for testicular pain - acute scrotum",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "torsion - not in taxonomy"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI breast high risk screening",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "MR screening"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "CT brain perfusion for stroke selection",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "CTP"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI shoulder arthrogram indications",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "MR arthro"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "CT pulmonary angio negative, next steps",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "PE neg followup"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI pelvis for endometriosis",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "endometriosis not in taxonomy"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "CT enterography vs MR enterography",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "IBD"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "noncontrast head CT for trauma adult",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "TBI"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI knee meniscal tear staging",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "knee MR"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "DECT for monosodium urate deposition",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "DECT gout not in taxonomy"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MR brain for first unprovoked seizure adult",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "neuro",
+    "notes": "first seizure"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI spine for back pain with red flags",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "red flag back pain"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "renal mass CT protocol 4 phase",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "renal mass protocol"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "adrenal washout protocol indeterminate nodule",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "washout"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "CTA abdomen for mesenteric ischemia",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "mesenteric isch not mapped"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRA neck for vertebral dissection",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "vert dissection -> stroke workup"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI sacroiliac joints for spondyloarthropathy",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "SI joints"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "tagged WBC scan vs MRI for osteo",
+    "expected_concept_id": "bone_infection",
+    "anatomic_region": "msk",
+    "notes": "osteo nucs"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MR pelvis for prostate PI-RADS protocol",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "abdomen",
+    "notes": "PI-RADS"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "CT abdomen pelvis with contrast for fever unknown source",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "FUO"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI for vertebral compression fracture chronicity",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "VCF age"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI brain for memory loss workup",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "dementia"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "CT abdomen pelvis for LLQ pain elderly",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "LLQ"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI brain hydrocephalus shunt evaluation",
+    "expected_concept_id": "hydrocephalus",
+    "anatomic_region": "neuro",
+    "notes": "shunt"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "carotid US criteria for greater than 70% stenosis",
+    "expected_concept_id": "carotid_stenosis",
+    "anatomic_region": "vascular",
+    "notes": "carotid duplex"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "CTA runoff for claudication workup",
+    "expected_concept_id": "peripheral_vascular",
+    "anatomic_region": "msk",
+    "notes": "PAD"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI thigh for inflammatory myopathy",
+    "expected_concept_id": "myositis",
+    "anatomic_region": "msk",
+    "notes": "myositis MRI"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "PE protocol",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "abbreviation only"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "RLQ US",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "abbrev"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "BI-RADS 4 management",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "BI-RADS"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "incidental 8mm SPN low risk",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "Fleischner"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "MR sequence for MS active plaque",
+    "expected_concept_id": "multiple_sclerosis",
+    "anatomic_region": "neuro",
+    "notes": "MS"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "appropriateness mild TBI",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "mTBI"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "MR shoulder vs MR arthro 1st line",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "MR vs arthro"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "DVT US incomplete next step",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "DVT alt"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "Crohn flare imaging modality",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "IBD"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "MR spine for cord compression urgent",
+    "expected_concept_id": "myelopathy",
+    "anatomic_region": "spine",
+    "notes": "cord compression"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "TIA workup imaging",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "TIA"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "indeterminate adrenal nodule next",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "adrenal next"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "metastatic workup unknown primary",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "CUP not mapped"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "pheo workup imaging",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "pheochromocytoma"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "MRA vs CTA for AVM",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "AVM workup"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "stress fracture occult workup",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "stress fx"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "spinal epidural abscess MR",
+    "expected_concept_id": "spine_infection",
+    "anatomic_region": "spine",
+    "notes": "SEA"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "noncon CT head TIA appropriate",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "TIA NCCT"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "MR thigh abscess vs cellulitis",
+    "expected_concept_id": "soft_tissue_infection",
+    "anatomic_region": "msk",
+    "notes": "ST infection"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "GBS MRI sequences",
+    "expected_concept_id": "guillain_barre",
+    "anatomic_region": "spine",
+    "notes": "GBS"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "thyroid cancer surveillance",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "thyroid"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "incidental pancreatic cyst followup",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "panc cyst"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "MR for diabetic foot when can't differentiate",
+    "expected_concept_id": "bone_infection",
+    "anatomic_region": "msk",
+    "notes": "diabetic foot osteo"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "tibia bone lesion lytic ddx",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "bone lesion"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "imaging for staging colon ca",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "staging"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "head CT after fall on coumadin",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "ICH r/o"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "small bowel obstruction transition point",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "SBO"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "lower extremity arterial doppler abnormal next step",
+    "expected_concept_id": "peripheral_vascular",
+    "anatomic_region": "msk",
+    "notes": "PAD next"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "MRI brain failed med refractory epilepsy",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "neuro",
+    "notes": "epilepsy"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MRCP for biliary obstruction protocol",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "MRCP -> biliary"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MRI perfusion DSC for glioma grading",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "neuro",
+    "notes": "DSC perfusion"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "neuro IR thrombectomy candidate imaging",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "LVO"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MR breast for occult primary axillary node",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "occult primary"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "BPE on screening breast MR significance",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "BPE"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MR neurography for brachial plexus",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "plexus not mapped"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "dixon technique for MR sacroiliac joints",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "SI MR"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "advanced MSK MRI for cartilage T2 mapping",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "cartilage mapping"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "PSMA PET CT for high risk prostate staging",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "abdomen",
+    "notes": "PSMA"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "FDG PET for lymphoma staging post-rituximab",
+    "expected_concept_id": "lymphadenopathy",
+    "anatomic_region": "spine",
+    "notes": "lymphoma -> LAD concept"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "EOB-MRI for HCC characterization",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "Eovist"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "CT colonography for incomplete colonoscopy",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "CTC"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "abbreviated MRI for HCC screening",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "AMRI"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MR enterography active vs penetrating Crohn",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "MRE Crohn"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MRI shoulder protocol post-op rotator cuff repair",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "post-op cuff"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "tomosynthesis recall rates compared to 2D",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "DBT"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MR perfusion ASL for vasospasm post-SAH",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "ASL vasospasm"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "DTI for pediatric leukodystrophy",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "neuro",
+    "notes": "leukodystrophy not mapped"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "CTA aorta entire for type B dissection followup",
+    "expected_concept_id": "aortic_dissection",
+    "anatomic_region": "chest",
+    "notes": "type B"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MRI cardiac for myocarditis - LGE",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "myocarditis -> cardiac"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "renal mass biopsy candidate selection MRI",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "renal mass"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MR rectum protocol for staging rectal CA",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "rectal"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MRCP for PSC followup",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "PSC -> biliary"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MRI penumbra mismatch ischemic core",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "stroke"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "PET CT for thyroid cancer recurrence iodine negative",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "thyroid CA"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MR neurography for sciatic neuropathy",
+    "expected_concept_id": "radiculopathy",
+    "anatomic_region": "spine",
+    "notes": "MR neuro"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MR pancreatic protocol cystic lesion mucinous vs serous",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "panc cysts"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "FDG PET for solitary pulmonary nodule indeterminate",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "PET SPN"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "GBCA risks NSF in CKD",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "safety not concept"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "musculoskeletal US for tendinopathy followup",
+    "expected_concept_id": "soft_tissue_mass",
+    "anatomic_region": "msk",
+    "notes": "tendon ambiguous"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MR shoulder for occult posterior labrum tear in throwers",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "throwers shoulder"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "what is pulmunary embolisim",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "typo"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "pancreatitis ct findings",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "pancreatitis routes to panc"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "ddx hyperdense MCA",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "hyperdense MCA -> early stroke"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "what is best for r/o appy in pregnancy",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "appy pregnancy"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "ACR appropriateness criteria for headache",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "ACR"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI brain w/ and w/o for tumor followup",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "neuro",
+    "notes": "tumor followup"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "ICA stenosis NASCET vs ECST",
+    "expected_concept_id": "carotid_stenosis",
+    "anatomic_region": "vascular",
+    "notes": "carotid criteria"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "amyloid PET for early AD",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "amyloid PET"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "MRI for stroke",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "vague"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "back pain",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "vague concept-level"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "lung nodule",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "vague concept-level"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "PET CT for staging",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "vague, no target cancer"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "abscess vs hematoma on MR",
+    "expected_concept_id": "soft_tissue_infection",
+    "anatomic_region": "msk",
+    "notes": "ddx abscess"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "vasoreactivity testing imaging Moyamoya",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "moyamoya -> stroke risk"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging for radiculopathy",
+    "expected_concept_id": "radiculopathy",
+    "anatomic_region": "spine",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "patient with foot drop after lumbar surgery",
+    "expected_concept_id": "radiculopathy",
+    "anatomic_region": "spine",
+    "notes": "post-op radic"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "lower extremity venous duplex protocol",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "DVT"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MR for vertebral body lesion - benign vs malignant",
+    "expected_concept_id": "spinal_tumor",
+    "anatomic_region": "spine",
+    "notes": "spinal mets"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "primary spinal cord tumor MR",
+    "expected_concept_id": "spinal_tumor",
+    "anatomic_region": "spine",
+    "notes": "cord tumor"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "spectroscopy for pediatric brainstem glioma",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "neuro",
+    "notes": "MRS"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging in heart failure",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "direct"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "patient with crackles bilateral lower lobes",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "CHF/PNA - lean CHF"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "echocardiogram vs cardiac MRI for ischemic cardiomyopathy",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "ischemic CMP"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "what is xanax",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "neuro",
+    "notes": "totally unrelated query"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging pyelonephritis findings on ct",
+    "expected_concept_id": "pyelonephritis",
+    "anatomic_region": "abdomen",
+    "notes": "pyelo"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "lady with flank pain pregnant",
+    "expected_concept_id": "pyelonephritis",
+    "anatomic_region": "abdomen",
+    "notes": "pyelo pregnancy"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "ultrasound vs MRI for pyelo in pregnancy",
+    "expected_concept_id": "pyelonephritis",
+    "anatomic_region": "abdomen",
+    "notes": "imaging choice"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MRI for emphysematous pyelonephritis",
+    "expected_concept_id": "pyelonephritis",
+    "anatomic_region": "abdomen",
+    "notes": "EPN"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "Ewing sarcoma vs osteomyelitis on MRI",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "Ewing ddx"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "MR for chondrosarcoma vs enchondroma followup",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "cartilage tumor"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "what is RF for axillary lymphadenopathy",
+    "expected_concept_id": "lymphadenopathy",
+    "anatomic_region": "spine",
+    "notes": "ax LAD"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "30yo with axillary swelling after covid vaccine",
+    "expected_concept_id": "lymphadenopathy",
+    "anatomic_region": "spine",
+    "notes": "post-vaccine LAD"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "Hounsfield density of fat",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "physics question not in taxonomy"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "CTA TAA followup interval",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "chest",
+    "notes": "thoracic aneurysm"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "4D flow MRI for bicuspid aortic valve aortopathy",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "chest",
+    "notes": "4D flow"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "what does emphysematous cholecystitis look like",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "GB emphysematous"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "patient afib new onset weakness",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "embolic stroke"
+  },
+  {
+    "persona": "rad_r1",
+    "query": "CT shoulder for HAGL lesion",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "HAGL"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "rad onc planning CT vs PET for HNSCC",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "head and neck"
+  },
+  {
+    "persona": "rad_fellow",
+    "query": "next imaging for incidental small bowel wall thickening",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "SB thickening -> IBD ddx"
+  },
+  {
+    "persona": "rad_med_student",
+    "query": "imaging in osteosarcoma",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "OS"
+  },
+  {
+    "persona": "rad_intern",
+    "query": "pt with new headache and papilledema",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "neuro",
+    "notes": "increased ICP - mass workup"
+  },
+  {
+    "persona": "rad_r2",
+    "query": "MR for arachnoiditis vs nerve root sheath tumor",
+    "expected_concept_id": "spinal_tumor",
+    "anatomic_region": "spine",
+    "notes": "spinal nerve sheath tumor"
+  },
+  {
+    "persona": "rad_r3_r4",
+    "query": "transient global amnesia imaging",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "TGA workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "DSC perfusion threshold for stroke core",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "brain",
+    "notes": "perfusion imaging for ischemic core"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "CTP RAPID Tmax >6s mismatch ratio",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "brain",
+    "notes": "CT perfusion late window stroke"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI brain stroke protocol w/ DWI ADC",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "brain",
+    "notes": "acute stroke MR protocol"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "FLAIR-DWI mismatch wake-up stroke",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "brain",
+    "notes": "wake up stroke imaging"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "CTA head and neck for LVO",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "brain",
+    "notes": "large vessel occlusion"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "vessel wall imaging for CNS vasculitis",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "brain",
+    "notes": "vasculitis presenting w/ stroke"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRV for cerebral venous sinus thrombosis",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "brain",
+    "notes": "CVST workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "DSA vs CTA for ruptured aneurysm",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "brain",
+    "notes": "aneurysm workup post SAH"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "non-con CT for acute SAH",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "brain",
+    "notes": "SAH initial imaging"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "GRE/SWI for microbleeds CAA",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "brain",
+    "notes": "cerebral amyloid angiopathy"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MR perfusion for glioma grading",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "rCBV high grade glioma"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRS choline/NAA ratio for tumor recurrence",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "post-treatment glioma surveillance"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "DTI for pre-op tractography eloquent cortex",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "pre-surgical mapping"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "brain MR w/ and w/o for new mass",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "initial brain tumor workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "RANO criteria for GBM follow-up",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "glioma response assessment"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "pseudoprogression vs true progression GBM",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "post-RT glioma"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "leptomeningeal enhancement workup",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "LM disease imaging"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI brain w/ contrast for new seizure",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "brain",
+    "notes": "first time seizure adult"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "hippocampal volumetry mesial temporal sclerosis",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "brain",
+    "notes": "TLE imaging"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI epilepsy protocol thin coronal T2 FLAIR",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "brain",
+    "notes": "dedicated epilepsy MR"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "PET FDG for ictal/interictal seizure focus",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "brain",
+    "notes": "PET epilepsy localization"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI brain for migraine with aura",
+    "expected_concept_id": "headache",
+    "anatomic_region": "brain",
+    "notes": "headache imaging"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "imaging for thunderclap headache",
+    "expected_concept_id": "headache",
+    "anatomic_region": "brain",
+    "notes": "TCH workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI brain for new headache > 50 yo",
+    "expected_concept_id": "headache",
+    "anatomic_region": "brain",
+    "notes": "secondary headache red flag"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI dementia protocol coronal hippocampi",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "brain",
+    "notes": "AD workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "FDG PET vs amyloid PET for AD",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "brain",
+    "notes": "dementia molecular imaging"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "DAT scan for parkinsonism",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "brain",
+    "notes": "atypical parkinsonism"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI brain for rapidly progressive dementia",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "brain",
+    "notes": "RPD - CJD workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "DWI for CJD cortical ribboning",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "brain",
+    "notes": "prion disease imaging"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI brain for new MS plaque dissemination time",
+    "expected_concept_id": "multiple_sclerosis",
+    "anatomic_region": "brain",
+    "notes": "McDonald criteria"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MAGNIMS protocol MS follow-up",
+    "expected_concept_id": "multiple_sclerosis",
+    "anatomic_region": "brain",
+    "notes": "MS surveillance MR"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "orbital MR for optic neuritis",
+    "expected_concept_id": "multiple_sclerosis",
+    "anatomic_region": "brain",
+    "notes": "ON workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI spine for MS cord lesions",
+    "expected_concept_id": "multiple_sclerosis",
+    "anatomic_region": "spine",
+    "notes": "spinal cord MS"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "NMO/MOG vs MS imaging features",
+    "expected_concept_id": "multiple_sclerosis",
+    "anatomic_region": "brain",
+    "notes": "NMOSD vs MS"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI brain for NPH evaluation",
+    "expected_concept_id": "hydrocephalus",
+    "anatomic_region": "brain",
+    "notes": "normal pressure hydrocephalus"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "CSF flow study for aqueductal stenosis",
+    "expected_concept_id": "hydrocephalus",
+    "anatomic_region": "brain",
+    "notes": "PC CSF flow"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "DESH pattern NPH",
+    "expected_concept_id": "hydrocephalus",
+    "anatomic_region": "brain",
+    "notes": "high convexity tight sulci"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "shunt series for VP shunt malfunction",
+    "expected_concept_id": "hydrocephalus",
+    "anatomic_region": "brain",
+    "notes": "shunt failure workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI brain for chiari decompression planning",
+    "expected_concept_id": "hydrocephalus",
+    "anatomic_region": "brain",
+    "notes": "chiari pre-op - related CSF dynamics"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MR neurography brachial plexus",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "brain",
+    "notes": "subspecialty deep cut"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MR neurography lumbosacral plexus",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "spine",
+    "notes": "subspecialty deep cut"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "CTA neck for blunt cerebrovascular injury",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "brain",
+    "notes": "BCVI screen"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "carotid stenosis NASCET measurement CTA",
+    "expected_concept_id": "carotid_stenosis",
+    "anatomic_region": "brain",
+    "notes": "carotid stenosis grading"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRA neck contrast vs TOF for carotid",
+    "expected_concept_id": "carotid_stenosis",
+    "anatomic_region": "brain",
+    "notes": "carotid imaging"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI IAC for sensorineural hearing loss",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "rule out CPA mass"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "thyroid US TI-RADS 4 nodule",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neck",
+    "notes": "thyroid nodule workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "CT neck w/ contrast for parotid mass",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neck",
+    "notes": "salivary gland mass"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI neck for tongue base SCC staging",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neck",
+    "notes": "H&N cancer staging"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "PET-CT for HPV+ oropharyngeal cancer",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neck",
+    "notes": "HNSCC restaging"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI for retropharyngeal abscess vs phlegmon",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neck",
+    "notes": "deep neck infection"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI orbits for thyroid eye disease",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neck",
+    "notes": "TED workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI sella for pituitary microadenoma",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "pituitary adenoma"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "dynamic contrast MR pituitary Cushing",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "Cushing workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI brain post-Gad for vestibular schwannoma",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "CPA mass"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI cervical spine for myelopathy cord signal",
+    "expected_concept_id": "myelopathy",
+    "anatomic_region": "spine",
+    "notes": "cervical spondylotic myelopathy"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI total spine for spinal cord tumor workup",
+    "expected_concept_id": "spinal_tumor",
+    "anatomic_region": "spine",
+    "notes": "intramedullary mass"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI lumbar spine for radiculopathy L5/S1",
+    "expected_concept_id": "radiculopathy",
+    "anatomic_region": "spine",
+    "notes": "lumbar radic"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI spine for cauda equina red flags",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "CES workup"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI spine for spondylodiscitis MSSA",
+    "expected_concept_id": "spine_infection",
+    "anatomic_region": "spine",
+    "notes": "vertebral OM"
+  },
+  {
+    "persona": "rad_neuroradiologist",
+    "query": "MRI brain for autoimmune encephalitis",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "brain",
+    "notes": "AE workup limbic - often presents w/ seizures"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "EOB-MRI for HCC LI-RADS 5",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "HCC dx with hepatobiliary agent"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "LI-RADS treatment response post-TACE",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "LR-TR post locoregional"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "multiphase CT for HCC surveillance cirrhotic",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "cirrhosis HCC screen"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI for FNH vs adenoma",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "benign hepatic lesion"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "hepatocyte-specific agent Eovist for FNH",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "FNH characterization"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for hypervascular liver mets neuroendocrine",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "NET liver mets"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRCP for choledocholithiasis",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "CBD stone workup"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "HIDA scan for acute cholecystitis",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "EF on HIDA chronic chole"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI for IgG4 autoimmune pancreatitis",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "AIP can mimic PDAC"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "pancreas protocol CT for adenocarcinoma staging",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "PDAC staging"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI/MRCP for IPMN main duct vs branch",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "cystic pancreatic lesion"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "Fukuoka criteria IPMN follow-up",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "IPMN surveillance"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "EUS vs MRI for small pancreatic neuroendocrine",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "panNET"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for acute necrotizing pancreatitis CTSI",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "severe pancreatitis"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MR enterography for Crohn activity",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "active vs chronic IBD"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CTE vs MRE for IBD young patient",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "modality choice"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for small bowel obstruction transition point",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "SBO workup"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for closed loop SBO",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "high grade obstruction"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for sigmoid diverticulitis Hinchey",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "complicated diverticulitis"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for perforated viscus pneumoperitoneum",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "free air workup"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT abd/pelvis with contrast for RLQ pain adult",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "appy in adult"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI for appendicitis pregnant patient",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "MR appy pregnancy"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT colonography for incomplete colonoscopy",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "CTC indications"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI rectal cancer staging high-res T2",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "rectal MR staging"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "PET-CT colon cancer restaging post-chemo",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "CRC restaging"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT urogram for hematuria workup",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "gross hematuria"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI for Bosniak 2F renal cyst",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "complex cystic renal lesion"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "dual-energy CT for renal stone composition",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "DECT urolithiasis"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for pyelonephritis emphysematous",
+    "expected_concept_id": "pyelonephritis",
+    "anatomic_region": "abdomen",
+    "notes": "complicated pyelo"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI adrenal in/out of phase for adenoma",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "adrenal washout"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT adrenal washout 10/15 min protocol",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "adrenal characterization"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI for pheochromocytoma T2 light bulb",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "pheo workup"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "multiparametric prostate MRI PI-RADS 4",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "pelvis",
+    "notes": "csPCa detection"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "PSMA PET for biochemical recurrence prostate",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "pelvis",
+    "notes": "BCR prostate ca"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI prostate post-biopsy artifact timing",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "pelvis",
+    "notes": "post bx delay"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI pelvis for endometriosis DIE",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "pelvis",
+    "notes": "deep infiltrating endo - subspecialty"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI uterus for fibroid mapping pre-UFE",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "pelvis",
+    "notes": "pre-procedural fibroid - subspecialty"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI cervical cancer FIGO staging",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "pelvis",
+    "notes": "cervix ca staging - subspecialty"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI ovarian mass O-RADS 4 lesion",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "pelvis",
+    "notes": "adnexal mass MR - subspecialty"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for ovarian cancer peritoneal carcinomatosis",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "pelvis",
+    "notes": "PCI score"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT abd/pelvis for adnexal torsion",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "pelvis",
+    "notes": "torsion workup"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "US first for adnexal torsion",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "pelvis",
+    "notes": "OB/GYN US"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT enterography for GI bleed obscure",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "obscure GIB"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CTA for active GI bleed",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "active extravasation"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "RBC scan for slow GI bleed",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "tagged RBC"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for ischemic colitis pneumatosis",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "bowel ischemia"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CTA mesenteric for chronic mesenteric ischemia",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "CMI workup"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for retroperitoneal hematoma anticoagulated",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "RP bleed"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CTA for AAA pre-EVAR sizing",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "abdomen",
+    "notes": "EVAR planning"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "US AAA surveillance interval 4.5 cm",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "abdomen",
+    "notes": "AAA surveillance"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for endoleak post-EVAR type II",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "abdomen",
+    "notes": "post-EVAR"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI for perianal fistula St James",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "pelvis",
+    "notes": "fistula classification"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for splenic laceration AAST grade",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "trauma spleen"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "FAST exam vs CT in blunt abdominal trauma",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "trauma protocol"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT abd for nonspecific abd pain elderly",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "geriatric abd pain"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI for incidental adrenal indeterminate",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "incidentaloma"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "CT for hernia incarcerated vs strangulated",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "incarcerated hernia"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "MRI rectal cancer restaging post-CRT",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "pelvis",
+    "notes": "post-CRT rectal"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "PET-CT for HCC extrahepatic spread",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "FDG PET HCC"
+  },
+  {
+    "persona": "rad_bodyradiologist",
+    "query": "RECIST 1.1 for liver mets follow-up",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "response assessment"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI shoulder for rotator cuff tear",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "RCT workup"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MR arthrogram shoulder for SLAP tear",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "labral pathology"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI shoulder for adhesive capsulitis",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "frozen shoulder MR"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI hip for labral tear",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "FAI workup"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MR arthrogram hip vs non-arthrogram",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "labral MR"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI hip for AVN ARCO staging",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "femoral head AVN"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "X-ray for FAI cam vs pincer",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "FAI radiographs"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI knee meniscal tear",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "internal derangement"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI knee ACL reconstruction graft eval",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "post-op ACL"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI knee for OCD lesion stability",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "osteochondral defect"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI ankle ATFL tear",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "lateral ligament - no specific concept"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MR arthrogram wrist TFCC tear",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "TFCC workup - no specific concept"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI wrist for scaphoid occult fracture",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "occult scaphoid"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for sacral insufficiency fracture",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "sacral stress fx"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI tibia for stress fracture",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "tibial stress"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "next imaging after equivocal XR stress fx",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "stress fx workup"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for osteomyelitis diabetic foot",
+    "expected_concept_id": "bone_infection",
+    "anatomic_region": "msk",
+    "notes": "diabetic foot OM"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI vs WBC scan for chronic osteo",
+    "expected_concept_id": "bone_infection",
+    "anatomic_region": "msk",
+    "notes": "chronic OM workup"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for septic arthritis hip",
+    "expected_concept_id": "bone_infection",
+    "anatomic_region": "msk",
+    "notes": "septic joint"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for psoas abscess",
+    "expected_concept_id": "soft_tissue_infection",
+    "anatomic_region": "msk",
+    "notes": "deep abscess"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for necrotizing fasciitis gas",
+    "expected_concept_id": "soft_tissue_infection",
+    "anatomic_region": "msk",
+    "notes": "NSTI imaging"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for soft tissue sarcoma staging",
+    "expected_concept_id": "soft_tissue_mass",
+    "anatomic_region": "msk",
+    "notes": "STS staging"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for indeterminate soft tissue mass",
+    "expected_concept_id": "soft_tissue_mass",
+    "anatomic_region": "msk",
+    "notes": "STM characterization"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for lipoma vs atypical lipomatous tumor",
+    "expected_concept_id": "soft_tissue_mass",
+    "anatomic_region": "msk",
+    "notes": "ALT vs lipoma"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "XR for bone tumor aggressive features",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "Lodwick grade"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for osteoid osteoma nidus",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "OO imaging"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for chondrosarcoma vs enchondroma",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "cartilaginous lesion"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "PET-CT for myeloma vs skeletal survey",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "MM imaging"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "whole body MRI for myeloma",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "WB-MRI plasma cell"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for giant cell tumor of bone",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "GCT"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "US for DVT lower extremity",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "DVT workup"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "CTA runoff for PAD claudication",
+    "expected_concept_id": "peripheral_vascular",
+    "anatomic_region": "msk",
+    "notes": "PAD imaging"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for myositis dermatomyositis",
+    "expected_concept_id": "myositis",
+    "anatomic_region": "msk",
+    "notes": "DM/PM imaging"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI whole body for IIM",
+    "expected_concept_id": "myositis",
+    "anatomic_region": "msk",
+    "notes": "inflammatory myopathy"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for Morton neuroma",
+    "expected_concept_id": "soft_tissue_mass",
+    "anatomic_region": "msk",
+    "notes": "interdigital neuroma"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for plantar fasciitis vs heel pain",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "heel pain - no specific concept"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI elbow lateral epicondylitis",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "tennis elbow - no specific concept"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for hamstring proximal avulsion",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "hamstring tear - no specific concept"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for athletic pubalgia sports hernia",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "core muscle injury - groin"
+  },
+  {
+    "persona": "rad_msk",
+    "query": "MRI for greater trochanteric pain syndrome",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "GTPS"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "BI-RADS 4 mass workup",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "suspicious mass"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "supplemental screening dense breasts",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "dense breast supplemental"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "ABUS vs handheld US for screening",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "screening US modality"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "MRI for newly diagnosed breast cancer",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "MR staging breast ca"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "MRI breast for high risk screening BRCA",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "high risk MR"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "DBT vs 2D mammo for dense breasts",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "tomo vs FFDM"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "contrast enhanced mammography CEM indications",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "CEM"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "BI-RADS 3 follow-up interval",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "probably benign 6mo"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "MRI for occult primary breast cancer",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "axillary mets unknown"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "MRI breast for response to NAC",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "neoadjuvant response"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "MRI breast for residual disease after lumpectomy",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "positive margins"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "US for palpable lump under 30 yo",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "young palpable"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "BI-RADS 5 highly suggestive lesion",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "category 5"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "imaging for new pathologic nipple discharge",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "PND workup"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "MRI for silicone implant rupture",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "breast",
+    "notes": "implant integrity - no concept"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "US for axillary adenopathy unilateral",
+    "expected_concept_id": "lymphadenopathy",
+    "anatomic_region": "breast",
+    "notes": "axillary nodes"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "MRI for inflammatory breast cancer",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "IBC"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "stereotactic biopsy for grouped microcalcs",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "calcs bx"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "MRI for ILC lobular cancer staging",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "ILC extent"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "DCIS extent on MRI",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "DCIS evaluation"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "breast MRI background parenchymal enhancement",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "BPE assessment"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "breast cancer screening woman > 75",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "older women screen"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "Tyrer-Cuzick lifetime risk for MRI screen",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "risk model"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "post-lumpectomy mammo timing",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "post-treatment surveillance"
+  },
+  {
+    "persona": "rad_breast",
+    "query": "MRI for Paget disease nipple",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "Paget"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "Lung-RADS 4B nodule workup",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "Lung-RADS"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "Fleischner criteria 6mm solid nodule",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "incidental nodule"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "subsolid nodule follow-up Fleischner",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "GGO/part-solid"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "LDCT lung cancer screening eligibility",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "LDCT screening"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "PET-CT for lung cancer staging",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "NSCLC staging"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CT for NSCLC restaging post-chemo",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "RECIST chest"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CTA chest PE protocol",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "PE workup"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "V/Q scan vs CTPA pregnancy PE",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "PE in pregnancy"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "right heart strain CTPA RV/LV ratio",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "submassive PE"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CT for ILD differential UIP vs NSIP",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "chest",
+    "notes": "HRCT pattern ILD - no concept"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "HRCT for hypersensitivity pneumonitis",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "chest",
+    "notes": "HP findings - no concept"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CT for sarcoidosis staging",
+    "expected_concept_id": "lymphadenopathy",
+    "anatomic_region": "chest",
+    "notes": "sarcoid lymphadenopathy"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CT for community acquired pneumonia non-resolving",
+    "expected_concept_id": "pneumonia",
+    "anatomic_region": "chest",
+    "notes": "non-resolving PNA"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CT for cavitary lung lesion TB vs malignancy",
+    "expected_concept_id": "pneumonia",
+    "anatomic_region": "chest",
+    "notes": "cavitary lesion"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CT for empyema vs parapneumonic effusion",
+    "expected_concept_id": "pneumonia",
+    "anatomic_region": "chest",
+    "notes": "complicated effusion"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "cardiac MRI for non-ischemic cardiomyopathy",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "CMR NICM"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CMR for myocarditis Lake Louise",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "myocarditis LLC"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CMR for cardiac amyloid LGE",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "amyloid CMR"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "coronary CTA for CAD-RADS",
+    "expected_concept_id": "chest_pain",
+    "anatomic_region": "chest",
+    "notes": "CCTA"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CTA for aortic dissection Stanford A vs B",
+    "expected_concept_id": "aortic_dissection",
+    "anatomic_region": "chest",
+    "notes": "AD classification"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CTA chest for thoracic aortic aneurysm",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "chest",
+    "notes": "TAA surveillance"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CT for mediastinal mass anterior compartment",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "anterior mediastinum mass workup"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CT for thymoma vs thymic hyperplasia",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "thymic mass"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "imaging for hemoptysis massive",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "bronchial artery"
+  },
+  {
+    "persona": "rad_cardiothoracic",
+    "query": "CT chest for new chest pain low-intermediate",
+    "expected_concept_id": "chest_pain",
+    "anatomic_region": "chest",
+    "notes": "triple rule out"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "US for pyloric stenosis",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "peds gastric outlet obstruction"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "non-accidental trauma skeletal survey",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "NAT skeletal survey"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "VCUG vs RNC for VUR",
+    "expected_concept_id": "pyelonephritis",
+    "anatomic_region": "abdomen",
+    "notes": "VUR evaluation - reflux/UTI"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "US for intussusception ileocolic",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "peds intuss"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "US for DDH infant 4 mo",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "DDH screen"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "MRI for neuroblastoma staging",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "peds adrenal NB"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "MRI brain for medulloblastoma posterior fossa",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "posterior fossa tumor"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "US for testicular torsion teen",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "pelvis",
+    "notes": "scrotal US - no concept"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "MRCP for choledochal cyst",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "biliary anomaly"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "XR for toddler fracture tibia",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "toddler fx"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "MRI brain for hypoxic ischemic injury neonate",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "brain",
+    "notes": "HIE - neonatal ischemic injury"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "US head for IVH preemie",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "brain",
+    "notes": "germinal matrix"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "MRI for slipped capital femoral epiphysis",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "SCFE workup"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "MRI brain for tuberous sclerosis SEGA",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "TSC neuroimaging"
+  },
+  {
+    "persona": "rad_peds_radiologist",
+    "query": "CT for blunt abdominal trauma child",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "ped trauma"
+  },
+  {
+    "persona": "rad_IR",
+    "query": "Y90 candidacy for HCC",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "IR procedure planning - not ACR appropriateness"
+  },
+  {
+    "persona": "rad_IR",
+    "query": "TIPS workup MELD/Child-Pugh",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "portal HTN IR - subspecialty"
+  },
+  {
+    "persona": "rad_IR",
+    "query": "TACE planning for unresectable HCC",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "locoregional therapy - subspecialty"
+  },
+  {
+    "persona": "rad_IR",
+    "query": "UFE workup for symptomatic fibroids",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "pelvis",
+    "notes": "UFE - subspecialty"
+  },
+  {
+    "persona": "rad_IR",
+    "query": "PAE for BPH eligibility",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "pelvis",
+    "notes": "PAE - subspecialty"
+  },
+  {
+    "persona": "rad_IR",
+    "query": "cryoablation vs RFA renal mass",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "renal ablation"
+  },
+  {
+    "persona": "rad_IR",
+    "query": "microwave ablation for HCC < 3 cm",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "thermal ablation HCC"
+  },
+  {
+    "persona": "rad_IR",
+    "query": "CT-guided lung biopsy approach pneumothorax risk",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "lung bx planning"
+  },
+  {
+    "persona": "rad_IR",
+    "query": "IVC filter retrieval imaging",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "IVCF retrieval - IR procedure"
+  },
+  {
+    "persona": "rad_IR",
+    "query": "varicocele embolization workup",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "pelvis",
+    "notes": "varicocele - IR subspecialty"
+  },
+  {
+    "persona": "ct_tech",
+    "query": "CT abd pelvis with contrast for appendicitis",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "tech protocol q"
+  },
+  {
+    "persona": "ct_tech",
+    "query": "stroke protocol CT head",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "brain",
+    "notes": "tech protocol"
+  },
+  {
+    "persona": "ct_tech",
+    "query": "CTA chest for PE which protocol",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "tech PE protocol"
+  },
+  {
+    "persona": "ct_tech",
+    "query": "CT head no contrast trauma",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "brain",
+    "notes": "trauma head CT"
+  },
+  {
+    "persona": "ct_tech",
+    "query": "CT cervical spine trauma",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "spine",
+    "notes": "c-spine trauma"
+  },
+  {
+    "persona": "ct_tech",
+    "query": "CT abdomen for kidney stones",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "stone protocol"
+  },
+  {
+    "persona": "ct_tech",
+    "query": "CTA neck protocol for stroke",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "brain",
+    "notes": "neck CTA"
+  },
+  {
+    "persona": "ct_tech",
+    "query": "CT for diverticulitis which contrast",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "PO/IV contrast"
+  },
+  {
+    "persona": "ct_tech",
+    "query": "CT urogram three phase protocol",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "CT IVP protocol"
+  },
+  {
+    "persona": "ct_tech",
+    "query": "low dose CT chest screening",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "LDCT tech"
+  },
+  {
+    "persona": "mri_tech",
+    "query": "MRI brain w/ contrast which protocol",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "brain",
+    "notes": "tech contrast Q"
+  },
+  {
+    "persona": "mri_tech",
+    "query": "knee MRI sequences",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "tech sequence Q"
+  },
+  {
+    "persona": "mri_tech",
+    "query": "MRI lumbar spine sequences w/o contrast",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "tech LSP"
+  },
+  {
+    "persona": "mri_tech",
+    "query": "MRI prostate sequences multiparametric",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "pelvis",
+    "notes": "tech mpMRI"
+  },
+  {
+    "persona": "mri_tech",
+    "query": "MRI breast bilateral with contrast protocol",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "tech breast MR"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "65yo F sudden severe HA worst of life",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "classic SAH presentation"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "72yo M LSW 90min ago right facial droop",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "code stroke last seen well window"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "28yo F LLQ pain neg hCG",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "young female LLQ ddx"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "31yo F RLQ pain fever WBC 14",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "classic appy presentation"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "48yo M tearing chest/back pain HTN",
+    "expected_concept_id": "aortic_dissection",
+    "anatomic_region": "chest",
+    "notes": "r/o dissection"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "70yo M syncope pulsatile abdominal mass",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "chest",
+    "notes": "r/o AAA rupture"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "55yo F pleuritic CP tachy s/p hip surgery",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "r/o PE post-op"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "82yo F fall on outstretched hand wrist deformity",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "obvious distal radius fx"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "19yo M MVC blunt abdominal trauma stable",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "FAST then pan-scan"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "63yo M RUQ pain Murphy +",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "classic acute cholecystitis"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "45yo F SOB unilateral leg swelling",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "r/o DVT with PE concern"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "78yo M black tarry stools Hgb 7",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "GIB workup"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "34yo F flank pain fever pyuria",
+    "expected_concept_id": "pyelonephritis",
+    "anatomic_region": "abdomen",
+    "notes": "complicated pyelo"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "60yo M crushing CP diaphoretic ECG nl",
+    "expected_concept_id": "chest_pain",
+    "anatomic_region": "chest",
+    "notes": "atypical ACS w/u"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "25yo M scrotal pain swelling 4h",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "testicular torsion - not in taxonomy"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "29yo F LLQ pain + hCG",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "ectopic pregnancy concern"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "22yo F sudden severe pelvic pain ovarian cyst h/o",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "ovarian torsion - not in taxonomy"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "88yo F altered MS fall head strike on coumadin",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "anticoag head injury"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "50yo M first time seizure no h/o",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "neuro",
+    "notes": "new onset sz w/u"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "44yo F unilateral HA visual aura",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "migraine vs secondary"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "67yo M productive cough fever rigors",
+    "expected_concept_id": "pneumonia",
+    "anatomic_region": "chest",
+    "notes": "CAP w/u"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "39yo F SOB tachypnea recent OCP started",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "PE risk OCP"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "71yo M CHF exacerbation rales bilateral",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "ADHF presentation"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "23yo M MVC neck pain midline TTP",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "c-spine clearance"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "36yo F PE workup pregnant 2nd trimester",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "PE in pregnancy"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "66yo M weak L arm L face droop sx onset 30min",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "acute stroke t-PA window"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "41yo M epigastric pain radiating to back lipase 1200",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "acute pancreatitis"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "55yo F right calf pain swelling post-flight",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "post-travel DVT"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "16yo M groin pain hx undescended testis",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "testicular issue - not in taxonomy"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "60yo M smoker hemoptysis weight loss",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "lung ca concern"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "48yo F LUQ pain s/p MVC seatbelt sign",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "splenic injury concern"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "75yo M acute confusion fever UA +",
+    "expected_concept_id": "pyelonephritis",
+    "anatomic_region": "abdomen",
+    "notes": "urosepsis source"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "33yo M motorcycle crash GCS 13 helmet on",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "trauma TBI"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "70yo F bilateral leg weakness urinary retention",
+    "expected_concept_id": "myelopathy",
+    "anatomic_region": "spine",
+    "notes": "cord compression"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "52yo M back pain saddle anesthesia",
+    "expected_concept_id": "radiculopathy",
+    "anatomic_region": "spine",
+    "notes": "cauda equina concern"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "21yo M football tackle knee twisted unable to bear weight",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "ACL vs meniscus"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "38yo F right shoulder pain s/p fall outstretched arm",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "r/o rotator cuff/fx"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "80yo F hip pain after ground level fall unable to walk",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "r/o hip fx"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "47yo M IVDU back pain fever",
+    "expected_concept_id": "spine_infection",
+    "anatomic_region": "spine",
+    "notes": "epidural abscess concern"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "29yo F diabetic foot ulcer fever",
+    "expected_concept_id": "soft_tissue_infection",
+    "anatomic_region": "msk",
+    "notes": "r/o osteo abscess"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "64yo M neck mass enlarging 3wk smoker",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "neck mass w/u"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "58yo M ascites jaundice new",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "HCC concern in cirrhosis"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "42yo F RUQ pain post-fatty meal recurrent",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "biliary colic vs chole"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "69yo M obstipation vomiting distended abdomen",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "SBO vs LBO"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "35yo F LLQ pain fever colonic h/o",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "atypical young diverticulitis"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "57yo F new breast lump self-discovered",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "palpable breast mass"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "48yo M sudden cold pulseless leg",
+    "expected_concept_id": "peripheral_vascular",
+    "anatomic_region": "msk",
+    "notes": "acute limb ischemia"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "73yo M TIA sx resolved",
+    "expected_concept_id": "carotid_stenosis",
+    "anatomic_region": "vascular",
+    "notes": "carotid w/u post TIA"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "90yo F PEA arrest tamponade vs tension PTX",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "chest",
+    "notes": "cardiac arrest ddx"
+  },
+  {
+    "persona": "ed_attending",
+    "query": "44yo F suspected aortic dissection w/ neuro deficit",
+    "expected_concept_id": "aortic_dissection",
+    "anatomic_region": "chest",
+    "notes": "type A dissection"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "ATLS protocol blunt trauma which scans",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "trauma protocol Q"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "wells score low PE next step",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "PE workup algorithm"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "trauma pan-scan indications",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "whole body CT trauma"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "CT or MRI for acute stroke",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "imaging modality Q"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "US first or CT for RLQ pain young female",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "appy imaging strategy"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "c-spine NEXUS vs Canadian rules",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "c-spine clearance"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "CTA neck for blunt cervical vascular injury",
+    "expected_concept_id": "carotid_stenosis",
+    "anatomic_region": "vascular",
+    "notes": "BCVI screening"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "how to image suspected SAH after neg CT",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "LP vs CTA after neg CT"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "renal colic imaging in pregnancy",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "nephrolithiasis - not core"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "first trimester bleeding TVUS findings",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "early pregnancy - not core"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "PERC rule when can I skip imaging",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "PERC use"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "syncope w/u when to image head",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "syncope imaging"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "pediatric appy US vs CT",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "peds appy"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "first time seizure ED imaging",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "neuro",
+    "notes": "new sz imaging"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "hemoptysis CTA chest indications",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "hemoptysis w/u"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "blunt cardiac injury workup",
+    "expected_concept_id": "chest_pain",
+    "anatomic_region": "chest",
+    "notes": "trauma chest"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "dx of necrotizing soft tissue infection imaging",
+    "expected_concept_id": "soft_tissue_infection",
+    "anatomic_region": "msk",
+    "notes": "nec fasc imaging"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "MRI for cauda equina ED indications",
+    "expected_concept_id": "radiculopathy",
+    "anatomic_region": "spine",
+    "notes": "cauda imaging"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "AAA screening US in ED for back pain elderly",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "chest",
+    "notes": "AAA POCUS"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "LLQ pain young female ddx",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "ddx Q"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "ankle xray Ottawa rules",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "ankle rules"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "acute knee injury when to MRI",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "knee MRI timing"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "shoulder dislocation pre and post reduction films",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "shoulder dislocation imaging"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "MRI brain stroke protocol DWI",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "stroke MRI"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "ddx for new HA in HIV patient",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "HA in immunocompromised"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "epidural abscess imaging back pain fever",
+    "expected_concept_id": "spine_infection",
+    "anatomic_region": "spine",
+    "notes": "epidural abscess"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "how to evaluate hematuria ED",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "hematuria w/u"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "traumatic pneumothorax sizing CXR vs CT",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "chest",
+    "notes": "PTX sizing - not core"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "transient global amnesia workup",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "TGA imaging"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "first time afib w/ rapid ventricular response imaging",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "afib RVR"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "ddx for pleuritic chest pain young athlete",
+    "expected_concept_id": "chest_pain",
+    "anatomic_region": "chest",
+    "notes": "pleuritic CP"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "CT angio for stroke when",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "CTA stroke"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "imaging for abscess vs cellulitis",
+    "expected_concept_id": "soft_tissue_infection",
+    "anatomic_region": "msk",
+    "notes": "skin/soft tissue"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "acute back pain red flags imaging",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "back pain red flags"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "perforated viscus imaging upright vs CT",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "perforation"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "ARDS imaging follow-up timing",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "chest",
+    "notes": "ARDS - not in taxonomy"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "septic shock source w/u no obvious source",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "source ID - not core"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "tamponade vs tension PTX bedside US",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "chest",
+    "notes": "shock ddx - not core"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "massive PE thrombolysis imaging confirm",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "massive PE"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "intubated trauma pt re-image bleed expanding",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "expanding ICH"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "ECMO candidate respiratory failure imaging",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "chest",
+    "notes": "ECMO eval - not core"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "mesenteric ischemia high lactate elderly",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "AMI w/u"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "acalculous cholecystitis ICU pt",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "ICU GB disease"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "ICU acquired weakness vs GBS workup",
+    "expected_concept_id": "guillain_barre",
+    "anatomic_region": "spine",
+    "notes": "polyneuropathy ddx"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "HSV encephalitis imaging temporal lobe",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "neuro",
+    "notes": "encephalitis - not core"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "post-arrest brain imaging prognosis",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "anoxic injury imaging"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "toxic megacolon decompression imaging",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "fulminant colitis"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "AAA endograft post-op leak",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "chest",
+    "notes": "endoleak f/u"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "delayed splenic rupture trauma f/u",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "delayed bleed"
+  },
+  {
+    "persona": "ed_intensivist",
+    "query": "aortic dissection malperfusion limb",
+    "expected_concept_id": "aortic_dissection",
+    "anatomic_region": "chest",
+    "notes": "dissection complications"
+  },
+  {
+    "persona": "im_attending",
+    "query": "57yo abnormal LFTs cholestatic pattern",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "cholestasis w/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "fever of unknown origin 2 weeks",
+    "expected_concept_id": "lymphadenopathy",
+    "anatomic_region": "spine",
+    "notes": "FUO imaging"
+  },
+  {
+    "persona": "im_attending",
+    "query": "elevated PSA next workup",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "abdomen",
+    "notes": "PSA workup"
+  },
+  {
+    "persona": "im_attending",
+    "query": "incidental adrenal nodule 2cm on CT",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "adrenal incidentaloma"
+  },
+  {
+    "persona": "im_attending",
+    "query": "3mm pulmonary nodule f/u Fleischner",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "nodule f/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "8mm solid pulmonary nodule smoker",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "intermediate nodule"
+  },
+  {
+    "persona": "im_attending",
+    "query": "incidental liver lesion 1.5cm on CT",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "incidental liver lesion"
+  },
+  {
+    "persona": "im_attending",
+    "query": "incidental renal cyst Bosniak II f/u",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "renal cyst f/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "incidental pancreatic cyst 1cm IPMN concern",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "pancreatic cyst f/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "colon cancer surveillance CT timing",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "CRC surveillance"
+  },
+  {
+    "persona": "im_attending",
+    "query": "breast cancer survivor f/u imaging",
+    "expected_concept_id": "breast_cancer",
+    "anatomic_region": "breast",
+    "notes": "bca survivorship"
+  },
+  {
+    "persona": "im_attending",
+    "query": "HCC surveillance cirrhosis q6mo",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "HCC screening"
+  },
+  {
+    "persona": "im_attending",
+    "query": "65yo F screening mammo schedule",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "screening interval"
+  },
+  {
+    "persona": "im_attending",
+    "query": "microcytic anemia occult bleed workup",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "iron def anemia"
+  },
+  {
+    "persona": "im_attending",
+    "query": "AFP elevated chronic HBV",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "HCC screen"
+  },
+  {
+    "persona": "im_attending",
+    "query": "CEA rising after colon resection",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "CEA rise"
+  },
+  {
+    "persona": "im_attending",
+    "query": "CA 19-9 elevated workup",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "tumor marker"
+  },
+  {
+    "persona": "im_attending",
+    "query": "polycythemia secondary causes imaging",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "polycythemia w/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "hypercalcemia not PTH related w/u",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "malignancy hypercalcemia"
+  },
+  {
+    "persona": "im_attending",
+    "query": "monoclonal gammopathy bone survey vs MRI",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "MGUS/myeloma w/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "chronic cough 8 weeks nonsmoker CXR neg",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "chronic cough"
+  },
+  {
+    "persona": "im_attending",
+    "query": "dyspnea on exertion BNP elevated",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "HFpEF w/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "new onset afib w/u TEE",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "afib w/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "isolated alk phos elevation",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "isolated ALP"
+  },
+  {
+    "persona": "im_attending",
+    "query": "transaminitis hep panel neg",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "transaminitis w/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "postmenopausal bleeding workup",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "PMB - not in taxonomy"
+  },
+  {
+    "persona": "im_attending",
+    "query": "painless hematuria 60yo M smoker",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "GU malignancy w/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "Crohn's flare imaging modality",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "IBD imaging"
+  },
+  {
+    "persona": "im_attending",
+    "query": "UC surveillance colonoscopy + imaging",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "UC surveillance"
+  },
+  {
+    "persona": "im_attending",
+    "query": "nontraumatic back pain >6wk red flags",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "chronic back pain"
+  },
+  {
+    "persona": "im_attending",
+    "query": "paraneoplastic syndrome occult malignancy w/u",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "paraneoplastic w/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "Lynch syndrome surveillance",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "Lynch screen"
+  },
+  {
+    "persona": "im_attending",
+    "query": "BRCA mutation breast MRI screening",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "BRCA screening"
+  },
+  {
+    "persona": "im_attending",
+    "query": "hypopituitarism MRI pituitary",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "neuro",
+    "notes": "pituitary imaging"
+  },
+  {
+    "persona": "im_attending",
+    "query": "subacute cognitive decline 65yo",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "dementia w/u"
+  },
+  {
+    "persona": "im_attending",
+    "query": "multiple cranial neuropathies w/u",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "neuro",
+    "notes": "skull base"
+  },
+  {
+    "persona": "im_attending",
+    "query": "evaluate for AIH primary biliary cholangitis",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "autoimmune liver - not core"
+  },
+  {
+    "persona": "im_attending",
+    "query": "paroxysmal HTN flushing pheochromocytoma w/u",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "pheo - flagged in prompt"
+  },
+  {
+    "persona": "im_attending",
+    "query": "primary aldosteronism CT adrenal",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "Conn syndrome"
+  },
+  {
+    "persona": "im_attending",
+    "query": "low back pain w/ B symptoms",
+    "expected_concept_id": "spinal_tumor",
+    "anatomic_region": "spine",
+    "notes": "spinal mets concern"
+  },
+  {
+    "persona": "im_resident",
+    "query": "what imaging for new headache in HIV",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "HA immunocompromised"
+  },
+  {
+    "persona": "im_resident",
+    "query": "next imaging after equivocal abdominal pain",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "equivocal w/u"
+  },
+  {
+    "persona": "im_resident",
+    "query": "anemia workup occult bleed next step",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "occult bleed w/u"
+  },
+  {
+    "persona": "im_resident",
+    "query": "how to image suspected MS new optic neuritis",
+    "expected_concept_id": "multiple_sclerosis",
+    "anatomic_region": "neuro",
+    "notes": "MS w/u"
+  },
+  {
+    "persona": "im_resident",
+    "query": "CT vs MRI for new seizure inpatient",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "neuro",
+    "notes": "sz imaging choice"
+  },
+  {
+    "persona": "im_resident",
+    "query": "dementia w/u when to MRI",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "dementia MRI"
+  },
+  {
+    "persona": "im_resident",
+    "query": "incidental thyroid nodule on CT next step",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "thyroid incidentaloma"
+  },
+  {
+    "persona": "im_resident",
+    "query": "workup for new bilateral leg weakness",
+    "expected_concept_id": "guillain_barre",
+    "anatomic_region": "spine",
+    "notes": "ascending weakness"
+  },
+  {
+    "persona": "im_resident",
+    "query": "polymyositis vs dermatomyositis imaging",
+    "expected_concept_id": "myositis",
+    "anatomic_region": "msk",
+    "notes": "inflammatory myopathy"
+  },
+  {
+    "persona": "im_resident",
+    "query": "how to image suspected vertebral osteo",
+    "expected_concept_id": "spine_infection",
+    "anatomic_region": "spine",
+    "notes": "vertebral osteo"
+  },
+  {
+    "persona": "im_resident",
+    "query": "MRI for radiculopathy when",
+    "expected_concept_id": "radiculopathy",
+    "anatomic_region": "spine",
+    "notes": "radic imaging"
+  },
+  {
+    "persona": "im_resident",
+    "query": "workup for new shoulder pain in 60yo F",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "shoulder w/u"
+  },
+  {
+    "persona": "im_resident",
+    "query": "when to order DEXA",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "osteoporosis - not core"
+  },
+  {
+    "persona": "im_resident",
+    "query": "pleural effusion new unilateral w/u",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "new effusion w/u"
+  },
+  {
+    "persona": "im_resident",
+    "query": "ddx for chronic dyspnea normal CXR",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "dyspnea w/u"
+  },
+  {
+    "persona": "im_resident",
+    "query": "liver lesion incidentally found next imaging",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "liver lesion w/u"
+  },
+  {
+    "persona": "im_resident",
+    "query": "how to image suspected appy pregnant pt",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "appy pregnancy"
+  },
+  {
+    "persona": "im_resident",
+    "query": "anemia + abdominal mass next step",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "anemia + mass"
+  },
+  {
+    "persona": "im_resident",
+    "query": "evaluate for pancreatic cancer painless jaundice",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "painless jaundice"
+  },
+  {
+    "persona": "im_resident",
+    "query": "workup new ascites in unknown cause",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "new ascites"
+  },
+  {
+    "persona": "im_resident",
+    "query": "evaluation of palpable axillary lymph node",
+    "expected_concept_id": "lymphadenopathy",
+    "anatomic_region": "spine",
+    "notes": "axillary LN"
+  },
+  {
+    "persona": "im_resident",
+    "query": "how to follow up incidental adrenal lesion",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "adrenal f/u"
+  },
+  {
+    "persona": "im_resident",
+    "query": "MRI brain indications new headache outpatient",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "outpt HA"
+  },
+  {
+    "persona": "im_resident",
+    "query": "DVT workup unprovoked which imaging",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "unprovoked DVT"
+  },
+  {
+    "persona": "im_resident",
+    "query": "syncope inpatient when to image",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "syncope w/u"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "GFR <30 imaging contraindications gadolinium",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "renal pt imaging"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "C diff toxic megacolon imaging",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "fulminant cdiff"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "CKD-MBD bone imaging",
+    "expected_concept_id": "bone_tumor",
+    "anatomic_region": "msk",
+    "notes": "renal osteodystrophy"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "HCC LIRADS 4 next step",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "LIRADS"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "EUS vs MRCP for choledocholithiasis",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "biliary imaging"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "idiopathic pulmonary fibrosis HRCT pattern",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "chest",
+    "notes": "IPF - not core"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "pulmonary HTN workup imaging",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "PH w/u"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "CTA coronaries vs stress test stable angina",
+    "expected_concept_id": "chest_pain",
+    "anatomic_region": "chest",
+    "notes": "stable CAD"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "acute interstitial nephritis imaging role",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "AIN"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "polyangiitis with granulomatosis CT chest",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "chest",
+    "notes": "GPA - not core"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "hepatic adenoma vs FNH on MRI",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "liver lesion characterization"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "EUS for pancreatic cystic lesion",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "pancreatic cyst EUS"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "MR enterography Crohn small bowel",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "MRE"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "varicocele imaging infertility",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "varicocele - flagged in prompt"
+  },
+  {
+    "persona": "im_subspecialty",
+    "query": "multiparametric MRI prostate PIRADS 4",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "abdomen",
+    "notes": "PIRADS"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "55 yo M elevated PSA next step",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "abdomen",
+    "notes": "classic FM PSA followup"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "patient with progressive back pain 6 weeks no trauma",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "subacute back pain workup"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "follow up incidental adrenal nodule 2 cm",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "incidentaloma f/u"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "62 yo smoker chronic cough imaging",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "smoker w/ cough"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "incidental 8 mm lung nodule on CT what next",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "Fleischner f/u"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "RLQ pain low grade fever adult next step",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "classic appy"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "70 yo woman new headache for 3 weeks",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "red flag headache age"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "dad with memory loss imaging workup",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "dementia workup"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "postmenopausal woman with hematuria",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "hematuria workup"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "acute onset right sided weakness 2 hours",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "acute stroke"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "65 yo with abdominal pain pulsatile mass",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "chest",
+    "notes": "AAA exam"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "RUQ pain after fatty meal",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "biliary colic"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "LLQ pain fever diverticulitis workup",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "classic diverticulitis"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "elderly patient with confusion and fall imaging",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "elderly fall"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "painless palpable breast lump 45 yo woman",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "breast lump workup"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "calf swelling and pain unilateral",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "classic DVT"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "hemoptysis in former smoker imaging",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "hemoptysis"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "incidental liver lesion on ultrasound 1.5 cm",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "liver incidentaloma"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "chronic low back pain radiating to leg",
+    "expected_concept_id": "radiculopathy",
+    "anatomic_region": "spine",
+    "notes": "sciatica"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "worsening dyspnea on exertion lower extremity edema",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "CHF workup"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "60 yo with weight loss and iron deficiency anemia",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "colon ca workup"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "incidental pancreatic cyst 1.2 cm on CT",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "pancreatic cyst"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "rectal bleeding age 55 imaging needed",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "rectal bleeding"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "right knee pain after twisting injury skiing",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "knee injury"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "shoulder pain unable to lift arm overhead",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "RC tear"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "groin pain after fall in elderly",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "occult hip fx"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "annual mammogram screening order 50 yo",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "screening"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "recurrent UTI with flank pain",
+    "expected_concept_id": "pyelonephritis",
+    "anatomic_region": "abdomen",
+    "notes": "pyelo"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "patient with chronic diarrhea and weight loss",
+    "expected_concept_id": "inflammatory_bowel_disease",
+    "anatomic_region": "abdomen",
+    "notes": "IBD workup"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "solitary thyroid nodule 1.8 cm on exam",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "thyroid nodule"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "chest pain with exertion middle aged man",
+    "expected_concept_id": "chest_pain",
+    "anatomic_region": "chest",
+    "notes": "ACS workup"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "incidental kidney mass 3 cm on CT",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "renal mass f/u"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "recurrent syncope workup imaging",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "neuro",
+    "notes": "syncope outside"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "worsening claudication in diabetic patient",
+    "expected_concept_id": "peripheral_vascular",
+    "anatomic_region": "msk",
+    "notes": "PAD"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "painful axillary lump in 40 yo woman",
+    "expected_concept_id": "lymphadenopathy",
+    "anatomic_region": "spine",
+    "notes": "axillary LAD"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "incidental finding of pulmonary nodule on chest xray",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "incidental nodule"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "abdominal distension with vomiting and no flatus",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "SBO"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "postmenopausal bleeding workup",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "PMB outside"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "65 yo M with leg pain at rest",
+    "expected_concept_id": "peripheral_vascular",
+    "anatomic_region": "msk",
+    "notes": "critical limb ischemia"
+  },
+  {
+    "persona": "fm_attending",
+    "query": "abnormal lft incidental finding follow up",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "LFT elevated"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "first time seizure adult workup",
+    "expected_concept_id": "seizure",
+    "anatomic_region": "neuro",
+    "notes": "new onset seizure"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "RLQ pain pregnant patient",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "appy in pregnancy"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "evaluate elevated alk phos",
+    "expected_concept_id": "liver_lesion",
+    "anatomic_region": "abdomen",
+    "notes": "elevated ALP"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "workup of new onset headache with vision changes",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "neuro",
+    "notes": "red flag h/a"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "acute onset severe chest and back pain tearing",
+    "expected_concept_id": "aortic_dissection",
+    "anatomic_region": "chest",
+    "notes": "dissection"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "28 yo woman with optic neuritis workup",
+    "expected_concept_id": "multiple_sclerosis",
+    "anatomic_region": "neuro",
+    "notes": "MS workup"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "low back pain with saddle anesthesia",
+    "expected_concept_id": "myelopathy",
+    "anatomic_region": "spine",
+    "notes": "cauda equina"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "evaluating elevated d-dimer in ED",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "PE workup"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "workup of microcytic anemia in 55 yo male",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "anemia and colon ca"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "approach to incidental adrenal mass 4 cm",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "adrenal f/u"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "workup of hematuria in 40 yo nonsmoker",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "hematuria"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "evaluate young patient with new headache and papilledema",
+    "expected_concept_id": "hydrocephalus",
+    "anatomic_region": "neuro",
+    "notes": "papilledema"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "workup of post menopausal woman with abdominal pain",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "abd pain"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "evaluation of palpable breast mass under 30",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "young breast lump"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "approach to back pain with fever and IVDU history",
+    "expected_concept_id": "spine_infection",
+    "anatomic_region": "spine",
+    "notes": "discitis"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "workup of unilateral leg swelling postpartum",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "postpartum DVT"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "evaluating elderly patient with new urinary retention and back pain",
+    "expected_concept_id": "spinal_tumor",
+    "anatomic_region": "spine",
+    "notes": "cord compression"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "workup of acute ascending paralysis",
+    "expected_concept_id": "guillain_barre",
+    "anatomic_region": "spine",
+    "notes": "GBS"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "approach to chronic cough in nonsmoker",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "chest",
+    "notes": "GERD cough"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "evaluation of jaundice in 65 yo",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "painless jaundice"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "workup of right upper quadrant pain in pregnancy",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "cholecystitis pregnancy"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "approach to recurrent epistaxis and easy bruising",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "neuro",
+    "notes": "bleeding diathesis"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "evaluate proximal muscle weakness with elevated CK",
+    "expected_concept_id": "myositis",
+    "anatomic_region": "msk",
+    "notes": "polymyositis"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "workup of carotid bruit on exam",
+    "expected_concept_id": "carotid_stenosis",
+    "anatomic_region": "vascular",
+    "notes": "carotid"
+  },
+  {
+    "persona": "fm_resident",
+    "query": "approach to elevated PSA with normal exam",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "abdomen",
+    "notes": "PSA workup"
+  },
+  {
+    "persona": "np_pa",
+    "query": "patient with pelvic pain",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "pelvic pain vague"
+  },
+  {
+    "persona": "np_pa",
+    "query": "chronic cough imaging",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "chronic cough"
+  },
+  {
+    "persona": "np_pa",
+    "query": "knee pain after fall",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "knee fall"
+  },
+  {
+    "persona": "np_pa",
+    "query": "patient with shortness of breath and leg swelling",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "CHF"
+  },
+  {
+    "persona": "np_pa",
+    "query": "ankle injury cant bear weight",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "Ottawa ankle"
+  },
+  {
+    "persona": "np_pa",
+    "query": "patient with progressive shortness of breath what imaging",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "PE possible"
+  },
+  {
+    "persona": "np_pa",
+    "query": "low back pain not improving with conservative care",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "subacute LBP"
+  },
+  {
+    "persona": "np_pa",
+    "query": "right shoulder pain after lifting",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "shoulder strain"
+  },
+  {
+    "persona": "np_pa",
+    "query": "hip pain in elderly after fall normal xray",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "occult hip fx"
+  },
+  {
+    "persona": "np_pa",
+    "query": "patient with sudden onset severe headache",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "thunderclap"
+  },
+  {
+    "persona": "np_pa",
+    "query": "woman with right sided abdominal pain",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "RLQ pain"
+  },
+  {
+    "persona": "np_pa",
+    "query": "worsening dyspnea elderly female imaging",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "CHF eval"
+  },
+  {
+    "persona": "np_pa",
+    "query": "60 yo woman with breast lump self detected",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "breast lump"
+  },
+  {
+    "persona": "np_pa",
+    "query": "patient with calf pain and swelling after long flight",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "travel DVT"
+  },
+  {
+    "persona": "np_pa",
+    "query": "worsening confusion in nursing home patient",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "dementia"
+  },
+  {
+    "persona": "np_pa",
+    "query": "foot pain after stepping awkwardly",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "foot injury"
+  },
+  {
+    "persona": "np_pa",
+    "query": "patient with chronic flank pain",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "flank pain"
+  },
+  {
+    "persona": "np_pa",
+    "query": "evaluating wrist pain after FOOSH",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "scaphoid"
+  },
+  {
+    "persona": "np_pa",
+    "query": "patient with painful red swollen calf",
+    "expected_concept_id": "soft_tissue_infection",
+    "anatomic_region": "msk",
+    "notes": "cellulitis vs DVT"
+  },
+  {
+    "persona": "np_pa",
+    "query": "woman with persistent abdominal bloating and pain",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "abd pain"
+  },
+  {
+    "persona": "np_pa",
+    "query": "middle aged man with chest pain on exertion",
+    "expected_concept_id": "chest_pain",
+    "anatomic_region": "chest",
+    "notes": "CP"
+  },
+  {
+    "persona": "np_pa",
+    "query": "acute onset back pain with leg weakness",
+    "expected_concept_id": "myelopathy",
+    "anatomic_region": "spine",
+    "notes": "cord compression"
+  },
+  {
+    "persona": "np_pa",
+    "query": "patient with bilateral leg pain when walking",
+    "expected_concept_id": "peripheral_vascular",
+    "anatomic_region": "msk",
+    "notes": "claudication"
+  },
+  {
+    "persona": "np_pa",
+    "query": "elderly patient with new neck mass",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "neck mass"
+  },
+  {
+    "persona": "np_pa",
+    "query": "evaluating chronic headache in 30 yo woman",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "chronic h/a"
+  },
+  {
+    "persona": "np_pa",
+    "query": "patient with rectal bleeding age 40",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "hemorrhoids likely"
+  },
+  {
+    "persona": "np_pa",
+    "query": "painful palpable lump under jaw",
+    "expected_concept_id": "lymphadenopathy",
+    "anatomic_region": "spine",
+    "notes": "cervical LAD"
+  },
+  {
+    "persona": "np_pa",
+    "query": "man with painless scrotal swelling",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "outside"
+  },
+  {
+    "persona": "np_pa",
+    "query": "woman with chronic vaginal bleeding workup",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "gyn outside"
+  },
+  {
+    "persona": "np_pa",
+    "query": "evaluating cellulitis vs abscess in leg",
+    "expected_concept_id": "soft_tissue_infection",
+    "anatomic_region": "msk",
+    "notes": "abscess"
+  },
+  {
+    "persona": "np_pa",
+    "query": "man with persistent right shoulder pain at night",
+    "expected_concept_id": "shoulder_pain",
+    "anatomic_region": "msk",
+    "notes": "RC issue"
+  },
+  {
+    "persona": "np_pa",
+    "query": "patient with positive FOBT",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "FOBT+"
+  },
+  {
+    "persona": "np_pa",
+    "query": "60 yo M with weight loss and back pain",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "panc ca"
+  },
+  {
+    "persona": "np_pa",
+    "query": "acute onset abdominal pain with rigid abdomen",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "acute abd"
+  },
+  {
+    "persona": "np_pa",
+    "query": "painful hard lump on thigh growing over months",
+    "expected_concept_id": "soft_tissue_mass",
+    "anatomic_region": "msk",
+    "notes": "sarcoma concern"
+  },
+  {
+    "persona": "np_pa",
+    "query": "knee pain with locking and catching",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "meniscus"
+  },
+  {
+    "persona": "np_pa",
+    "query": "patient with fever and back pain post procedure",
+    "expected_concept_id": "spine_infection",
+    "anatomic_region": "spine",
+    "notes": "post op"
+  },
+  {
+    "persona": "np_pa",
+    "query": "woman with chronic right upper quadrant pain",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "biliary"
+  },
+  {
+    "persona": "np_pa",
+    "query": "evaluating dizziness in elderly patient",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "neuro",
+    "notes": "vertigo outside"
+  },
+  {
+    "persona": "np_pa",
+    "query": "non healing leg ulcer in diabetic",
+    "expected_concept_id": "bone_infection",
+    "anatomic_region": "msk",
+    "notes": "osteomyelitis"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "best initial test for appendicitis",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "appy MS"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "imaging modality of choice for stroke",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "stroke imaging"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "next step for lung nodule 7 mm",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "Fleischner"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "best initial imaging for suspected PE",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "CTPA"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "imaging of choice for suspected aortic dissection",
+    "expected_concept_id": "aortic_dissection",
+    "anatomic_region": "chest",
+    "notes": "CTA"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "first line imaging for cauda equina syndrome",
+    "expected_concept_id": "myelopathy",
+    "anatomic_region": "spine",
+    "notes": "MRI"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "best initial test for acute cholecystitis",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "US RUQ"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "imaging modality of choice for multiple sclerosis",
+    "expected_concept_id": "multiple_sclerosis",
+    "anatomic_region": "neuro",
+    "notes": "MRI brain"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "first line imaging for suspected appendicitis pediatric",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "peds US"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "imaging of choice for hepatocellular carcinoma",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "HCC"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "best test for suspected DVT",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "duplex"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "workup of incidental pulmonary nodule Fleischner",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "Fleischner"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "next step in evaluating an adrenal incidentaloma",
+    "expected_concept_id": "adrenal_mass",
+    "anatomic_region": "abdomen",
+    "notes": "adrenal"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "imaging modality of choice for suspected meningioma",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "neuro",
+    "notes": "MRI"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "first line imaging for back pain with red flags",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "MRI"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "best initial imaging for renal mass workup",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "CT"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "imaging of choice for pancreatic cancer staging",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "panc protocol"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "next step for abnormal screening mammogram",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "diagnostic mammo"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "imaging modality of choice for osteomyelitis",
+    "expected_concept_id": "bone_infection",
+    "anatomic_region": "msk",
+    "notes": "MRI"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "best initial test for suspected diverticulitis",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "CT"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "imaging of choice for small bowel obstruction",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "CT"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "workup of carotid TIA",
+    "expected_concept_id": "carotid_stenosis",
+    "anatomic_region": "vascular",
+    "notes": "carotid US"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "imaging modality of choice for vertebral compression fracture",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "MRI vs xray"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "first line imaging for hydrocephalus in adult",
+    "expected_concept_id": "hydrocephalus",
+    "anatomic_region": "neuro",
+    "notes": "CT"
+  },
+  {
+    "persona": "med_student_clinical",
+    "query": "best initial test for AAA screening",
+    "expected_concept_id": "aortic_aneurysm",
+    "anatomic_region": "chest",
+    "notes": "US"
+  },
+  {
+    "persona": "nurse",
+    "query": "What scan does pt need for SOB and DOE",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "nurse SOB"
+  },
+  {
+    "persona": "nurse",
+    "query": "imaging for fall with hip pain",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "fall"
+  },
+  {
+    "persona": "nurse",
+    "query": "scan order for chest pain rule out PE",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "rule out"
+  },
+  {
+    "persona": "nurse",
+    "query": "patient with new confusion what imaging needed",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "AMS"
+  },
+  {
+    "persona": "nurse",
+    "query": "xray order for elderly fall with leg pain",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "fall xray"
+  },
+  {
+    "persona": "nurse",
+    "query": "patient with new severe headache and vomiting imaging",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "ICH"
+  },
+  {
+    "persona": "nurse",
+    "query": "scan needed for postop fever and abdominal pain",
+    "expected_concept_id": "abdominal_pain",
+    "anatomic_region": "abdomen",
+    "notes": "post op"
+  },
+  {
+    "persona": "nurse",
+    "query": "imaging order for new onset weakness right side",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "stroke"
+  },
+  {
+    "persona": "nurse",
+    "query": "scan for patient with low back pain and fever",
+    "expected_concept_id": "spine_infection",
+    "anatomic_region": "spine",
+    "notes": "discitis"
+  },
+  {
+    "persona": "nurse",
+    "query": "what imaging for postpartum patient with chest pain",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "postpartum PE"
+  },
+  {
+    "persona": "nurse",
+    "query": "imaging for new lump in neck",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "neck mass"
+  },
+  {
+    "persona": "nurse",
+    "query": "scan needed for abdominal distension and no bowel movements",
+    "expected_concept_id": "bowel_obstruction",
+    "anatomic_region": "abdomen",
+    "notes": "SBO"
+  },
+  {
+    "persona": "nurse",
+    "query": "what imaging for patient with calf pain and redness",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "DVT vs cellulitis"
+  },
+  {
+    "persona": "nurse",
+    "query": "imaging order for elderly patient with sudden severe back pain",
+    "expected_concept_id": "fracture",
+    "anatomic_region": "msk",
+    "notes": "compression fx"
+  },
+  {
+    "persona": "nurse",
+    "query": "scan for patient with abnormal breast exam",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "breast mass"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is hcc",
+    "expected_concept_id": "liver_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "patient HCC"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "my doctor ordered MRI for my back is this normal",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "patient MRI back"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "imaging for breast lump after mammogram callback",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "callback"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is a brain tumor",
+    "expected_concept_id": "brain_neoplasm",
+    "anatomic_region": "neuro",
+    "notes": "layperson"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "MRI of head what does it show",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "neuro",
+    "notes": "general MRI"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "CT scan for kidney stones",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "kidney stones outside"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is osteoarthritis",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "msk",
+    "notes": "OA outside"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "my mammogram was abnormal what next",
+    "expected_concept_id": "breast_screening",
+    "anatomic_region": "breast",
+    "notes": "abnormal screen"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "imaging for back ache",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "vague back"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is a blood clot in the leg",
+    "expected_concept_id": "dvt",
+    "anatomic_region": "msk",
+    "notes": "layperson DVT"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what does a lung nodule mean",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "lung nodule"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "can a CT scan detect lung cancer",
+    "expected_concept_id": "lung_cancer",
+    "anatomic_region": "chest",
+    "notes": "lung ca"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "MRI for headache do i need one",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "headache MRI"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is alzheimers disease",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "patient dementia"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "doctor said i have a kidney mass what does that mean",
+    "expected_concept_id": "kidney_mass",
+    "anatomic_region": "abdomen",
+    "notes": "renal mass"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is a stroke and how is it diagnosed",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "patient stroke"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is pancreatic cancer",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "panc ca"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is a colonoscopy used for",
+    "expected_concept_id": "colon_cancer",
+    "anatomic_region": "abdomen",
+    "notes": "colonoscopy"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "imaging for chest pain in women",
+    "expected_concept_id": "chest_pain",
+    "anatomic_region": "chest",
+    "notes": "CP women"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is heart failure",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "CHF"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "MRI for knee pain when do i need it",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "knee MRI"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is a brain aneurysm",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "aneurysm"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is sciatica",
+    "expected_concept_id": "radiculopathy",
+    "anatomic_region": "spine",
+    "notes": "sciatica patient"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "acid reflux symptoms",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "chest",
+    "notes": "GERD outside"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is IBS",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "IBS outside"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "anxiety symptoms in adults",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "neuro",
+    "notes": "anxiety outside"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what does neumonia look like on xray",
+    "expected_concept_id": "pneumonia",
+    "anatomic_region": "chest",
+    "notes": "misspelled pneumonia"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "guillan barre symptoms",
+    "expected_concept_id": "guillain_barre",
+    "anatomic_region": "spine",
+    "notes": "misspelled GBS"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "alzheimers signs early",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "misspelled alzheimers"
+  },
+  {
+    "persona": "patient_curious",
+    "query": "what is a concussion",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "neuro",
+    "notes": "concussion outside"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "dad has confusion what imaging is needed",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "caregiver dad"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "mom with hip fracture follow up",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "hip fx f/u"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "kid with headache imaging",
+    "expected_concept_id": "headache",
+    "anatomic_region": "neuro",
+    "notes": "peds h/a"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "my mother fell and hit her head should she get a scan",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "elderly fall"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "dad has lung spot on xray what next",
+    "expected_concept_id": "lung_nodule",
+    "anatomic_region": "chest",
+    "notes": "lung spot"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "my husband has weakness on one side what should we do",
+    "expected_concept_id": "stroke",
+    "anatomic_region": "neuro",
+    "notes": "stroke caregiver"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "mom found breast lump what kind of test",
+    "expected_concept_id": "breast_mass",
+    "anatomic_region": "breast",
+    "notes": "breast lump"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "my dad has back pain getting worse imaging",
+    "expected_concept_id": "back_pain",
+    "anatomic_region": "spine",
+    "notes": "back pain"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "child with belly pain on right side",
+    "expected_concept_id": "appendicitis",
+    "anatomic_region": "abdomen",
+    "notes": "peds appy"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "my wife has terrible headache and vomiting",
+    "expected_concept_id": "intracranial_hemorrhage",
+    "anatomic_region": "neuro",
+    "notes": "headache concern"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "dad diagnosed with prostate cancer next imaging",
+    "expected_concept_id": "prostate",
+    "anatomic_region": "abdomen",
+    "notes": "prostate ca f/u"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "grandma fell hip hurts can't walk",
+    "expected_concept_id": "hip_pain",
+    "anatomic_region": "msk",
+    "notes": "hip injury"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "son has swollen painful knee after game",
+    "expected_concept_id": "knee_pain",
+    "anatomic_region": "msk",
+    "notes": "peds knee"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "mom has memory problems getting worse",
+    "expected_concept_id": "dementia",
+    "anatomic_region": "neuro",
+    "notes": "memory"
+  },
+  {
+    "persona": "patient_caregiver",
+    "query": "my father has yellow eyes and weight loss",
+    "expected_concept_id": "pancreatic_mass",
+    "anatomic_region": "abdomen",
+    "notes": "jaundice"
+  },
+  {
+    "persona": "patient_symptom_search",
+    "query": "left side belly pain comes and goes",
+    "expected_concept_id": "diverticulitis",
+    "anatomic_region": "abdomen",
+    "notes": "LLQ pain"
+  },
+  {
+    "persona": "patient_symptom_search",
+    "query": "spotting after menopause",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "abdomen",
+    "notes": "PMB outside"
+  },
+  {
+    "persona": "patient_symptom_search",
+    "query": "lump under arm not painful",
+    "expected_concept_id": "lymphadenopathy",
+    "anatomic_region": "spine",
+    "notes": "axillary LAD"
+  },
+  {
+    "persona": "patient_symptom_search",
+    "query": "pain in upper belly after eating",
+    "expected_concept_id": "cholecystitis",
+    "anatomic_region": "abdomen",
+    "notes": "biliary"
+  },
+  {
+    "persona": "patient_symptom_search",
+    "query": "sharp chest pain when breathing",
+    "expected_concept_id": "pulmonary_embolism",
+    "anatomic_region": "chest",
+    "notes": "pleuritic"
+  },
+  {
+    "persona": "patient_symptom_search",
+    "query": "lump on neck not going away",
+    "expected_concept_id": "thyroid_neck_mass",
+    "anatomic_region": "neuro",
+    "notes": "neck lump"
+  },
+  {
+    "persona": "patient_symptom_search",
+    "query": "burning when peeing and back pain",
+    "expected_concept_id": "pyelonephritis",
+    "anatomic_region": "abdomen",
+    "notes": "pyelo"
+  },
+  {
+    "persona": "patient_symptom_search",
+    "query": "hard lump on thigh growing",
+    "expected_concept_id": "soft_tissue_mass",
+    "anatomic_region": "msk",
+    "notes": "STS"
+  },
+  {
+    "persona": "patient_symptom_search",
+    "query": "dizziness and trouble walking",
+    "expected_concept_id": "OUT_OF_TAXONOMY",
+    "anatomic_region": "neuro",
+    "notes": "vertigo outside"
+  },
+  {
+    "persona": "patient_symptom_search",
+    "query": "shortness of breath getting worse over weeks",
+    "expected_concept_id": "heart_failure",
+    "anatomic_region": "chest",
+    "notes": "CHF"
+  }
+]

@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-05-20T11:44:08.354263+00:00",
+  "generated_at": "2026-05-21T04:27:58.045630+00:00",
   "concepts": {
     "brain_neoplasm": {
       "display_name": "Brain Tumor",
@@ -20,7 +20,40 @@
         "brain metastasis",
         "brain metastases",
         "intra-axial mass",
-        "extra-axial mass"
+        "extra-axial mass",
+        "new headache and papilledema",
+        "headache and papilledema",
+        "papilledema",
+        "headache papilledema",
+        "rano criteria",
+        "gbm",
+        "gbm follow up",
+        "gbm follow-up",
+        "glioblastoma follow up",
+        "glioblastoma follow-up",
+        "pseudoprogression vs true progression",
+        "pseudoprogression gbm",
+        "mrs choline naa",
+        "mr spectroscopy tumor",
+        "tumor recurrence brain",
+        "dti for pre-op tractography",
+        "pre-op tractography",
+        "dti tractography eloquent",
+        "leptomeningeal enhancement",
+        "leptomeningeal disease",
+        "leptomeningeal carcinomatosis",
+        "mri iac",
+        "internal auditory canal",
+        "iac mri",
+        "mri iac for sensorineural hearing loss",
+        "sensorineural hearing loss mri",
+        "acoustic neuroma",
+        "vestibular schwannoma",
+        "pituitary adenoma",
+        "pituitary microadenoma",
+        "mri sella",
+        "mri sella for pituitary",
+        "sellar mass"
       ],
       "scenario_mappings": [
         {
@@ -1191,7 +1224,28 @@
         "acute stroke",
         "transient ischemic attack",
         "tia",
-        "ischemic infarct"
+        "ischemic infarct",
+        "lsw 90min ago",
+        "last seen well",
+        "facial droop",
+        "right facial droop",
+        "left facial droop",
+        "afib new onset weakness",
+        "atrial fibrillation new weakness",
+        "weakness on one side",
+        "one sided weakness",
+        "new onset weakness",
+        "patient with new confusion",
+        "patient with new confusion what imaging",
+        "mra neck for vertebral dissection",
+        "vertebral artery dissection",
+        "carotid dissection",
+        "vertebral dissection",
+        "hyperdense mca",
+        "ddx hyperdense mca",
+        "perfusion imaging stroke",
+        "ct perfusion stroke",
+        "dsc perfusion threshold stroke"
       ],
       "scenario_mappings": [
         {
@@ -5172,23 +5226,277 @@
         "brain bleed",
         "brain hemorrhage",
         "intraventricular hemorrhage",
-        "ivh"
+        "ivh",
+        "head trauma",
+        "head injury",
+        "mild tbi",
+        "moderate tbi",
+        "severe tbi",
+        "tbi",
+        "traumatic brain injury",
+        "noncontrast head ct trauma",
+        "ct head no contrast trauma",
+        "head ct trauma",
+        "head ct for trauma",
+        "head ct after fall",
+        "ct head after fall",
+        "fall hit head",
+        "fall and hit head",
+        "fall struck head",
+        "trauma head imaging",
+        "head ct for trauma adult",
+        "noncontrast head ct for trauma adult",
+        "appropriateness mild tbi",
+        "ruptured aneurysm",
+        "ruptured cerebral aneurysm",
+        "avm",
+        "brain avm",
+        "intracranial avm",
+        "arteriovenous malformation brain",
+        "dsa vs cta for ruptured aneurysm",
+        "microbleeds",
+        "cerebral microbleeds",
+        "cerebral amyloid angiopathy",
+        "caa",
+        "gre swi microbleeds",
+        "sudden severe headache",
+        "worst headache of life",
+        "thunderclap headache",
+        "head ct after fall on coumadin",
+        "head ct on warfarin",
+        "head ct anticoagulation"
       ],
       "scenario_mappings": [
         {
-          "scenario_id": "5311",
-          "scenario_name": "Subarachnoid hemorrhage on noncontrast CT, nontraumatic, next imaging study",
-          "relevance_score": 0.4,
+          "scenario_id": "2199",
+          "scenario_name": "Head trauma, acute, mild, GCS 13-15, imaging indicated per clinical decision rule, initial imaging",
+          "relevance_score": 0.37,
           "region": "neuro",
           "metadata": {
             "phase": "initial",
             "phase_display": "Initial Workup",
             "context": {},
-            "procedure_count": 8,
+            "procedure_count": 11,
             "high_rated_count": 1
           },
           "top_procedure": {
-            "name": "CTA head W/ Contrast",
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "2200",
+          "scenario_name": "Head trauma, acute, mild, GCS 13-15, imaging not indicated per clinical decision rule, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 2,
+            "ratingLevel": "Usually Not Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5551",
+          "scenario_name": "Head trauma, acute, moderate, GCS 9-12, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5513",
+          "scenario_name": "Head trauma, acute, neuro decline since last imaging, short-term follow up imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5514",
+          "scenario_name": "Head trauma, acute, no neuro decline, initial imaging normal, short term follow up imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5515",
+          "scenario_name": "Head trauma, acute, no neuro decline, positive findings on initial imaging, short term follow up imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5553",
+          "scenario_name": "Head trauma, acute, penetrating, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5552",
+          "scenario_name": "Head trauma, acute, severe, GCS 3-8, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "2207",
+          "scenario_name": "Head trauma, chronic, unexplained cognitive or neuro deficit, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "2210",
+          "scenario_name": "Head trauma, CSF leak suspected, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 17,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5526",
+          "scenario_name": "Head trauma, intracranial arterial injury suspected, positive findings on prior imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTA head and neck W/ Contrast",
             "modality": "CT",
             "rating": 9,
             "ratingLevel": "Usually Appropriate",
@@ -5197,24 +5505,854 @@
           }
         },
         {
-          "scenario_id": "5311",
-          "scenario_name": "Subarachnoid hemorrhage on noncontrast CT, nontraumatic, next imaging study",
-          "relevance_score": 0.4,
+          "scenario_id": "5525",
+          "scenario_name": "Head trauma, intracranial arterial injury suspected, risk factors",
+          "relevance_score": 0.37,
           "region": "neuro",
           "metadata": {
-            "phase": "initial",
-            "phase_display": "Initial Workup",
-            "context": {},
-            "procedure_count": 8,
+            "phase": "screening",
+            "phase_display": "Screening",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 11,
             "high_rated_count": 1
           },
           "top_procedure": {
-            "name": "CTA head W/ Contrast",
+            "name": "CTA head and neck W/ Contrast",
             "modality": "CT",
             "rating": 9,
             "ratingLevel": "Usually Appropriate",
             "usesContrast": 1,
             "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5528",
+          "scenario_name": "Head trauma, intracranial venous injury suspected, positive findings on prior imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTV head W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5527",
+          "scenario_name": "Head trauma, intracranial venous injury suspected, risk factors",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "screening",
+            "phase_display": "Screening",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTV head W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "2206",
+          "scenario_name": "Head trauma, subacute, unexplained cognitive or neuro deficit, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "2199",
+          "scenario_name": "Head trauma, acute, mild, GCS 13-15, imaging indicated per clinical decision rule, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "2200",
+          "scenario_name": "Head trauma, acute, mild, GCS 13-15, imaging not indicated per clinical decision rule, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 2,
+            "ratingLevel": "Usually Not Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5551",
+          "scenario_name": "Head trauma, acute, moderate, GCS 9-12, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5513",
+          "scenario_name": "Head trauma, acute, neuro decline since last imaging, short-term follow up imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5514",
+          "scenario_name": "Head trauma, acute, no neuro decline, initial imaging normal, short term follow up imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5515",
+          "scenario_name": "Head trauma, acute, no neuro decline, positive findings on initial imaging, short term follow up imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5553",
+          "scenario_name": "Head trauma, acute, penetrating, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5552",
+          "scenario_name": "Head trauma, acute, severe, GCS 3-8, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "2207",
+          "scenario_name": "Head trauma, chronic, unexplained cognitive or neuro deficit, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "2210",
+          "scenario_name": "Head trauma, CSF leak suspected, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 17,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5526",
+          "scenario_name": "Head trauma, intracranial arterial injury suspected, positive findings on prior imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTA head and neck W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5525",
+          "scenario_name": "Head trauma, intracranial arterial injury suspected, risk factors",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "screening",
+            "phase_display": "Screening",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTA head and neck W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5528",
+          "scenario_name": "Head trauma, intracranial venous injury suspected, positive findings on prior imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTV head W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5527",
+          "scenario_name": "Head trauma, intracranial venous injury suspected, risk factors",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "screening",
+            "phase_display": "Screening",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 11,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CTV head W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "2206",
+          "scenario_name": "Head trauma, subacute, unexplained cognitive or neuro deficit, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 11,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "5244",
+          "scenario_name": "Head trauma, chronic, blunt, new or progressive neurologic deficit, not abuse or post traumatic seizure",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 10,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "5287",
+          "scenario_name": "Head trauma, minor, acute, blunt, altered mental status, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5288",
+          "scenario_name": "Head trauma, minor, acute, blunt, basilar skull fracture suspected, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 7,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5286",
+          "scenario_name": "Head trauma, minor, acute, blunt, GCS=14, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5283",
+          "scenario_name": "Head trauma, minor, acute, blunt, GCS=15, abnormal behavior per parents, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5280",
+          "scenario_name": "Head trauma, minor, acute, blunt, GCS=15, loss of consciousness, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5282",
+          "scenario_name": "Head trauma, minor, acute, blunt, GCS=15, scalp hematoma,, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5285",
+          "scenario_name": "Head trauma, minor, acute, blunt, GCS=15, severe headache, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5281",
+          "scenario_name": "Head trauma, minor, acute, blunt, GCS=15, severe mechanism of injury, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5284",
+          "scenario_name": "Head trauma, minor, acute, blunt, GCS=15, vomiting, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "2046",
+          "scenario_name": "Head trauma, minor, acute, blunt, low risk per PECARN, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 2,
+            "ratingLevel": "Usually Not Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5243",
+          "scenario_name": "Head trauma, moderate to severe, acute, blunt, GCS<=13, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "2049",
+          "scenario_name": "Head trauma, subacute, blunt, cognitive or neurologic signs, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "5244",
+          "scenario_name": "Head trauma, chronic, blunt, new or progressive neurologic deficit, not abuse or post traumatic seizure",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 10,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI head W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "5287",
+          "scenario_name": "Head trauma, minor, acute, blunt, altered mental status, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5288",
+          "scenario_name": "Head trauma, minor, acute, blunt, basilar skull fracture suspected, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 7,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5286",
+          "scenario_name": "Head trauma, minor, acute, blunt, GCS=14, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5283",
+          "scenario_name": "Head trauma, minor, acute, blunt, GCS=15, abnormal behavior per parents, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5280",
+          "scenario_name": "Head trauma, minor, acute, blunt, GCS=15, loss of consciousness, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5282",
+          "scenario_name": "Head trauma, minor, acute, blunt, GCS=15, scalp hematoma,, not abuse, initial imaging",
+          "relevance_score": 0.37,
+          "region": "neuro",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "CT head W/O Contrast",
+            "modality": "CT",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv",
+            "noStrong": true
           }
         }
       ]
@@ -6361,7 +7499,18 @@
         "parsonage turner",
         "parsonage-turner",
         "brachial plexopathy",
-        "lumbosacral plexopathy"
+        "lumbosacral plexopathy",
+        "leg pain radiating",
+        "leg pain radiating down",
+        "shooting leg pain",
+        "shooting pain down leg",
+        "chronic low back pain radiating to leg",
+        "back pain radiating to leg",
+        "foot drop after lumbar surgery",
+        "foot drop",
+        "mr neurography",
+        "mr neurography sciatic",
+        "mr neurography for sciatic"
       ],
       "scenario_mappings": [
         {
@@ -8066,13 +9215,54 @@
         "amyotrophic lateral sclerosis",
         "motor neuron disease",
         "conus medullaris syndrome",
-        "tethered cord"
+        "tethered cord",
+        "cauda equina",
+        "cauda equina syndrome",
+        "first line imaging for cauda equina syndrome",
+        "mri for cauda equina",
+        "mri lumbar spine cauda equina",
+        "saddle anesthesia",
+        "low back pain with saddle anesthesia",
+        "back pain saddle anesthesia",
+        "saddle anaesthesia",
+        "back pain with leg weakness",
+        "back pain leg weakness",
+        "back pain with urinary retention",
+        "leg weakness urinary retention",
+        "bilateral leg weakness",
+        "bilateral leg weakness urinary retention",
+        "acute onset back pain with leg weakness",
+        "back pain with leg weakness urinary retention",
+        "back pain with neurologic deficit"
       ],
       "scenario_mappings": [
         {
+          "scenario_id": "5623",
+          "scenario_name": "Low back pain, cauda equina syndrome suspected, initial imaging",
+          "relevance_score": 0.45,
+          "region": "spine",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 9,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI lumbar spine W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
           "scenario_id": "5471",
           "scenario_name": "Myelopathy, acute, cervical and thoracic spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8093,7 +9283,7 @@
         {
           "scenario_id": "5468",
           "scenario_name": "Myelopathy, acute, cervical spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8114,7 +9304,7 @@
         {
           "scenario_id": "5473",
           "scenario_name": "Myelopathy, acute, complete spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8135,7 +9325,7 @@
         {
           "scenario_id": "5470",
           "scenario_name": "Myelopathy, acute, lumbar spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8156,7 +9346,7 @@
         {
           "scenario_id": "5472",
           "scenario_name": "Myelopathy, acute, thoracic and lumbar spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8177,7 +9367,7 @@
         {
           "scenario_id": "5469",
           "scenario_name": "Myelopathy, acute, thoracic spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8198,7 +9388,7 @@
         {
           "scenario_id": "5477",
           "scenario_name": "Myelopathy, chronic, cervical and thoracic spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8219,7 +9409,7 @@
         {
           "scenario_id": "5474",
           "scenario_name": "Myelopathy, chronic, cervical spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8240,7 +9430,7 @@
         {
           "scenario_id": "5479",
           "scenario_name": "Myelopathy, chronic, complete spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8261,7 +9451,7 @@
         {
           "scenario_id": "5476",
           "scenario_name": "Myelopathy, chronic, lumbar spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8282,7 +9472,7 @@
         {
           "scenario_id": "5478",
           "scenario_name": "Myelopathy, chronic, thoracic and lumbar spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8303,7 +9493,7 @@
         {
           "scenario_id": "5475",
           "scenario_name": "Myelopathy, chronic, thoracic spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8322,9 +9512,32 @@
           }
         },
         {
+          "scenario_id": "5623",
+          "scenario_name": "Low back pain, cauda equina syndrome suspected, initial imaging",
+          "relevance_score": 0.45,
+          "region": "spine",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 9,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI lumbar spine W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
           "scenario_id": "5471",
           "scenario_name": "Myelopathy, acute, cervical and thoracic spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8345,7 +9558,7 @@
         {
           "scenario_id": "5468",
           "scenario_name": "Myelopathy, acute, cervical spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8366,7 +9579,7 @@
         {
           "scenario_id": "5473",
           "scenario_name": "Myelopathy, acute, complete spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8387,7 +9600,7 @@
         {
           "scenario_id": "5470",
           "scenario_name": "Myelopathy, acute, lumbar spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8408,7 +9621,7 @@
         {
           "scenario_id": "5472",
           "scenario_name": "Myelopathy, acute, thoracic and lumbar spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8429,7 +9642,7 @@
         {
           "scenario_id": "5469",
           "scenario_name": "Myelopathy, acute, thoracic spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8450,7 +9663,7 @@
         {
           "scenario_id": "5477",
           "scenario_name": "Myelopathy, chronic, cervical and thoracic spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8471,7 +9684,7 @@
         {
           "scenario_id": "5474",
           "scenario_name": "Myelopathy, chronic, cervical spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8492,7 +9705,7 @@
         {
           "scenario_id": "5479",
           "scenario_name": "Myelopathy, chronic, complete spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8513,7 +9726,7 @@
         {
           "scenario_id": "5476",
           "scenario_name": "Myelopathy, chronic, lumbar spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8534,7 +9747,7 @@
         {
           "scenario_id": "5478",
           "scenario_name": "Myelopathy, chronic, thoracic and lumbar spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8555,7 +9768,7 @@
         {
           "scenario_id": "5475",
           "scenario_name": "Myelopathy, chronic, thoracic spine, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8566,6 +9779,52 @@
           },
           "top_procedure": {
             "name": "MRI thoracic spine W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "5841",
+          "scenario_name": "Spine infection suspected, lumbar, cauda equina syndrome, initial imaging",
+          "relevance_score": 0.45,
+          "region": "spine",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 8,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI lumbar spine W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "5840",
+          "scenario_name": "Spine infection suspected, thoracic and lumbar, cauda equina syndrome, initial imaging",
+          "relevance_score": 0.45,
+          "region": "spine",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 8,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI thoracic and lumbar spine W/O Con...",
             "modality": "MRI",
             "rating": 9,
             "ratingLevel": "Usually Appropriate",
@@ -8576,7 +9835,7 @@
         {
           "scenario_id": "7801",
           "scenario_name": "Thoracic back pain, acute, no myelopathy, no red flags, no prior management, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8598,7 +9857,7 @@
         {
           "scenario_id": "7802",
           "scenario_name": "Thoracic back pain, chronic, no myelopathy, no red flags,  failed conservative management,  initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8620,7 +9879,7 @@
         {
           "scenario_id": "7806",
           "scenario_name": "Thoracic back pain, myelopathy, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8641,7 +9900,7 @@
         {
           "scenario_id": "7804",
           "scenario_name": "Thoracic back pain, subacute, no myelopathy, no red flags, failed conservative management, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8663,7 +9922,7 @@
         {
           "scenario_id": "7819",
           "scenario_name": "Thoracic back pain, with or without myelopathy, cancer suspected, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8686,7 +9945,7 @@
         {
           "scenario_id": "7815",
           "scenario_name": "Thoracic back pain, with or without myelopathy, chronic steroid use, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8707,7 +9966,7 @@
         {
           "scenario_id": "7814",
           "scenario_name": "Thoracic back pain, with or without myelopathy, elderly, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8726,9 +9985,32 @@
           }
         },
         {
+          "scenario_id": "5841",
+          "scenario_name": "Spine infection suspected, lumbar, cauda equina syndrome, initial imaging",
+          "relevance_score": 0.45,
+          "region": "spine",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 8,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI lumbar spine W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
           "scenario_id": "7821",
           "scenario_name": "Thoracic back pain, with or without myelopathy, immunosuppressed, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8749,7 +10031,7 @@
         {
           "scenario_id": "7820",
           "scenario_name": "Thoracic back pain, with or without myelopathy, infection suspected, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8772,7 +10054,7 @@
         {
           "scenario_id": "7812",
           "scenario_name": "Thoracic back pain, with or without myelopathy, low-velocity trauma, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8793,7 +10075,7 @@
         {
           "scenario_id": "7813",
           "scenario_name": "Thoracic back pain, with or without myelopathy, osteoporosis, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8812,9 +10094,32 @@
           }
         },
         {
+          "scenario_id": "5840",
+          "scenario_name": "Spine infection suspected, thoracic and lumbar, cauda equina syndrome, initial imaging",
+          "relevance_score": 0.45,
+          "region": "spine",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 8,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI thoracic and lumbar spine W/O Con...",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
           "scenario_id": "7801",
           "scenario_name": "Thoracic back pain, acute, no myelopathy, no red flags, no prior management, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8836,7 +10141,7 @@
         {
           "scenario_id": "7802",
           "scenario_name": "Thoracic back pain, chronic, no myelopathy, no red flags,  failed conservative management,  initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8858,7 +10163,7 @@
         {
           "scenario_id": "7806",
           "scenario_name": "Thoracic back pain, myelopathy, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8879,7 +10184,7 @@
         {
           "scenario_id": "7804",
           "scenario_name": "Thoracic back pain, subacute, no myelopathy, no red flags, failed conservative management, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8901,7 +10206,7 @@
         {
           "scenario_id": "7819",
           "scenario_name": "Thoracic back pain, with or without myelopathy, cancer suspected, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8924,7 +10229,7 @@
         {
           "scenario_id": "7815",
           "scenario_name": "Thoracic back pain, with or without myelopathy, chronic steroid use, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8945,7 +10250,7 @@
         {
           "scenario_id": "7814",
           "scenario_name": "Thoracic back pain, with or without myelopathy, elderly, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8966,7 +10271,7 @@
         {
           "scenario_id": "7821",
           "scenario_name": "Thoracic back pain, with or without myelopathy, immunosuppressed, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8987,7 +10292,7 @@
         {
           "scenario_id": "7820",
           "scenario_name": "Thoracic back pain, with or without myelopathy, infection suspected, initial imaging",
-          "relevance_score": 0.53,
+          "relevance_score": 0.45,
           "region": "spine",
           "metadata": {
             "phase": "initial",
@@ -8997,132 +10302,6 @@
             },
             "procedure_count": 9,
             "high_rated_count": 2
-          },
-          "top_procedure": {
-            "name": "MRI thoracic spine W/O Contrast",
-            "modality": "MRI",
-            "rating": 9,
-            "ratingLevel": "Usually Appropriate",
-            "usesContrast": 0,
-            "radiationDose": "0 mSv"
-          }
-        },
-        {
-          "scenario_id": "7812",
-          "scenario_name": "Thoracic back pain, with or without myelopathy, low-velocity trauma, initial imaging",
-          "relevance_score": 0.53,
-          "region": "spine",
-          "metadata": {
-            "phase": "initial",
-            "phase_display": "Initial Workup",
-            "context": {},
-            "procedure_count": 9,
-            "high_rated_count": 3
-          },
-          "top_procedure": {
-            "name": "MRI thoracic spine W/O Contrast",
-            "modality": "MRI",
-            "rating": 9,
-            "ratingLevel": "Usually Appropriate",
-            "usesContrast": 0,
-            "radiationDose": "0 mSv"
-          }
-        },
-        {
-          "scenario_id": "7813",
-          "scenario_name": "Thoracic back pain, with or without myelopathy, osteoporosis, initial imaging",
-          "relevance_score": 0.53,
-          "region": "spine",
-          "metadata": {
-            "phase": "initial",
-            "phase_display": "Initial Workup",
-            "context": {},
-            "procedure_count": 9,
-            "high_rated_count": 3
-          },
-          "top_procedure": {
-            "name": "MRI thoracic spine W/O Contrast",
-            "modality": "MRI",
-            "rating": 9,
-            "ratingLevel": "Usually Appropriate",
-            "usesContrast": 0,
-            "radiationDose": "0 mSv"
-          }
-        },
-        {
-          "scenario_id": "7827",
-          "scenario_name": "Thoracic back pain, with or without myelopathy, bone destruction on radiography, next imaging study",
-          "relevance_score": 0.53,
-          "region": "spine",
-          "metadata": {
-            "phase": "initial",
-            "phase_display": "Initial Workup",
-            "context": {},
-            "procedure_count": 8,
-            "high_rated_count": 3
-          },
-          "top_procedure": {
-            "name": "MRI thoracic spine W/O Contrast",
-            "modality": "MRI",
-            "rating": 9,
-            "ratingLevel": "Usually Appropriate",
-            "usesContrast": 0,
-            "radiationDose": "0 mSv"
-          }
-        },
-        {
-          "scenario_id": "7825",
-          "scenario_name": "Thoracic back pain, with or without myelopathy, fracture on radiography, next imaging study",
-          "relevance_score": 0.53,
-          "region": "spine",
-          "metadata": {
-            "phase": "initial",
-            "phase_display": "Initial Workup",
-            "context": {},
-            "procedure_count": 8,
-            "high_rated_count": 3
-          },
-          "top_procedure": {
-            "name": "MRI thoracic spine W/O Contrast",
-            "modality": "MRI",
-            "rating": 9,
-            "ratingLevel": "Usually Appropriate",
-            "usesContrast": 0,
-            "radiationDose": "0 mSv"
-          }
-        },
-        {
-          "scenario_id": "7829",
-          "scenario_name": "Thoracic back pain, with or without myelopathy, post thoracic spine surgery, follow-up imaging",
-          "relevance_score": 0.53,
-          "region": "spine",
-          "metadata": {
-            "phase": "surveillance",
-            "phase_display": "Surveillance",
-            "context": {},
-            "procedure_count": 9,
-            "high_rated_count": 4
-          },
-          "top_procedure": {
-            "name": "MRI thoracic spine W/O Contrast",
-            "modality": "MRI",
-            "rating": 9,
-            "ratingLevel": "Usually Appropriate",
-            "usesContrast": 0,
-            "radiationDose": "0 mSv"
-          }
-        },
-        {
-          "scenario_id": "7826",
-          "scenario_name": "Thoracic back pain, with or without myelopathy, spinal deformity on radiography, next imaging study",
-          "relevance_score": 0.53,
-          "region": "spine",
-          "metadata": {
-            "phase": "initial",
-            "phase_display": "Initial Workup",
-            "context": {},
-            "procedure_count": 8,
-            "high_rated_count": 3
           },
           "top_procedure": {
             "name": "MRI thoracic spine W/O Contrast",
@@ -9381,7 +10560,26 @@
         "nsclc",
         "sclc",
         "lung malignancy",
-        "pulmonary carcinoma"
+        "pulmonary carcinoma",
+        "hemoptysis",
+        "smoker with hemoptysis",
+        "smoker hemoptysis",
+        "imaging for hemoptysis",
+        "hemoptysis cta chest",
+        "hemoptysis cta chest indications",
+        "imaging for hemoptysis massive",
+        "massive hemoptysis",
+        "mediastinal mass",
+        "anterior mediastinal mass",
+        "ct for mediastinal mass anterior compartment",
+        "thymoma",
+        "thymic hyperplasia",
+        "ct for thymoma vs thymic hyperplasia",
+        "paraneoplastic syndrome occult",
+        "paraneoplastic occult malignancy",
+        "hypercalcemia not pth related",
+        "pleural effusion unilateral",
+        "pleural effusion new unilateral"
       ],
       "scenario_mappings": [
         {
@@ -10177,7 +11375,32 @@
         "lung clot",
         "blood clot lung",
         "pulmonary thromboembolism",
-        "vte chest"
+        "vte chest",
+        "ctpa",
+        "cta chest pe",
+        "cta chest for pe",
+        "ctpa protocol",
+        "ctpa contraindication",
+        "pe protocol",
+        "wells score pe",
+        "wells score low pe",
+        "wells criteria pe",
+        "perc rule",
+        "perc rule pe",
+        "perc rule when skip imaging",
+        "pleuritic chest pain",
+        "pleuritic cp",
+        "pleuritic chest pain post op",
+        "sob tachypnea ocp",
+        "sob tachypnea oral contraceptive",
+        "right heart strain ctpa",
+        "rv lv ratio ctpa",
+        "pe pregnancy",
+        "pe in pregnant",
+        "pregnant pe",
+        "pe workup pregnant",
+        "pulmonary embolism pregnant",
+        "postpartum chest pain"
       ],
       "scenario_mappings": [
         {
@@ -12249,7 +13472,36 @@
         "liver tumor",
         "hepatic tumor",
         "liver nodule",
-        "focal liver lesion"
+        "focal liver lesion",
+        "fnh",
+        "focal nodular hyperplasia",
+        "mri for fnh",
+        "hepatic adenoma",
+        "liver adenoma",
+        "mri for fnh vs adenoma",
+        "fnh vs adenoma",
+        "liver hemangioma",
+        "hepatic hemangioma",
+        "eovist",
+        "gd-eob",
+        "primovist",
+        "hepatocyte-specific agent eovist",
+        "hepatobiliary phase",
+        "hepatocyte specific contrast",
+        "hypervascular liver lesion",
+        "hypervascular liver mets",
+        "neuroendocrine liver mets",
+        "recist 1.1 liver",
+        "mrecist liver",
+        "abnormal lfts",
+        "abnormal lft",
+        "transaminitis",
+        "57yo abnormal lfts cholestatic",
+        "abnormal lft incidental",
+        "transaminitis hep panel neg",
+        "isolated alk phos elevation",
+        "alkaline phosphatase elevated",
+        "cholestatic pattern lfts"
       ],
       "scenario_mappings": [
         {
@@ -13268,7 +14520,15 @@
         "appendix inflammation",
         "acute appendicitis",
         "rlq pain",
-        "right lower quadrant pain"
+        "right lower quadrant pain",
+        "31yo rlq pain",
+        "rlq pain us protocol",
+        "rlq pain fever leukocytosis",
+        "fever leukocytosis rlq",
+        "appendicitis suspected",
+        "r/o appendicitis",
+        "rule out appendicitis",
+        "r/o appendicitis pregnant"
       ],
       "scenario_mappings": [
         {
@@ -13943,7 +15203,29 @@
         "pancreatic tumor",
         "pancreatic cancer",
         "pancreatic adenocarcinoma",
-        "pancreatic cyst"
+        "pancreatic cyst",
+        "acute pancreatitis",
+        "pancreatitis",
+        "necrotizing pancreatitis",
+        "ct for acute necrotizing pancreatitis",
+        "ctsi",
+        "ct pancreatitis",
+        "pancreatitis ct findings",
+        "igg4 pancreatitis",
+        "igg4 autoimmune pancreatitis",
+        "autoimmune pancreatitis",
+        "mri for igg4",
+        "ipmn",
+        "ipmn follow up",
+        "fukuoka criteria",
+        "fukuoka criteria ipmn",
+        "ca 19 9 elevated",
+        "ca19-9 elevated",
+        "ca 19-9 elevated",
+        "painless jaundice",
+        "evaluate for pancreatic cancer painless jaundice",
+        "weight loss back pain",
+        "weight loss and back pain"
       ],
       "scenario_mappings": [
         {
@@ -14652,7 +15934,24 @@
         "renal tumor",
         "kidney cancer",
         "renal cell carcinoma",
-        "rcc"
+        "rcc",
+        "hematuria",
+        "hematuria workup",
+        "first time hematuria",
+        "appropriate imaging for first time hematuria",
+        "evaluate hematuria",
+        "how to evaluate hematuria",
+        "microscopic hematuria",
+        "gross hematuria",
+        "painless hematuria",
+        "painless hematuria 60yo",
+        "postmenopausal hematuria",
+        "postmenopausal woman with hematuria",
+        "ct urogram",
+        "ct urogram for hematuria",
+        "ct urogram for hematuria workup",
+        "ct urogram three phase",
+        "ct urogram three phase protocol"
       ],
       "scenario_mappings": [
         {
@@ -16701,7 +18000,43 @@
         "hfref",
         "hfpef",
         "diastolic dysfunction",
-        "pulmonary edema"
+        "pulmonary edema",
+        "cardiac mri myocarditis",
+        "cmr myocarditis",
+        "cmr for myocarditis",
+        "myocarditis",
+        "myocarditis lake louise",
+        "lake louise myocarditis",
+        "cmr for cardiomyopathy",
+        "cmr nonischemic",
+        "cmr nicm",
+        "lge cardiomyopathy",
+        "cardiac amyloid",
+        "cardiac amyloidosis",
+        "amyloid cardiomyopathy",
+        "cmr for cardiac amyloid",
+        "hypertrophic cardiomyopathy",
+        "hcm imaging",
+        "dilated cardiomyopathy",
+        "ischemic cardiomyopathy",
+        "non-ischemic cardiomyopathy",
+        "stress cmr",
+        "cardiac sarcoidosis",
+        "cmr for sarcoid",
+        "new onset afib",
+        "first time afib",
+        "afib new onset weakness",
+        "atrial fibrillation rvr",
+        "dyspnea on exertion bnp",
+        "elevated bnp",
+        "elevated brain natriuretic",
+        "crackles bilateral lower lobes",
+        "bilateral crackles",
+        "patient with crackles",
+        "sob and leg swelling",
+        "shortness of breath and leg swelling",
+        "doe and edema",
+        "doe edema"
       ],
       "scenario_mappings": [
         {
@@ -17567,7 +18902,21 @@
         "sbo",
         "small bowel obstruction",
         "large bowel obstruction",
-        "ileus"
+        "ileus",
+        "abdominal pain and distension no bm",
+        "abdominal pain distension no bm",
+        "abdominal distension no bm",
+        "abdominal distension no bowel movements",
+        "abdominal distension and vomiting",
+        "abdominal distension vomiting no flatus",
+        "distended abdomen vomiting",
+        "obstipation vomiting distended",
+        "obstipation vomiting",
+        "no flatus distension",
+        "abdominal pain vomiting no bm",
+        "incarcerated hernia",
+        "strangulated hernia",
+        "ct for hernia incarcerated"
       ],
       "scenario_mappings": [
         {
@@ -17935,7 +19284,23 @@
         "rectal cancer",
         "colorectal carcinoma",
         "colonic mass",
-        "colon mass"
+        "colon mass",
+        "rectal bleeding",
+        "rectal bleeding workup",
+        "concerning rectal bleeding workup",
+        "hematochezia",
+        "blood in stool over 50",
+        "lower gi bleed workup",
+        "ct colonography",
+        "ct colonography for incomplete colonoscopy",
+        "incomplete colonoscopy",
+        "lynch syndrome",
+        "lynch syndrome surveillance",
+        "hereditary colorectal cancer",
+        "fap surveillance",
+        "imaging for staging colon ca",
+        "rectal cancer staging",
+        "mri rectal cancer staging"
       ],
       "scenario_mappings": [
         {
@@ -25005,7 +26370,24 @@
         "epidural abscess",
         "spondylodiscitis",
         "spinal epidural abscess",
-        "vertebral discitis"
+        "vertebral discitis",
+        "fever and back pain",
+        "back pain with fever",
+        "back pain and fever",
+        "back pain fever",
+        "low back pain and fever",
+        "low back pain with fever",
+        "scan for patient with low back pain and fever",
+        "ivdu back pain",
+        "iv drug use back pain",
+        "ivdu back pain fever",
+        "back pain in ivdu",
+        "back pain history of ivdu",
+        "back pain immunocompromised",
+        "epidural abscess back pain fever",
+        "approach to back pain with fever",
+        "vertebral osteo",
+        "suspected vertebral osteo"
       ],
       "scenario_mappings": [
         {
@@ -27344,7 +28726,40 @@
         "broken hand",
         "hip fracture",
         "wrist fracture",
-        "ankle fracture"
+        "ankle fracture",
+        "scaphoid fracture",
+        "vertebral compression fracture",
+        "compression fracture",
+        "vertebral fracture",
+        "elderly fall hip pain",
+        "fall and hip pain",
+        "fall with hip pain",
+        "fall with leg pain",
+        "fall on outstretched hand",
+        "foosh",
+        "fall outstretched hand",
+        "wrist deformity",
+        "wrist deformity after fall",
+        "fall on outstretched hand wrist deformity",
+        "xray order for elderly fall",
+        "ottawa ankle rules",
+        "ankle xray ottawa rules",
+        "ottawa knee rules",
+        "canadian c-spine rule",
+        "nexus criteria",
+        "c-spine nexus",
+        "c-spine clearance",
+        "cervical spine trauma",
+        "ct cervical spine trauma",
+        "ct c-spine for trauma",
+        "spine trauma imaging",
+        "mvc neck pain midline",
+        "mvc neck pain",
+        "skeletal survey",
+        "non-accidental trauma skeletal survey",
+        "nat skeletal survey",
+        "child abuse skeletal survey",
+        "non-accidental trauma"
       ],
       "scenario_mappings": [
         {
@@ -29629,7 +31044,28 @@
         "neck lump",
         "groin lump",
         "supraclavicular lymph node",
-        "lymph node enlargement"
+        "lymph node enlargement",
+        "weight loss night sweats lymph nodes",
+        "weight loss night sweats",
+        "b symptoms",
+        "night sweats lymph nodes",
+        "fdg pet for lymphoma",
+        "fdg pet for lymphoma staging",
+        "lymphoma staging",
+        "lymphoma post rituximab",
+        "ct for sarcoidosis staging",
+        "hilar lymphadenopathy",
+        "mediastinal lymphadenopathy",
+        "palpable axillary lymph node",
+        "evaluation of palpable axillary",
+        "painful palpable lump under jaw",
+        "lump under jaw",
+        "lump under arm not painful",
+        "lump under arm",
+        "axillary swelling",
+        "axillary swelling after covid",
+        "fever of unknown origin",
+        "fuo workup"
       ],
       "scenario_mappings": [
         {
@@ -33019,7 +34455,26 @@
         "breast malignancy",
         "dcis",
         "ductal carcinoma",
-        "lobular carcinoma"
+        "lobular carcinoma",
+        "bi-rads 5",
+        "birads 5",
+        "bi rads 5",
+        "highly suggestive lesion",
+        "bi-rads 5 highly suggestive lesion",
+        "newly diagnosed breast cancer",
+        "post-lumpectomy mammo",
+        "post-lumpectomy mammogram",
+        "post lumpectomy mammo timing",
+        "post-lumpectomy mammo timing",
+        "mri breast for response to nac",
+        "mri breast for nac",
+        "neoadjuvant chemotherapy breast",
+        "mri breast bilateral with contrast",
+        "mri for paget disease",
+        "paget disease nipple",
+        "contrast enhanced mammography",
+        "cem",
+        "contrast enhanced mammography cem"
       ],
       "scenario_mappings": [
         {
@@ -35549,6 +37004,39 @@
     "brain metastases": "brain_neoplasm",
     "intra-axial mass": "brain_neoplasm",
     "extra-axial mass": "brain_neoplasm",
+    "new headache and papilledema": "brain_neoplasm",
+    "headache and papilledema": "brain_neoplasm",
+    "papilledema": "brain_neoplasm",
+    "headache papilledema": "brain_neoplasm",
+    "rano criteria": "brain_neoplasm",
+    "gbm": "brain_neoplasm",
+    "gbm follow up": "brain_neoplasm",
+    "gbm follow-up": "brain_neoplasm",
+    "glioblastoma follow up": "brain_neoplasm",
+    "glioblastoma follow-up": "brain_neoplasm",
+    "pseudoprogression vs true progression": "brain_neoplasm",
+    "pseudoprogression gbm": "brain_neoplasm",
+    "mrs choline naa": "brain_neoplasm",
+    "mr spectroscopy tumor": "brain_neoplasm",
+    "tumor recurrence brain": "brain_neoplasm",
+    "dti for pre-op tractography": "brain_neoplasm",
+    "pre-op tractography": "brain_neoplasm",
+    "dti tractography eloquent": "brain_neoplasm",
+    "leptomeningeal enhancement": "brain_neoplasm",
+    "leptomeningeal disease": "brain_neoplasm",
+    "leptomeningeal carcinomatosis": "brain_neoplasm",
+    "mri iac": "brain_neoplasm",
+    "internal auditory canal": "brain_neoplasm",
+    "iac mri": "brain_neoplasm",
+    "mri iac for sensorineural hearing loss": "brain_neoplasm",
+    "sensorineural hearing loss mri": "brain_neoplasm",
+    "acoustic neuroma": "brain_neoplasm",
+    "vestibular schwannoma": "brain_neoplasm",
+    "pituitary adenoma": "brain_neoplasm",
+    "pituitary microadenoma": "brain_neoplasm",
+    "mri sella": "brain_neoplasm",
+    "mri sella for pituitary": "brain_neoplasm",
+    "sellar mass": "brain_neoplasm",
     "stroke": "stroke",
     "cva": "stroke",
     "cerebrovascular accident": "stroke",
@@ -35560,6 +37048,27 @@
     "transient ischemic attack": "stroke",
     "tia": "stroke",
     "ischemic infarct": "stroke",
+    "lsw 90min ago": "stroke",
+    "last seen well": "stroke",
+    "facial droop": "stroke",
+    "right facial droop": "stroke",
+    "left facial droop": "stroke",
+    "afib new onset weakness": "heart_failure",
+    "atrial fibrillation new weakness": "stroke",
+    "weakness on one side": "stroke",
+    "one sided weakness": "stroke",
+    "new onset weakness": "stroke",
+    "patient with new confusion": "stroke",
+    "patient with new confusion what imaging": "stroke",
+    "mra neck for vertebral dissection": "stroke",
+    "vertebral artery dissection": "stroke",
+    "carotid dissection": "stroke",
+    "vertebral dissection": "stroke",
+    "hyperdense mca": "stroke",
+    "ddx hyperdense mca": "stroke",
+    "perfusion imaging stroke": "stroke",
+    "ct perfusion stroke": "stroke",
+    "dsc perfusion threshold stroke": "stroke",
     "headache": "headache",
     "head pain": "headache",
     "cephalgia": "headache",
@@ -35622,6 +37131,44 @@
     "brain hemorrhage": "intracranial_hemorrhage",
     "intraventricular hemorrhage": "intracranial_hemorrhage",
     "ivh": "intracranial_hemorrhage",
+    "head trauma": "intracranial_hemorrhage",
+    "head injury": "intracranial_hemorrhage",
+    "mild tbi": "intracranial_hemorrhage",
+    "moderate tbi": "intracranial_hemorrhage",
+    "severe tbi": "intracranial_hemorrhage",
+    "tbi": "intracranial_hemorrhage",
+    "traumatic brain injury": "intracranial_hemorrhage",
+    "noncontrast head ct trauma": "intracranial_hemorrhage",
+    "ct head no contrast trauma": "intracranial_hemorrhage",
+    "head ct trauma": "intracranial_hemorrhage",
+    "head ct for trauma": "intracranial_hemorrhage",
+    "head ct after fall": "intracranial_hemorrhage",
+    "ct head after fall": "intracranial_hemorrhage",
+    "fall hit head": "intracranial_hemorrhage",
+    "fall and hit head": "intracranial_hemorrhage",
+    "fall struck head": "intracranial_hemorrhage",
+    "trauma head imaging": "intracranial_hemorrhage",
+    "head ct for trauma adult": "intracranial_hemorrhage",
+    "noncontrast head ct for trauma adult": "intracranial_hemorrhage",
+    "appropriateness mild tbi": "intracranial_hemorrhage",
+    "ruptured aneurysm": "intracranial_hemorrhage",
+    "ruptured cerebral aneurysm": "intracranial_hemorrhage",
+    "avm": "intracranial_hemorrhage",
+    "brain avm": "intracranial_hemorrhage",
+    "intracranial avm": "intracranial_hemorrhage",
+    "arteriovenous malformation brain": "intracranial_hemorrhage",
+    "dsa vs cta for ruptured aneurysm": "intracranial_hemorrhage",
+    "microbleeds": "intracranial_hemorrhage",
+    "cerebral microbleeds": "intracranial_hemorrhage",
+    "cerebral amyloid angiopathy": "intracranial_hemorrhage",
+    "caa": "intracranial_hemorrhage",
+    "gre swi microbleeds": "intracranial_hemorrhage",
+    "sudden severe headache": "intracranial_hemorrhage",
+    "worst headache of life": "intracranial_hemorrhage",
+    "thunderclap headache": "intracranial_hemorrhage",
+    "head ct after fall on coumadin": "intracranial_hemorrhage",
+    "head ct on warfarin": "intracranial_hemorrhage",
+    "head ct anticoagulation": "intracranial_hemorrhage",
     "back pain": "back_pain",
     "low back pain": "back_pain",
     "lbp": "back_pain",
@@ -35652,6 +37199,17 @@
     "parsonage-turner": "radiculopathy",
     "brachial plexopathy": "radiculopathy",
     "lumbosacral plexopathy": "radiculopathy",
+    "leg pain radiating": "radiculopathy",
+    "leg pain radiating down": "radiculopathy",
+    "shooting leg pain": "radiculopathy",
+    "shooting pain down leg": "radiculopathy",
+    "chronic low back pain radiating to leg": "radiculopathy",
+    "back pain radiating to leg": "radiculopathy",
+    "foot drop after lumbar surgery": "radiculopathy",
+    "foot drop": "radiculopathy",
+    "mr neurography": "radiculopathy",
+    "mr neurography sciatic": "radiculopathy",
+    "mr neurography for sciatic": "radiculopathy",
     "spinal stenosis": "spinal_stenosis",
     "canal stenosis": "spinal_stenosis",
     "narrowing of spine": "spinal_stenosis",
@@ -35675,6 +37233,24 @@
     "motor neuron disease": "myelopathy",
     "conus medullaris syndrome": "myelopathy",
     "tethered cord": "myelopathy",
+    "cauda equina": "myelopathy",
+    "cauda equina syndrome": "myelopathy",
+    "first line imaging for cauda equina syndrome": "myelopathy",
+    "mri for cauda equina": "myelopathy",
+    "mri lumbar spine cauda equina": "myelopathy",
+    "saddle anesthesia": "myelopathy",
+    "low back pain with saddle anesthesia": "myelopathy",
+    "back pain saddle anesthesia": "myelopathy",
+    "saddle anaesthesia": "myelopathy",
+    "back pain with leg weakness": "myelopathy",
+    "back pain leg weakness": "myelopathy",
+    "back pain with urinary retention": "myelopathy",
+    "leg weakness urinary retention": "myelopathy",
+    "bilateral leg weakness": "myelopathy",
+    "bilateral leg weakness urinary retention": "myelopathy",
+    "acute onset back pain with leg weakness": "myelopathy",
+    "back pain with leg weakness urinary retention": "myelopathy",
+    "back pain with neurologic deficit": "myelopathy",
     "lung nodule": "lung_nodule",
     "pulmonary nodule": "lung_nodule",
     "lung lesion": "lung_nodule",
@@ -35690,6 +37266,25 @@
     "sclc": "lung_cancer",
     "lung malignancy": "lung_cancer",
     "pulmonary carcinoma": "lung_cancer",
+    "hemoptysis": "lung_cancer",
+    "smoker with hemoptysis": "lung_cancer",
+    "smoker hemoptysis": "lung_cancer",
+    "imaging for hemoptysis": "lung_cancer",
+    "hemoptysis cta chest": "lung_cancer",
+    "hemoptysis cta chest indications": "lung_cancer",
+    "imaging for hemoptysis massive": "lung_cancer",
+    "massive hemoptysis": "lung_cancer",
+    "mediastinal mass": "lung_cancer",
+    "anterior mediastinal mass": "lung_cancer",
+    "ct for mediastinal mass anterior compartment": "lung_cancer",
+    "thymoma": "lung_cancer",
+    "thymic hyperplasia": "lung_cancer",
+    "ct for thymoma vs thymic hyperplasia": "lung_cancer",
+    "paraneoplastic syndrome occult": "lung_cancer",
+    "paraneoplastic occult malignancy": "lung_cancer",
+    "hypercalcemia not pth related": "lung_cancer",
+    "pleural effusion unilateral": "lung_cancer",
+    "pleural effusion new unilateral": "lung_cancer",
     "pulmonary embolism": "pulmonary_embolism",
     "pulmonary embolus": "pulmonary_embolism",
     "pe": "pulmonary_embolism",
@@ -35698,6 +37293,31 @@
     "blood clot lung": "pulmonary_embolism",
     "pulmonary thromboembolism": "pulmonary_embolism",
     "vte chest": "pulmonary_embolism",
+    "ctpa": "pulmonary_embolism",
+    "cta chest pe": "pulmonary_embolism",
+    "cta chest for pe": "pulmonary_embolism",
+    "ctpa protocol": "pulmonary_embolism",
+    "ctpa contraindication": "pulmonary_embolism",
+    "pe protocol": "pulmonary_embolism",
+    "wells score pe": "pulmonary_embolism",
+    "wells score low pe": "pulmonary_embolism",
+    "wells criteria pe": "pulmonary_embolism",
+    "perc rule": "pulmonary_embolism",
+    "perc rule pe": "pulmonary_embolism",
+    "perc rule when skip imaging": "pulmonary_embolism",
+    "pleuritic chest pain": "pulmonary_embolism",
+    "pleuritic cp": "pulmonary_embolism",
+    "pleuritic chest pain post op": "pulmonary_embolism",
+    "sob tachypnea ocp": "pulmonary_embolism",
+    "sob tachypnea oral contraceptive": "pulmonary_embolism",
+    "right heart strain ctpa": "pulmonary_embolism",
+    "rv lv ratio ctpa": "pulmonary_embolism",
+    "pe pregnancy": "pulmonary_embolism",
+    "pe in pregnant": "pulmonary_embolism",
+    "pregnant pe": "pulmonary_embolism",
+    "pe workup pregnant": "pulmonary_embolism",
+    "pulmonary embolism pregnant": "pulmonary_embolism",
+    "postpartum chest pain": "pulmonary_embolism",
     "pneumonia": "pneumonia",
     "lung infection": "pneumonia",
     "chest infection": "pneumonia",
@@ -35724,6 +37344,35 @@
     "hepatic tumor": "liver_lesion",
     "liver nodule": "liver_lesion",
     "focal liver lesion": "liver_lesion",
+    "fnh": "liver_lesion",
+    "focal nodular hyperplasia": "liver_lesion",
+    "mri for fnh": "liver_lesion",
+    "hepatic adenoma": "liver_lesion",
+    "liver adenoma": "liver_lesion",
+    "mri for fnh vs adenoma": "liver_lesion",
+    "fnh vs adenoma": "liver_lesion",
+    "liver hemangioma": "liver_lesion",
+    "hepatic hemangioma": "liver_lesion",
+    "eovist": "liver_lesion",
+    "gd-eob": "liver_lesion",
+    "primovist": "liver_lesion",
+    "hepatocyte-specific agent eovist": "liver_lesion",
+    "hepatobiliary phase": "liver_lesion",
+    "hepatocyte specific contrast": "liver_lesion",
+    "hypervascular liver lesion": "liver_lesion",
+    "hypervascular liver mets": "liver_lesion",
+    "neuroendocrine liver mets": "liver_lesion",
+    "recist 1.1 liver": "liver_lesion",
+    "mrecist liver": "liver_lesion",
+    "abnormal lfts": "liver_lesion",
+    "abnormal lft": "liver_lesion",
+    "transaminitis": "liver_lesion",
+    "57yo abnormal lfts cholestatic": "liver_lesion",
+    "abnormal lft incidental": "liver_lesion",
+    "transaminitis hep panel neg": "liver_lesion",
+    "isolated alk phos elevation": "liver_lesion",
+    "alkaline phosphatase elevated": "liver_lesion",
+    "cholestatic pattern lfts": "liver_lesion",
     "liver cancer": "liver_cancer",
     "hcc": "liver_cancer",
     "hepatocellular carcinoma": "liver_cancer",
@@ -35735,6 +37384,14 @@
     "acute appendicitis": "appendicitis",
     "rlq pain": "appendicitis",
     "right lower quadrant pain": "appendicitis",
+    "31yo rlq pain": "appendicitis",
+    "rlq pain us protocol": "appendicitis",
+    "rlq pain fever leukocytosis": "appendicitis",
+    "fever leukocytosis rlq": "appendicitis",
+    "appendicitis suspected": "appendicitis",
+    "r/o appendicitis": "appendicitis",
+    "rule out appendicitis": "appendicitis",
+    "r/o appendicitis pregnant": "appendicitis",
     "abdominal pain": "abdominal_pain",
     "belly pain": "abdominal_pain",
     "stomach pain": "abdominal_pain",
@@ -35747,6 +37404,28 @@
     "pancreatic cancer": "pancreatic_mass",
     "pancreatic adenocarcinoma": "pancreatic_mass",
     "pancreatic cyst": "pancreatic_mass",
+    "acute pancreatitis": "pancreatic_mass",
+    "pancreatitis": "pancreatic_mass",
+    "necrotizing pancreatitis": "pancreatic_mass",
+    "ct for acute necrotizing pancreatitis": "pancreatic_mass",
+    "ctsi": "pancreatic_mass",
+    "ct pancreatitis": "pancreatic_mass",
+    "pancreatitis ct findings": "pancreatic_mass",
+    "igg4 pancreatitis": "pancreatic_mass",
+    "igg4 autoimmune pancreatitis": "pancreatic_mass",
+    "autoimmune pancreatitis": "pancreatic_mass",
+    "mri for igg4": "pancreatic_mass",
+    "ipmn": "pancreatic_mass",
+    "ipmn follow up": "pancreatic_mass",
+    "fukuoka criteria": "pancreatic_mass",
+    "fukuoka criteria ipmn": "pancreatic_mass",
+    "ca 19 9 elevated": "pancreatic_mass",
+    "ca19-9 elevated": "pancreatic_mass",
+    "ca 19-9 elevated": "pancreatic_mass",
+    "painless jaundice": "pancreatic_mass",
+    "evaluate for pancreatic cancer painless jaundice": "pancreatic_mass",
+    "weight loss back pain": "pancreatic_mass",
+    "weight loss and back pain": "pancreatic_mass",
     "kidney mass": "kidney_mass",
     "renal mass": "kidney_mass",
     "kidney lesion": "kidney_mass",
@@ -35756,6 +37435,23 @@
     "kidney cancer": "kidney_mass",
     "renal cell carcinoma": "kidney_mass",
     "rcc": "kidney_mass",
+    "hematuria": "kidney_mass",
+    "hematuria workup": "kidney_mass",
+    "first time hematuria": "kidney_mass",
+    "appropriate imaging for first time hematuria": "kidney_mass",
+    "evaluate hematuria": "kidney_mass",
+    "how to evaluate hematuria": "kidney_mass",
+    "microscopic hematuria": "kidney_mass",
+    "gross hematuria": "kidney_mass",
+    "painless hematuria": "kidney_mass",
+    "painless hematuria 60yo": "kidney_mass",
+    "postmenopausal hematuria": "kidney_mass",
+    "postmenopausal woman with hematuria": "kidney_mass",
+    "ct urogram": "kidney_mass",
+    "ct urogram for hematuria": "kidney_mass",
+    "ct urogram for hematuria workup": "kidney_mass",
+    "ct urogram three phase": "kidney_mass",
+    "ct urogram three phase protocol": "kidney_mass",
     "adrenal mass": "adrenal_mass",
     "adrenal nodule": "adrenal_mass",
     "adrenal lesion": "adrenal_mass",
@@ -35797,6 +37493,41 @@
     "hfpef": "heart_failure",
     "diastolic dysfunction": "heart_failure",
     "pulmonary edema": "heart_failure",
+    "cardiac mri myocarditis": "heart_failure",
+    "cmr myocarditis": "heart_failure",
+    "cmr for myocarditis": "heart_failure",
+    "myocarditis": "heart_failure",
+    "myocarditis lake louise": "heart_failure",
+    "lake louise myocarditis": "heart_failure",
+    "cmr for cardiomyopathy": "heart_failure",
+    "cmr nonischemic": "heart_failure",
+    "cmr nicm": "heart_failure",
+    "lge cardiomyopathy": "heart_failure",
+    "cardiac amyloid": "heart_failure",
+    "cardiac amyloidosis": "heart_failure",
+    "amyloid cardiomyopathy": "heart_failure",
+    "cmr for cardiac amyloid": "heart_failure",
+    "hypertrophic cardiomyopathy": "heart_failure",
+    "hcm imaging": "heart_failure",
+    "dilated cardiomyopathy": "heart_failure",
+    "ischemic cardiomyopathy": "heart_failure",
+    "non-ischemic cardiomyopathy": "heart_failure",
+    "stress cmr": "heart_failure",
+    "cardiac sarcoidosis": "heart_failure",
+    "cmr for sarcoid": "heart_failure",
+    "new onset afib": "heart_failure",
+    "first time afib": "heart_failure",
+    "atrial fibrillation rvr": "heart_failure",
+    "dyspnea on exertion bnp": "heart_failure",
+    "elevated bnp": "heart_failure",
+    "elevated brain natriuretic": "heart_failure",
+    "crackles bilateral lower lobes": "heart_failure",
+    "bilateral crackles": "heart_failure",
+    "patient with crackles": "heart_failure",
+    "sob and leg swelling": "heart_failure",
+    "shortness of breath and leg swelling": "heart_failure",
+    "doe and edema": "heart_failure",
+    "doe edema": "heart_failure",
     "thyroid mass": "thyroid_neck_mass",
     "neck mass": "thyroid_neck_mass",
     "goiter": "thyroid_neck_mass",
@@ -35813,6 +37544,20 @@
     "small bowel obstruction": "bowel_obstruction",
     "large bowel obstruction": "bowel_obstruction",
     "ileus": "bowel_obstruction",
+    "abdominal pain and distension no bm": "bowel_obstruction",
+    "abdominal pain distension no bm": "bowel_obstruction",
+    "abdominal distension no bm": "bowel_obstruction",
+    "abdominal distension no bowel movements": "bowel_obstruction",
+    "abdominal distension and vomiting": "bowel_obstruction",
+    "abdominal distension vomiting no flatus": "bowel_obstruction",
+    "distended abdomen vomiting": "bowel_obstruction",
+    "obstipation vomiting distended": "bowel_obstruction",
+    "obstipation vomiting": "bowel_obstruction",
+    "no flatus distension": "bowel_obstruction",
+    "abdominal pain vomiting no bm": "bowel_obstruction",
+    "incarcerated hernia": "bowel_obstruction",
+    "strangulated hernia": "bowel_obstruction",
+    "ct for hernia incarcerated": "bowel_obstruction",
     "diverticulitis": "diverticulitis",
     "diverticular disease": "diverticulitis",
     "diverticulosis": "diverticulitis",
@@ -35826,6 +37571,22 @@
     "colorectal carcinoma": "colon_cancer",
     "colonic mass": "colon_cancer",
     "colon mass": "colon_cancer",
+    "rectal bleeding": "colon_cancer",
+    "rectal bleeding workup": "colon_cancer",
+    "concerning rectal bleeding workup": "colon_cancer",
+    "hematochezia": "colon_cancer",
+    "blood in stool over 50": "colon_cancer",
+    "lower gi bleed workup": "colon_cancer",
+    "ct colonography": "colon_cancer",
+    "ct colonography for incomplete colonoscopy": "colon_cancer",
+    "incomplete colonoscopy": "colon_cancer",
+    "lynch syndrome": "colon_cancer",
+    "lynch syndrome surveillance": "colon_cancer",
+    "hereditary colorectal cancer": "colon_cancer",
+    "fap surveillance": "colon_cancer",
+    "imaging for staging colon ca": "colon_cancer",
+    "rectal cancer staging": "colon_cancer",
+    "mri rectal cancer staging": "colon_cancer",
     "cholecystitis": "cholecystitis",
     "gallbladder inflammation": "cholecystitis",
     "gallstones": "cholecystitis",
@@ -35879,6 +37640,23 @@
     "spondylodiscitis": "spine_infection",
     "spinal epidural abscess": "spine_infection",
     "vertebral discitis": "spine_infection",
+    "fever and back pain": "spine_infection",
+    "back pain with fever": "spine_infection",
+    "back pain and fever": "spine_infection",
+    "back pain fever": "spine_infection",
+    "low back pain and fever": "spine_infection",
+    "low back pain with fever": "spine_infection",
+    "scan for patient with low back pain and fever": "spine_infection",
+    "ivdu back pain": "spine_infection",
+    "iv drug use back pain": "spine_infection",
+    "ivdu back pain fever": "spine_infection",
+    "back pain in ivdu": "spine_infection",
+    "back pain history of ivdu": "spine_infection",
+    "back pain immunocompromised": "spine_infection",
+    "epidural abscess back pain fever": "spine_infection",
+    "approach to back pain with fever": "spine_infection",
+    "vertebral osteo": "spine_infection",
+    "suspected vertebral osteo": "spine_infection",
     "soft tissue infection": "soft_tissue_infection",
     "cellulitis": "soft_tissue_infection",
     "necrotizing fasciitis": "soft_tissue_infection",
@@ -35901,6 +37679,39 @@
     "broken hand": "fracture",
     "wrist fracture": "fracture",
     "ankle fracture": "fracture",
+    "scaphoid fracture": "fracture",
+    "vertebral compression fracture": "fracture",
+    "compression fracture": "fracture",
+    "vertebral fracture": "fracture",
+    "elderly fall hip pain": "fracture",
+    "fall and hip pain": "fracture",
+    "fall with hip pain": "fracture",
+    "fall with leg pain": "fracture",
+    "fall on outstretched hand": "fracture",
+    "foosh": "fracture",
+    "fall outstretched hand": "fracture",
+    "wrist deformity": "fracture",
+    "wrist deformity after fall": "fracture",
+    "fall on outstretched hand wrist deformity": "fracture",
+    "xray order for elderly fall": "fracture",
+    "ottawa ankle rules": "fracture",
+    "ankle xray ottawa rules": "fracture",
+    "ottawa knee rules": "fracture",
+    "canadian c-spine rule": "fracture",
+    "nexus criteria": "fracture",
+    "c-spine nexus": "fracture",
+    "c-spine clearance": "fracture",
+    "cervical spine trauma": "fracture",
+    "ct cervical spine trauma": "fracture",
+    "ct c-spine for trauma": "fracture",
+    "spine trauma imaging": "fracture",
+    "mvc neck pain midline": "fracture",
+    "mvc neck pain": "fracture",
+    "skeletal survey": "fracture",
+    "non-accidental trauma skeletal survey": "fracture",
+    "nat skeletal survey": "fracture",
+    "child abuse skeletal survey": "fracture",
+    "non-accidental trauma": "fracture",
     "soft tissue mass": "soft_tissue_mass",
     "soft tissue tumor": "soft_tissue_mass",
     "soft tissue sarcoma": "soft_tissue_mass",
@@ -35925,6 +37736,27 @@
     "groin lump": "lymphadenopathy",
     "supraclavicular lymph node": "lymphadenopathy",
     "lymph node enlargement": "lymphadenopathy",
+    "weight loss night sweats lymph nodes": "lymphadenopathy",
+    "weight loss night sweats": "lymphadenopathy",
+    "b symptoms": "lymphadenopathy",
+    "night sweats lymph nodes": "lymphadenopathy",
+    "fdg pet for lymphoma": "lymphadenopathy",
+    "fdg pet for lymphoma staging": "lymphadenopathy",
+    "lymphoma staging": "lymphadenopathy",
+    "lymphoma post rituximab": "lymphadenopathy",
+    "ct for sarcoidosis staging": "lymphadenopathy",
+    "hilar lymphadenopathy": "lymphadenopathy",
+    "mediastinal lymphadenopathy": "lymphadenopathy",
+    "palpable axillary lymph node": "lymphadenopathy",
+    "evaluation of palpable axillary": "lymphadenopathy",
+    "painful palpable lump under jaw": "lymphadenopathy",
+    "lump under jaw": "lymphadenopathy",
+    "lump under arm not painful": "lymphadenopathy",
+    "lump under arm": "lymphadenopathy",
+    "axillary swelling": "lymphadenopathy",
+    "axillary swelling after covid": "lymphadenopathy",
+    "fever of unknown origin": "lymphadenopathy",
+    "fuo workup": "lymphadenopathy",
     "aortic aneurysm": "aortic_aneurysm",
     "aaa": "aortic_aneurysm",
     "abdominal aortic aneurysm": "aortic_aneurysm",
@@ -35964,6 +37796,25 @@
     "dcis": "breast_cancer",
     "ductal carcinoma": "breast_cancer",
     "lobular carcinoma": "breast_cancer",
+    "bi-rads 5": "breast_cancer",
+    "birads 5": "breast_cancer",
+    "bi rads 5": "breast_cancer",
+    "highly suggestive lesion": "breast_cancer",
+    "bi-rads 5 highly suggestive lesion": "breast_cancer",
+    "newly diagnosed breast cancer": "breast_cancer",
+    "post-lumpectomy mammo": "breast_cancer",
+    "post-lumpectomy mammogram": "breast_cancer",
+    "post lumpectomy mammo timing": "breast_cancer",
+    "post-lumpectomy mammo timing": "breast_cancer",
+    "mri breast for response to nac": "breast_cancer",
+    "mri breast for nac": "breast_cancer",
+    "neoadjuvant chemotherapy breast": "breast_cancer",
+    "mri breast bilateral with contrast": "breast_cancer",
+    "mri for paget disease": "breast_cancer",
+    "paget disease nipple": "breast_cancer",
+    "contrast enhanced mammography": "breast_cancer",
+    "cem": "breast_cancer",
+    "contrast enhanced mammography cem": "breast_cancer",
     "breast screening": "breast_screening",
     "mammogram": "breast_screening",
     "mammography": "breast_screening",
