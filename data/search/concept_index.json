@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-05-21T04:27:58.045630+00:00",
+  "generated_at": "2026-05-21T10:07:14.250188+00:00",
   "concepts": {
     "brain_neoplasm": {
       "display_name": "Brain Tumor",
@@ -13461,6 +13461,46 @@
         }
       ]
     },
+    "pericardial_effusion": {
+      "display_name": "Pericardial Effusion / Pericarditis",
+      "body_region": "chest",
+      "synonyms": [
+        "pericardial effusion",
+        "pericardial disease",
+        "pericarditis",
+        "cardiac tamponade",
+        "tamponade",
+        "pericardial tamponade",
+        "constrictive pericarditis",
+        "pericardial effusion vs tamponade",
+        "imaging for pericardial disease"
+      ],
+      "scenario_mappings": [
+        {
+          "scenario_id": "5978",
+          "scenario_name": "Dyspnea, pericardial disease suspected, ischemia excluded, initial imaging",
+          "relevance_score": 1.0,
+          "region": "chest",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 16,
+            "high_rated_count": 4
+          },
+          "top_procedure": {
+            "name": "US echocardiography transthoracic res...",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        }
+      ]
+    },
     "liver_lesion": {
       "display_name": "Liver Lesion",
       "body_region": "abdomen",
@@ -20517,6 +20557,699 @@
           },
           "top_procedure": {
             "name": "US abdomen",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        }
+      ]
+    },
+    "cholangitis": {
+      "display_name": "Cholangitis / Biliary Infection",
+      "body_region": "abdomen",
+      "synonyms": [
+        "cholangitis",
+        "ascending cholangitis",
+        "acute cholangitis",
+        "charcot triad",
+        "charcot triad imaging",
+        "biliary infection",
+        "biliary sepsis",
+        "ruq pain fever wbc",
+        "ruq pain fever high wbc",
+        "ruq pain with fever and high wbc"
+      ],
+      "scenario_mappings": [
+        {
+          "scenario_id": "6705",
+          "scenario_name": "RUQ pain, fever, high WBC count , biliary disease suspected, US equivocal, next imaging study",
+          "relevance_score": 1.0,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 6,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "MRI abdomen W/O & W/ Contrast with MRCP",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 2,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "6704",
+          "scenario_name": "RUQ pain, fever, high WBC count , biliary disease suspected, US negative, next imaging study",
+          "relevance_score": 1.0,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 6,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "MRI abdomen W/O & W/ Contrast with MRCP",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 2,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4686",
+          "scenario_name": "Jaundice, biliary obstruction suspected",
+          "relevance_score": 0.7,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 7,
+            "high_rated_count": 4
+          },
+          "top_procedure": {
+            "name": "US abdomen",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        }
+      ]
+    },
+    "pyloric_stenosis": {
+      "display_name": "Pyloric Stenosis (Pediatric)",
+      "body_region": "abdomen",
+      "synonyms": [
+        "pyloric stenosis",
+        "hypertrophic pyloric stenosis",
+        "infant nonbilious vomiting",
+        "projectile vomiting infant",
+        "us for pyloric stenosis",
+        "pyloric stenosis suspected",
+        "newborn projectile vomiting"
+      ],
+      "scenario_mappings": [
+        {
+          "scenario_id": "815",
+          "scenario_name": "Vomiting, nonbilious, new onset, hypertrophic pyloric stenosis suspected, initial imaging",
+          "relevance_score": 1.0,
+          "region": "vascular",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 5,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "US abdomen (UGI tract)",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        }
+      ]
+    },
+    "vesicoureteral_reflux": {
+      "display_name": "Vesicoureteral Reflux (VUR)",
+      "body_region": "abdomen",
+      "synonyms": [
+        "vesicoureteral reflux",
+        "vur",
+        "vcug",
+        "vcug vs rnc",
+        "voiding cystourethrogram",
+        "vur follow up",
+        "vur followup",
+        "vur surveillance",
+        "antenatal hydronephrosis followup",
+        "antenatal hydronephrosis surveillance",
+        "neonatal hydronephrosis"
+      ],
+      "scenario_mappings": [
+        {
+          "scenario_id": "7280",
+          "scenario_name": "Vesicoureteral reflux, follow-up imaging",
+          "relevance_score": 1.0,
+          "region": "other",
+          "metadata": {
+            "phase": "surveillance",
+            "phase_display": "Surveillance",
+            "context": {},
+            "procedure_count": 9,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "US kidneys and bladder",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "6248",
+          "scenario_name": "Pyelonephritis suspected, acute, vesicoureteral reflux, initial imaging",
+          "relevance_score": 0.9,
+          "region": "other",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 17,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "CT Abd/Pelvis W/ Contrast",
+            "modality": "CT",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 1,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "5357",
+          "scenario_name": "Hydronephrosis, antenatal, moderate to severe hydronephrosis on initial neonatal US, no reflux on VCUG",
+          "relevance_score": 0.7,
+          "region": "peds",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 4,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "US kidneys and bladder follow-up in 1...",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        }
+      ]
+    },
+    "ectopic_pregnancy": {
+      "display_name": "Ectopic Pregnancy / Pelvic Pain in Pregnancy",
+      "body_region": "abdomen",
+      "synonyms": [
+        "ectopic pregnancy",
+        "ectopic",
+        "rule out ectopic",
+        "r/o ectopic",
+        "ectopic suspected",
+        "positive beta-hcg pelvic pain",
+        "positive bhcg pelvic pain",
+        "pelvic pain positive hcg",
+        "pelvic pain pregnant",
+        "early pregnancy bleeding",
+        "first trimester bleeding",
+        "pregnancy of unknown location"
+      ],
+      "scenario_mappings": [
+        {
+          "scenario_id": "1041",
+          "scenario_name": "Pelvic pain, acute, positive beta-hCG, gynecological etiology suspected, initial imaging",
+          "relevance_score": 1.0,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 13,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "US pelvis transvaginal",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "1043",
+          "scenario_name": "Pelvic pain, acute, positive beta-hCG, non-gynecological etiology suspected, initial imaging",
+          "relevance_score": 0.9,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 11,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "US pelvis transvaginal",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "1042",
+          "scenario_name": "Pelvic pain, acute, negative beta-hCG, gynecological etiology suspected, initial imaging",
+          "relevance_score": 0.7,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 13,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "US pelvis transvaginal",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        }
+      ]
+    },
+    "ovarian_torsion": {
+      "display_name": "Ovarian Torsion / Adnexal Pathology",
+      "body_region": "abdomen",
+      "synonyms": [
+        "ovarian torsion",
+        "adnexal torsion",
+        "twisted ovary",
+        "acute pelvic pain ovarian",
+        "ovarian cyst rupture",
+        "hemorrhagic ovarian cyst",
+        "adnexal mass acute",
+        "ruptured ovarian cyst",
+        "adnexal mass symptomatic"
+      ],
+      "scenario_mappings": [
+        {
+          "scenario_id": "1042",
+          "scenario_name": "Pelvic pain, acute, negative beta-hCG, gynecological etiology suspected, initial imaging",
+          "relevance_score": 1.0,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 13,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "US pelvis transvaginal",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "1041",
+          "scenario_name": "Pelvic pain, acute, positive beta-hCG, gynecological etiology suspected, initial imaging",
+          "relevance_score": 0.8,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 13,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "US pelvis transvaginal",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "7523",
+          "scenario_name": "Adnexal mass, no acute symptoms, postmenopausal, pelvic US suspicious for malignancy, next imaging study for characterization",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 6,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI pelvis W/O & W/ Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 2,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4706",
+          "scenario_name": "Adnexal mass, no acute symptoms, premenopausal, pelvic US suspicious for malignancy, next imaging study for characterization",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 6,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI pelvis W/O & W/ Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 2,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "7523",
+          "scenario_name": "Adnexal mass, no acute symptoms, postmenopausal, pelvic US suspicious for malignancy, next imaging study for characterization",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 6,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI pelvis W/O & W/ Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 2,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4706",
+          "scenario_name": "Adnexal mass, no acute symptoms, premenopausal, pelvic US suspicious for malignancy, next imaging study for characterization",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 6,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI pelvis W/O & W/ Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 2,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4705",
+          "scenario_name": "Adnexal mass, no acute symptoms, postmenopausal, initial pelvic US indeterminate, follow-up imaging",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 10,
+            "high_rated_count": 5
+          },
+          "top_procedure": {
+            "name": "US pelvis transvaginal",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "7522",
+          "scenario_name": "Adnexal mass, no acute symptoms, postmenopausal, initial pelvic US indeterminate, next imaging study for characterization",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 6,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI pelvis W/O & W/ Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 2,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "7524",
+          "scenario_name": "Adnexal mass, no acute symptoms, pregnant, initial pelvic US indeterminate, next imaging study for characterization",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 6,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI pelvis W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "1172",
+          "scenario_name": "Adnexal mass, no acute symptoms, premenopausal, initial pelvic US indeterminate, follow-up imaging",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 10,
+            "high_rated_count": 4
+          },
+          "top_procedure": {
+            "name": "US pelvis transvaginal",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "7521",
+          "scenario_name": "Adnexal mass, no acute symptoms, premenopausal, initial pelvic US indeterminate, next imaging study for characterization",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 6,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI pelvis W/O & W/ Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 2,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4705",
+          "scenario_name": "Adnexal mass, no acute symptoms, postmenopausal, initial pelvic US indeterminate, follow-up imaging",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 10,
+            "high_rated_count": 5
+          },
+          "top_procedure": {
+            "name": "US pelvis transvaginal",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "7522",
+          "scenario_name": "Adnexal mass, no acute symptoms, postmenopausal, initial pelvic US indeterminate, next imaging study for characterization",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 6,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI pelvis W/O & W/ Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 2,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "7524",
+          "scenario_name": "Adnexal mass, no acute symptoms, pregnant, initial pelvic US indeterminate, next imaging study for characterization",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 6,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI pelvis W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "1172",
+          "scenario_name": "Adnexal mass, no acute symptoms, premenopausal, initial pelvic US indeterminate, follow-up imaging",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 10,
+            "high_rated_count": 4
+          },
+          "top_procedure": {
+            "name": "US pelvis transvaginal",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "7521",
+          "scenario_name": "Adnexal mass, no acute symptoms, premenopausal, initial pelvic US indeterminate, next imaging study for characterization",
+          "relevance_score": 0.53,
+          "region": "abdomen",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 6,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI pelvis W/O & W/ Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 2,
+            "radiationDose": "0 mSv"
+          }
+        }
+      ]
+    },
+    "scrotal_pain": {
+      "display_name": "Scrotal Pain / Testicular Torsion",
+      "body_region": "abdomen",
+      "synonyms": [
+        "scrotal pain",
+        "scrotal pain acute",
+        "scrotal pain acute nontraumatic",
+        "acute scrotum",
+        "testicular torsion",
+        "testicular pain",
+        "twisted testicle",
+        "scrotal swelling",
+        "acute scrotal pain"
+      ],
+      "scenario_mappings": [
+        {
+          "scenario_id": "7833",
+          "scenario_name": "Scrotal pain, acute, nontraumatic, no antecedent mass, initial imaging",
+          "relevance_score": 1.0,
+          "region": "other",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 8,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "US scrotum",
             "modality": "US",
             "rating": 9,
             "ratingLevel": "Usually Appropriate",
@@ -31028,6 +31761,765 @@
         }
       ]
     },
+    "hip_dysplasia": {
+      "display_name": "Hip Dysplasia / DDH",
+      "body_region": "msk",
+      "synonyms": [
+        "hip dysplasia",
+        "developmental dysplasia of the hip",
+        "ddh",
+        "ddh infant",
+        "infant hip ultrasound",
+        "us for ddh",
+        "us for ddh infant",
+        "us for ddh infant 4 mo",
+        "hip dysplasia infant",
+        "infant hip",
+        "hip dysplasia suspected",
+        "dysplasia infant"
+      ],
+      "scenario_mappings": [
+        {
+          "scenario_id": "787",
+          "scenario_name": "Hip dysplasia suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 2,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "US hips",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "790",
+          "scenario_name": "Hip dysplasia suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 2,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography pelvis",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0.1-1mSv"
+          }
+        },
+        {
+          "scenario_id": "4696",
+          "scenario_name": "Hip dysplasia suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 2,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography pelvis",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0.1-1mSv"
+          }
+        },
+        {
+          "scenario_id": "4694",
+          "scenario_name": "Hip dysplasia suspected, equivocal physical exam or risk factors",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "screening",
+            "phase_display": "Screening",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 2,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "US hips",
+            "modality": "US",
+            "rating": 2,
+            "ratingLevel": "Usually Not Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "4695",
+          "scenario_name": "Hip dysplasia suspected, equivocal physical exam or risk factors",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "screening",
+            "phase_display": "Screening",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 2,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "US hips",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "787",
+          "scenario_name": "Hip dysplasia suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 2,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "US hips",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "790",
+          "scenario_name": "Hip dysplasia suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 2,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography pelvis",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0.1-1mSv"
+          }
+        },
+        {
+          "scenario_id": "4696",
+          "scenario_name": "Hip dysplasia suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 2,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography pelvis",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0.1-1mSv"
+          }
+        },
+        {
+          "scenario_id": "4694",
+          "scenario_name": "Hip dysplasia suspected, equivocal physical exam or risk factors",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "screening",
+            "phase_display": "Screening",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 2,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "US hips",
+            "modality": "US",
+            "rating": 2,
+            "ratingLevel": "Usually Not Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "4695",
+          "scenario_name": "Hip dysplasia suspected, equivocal physical exam or risk factors",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "screening",
+            "phase_display": "Screening",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 2,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "US hips",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "6722",
+          "scenario_name": "Hip pain, chronic, dysplasia suspected, radiography negative, next imaging study",
+          "relevance_score": 0.53,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 8,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI hip W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "6721",
+          "scenario_name": "Hip pain, chronic, dysplasia suspected, radiography nondiagnostic, next imaging study",
+          "relevance_score": 0.53,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 8,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI hip W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "6722",
+          "scenario_name": "Hip pain, chronic, dysplasia suspected, radiography negative, next imaging study",
+          "relevance_score": 0.53,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 8,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI hip W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "6721",
+          "scenario_name": "Hip pain, chronic, dysplasia suspected, radiography nondiagnostic, next imaging study",
+          "relevance_score": 0.53,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 8,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "MRI hip W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4697",
+          "scenario_name": "Hip dysplasia, in harness",
+          "relevance_score": 0.53,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "US hips",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4697",
+          "scenario_name": "Hip dysplasia, in harness",
+          "relevance_score": 0.53,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "US hips",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        }
+      ]
+    },
+    "pediatric_limp": {
+      "display_name": "Pediatric Limp / Acute Limp <=5yo",
+      "body_region": "msk",
+      "synonyms": [
+        "pediatric limp",
+        "acute limp",
+        "kid with limping",
+        "kid limp no trauma",
+        "kid limping no trauma",
+        "child limping",
+        "child won't walk",
+        "child won't bear weight",
+        "antalgic gait child",
+        "ped acute limp",
+        "limping toddler",
+        "toddler limping",
+        "limp in young child"
+      ],
+      "scenario_mappings": [
+        {
+          "scenario_id": "4503",
+          "scenario_name": "Ped <=5yo, acute limp, ankle pain",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 8,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography ankle",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "<0.1 mSv"
+          }
+        },
+        {
+          "scenario_id": "4504",
+          "scenario_name": "Ped <=5yo, acute limp, foot pain",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 8,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography foot",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "<0.1 mSv"
+          }
+        },
+        {
+          "scenario_id": "4499",
+          "scenario_name": "Ped <=5yo, acute limp, hip pain",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography hip",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "4501",
+          "scenario_name": "Ped <=5yo, acute limp, knee pain",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 8,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography knee",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "<0.1 mSv"
+          }
+        },
+        {
+          "scenario_id": "4508",
+          "scenario_name": "Ped <=5yo, acute limp, symptoms localized to ankle, infection suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 9,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI ankle W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4509",
+          "scenario_name": "Ped <=5yo, acute limp, symptoms localized to foot, infection suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 9,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI foot W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4556",
+          "scenario_name": "Ped <=5yo, acute limp, symptoms localized to hip, infection suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 8,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "US hips",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4506",
+          "scenario_name": "Ped <=5yo, acute limp, symptoms localized to knee, infection suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 9,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI knee W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4503",
+          "scenario_name": "Ped <=5yo, acute limp, ankle pain",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 8,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography ankle",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "<0.1 mSv"
+          }
+        },
+        {
+          "scenario_id": "4504",
+          "scenario_name": "Ped <=5yo, acute limp, foot pain",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 8,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography foot",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "<0.1 mSv"
+          }
+        },
+        {
+          "scenario_id": "4499",
+          "scenario_name": "Ped <=5yo, acute limp, hip pain",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 7,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography hip",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "1-10 mSv"
+          }
+        },
+        {
+          "scenario_id": "4501",
+          "scenario_name": "Ped <=5yo, acute limp, knee pain",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 8,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "Radiography knee",
+            "modality": "XR",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "<0.1 mSv"
+          }
+        },
+        {
+          "scenario_id": "4508",
+          "scenario_name": "Ped <=5yo, acute limp, symptoms localized to ankle, infection suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 9,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI ankle W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4509",
+          "scenario_name": "Ped <=5yo, acute limp, symptoms localized to foot, infection suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 9,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI foot W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4556",
+          "scenario_name": "Ped <=5yo, acute limp, symptoms localized to hip, infection suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 8,
+            "high_rated_count": 3
+          },
+          "top_procedure": {
+            "name": "US hips",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "4506",
+          "scenario_name": "Ped <=5yo, acute limp, symptoms localized to knee, infection suspected",
+          "relevance_score": 0.87,
+          "region": "msk",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 9,
+            "high_rated_count": 2
+          },
+          "top_procedure": {
+            "name": "MRI knee W/O Contrast",
+            "modality": "MRI",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        }
+      ]
+    },
     "lymphadenopathy": {
       "display_name": "Lymphadenopathy / Axillary Adenopathy",
       "body_region": "spine",
@@ -37336,6 +38828,15 @@
     "acute coronary syndrome": "chest_pain",
     "acs": "chest_pain",
     "heart attack": "chest_pain",
+    "pericardial effusion": "pericardial_effusion",
+    "pericardial disease": "pericardial_effusion",
+    "pericarditis": "pericardial_effusion",
+    "cardiac tamponade": "pericardial_effusion",
+    "tamponade": "pericardial_effusion",
+    "pericardial tamponade": "pericardial_effusion",
+    "constrictive pericarditis": "pericardial_effusion",
+    "pericardial effusion vs tamponade": "pericardial_effusion",
+    "imaging for pericardial disease": "pericardial_effusion",
     "liver lesion": "liver_lesion",
     "hepatic lesion": "liver_lesion",
     "liver mass": "liver_lesion",
@@ -37594,6 +39095,64 @@
     "biliary colic": "cholecystitis",
     "ruq pain": "cholecystitis",
     "right upper quadrant pain": "cholecystitis",
+    "cholangitis": "cholangitis",
+    "ascending cholangitis": "cholangitis",
+    "acute cholangitis": "cholangitis",
+    "charcot triad": "cholangitis",
+    "charcot triad imaging": "cholangitis",
+    "biliary infection": "cholangitis",
+    "biliary sepsis": "cholangitis",
+    "ruq pain fever wbc": "cholangitis",
+    "ruq pain fever high wbc": "cholangitis",
+    "ruq pain with fever and high wbc": "cholangitis",
+    "pyloric stenosis": "pyloric_stenosis",
+    "hypertrophic pyloric stenosis": "pyloric_stenosis",
+    "infant nonbilious vomiting": "pyloric_stenosis",
+    "projectile vomiting infant": "pyloric_stenosis",
+    "us for pyloric stenosis": "pyloric_stenosis",
+    "pyloric stenosis suspected": "pyloric_stenosis",
+    "newborn projectile vomiting": "pyloric_stenosis",
+    "vesicoureteral reflux": "vesicoureteral_reflux",
+    "vur": "vesicoureteral_reflux",
+    "vcug": "vesicoureteral_reflux",
+    "vcug vs rnc": "vesicoureteral_reflux",
+    "voiding cystourethrogram": "vesicoureteral_reflux",
+    "vur follow up": "vesicoureteral_reflux",
+    "vur followup": "vesicoureteral_reflux",
+    "vur surveillance": "vesicoureteral_reflux",
+    "antenatal hydronephrosis followup": "vesicoureteral_reflux",
+    "antenatal hydronephrosis surveillance": "vesicoureteral_reflux",
+    "neonatal hydronephrosis": "vesicoureteral_reflux",
+    "ectopic pregnancy": "ectopic_pregnancy",
+    "ectopic": "ectopic_pregnancy",
+    "rule out ectopic": "ectopic_pregnancy",
+    "r/o ectopic": "ectopic_pregnancy",
+    "ectopic suspected": "ectopic_pregnancy",
+    "positive beta-hcg pelvic pain": "ectopic_pregnancy",
+    "positive bhcg pelvic pain": "ectopic_pregnancy",
+    "pelvic pain positive hcg": "ectopic_pregnancy",
+    "pelvic pain pregnant": "ectopic_pregnancy",
+    "early pregnancy bleeding": "ectopic_pregnancy",
+    "first trimester bleeding": "ectopic_pregnancy",
+    "pregnancy of unknown location": "ectopic_pregnancy",
+    "ovarian torsion": "ovarian_torsion",
+    "adnexal torsion": "ovarian_torsion",
+    "twisted ovary": "ovarian_torsion",
+    "acute pelvic pain ovarian": "ovarian_torsion",
+    "ovarian cyst rupture": "ovarian_torsion",
+    "hemorrhagic ovarian cyst": "ovarian_torsion",
+    "adnexal mass acute": "ovarian_torsion",
+    "ruptured ovarian cyst": "ovarian_torsion",
+    "adnexal mass symptomatic": "ovarian_torsion",
+    "scrotal pain": "scrotal_pain",
+    "scrotal pain acute": "scrotal_pain",
+    "scrotal pain acute nontraumatic": "scrotal_pain",
+    "acute scrotum": "scrotal_pain",
+    "testicular torsion": "scrotal_pain",
+    "testicular pain": "scrotal_pain",
+    "twisted testicle": "scrotal_pain",
+    "scrotal swelling": "scrotal_pain",
+    "acute scrotal pain": "scrotal_pain",
     "knee pain": "knee_pain",
     "knee injury": "knee_pain",
     "knee trauma": "knee_pain",
@@ -37724,6 +39283,31 @@
     "soft tissue hematoma": "soft_tissue_mass",
     "muscle tear": "soft_tissue_mass",
     "muscle strain": "soft_tissue_mass",
+    "hip dysplasia": "hip_dysplasia",
+    "developmental dysplasia of the hip": "hip_dysplasia",
+    "ddh": "hip_dysplasia",
+    "ddh infant": "hip_dysplasia",
+    "infant hip ultrasound": "hip_dysplasia",
+    "us for ddh": "hip_dysplasia",
+    "us for ddh infant": "hip_dysplasia",
+    "us for ddh infant 4 mo": "hip_dysplasia",
+    "hip dysplasia infant": "hip_dysplasia",
+    "infant hip": "hip_dysplasia",
+    "hip dysplasia suspected": "hip_dysplasia",
+    "dysplasia infant": "hip_dysplasia",
+    "pediatric limp": "pediatric_limp",
+    "acute limp": "pediatric_limp",
+    "kid with limping": "pediatric_limp",
+    "kid limp no trauma": "pediatric_limp",
+    "kid limping no trauma": "pediatric_limp",
+    "child limping": "pediatric_limp",
+    "child won't walk": "pediatric_limp",
+    "child won't bear weight": "pediatric_limp",
+    "antalgic gait child": "pediatric_limp",
+    "ped acute limp": "pediatric_limp",
+    "limping toddler": "pediatric_limp",
+    "toddler limping": "pediatric_limp",
+    "limp in young child": "pediatric_limp",
     "lymphadenopathy": "lymphadenopathy",
     "adenopathy": "lymphadenopathy",
     "axillary adenopathy": "lymphadenopathy",

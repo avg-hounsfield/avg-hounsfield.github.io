@@ -387,6 +387,18 @@ CONCEPT_TAXONOMY = {
                      "acute coronary syndrome", "acs", "heart attack"],
         "scenario_keywords": ["chest pain", "thoracic pain", "angina"]
     },
+    "pericardial_effusion": {
+        "display_name": "Pericardial Effusion / Pericarditis",
+        "body_region": "chest",
+        "synonyms": ["pericardial effusion", "pericardial disease",
+                     "pericarditis", "cardiac tamponade", "tamponade",
+                     "pericardial tamponade", "constrictive pericarditis",
+                     "pericardial effusion vs tamponade",
+                     "imaging for pericardial disease"],
+        "manual_scenario_ids": [
+            {"id": "5978", "relevance_score": 1.0},  # Dyspnea, pericardial disease suspected
+        ],
+    },
 
     # Abdomen concepts
     "liver_lesion": {
@@ -606,6 +618,93 @@ CONCEPT_TAXONOMY = {
                               "ruq pain", "cholelithiasis"],
         "negative_keywords": ["jaundice", "biliary obstruction"]  # Different from cholecystitis
     },
+    "cholangitis": {
+        "display_name": "Cholangitis / Biliary Infection",
+        "body_region": "abdomen",
+        "synonyms": ["cholangitis", "ascending cholangitis", "acute cholangitis",
+                     "charcot triad", "charcot triad imaging",
+                     "biliary infection", "biliary sepsis",
+                     "ruq pain fever wbc", "ruq pain fever high wbc",
+                     "ruq pain with fever and high wbc"],
+        # ACR scenarios: RUQ pain + fever + high WBC + biliary disease suspected
+        "manual_scenario_ids": [
+            {"id": "6705", "relevance_score": 1.0},  # RUQ pain fever high WBC, US equivocal
+            {"id": "6704", "relevance_score": 1.0},  # RUQ pain fever high WBC, US negative
+            {"id": "4686", "relevance_score": 0.7},  # Jaundice biliary obstruction
+        ],
+    },
+    "pyloric_stenosis": {
+        "display_name": "Pyloric Stenosis (Pediatric)",
+        "body_region": "abdomen",
+        # ACR source filed the one topic under "vascular" (a misclassification)
+        "additional_regions": ["vascular"],
+        "synonyms": ["pyloric stenosis", "hypertrophic pyloric stenosis",
+                     "infant nonbilious vomiting", "projectile vomiting infant",
+                     "us for pyloric stenosis", "pyloric stenosis suspected",
+                     "newborn projectile vomiting"],
+        "manual_scenario_ids": [
+            {"id": "815", "relevance_score": 1.0},
+        ],
+    },
+    "vesicoureteral_reflux": {
+        "display_name": "Vesicoureteral Reflux (VUR)",
+        "body_region": "abdomen",
+        "additional_regions": ["other", "peds"],
+        "synonyms": ["vesicoureteral reflux", "vur", "vcug",
+                     "vcug vs rnc", "voiding cystourethrogram",
+                     "vur follow up", "vur followup", "vur surveillance",
+                     "antenatal hydronephrosis followup",
+                     "antenatal hydronephrosis surveillance",
+                     "neonatal hydronephrosis"],
+        "manual_scenario_ids": [
+            {"id": "7280", "relevance_score": 1.0},  # VUR follow-up imaging
+            {"id": "6248", "relevance_score": 0.9},  # Pyelonephritis w/ VUR
+            {"id": "5357", "relevance_score": 0.7},  # Antenatal hydronephrosis
+        ],
+    },
+    "ectopic_pregnancy": {
+        "display_name": "Ectopic Pregnancy / Pelvic Pain in Pregnancy",
+        "body_region": "abdomen",
+        "synonyms": ["ectopic pregnancy", "ectopic", "rule out ectopic",
+                     "r/o ectopic", "ectopic suspected",
+                     "positive beta-hcg pelvic pain", "positive bhcg pelvic pain",
+                     "pelvic pain positive hcg", "pelvic pain pregnant",
+                     "early pregnancy bleeding", "first trimester bleeding",
+                     "pregnancy of unknown location"],
+        # ACR: acute pelvic pain + beta-hCG status scenarios
+        "manual_scenario_ids": [
+            {"id": "1041", "relevance_score": 1.0},  # +bhCG, gyn etiology suspected
+            {"id": "1043", "relevance_score": 0.9},  # +bhCG, non-gyn etiology
+            {"id": "1042", "relevance_score": 0.7},  # -bhCG, gyn etiology
+        ],
+    },
+    "ovarian_torsion": {
+        "display_name": "Ovarian Torsion / Adnexal Pathology",
+        "body_region": "abdomen",
+        "synonyms": ["ovarian torsion", "adnexal torsion", "twisted ovary",
+                     "acute pelvic pain ovarian", "ovarian cyst rupture",
+                     "hemorrhagic ovarian cyst", "adnexal mass acute",
+                     "ruptured ovarian cyst", "adnexal mass symptomatic"],
+        "scenario_keywords": ["adnexal mass"],
+        # Acute pelvic pain scenarios (negative beta-hCG gyn etiology in particular)
+        "manual_scenario_ids": [
+            {"id": "1042", "relevance_score": 1.0},  # -bhCG, gyn etiology
+            {"id": "1041", "relevance_score": 0.8},  # +bhCG, gyn etiology
+        ],
+    },
+    "scrotal_pain": {
+        "display_name": "Scrotal Pain / Testicular Torsion",
+        "body_region": "abdomen",
+        "additional_regions": ["other"],
+        "synonyms": ["scrotal pain", "scrotal pain acute",
+                     "scrotal pain acute nontraumatic",
+                     "acute scrotum", "testicular torsion",
+                     "testicular pain", "twisted testicle",
+                     "scrotal swelling", "acute scrotal pain"],
+        "manual_scenario_ids": [
+            {"id": "7833", "relevance_score": 1.0},  # Scrotal pain acute nontraumatic
+        ],
+    },
 
     # MSK concepts
     "knee_pain": {
@@ -722,6 +821,26 @@ CONCEPT_TAXONOMY = {
                      "muscle hematoma", "soft tissue hematoma",
                      "muscle tear", "muscle strain"],
         "scenario_keywords": ["soft tissue mass", "soft tissue tumor"]
+    },
+    "hip_dysplasia": {
+        "display_name": "Hip Dysplasia / DDH",
+        "body_region": "msk",
+        "synonyms": ["hip dysplasia", "developmental dysplasia of the hip",
+                     "ddh", "ddh infant", "infant hip ultrasound",
+                     "us for ddh", "us for ddh infant", "us for ddh infant 4 mo",
+                     "hip dysplasia infant", "infant hip",
+                     "hip dysplasia suspected", "dysplasia infant"],
+        "scenario_keywords": ["hip dysplasia", "dysplasia suspected"],
+    },
+    "pediatric_limp": {
+        "display_name": "Pediatric Limp / Acute Limp <=5yo",
+        "body_region": "msk",
+        "synonyms": ["pediatric limp", "acute limp", "kid with limping",
+                     "kid limp no trauma", "kid limping no trauma",
+                     "child limping", "child won't walk", "child won't bear weight",
+                     "antalgic gait child", "ped acute limp",
+                     "limping toddler", "toddler limping", "limp in young child"],
+        "scenario_keywords": ["acute limp", "ped <=5yo"],
     },
     "lymphadenopathy": {
         "display_name": "Lymphadenopathy / Axillary Adenopathy",
