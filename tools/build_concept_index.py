@@ -139,7 +139,15 @@ CONCEPT_TAXONOMY = {
                      "vestibular schwannoma",
                      # Pituitary
                      "pituitary adenoma", "pituitary microadenoma",
-                     "mri sella", "mri sella for pituitary", "sellar mass"],
+                     "mri sella", "mri sella for pituitary", "sellar mass",
+                     "hypopituitarism", "hypopituitarism mri pituitary",
+                     # Phakomatoses / tuberous sclerosis
+                     "tuberous sclerosis", "mri brain tuberous sclerosis",
+                     "sega", "subependymal giant cell astrocytoma",
+                     # Generic protocol queries
+                     "mri brain with contrast which protocol",
+                     "mri brain w/ contrast which protocol",
+                     "brain tumor protocol mri"],
         "scenario_keywords": ["brain tumor", "intracranial", "brain mass", "glioma",
                               "meningioma", "brain mets", "brain metasta"]
     },
@@ -161,7 +169,25 @@ CONCEPT_TAXONOMY = {
                      "carotid dissection", "vertebral dissection",
                      "hyperdense mca", "ddx hyperdense mca",
                      "perfusion imaging stroke", "ct perfusion stroke",
-                     "dsc perfusion threshold stroke"],
+                     "dsc perfusion threshold stroke",
+                     # Advanced stroke imaging vocabulary
+                     "ctp rapid", "ctp tmax", "ctp tmax >6s", "tmax mismatch",
+                     "ctp rapid tmax mismatch ratio", "mismatch ratio",
+                     "cta head and neck", "cta head neck for lvo", "lvo",
+                     "large vessel occlusion",
+                     "mrv for cerebral venous sinus thrombosis",
+                     "cerebral venous sinus thrombosis", "cvst",
+                     "cerebral venous thrombosis",
+                     "blunt cerebrovascular injury", "bcvi",
+                     "cta neck for blunt cerebrovascular",
+                     "post arrest brain imaging", "post-arrest brain imaging",
+                     "post-arrest brain imaging prognosis",
+                     # TGA / amnesia
+                     "transient global amnesia", "tga", "transient global amnesia workup",
+                     "transient global amnesia imaging",
+                     # Vignette patterns
+                     "weak l arm l face droop", "weak r arm r face droop",
+                     "weak arm face droop", "arm face droop"],
         "scenario_keywords": ["stroke", "ischemic", "hemorrhage", "cerebrovascular",
                               "infarct", "transient ischemic", "ischemic infarct"]
     },
@@ -171,14 +197,39 @@ CONCEPT_TAXONOMY = {
         "synonyms": ["headache", "head pain", "cephalgia", "migraine", "tension headache",
                      "cluster headache", "chronic headache", "new headache",
                      "intracranial hypotension", "csf leak", "iih", "pseudotumor cerebri",
-                     "idiopathic intracranial hypertension"],
+                     "idiopathic intracranial hypertension",
+                     # Red flags / migraine variants
+                     "new ha red flags", "ha red flags", "headache red flags",
+                     "mri brain ha red flags",
+                     "mri brain with and without contrast for new ha red flags",
+                     "mri brain new ha", "mri brain for new headache",
+                     "unilateral ha visual aura", "headache with visual aura",
+                     "headache with aura", "visual aura headache",
+                     # Syncope (headache pathway in some cases)
+                     "syncope when to image head", "syncope w/u when to image",
+                     "syncope inpatient when to image", "syncope inpatient imaging",
+                     # Immunocompromised HA
+                     "ddx for new ha in hiv", "headache in hiv",
+                     "headache in immunocompromised", "headache hiv patient",
+                     "new headache in hiv"],
         "scenario_keywords": ["headache", "head pain", "migraine", "cephalgia"]
     },
     "dementia": {
         "display_name": "Dementia/Cognitive Decline",
         "body_region": "neuro",
         "synonyms": ["dementia", "alzheimer", "cognitive decline", "memory loss",
-                     "neurodegenerative", "cognitive impairment"],
+                     "neurodegenerative", "cognitive impairment",
+                     # DAT scan / Parkinsonism imaging
+                     "dat scan", "dat scan for parkinsonism", "datscan",
+                     "parkinsonism imaging", "parkinsonism workup",
+                     # CJD imaging
+                     "dwi cjd", "dwi for cjd cortical ribboning",
+                     "cjd cortical ribboning", "cjd imaging",
+                     "creutzfeldt jakob", "creutzfeldt-jakob disease",
+                     # Layperson confusion
+                     "dad has confusion what imaging is needed",
+                     "patient with confusion imaging",
+                     "new confusion in elderly"],
         "scenario_keywords": ["dementia", "alzheimer", "cognitive", "memory"]
     },
     "seizure": {
@@ -239,7 +290,20 @@ CONCEPT_TAXONOMY = {
                      "thunderclap headache",
                      # Anticoagulation + head
                      "head ct after fall on coumadin",
-                     "head ct on warfarin", "head ct anticoagulation"],
+                     "head ct on warfarin", "head ct anticoagulation",
+                     # Additional vignette patterns
+                     "sudden severe ha worst of life",
+                     "65yo f sudden severe ha worst of life",
+                     "motorcycle crash gcs", "33yo m motorcycle crash gcs",
+                     "intubated trauma pt re-image",
+                     "intubated trauma pt re-image bleed expanding",
+                     "expanding bleed", "expanding intracranial bleed",
+                     "elderly patient with confusion and fall",
+                     "elderly confusion and fall imaging",
+                     "elderly fall altered mental status",
+                     "my mother fell and hit her head",
+                     "mother fell hit head", "fall and hit her head",
+                     "should she get a scan after hitting head"],
         "scenario_keywords": ["subarachnoid hemorrhage", "intracranial hemorrhage",
                               "subdural", "epidural hematoma",
                               "hemorrhagic stroke", "head trauma"]
@@ -253,7 +317,18 @@ CONCEPT_TAXONOMY = {
                      "backache", "back ache", "back hurts", "back is sore",
                      "thoracic pain", "cervical pain", "neck pain",
                      "enthesitis", "sacroiliitis", "axial spondyloarthritis",
-                     "ankylosing spondylitis"],
+                     "ankylosing spondylitis",
+                     # MRI SI joints / spondyloarthropathy imaging
+                     "mri sacroiliac joints", "mri si joints",
+                     "mri sacroiliac joints for spondyloarthropathy",
+                     "mri si joints for spondyloarthropathy",
+                     "spondyloarthropathy",
+                     "dixon technique mr sacroiliac",
+                     "dixon technique for mr sacroiliac joints",
+                     # MRI sequences
+                     "mri lumbar spine sequences",
+                     "mri lumbar spine sequences w/o contrast",
+                     "mri lumbar spine sequences without contrast"],
         "scenario_keywords": ["back pain", "low back", "lumbar pain", "spine pain"]
     },
     "radiculopathy": {
@@ -320,7 +395,24 @@ CONCEPT_TAXONOMY = {
         "display_name": "Lung Nodule",
         "body_region": "chest",
         "synonyms": ["lung nodule", "pulmonary nodule", "lung lesion", "solitary pulmonary nodule",
-                     "spn", "lung mass", "pulmonary mass", "sarcoidosis"],
+                     "spn", "lung mass", "pulmonary mass", "sarcoidosis",
+                     # Lung-RADS / Fleischner
+                     "lung rads", "lung-rads", "lungrads",
+                     "lung-rads 4b", "lung rads 4b", "lung-rads 4b nodule",
+                     "lung-rads 4b nodule workup",
+                     "fleischner criteria", "fleischner society",
+                     "subsolid nodule", "subsolid nodule follow up",
+                     "subsolid nodule follow-up", "subsolid nodule fleischner",
+                     # Procedure planning
+                     "ct guided lung biopsy", "ct-guided lung biopsy",
+                     "ct-guided lung biopsy approach",
+                     "ct-guided lung biopsy approach pneumothorax risk",
+                     "lung biopsy approach",
+                     # Chronic cough as nodule presentation
+                     "chronic cough 8 weeks", "chronic cough nonsmoker cxr neg",
+                     "chronic cough nonsmoker",
+                     # Layperson
+                     "lung spot on xray", "dad has lung spot on xray"],
         "scenario_keywords": ["lung nodule", "pulmonary nodule", "lung mass", "pulmonary mass"]
     },
     "lung_cancer": {
@@ -375,7 +467,17 @@ CONCEPT_TAXONOMY = {
         "display_name": "Pneumonia",
         "body_region": "chest",
         "synonyms": ["pneumonia", "lung infection", "chest infection", "respiratory infection",
-                     "community acquired pneumonia", "hospital acquired pneumonia"],
+                     "community acquired pneumonia", "hospital acquired pneumonia",
+                     # Classic presentations
+                     "cough fever and infiltrate", "cough fever and infiltrate on cxr",
+                     "cough fever and infiltrate on chest xray",
+                     "fever and infiltrate on cxr",
+                     "productive cough fever rigors",
+                     "67yo m productive cough fever rigors",
+                     "67yo productive cough fever",
+                     # Common misspellings
+                     "neumonia", "what does neumonia look like", "neumonia on xray",
+                     "what does pneumonia look like on xray"],
         "scenario_keywords": ["pneumonia", "lung infection"]
     },
     "chest_pain": {
@@ -447,14 +549,35 @@ CONCEPT_TAXONOMY = {
                      "31yo rlq pain", "rlq pain us protocol",
                      "rlq pain fever leukocytosis", "fever leukocytosis rlq",
                      "appendicitis suspected", "r/o appendicitis",
-                     "rule out appendicitis", "r/o appendicitis pregnant"],
+                     "rule out appendicitis", "r/o appendicitis pregnant",
+                     # Pregnancy variants
+                     "r/o appy in pregnancy", "rule out appy in pregnancy",
+                     "r/o appy pregnant", "appy in pregnancy",
+                     "image suspected appy pregnant", "how to image suspected appy pregnant",
+                     "appendicitis in pregnant", "appendicitis in pregnancy",
+                     "best for r/o appy in pregnancy"],
         "scenario_keywords": ["appendicitis", "appendix"]
     },
     "abdominal_pain": {
         "display_name": "Abdominal Pain",
         "body_region": "abdomen",
         "synonyms": ["abdominal pain", "belly pain", "stomach pain", "acute abdomen",
-                     "abdominal discomfort"],
+                     "abdominal discomfort",
+                     # GI bleed / occult bleed (overlaps with colon_cancer but
+                     # presentation-focused queries land here)
+                     "ct enterography for gi bleed", "rbc scan for slow gi bleed",
+                     "obscure gi bleed", "lower gi bleed", "upper gi bleed",
+                     "tarry stools", "black tarry stools", "melena",
+                     # Perforation / acute abdomen
+                     "perforated viscus", "pneumoperitoneum",
+                     "ct for perforated viscus pneumoperitoneum",
+                     "ct for perforated viscus",
+                     # Trauma / blunt abdominal
+                     "blunt abdominal trauma", "blunt abdominal trauma stable",
+                     "ct abd for nonspecific abd pain elderly",
+                     "luq pain post mvc", "luq pain seatbelt sign", "seatbelt sign",
+                     "atls protocol blunt trauma", "atls blunt trauma which scans",
+                     "trauma pan scan", "pan scan trauma"],
         "scenario_keywords": ["abdominal pain", "acute abdomen"]
     },
     "pancreatic_mass": {
@@ -493,7 +616,16 @@ CONCEPT_TAXONOMY = {
                      "postmenopausal hematuria", "postmenopausal woman with hematuria",
                      "ct urogram", "ct urogram for hematuria",
                      "ct urogram for hematuria workup",
-                     "ct urogram three phase", "ct urogram three phase protocol"],
+                     "ct urogram three phase", "ct urogram three phase protocol",
+                     # Secondary polycythemia (renal mass / EPO)
+                     "polycythemia secondary causes",
+                     "polycythemia secondary causes imaging",
+                     "secondary polycythemia imaging",
+                     # AIN
+                     "acute interstitial nephritis",
+                     "acute interstitial nephritis imaging role",
+                     # Chronic flank pain (could be cyst/mass)
+                     "chronic flank pain"],
         "scenario_keywords": ["kidney", "renal mass", "renal cell", "renal lesion"],
         # "adrenal mass" contains "renal mass" as a substring -> wrong routing.
         "negative_keywords": ["adrenal"]
@@ -511,7 +643,17 @@ CONCEPT_TAXONOMY = {
         "body_region": "abdomen",
         "synonyms": ["pyelonephritis", "kidney infection", "renal infection",
                      "uti with fever", "complicated uti", "perinephric abscess",
-                     "renal abscess"],
+                     "renal abscess",
+                     # Flank pain + fever / pregnancy / recurrent UTI
+                     "flank pain pregnant", "flank pain in pregnancy",
+                     "lady with flank pain pregnant",
+                     "ultrasound vs mri for pyelo",
+                     "ultrasound vs mri for pyelo in pregnancy",
+                     "pyelo in pregnancy", "pyelonephritis in pregnancy",
+                     "flank pain fever pyuria", "flank pain fever urinary",
+                     "recurrent uti with flank pain", "recurrent uti flank pain",
+                     "acute confusion fever ua", "acute confusion fever ua positive",
+                     "fever and dysuria elderly"],
         "scenario_keywords": ["pyelonephritis", "renal abscess", "perinephric"]
     },
     "inflammatory_bowel_disease": {
@@ -519,7 +661,21 @@ CONCEPT_TAXONOMY = {
         "body_region": "abdomen",
         "synonyms": ["inflammatory bowel disease", "ibd", "crohn", "crohn disease",
                      "crohns", "crohns disease", "ulcerative colitis", "uc",
-                     "colitis"],
+                     "colitis",
+                     # Imaging
+                     "ct enterography", "mr enterography",
+                     "ct enterography vs mr enterography",
+                     "ct vs mr enterography",
+                     # Toxic megacolon (UC emergency)
+                     "toxic megacolon", "toxic megacolon imaging",
+                     "toxic megacolon decompression",
+                     "c diff toxic megacolon", "cdiff toxic megacolon",
+                     # Small bowel wall thickening
+                     "incidental small bowel wall thickening",
+                     "small bowel wall thickening",
+                     # Chronic diarrhea
+                     "chronic diarrhea and weight loss",
+                     "chronic diarrhea with weight loss"],
         "scenario_keywords": ["crohn", "ulcerative colitis", "inflammatory bowel"]
     },
     "prostate": {
@@ -553,7 +709,19 @@ CONCEPT_TAXONOMY = {
                      "crackles bilateral lower lobes", "bilateral crackles",
                      "patient with crackles", "sob and leg swelling",
                      "shortness of breath and leg swelling",
-                     "doe and edema", "doe edema"],
+                     "doe and edema", "doe edema",
+                     # Chronic dyspnea / pulmonary HTN workup
+                     "chronic dyspnea", "ddx for chronic dyspnea",
+                     "ddx for chronic dyspnea normal cxr",
+                     "pulmonary htn workup", "pulmonary hypertension imaging",
+                     "pulmonary hypertension workup",
+                     "worsening dyspnea", "worsening dyspnea on exertion",
+                     "worsening dyspnea on exertion lower extremity edema",
+                     "worsening dyspnea elderly", "worsening dyspnea elderly female",
+                     "shortness of breath getting worse",
+                     "shortness of breath getting worse over weeks",
+                     "shortness of breath progressive",
+                     "what scan does pt need for sob and doe"],
         "scenario_keywords": ["heart failure", "cardiomyopathy"]
     },
     "thyroid_neck_mass": {
@@ -564,7 +732,23 @@ CONCEPT_TAXONOMY = {
         "additional_regions": ["other"],
         "synonyms": ["thyroid mass", "neck mass", "goiter", "thyroid nodule",
                      "thyroid lesion", "thyroid cancer", "parathyroid",
-                     "hyperparathyroidism", "lump in neck", "neck lump"],
+                     "hyperparathyroidism", "lump in neck", "neck lump",
+                     # Head & neck cancer / oncology
+                     "hnscc", "head and neck scc", "head and neck cancer",
+                     "rad onc planning ct hnscc", "rad onc planning ct vs pet for hnscc",
+                     "mri neck for tongue base scc", "tongue base scc",
+                     "tongue base cancer", "base of tongue cancer",
+                     "pet ct hpv oropharyngeal",
+                     "pet-ct for hpv+ oropharyngeal cancer",
+                     "hpv oropharyngeal cancer", "oropharyngeal cancer",
+                     "oropharyngeal scc",
+                     # Retropharyngeal space
+                     "retropharyngeal abscess", "retropharyngeal abscess vs phlegmon",
+                     "mri for retropharyngeal abscess",
+                     # Thyroid eye / orbit
+                     "mri orbits", "mri orbits thyroid eye disease",
+                     "thyroid eye disease", "graves ophthalmopathy",
+                     "graves disease orbits"],
         "scenario_keywords": ["thyroid", "neck mass", "goiter", "parathyroid"]
     },
     "bowel_obstruction": {
@@ -581,7 +765,13 @@ CONCEPT_TAXONOMY = {
                      "abdominal pain vomiting no bm",
                      # Incarcerated hernia
                      "incarcerated hernia", "strangulated hernia",
-                     "ct for hernia incarcerated"],
+                     "ct for hernia incarcerated",
+                     # Layperson + intussusception (pediatric overlap)
+                     "abdominal distension with vomiting and no flatus",
+                     "scan needed for abdominal distension and no bowel movements",
+                     "scan for abdominal distension and no bowel movements",
+                     "intussusception", "us for intussusception",
+                     "us for intussusception ileocolic", "ileocolic intussusception"],
         "scenario_keywords": ["bowel obstruction", "intestinal obstruction", "ileus"]
     },
     "diverticulitis": {
@@ -606,14 +796,39 @@ CONCEPT_TAXONOMY = {
                      "lynch syndrome", "lynch syndrome surveillance",
                      "hereditary colorectal cancer", "fap surveillance",
                      "imaging for staging colon ca",
-                     "rectal cancer staging", "mri rectal cancer staging"],
+                     "rectal cancer staging", "mri rectal cancer staging",
+                     # Iron deficiency anemia / occult bleed workup (most common
+                     # path to colon ca discovery)
+                     "iron deficiency anemia", "iron deficiency anemia workup",
+                     "ida workup", "ida 60 yo", "ida in male",
+                     "microcytic anemia", "microcytic anemia occult bleed",
+                     "microcytic anemia occult bleed workup",
+                     "microcytic anemia in 55 yo male", "workup of microcytic anemia",
+                     "occult bleed", "occult bleed next step",
+                     "anemia workup occult bleed", "anemia workup occult bleed next step",
+                     "anemia and weight loss", "weight loss and iron deficiency",
+                     "weight loss and iron deficiency anemia",
+                     "anemia + abdominal mass", "anemia and abdominal mass",
+                     "positive fobt", "fobt positive", "patient with positive fobt"],
         "scenario_keywords": ["colon", "colorectal", "rectal cancer"]
     },
     "cholecystitis": {
         "display_name": "Cholecystitis/Gallbladder",
         "body_region": "abdomen",
         "synonyms": ["cholecystitis", "gallbladder inflammation", "gallstones", "cholelithiasis",
-                     "biliary colic", "ruq pain", "right upper quadrant pain"],
+                     "biliary colic", "ruq pain", "right upper quadrant pain",
+                     # MRCP / biliary imaging queries
+                     "mrcp", "mrcp for biliary obstruction",
+                     "mrcp for biliary obstruction protocol",
+                     "mrcp for choledocholithiasis",
+                     "eus vs mrcp for choledocholithiasis",
+                     "choledocholithiasis", "common bile duct stones",
+                     "choledochal cyst", "mrcp for choledochal cyst",
+                     "psc", "primary sclerosing cholangitis",
+                     "mrcp for psc", "mrcp for psc followup",
+                     # Layperson
+                     "pain in upper belly after eating",
+                     "upper belly pain after eating"],
         "scenario_keywords": ["cholecystitis", "gallbladder", "gallstone", "biliary colic",
                               "ruq pain", "cholelithiasis"],
         "negative_keywords": ["jaundice", "biliary obstruction"]  # Different from cholecystitis
@@ -736,7 +951,22 @@ CONCEPT_TAXONOMY = {
         "display_name": "Bone Tumor",
         "body_region": "msk",
         "synonyms": ["bone tumor", "bone mass", "bone lesion", "bone cancer",
-                     "primary bone tumor", "osteosarcoma", "bone metastasis", "bone mets"],
+                     "primary bone tumor", "osteosarcoma", "bone metastasis", "bone mets",
+                     # Chondrosarcoma / enchondroma DDx
+                     "chondrosarcoma", "enchondroma",
+                     "chondrosarcoma vs enchondroma",
+                     "mr for chondrosarcoma vs enchondroma",
+                     "mri for chondrosarcoma vs enchondroma",
+                     # Multiple myeloma whole-body imaging
+                     "multiple myeloma", "myeloma imaging",
+                     "whole body mri for myeloma", "whole body mri myeloma",
+                     "wbmri myeloma", "whole-body mri myeloma",
+                     "monoclonal gammopathy", "monoclonal gammopathy bone survey",
+                     "monoclonal gammopathy bone survey vs mri",
+                     "mgus", "smoldering myeloma",
+                     # CKD-MBD
+                     "ckd mbd", "ckd-mbd", "ckd mbd bone imaging",
+                     "chronic kidney disease bone disease"],
         "scenario_keywords": ["bone tumor", "bone mass", "bone lesion", "osteosarcoma",
                               "primary bone"]
     },
@@ -746,7 +976,18 @@ CONCEPT_TAXONOMY = {
         # Pelvic osteomyelitis is in abdomen, chest-wall osteomyelitis is in chest.
         "additional_regions": ["abdomen", "chest"],
         "synonyms": ["osteomyelitis", "bone infection", "septic arthritis", "septic joint",
-                     "joint infection", "osteo"],
+                     "joint infection", "osteo",
+                     # Diabetic foot - very common bone infection workup
+                     "diabetic foot ulcer concern for infection",
+                     "diabetic foot ulcer with concern for infection",
+                     "mr for diabetic foot when can't differentiate",
+                     "mr for diabetic foot",
+                     "diabetic foot can't differentiate",
+                     "non healing leg ulcer in diabetic",
+                     "non-healing leg ulcer in diabetic",
+                     "non healing diabetic foot ulcer",
+                     "non-healing diabetic foot ulcer",
+                     "diabetic foot infection imaging"],
         "scenario_keywords": ["osteomyelitis", "septic arthritis"]
     },
     "spine_infection": {
@@ -776,7 +1017,16 @@ CONCEPT_TAXONOMY = {
         # "fasciitis" alone removed - was wrongly catching "plantar fasciitis".
         # "abscess" alone removed - too generic (catches liver abscess etc).
         "synonyms": ["soft tissue infection", "cellulitis", "necrotizing fasciitis",
-                     "soft tissue abscess", "skin infection", "wound infection"],
+                     "soft tissue abscess", "skin infection", "wound infection",
+                     # DDx queries
+                     "abscess vs hematoma", "abscess vs hematoma on mr",
+                     "abscess vs hematoma mri",
+                     # Specific anatomic abscesses
+                     "psoas abscess", "mri for psoas abscess",
+                     # Diabetic foot
+                     "diabetic foot ulcer fever",
+                     "29yo f diabetic foot ulcer fever",
+                     "painful red swollen calf"],
         "scenario_keywords": ["soft tissue infection", "necrotizing fasciitis"]
     },
     "fracture": {
@@ -892,7 +1142,19 @@ CONCEPT_TAXONOMY = {
         "display_name": "Deep Vein Thrombosis",
         "body_region": "msk",  # DVT scenarios are in MSK region in ACR
         "synonyms": ["dvt", "deep vein thrombosis", "deep venous thrombosis", "leg clot",
-                     "venous thrombosis", "lower extremity dvt", "leg swelling"],
+                     "venous thrombosis", "lower extremity dvt", "leg swelling",
+                     # Common presentations
+                     "calf pain and swelling", "calf pain swelling",
+                     "calf swelling unilateral", "unilateral calf swelling",
+                     "calf pain and redness", "calf pain redness",
+                     "painful red swollen calf",
+                     "post flight calf pain", "post-flight calf pain",
+                     "calf pain post long flight", "calf pain after long flight",
+                     "calf pain swelling post flight", "calf pain swelling post-flight",
+                     "long flight leg swelling",
+                     "blood clot in the leg", "blood clot in leg",
+                     "what is a blood clot in the leg",
+                     "what is a blood clot"],
         "scenario_keywords": ["deep vein", "dvt", "venous thrombosis", "thrombosis",
                               "extremity swelling", "leg swelling", "edema"]
     },
@@ -900,7 +1162,16 @@ CONCEPT_TAXONOMY = {
         "display_name": "Peripheral Vascular Disease",
         "body_region": "msk",  # PVD scenarios are in MSK region in ACR
         "synonyms": ["peripheral vascular disease", "pvd", "peripheral arterial disease", "pad",
-                     "claudication", "limb ischemia"],
+                     "claudication", "limb ischemia",
+                     # Presentations
+                     "leg pain when walking", "bilateral leg pain when walking",
+                     "leg pain when walking elderly",
+                     "leg pain when walking elderly diabetic",
+                     "leg pain at rest", "rest pain leg",
+                     "cold pulseless leg", "sudden cold pulseless leg",
+                     "acute limb ischemia", "ali",
+                     "non healing leg ulcer", "non-healing leg ulcer",
+                     "non healing ulcer foot diabetic"],
         "scenario_keywords": ["peripheral vascular", "peripheral arterial", "claudication",
                               "arterial occlusion", "extremity ischemia"]
     },
@@ -917,7 +1188,20 @@ CONCEPT_TAXONOMY = {
         "display_name": "Breast Mass",
         "body_region": "breast",
         "synonyms": ["breast mass", "breast lump", "breast lesion", "breast nodule",
-                     "palpable breast mass"],
+                     "palpable breast mass",
+                     # BI-RADS 3 = probably benign 6-month follow-up
+                     "bi-rads 3", "birads 3", "bi rads 3",
+                     "bi-rads 3 follow-up", "bi-rads 3 follow-up interval",
+                     "birads 3 follow-up", "birads 3 follow-up interval",
+                     # Nipple discharge workup
+                     "pathologic nipple discharge",
+                     "imaging for new pathologic nipple discharge",
+                     "imaging for nipple discharge",
+                     "new nipple discharge", "nipple discharge",
+                     # Microcalcifications / stereotactic
+                     "stereotactic biopsy", "stereotactic biopsy for grouped microcalcs",
+                     "grouped microcalcifications", "grouped microcalcs",
+                     "microcalcifications", "microcalcs"],
         "scenario_keywords": ["breast mass", "breast lump", "breast lesion"]
     },
     "breast_cancer": {
@@ -946,7 +1230,29 @@ CONCEPT_TAXONOMY = {
         "display_name": "Breast Screening",
         "body_region": "breast",
         "synonyms": ["breast screening", "mammogram", "mammography", "breast cancer screening",
-                     "dense breasts", "high risk screening"],
+                     "dense breasts", "high risk screening",
+                     # Background parenchymal enhancement
+                     "bpe", "background parenchymal enhancement",
+                     "bpe on screening breast mr",
+                     "breast mri background parenchymal enhancement",
+                     "breast mri bpe",
+                     # Tomosynthesis / DBT
+                     "tomosynthesis", "dbt", "digital breast tomosynthesis",
+                     "tomosynthesis recall rates",
+                     "tomosynthesis recall rates compared to 2d",
+                     "tomosynthesis vs 2d", "dbt vs 2d mammography",
+                     "tomosynthesis vs mammography",
+                     # ABUS
+                     "abus", "automated breast ultrasound",
+                     "abus vs handheld us", "abus vs handheld us for screening",
+                     "automated breast us for screening",
+                     # Risk assessment
+                     "tyrer cuzick", "tyrer-cuzick", "tyrer-cuzick lifetime risk",
+                     "tyrer-cuzick lifetime risk for mri screen",
+                     "lifetime risk for mri screen", "lifetime breast cancer risk",
+                     # Screening schedule queries
+                     "screening mammo schedule", "screening mammogram schedule",
+                     "65yo f screening mammo schedule"],
         "scenario_keywords": ["screening", "mammogra", "dense breast"]
     },
 
@@ -956,7 +1262,16 @@ CONCEPT_TAXONOMY = {
         "body_region": "msk",
         "synonyms": ["myositis", "polymyositis", "dermatomyositis", "inflammatory myopathy",
                      "muscle inflammation", "idiopathic inflammatory myopathy",
-                     "pyomyositis", "rhabdomyolysis", "denervation atrophy"],
+                     "pyomyositis", "rhabdomyolysis", "denervation atrophy",
+                     # Common myositis presentation patterns
+                     "muscle weakness elevated ck", "elevated ck muscle weakness",
+                     "proximal muscle weakness", "proximal muscle weakness elevated ck",
+                     "proximal muscle weakness with elevated ck",
+                     "evaluate proximal muscle weakness with elevated ck",
+                     # Whole-body MRI for inflammatory myopathy
+                     "iim", "idiopathic inflammatory myopathy",
+                     "whole body mri for iim", "mri whole body for iim",
+                     "wbmri for myositis", "wbmri myositis"],
         # Curated mapping: route to nonsuperficial soft tissue mass MR protocols
         "manual_scenario_ids": [
             {"id": "6979", "relevance_score": 0.8},  # Soft tissue mass, hip, nonsuperficial
