@@ -664,6 +664,21 @@ class ProtocolHelpApp {
         this._renderGlobalConceptResult(exactConcept, resultContainer);
         return;
       }
+      // Substring override: if a multi-word concept synonym is strictly longer
+      // than the card topic AND has more words, prefer the concept. Catches
+      // "ivdu back pain fever" -> spine_infection over the "back pain" card,
+      // "elderly fall hip pain" -> fracture over the "hip pain" card.
+      const subConcept = await this._globalConceptLookupSubstringWithMatch(trimmed);
+      if (subConcept && subConcept.matchedSyn) {
+        const cardTopic = card.topic.toLowerCase();
+        const syn = subConcept.matchedSyn;
+        const synWords = syn.split(' ').length;
+        const cardWords = cardTopic.split(' ').length;
+        if (syn.length > cardTopic.length + 2 && synWords >= Math.max(2, cardWords + 1)) {
+          this._renderGlobalConceptResult(subConcept, resultContainer);
+          return;
+        }
+      }
     }
 
     if (!card) {
@@ -1305,6 +1320,9 @@ class ProtocolHelpApp {
       .toLowerCase()
       .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
       .replace(/[-_/]/g, ' ')
+      // Punctuation -> space so substring word boundaries hold:
+      // "rlq pain, us protocol?" must boundary-match the "rlq pain" synonym.
+      .replace(/[,.?!;:()\[\]]/g, ' ')
       .replace(/\s+/g, ' ')
       .trim();
   }
@@ -1335,8 +1353,8 @@ class ProtocolHelpApp {
     this._globalConceptIdxPromise = (async () => {
       try {
         const [ciRes, snRes] = await Promise.all([
-          fetch('data/search/concept_index.json?v=20260518a'),
-          fetch('data/search/scenario_names.json?v=20260518a'),
+          fetch('data/search/concept_index.json?v=20260521a'),
+          fetch('data/search/scenario_names.json?v=20260521a'),
         ]);
         if (!ciRes.ok) return null;
         const ci = await ciRes.json();
@@ -1536,6 +1554,46 @@ class ProtocolHelpApp {
     const concept = idx.ci.concepts && idx.ci.concepts[cid];
     if (!concept) return null;
     return { conceptId: cid, concept };
+  }
+
+  // Substring concept lookup that also returns the matched synonym. Used to
+  // override a summary-card substring match when a longer multi-word concept
+  // synonym matches the same query (e.g. "ivdu back pain fever" beats the
+  // generic "back pain" card).
+  async _globalConceptLookupSubstringWithMatch(query) {
+    const idx = await this._ensureGlobalConceptIndex();
+    if (!idx) return null;
+    const q = this._conceptNorm(query);
+    if (q.length <= 3) return null;
+    let bestLen = -1;
+    let bestSyn = null;
+    let bestCid = null;
+    const tokens = q.split(' ');
+    for (const [syn, cId] of Object.entries(idx.normMap)) {
+      let matches = false;
+      if (syn.length <= 3) {
+        matches = tokens.includes(syn);
+      } else if (q.includes(syn)) {
+        const i = q.indexOf(syn);
+        const before = i === 0 || q[i - 1] === ' ';
+        const afterIdx = i + syn.length;
+        const after = afterIdx === q.length || q[afterIdx] === ' ';
+        matches = before && after;
+      } else if (syn.includes(q)) {
+        const i = syn.indexOf(q);
+        const before = i === 0 || syn[i - 1] === ' ';
+        const afterIdx = i + q.length;
+        const after = afterIdx === syn.length || syn[afterIdx] === ' ';
+        matches = before && after;
+      }
+      if (matches && syn.length > bestLen) {
+        bestLen = syn.length; bestSyn = syn; bestCid = cId;
+      }
+    }
+    if (!bestCid) return null;
+    const concept = idx.ci.concepts && idx.ci.concepts[bestCid];
+    if (!concept) return null;
+    return { conceptId: bestCid, concept, matchedSyn: bestSyn };
   }
 
   // Search across all scenario names (and extracted clinical keywords) for

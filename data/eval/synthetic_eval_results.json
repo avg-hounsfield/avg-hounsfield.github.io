@@ -153,10 +153,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "exact_concept_override",
     "hit_concept_id": "aortic_aneurysm",
-    "summary_card": "aortic aneurysm",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "abdominal aortic aneurysm screening",
     "persona": "rad_med_student",
     "expected": "aortic_aneurysm",
@@ -181,10 +181,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "pancreatic_mass",
-    "summary_card": "pancreatitis",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "imaging of acute pancreatitis",
     "persona": "rad_med_student",
     "expected": "pancreatic_mass",
@@ -195,10 +195,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "fracture",
-    "summary_card": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "what does a hip fracture look like on X-ray",
     "persona": "rad_med_student",
     "expected": "fracture",
@@ -237,18 +237,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "stroke",
-    "summary_card": "stroke",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "carotid_stenosis",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "carotid duplex for stroke workup",
     "persona": "rad_med_student",
     "expected": "carotid_stenosis",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "stroke"
+      "carotid_stenosis"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "summary_card:substring",
@@ -345,10 +345,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "hydrocephalus",
-    "summary_card": "hydrocephalus",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "what does normal pressure hydrocephalus look like",
     "persona": "rad_med_student",
     "expected": "hydrocephalus",
@@ -373,10 +373,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "shoulder_pain",
-    "summary_card": "rotator cuff",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "shoulder MRI rotator cuff tear",
     "persona": "rad_med_student",
     "expected": "shoulder_pain",
@@ -400,164 +400,63 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "diverticulitis",
-    "top_scenarios": [
-      [
-        "6314",
-        "RLQ pain, initial imaging",
-        "abdomen"
-      ],
-      [
-        "7110",
-        "LLQ pain, initial imaging",
-        "abdomen"
-      ],
-      [
-        "6316",
-        "RLQ pain, fever, leukocytosis, appendicitis suspected, pregnant, initial imaging",
-        "abdomen"
-      ],
-      [
-        "6700",
-        "RUQ pain, etiology unknown, initial imaging",
-        "abdomen"
-      ],
-      [
-        "6315",
-        "RLQ pain, fever, leukocytosis, appendicitis suspected, initial imaging",
-        "abdomen"
-      ]
-    ],
-    "top_concepts": [
-      "diverticulitis",
-      "appendicitis",
-      "cholecystitis",
-      "appendicitis"
-    ],
+    "stage": "concept:substring",
+    "hit_concept_id": "appendicitis",
+    "top_scenarios": [],
     "query": "31yo with RLQ pain, US protocol?",
     "persona": "rad_intern",
     "expected": "appendicitis",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "diverticulitis",
-      "appendicitis",
-      "cholecystitis"
+      "appendicitis"
     ],
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "spine_infection",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "fever and back pain, imaging?",
     "persona": "rad_intern",
     "expected": "spine_infection",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "spine_infection"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "chest_pain",
-    "top_scenarios": [
-      [
-        "5247",
-        "Hemoptysis, recurrent, initial imaging",
-        "chest"
-      ],
-      [
-        "5246",
-        "Hemoptysis, nonmassive, initial imaging",
-        "chest"
-      ],
-      [
-        "5245",
-        "Hemoptysis, massive, life threatening, initial imaging",
-        "chest"
-      ],
-      [
-        "8567",
-        "Chest pain, hx of sickle cell disease, initial imaging",
-        "chest"
-      ],
-      [
-        "8562",
-        "Chest pain, pneumothorax suspected, initial imaging",
-        "chest"
-      ]
-    ],
-    "top_concepts": [
-      "chest_pain",
-      "chest_pain",
-      "lung_cancer",
-      "chest_pain",
-      "lung_cancer"
-    ],
+    "stage": "concept:substring",
+    "hit_concept_id": "lung_cancer",
+    "top_scenarios": [],
     "query": "smoker with hemoptysis, what to image",
     "persona": "rad_intern",
     "expected": "lung_cancer",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "chest_pain",
       "lung_cancer"
     ],
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "hip_pain",
-    "summary_card": "hip pain",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "elderly fall, hip pain, no fx on xray",
     "persona": "rad_intern",
     "expected": "fracture",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "hip_pain"
+      "fracture"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "embedding",
+    "stage": "concept:substring",
     "hit_concept_id": "pediatric_limp",
-    "top_scenarios": [
-      [
-        "4502",
-        "Ped <=5yo, acute limp, lower leg pain",
-        "other"
-      ],
-      [
-        "4499",
-        "Ped <=5yo, acute limp, hip pain",
-        "msk"
-      ],
-      [
-        "4503",
-        "Ped <=5yo, acute limp, ankle pain",
-        "msk"
-      ],
-      [
-        "1117",
-        "Ped <=5yo, acute limp, non localized",
-        "other"
-      ],
-      [
-        "4500",
-        "Ped <=5yo, acute limp, thigh pain",
-        "other"
-      ]
-    ],
-    "top_concepts": [
-      "pediatric_limp",
-      "pediatric_limp",
-      "pediatric_limp",
-      "pediatric_limp",
-      "pediatric_limp"
-    ],
+    "top_scenarios": [],
     "query": "kid with limping, no trauma",
     "persona": "rad_intern",
     "expected": "hip_pain",
@@ -581,7 +480,7 @@
     "hit_top5": true
   },
   {
-    "stage": "concept:levenshtein(diabetic foot ulcer concern for infection)",
+    "stage": "concept:exact",
     "hit_concept_id": "bone_infection",
     "top_scenarios": [],
     "query": "diabetic foot ulcer, concern for infection",
@@ -661,18 +560,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "abdominal_pain",
-    "summary_card": "abdominal pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "bowel_obstruction",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "abdominal pain and distension, no BMs",
     "persona": "rad_intern",
     "expected": "bowel_obstruction",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "abdominal_pain"
+      "bowel_obstruction"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -688,42 +587,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "8587",
-        "Physical abuse suspected, concern for humerus injury based on clinical presentation or hx, no apparent neurological or skeletal or visceral injuries, initial imaging",
-        "neuro"
-      ],
-      [
-        "8613",
-        "Physical abuse suspected, concern for humerus injury based on clinical presentation or hx, no apparent neurological or skeletal or visceral injuries, initial imaging",
-        "neuro"
-      ],
-      [
-        "8580",
-        "Physical abuse suspected, concern for wrist injury based on clinical presentation or hx, no apparent neurological or skeletal or visceral injuries, initial imaging",
-        "neuro"
-      ],
-      [
-        "8624",
-        "Physical abuse suspected, concern for wrist injury based on clinical presentation or hx, no apparent neurological or skeletal or visceral injuries, initial imaging",
-        "neuro"
-      ],
-      [
-        "8581",
-        "Physical abuse suspected, concern for elbow injury based on clinical presentation or hx, no apparent neurological or skeletal or visceral injuries, initial imaging",
-        "neuro"
-      ]
-    ],
-    "top_concepts": [],
+    "stage": "concept:exact",
+    "hit_concept_id": "shoulder_pain",
+    "top_scenarios": [],
     "query": "patient cant move arm after fall",
     "persona": "rad_intern",
     "expected": "shoulder_pain",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "shoulder_pain"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "summary_card:substring",
@@ -779,47 +653,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "fracture",
-    "top_scenarios": [
-      [
-        "4502",
-        "Ped <=5yo, acute limp, lower leg pain",
-        "other"
-      ],
-      [
-        "7195",
-        "Venous leg ulcer, lower extremity, initial imaging",
-        "msk"
-      ],
-      [
-        "578",
-        "Cold painful leg, sudden onset, vascular compromise suspected, initial imaging",
-        "vascular"
-      ],
-      [
-        "6244",
-        "Arterial claudication, revascularization assessment, initial imaging",
-        "vascular"
-      ],
-      [
-        "4507",
-        "Ped <=5yo, acute limp, symptoms localized to lower leg, infection suspected",
-        "other"
-      ]
-    ],
-    "top_concepts": [
-      "fracture",
-      "fracture"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "guillain_barre",
+    "top_scenarios": [],
     "query": "weakness in legs ascending",
     "persona": "rad_intern",
     "expected": "guillain_barre",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "fracture"
+      "guillain_barre"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:exact",
@@ -835,46 +679,15 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
+    "stage": "concept:exact",
     "hit_concept_id": "carotid_stenosis",
-    "top_scenarios": [
-      [
-        "7360",
-        "Carotid stenosis, asymptomatic, surveillance",
-        "vascular"
-      ],
-      [
-        "7351",
-        "TIA, symptoms resolved, initial imaging",
-        "neuro"
-      ],
-      [
-        "7192",
-        "TAVR, preintervention planning, supravalvular aorta and vascular access assessment, initial imaging",
-        "chest"
-      ],
-      [
-        "7117",
-        "Suspected dysfunction of the upper or lower extremity hemodialysis access (ie, arteriovenous fistula or graft) suggested by an abnormal clinical indicator or hemodynamic indicator (ie, reduction in dialysis vascular access blood flow rate or kinetics). Treatment and procedures.",
-        "msk"
-      ],
-      [
-        "7358",
-        "Venous sinus thrombosis, surveillance",
-        "vascular"
-      ]
-    ],
-    "top_concepts": [
-      "carotid_stenosis",
-      "stroke"
-    ],
+    "top_scenarios": [],
     "query": "patient with TIA, carotid eval",
     "persona": "rad_intern",
     "expected": "carotid_stenosis",
     "hit_top1": true,
     "top5_concepts": [
-      "carotid_stenosis",
-      "stroke"
+      "carotid_stenosis"
     ],
     "hit_top5": true
   },
@@ -1255,14 +1068,16 @@
   },
   {
     "stage": "summary_card:substring",
-    "hit_concept_id": null,
+    "hit_concept_id": "abdominal_pain",
     "summary_card": "kidney stone",
     "top_scenarios": [],
     "query": "noncon vs con CT for kidney stone",
     "persona": "rad_r1",
     "expected": "OUT_OF_TAXONOMY",
     "hit_top1": false,
-    "top5_concepts": [],
+    "top5_concepts": [
+      "abdominal_pain"
+    ],
     "hit_top5": false
   },
   {
@@ -1577,42 +1392,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "8501",
-        "Shoulder pain, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ],
-      [
-        "8478",
-        "Shoulder pain, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "8470",
-        "Shoulder swelling, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "8493",
-        "Shoulder swelling, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ],
-      [
-        "3561",
-        "Shoulder pain, chronic, labral pathology suspected, radiography normal, next imaging study",
-        "msk"
-      ]
-    ],
-    "top_concepts": [],
+    "stage": "concept:exact",
+    "hit_concept_id": "shoulder_pain",
+    "top_scenarios": [],
     "query": "MRI shoulder arthrogram indications",
     "persona": "rad_r2",
     "expected": "shoulder_pain",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "shoulder_pain"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -1909,14 +1699,16 @@
   },
   {
     "stage": "summary_card:substring",
-    "hit_concept_id": null,
+    "hit_concept_id": "abdominal_pain",
     "summary_card": "mesenteric ischemia",
     "top_scenarios": [],
     "query": "CTA abdomen for mesenteric ischemia",
     "persona": "rad_r2",
     "expected": "OUT_OF_TAXONOMY",
     "hit_top1": false,
-    "top5_concepts": [],
+    "top5_concepts": [
+      "abdominal_pain"
+    ],
     "hit_top5": false
   },
   {
@@ -2018,10 +1810,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "fracture",
-    "summary_card": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "MRI for vertebral compression fracture chronicity",
     "persona": "rad_r2",
     "expected": "fracture",
@@ -2397,50 +2189,17 @@
     "hit_top5": false
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "chest_pain",
-    "top_scenarios": [
-      [
-        "6314",
-        "RLQ pain, initial imaging",
-        "abdomen"
-      ],
-      [
-        "8568",
-        "Chest pain, panic attack suspected, initial imaging",
-        "chest"
-      ],
-      [
-        "8566",
-        "Chest pain, cardiac disease, initial imaging",
-        "chest"
-      ],
-      [
-        "8448",
-        "Liver transplant, immediate postoperative, initial imaging",
-        "abdomen"
-      ],
-      [
-        "6287",
-        "Ataxia, recent trauma, initial imaging",
-        "neuro"
-      ]
-    ],
-    "top_concepts": [
-      "chest_pain",
-      "chest_pain",
-      "chest_pain",
-      "chest_pain",
-      "chest_pain"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "adrenal_mass",
+    "top_scenarios": [],
     "query": "pheo workup imaging",
     "persona": "rad_r3_r4",
     "expected": "adrenal_mass",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "chest_pain"
+      "adrenal_mass"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -2456,10 +2215,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "exact_concept_override",
     "hit_concept_id": "fracture",
-    "summary_card": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "stress fracture occult workup",
     "persona": "rad_r3_r4",
     "expected": "fracture",
@@ -2600,10 +2359,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "bowel_obstruction",
-    "summary_card": "bowel obstruction",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "small bowel obstruction transition point",
     "persona": "rad_r3_r4",
     "expected": "bowel_obstruction",
@@ -2823,42 +2582,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "8509",
-        "TMJ pain, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ],
-      [
-        "8548",
-        "Foot pain chronic, cartilage abnormality suspected, radiography indeterminate, next imaging study",
-        "msk"
-      ],
-      [
-        "8544",
-        "Foot pain chronic, cartilage abnormality suspected, radiography negative, next imaging study",
-        "msk"
-      ],
-      [
-        "8486",
-        "TMJ pain, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "8547",
-        "Foot pain chronic, osteochondral lesion suspected, radiography indeterminate, next imaging study",
-        "msk"
-      ]
-    ],
-    "top_concepts": [],
+    "stage": "concept:exact",
+    "hit_concept_id": "knee_pain",
+    "top_scenarios": [],
     "query": "advanced MSK MRI for cartilage T2 mapping",
     "persona": "rad_fellow",
     "expected": "knee_pain",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "knee_pain"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -3293,46 +3027,17 @@
     "hit_top5": false
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "shoulder_pain",
-    "top_scenarios": [
-      [
-        "8531",
-        "Foot pain chronic, tendon origin suspected, radiography negative, next imaging study",
-        "msk"
-      ],
-      [
-        "8536",
-        "Foot pain chronic, tendon origin suspected, radiography indeterminate, next imaging study",
-        "msk"
-      ],
-      [
-        "8502",
-        "Wrist pain, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ],
-      [
-        "7322",
-        "Hand pain, chronic, tendon injury suspected, radiography normal, next imaging study",
-        "msk"
-      ],
-      [
-        "7331",
-        "Hand pain, chronic, tendon injury suspected, nonspecific arthritis findings on radiography, next imaging study",
-        "msk"
-      ]
-    ],
-    "top_concepts": [
-      "shoulder_pain"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "soft_tissue_mass",
+    "top_scenarios": [],
     "query": "musculoskeletal US for tendinopathy followup",
     "persona": "rad_fellow",
     "expected": "soft_tissue_mass",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "shoulder_pain"
+      "soft_tissue_mass"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -3493,47 +3198,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "brain_neoplasm",
-    "top_scenarios": [
-      [
-        "2075",
-        "ICU patient, newly admitted, initial imaging",
-        "other"
-      ],
-      [
-        "5521",
-        "ICU patient, nasogastric tube placement, follow up imaging",
-        "other"
-      ],
-      [
-        "3567",
-        "Abd pain, acute, nonlocalized, initial exam",
-        "other"
-      ],
-      [
-        "1133",
-        "Abd pain, acute, nonlocalized, fever, initial exam",
-        "other"
-      ],
-      [
-        "5532",
-        "Syncope, low probability of cardiovascular etiology, initial imaging",
-        "other"
-      ]
-    ],
-    "top_concepts": [
-      "brain_neoplasm",
-      "brain_neoplasm"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "carotid_stenosis",
+    "top_scenarios": [],
     "query": "ICA stenosis NASCET vs ECST",
     "persona": "rad_r3_r4",
     "expected": "carotid_stenosis",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "brain_neoplasm"
+      "carotid_stenosis"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -3771,42 +3446,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "6780",
-        "Vertebral compression fracture on radiography, thoracic, symptomatic, new, hx of malignancy, next imaging study",
-        "spine"
-      ],
-      [
-        "6779",
-        "Vertebral compression fracture on radiography, cervical, symptomatic, new, hx of malignancy, next imaging study",
-        "spine"
-      ],
-      [
-        "6788",
-        "Vertebral compression fracture on radiography, cervical, asymptomatic, hx of malignancy, next imaging study",
-        "spine"
-      ],
-      [
-        "6781",
-        "Vertebral compression fracture on radiography, lumbar, symptomatic, new, hx of malignancy, next imaging study",
-        "spine"
-      ],
-      [
-        "6789",
-        "Vertebral compression fracture on radiography, thoracic, asymptomatic, hx of malignancy, next imaging study",
-        "spine"
-      ]
-    ],
-    "top_concepts": [],
+    "stage": "concept:exact",
+    "hit_concept_id": "spinal_tumor",
+    "top_scenarios": [],
     "query": "MR for vertebral body lesion - benign vs malignant",
     "persona": "rad_r2",
     "expected": "spinal_tumor",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "spinal_tumor"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -4071,42 +3721,17 @@
     "hit_top5": false
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "6288",
-        "Ataxia, recurrent, interval normal neuro exam, initial imaging",
-        "neuro"
-      ],
-      [
-        "5520",
-        "ICU patient, ET tube placement, follow up imaging",
-        "other"
-      ],
-      [
-        "8451",
-        "Liver transplant, postoperative, surveillance",
-        "abdomen"
-      ],
-      [
-        "2079",
-        "ICU patient, stable, no change in clinical status, initial imaging",
-        "other"
-      ],
-      [
-        "7208",
-        "Breast implant evaluation, silicone, asymptomatic, negative imaging 5 to 6 yrs after implant placement, follow-up imaging every 2 to 3 yrs",
-        "breast"
-      ]
-    ],
-    "top_concepts": [],
+    "stage": "concept:exact",
+    "hit_concept_id": "aortic_aneurysm",
+    "top_scenarios": [],
     "query": "CTA TAA followup interval",
     "persona": "rad_r3_r4",
     "expected": "aortic_aneurysm",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "aortic_aneurysm"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -4168,16 +3793,16 @@
   },
   {
     "stage": "concept:substring",
-    "hit_concept_id": "heart_failure",
+    "hit_concept_id": "stroke",
     "top_scenarios": [],
     "query": "patient afib new onset weakness",
     "persona": "rad_intern",
     "expected": "stroke",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "heart_failure"
+      "stroke"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "scenario_name",
@@ -4238,31 +3863,31 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "headache",
-    "summary_card": "headache",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "brain_neoplasm",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "pt with new headache and papilledema",
     "persona": "rad_intern",
     "expected": "brain_neoplasm",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "headache"
+      "brain_neoplasm"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "concept:substring",
-    "hit_concept_id": "radiculopathy",
+    "stage": "concept:exact",
+    "hit_concept_id": "spinal_tumor",
     "top_scenarios": [],
     "query": "MR for arachnoiditis vs nerve root sheath tumor",
     "persona": "rad_r2",
     "expected": "spinal_tumor",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "radiculopathy"
+      "spinal_tumor"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:exact",
@@ -4582,51 +4207,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "multiple_sclerosis",
-    "top_scenarios": [
-      [
-        "8700",
-        "Demyelinating disease, new neuro deficits, initial imaging",
-        "neuro"
-      ],
-      [
-        "8701",
-        "Demyelinating disease, progressive neuro deficits, initial imaging",
-        "neuro"
-      ],
-      [
-        "7958",
-        "Cognitive impairment, progressive aphasia, frontotemporal dementia suspected, initial imaging",
-        "neuro"
-      ],
-      [
-        "8694",
-        "Demyelinating disease of the CNS suspected, subacute sensorimotor symptoms, initial imaging",
-        "neuro"
-      ],
-      [
-        "8693",
-        "Demyelinating disease of the CNS suspected, acute sensorimotor symptoms, initial imaging",
-        "neuro"
-      ]
-    ],
-    "top_concepts": [
-      "multiple_sclerosis",
-      "multiple_sclerosis",
-      "dementia",
-      "multiple_sclerosis",
-      "multiple_sclerosis"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "seizure",
+    "top_scenarios": [],
     "query": "hippocampal volumetry mesial temporal sclerosis",
     "persona": "rad_neuroradiologist",
     "expected": "seizure",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "multiple_sclerosis",
-      "dementia"
+      "seizure"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -4669,24 +4260,24 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "headache",
-    "summary_card": "headache",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "intracranial_hemorrhage",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "imaging for thunderclap headache",
     "persona": "rad_neuroradiologist",
     "expected": "headache",
-    "hit_top1": true,
+    "hit_top1": false,
     "top5_concepts": [
-      "headache"
+      "intracranial_hemorrhage"
     ],
-    "hit_top5": true
+    "hit_top5": false
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "headache",
-    "summary_card": "headache",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "MRI brain for new headache > 50 yo",
     "persona": "rad_neuroradiologist",
     "expected": "headache",
@@ -4876,51 +4467,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "brain_neoplasm",
-    "top_scenarios": [
-      [
-        "7725",
-        "Headache, orthostatic, intracranial hypotension suspected, no improvement post 72 hrs of dural puncture that could cause CSF leakage, initial imaging",
-        "neuro"
-      ],
-      [
-        "7723",
-        "Headache, orthostatic, intracranial hypotension suspected, within 72 hrs of dural puncture that could cause CSF leakage, initial imaging",
-        "neuro"
-      ],
-      [
-        "7726",
-        "Headache, orthostatic, intracranial hypotension suspected, no improvement post 72 hrs of spinal intervention that could cause CSF leakage, initial imaging",
-        "neuro"
-      ],
-      [
-        "7724",
-        "Headache, orthostatic, within 72 hrs of spinal intervention that could cause CSF leakage, initial imaging",
-        "neuro"
-      ],
-      [
-        "7722",
-        "Headache, orthostatic, intracranial hypotension suspected, no recent spinal intervention that could cause CSF leakage, initial imaging",
-        "neuro"
-      ]
-    ],
-    "top_concepts": [
-      "brain_neoplasm",
-      "brain_neoplasm",
-      "brain_neoplasm",
-      "headache",
-      "brain_neoplasm"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "hydrocephalus",
+    "top_scenarios": [],
     "query": "CSF flow study for aqueductal stenosis",
     "persona": "rad_neuroradiologist",
     "expected": "hydrocephalus",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "brain_neoplasm",
-      "headache"
+      "hydrocephalus"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -4936,46 +4493,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "brain_neoplasm",
-    "top_scenarios": [
-      [
-        "7406",
-        "PAVM suspected, asymptomatic, family hx HHT, initial imaging",
-        "other"
-      ],
-      [
-        "7407",
-        "PAVM, post embolization, surveillance",
-        "other"
-      ],
-      [
-        "7405",
-        "PAVM suspected, hemoptysis, epistaxis hx, family hx HHT, initial imaging",
-        "chest"
-      ],
-      [
-        "7403",
-        "PAVM suspected, shortness of breath, epistaxis hx, family hx HHT, initial imaging",
-        "other"
-      ],
-      [
-        "7404",
-        "PAVM suspected, hemothorax, epistaxis hx, family hx HHT,initial imaging",
-        "other"
-      ]
-    ],
-    "top_concepts": [
-      "brain_neoplasm"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "hydrocephalus",
+    "top_scenarios": [],
     "query": "shunt series for VP shunt malfunction",
     "persona": "rad_neuroradiologist",
     "expected": "hydrocephalus",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "brain_neoplasm"
+      "hydrocephalus"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -5030,10 +4558,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "carotid_stenosis",
-    "summary_card": "carotid stenosis",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "carotid stenosis NASCET measurement CTA",
     "persona": "rad_neuroradiologist",
     "expected": "carotid_stenosis",
@@ -5348,50 +4876,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "multiple_sclerosis",
-    "top_scenarios": [
-      [
-        "8700",
-        "Demyelinating disease, new neuro deficits, initial imaging",
-        "neuro"
-      ],
-      [
-        "8701",
-        "Demyelinating disease, progressive neuro deficits, initial imaging",
-        "neuro"
-      ],
-      [
-        "8693",
-        "Demyelinating disease of the CNS suspected, acute sensorimotor symptoms, initial imaging",
-        "neuro"
-      ],
-      [
-        "8694",
-        "Demyelinating disease of the CNS suspected, subacute sensorimotor symptoms, initial imaging",
-        "neuro"
-      ],
-      [
-        "8695",
-        "Demyelinating disease of the CNS suspected, acute brainstem symptoms, initial imaging",
-        "neuro"
-      ]
-    ],
-    "top_concepts": [
-      "multiple_sclerosis",
-      "multiple_sclerosis",
-      "multiple_sclerosis",
-      "multiple_sclerosis",
-      "multiple_sclerosis"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "seizure",
+    "top_scenarios": [],
     "query": "MRI brain for autoimmune encephalitis",
     "persona": "rad_neuroradiologist",
     "expected": "seizure",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "multiple_sclerosis"
+      "seizure"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -5407,50 +4902,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "prostate",
-    "top_scenarios": [
-      [
-        "8451",
-        "Liver transplant, postoperative, surveillance",
-        "abdomen"
-      ],
-      [
-        "6751",
-        "Prostate cancer, residual disease suspected, post radical prostatectomy, follow-up imaging",
-        "abdomen"
-      ],
-      [
-        "6750",
-        "Prostate cancer, recurrent disease suspected, post radical prostatectomy, follow-up imaging",
-        "abdomen"
-      ],
-      [
-        "6756",
-        "Prostate cancer, metastatic, post androgen deprivation therapy, follow-up imaging",
-        "abdomen"
-      ],
-      [
-        "6754",
-        "Prostate cancer, metastatic, post immunotherapy, follow-up imaging",
-        "abdomen"
-      ]
-    ],
-    "top_concepts": [
-      "prostate",
-      "prostate",
-      "prostate",
-      "prostate",
-      "prostate"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "liver_cancer",
+    "top_scenarios": [],
     "query": "LI-RADS treatment response post-TACE",
     "persona": "rad_bodyradiologist",
     "expected": "liver_cancer",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "prostate"
+      "liver_cancer"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -5532,10 +4994,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "pancreatic_mass",
-    "summary_card": "pancreatitis",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "MRI for IgG4 autoimmune pancreatitis",
     "persona": "rad_bodyradiologist",
     "expected": "pancreatic_mass",
@@ -5664,10 +5126,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "pancreatic_mass",
-    "summary_card": "pancreatitis",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "CT for acute necrotizing pancreatitis CTSI",
     "persona": "rad_bodyradiologist",
     "expected": "abdominal_pain",
@@ -5704,10 +5166,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "bowel_obstruction",
-    "summary_card": "bowel obstruction",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "CT for small bowel obstruction transition point",
     "persona": "rad_bodyradiologist",
     "expected": "bowel_obstruction",
@@ -5884,50 +5346,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "pyelonephritis",
-    "top_scenarios": [
-      [
-        "7221",
-        "Flank pain, acute, stone disease suspected, CT without contrast inconclusive for stones, next imaging study",
-        "other"
-      ],
-      [
-        "7217",
-        "Flank pain, acute, stone disease suspected, no hx of stone disease, initial imaging",
-        "other"
-      ],
-      [
-        "6254",
-        "Pyelonephritis suspected, acute, renal stones hx, initial imaging",
-        "abdomen"
-      ],
-      [
-        "7218",
-        "Flank pain, acute, stone disease on recent imaging, recurrent symptoms, follow-up imaging",
-        "other"
-      ],
-      [
-        "7216",
-        "Flank pain, acute, stone disease suspected, remote hx of stone disease, initial imaging",
-        "other"
-      ]
-    ],
-    "top_concepts": [
-      "pyelonephritis",
-      "kidney_mass",
-      "kidney_mass",
-      "kidney_mass"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "abdominal_pain",
+    "top_scenarios": [],
     "query": "dual-energy CT for renal stone composition",
     "persona": "rad_bodyradiologist",
     "expected": "abdominal_pain",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "pyelonephritis",
-      "kidney_mass"
+      "abdominal_pain"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -6247,16 +5676,18 @@
     "hit_top5": false
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": null,
-    "summary_card": "ovarian cancer",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "abdominal_pain",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "CT for ovarian cancer peritoneal carcinomatosis",
     "persona": "rad_bodyradiologist",
     "expected": "abdominal_pain",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "abdominal_pain"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -6366,16 +5797,18 @@
     "hit_top5": false
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": null,
-    "summary_card": "mesenteric ischemia",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "abdominal_pain",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "CTA mesenteric for chronic mesenteric ischemia",
     "persona": "rad_bodyradiologist",
     "expected": "abdominal_pain",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "abdominal_pain"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -6690,55 +6123,23 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "liver_cancer",
-    "top_scenarios": [
-      [
-        "8451",
-        "Liver transplant, postoperative, surveillance",
-        "abdomen"
-      ],
-      [
-        "8448",
-        "Liver transplant, immediate postoperative, initial imaging",
-        "abdomen"
-      ],
-      [
-        "8400",
-        "Primary liver cancer, post liver directed therapy, posttreatment evaluation",
-        "abdomen"
-      ],
-      [
-        "8449",
-        "Liver transplant, postoperative complications, vascular etiology suspected, initial imaging",
-        "abdomen"
-      ],
-      [
-        "8401",
-        "Primary liver cancer, post neoadjuvant chemo, posttreatment evaluation",
-        "abdomen"
-      ]
-    ],
-    "top_concepts": [
-      "liver_cancer",
-      "liver_cancer",
-      "pancreatic_mass"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "liver_lesion",
+    "top_scenarios": [],
     "query": "RECIST 1.1 for liver mets follow-up",
     "persona": "rad_bodyradiologist",
     "expected": "liver_lesion",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "liver_cancer",
-      "pancreatic_mass"
+      "liver_lesion"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "shoulder_pain",
-    "summary_card": "rotator cuff",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "MRI shoulder for rotator cuff tear",
     "persona": "rad_msk",
     "expected": "shoulder_pain",
@@ -6749,41 +6150,9 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
+    "stage": "concept:substring",
     "hit_concept_id": "shoulder_pain",
-    "top_scenarios": [
-      [
-        "8478",
-        "Shoulder pain, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "8501",
-        "Shoulder pain, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ],
-      [
-        "8619",
-        "Physical abuse suspected, concern for shoulder injury based on clinical presentation or hx, no apparent neurological or skeletal or visceral injuries, initial imaging",
-        "neuro"
-      ],
-      [
-        "8591",
-        "Physical abuse suspected, concern for shoulder injury based on clinical presentation or hx, no apparent neurological or skeletal or visceral injuries, initial imaging",
-        "neuro"
-      ],
-      [
-        "7876",
-        "Shoulder pain, acute, physical exam consistent with rotator cuff tear, radiography negative, next imaging study",
-        "msk"
-      ]
-    ],
-    "top_concepts": [
-      "shoulder_pain",
-      "shoulder_pain",
-      "shoulder_pain",
-      "shoulder_pain"
-    ],
+    "top_scenarios": [],
     "query": "MR arthrogram shoulder for SLAP tear",
     "persona": "rad_msk",
     "expected": "shoulder_pain",
@@ -6881,42 +6250,9 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
+    "stage": "concept:substring",
     "hit_concept_id": "hip_pain",
-    "top_scenarios": [
-      [
-        "8499",
-        "Hip pain, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ],
-      [
-        "8476",
-        "Hip pain, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "7171",
-        "Hip replaced, trochanteric pain, trochanteric bursitis suspected, radiography performed, next imaging study",
-        "msk"
-      ],
-      [
-        "8468",
-        "Hip swelling, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "8491",
-        "Hip swelling, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ]
-    ],
-    "top_concepts": [
-      "hip_pain",
-      "hip_pain",
-      "hip_pain",
-      "hip_pain",
-      "hip_pain"
-    ],
+    "top_scenarios": [],
     "query": "MR arthrogram hip vs non-arthrogram",
     "persona": "rad_msk",
     "expected": "hip_pain",
@@ -6940,38 +6276,9 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
+    "stage": "concept:substring",
     "hit_concept_id": "hip_pain",
-    "top_scenarios": [
-      [
-        "837",
-        "Rib fracture suspected, after CPR",
-        "msk"
-      ],
-      [
-        "8455",
-        "Aspirated foreign body suspected, radiography negative, next imaging study",
-        "other"
-      ],
-      [
-        "7731",
-        "Torso trauma, penetrating, hypotensive, initial imaging",
-        "other"
-      ],
-      [
-        "8590",
-        "Physical abuse suspected, concern for ribs injury based on clinical presentation or hx, no apparent neurological or skeletal or visceral injuries, initial imaging",
-        "neuro"
-      ],
-      [
-        "8618",
-        "Physical abuse suspected, concern for ribs injury based on clinical presentation or hx, no apparent neurological or skeletal or visceral injuries, initial imaging",
-        "neuro"
-      ]
-    ],
-    "top_concepts": [
-      "hip_pain"
-    ],
+    "top_scenarios": [],
     "query": "X-ray for FAI cam vs pincer",
     "persona": "rad_msk",
     "expected": "hip_pain",
@@ -7194,10 +6501,10 @@
     "hit_top5": false
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "fracture",
-    "summary_card": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "MRI wrist for scaphoid occult fracture",
     "persona": "rad_msk",
     "expected": "fracture",
@@ -7208,10 +6515,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "fracture",
-    "summary_card": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "MRI for sacral insufficiency fracture",
     "persona": "rad_msk",
     "expected": "fracture",
@@ -7222,10 +6529,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "fracture",
-    "summary_card": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "MRI tibia for stress fracture",
     "persona": "rad_msk",
     "expected": "fracture",
@@ -7236,51 +6543,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "diverticulitis",
-    "top_scenarios": [
-      [
-        "6314",
-        "RLQ pain, initial imaging",
-        "abdomen"
-      ],
-      [
-        "7110",
-        "LLQ pain, initial imaging",
-        "abdomen"
-      ],
-      [
-        "8561",
-        "Chest wall pain, initial imaging",
-        "chest"
-      ],
-      [
-        "8446",
-        "SVC occlusion suspected, chronic, initial imaging",
-        "other"
-      ],
-      [
-        "8444",
-        "SVC occlusion suspected, acute, initial imaging",
-        "other"
-      ]
-    ],
-    "top_concepts": [
-      "diverticulitis",
-      "chest_pain",
-      "chest_pain",
-      "pulmonary_embolism"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "fracture",
+    "top_scenarios": [],
     "query": "next imaging after equivocal XR stress fx",
     "persona": "rad_msk",
     "expected": "fracture",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "diverticulitis",
-      "chest_pain",
-      "pulmonary_embolism"
+      "fracture"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -7309,16 +6582,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": null,
-    "summary_card": "arthritis",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "bone_infection",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "MRI for septic arthritis hip",
     "persona": "rad_msk",
     "expected": "bone_infection",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "bone_infection"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:exact",
@@ -7553,42 +6828,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "5455",
-        "Metatarsalgia, chronic, negative or equivocal radiography, mortons neuroma suspected, next imaging study",
-        "msk"
-      ],
-      [
-        "8556",
-        "Foot pain chronic, neurogenic origin suspected, radiography negative, next imaging study",
-        "msk"
-      ],
-      [
-        "8553",
-        "Foot pain chronic, baxter neuropathy suspected, radiography negative, next imaging study",
-        "msk"
-      ],
-      [
-        "8557",
-        "Foot pain chronic, baxter neuropathy suspected, radiography indeterminate, next imaging study",
-        "msk"
-      ],
-      [
-        "8543",
-        "Foot pain chronic, osteochondral lesion suspected, radiography negative, next imaging study",
-        "msk"
-      ]
-    ],
-    "top_concepts": [],
+    "stage": "concept:exact",
+    "hit_concept_id": "soft_tissue_mass",
+    "top_scenarios": [],
     "query": "MRI for Morton neuroma",
     "persona": "rad_msk",
     "expected": "soft_tissue_mass",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "soft_tissue_mass"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -7714,42 +6964,17 @@
     "hit_top5": false
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "6236",
-        "Groin hernia suspected, femoral, initial imaging",
-        "abdomen"
-      ],
-      [
-        "6235",
-        "Groin hernia suspected, inguinal, initial imaging",
-        "abdomen"
-      ],
-      [
-        "6233",
-        "Abdominal wall hernia suspected, lumbar, initial imaging",
-        "spine"
-      ],
-      [
-        "6234",
-        "Abdominal wall hernia suspected, spigelian, initial imaging",
-        "abdomen"
-      ],
-      [
-        "6232",
-        "Abdominal wall hernia suspected, incisional, initial imaging",
-        "abdomen"
-      ]
-    ],
-    "top_concepts": [],
+    "stage": "concept:exact",
+    "hit_concept_id": "hip_pain",
+    "top_scenarios": [],
     "query": "MRI for athletic pubalgia sports hernia",
     "persona": "rad_msk",
     "expected": "hip_pain",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "hip_pain"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -7859,10 +7084,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "breast_cancer",
-    "summary_card": "breast cancer",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "MRI for newly diagnosed breast cancer",
     "persona": "rad_breast",
     "expected": "breast_cancer",
@@ -8230,18 +7455,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "breast_cancer",
-    "summary_card": "breast cancer",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "breast_screening",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "breast cancer screening woman > 75",
     "persona": "rad_breast",
     "expected": "breast_screening",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "breast_cancer"
+      "breast_screening"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:exact",
@@ -8506,10 +7731,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "pneumonia",
-    "summary_card": "pneumonia",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "CT for community acquired pneumonia non-resolving",
     "persona": "rad_cardiothoracic",
     "expected": "pneumonia",
@@ -8520,17 +7745,17 @@
     "hit_top5": true
   },
   {
-    "stage": "concept:substring",
-    "hit_concept_id": "lung_nodule",
+    "stage": "concept:exact",
+    "hit_concept_id": "pneumonia",
     "top_scenarios": [],
     "query": "CT for cavitary lung lesion TB vs malignancy",
     "persona": "rad_cardiothoracic",
     "expected": "pneumonia",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "lung_nodule"
+      "pneumonia"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -8676,10 +7901,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "aortic_aneurysm",
-    "summary_card": "aortic aneurysm",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "CTA chest for thoracic aortic aneurysm",
     "persona": "rad_cardiothoracic",
     "expected": "aortic_aneurysm",
@@ -8808,50 +8033,17 @@
     "hit_top5": false
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "pancreatic_mass",
-    "top_scenarios": [
-      [
-        "8510",
-        "Pancreatic neuroendocrine tumor, local staging",
-        "abdomen"
-      ],
-      [
-        "8511",
-        "Pancreatic neuroendocrine tumor, staging, evaluation for mets",
-        "abdomen"
-      ],
-      [
-        "8524",
-        "Gastric adenocarcinoma, staging for distant mets",
-        "abdomen"
-      ],
-      [
-        "8860",
-        "Ocular melanoma, initial staging",
-        "other"
-      ],
-      [
-        "5535",
-        "Vulvar cancer, primary tumor >4 cm, initial pretreatment staging",
-        "other"
-      ]
-    ],
-    "top_concepts": [
-      "pancreatic_mass",
-      "pancreatic_mass",
-      "breast_cancer",
-      "pancreatic_mass"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "adrenal_mass",
+    "top_scenarios": [],
     "query": "MRI for neuroblastoma staging",
     "persona": "rad_peds_radiologist",
     "expected": "adrenal_mass",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "pancreatic_mass",
-      "breast_cancer"
+      "adrenal_mass"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -9415,16 +8607,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": null,
-    "summary_card": "kidney stone",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "abdominal_pain",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "CT abdomen for kidney stones",
     "persona": "ct_tech",
     "expected": "abdominal_pain",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "abdominal_pain"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "summary_card:substring",
@@ -9527,23 +8721,17 @@
     "hit_top5": true
   },
   {
-    "stage": "scenario_name",
-    "hit_concept_id": "soft_tissue_mass",
-    "top_scenarios": [
-      [
-        "7006",
-        "Soft tissue mass, knee, radiography and noncontrast US nondiagnostic, MRI contraindicated, next imaging study",
-        "msk"
-      ]
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "knee_pain",
+    "top_scenarios": [],
     "query": "knee MRI sequences",
     "persona": "mri_tech",
     "expected": "knee_pain",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "soft_tissue_mass"
+      "knee_pain"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:exact",
@@ -9637,64 +8825,29 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "aortic_dissection",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "48yo M tearing chest/back pain HTN",
     "persona": "ed_attending",
     "expected": "aortic_dissection",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "aortic_dissection"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "embedding",
+    "stage": "concept:substring",
     "hit_concept_id": "aortic_aneurysm",
-    "top_scenarios": [
-      [
-        "7203",
-        "Abdominal mass, pulsatile, abdominal aortic aneurysm suspected, initial imaging",
-        "chest"
-      ],
-      [
-        "906",
-        "Abdominal mass, intra-abdominal neoplasm suspected",
-        "abdomen"
-      ],
-      [
-        "4790",
-        "Abdominal wall mass, suspected",
-        "abdomen"
-      ],
-      [
-        "8459",
-        "Abdominal pain, acute, surgical complication suspected, initial imaging",
-        "abdomen"
-      ],
-      [
-        "8458",
-        "Abdominal pain, acute, bowel obstruction suspected, no hx of abdominal surgery, initial imaging",
-        "abdomen"
-      ]
-    ],
-    "top_concepts": [
-      "aortic_aneurysm",
-      "abdominal_pain",
-      "abdominal_pain",
-      "abdominal_pain",
-      "abdominal_pain"
-    ],
+    "top_scenarios": [],
     "query": "70yo M syncope pulsatile abdominal mass",
     "persona": "ed_attending",
     "expected": "aortic_aneurysm",
     "hit_top1": true,
     "top5_concepts": [
-      "aortic_aneurysm",
-      "abdominal_pain",
-      "bowel_obstruction"
+      "aortic_aneurysm"
     ],
     "hit_top5": true
   },
@@ -9875,17 +9028,17 @@
     "hit_top5": false
   },
   {
-    "stage": "concept:substring",
-    "hit_concept_id": "multiple_sclerosis",
+    "stage": "concept:exact",
+    "hit_concept_id": "intracranial_hemorrhage",
     "top_scenarios": [],
     "query": "88yo F altered MS fall head strike on coumadin",
     "persona": "ed_attending",
     "expected": "intracranial_hemorrhage",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "multiple_sclerosis"
+      "intracranial_hemorrhage"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "summary_card:substring",
@@ -9928,49 +9081,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "chest_pain",
-    "top_scenarios": [
-      [
-        "8563",
-        "Chest pain, pneumomediastinum suspected, initial imaging",
-        "chest"
-      ],
-      [
-        "7226",
-        "Sepsis suspected, dyspnea, initial imaging",
-        "other"
-      ],
-      [
-        "8562",
-        "Chest pain, pneumothorax suspected, initial imaging",
-        "chest"
-      ],
-      [
-        "7229",
-        "Sepsis, dyspnea, initial imaging",
-        "other"
-      ],
-      [
-        "7227",
-        "Sepsis suspected, chest pain, initial imaging",
-        "chest"
-      ]
-    ],
-    "top_concepts": [
-      "chest_pain",
-      "chest_pain",
-      "chest_pain",
-      "chest_pain"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "pulmonary_embolism",
+    "top_scenarios": [],
     "query": "39yo F SOB tachypnea recent OCP started",
     "persona": "ed_attending",
     "expected": "pulmonary_embolism",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "chest_pain"
+      "pulmonary_embolism"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -9986,18 +9107,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "neck pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "23yo M MVC neck pain midline TTP",
     "persona": "ed_attending",
     "expected": "fracture",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "fracture"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -10026,16 +9147,16 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:word",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "pancreatic_mass",
     "top_scenarios": [],
+    "from_card_kind": "word",
     "query": "41yo M epigastric pain radiating to back lipase 1200",
     "persona": "ed_attending",
     "expected": "abdominal_pain",
     "hit_top1": false,
     "top5_concepts": [
-      "back_pain"
+      "pancreatic_mass"
     ],
     "hit_top5": false
   },
@@ -10160,16 +9281,16 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "myelopathy",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "52yo M back pain saddle anesthesia",
     "persona": "ed_attending",
     "expected": "radiculopathy",
     "hit_top1": false,
     "top5_concepts": [
-      "back_pain"
+      "myelopathy"
     ],
     "hit_top5": false
   },
@@ -10244,18 +9365,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "spine_infection",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "47yo M IVDU back pain fever",
     "persona": "ed_attending",
     "expected": "spine_infection",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "spine_infection"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:exact",
@@ -10284,16 +9405,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": null,
-    "summary_card": "jaundice",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "liver_cancer",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "58yo M ascites jaundice new",
     "persona": "ed_attending",
     "expected": "liver_cancer",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "liver_cancer"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -10361,17 +9484,17 @@
     "hit_top5": true
   },
   {
-    "stage": "concept:substring",
-    "hit_concept_id": "stroke",
+    "stage": "concept:exact",
+    "hit_concept_id": "carotid_stenosis",
     "top_scenarios": [],
     "query": "73yo M TIA sx resolved",
     "persona": "ed_attending",
     "expected": "carotid_stenosis",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "stroke"
+      "carotid_stenosis"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -10440,10 +9563,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "stroke",
-    "summary_card": "stroke",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "CT or MRI for acute stroke",
     "persona": "ed_resident",
     "expected": "stroke",
@@ -10480,42 +9603,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "2470",
-        "Neck trauma, penetrating, CTA neg or equivocal, vascular injury suspected",
-        "vascular"
-      ],
-      [
-        "7362",
-        "Cervical vascular Injury suspected, initial imaging",
-        "spine"
-      ],
-      [
-        "7364",
-        "Cervical vascular injury, surveillance",
-        "spine"
-      ],
-      [
-        "2471",
-        "Neck trauma, penetrating, CTA neg or equivocal, aerodigestive injury suspected",
-        "other"
-      ],
-      [
-        "4681",
-        "Cervical spine trauma, acute, blunt, arterial injury suspected, with or without positive cervical spine CT, next imaging study",
-        "spine"
-      ]
-    ],
-    "top_concepts": [],
+    "stage": "concept:exact",
+    "hit_concept_id": "carotid_stenosis",
+    "top_scenarios": [],
     "query": "CTA neck for blunt cervical vascular injury",
     "persona": "ed_resident",
     "expected": "carotid_stenosis",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "carotid_stenosis"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -10678,26 +9776,17 @@
     "hit_top5": true
   },
   {
-    "stage": "scenario_name",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "5362",
-        "Chest trauma, blunt, cardiac injury suspected, hemodynamically stable",
-        "chest"
-      ],
-      [
-        "5363",
-        "Chest trauma, blunt, cardiac injury suspected, hemodynamically unstable",
-        "chest"
-      ]
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "chest_pain",
+    "top_scenarios": [],
     "query": "blunt cardiac injury workup",
     "persona": "ed_resident",
     "expected": "chest_pain",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "chest_pain"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "summary_card:substring",
@@ -10727,18 +9816,18 @@
     "hit_top5": false
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "aortic_aneurysm",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "AAA screening US in ED for back pain elderly",
     "persona": "ed_resident",
     "expected": "aortic_aneurysm",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "aortic_aneurysm"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -10780,42 +9869,9 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
+    "stage": "concept:substring",
     "hit_concept_id": "shoulder_pain",
-    "top_scenarios": [
-      [
-        "8501",
-        "Shoulder pain, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ],
-      [
-        "7870",
-        "Shoulder pain, acute, hx or physical exam consistent with dislocation, radiography negative, next imaging study",
-        "msk"
-      ],
-      [
-        "7869",
-        "Shoulder pain, acute, hx or physical exam consistent with dislocation, radiography indeterminate, next imaging study",
-        "msk"
-      ],
-      [
-        "8478",
-        "Shoulder pain, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "7872",
-        "Shoulder pain, acute, hx or physical exam consistent with dislocation, radiography positive, next imaging study",
-        "msk"
-      ]
-    ],
-    "top_concepts": [
-      "shoulder_pain",
-      "shoulder_pain",
-      "shoulder_pain",
-      "shoulder_pain",
-      "shoulder_pain"
-    ],
+    "top_scenarios": [],
     "query": "shoulder dislocation pre and post reduction films",
     "persona": "ed_resident",
     "expected": "shoulder_pain",
@@ -10853,24 +9909,24 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "spine_infection",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "epidural abscess imaging back pain fever",
     "persona": "ed_resident",
     "expected": "spine_infection",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "spine_infection"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "kidney_mass",
-    "summary_card": "hematuria",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "how to evaluate hematuria ED",
     "persona": "ed_resident",
     "expected": "kidney_mass",
@@ -10950,18 +10006,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "chest_pain",
-    "summary_card": "chest pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "pulmonary_embolism",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "ddx for pleuritic chest pain young athlete",
     "persona": "ed_resident",
     "expected": "chest_pain",
-    "hit_top1": true,
+    "hit_top1": false,
     "top5_concepts": [
-      "chest_pain"
+      "pulmonary_embolism"
     ],
-    "hit_top5": true
+    "hit_top5": false
   },
   {
     "stage": "summary_card:substring",
@@ -11189,16 +10245,18 @@
     "hit_top5": false
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": null,
-    "summary_card": "mesenteric ischemia",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "abdominal_pain",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "mesenteric ischemia high lactate elderly",
     "persona": "ed_intensivist",
     "expected": "abdominal_pain",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "abdominal_pain"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "summary_card:substring",
@@ -11549,16 +10607,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": null,
-    "summary_card": "cirrhosis",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "liver_cancer",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "HCC surveillance cirrhosis q6mo",
     "persona": "im_attending",
     "expected": "liver_cancer",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "liver_cancer"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:exact",
@@ -11832,10 +10892,10 @@
     "hit_top5": false
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "kidney_mass",
-    "summary_card": "hematuria",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "painless hematuria 60yo M smoker",
     "persona": "im_attending",
     "expected": "kidney_mass",
@@ -12019,26 +11079,17 @@
     "hit_top5": true
   },
   {
-    "stage": "scenario_name",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "6206",
-        "Multiple lower cranial nerve palsies, initial imaging",
-        "neuro"
-      ],
-      [
-        "6196",
-        "Multiple middle cranial nerve palsies, cranial nerve V–VII, initial imaging",
-        "neuro"
-      ]
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "brain_neoplasm",
+    "top_scenarios": [],
     "query": "multiple cranial neuropathies w/u",
     "persona": "im_attending",
     "expected": "brain_neoplasm",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "brain_neoplasm"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -12113,24 +11164,24 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "spinal_tumor",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "low back pain w/ B symptoms",
     "persona": "im_attending",
     "expected": "spinal_tumor",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "spinal_tumor"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "headache",
-    "summary_card": "headache",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "what imaging for new headache in HIV",
     "persona": "im_resident",
     "expected": "headache",
@@ -12223,17 +11274,17 @@
     "hit_top5": true
   },
   {
-    "stage": "concept:substring",
-    "hit_concept_id": "myelopathy",
+    "stage": "concept:exact",
+    "hit_concept_id": "guillain_barre",
     "top_scenarios": [],
     "query": "workup for new bilateral leg weakness",
     "persona": "im_resident",
     "expected": "guillain_barre",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "myelopathy"
+      "guillain_barre"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -12336,16 +11387,18 @@
     "hit_top5": false
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": null,
-    "summary_card": "pleural effusion",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "lung_cancer",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "pleural effusion new unilateral w/u",
     "persona": "im_resident",
     "expected": "lung_cancer",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "lung_cancer"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:exact",
@@ -12414,51 +11467,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "abdominal_pain",
-    "top_scenarios": [
-      [
-        "8459",
-        "Abdominal pain, acute, surgical complication suspected, initial imaging",
-        "abdomen"
-      ],
-      [
-        "8450",
-        "Liver transplant, postoperative complications, biliary etiology suspected, initial imaging",
-        "abdomen"
-      ],
-      [
-        "8449",
-        "Liver transplant, postoperative complications, vascular etiology suspected, initial imaging",
-        "abdomen"
-      ],
-      [
-        "8458",
-        "Abdominal pain, acute, bowel obstruction suspected, no hx of abdominal surgery, initial imaging",
-        "abdomen"
-      ],
-      [
-        "8448",
-        "Liver transplant, immediate postoperative, initial imaging",
-        "abdomen"
-      ]
-    ],
-    "top_concepts": [
-      "abdominal_pain",
-      "abdominal_pain",
-      "abdominal_pain",
-      "abdominal_pain",
-      "abdominal_pain"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "liver_cancer",
+    "top_scenarios": [],
     "query": "workup new ascites in unknown cause",
     "persona": "im_resident",
     "expected": "liver_cancer",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "abdominal_pain",
-      "bowel_obstruction"
+      "liver_cancer"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -12487,10 +11506,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "headache",
-    "summary_card": "headache",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "MRI brain indications new headache outpatient",
     "persona": "im_resident",
     "expected": "headache",
@@ -12985,10 +12004,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "headache",
-    "summary_card": "headache",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "70 yo woman new headache for 3 weeks",
     "persona": "fm_attending",
     "expected": "headache",
@@ -13026,65 +12045,31 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "headache",
-    "top_scenarios": [
-      [
-        "2102",
-        "Pancreatitis, acute, critically ill, >48 hours",
-        "abdomen"
-      ],
-      [
-        "2101",
-        "Pancreatitis, acute, severe, > 7 days",
-        "abdomen"
-      ],
-      [
-        "1133",
-        "Abd pain, acute, nonlocalized, fever, initial exam",
-        "other"
-      ],
-      [
-        "3567",
-        "Abd pain, acute, nonlocalized, initial exam",
-        "other"
-      ],
-      [
-        "7012",
-        "Headache, severe, sudden onset, maximal severity within an hour, initial imaging",
-        "neuro"
-      ]
-    ],
-    "top_concepts": [
-      "headache",
-      "chest_pain",
-      "abdominal_pain",
-      "abdominal_pain"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "stroke",
+    "top_scenarios": [],
     "query": "acute onset right sided weakness 2 hours",
     "persona": "fm_attending",
     "expected": "stroke",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "headache",
-      "chest_pain",
-      "abdominal_pain"
+      "stroke"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "abdominal_pain",
-    "summary_card": "abdominal pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "aortic_aneurysm",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "65 yo with abdominal pain pulsatile mass",
     "persona": "fm_attending",
     "expected": "aortic_aneurysm",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "abdominal_pain"
+      "aortic_aneurysm"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -13139,42 +12124,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "8466",
-        "Foot swelling, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "8464",
-        "Ankle swelling, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "8468",
-        "Hip swelling, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "8489",
-        "Foot swelling, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ],
-      [
-        "8469",
-        "Knee swelling, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ]
-    ],
-    "top_concepts": [],
+    "stage": "concept:exact",
+    "hit_concept_id": "dvt",
+    "top_scenarios": [],
     "query": "calf swelling and pain unilateral",
     "persona": "fm_attending",
     "expected": "dvt",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "dvt"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -13643,49 +12603,45 @@
     "hit_top5": true
   },
   {
-    "stage": "scenario_name",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "7154",
-        "Abnormal liver function tests, cholestatic predominance, elevated alkaline phosphatase with or without elevated gamma-glutamyl transpeptidase, initial imaging",
-        "abdomen"
-      ]
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "liver_lesion",
+    "top_scenarios": [],
     "query": "evaluate elevated alk phos",
     "persona": "fm_resident",
     "expected": "liver_lesion",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "liver_lesion"
+    ],
+    "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "headache",
-    "summary_card": "headache",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "brain_neoplasm",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "workup of new onset headache with vision changes",
     "persona": "fm_resident",
     "expected": "brain_neoplasm",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "headache"
+      "brain_neoplasm"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "aortic_dissection",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "acute onset severe chest and back pain tearing",
     "persona": "fm_resident",
     "expected": "aortic_dissection",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "aortic_dissection"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -13775,18 +12731,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "kidney_mass",
-    "summary_card": "renal mass",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "adrenal_mass",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "approach to incidental adrenal mass 4 cm",
     "persona": "fm_resident",
     "expected": "adrenal_mass",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "kidney_mass"
+      "adrenal_mass"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "summary_card:substring",
@@ -13803,16 +12759,16 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "headache",
-    "summary_card": "headache",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "brain_neoplasm",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "evaluate young patient with new headache and papilledema",
     "persona": "fm_resident",
     "expected": "hydrocephalus",
     "hit_top1": false,
     "top5_concepts": [
-      "headache"
+      "brain_neoplasm"
     ],
     "hit_top5": false
   },
@@ -13831,10 +12787,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "breast_mass",
-    "summary_card": "breast mass",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "evaluation of palpable breast mass under 30",
     "persona": "fm_resident",
     "expected": "breast_mass",
@@ -13845,18 +12801,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "spine_infection",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "approach to back pain with fever and IVDU history",
     "persona": "fm_resident",
     "expected": "spine_infection",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "spine_infection"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -13872,18 +12828,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "spinal_tumor",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "evaluating elderly patient with new urinary retention and back pain",
     "persona": "fm_resident",
     "expected": "spinal_tumor",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "spinal_tumor"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -13942,16 +12898,18 @@
     "hit_top5": false
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": null,
-    "summary_card": "jaundice",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "pancreatic_mass",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "evaluation of jaundice in 65 yo",
     "persona": "fm_resident",
     "expected": "pancreatic_mass",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "pancreatic_mass"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -14153,70 +13111,36 @@
     "hit_top5": true
   },
   {
-    "stage": "scenario_name",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "5405",
-        "Ankle trauma, up to 3 weeks after injury, no exclusionary criteria, unable to bear weight immediately after injury, initial imaging",
-        "msk"
-      ]
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "fracture",
+    "top_scenarios": [],
     "query": "ankle injury cant bear weight",
     "persona": "np_pa",
     "expected": "fracture",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "fracture"
+    ],
+    "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "chest_pain",
-    "top_scenarios": [
-      [
-        "7226",
-        "Sepsis suspected, dyspnea, initial imaging",
-        "other"
-      ],
-      [
-        "7229",
-        "Sepsis, dyspnea, initial imaging",
-        "other"
-      ],
-      [
-        "4546",
-        "Dyspnea, chronic, small airways disease suspected, initial imaging",
-        "other"
-      ],
-      [
-        "4545",
-        "Dyspnea, chronic, COPD suspected, initial imaging",
-        "chest"
-      ],
-      [
-        "8563",
-        "Chest pain, pneumomediastinum suspected, initial imaging",
-        "chest"
-      ]
-    ],
-    "top_concepts": [
-      "chest_pain",
-      "chest_pain"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "pulmonary_embolism",
+    "top_scenarios": [],
     "query": "patient with progressive shortness of breath what imaging",
     "persona": "np_pa",
     "expected": "pulmonary_embolism",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "chest_pain"
+      "pulmonary_embolism"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "low back pain not improving with conservative care",
     "persona": "np_pa",
     "expected": "back_pain",
@@ -14255,32 +13179,32 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "headache",
-    "summary_card": "headache",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "intracranial_hemorrhage",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "patient with sudden onset severe headache",
     "persona": "np_pa",
     "expected": "intracranial_hemorrhage",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "headache"
+      "intracranial_hemorrhage"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "abdominal_pain",
-    "summary_card": "abdominal pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "appendicitis",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "woman with right sided abdominal pain",
     "persona": "np_pa",
     "expected": "appendicitis",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "abdominal_pain"
+      "appendicitis"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -14368,16 +13292,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": null,
-    "summary_card": "foot pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "foot pain after stepping awkwardly",
     "persona": "np_pa",
     "expected": "fracture",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "fracture"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -14393,16 +13319,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": null,
-    "summary_card": "wrist pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "evaluating wrist pain after FOOSH",
     "persona": "np_pa",
     "expected": "fracture",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "fracture"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -14486,10 +13414,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "headache",
-    "summary_card": "headache",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "evaluating chronic headache in 30 yo woman",
     "persona": "np_pa",
     "expected": "headache",
@@ -14617,18 +13545,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "pancreatic_mass",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "60 yo M with weight loss and back pain",
     "persona": "np_pa",
     "expected": "pancreatic_mass",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "pancreatic_mass"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "summary_card:substring",
@@ -14701,18 +13629,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "spine_infection",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "patient with fever and back pain post procedure",
     "persona": "np_pa",
     "expected": "spine_infection",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "spine_infection"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -15049,10 +13977,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "bowel_obstruction",
-    "summary_card": "bowel obstruction",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "imaging of choice for small bowel obstruction",
     "persona": "med_student_clinical",
     "expected": "bowel_obstruction",
@@ -15063,23 +13991,23 @@
     "hit_top5": true
   },
   {
-    "stage": "concept:substring",
-    "hit_concept_id": "stroke",
+    "stage": "concept:exact",
+    "hit_concept_id": "carotid_stenosis",
     "top_scenarios": [],
     "query": "workup of carotid TIA",
     "persona": "med_student_clinical",
     "expected": "carotid_stenosis",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "stroke"
+      "carotid_stenosis"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "fracture",
-    "summary_card": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "imaging modality of choice for vertebral compression fracture",
     "persona": "med_student_clinical",
     "expected": "fracture",
@@ -15130,32 +14058,32 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "hip_pain",
-    "summary_card": "hip pain",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "imaging for fall with hip pain",
     "persona": "nurse",
     "expected": "hip_pain",
-    "hit_top1": true,
+    "hit_top1": false,
     "top5_concepts": [
-      "hip_pain"
+      "fracture"
     ],
-    "hit_top5": true
+    "hit_top5": false
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "chest_pain",
-    "summary_card": "chest pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "pulmonary_embolism",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "scan order for chest pain rule out PE",
     "persona": "nurse",
     "expected": "pulmonary_embolism",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "chest_pain"
+      "pulmonary_embolism"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -15184,18 +14112,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "headache",
-    "summary_card": "headache",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "intracranial_hemorrhage",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "patient with new severe headache and vomiting imaging",
     "persona": "nurse",
     "expected": "intracranial_hemorrhage",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "headache"
+      "intracranial_hemorrhage"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "summary_card:substring",
@@ -15239,18 +14167,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "chest_pain",
-    "summary_card": "chest pain",
+    "stage": "substring_concept_override",
+    "hit_concept_id": "pulmonary_embolism",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "what imaging for postpartum patient with chest pain",
     "persona": "nurse",
     "expected": "pulmonary_embolism",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "chest_pain"
+      "pulmonary_embolism"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -15292,18 +14220,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "imaging order for elderly patient with sudden severe back pain",
     "persona": "nurse",
     "expected": "fracture",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "fracture"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -15485,14 +14413,16 @@
   },
   {
     "stage": "summary_card:substring",
-    "hit_concept_id": null,
+    "hit_concept_id": "abdominal_pain",
     "summary_card": "kidney stone",
     "top_scenarios": [],
     "query": "CT scan for kidney stones",
     "persona": "patient_curious",
     "expected": "OUT_OF_TAXONOMY",
     "hit_top1": false,
-    "top5_concepts": [],
+    "top5_concepts": [
+      "abdominal_pain"
+    ],
     "hit_top5": false
   },
   {
@@ -15762,18 +14692,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "aortic_aneurysm",
-    "summary_card": "aneurysm",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "intracranial_hemorrhage",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "what is a brain aneurysm",
     "persona": "patient_curious",
     "expected": "intracranial_hemorrhage",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "aortic_aneurysm"
+      "intracranial_hemorrhage"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -15903,50 +14833,17 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "multiple_sclerosis",
-    "top_scenarios": [
-      [
-        "8702",
-        "Demyelinating disease of the PNS suspected, acute symmetric weakness, initial imaging",
-        "neuro"
-      ],
-      [
-        "8351",
-        "Horner syndrome, acute onset, painful, with or without localizing neuro signs or symptoms, initial imaging",
-        "other"
-      ],
-      [
-        "8353",
-        "Horner syndrome, acute onset, neuro signs or symptoms localizing to cranial nerve, no trauma hx, initial imaging",
-        "neuro"
-      ],
-      [
-        "8357",
-        "Horner syndrome, nonacute onset, neuro signs and symptoms localizing to cranial nerve, initial imaging",
-        "neuro"
-      ],
-      [
-        "8354",
-        "Horner syndrome, acute onset, neuro signs and symptoms localizing to spinal cord, no trauma hx, initial imaging",
-        "spine"
-      ]
-    ],
-    "top_concepts": [
-      "multiple_sclerosis",
-      "multiple_sclerosis",
-      "multiple_sclerosis",
-      "multiple_sclerosis",
-      "multiple_sclerosis"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "guillain_barre",
+    "top_scenarios": [],
     "query": "guillan barre symptoms",
     "persona": "patient_curious",
     "expected": "guillain_barre",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "multiple_sclerosis"
+      "guillain_barre"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -16055,10 +14952,10 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
+    "stage": "substring_concept_override",
     "hit_concept_id": "fracture",
-    "summary_card": "fracture",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "mom with hip fracture follow up",
     "persona": "patient_caregiver",
     "expected": "hip_pain",
@@ -16149,31 +15046,31 @@
     "hit_top5": true
   },
   {
-    "stage": "concept:substring",
-    "hit_concept_id": "abdominal_pain",
+    "stage": "concept:exact",
+    "hit_concept_id": "appendicitis",
     "top_scenarios": [],
     "query": "child with belly pain on right side",
     "persona": "patient_caregiver",
     "expected": "appendicitis",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "abdominal_pain"
+      "appendicitis"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "headache",
-    "summary_card": "headache",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "intracranial_hemorrhage",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "my wife has terrible headache and vomiting",
     "persona": "patient_caregiver",
     "expected": "intracranial_hemorrhage",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "headache"
+      "intracranial_hemorrhage"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",
@@ -16189,93 +15086,27 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "pediatric_limp",
-    "top_scenarios": [
-      [
-        "8476",
-        "Hip pain, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "8612",
-        "Physical abuse suspected, concern for hip injury based on clinical presentation or hx, no apparent neurological or skeletal or visceral injuries, initial imaging",
-        "neuro"
-      ],
-      [
-        "8585",
-        "Physical abuse suspected, concern for hip injury based on clinical presentation or hx, no apparent neurological or skeletal or visceral injuries, initial imaging",
-        "neuro"
-      ],
-      [
-        "8499",
-        "Hip pain, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ],
-      [
-        "4556",
-        "Ped <=5yo, acute limp, symptoms localized to hip, infection suspected",
-        "msk"
-      ]
-    ],
-    "top_concepts": [
-      "pediatric_limp",
-      "pediatric_limp",
-      "back_pain",
-      "hip_pain"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "hip_pain",
+    "top_scenarios": [],
     "query": "grandma fell hip hurts can't walk",
     "persona": "patient_caregiver",
     "expected": "hip_pain",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "pediatric_limp",
-      "back_pain",
       "hip_pain"
     ],
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "pediatric_limp",
-    "top_scenarios": [
-      [
-        "8469",
-        "Knee swelling, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "8492",
-        "Knee swelling, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ],
-      [
-        "8477",
-        "Knee pain, idiopathic arthritis suspected, initial imaging",
-        "msk"
-      ],
-      [
-        "4506",
-        "Ped <=5yo, acute limp, symptoms localized to knee, infection suspected",
-        "msk"
-      ],
-      [
-        "8500",
-        "Knee pain, idiopathic arthritis, follow-up imaging",
-        "msk"
-      ]
-    ],
-    "top_concepts": [
-      "pediatric_limp",
-      "pediatric_limp",
-      "knee_pain"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "knee_pain",
+    "top_scenarios": [],
     "query": "son has swollen painful knee after game",
     "persona": "patient_caregiver",
     "expected": "knee_pain",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "pediatric_limp",
       "knee_pain"
     ],
     "hit_top5": true
@@ -16327,55 +15158,30 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": null,
-    "top_scenarios": [
-      [
-        "7376",
-        "Vision loss, acute, nontraumatic, no papilledema, initial imaging",
-        "neuro"
-      ],
-      [
-        "8367",
-        "Vision loss, chronic, optic nerve abnormality suspected, initial imaging",
-        "neuro"
-      ],
-      [
-        "7386",
-        "Vision loss, optic pathway tumor suspected, with or without hx of neurofibromatosis type 1, initial imaging",
-        "neuro"
-      ],
-      [
-        "7378",
-        "Vision loss due to congenital abnormality, unilateral, no leukocoria, initial imaging",
-        "neuro"
-      ],
-      [
-        "7381",
-        "Vision loss due to developmental abnormality, unilateral, no leukocoria, initial imaging",
-        "neuro"
-      ]
-    ],
-    "top_concepts": [],
+    "stage": "concept:exact",
+    "hit_concept_id": "pancreatic_mass",
+    "top_scenarios": [],
     "query": "my father has yellow eyes and weight loss",
     "persona": "patient_caregiver",
     "expected": "pancreatic_mass",
-    "hit_top1": false,
-    "top5_concepts": [],
-    "hit_top5": false
+    "hit_top1": true,
+    "top5_concepts": [
+      "pancreatic_mass"
+    ],
+    "hit_top5": true
   },
   {
-    "stage": "concept:substring",
-    "hit_concept_id": "abdominal_pain",
+    "stage": "concept:exact",
+    "hit_concept_id": "diverticulitis",
     "top_scenarios": [],
     "query": "left side belly pain comes and goes",
     "persona": "patient_symptom_search",
     "expected": "diverticulitis",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "abdominal_pain"
+      "diverticulitis"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -16442,18 +15248,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "chest_pain",
-    "summary_card": "chest pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "pulmonary_embolism",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "sharp chest pain when breathing",
     "persona": "patient_symptom_search",
     "expected": "pulmonary_embolism",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "chest_pain"
+      "pulmonary_embolism"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "embedding",
@@ -16500,18 +15306,18 @@
     "hit_top5": true
   },
   {
-    "stage": "summary_card:substring",
-    "hit_concept_id": "back_pain",
-    "summary_card": "back pain",
+    "stage": "exact_concept_override",
+    "hit_concept_id": "pyelonephritis",
     "top_scenarios": [],
+    "from_card_kind": "substring",
     "query": "burning when peeing and back pain",
     "persona": "patient_symptom_search",
     "expected": "pyelonephritis",
-    "hit_top1": false,
+    "hit_top1": true,
     "top5_concepts": [
-      "back_pain"
+      "pyelonephritis"
     ],
-    "hit_top5": false
+    "hit_top5": true
   },
   {
     "stage": "embedding",
