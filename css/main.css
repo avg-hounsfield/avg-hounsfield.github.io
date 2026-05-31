@@ -1265,6 +1265,65 @@ input:focus, button:focus {
   background: rgba(0, 0, 0, 0.2);
 }
 
+/* Region Filter Chips (in-place region filter on global concept results).
+   Mirrors the phase-chip styling for visual consistency. */
+.region-filter-chips {
+  margin-top: var(--space-sm);
+}
+
+.region-filter-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-xs);
+}
+
+.region-chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.filter-chip.region-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-chip.region-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-muted);
+}
+
+.filter-chip.region-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg-primary);
+}
+
+.region-count {
+  font-size: 11px;
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.filter-chip.region-chip.active .region-count {
+  background: rgba(0, 0, 0, 0.2);
+}
+
 /* ========================================
    Grouped Scenarios by Phase
    ======================================== */

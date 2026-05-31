@@ -904,7 +904,8 @@ export class UI {
       msk: 'Musculoskeletal',
       vascular: 'Vascular',
       breast: 'Breast',
-      peds: 'Pediatric'
+      peds: 'Pediatric',
+      other: 'General'
     };
     return names[region] || region;
   }

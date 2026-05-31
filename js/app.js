@@ -1756,75 +1756,103 @@ class ProtocolHelpApp {
 
   _renderGlobalConceptResult({ concept }, container) {
     const mappings = Array.isArray(concept.scenario_mappings) ? concept.scenario_mappings : [];
-    // Pick the first region as primary; collect distinct regions for region chips.
+    const displayName = concept.display_name || '';
+    // Collect distinct regions (in mapping order) and per-region counts so we can
+    // offer an in-place "Filter by region" chip row when a concept spans 2+ regions.
     const regions = [];
+    const regionCounts = {};
     for (const m of mappings) {
-      if (m && m.region && !regions.includes(m.region)) regions.push(m.region);
+      const r = m && m.region;
+      if (!r) continue;
+      if (!regions.includes(r)) regions.push(r);
+      regionCounts[r] = (regionCounts[r] || 0) + 1;
     }
     const primaryRegion = regions[0] || concept.body_region || 'neuro';
-    const displayName = concept.display_name || '';
-    const previewCount = Math.min(5, mappings.length);
-    const previews = mappings.slice(0, previewCount);
 
     container.classList.remove('hidden');
-    container.innerHTML = `
-      <div class="global-result-card">
-        <div class="global-result-header">
-          <span class="global-result-topic">${this.escapeHtml(displayName)}</span>
-          <span class="global-result-meta">Matched concept</span>
+
+    // activeRegion === null means "all regions". Re-renders the card body in place.
+    const renderBody = (activeRegion) => {
+      const shown = activeRegion ? mappings.filter(m => m.region === activeRegion) : mappings;
+      const footerRegion = activeRegion || primaryRegion;
+      const previews = shown.slice(0, Math.min(5, shown.length));
+      const regionChips = regions.length > 1 ? `
+        <div class="region-filter-chips">
+          <div class="region-filter-label">Filter by region:</div>
+          <div class="region-chips-container">
+            ${regions.map(r => `
+              <button type="button" class="filter-chip region-chip ${activeRegion === r ? 'active' : ''}" data-region="${this.escapeHtml(r)}">
+                ${this.escapeHtml(this.formatRegionName(r))}
+                <span class="region-count">${regionCounts[r]}</span>
+              </button>
+            `).join('')}
+          </div>
         </div>
-        <div class="global-result-body">
-          <p class="global-result-recommendation">
-            ${mappings.length} clinical scenario${mappings.length === 1 ? '' : 's'} mapped${regions.length ? ` across ${regions.length} region${regions.length === 1 ? '' : 's'}` : ''}.
-          </p>
-          ${previews.length > 0 ? `
-            <ul class="scenario-preview-list" style="list-style:none;padding:0;margin:var(--space-sm) 0 0">
-              ${previews.map(p => `
-                <li class="scenario-preview-item">
-                  <button type="button" class="scenario-preview-btn"
-                          data-region="${this.escapeHtml(p.region || primaryRegion)}"
-                          data-name="${this.escapeHtml(p.scenario_name || '')}">
-                    <div class="scenario-preview-row">
-                      <span class="scenario-preview-name">${this.escapeHtml(p.scenario_name || '')}</span>
-                      <span class="scenario-preview-region">${this.escapeHtml(p.region || primaryRegion)}</span>
-                    </div>
-                    ${this._renderProcedureChip(p.top_procedure)}
-                  </button>
-                </li>
-              `).join('')}
-            </ul>
-          ` : ''}
-          ${regions.length > 1 ? `
-            <div class="dym-row" style="margin-top: var(--space-sm)">
-              <span class="dym-label">Open in:</span>
-              ${regions.map(r => `<button type="button" class="dym-chip" data-region="${this.escapeHtml(r)}" data-topic="${this.escapeHtml(displayName)}">${this.escapeHtml(r)}</button>`).join('')}
-            </div>
-          ` : ''}
+      ` : '';
+
+      container.innerHTML = `
+        <div class="global-result-card">
+          <div class="global-result-header">
+            <span class="global-result-topic">${this.escapeHtml(displayName)}</span>
+            <span class="global-result-meta">Matched concept</span>
+          </div>
+          <div class="global-result-body">
+            <p class="global-result-recommendation">
+              ${shown.length} clinical scenario${shown.length === 1 ? '' : 's'}${activeRegion ? ` in ${this.escapeHtml(this.formatRegionName(activeRegion))}` : (regions.length ? ` mapped across ${regions.length} region${regions.length === 1 ? '' : 's'}` : '')}.
+            </p>
+            ${regionChips}
+            ${previews.length > 0 ? `
+              <ul class="scenario-preview-list" style="list-style:none;padding:0;margin:var(--space-sm) 0 0">
+                ${previews.map(p => `
+                  <li class="scenario-preview-item">
+                    <button type="button" class="scenario-preview-btn"
+                            data-region="${this.escapeHtml(p.region || primaryRegion)}"
+                            data-name="${this.escapeHtml(p.scenario_name || '')}">
+                      <div class="scenario-preview-row">
+                        <span class="scenario-preview-name">${this.escapeHtml(p.scenario_name || '')}</span>
+                        <span class="scenario-preview-region">${this.escapeHtml(p.region || primaryRegion)}</span>
+                      </div>
+                      ${this._renderProcedureChip(p.top_procedure)}
+                    </button>
+                  </li>
+                `).join('')}
+              </ul>
+            ` : ''}
+          </div>
+          <div class="global-result-footer">
+            <span class="global-result-source">From concept index</span>
+            <button class="global-result-action" data-region="${this.escapeHtml(footerRegion)}" data-topic="${this.escapeHtml(displayName)}">
+              See all ${shown.length} scenarios
+            </button>
+          </div>
         </div>
-        <div class="global-result-footer">
-          <span class="global-result-source">From concept index</span>
-          <button class="global-result-action" data-region="${this.escapeHtml(primaryRegion)}" data-topic="${this.escapeHtml(displayName)}">
-            See all ${mappings.length} scenarios
-          </button>
-        </div>
-      </div>
-    `;
-    const fireConcept = (btn) => {
-      const region = btn.getAttribute('data-region');
-      const topic = btn.getAttribute('data-topic') || displayName;
-      if (region) this.navigateToRegionSearch(region, topic);
-    };
-    container.querySelectorAll('.dym-chip').forEach(btn => btn.addEventListener('click', () => fireConcept(btn)));
-    const action = container.querySelector('.global-result-action');
-    if (action) action.addEventListener('click', () => fireConcept(action));
-    // Per-scenario click-through: navigate to the scenario's region and pre-fill its full name
-    container.querySelectorAll('.scenario-preview-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const region = btn.getAttribute('data-region');
-        const name = btn.getAttribute('data-name') || '';
-        if (region) this.navigateToRegionSearch(region, name);
+      `;
+
+      // Region filter chips: toggle in place (click active chip again to clear).
+      container.querySelectorAll('.region-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const r = btn.getAttribute('data-region');
+          renderBody(activeRegion === r ? null : r);
+        });
       });
-    });
+      // Footer action: open the active (or primary) region's full scenario view.
+      const action = container.querySelector('.global-result-action');
+      if (action) {
+        action.addEventListener('click', () => {
+          this.navigateToRegionSearch(action.getAttribute('data-region'), displayName);
+        });
+      }
+      // Per-scenario click-through: navigate to the scenario's region, pre-fill its full name.
+      container.querySelectorAll('.scenario-preview-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const region = btn.getAttribute('data-region');
+          const name = btn.getAttribute('data-name') || '';
+          if (region) this.navigateToRegionSearch(region, name);
+        });
+      });
+    };
+
+    renderBody(null);
   }
 
   _renderGlobalScenarioListResult(query, scenarios, container) {
@@ -2969,7 +2997,8 @@ class ProtocolHelpApp {
       msk: 'Musculoskeletal',
       vascular: 'Vascular',
       breast: 'Breast',
-      peds: 'Pediatric'
+      peds: 'Pediatric',
+      other: 'General'
     };
     return names[region] || region;
   }
