@@ -9693,15 +9693,15 @@
     "hit_top5": true
   },
   {
-    "stage": "concept:substring",
-    "hit_concept_id": "headache",
+    "stage": "concept:exact",
+    "hit_concept_id": "syncope",
     "top_scenarios": [],
     "query": "syncope w/u when to image head",
     "persona": "ed_resident",
-    "expected": "headache",
+    "expected": "syncope",
     "hit_top1": true,
     "top5_concepts": [
-      "headache"
+      "syncope"
     ],
     "hit_top5": true
   },
@@ -11535,14 +11535,14 @@
   },
   {
     "stage": "concept:exact",
-    "hit_concept_id": "headache",
+    "hit_concept_id": "syncope",
     "top_scenarios": [],
     "query": "syncope inpatient when to image",
     "persona": "im_resident",
-    "expected": "headache",
+    "expected": "syncope",
     "hit_top1": true,
     "top5_concepts": [
-      "headache"
+      "syncope"
     ],
     "hit_top5": true
   },
@@ -12382,48 +12382,30 @@
     "hit_top5": true
   },
   {
-    "stage": "embedding",
-    "hit_concept_id": "chest_pain",
-    "top_scenarios": [
-      [
-        "5532",
-        "Syncope, low probability of cardiovascular etiology, initial imaging",
-        "other"
-      ],
-      [
-        "5530",
-        "Syncope, cardiovascular etiology suspected, initial imaging",
-        "other"
-      ],
-      [
-        "5531",
-        "Presyncope, low probability of cardiovascular etiology, initial imaging",
-        "other"
-      ],
-      [
-        "5529",
-        "Presyncope, cardiovascular etiology suspected, initial imaging",
-        "other"
-      ],
-      [
-        "8568",
-        "Chest pain, panic attack suspected, initial imaging",
-        "chest"
-      ]
-    ],
-    "top_concepts": [
-      "chest_pain",
-      "chest_pain",
-      "chest_pain"
-    ],
+    "stage": "concept:exact",
+    "hit_concept_id": "syncope",
+    "top_scenarios": [],
     "query": "recurrent syncope workup imaging",
     "persona": "fm_attending",
-    "expected": "OUT_OF_TAXONOMY",
-    "hit_top1": false,
+    "expected": "syncope",
+    "hit_top1": true,
     "top5_concepts": [
-      "chest_pain"
+      "syncope"
     ],
-    "hit_top5": false
+    "hit_top5": true
+  },
+  {
+    "stage": "concept:exact",
+    "hit_concept_id": "syncope",
+    "top_scenarios": [],
+    "query": "syncope",
+    "persona": "ed_resident",
+    "expected": "syncope",
+    "hit_top1": true,
+    "top5_concepts": [
+      "syncope"
+    ],
+    "hit_top5": true
   },
   {
     "stage": "concept:substring",

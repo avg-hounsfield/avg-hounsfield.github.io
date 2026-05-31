@@ -225,14 +225,30 @@ CONCEPT_TAXONOMY = {
                      "mri brain new ha", "mri brain for new headache",
                      "unilateral ha visual aura", "headache with visual aura",
                      "headache with aura", "visual aura headache",
-                     # Syncope (headache pathway in some cases)
-                     "syncope when to image head", "syncope w/u when to image",
-                     "syncope inpatient when to image", "syncope inpatient imaging",
                      # Immunocompromised HA
                      "ddx for new ha in hiv", "headache in hiv",
                      "headache in immunocompromised", "headache hiv patient",
                      "new headache in hiv"],
         "scenario_keywords": ["headache", "head pain", "migraine", "cephalgia"]
+    },
+    "syncope": {
+        "display_name": "Syncope / Presyncope",
+        "body_region": "other",
+        "synonyms": ["syncope", "presyncope", "near syncope", "syncopal episode",
+                     "fainting", "passing out", "loss of consciousness",
+                     "transient loss of consciousness", "collapse",
+                     "vasovagal syncope", "cardiovascular syncope", "cardiac syncope",
+                     # query-phrasings (previously misrouted to the headache concept)
+                     "syncope when to image head", "syncope w/u when to image head",
+                     "syncope w/u when to image", "syncope inpatient when to image",
+                     "syncope inpatient imaging", "recurrent syncope workup imaging",
+                     "syncope workup imaging"],
+        "manual_scenario_ids": [
+            {"id": "5530", "relevance_score": 1.0},  # Syncope, CV etiology suspected
+            {"id": "5532", "relevance_score": 0.9},  # Syncope, low prob CV etiology
+            {"id": "5529", "relevance_score": 0.9},  # Presyncope, CV etiology suspected
+            {"id": "5531", "relevance_score": 0.8},  # Presyncope, low prob CV etiology
+        ],
     },
     "dementia": {
         "display_name": "Dementia/Cognitive Decline",

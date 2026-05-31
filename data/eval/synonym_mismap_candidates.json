@@ -1,0 +1,2370 @@
+{
+  "generated_from": "concept_index.json",
+  "total_synonyms": 1778,
+  "candidate_count": 145,
+  "note": "Heuristic candidates for human review; not all are real mismaps.",
+  "candidates": [
+    {
+      "synonym": "abdominal pain pulsatile mass",
+      "current_concept": "aortic_aneurysm",
+      "current_region": "chest",
+      "foreign_entity": "abdominal pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 11
+    },
+    {
+      "synonym": "back pain and burning urination",
+      "current_concept": "pyelonephritis",
+      "current_region": "abdomen",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 11
+    },
+    {
+      "synonym": "bone tumor spine",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "bone tumor",
+      "suggested_concept": "bone_tumor",
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "bone_tumor"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 11
+    },
+    {
+      "synonym": "imaging order for elderly patient with sudden severe back pain",
+      "current_concept": "fracture",
+      "current_region": "msk",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": true,
+      "score": 10
+    },
+    {
+      "synonym": "65 yo with abdominal pain pulsatile mass",
+      "current_concept": "aortic_aneurysm",
+      "current_region": "chest",
+      "foreign_entity": "abdominal pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 8
+    },
+    {
+      "synonym": "48yo m tearing chest back pain htn",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 8
+    },
+    {
+      "synonym": "48yo m tearing chest/back pain htn",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 8
+    },
+    {
+      "synonym": "acute onset severe chest and back pain tearing",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 8
+    },
+    {
+      "synonym": "chest and back pain tearing",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "severe chest and back pain tearing",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "tearing back pain",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "tearing chest and back pain",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "tearing chest back pain",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "tearing chest/back pain",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "carotid us for stroke",
+      "current_concept": "carotid_stenosis",
+      "current_region": "vascular",
+      "foreign_entity": "stroke",
+      "suggested_concept": "stroke",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "stroke"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "blunt cardiac injury workup",
+      "current_concept": "chest_pain",
+      "current_region": "chest",
+      "foreign_entity": "injury",
+      "suggested_concept": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": true,
+      "score": 8
+    },
+    {
+      "synonym": "23yo m mvc neck pain midline ttp",
+      "current_concept": "fracture",
+      "current_region": "msk",
+      "foreign_entity": "neck pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 8
+    },
+    {
+      "synonym": "elderly patient with sudden severe back pain",
+      "current_concept": "fracture",
+      "current_region": "msk",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "elderly sudden severe back pain",
+      "current_concept": "fracture",
+      "current_region": "msk",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "mvc neck pain",
+      "current_concept": "fracture",
+      "current_region": "msk",
+      "foreign_entity": "neck pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "mvc neck pain midline",
+      "current_concept": "fracture",
+      "current_region": "msk",
+      "foreign_entity": "neck pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "mvc neck pain midline ttp",
+      "current_concept": "fracture",
+      "current_region": "msk",
+      "foreign_entity": "neck pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "shortness of breath and leg swelling",
+      "current_concept": "heart_failure",
+      "current_region": "chest",
+      "foreign_entity": "leg swelling",
+      "suggested_concept": "dvt",
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "dvt"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "sob and leg swelling",
+      "current_concept": "heart_failure",
+      "current_region": "chest",
+      "foreign_entity": "leg swelling",
+      "suggested_concept": "dvt",
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "dvt"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "headache and vomiting imaging",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "ct for sarcoidosis staging",
+      "current_concept": "lymphadenopathy",
+      "current_region": "spine",
+      "foreign_entity": "sarcoidosis",
+      "suggested_concept": "lung_nodule",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "lung_nodule"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 8
+    },
+    {
+      "synonym": "weight loss and back pain",
+      "current_concept": "pancreatic_mass",
+      "current_region": "abdomen",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "weight loss back pain",
+      "current_concept": "pancreatic_mass",
+      "current_region": "abdomen",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "chest pain rule out pe",
+      "current_concept": "pulmonary_embolism",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "burning urination and back pain",
+      "current_concept": "pyelonephritis",
+      "current_region": "abdomen",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "burning when peeing and back pain",
+      "current_concept": "pyelonephritis",
+      "current_region": "abdomen",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 8
+    },
+    {
+      "synonym": "burning when urinating back pain",
+      "current_concept": "pyelonephritis",
+      "current_region": "abdomen",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "dysuria and back pain",
+      "current_concept": "pyelonephritis",
+      "current_region": "abdomen",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "arachnoiditis vs nerve root sheath tumor",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "arachnoiditis",
+      "suggested_concept": "radiculopathy",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "radiculopathy"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "cerebral venous thrombosis",
+      "current_concept": "stroke",
+      "current_region": "neuro",
+      "foreign_entity": "venous thrombosis",
+      "suggested_concept": "dvt",
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "dvt"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 8
+    },
+    {
+      "synonym": "neurogenic claudication",
+      "current_concept": "spinal_stenosis",
+      "current_region": null,
+      "foreign_entity": "claudication",
+      "suggested_concept": "peripheral_vascular",
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "peripheral_vascular"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 7
+    },
+    {
+      "synonym": "ct enterography for gi bleed",
+      "current_concept": "abdominal_pain",
+      "current_region": "abdomen",
+      "foreign_entity": "ct enterography",
+      "suggested_concept": "inflammatory_bowel_disease",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "inflammatory_bowel_disease"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "chest pain htn emergency",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "belly pain on right side",
+      "current_concept": "appendicitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "belly pain right side",
+      "current_concept": "appendicitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "abdominal pain and distension no bm",
+      "current_concept": "bowel_obstruction",
+      "current_region": "abdomen",
+      "foreign_entity": "abdominal pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "abdominal pain distension no bm",
+      "current_concept": "bowel_obstruction",
+      "current_region": "abdomen",
+      "foreign_entity": "abdominal pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "abdominal pain vomiting no bm",
+      "current_concept": "bowel_obstruction",
+      "current_region": "abdomen",
+      "foreign_entity": "abdominal pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "headache vision changes",
+      "current_concept": "brain_neoplasm",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "headache with vision changes",
+      "current_concept": "brain_neoplasm",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "new headache with vision changes",
+      "current_concept": "brain_neoplasm",
+      "current_region": "neuro",
+      "foreign_entity": "new headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "breast cancer screening",
+      "current_concept": "breast_screening",
+      "current_region": "breast",
+      "foreign_entity": "breast cancer",
+      "suggested_concept": "breast_cancer",
+      "suggested_region": "breast",
+      "foreign_owned_by": [
+        "breast_cancer"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "blunt cervical vascular injury",
+      "current_concept": "carotid_stenosis",
+      "current_region": "vascular",
+      "foreign_entity": "injury",
+      "suggested_concept": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "cta neck blunt cervical vascular injury",
+      "current_concept": "carotid_stenosis",
+      "current_region": "vascular",
+      "foreign_entity": "injury",
+      "suggested_concept": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "cta neck for blunt cervical vascular injury",
+      "current_concept": "carotid_stenosis",
+      "current_region": "vascular",
+      "foreign_entity": "injury",
+      "suggested_concept": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 6
+    },
+    {
+      "synonym": "blunt cardiac injury",
+      "current_concept": "chest_pain",
+      "current_region": "chest",
+      "foreign_entity": "injury",
+      "suggested_concept": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "ruq pain fever high wbc",
+      "current_concept": "cholangitis",
+      "current_region": "abdomen",
+      "foreign_entity": "ruq pain",
+      "suggested_concept": "cholecystitis",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "cholecystitis"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "ruq pain fever wbc",
+      "current_concept": "cholangitis",
+      "current_region": "abdomen",
+      "foreign_entity": "ruq pain",
+      "suggested_concept": "cholecystitis",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "cholecystitis"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "ruq pain with fever and high wbc",
+      "current_concept": "cholangitis",
+      "current_region": "abdomen",
+      "foreign_entity": "ruq pain",
+      "suggested_concept": "cholecystitis",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "cholecystitis"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "belly pain left side",
+      "current_concept": "diverticulitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "belly pain on left side",
+      "current_concept": "diverticulitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "traumatic brain injury",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "injury",
+      "suggested_concept": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain leg weakness",
+      "current_concept": "myelopathy",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain with leg weakness",
+      "current_concept": "myelopathy",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain with leg weakness urinary retention",
+      "current_concept": "myelopathy",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 6
+    },
+    {
+      "synonym": "back pain with neurologic deficit",
+      "current_concept": "myelopathy",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain with urinary retention",
+      "current_concept": "myelopathy",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "chest pain r o pe",
+      "current_concept": "pulmonary_embolism",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain radiating to leg",
+      "current_concept": "radiculopathy",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain b symptoms",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain new urinary retention",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain with b symptoms",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain with new urinary retention",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain and fever",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain fever",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain history of ivdu",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain immunocompromised",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain in ivdu",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "back pain with fever",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": true,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "blunt cerebrovascular injury",
+      "current_concept": "stroke",
+      "current_region": "neuro",
+      "foreign_entity": "injury",
+      "suggested_concept": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "hip_pain",
+        "knee_pain",
+        "shoulder_pain"
+      ],
+      "cross_region": true,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 6
+    },
+    {
+      "synonym": "workup of new onset headache with vision changes",
+      "current_concept": "brain_neoplasm",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": true,
+      "score": 5
+    },
+    {
+      "synonym": "patient with new severe headache and vomiting imaging",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": true,
+      "score": 5
+    },
+    {
+      "synonym": "cavitary lung lesion tb vs malignancy",
+      "current_concept": "pneumonia",
+      "current_region": "chest",
+      "foreign_entity": "lung lesion",
+      "suggested_concept": "lung_nodule",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "lung_nodule"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": false,
+      "score": 5
+    },
+    {
+      "synonym": "ct for cavitary lung lesion tb vs malignancy",
+      "current_concept": "pneumonia",
+      "current_region": "chest",
+      "foreign_entity": "lung lesion",
+      "suggested_concept": "lung_nodule",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "lung_nodule"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": true,
+      "score": 5
+    },
+    {
+      "synonym": "ddx for pleuritic chest pain young athlete",
+      "current_concept": "pulmonary_embolism",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": false,
+      "score": 5
+    },
+    {
+      "synonym": "imaging for postpartum patient with chest pain",
+      "current_concept": "pulmonary_embolism",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": false,
+      "score": 5
+    },
+    {
+      "synonym": "scan order for chest pain rule out pe",
+      "current_concept": "pulmonary_embolism",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": true,
+      "score": 5
+    },
+    {
+      "synonym": "mr for arachnoiditis vs nerve root sheath tumor",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "arachnoiditis",
+      "suggested_concept": "radiculopathy",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "radiculopathy"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": true,
+      "score": 5
+    },
+    {
+      "synonym": "fever and back pain imaging",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": true,
+      "gold_label_also_affected": true,
+      "score": 5
+    },
+    {
+      "synonym": "htn tearing chest pain",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "tearing chest pain",
+      "current_concept": "aortic_dissection",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "child with belly pain on right side",
+      "current_concept": "appendicitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "child with right sided belly pain",
+      "current_concept": "appendicitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "right side abdominal pain",
+      "current_concept": "appendicitis",
+      "current_region": "abdomen",
+      "foreign_entity": "abdominal pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "right side belly pain",
+      "current_concept": "appendicitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "right sided abdominal pain",
+      "current_concept": "appendicitis",
+      "current_region": "abdomen",
+      "foreign_entity": "abdominal pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "right sided belly pain",
+      "current_concept": "appendicitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "woman with right sided abdominal pain",
+      "current_concept": "appendicitis",
+      "current_region": "abdomen",
+      "foreign_entity": "abdominal pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "new onset headache vision changes",
+      "current_concept": "brain_neoplasm",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "new onset headache with vision changes",
+      "current_concept": "brain_neoplasm",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "contrast enhanced mammography",
+      "current_concept": "breast_cancer",
+      "current_region": "breast",
+      "foreign_entity": "mammography",
+      "suggested_concept": "breast_screening",
+      "suggested_region": "breast",
+      "foreign_owned_by": [
+        "breast_screening"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "contrast enhanced mammography cem",
+      "current_concept": "breast_cancer",
+      "current_region": "breast",
+      "foreign_entity": "mammography",
+      "suggested_concept": "breast_screening",
+      "suggested_region": "breast",
+      "foreign_owned_by": [
+        "breast_screening"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "post-lumpectomy mammogram",
+      "current_concept": "breast_cancer",
+      "current_region": "breast",
+      "foreign_entity": "mammogram",
+      "suggested_concept": "breast_screening",
+      "suggested_region": "breast",
+      "foreign_owned_by": [
+        "breast_screening"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "lifetime breast cancer risk",
+      "current_concept": "breast_screening",
+      "current_region": "breast",
+      "foreign_entity": "breast cancer",
+      "suggested_concept": "breast_cancer",
+      "suggested_region": "breast",
+      "foreign_owned_by": [
+        "breast_cancer"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "primary sclerosing cholangitis",
+      "current_concept": "cholecystitis",
+      "current_region": "abdomen",
+      "foreign_entity": "cholangitis",
+      "suggested_concept": "cholangitis",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "cholangitis"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "upper belly pain after eating",
+      "current_concept": "cholecystitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "intermittent left sided belly pain",
+      "current_concept": "diverticulitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "left side abdominal pain",
+      "current_concept": "diverticulitis",
+      "current_region": "abdomen",
+      "foreign_entity": "abdominal pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "left side belly pain",
+      "current_concept": "diverticulitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "left side belly pain comes and goes",
+      "current_concept": "diverticulitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "left sided abdominal pain",
+      "current_concept": "diverticulitis",
+      "current_region": "abdomen",
+      "foreign_entity": "abdominal pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "left sided belly pain",
+      "current_concept": "diverticulitis",
+      "current_region": "abdomen",
+      "foreign_entity": "belly pain",
+      "suggested_concept": "abdominal_pain",
+      "suggested_region": "abdomen",
+      "foreign_owned_by": [
+        "abdominal_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "elderly fall hip pain",
+      "current_concept": "fracture",
+      "current_region": "msk",
+      "foreign_entity": "hip pain",
+      "suggested_concept": "hip_pain",
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "hip_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "fall and hip pain",
+      "current_concept": "fracture",
+      "current_region": "msk",
+      "foreign_entity": "hip pain",
+      "suggested_concept": "hip_pain",
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "hip_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "fall with hip pain",
+      "current_concept": "fracture",
+      "current_region": "msk",
+      "foreign_entity": "hip pain",
+      "suggested_concept": "hip_pain",
+      "suggested_region": "msk",
+      "foreign_owned_by": [
+        "hip_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "my wife has terrible headache and vomiting",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "new severe headache and vomiting",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "new severe headache with vomiting",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "patient with new severe headache and vomiting",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "patient with sudden onset severe headache",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "severe headache with vomiting",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "sudden onset severe headache",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "sudden severe headache",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "terrible headache and vomiting",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "worst headache of life",
+      "current_concept": "intracranial_hemorrhage",
+      "current_region": "neuro",
+      "foreign_entity": "headache",
+      "suggested_concept": "headache",
+      "suggested_region": "neuro",
+      "foreign_owned_by": [
+        "headache"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "acute onset back pain with leg weakness",
+      "current_concept": "myelopathy",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "cavitary lung lesion",
+      "current_concept": "pneumonia",
+      "current_region": "chest",
+      "foreign_entity": "lung lesion",
+      "suggested_concept": "lung_nodule",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "lung_nodule"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "cavitary lung lesion tb",
+      "current_concept": "pneumonia",
+      "current_region": "chest",
+      "foreign_entity": "lung lesion",
+      "suggested_concept": "lung_nodule",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "lung_nodule"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "ct for cavitary lung lesion",
+      "current_concept": "pneumonia",
+      "current_region": "chest",
+      "foreign_entity": "lung lesion",
+      "suggested_concept": "lung_nodule",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "lung_nodule"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "pleuritic chest pain",
+      "current_concept": "pulmonary_embolism",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "pleuritic chest pain post op",
+      "current_concept": "pulmonary_embolism",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "pleuritic chest pain young athlete",
+      "current_concept": "pulmonary_embolism",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "postpartum chest pain",
+      "current_concept": "pulmonary_embolism",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "postpartum patient with chest pain",
+      "current_concept": "pulmonary_embolism",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "sharp chest pain when breathing",
+      "current_concept": "pulmonary_embolism",
+      "current_region": "chest",
+      "foreign_entity": "chest pain",
+      "suggested_concept": "chest_pain",
+      "suggested_region": "chest",
+      "foreign_owned_by": [
+        "chest_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "chronic low back pain radiating to leg",
+      "current_concept": "radiculopathy",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "elderly new urinary retention and back pain",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "evaluating elderly patient with new urinary retention and back pain",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "low back pain w b symptoms",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "low back pain w/ b symptoms",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "low back pain with b symptoms",
+      "current_concept": "spinal_tumor",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "47yo m ivdu back pain fever",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    },
+    {
+      "synonym": "approach to back pain with fever",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "fever and back pain",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "iv drug use back pain",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "ivdu back pain",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "ivdu back pain fever",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "low back pain and fever",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "low back pain with fever",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": false,
+      "score": 3
+    },
+    {
+      "synonym": "scan for patient with low back pain and fever",
+      "current_concept": "spine_infection",
+      "current_region": "spine",
+      "foreign_entity": "back pain",
+      "suggested_concept": "back_pain",
+      "suggested_region": "spine",
+      "foreign_owned_by": [
+        "back_pain"
+      ],
+      "cross_region": false,
+      "lead_entity_is_foreign": false,
+      "has_query_phrasing": false,
+      "gold_label_also_affected": true,
+      "score": 3
+    }
+  ]
+}

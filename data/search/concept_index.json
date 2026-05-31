@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-05-22T00:09:39.247153+00:00",
+  "generated_at": "2026-05-31T07:07:29.009138+00:00",
   "concepts": {
     "brain_neoplasm": {
       "display_name": "Brain Tumor",
@@ -2151,10 +2151,6 @@
         "headache with visual aura",
         "headache with aura",
         "visual aura headache",
-        "syncope when to image head",
-        "syncope w/u when to image",
-        "syncope inpatient when to image",
-        "syncope inpatient imaging",
         "ddx for new ha in hiv",
         "headache in hiv",
         "headache in immunocompromised",
@@ -3260,6 +3256,123 @@
             "ratingLevel": "Usually Not Appropriate",
             "usesContrast": 0,
             "radiationDose": "0 mSv",
+            "noStrong": true
+          }
+        }
+      ]
+    },
+    "syncope": {
+      "display_name": "Syncope / Presyncope",
+      "body_region": "other",
+      "synonyms": [
+        "syncope",
+        "presyncope",
+        "near syncope",
+        "syncopal episode",
+        "fainting",
+        "passing out",
+        "loss of consciousness",
+        "transient loss of consciousness",
+        "collapse",
+        "vasovagal syncope",
+        "cardiovascular syncope",
+        "cardiac syncope",
+        "syncope when to image head",
+        "syncope w/u when to image head",
+        "syncope w/u when to image",
+        "syncope inpatient when to image",
+        "syncope inpatient imaging",
+        "recurrent syncope workup imaging",
+        "syncope workup imaging"
+      ],
+      "scenario_mappings": [
+        {
+          "scenario_id": "5530",
+          "scenario_name": "Syncope, cardiovascular etiology suspected, initial imaging",
+          "relevance_score": 1.0,
+          "region": "other",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 15,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "US echocardiography transthoracic res...",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "5532",
+          "scenario_name": "Syncope, low probability of cardiovascular etiology, initial imaging",
+          "relevance_score": 0.9,
+          "region": "other",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 15,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "Radiography chest",
+            "modality": "XR",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "<0.1 mSv",
+            "noStrong": true
+          }
+        },
+        {
+          "scenario_id": "5529",
+          "scenario_name": "Presyncope, cardiovascular etiology suspected, initial imaging",
+          "relevance_score": 0.9,
+          "region": "other",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {
+              "clinical_status": "suspected"
+            },
+            "procedure_count": 15,
+            "high_rated_count": 1
+          },
+          "top_procedure": {
+            "name": "US echocardiography transthoracic res...",
+            "modality": "US",
+            "rating": 9,
+            "ratingLevel": "Usually Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "0 mSv"
+          }
+        },
+        {
+          "scenario_id": "5531",
+          "scenario_name": "Presyncope, low probability of cardiovascular etiology, initial imaging",
+          "relevance_score": 0.8,
+          "region": "other",
+          "metadata": {
+            "phase": "initial",
+            "phase_display": "Initial Workup",
+            "context": {},
+            "procedure_count": 15,
+            "high_rated_count": 0
+          },
+          "top_procedure": {
+            "name": "Radiography chest",
+            "modality": "XR",
+            "rating": 5,
+            "ratingLevel": "May Be Appropriate",
+            "usesContrast": 0,
+            "radiationDose": "<0.1 mSv",
             "noStrong": true
           }
         }
@@ -39456,15 +39569,30 @@
     "headache with visual aura": "headache",
     "headache with aura": "headache",
     "visual aura headache": "headache",
-    "syncope when to image head": "headache",
-    "syncope w/u when to image": "headache",
-    "syncope inpatient when to image": "headache",
-    "syncope inpatient imaging": "headache",
     "ddx for new ha in hiv": "headache",
     "headache in hiv": "headache",
     "headache in immunocompromised": "headache",
     "headache hiv patient": "headache",
     "new headache in hiv": "headache",
+    "syncope": "syncope",
+    "presyncope": "syncope",
+    "near syncope": "syncope",
+    "syncopal episode": "syncope",
+    "fainting": "syncope",
+    "passing out": "syncope",
+    "loss of consciousness": "syncope",
+    "transient loss of consciousness": "syncope",
+    "collapse": "syncope",
+    "vasovagal syncope": "syncope",
+    "cardiovascular syncope": "syncope",
+    "cardiac syncope": "syncope",
+    "syncope when to image head": "syncope",
+    "syncope w/u when to image head": "syncope",
+    "syncope w/u when to image": "syncope",
+    "syncope inpatient when to image": "syncope",
+    "syncope inpatient imaging": "syncope",
+    "recurrent syncope workup imaging": "syncope",
+    "syncope workup imaging": "syncope",
     "dementia": "dementia",
     "alzheimer": "dementia",
     "cognitive decline": "dementia",

@@ -3719,8 +3719,8 @@
   {
     "persona": "ed_resident",
     "query": "syncope w/u when to image head",
-    "expected_concept_id": "headache",
-    "anatomic_region": "neuro",
+    "expected_concept_id": "syncope",
+    "anatomic_region": "other",
     "notes": "syncope imaging"
   },
   {
@@ -4440,8 +4440,8 @@
   {
     "persona": "im_resident",
     "query": "syncope inpatient when to image",
-    "expected_concept_id": "headache",
-    "anatomic_region": "neuro",
+    "expected_concept_id": "syncope",
+    "anatomic_region": "other",
     "notes": "syncope w/u"
   },
   {
@@ -4776,9 +4776,16 @@
   {
     "persona": "fm_attending",
     "query": "recurrent syncope workup imaging",
-    "expected_concept_id": "OUT_OF_TAXONOMY",
-    "anatomic_region": "neuro",
+    "expected_concept_id": "syncope",
+    "anatomic_region": "other",
     "notes": "syncope outside"
+  },
+  {
+    "persona": "ed_resident",
+    "query": "syncope",
+    "expected_concept_id": "syncope",
+    "anatomic_region": "other",
+    "notes": "bare term lock-in (regression guard)"
   },
   {
     "persona": "fm_attending",
