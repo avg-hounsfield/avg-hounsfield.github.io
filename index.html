@@ -84,7 +84,7 @@
       <div class="header-brand">
         <span class="brand-text">Radex</span>
       </div>
-      <nav class="header-nav" role="navigation" aria-label="Main navigation">
+      <nav class="header-nav" id="headerNav" role="navigation" aria-label="Main navigation">
         <a href="/" class="nav-link active" data-view="search" aria-pressed="true">Search</a>
         <a href="/about/" class="nav-link" data-view="protocols" aria-pressed="false">Protocols</a>
         <a href="#builder" class="nav-link" data-view="builder" aria-pressed="false">Builder</a>
@@ -96,7 +96,7 @@
         </button>
       </nav>
       <!-- Mobile menu button -->
-      <button class="mobile-menu-btn hidden" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false">
+      <button class="mobile-menu-btn hidden" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false" aria-controls="headerNav">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 12h18M3 6h18M3 18h18"/>
         </svg>
@@ -1107,7 +1107,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <!-- ONNX Runtime Web for intent classification (optional, falls back to rules) -->
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.0/dist/ort.min.js"></script>
-  <script src="https://unpkg.com/lunr@2.3.9/lunr.min.js"></script>
+  <!-- Self-hosted (was unpkg CDN) so the TF-IDF scenario ranking can't be lost
+       when the CDN is unreachable, and to guarantee reliable offline caching. -->
+  <script src="js/vendor/lunr.min.js?v=2.3.9"></script>
   <script type="module" src="js/app.js?v=20260521a"></script>
 </body>
 </html>

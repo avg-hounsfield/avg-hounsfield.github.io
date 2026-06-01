@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radex-v2.30.0';
+const CACHE_NAME = 'radex-v2.31.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -13,6 +13,7 @@ const STATIC_ASSETS = [
   '/js/radlite-api.js',
   '/js/protocol-builder.js',
   '/js/summary-cards.js',
+  '/js/vendor/lunr.min.js',
   '/manifest.json'
 ];
 
@@ -49,10 +50,9 @@ const DATA_ASSETS = [
   '/models/student-radiology/onnx/model_quantized.onnx'
 ];
 
-// External dependencies that should be cached
-const EXTERNAL_ASSETS = [
-  'https://unpkg.com/lunr@2.3.9/lunr.min.js'
-];
+// External (cross-origin CDN) dependencies that should be cached. Lunr is now
+// self-hosted (js/vendor/lunr.min.js), so this list is currently empty.
+const EXTERNAL_ASSETS = [];
 
 // Send progress message to all window clients (including uncontrolled during install)
 async function notifyProgress(loaded, total) {
