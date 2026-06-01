@@ -13,7 +13,8 @@
 
   --text-primary: #fafafa;
   --text-secondary: #a1a1a6;
-  --text-muted: #6b6b70;
+  /* Lightened from #6b6b70 (~3.3:1) to meet WCAG AA 4.5:1 on the dark bgs. */
+  --text-muted: #8a8a90;
 
   --accent: #9B5DE5;
   --accent-hover: #B47AED;

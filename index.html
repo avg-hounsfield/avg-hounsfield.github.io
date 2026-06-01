@@ -119,6 +119,10 @@
               placeholder="e.g., stroke, headache, chest pain, fracture..."
               autocomplete="off"
               aria-label="Quick search clinical scenarios"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-controls="searchSuggestions"
             >
             <button class="quick-search-btn" id="globalSearchBtn" aria-label="Search">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -126,7 +130,7 @@
                 <path d="M21 21l-4.35-4.35"/>
               </svg>
             </button>
-            <div class="search-suggestions hidden" id="searchSuggestions">
+            <div class="search-suggestions hidden" id="searchSuggestions" role="listbox" aria-label="Search suggestions">
               <!-- Populated dynamically -->
             </div>
           </div>
@@ -1080,14 +1084,17 @@
         }
       });
 
-      // Clear old caches on version change, then register
-      navigator.serviceWorker.getRegistrations().then(registrations => {
+      // Clear old caches on version change, then register. Await unregister +
+      // cache deletion BEFORE reloading so we don't reload into a partially
+      // cleared cache and serve a mix of old/new assets.
+      navigator.serviceWorker.getRegistrations().then(async registrations => {
         const storedVersion = localStorage.getItem('radex_sw_version');
         if (storedVersion !== CURRENT_SW_VERSION) {
-          registrations.forEach(reg => reg.unregister());
-          caches.keys().then(names => names.forEach(name => caches.delete(name)));
+          await Promise.all(registrations.map(reg => reg.unregister()));
+          const names = await caches.keys();
+          await Promise.all(names.map(name => caches.delete(name)));
           localStorage.setItem('radex_sw_version', CURRENT_SW_VERSION);
-          if (storedVersion) location.reload(true);
+          if (storedVersion) location.reload();
         }
       });
 

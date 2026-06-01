@@ -330,14 +330,9 @@ export class SearchEngine {
     let conceptId = hit ? hit.conceptId : null;
     if (hit) console.log('[SearchEngine] Concept match:', hit.matchedSyn, '->', conceptId);
 
-    // Last resort: conservative fuzzy match for typos (edit distance <=1, query length >=6)
-    if (!conceptId) {
-      const suggestions = this.suggestSimilar(query, 1);
-      if (suggestions.length > 0) {
-        conceptId = suggestions[0].conceptId;
-        console.log('[SearchEngine] Fuzzy match:', suggestions[0].term, '->', conceptId, '(distance', suggestions[0].distance + ')');
-      }
-    }
+    // NOTE: fuzzy (edit-distance) typo matches are intentionally NOT auto-committed
+    // to a concept here - they fall through to keyword search and the empty-state
+    // "did you mean" suggestions, so a typo never renders a confident wrong concept.
 
     if (!conceptId || !this.conceptIndex.concepts[conceptId]) {
       console.log('[SearchEngine] No concept found for query');

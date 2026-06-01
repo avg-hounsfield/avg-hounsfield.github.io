@@ -182,6 +182,29 @@ class ProtocolHelpApp {
     // Load summary cards for global quick search
     this.summaryCards.load();
     this.ui.setStatus('Ready');
+    // Restore view from the URL hash so a refreshed/shared #protocols or
+    // #builder link lands on the right view instead of always on Search.
+    const initialView = this._viewFromHash();
+    if (initialView !== 'search') this._applyView(initialView);
+  }
+
+  // Derive the SPA view from the URL hash (defaults to 'search').
+  _viewFromHash() {
+    const h = (location.hash || '').replace(/^#/, '');
+    return (h === 'protocols' || h === 'builder') ? h : 'search';
+  }
+
+  // Apply a view (nav state + section switch) WITHOUT touching history.
+  // Shared by nav clicks, popstate (Back/Forward), and initial hash restore.
+  _applyView(view) {
+    if (view === this.currentView) return;
+    document.querySelectorAll('.nav-link').forEach(l => {
+      const on = l.dataset.view === view;
+      l.classList.toggle('active', on);
+      l.setAttribute('aria-pressed', String(on));
+    });
+    this.currentView = view;
+    this.switchView(view);
   }
 
   initInstallPrompt() {
@@ -326,6 +349,9 @@ class ProtocolHelpApp {
     document.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', (e) => this.handleNavClick(e));
     });
+
+    // Back/Forward (and manual hash edits) re-derive the view from the URL.
+    window.addEventListener('popstate', () => this._applyView(this._viewFromHash()));
 
     // Protocol search input
     const protocolSearchInput = document.getElementById('protocolSearchInput');
@@ -696,6 +722,12 @@ class ProtocolHelpApp {
       return;
     }
 
+    // Request-sequence guard: a slower earlier query (e.g. embedding-model
+    // warmup) must not overwrite the result of a newer one. stale() is checked
+    // before each render that follows an await.
+    const reqId = (this._globalSearchSeq = (this._globalSearchSeq || 0) + 1);
+    const stale = () => reqId !== this._globalSearchSeq;
+
     // Find matching summary card
     let card = this.summaryCards.findMatch(trimmed);
 
@@ -739,6 +771,7 @@ class ProtocolHelpApp {
       // use (~1-2s warmup); subsequent queries are fast.
       try {
         const embHits = await this._globalEmbeddingSearch(trimmed, 8);
+        if (stale()) return;
         if (embHits.length > 0) {
           this._renderGlobalScenarioListResult(trimmed, embHits, resultContainer);
           return;
@@ -751,6 +784,7 @@ class ProtocolHelpApp {
       // embedding also returned nothing. Lunr scores are noisier than
       // embedding on the full eval, so it runs AFTER embedding, not before.
       const nameMatches = await this._globalScenarioNameSearch(trimmed, 8);
+      if (stale()) return;
       if (nameMatches.length > 0) {
         this._renderGlobalScenarioListResult(trimmed, nameMatches, resultContainer);
         return;
@@ -758,6 +792,7 @@ class ProtocolHelpApp {
 
       // Final fallback: "no quick answer" with did-you-mean chips
       const suggestions = await this._globalSuggestSimilar(trimmed, 3);
+      if (stale()) return;
       resultContainer.classList.remove('hidden');
       resultContainer.innerHTML = `
         <div class="global-result-card">
@@ -797,6 +832,7 @@ class ProtocolHelpApp {
       // Intent classification is optional
     }
 
+    if (stale()) return;
     // Render the card with intent context
     this.renderGlobalSearchResult(card, resultContainer, intent);
   }
@@ -1100,7 +1136,7 @@ class ProtocolHelpApp {
       const badge = card.card_type === 'STRONG' ? 'Strong' :
                     card.card_type === 'CLINICAL_FIRST' ? 'Clinical' : '';
       return `
-        <div class="suggestion-item" data-topic="${this.escapeHtml(card.topic)}" data-index="${i}">
+        <div class="suggestion-item" role="option" id="suggestion-${i}" aria-selected="false" data-topic="${this.escapeHtml(card.topic)}" data-index="${i}">
           <span class="suggestion-topic">${this.escapeHtml(displayName)}</span>
           <span class="suggestion-meta">
             ${badge ? `<span class="suggestion-badge">${badge}</span>` : ''}
@@ -1122,6 +1158,8 @@ class ProtocolHelpApp {
 
     suggestionsEl.classList.remove('hidden');
     this.activeSuggestionIndex = -1;
+    const input = document.getElementById('globalSearchInput');
+    if (input) { input.setAttribute('aria-expanded', 'true'); input.removeAttribute('aria-activedescendant'); }
   }
 
   hideSearchSuggestions() {
@@ -1131,16 +1169,25 @@ class ProtocolHelpApp {
       suggestionsEl.innerHTML = '';
     }
     this.activeSuggestionIndex = -1;
+    const input = document.getElementById('globalSearchInput');
+    if (input) { input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); }
   }
 
   updateActiveSuggestion(items) {
     items.forEach((item, i) => {
-      item.classList.toggle('active', i === this.activeSuggestionIndex);
+      const on = i === this.activeSuggestionIndex;
+      item.classList.toggle('active', on);
+      item.setAttribute('aria-selected', String(on));
     });
-    // Scroll active item into view
-    if (this.activeSuggestionIndex >= 0 && items[this.activeSuggestionIndex]) {
-      items[this.activeSuggestionIndex].scrollIntoView({ block: 'nearest' });
+    // Reflect the active option on the combobox input for screen readers.
+    const input = document.getElementById('globalSearchInput');
+    const active = this.activeSuggestionIndex >= 0 ? items[this.activeSuggestionIndex] : null;
+    if (input) {
+      if (active && active.id) input.setAttribute('aria-activedescendant', active.id);
+      else input.removeAttribute('aria-activedescendant');
     }
+    // Scroll active item into view
+    if (active) active.scrollIntoView({ block: 'nearest' });
   }
 
   handleSearch(query) {
@@ -1233,6 +1280,10 @@ class ProtocolHelpApp {
 
     this.ui.setStatus('Searching...', 'loading');
 
+    // Request-sequence guard: a slow earlier query (e.g. during model warmup)
+    // must not overwrite the results of a newer one typed since.
+    const reqId = (this._regionSearchSeq = (this._regionSearchSeq || 0) + 1);
+
     try {
       // On fresh searches, reset filters
       if (!isFilterChange) {
@@ -1255,6 +1306,9 @@ class ProtocolHelpApp {
 
       // Execute search - returns { scenarios, grouped, concept, isConceptSearch, intent }
       const result = await this.searchEngine.search(this.baseQuery, searchOptions);
+
+      // A newer search superseded this one while we awaited - drop these results.
+      if (reqId !== this._regionSearchSeq) return;
 
       // Show assumed context banner if condition-based urgency was applied
       if (result.intent && result.intent.matchedCondition) {
@@ -1458,11 +1512,9 @@ class ProtocolHelpApp {
     // (single-token generic words match exact-only and otherwise fall through).
     const hit = matchConcept(q, idx.normMap);
     let conceptId = hit ? hit.conceptId : null;
-    // Conservative fuzzy (edit distance <=1) last resort for typos.
-    if (!conceptId && q.length >= 6) {
-      const sug = await this._globalSuggestSimilar(query, 1);
-      if (sug.length > 0) conceptId = sug[0].conceptId;
-    }
+    // Fuzzy typo matches are NOT auto-committed here. When concept lookup misses,
+    // handleGlobalSearch falls through to embedding/Lunr and finally a "did you
+    // mean" chip row, so a typo never renders a confident wrong concept page.
     if (!conceptId) return null;
     const concept = idx.ci.concepts && idx.ci.concepts[conceptId];
     if (!concept) return null;
@@ -2148,27 +2200,18 @@ class ProtocolHelpApp {
     const view = link.dataset.view;
     if (!view) return;
 
-    // Prevent default navigation for SPA views, but allow normal navigation for others if needed
-    // In our case, all .nav-links are part of the SPA state
+    // All .nav-links are SPA state - prevent default navigation.
     e.preventDefault();
 
     if (view === this.currentView) return;
 
-    // Update nav button states
-    document.querySelectorAll('.nav-link').forEach(l => {
-      l.classList.toggle('active', l.dataset.view === view);
-      l.setAttribute('aria-pressed', l.dataset.view === view);
-    });
+    this._applyView(view);
 
-    this.currentView = view;
-    this.switchView(view);
-
-    // Update URL hash if needed for deep linking (optional, but good for UX)
-    if (view !== 'search') {
-      window.location.hash = view;
-    } else {
-      history.pushState("", document.title, window.location.pathname + window.location.search);
-    }
+    // Push a history entry so Back/Forward and refresh restore this view.
+    const url = view === 'search'
+      ? window.location.pathname + window.location.search
+      : '#' + view;
+    history.pushState({ view }, '', url);
   }
 
   async switchView(view) {

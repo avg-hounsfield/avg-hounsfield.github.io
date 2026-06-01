@@ -175,20 +175,9 @@ def concept_lookup(norm_map, query, exact_only=False, return_match=False):
         if return_match:
             return cid, "substring", best_syn
         return cid, "substring"
-    # Levenshtein
-    if len(q) >= 6:
-        best = None
-        for term, c in norm_map.items():
-            if abs(len(term) - len(q)) > 1:
-                continue
-            d = levenshtein_bounded(q, term, 1)
-            if 0 < d <= 1:
-                if best is None or len(term) < len(best[0]):
-                    best = (term, c)
-        if best:
-            if return_match:
-                return best[1], f"levenshtein({best[0]})", best[0]
-            return best[1], f"levenshtein({best[0]})"
+    # Fuzzy (Levenshtein) typo matches are intentionally NOT auto-committed to a
+    # concept (mirrors js/app.js + search-engine.js); typos fall through to the
+    # embedding / scenario-name stages and the "did you mean" suggestions instead.
     if return_match:
         return None, None, None
     return None, None

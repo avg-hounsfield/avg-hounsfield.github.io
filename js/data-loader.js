@@ -28,12 +28,10 @@ export class DataLoader {
       this.cache.set(region, data);
       return data;
     } catch (error) {
+      // Rethrow so the caller (selectRegion) can surface a real error + retry
+      // instead of silently opening an empty "0 scenarios" region page.
       console.error(`Error loading region ${region}:`, error);
-      return {
-        region,
-        scenarios: [],
-        embeddings: null
-      };
+      throw error;
     }
   }
 
