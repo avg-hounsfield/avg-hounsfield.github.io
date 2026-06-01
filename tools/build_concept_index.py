@@ -1425,7 +1425,9 @@ CONCEPT_TAXONOMY = {
     # Vascular/Aortic concepts - note: aortic scenarios are in chest region in ACR
     "aortic_aneurysm": {
         "display_name": "Aortic Aneurysm",
-        "body_region": "chest",  # ACR puts aortic scenarios in chest
+        "body_region": "chest",  # ACR files aortic scenarios under chest...
+        "additional_regions": ["abdomen"],  # ...but AAA is clinically abdominal too
+
         "synonyms": ["aortic aneurysm", "aaa", "abdominal aortic aneurysm", "thoracic aneurysm",
                      "aortic dilation", "aneurysm",
                      # AAA screening
@@ -1929,12 +1931,17 @@ def build_concept_index(data_dir, output_path):
         scenario_mappings.sort(key=lambda x: x["relevance_score"], reverse=True)
 
         if scenario_mappings:
-            concept_index["concepts"][concept_id] = {
+            concept_entry = {
                 "display_name": concept_def["display_name"],
                 "body_region": concept_def["body_region"],
                 "synonyms": concept_def["synonyms"],
                 "scenario_mappings": scenario_mappings[:50]  # Limit to top 50
             }
+            # Emit additional_regions so the runtime regional search can surface
+            # this concept (and its primary-region scenarios) under those tabs too.
+            if concept_def.get("additional_regions"):
+                concept_entry["additional_regions"] = concept_def["additional_regions"]
+            concept_index["concepts"][concept_id] = concept_entry
 
             print(f"  Found {len(scenario_mappings)} matching scenarios")
 

@@ -2061,6 +2061,14 @@ class ProtocolHelpApp {
   }
 
   handleScenarioSelect(scenario) {
+    // Cross-region card (concept shown under a declared additional region, but the
+    // scenario lives in another region whose procedures aren't loaded here):
+    // jump to its home region for full detail instead of an empty panel.
+    if (scenario && scenario._crossRegion && scenario.region) {
+      this.navigateToRegionSearch(scenario.region, scenario.name);
+      return;
+    }
+
     this.currentScenario = scenario;
 
     // Render procedures in right panel

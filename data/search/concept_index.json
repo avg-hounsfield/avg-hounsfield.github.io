@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-05-31T07:07:29.009138+00:00",
+  "generated_at": "2026-06-01T06:07:30.859778+00:00",
   "concepts": {
     "brain_neoplasm": {
       "display_name": "Brain Tumor",
@@ -19503,6 +19503,9 @@
             "radiationDose": "0 mSv"
           }
         }
+      ],
+      "additional_regions": [
+        "other"
       ]
     },
     "bowel_obstruction": {
@@ -21318,6 +21321,9 @@
             "radiationDose": "0 mSv"
           }
         }
+      ],
+      "additional_regions": [
+        "vascular"
       ]
     },
     "vesicoureteral_reflux": {
@@ -21402,6 +21408,10 @@
             "radiationDose": "0 mSv"
           }
         }
+      ],
+      "additional_regions": [
+        "other",
+        "peds"
       ]
     },
     "ectopic_pregnancy": {
@@ -21886,6 +21896,9 @@
             "radiationDose": "0 mSv"
           }
         }
+      ],
+      "additional_regions": [
+        "other"
       ]
     },
     "knee_pain": {
@@ -27801,6 +27814,10 @@
             "radiationDose": "0 mSv"
           }
         }
+      ],
+      "additional_regions": [
+        "abdomen",
+        "chest"
       ]
     },
     "spine_infection": {
@@ -30161,6 +30178,10 @@
             "radiationDose": "0 mSv"
           }
         }
+      ],
+      "additional_regions": [
+        "abdomen",
+        "chest"
       ]
     },
     "fracture": {
@@ -34075,6 +34096,9 @@
             "radiationDose": "0 mSv"
           }
         }
+      ],
+      "additional_regions": [
+        "breast"
       ]
     },
     "aortic_aneurysm": {
@@ -35118,6 +35142,9 @@
             "radiationDose": "1-10 mSv"
           }
         }
+      ],
+      "additional_regions": [
+        "abdomen"
       ]
     },
     "aortic_dissection": {

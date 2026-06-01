@@ -346,10 +346,19 @@ export class SearchEngine {
     let mappings = concept.scenario_mappings || [];
     console.log('[SearchEngine] Total mappings:', mappings.length);
 
-    // Filter by region if we're in a specific region
+    // Filter by region if we're in a specific region. A concept that DECLARES
+    // the current region (as body_region or an additional_region) is shown
+    // under that tab even when ACR files its scenarios elsewhere - e.g. aortic
+    // aneurysm scenarios live under "chest" but the concept also belongs to
+    // "abdomen", so AAA appears in the Abdomen tab too.
     if (this.regionName) {
       const beforeFilter = mappings.length;
-      mappings = mappings.filter(m => m.region === this.regionName);
+      const declared = new Set([concept.body_region, ...(concept.additional_regions || [])]);
+      if (declared.has(this.regionName)) {
+        mappings = mappings.filter(m => m.region === this.regionName || m.region === concept.body_region);
+      } else {
+        mappings = mappings.filter(m => m.region === this.regionName);
+      }
       console.log('[SearchEngine] After region filter:', mappings.length, '(from', beforeFilter, ')');
     }
 
@@ -373,8 +382,9 @@ export class SearchEngine {
     const grouped = this.groupByPhase(matchedScenarios, mappings);
     console.log('[SearchEngine] Grouped into', grouped.length, 'phases');
 
-    // Generate filter chips from available phases
-    const availablePhases = this.getAvailablePhases(concept.scenario_mappings, this.regionName);
+    // Generate filter chips from available phases (using the same declared-region
+    // logic as the mapping filter above so chips match the scenarios shown).
+    const availablePhases = this.getAvailablePhases(concept, this.regionName);
 
     return {
       scenarios: matchedScenarios,
@@ -412,6 +422,21 @@ export class SearchEngine {
           _relevanceScore: mapping.relevance_score
         };
         matchedScenarios.push(enrichedScenario);
+      } else if (mapping.region && mapping.region !== this.regionName) {
+        // Cross-region scenario: the concept declares the current region but ACR
+        // files this scenario under another region (e.g. aortic aneurysm shown in
+        // the Abdomen tab, scenarios filed under chest). The full scenario isn't
+        // loaded here, so build a display card from the mapping; clicking it
+        // navigates to its home region for full procedure detail.
+        matchedScenarios.push({
+          id: mapping.scenario_id,
+          name: mapping.scenario_name,
+          region: mapping.region,
+          procedures: [],
+          _conceptMetadata: mapping.metadata,
+          _relevanceScore: mapping.relevance_score,
+          _crossRegion: true,
+        });
       }
     }
 
@@ -466,13 +491,19 @@ export class SearchEngine {
   /**
    * Get available phases for filter chips
    */
-  getAvailablePhases(allMappings, regionName) {
+  getAvailablePhases(concept, regionName) {
     const phaseCounts = {};
 
-    // Filter by region first
-    let mappings = allMappings;
+    // Filter by region first, mirroring searchByConcept's declared-region logic
+    // so the phase chips match the scenarios actually shown in the tab.
+    let mappings = concept.scenario_mappings || [];
     if (regionName) {
-      mappings = mappings.filter(m => m.region === regionName);
+      const declared = new Set([concept.body_region, ...(concept.additional_regions || [])]);
+      if (declared.has(regionName)) {
+        mappings = mappings.filter(m => m.region === regionName || m.region === concept.body_region);
+      } else {
+        mappings = mappings.filter(m => m.region === regionName);
+      }
     }
 
     // Count scenarios per phase

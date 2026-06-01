@@ -998,8 +998,13 @@ export class UI {
       for (let i = 0; i < group.scenarios.length; i++) {
         const scenario = group.scenarios[i];
         const formattedTitle = this.formatScenarioTitle(scenario.name);
-        const procCount = scenario.procedures?.length || 0;
-        const highRated = (scenario.procedures || []).filter(p => p.rating >= 7).length;
+        // Fall back to the concept mapping's counts for cross-region cards whose
+        // full procedure list isn't loaded in this region.
+        const md = scenario._conceptMetadata || {};
+        const procCount = scenario.procedures?.length || md.procedure_count || 0;
+        const highRated = scenario.procedures?.length
+          ? scenario.procedures.filter(p => p.rating >= 7).length
+          : (md.high_rated_count || 0);
 
         html += `
           <div class="scenario-card" role="button" tabindex="0" data-phase="${this.escapeHtml(group.phase)}" data-index="${i}">
