@@ -12,6 +12,12 @@ import { DataLoader } from './data-loader.js?v=20260417a';
 import { UI } from './ui.js?v=20260417a';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
+import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
+
+// Regions that have a backing data/regions/<name>.json file. Used to guard
+// navigation so a summary card with a body label that has no region file
+// (e.g. "neck", "pelvis") falls back to global search instead of 404ing.
+const KNOWN_REGIONS = new Set(['neuro', 'spine', 'msk', 'abdomen', 'chest', 'vascular', 'breast', 'peds', 'other']);
 import { SummaryCards } from './summary-cards.js?v=20260417a';
 import * as embeddingSearch from './embedding-search.js?v=20260519b';
 import * as lunrSearch from './lunr-scenario-search.js?v=20260521a';
@@ -527,14 +533,47 @@ class ProtocolHelpApp {
       });
     });
 
-    // Close modal on Escape key
+    // Close modal on Escape key. The welcome disclaimer is a blocking modal that
+    // must be explicitly acknowledged, so Escape must NOT dismiss it.
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         document.querySelectorAll('.modal:not(.hidden)').forEach(modal => {
+          if (modal.id === 'welcomeModal') return;
           this.hideModal(modal.id);
         });
       }
     });
+  }
+
+  // Visible, focusable elements inside a modal (for focus-on-open and trapping).
+  _modalFocusables(modal) {
+    return Array.from(modal.querySelectorAll(
+      'a[href], button:not([disabled]), textarea, input:not([disabled]), select, [tabindex]:not([tabindex="-1"])'
+    )).filter(el => el.offsetParent !== null);
+  }
+
+  // Move focus into the modal, remember where it came from, and trap Tab so
+  // keyboard/SR users can't reach the background behind an aria-modal dialog.
+  _openModalA11y(modal, preferredFocus) {
+    this._modalReturnFocus = document.activeElement;
+    const focusables = this._modalFocusables(modal);
+    (preferredFocus || focusables[0] || modal).focus();
+    modal._trapHandler = (e) => {
+      if (e.key !== 'Tab') return;
+      const f = this._modalFocusables(modal);
+      if (f.length === 0) { e.preventDefault(); return; }
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    modal.addEventListener('keydown', modal._trapHandler);
+  }
+
+  _closeModalA11y(modal) {
+    if (modal._trapHandler) { modal.removeEventListener('keydown', modal._trapHandler); modal._trapHandler = null; }
+    const ret = this._modalReturnFocus;
+    this._modalReturnFocus = null;
+    if (ret && typeof ret.focus === 'function') ret.focus();
   }
 
   showModal(modalId) {
@@ -542,6 +581,7 @@ class ProtocolHelpApp {
     if (modal) {
       modal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
+      this._openModalA11y(modal);
     }
   }
 
@@ -550,6 +590,7 @@ class ProtocolHelpApp {
     if (modal) {
       modal.classList.add('hidden');
       document.body.style.overflow = '';
+      this._closeModalA11y(modal);
     }
   }
 
@@ -566,15 +607,18 @@ class ProtocolHelpApp {
       return;
     }
 
-    // Show blocking modal
+    // Show blocking modal and move keyboard focus to the acknowledge button.
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    this._openModalA11y(modal, acknowledgeBtn);
 
     // Handle acknowledgment
     acknowledgeBtn.addEventListener('click', () => {
       modal.classList.add('hidden');
       document.body.style.overflow = '';
       localStorage.setItem('protohelp_acknowledged', 'true');
+      this._closeModalA11y(modal);
+      document.getElementById('globalSearchInput')?.focus();
     });
   }
 
@@ -853,6 +897,17 @@ class ProtocolHelpApp {
   }
 
   async navigateToRegionSearch(region, topic) {
+    // Some summary cards carry a body label that has no region data file
+    // (e.g. "neck", "pelvis"). Navigating there 404s and shows an empty
+    // "0 scenarios" page. Instead, fall back to the universal concept search
+    // for the topic, which resolves the concept wherever its scenarios live.
+    if (!KNOWN_REGIONS.has(region)) {
+      const input = document.getElementById('globalSearchInput');
+      if (input && topic) input.value = topic;
+      this.handleGlobalSearch(topic);
+      return;
+    }
+
     // Hide global search result before navigating
     const globalResult = document.getElementById('globalSearchResult');
     if (globalResult) {
@@ -1315,16 +1370,7 @@ class ProtocolHelpApp {
   }
 
   _conceptNorm(s) {
-    if (!s) return '';
-    return String(s)
-      .toLowerCase()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .replace(/[-_/]/g, ' ')
-      // Punctuation -> space so substring word boundaries hold:
-      // "rlq pain, us protocol?" must boundary-match the "rlq pain" synonym.
-      .replace(/[,.?!;:()\[\]]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
+    return conceptNormalize(s);
   }
 
   _conceptLevenshtein(a, b, cap = 1) {
@@ -1350,7 +1396,7 @@ class ProtocolHelpApp {
   async _ensureGlobalConceptIndex() {
     if (this._globalConceptIdx) return this._globalConceptIdx;
     if (this._globalConceptIdxPromise) return this._globalConceptIdxPromise;
-    this._globalConceptIdxPromise = (async () => {
+    const p = (async () => {
       try {
         const [ciRes, snRes] = await Promise.all([
           fetch('data/search/concept_index.json?v=20260521a'),
@@ -1396,49 +1442,23 @@ class ProtocolHelpApp {
         return null;
       }
     })();
-    return this._globalConceptIdxPromise;
+    // Self-heal: clear the memo on null/failure so a later search retries instead
+    // of leaving concept + scenario-name routing disabled for the whole session.
+    p.then((res) => { if (!res && this._globalConceptIdxPromise === p) this._globalConceptIdxPromise = null; })
+     .catch(() => { if (this._globalConceptIdxPromise === p) this._globalConceptIdxPromise = null; });
+    this._globalConceptIdxPromise = p;
+    return p;
   }
 
   async _globalConceptLookup(query) {
     const idx = await this._ensureGlobalConceptIndex();
     if (!idx) return null;
     const q = this._conceptNorm(query);
-    let conceptId = idx.normMap[q];
-    // For very short queries (<=3 chars / single-letter abbreviations), only the
-    // exact synonym match is trustworthy. "pe" should NOT substring-match
-    // "pseudotumor cerebri", "ms" should NOT match "transverse myelitis", etc.
-    if (!conceptId && q.length > 3) {
-      // Prefer the longest synonym substring match so e.g. "vertebral osteomyelitis"
-      // routes to spine_infection (22) over "osteomyelitis" -> bone_infection (13).
-      // Word-boundary required on both sides so "renal mass" doesn't match inside
-      // "adrenal mass" and "pe" doesn't match inside "appendicitus".
-      let bestLen = -1;
-      const tokens = q.split(' ');
-      for (const [syn, cId] of Object.entries(idx.normMap)) {
-        let matches;
-        if (syn.length <= 3) {
-          matches = tokens.includes(syn);
-        } else if (q.includes(syn)) {
-          // Require word boundaries around the synonym inside q
-          const i = q.indexOf(syn);
-          const before = i === 0 || q[i - 1] === ' ';
-          const afterIdx = i + syn.length;
-          const after = afterIdx === q.length || q[afterIdx] === ' ';
-          matches = before && after;
-        } else if (syn.includes(q)) {
-          // Reverse direction: query is a piece of the synonym. Require q to be
-          // a whole word inside syn too.
-          const i = syn.indexOf(q);
-          const before = i === 0 || syn[i - 1] === ' ';
-          const afterIdx = i + q.length;
-          const after = afterIdx === syn.length || syn[afterIdx] === ' ';
-          matches = before && after;
-        }
-        if (matches && syn.length > bestLen) {
-          conceptId = cId; bestLen = syn.length;
-        }
-      }
-    }
+    // Exact, then word-boundary/longest-match substring via the shared matcher
+    // (single-token generic words match exact-only and otherwise fall through).
+    const hit = matchConcept(q, idx.normMap);
+    let conceptId = hit ? hit.conceptId : null;
+    // Conservative fuzzy (edit distance <=1) last resort for typos.
     if (!conceptId && q.length >= 6) {
       const sug = await this._globalSuggestSimilar(query, 1);
       if (sug.length > 0) conceptId = sug[0].conceptId;
@@ -1565,35 +1585,11 @@ class ProtocolHelpApp {
     if (!idx) return null;
     const q = this._conceptNorm(query);
     if (q.length <= 3) return null;
-    let bestLen = -1;
-    let bestSyn = null;
-    let bestCid = null;
-    const tokens = q.split(' ');
-    for (const [syn, cId] of Object.entries(idx.normMap)) {
-      let matches = false;
-      if (syn.length <= 3) {
-        matches = tokens.includes(syn);
-      } else if (q.includes(syn)) {
-        const i = q.indexOf(syn);
-        const before = i === 0 || q[i - 1] === ' ';
-        const afterIdx = i + syn.length;
-        const after = afterIdx === q.length || q[afterIdx] === ' ';
-        matches = before && after;
-      } else if (syn.includes(q)) {
-        const i = syn.indexOf(q);
-        const before = i === 0 || syn[i - 1] === ' ';
-        const afterIdx = i + q.length;
-        const after = afterIdx === syn.length || syn[afterIdx] === ' ';
-        matches = before && after;
-      }
-      if (matches && syn.length > bestLen) {
-        bestLen = syn.length; bestSyn = syn; bestCid = cId;
-      }
-    }
-    if (!bestCid) return null;
-    const concept = idx.ci.concepts && idx.ci.concepts[bestCid];
+    const hit = matchConcept(q, idx.normMap);
+    if (!hit) return null;
+    const concept = idx.ci.concepts && idx.ci.concepts[hit.conceptId];
     if (!concept) return null;
-    return { conceptId: bestCid, concept, matchedSyn: bestSyn };
+    return { conceptId: hit.conceptId, concept, matchedSyn: hit.matchedSyn };
   }
 
   // Search across all scenario names (and extracted clinical keywords) for

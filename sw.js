@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radex-v2.29.0';
+const CACHE_NAME = 'radex-v2.30.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -27,6 +27,7 @@ const DATA_ASSETS = [
   '/data/regions/vascular.json',
   '/data/regions/breast.json',
   '/data/regions/peds.json',
+  '/data/regions/other.json',
   '/data/search/medical-synonyms.json',
   '/data/search/concept_index.json',
   '/data/search/scenario_names.json',
@@ -131,16 +132,19 @@ self.addEventListener('fetch', event => {
           return response;
         })
         .catch(() => {
-          // Fallback to cache if network fails
-          return caches.match(event.request);
+          // Fallback to cache if network fails. ignoreSearch so a versioned
+          // request (app.js?v=...) still matches the precached unversioned URL.
+          return caches.match(event.request, { ignoreSearch: true });
         })
     );
     return;
   }
 
-  // Cache-first for data files and external assets
+  // Cache-first for data files and external assets. ignoreSearch so versioned
+  // fetches (e.g. concept_index.json?v=...) hit the precached unversioned URL
+  // instead of missing the cache and failing offline.
   event.respondWith(
-    caches.match(event.request)
+    caches.match(event.request, { ignoreSearch: true })
       .then(cachedResponse => {
         if (cachedResponse) {
           return cachedResponse;

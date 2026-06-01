@@ -23,7 +23,7 @@ let _loadingPromise = null;
 async function _load() {
   if (_index) return;
   if (_loadingPromise) return _loadingPromise;
-  _loadingPromise = (async () => {
+  const p = (async () => {
     if (typeof window === 'undefined' || !window.lunr) {
       throw new Error('Lunr global not available - check index.html script tag');
     }
@@ -41,7 +41,11 @@ async function _load() {
     }
     console.log(`[lunr-scenario-search] loaded ${Object.keys(_docs).length} docs in ${(performance.now() - t0).toFixed(0)}ms`);
   })();
-  return _loadingPromise;
+  // Clear the memoized promise on failure so a transient CDN/index error
+  // self-heals on the next call instead of disabling Lunr search all session.
+  p.catch(() => { if (_loadingPromise === p) _loadingPromise = null; });
+  _loadingPromise = p;
+  return p;
 }
 
 /**

@@ -285,7 +285,7 @@ export class UI {
         const highRated = (scenario.procedures || []).filter(p => p.rating >= 7).length;
 
         html += `
-          <div class="scenario-card" data-index="${group.originalIndices[0]}">
+          <div class="scenario-card" role="button" tabindex="0" data-index="${group.originalIndices[0]}">
             <div class="scenario-title">${this.escapeHtml(group.formattedTitle)}</div>
             <div class="scenario-meta">
               ${highRated > 0 ? `<span class="high-rated-count">${highRated} recommended</span> - ` : ''}
@@ -300,9 +300,9 @@ export class UI {
 
         html += `
           <div class="scenario-accordion" data-group-id="${cardIndex}">
-            <div class="accordion-header">
+            <div class="accordion-header" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-children-${cardIndex}">
               <div class="accordion-toggle">
-                <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <path d="M9 18l6-6-6-6"/>
                 </svg>
               </div>
@@ -313,14 +313,14 @@ export class UI {
                 </div>
               </div>
             </div>
-            <div class="accordion-children hidden">
+            <div class="accordion-children hidden" id="acc-children-${cardIndex}">
               ${group.scenarios.map((scenario, i) => {
                 const diff = this.getDifferentiator(scenario, group.formattedTitle);
                 const procCount = scenario.procedures?.length || 0;
                 const highRated = (scenario.procedures || []).filter(p => p.rating >= 7).length;
 
                 return `
-                  <div class="scenario-card scenario-child" data-index="${group.originalIndices[i]}">
+                  <div class="scenario-card scenario-child" role="button" tabindex="0" data-index="${group.originalIndices[i]}">
                     <div class="scenario-title child-title">${this.escapeHtml(diff)}</div>
                     <div class="scenario-meta">
                       ${highRated > 0 ? `<span class="high-rated-count">${highRated} rec</span> - ` : ''}
@@ -338,9 +338,9 @@ export class UI {
 
     this.scenariosList.innerHTML = html;
 
-    // Bind accordion toggle events
+    // Bind accordion toggle events (click + keyboard: Enter/Space)
     this.scenariosList.querySelectorAll('.accordion-header').forEach(header => {
-      header.addEventListener('click', (e) => {
+      const toggle = () => {
         const accordion = header.closest('.scenario-accordion');
         const children = accordion.querySelector('.accordion-children');
         const icon = accordion.querySelector('.accordion-icon');
@@ -348,13 +348,18 @@ export class UI {
         children.classList.toggle('hidden');
         icon.classList.toggle('expanded');
         accordion.classList.toggle('expanded');
+        header.setAttribute('aria-expanded', String(!children.classList.contains('hidden')));
+      };
+      header.addEventListener('click', toggle);
+      header.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
       });
     });
 
-    // Bind click events for scenario cards (both regular and child)
+    // Bind click + keyboard activation for scenario cards (both regular and child)
     this.scenariosList.querySelectorAll('.scenario-card').forEach((card) => {
-      card.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent accordion toggle when clicking child
+      const activate = (e) => {
+        e.stopPropagation(); // Prevent accordion toggle when activating child
 
         const index = parseInt(card.dataset.index);
 
@@ -369,6 +374,10 @@ export class UI {
         const scenario = scenarios[index];
         this.currentScenario = scenario;
         onSelect(scenario);
+      };
+      card.addEventListener('click', activate);
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(e); }
       });
     });
 
@@ -993,7 +1002,7 @@ export class UI {
         const highRated = (scenario.procedures || []).filter(p => p.rating >= 7).length;
 
         html += `
-          <div class="scenario-card" data-phase="${this.escapeHtml(group.phase)}" data-index="${i}">
+          <div class="scenario-card" role="button" tabindex="0" data-phase="${this.escapeHtml(group.phase)}" data-index="${i}">
             <div class="scenario-title">${this.escapeHtml(formattedTitle)}</div>
             <div class="scenario-meta">
               ${highRated > 0 ? `<span class="high-rated-count">${highRated} recommended</span> - ` : ''}
@@ -1022,9 +1031,9 @@ export class UI {
       });
     });
 
-    // Bind click events
+    // Bind click + keyboard activation
     this.scenariosList.querySelectorAll('.scenario-card').forEach(card => {
-      card.addEventListener('click', () => {
+      const activate = () => {
         const phase = card.dataset.phase;
         const index = parseInt(card.dataset.index);
         const key = `${phase}-${index}`;
@@ -1041,6 +1050,10 @@ export class UI {
           this.currentScenario = scenario;
           onSelect(scenario);
         }
+      };
+      card.addEventListener('click', activate);
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
       });
     });
 

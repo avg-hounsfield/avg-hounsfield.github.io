@@ -84,7 +84,7 @@ function _fp16ToFp32(h) {
 export async function ensureReady() {
   if (_model && _scenarioEmb) return;
   if (_loadingPromise) return _loadingPromise;
-  _loadingPromise = (async () => {
+  const p = (async () => {
     const t0 = performance.now();
     const tf = await _loadTransformersJs();
     // pipeline('feature-extraction') uses BERT mean pooling by default; we
@@ -98,7 +98,11 @@ export async function ensureReady() {
     const meta = await _loadScenarioEmbeddings();
     console.log(`[embedding-search] ready in ${(performance.now() - t0).toFixed(0)}ms; corpus=${meta.count} x ${meta.dim}`);
   })();
-  return _loadingPromise;
+  // Clear the memoized promise on failure so a transient model/index load error
+  // self-heals on the next call instead of disabling semantic search all session.
+  p.catch(() => { if (_loadingPromise === p) _loadingPromise = null; });
+  _loadingPromise = p;
+  return p;
 }
 
 /**

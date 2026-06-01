@@ -3,6 +3,7 @@
  * and concept-based search with clinical phase grouping
  */
 import { getIntentClassifier } from './intent-classifier.js';
+import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
 
 export class SearchEngine {
   constructor(regionData) {
@@ -20,13 +21,10 @@ export class SearchEngine {
   // Normalize text for matching: lowercase, NFD-strip diacritics, hyphens/underscores/slashes -> space, collapse spaces.
   // Makes "Guillain-Barre" == "guillain barre" and lets fuzzy match work cross-form.
   _norm(s) {
-    if (!s) return '';
-    return String(s)
-      .toLowerCase()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .replace(/[-_/]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
+    // Delegate to the shared normalizer so concept matching is identical across
+    // the global and regional paths (this one previously skipped punctuation
+    // stripping, so "stroke?" missed the exact-synonym fast path).
+    return conceptNormalize(s);
   }
 
   // Bounded Levenshtein. Returns Infinity if distance exceeds maxDist (early exit).
@@ -326,20 +324,11 @@ export class SearchEngine {
 
     const synMap = this.normSynonymToConcept || {};
 
-    // Try exact match against the pre-normalized synonym index
-    let conceptId = synMap[queryNorm];
-    console.log('[SearchEngine] Exact match:', conceptId);
-
-    // If no exact match, try substring matches (either direction)
-    if (!conceptId) {
-      for (const [synonym, cId] of Object.entries(synMap)) {
-        if (queryNorm.includes(synonym) || synonym.includes(queryNorm)) {
-          conceptId = cId;
-          console.log('[SearchEngine] Partial match:', synonym, '->', cId);
-          break;
-        }
-      }
-    }
+    // Exact, then word-boundary/longest-match substring via the SHARED matcher
+    // so this regional path behaves identically to the global search path.
+    const hit = matchConcept(queryNorm, synMap);
+    let conceptId = hit ? hit.conceptId : null;
+    if (hit) console.log('[SearchEngine] Concept match:', hit.matchedSyn, '->', conceptId);
 
     // Last resort: conservative fuzzy match for typos (edit distance <=1, query length >=6)
     if (!conceptId) {
