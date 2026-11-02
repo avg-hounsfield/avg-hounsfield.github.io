@@ -13,19 +13,18 @@ import { UI } from './ui.js?v=20260417a';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
-import { resolveQuery, buildTopicGuide } from './scenario-ranker.js?v=20261101c';
+import { resolveQuery, buildTopicGuide, guardSuggestions } from './scenario-ranker.js?v=20261101f';
 
 // Regions that have a backing data/regions/<name>.json file. Used to guard
 // navigation so a summary card with a body label that has no region file
 // (e.g. "neck", "pelvis") falls back to global search instead of 404ing.
-// Below this, the distilled model is matching noise: nonsense input scores about
-// 0.3-0.4, while real clinical phrasing scores 0.45 and up.
-const EMBEDDING_MIN_SCORE = 0.45;
-const CLOSEST_MATCH_NOTICE = 'No scenario uses these words. These are the closest in meaning, so check that they fit.';
+// Below this, the distilled model is matching noise or guessing: nonsense input
+// scores 0.3-0.4, and about 40% of answers between 0.45 and 0.5 missed.
+const EMBEDDING_MIN_SCORE = 0.5;
+const CLOSEST_MATCH_NOTICE = 'No scenario uses these words. These are suggestions by meaning, so check that they fit.';
 
 const KNOWN_REGIONS = new Set(['neuro', 'spine', 'msk', 'abdomen', 'chest', 'vascular', 'breast', 'peds', 'other']);
 import * as embeddingSearch from './embedding-search.js?v=20260519b';
-import * as lunrSearch from './lunr-scenario-search.js?v=20260521a';
 
 class ProtocolHelpApp {
   constructor() {
@@ -761,18 +760,16 @@ class ProtocolHelpApp {
       return;
     }
     if (resolved.mode === 'list') {
-      this._renderGlobalScenarioListResult(trimmed, resolved.scenarios, resultContainer, resolved);
+      const notice = resolved.corrected ? `Showing results for "${resolved.corrected}".` : resolved.notice;
+      this._renderGlobalScenarioListResult(resolved.corrected || trimmed, resolved.scenarios, resultContainer, { ...resolved, notice });
+      return;
+    }
+    if (resolved.mode === 'choose') {
+      this._renderTopicChooser(resolved.corrected || trimmed, resolved.topics, resultContainer);
       return;
     }
     if (resolved.mode === 'too-broad') {
       this._renderTooBroad(trimmed, resultContainer);
-      return;
-    }
-
-    // Fall back to the concept_index (myositis, guillain_barre, ...)
-    const conceptHit = await this._globalConceptLookup(trimmed);
-    if (conceptHit) {
-      this._renderGlobalConceptResult(conceptHit, resultContainer);
       return;
     }
 
@@ -789,16 +786,6 @@ class ProtocolHelpApp {
       }
     } catch (e) {
       console.warn('[App] embedding search unavailable:', e?.message || e);
-    }
-
-    // Last-resort scenario-name + Lunr TF-IDF. Catches queries where the
-    // embedding also returned nothing. Lunr scores are noisier than
-    // embedding on the full eval, so it runs AFTER embedding, not before.
-    const nameMatches = await this._globalScenarioNameSearch(trimmed, 8);
-    if (stale()) return;
-    if (nameMatches.length > 0) {
-      this._renderGlobalScenarioListResult(trimmed, nameMatches, resultContainer, { notice: CLOSEST_MATCH_NOTICE });
-      return;
     }
 
     // Final fallback: "no quick answer" with did-you-mean chips
@@ -1409,23 +1396,6 @@ class ProtocolHelpApp {
     return p;
   }
 
-  async _globalConceptLookup(query) {
-    const idx = await this._ensureGlobalConceptIndex();
-    if (!idx) return null;
-    const q = this._conceptNorm(query);
-    // Exact, then word-boundary/longest-match substring via the shared matcher
-    // (single-token generic words match exact-only and otherwise fall through).
-    const hit = matchConcept(q, idx.normMap);
-    let conceptId = hit ? hit.conceptId : null;
-    // Fuzzy typo matches are NOT auto-committed here. When concept lookup misses,
-    // handleGlobalSearch falls through to embedding/Lunr and finally a "did you
-    // mean" chip row, so a typo never renders a confident wrong concept page.
-    if (!conceptId) return null;
-    const concept = idx.ci.concepts && idx.ci.concepts[conceptId];
-    if (!concept) return null;
-    return { conceptId, concept };
-  }
-
   // Semantic search: embedding shortlist + additive lexical bonus.
   //
   // Pulls top-30 from the distilled student model and re-ranks with a small
@@ -1458,7 +1428,7 @@ class ProtocolHelpApp {
       reranked.push({ ...s, score: fused, embScore: h.score, lexScore: lex });
     }
     reranked.sort((a, b) => b.score - a.score);
-    return reranked.slice(0, max);
+    return guardSuggestions(query, reranked, idx.scenarioIndex).slice(0, max);
   }
 
   // Lexical overlap between a normalized query and a scenario's normName +
@@ -1513,109 +1483,6 @@ class ProtocolHelpApp {
       ];
     }
     return this._anatomyAbbrPairsCache;
-  }
-
-  // Search across all scenario names (and extracted clinical keywords) for
-  // queries that don't hit a concept synonym. Returns up to `max` ranked matches.
-  // Keyword matches score lower than name matches so name hits surface first.
-  //
-  // First tries Lunr (TF-IDF over all 3929 scenario names with stemming +
-  // fuzzy fallback). Lunr has much better recall than the ad-hoc substring
-  // matching below, especially for the 76% of ACR scenarios that don't have
-  // concept coverage. If Lunr returns hits, they're enriched with the
-  // scenarioIndex metadata (keywords, top_procedure) and returned.
-  // Falls back to substring matching only if Lunr is unavailable or empty.
-  async _globalScenarioNameSearch(query, max = 8) {
-    const idx = await this._ensureGlobalConceptIndex();
-    if (!idx || !idx.scenarioIndex) return [];
-
-    // ------- Stage 1: Lunr (TF-IDF) -------
-    try {
-      const lunrHits = await lunrSearch.search(query, max * 2);
-      if (lunrHits && lunrHits.length > 0) {
-        const enriched = [];
-        for (const h of lunrHits) {
-          const meta = this._scenarioById.get(String(h.id));
-          if (meta) {
-            enriched.push({ ...meta, score: h.score });
-          } else {
-            // Lunr returned an id we don't have scenario_names metadata for.
-            // Still surface it so the user gets a result.
-            enriched.push({
-              id: h.id, name: h.name, region: h.region,
-              score: h.score,
-            });
-          }
-          if (enriched.length >= max) break;
-        }
-        return enriched;
-      }
-    } catch (e) {
-      console.warn('[App] Lunr scenario search failed, falling back to substring:', e?.message || e);
-    }
-
-    // ------- Stage 2: legacy substring + keyword matching (fallback) -------
-    const q = this._conceptNorm(query);
-    if (q.length < 3) return [];
-    const tokens = q.split(/\s+/).filter(t => t.length >= 2);
-    if (tokens.length === 0) return [];
-
-    const hits = [];
-    for (const entry of idx.scenarioIndex) {
-      const name = entry.normName;
-      const kw = entry.normKeywords || '';
-      if (!name && !kw) continue;
-
-      let score = 0;
-      // 1. Name-level match (preferred)
-      if (name.includes(q)) {
-        if (name === q) score = 100;
-        else if (name.startsWith(q + ' ') || name.startsWith(q + ',')) score = 80;
-        else score = 60;
-      } else {
-        let matched = 0;
-        for (const t of tokens) {
-          if (name.includes(t)) matched++;
-        }
-        if (matched === tokens.length) {
-          score = 30 + matched * 5;
-        } else if (matched >= Math.max(1, tokens.length - 1) && tokens.length >= 2) {
-          score = 15 + matched * 4;
-        }
-      }
-
-      // 2. Keyword (description-derived) match - lower base score so name hits win.
-      // Only consider keyword match if name match was weak (score < 30).
-      if (score < 30 && kw) {
-        if (kw.includes(q)) {
-          // Word-boundary check on keyword string (keywords are space-separated)
-          const i = kw.indexOf(q);
-          const before = i === 0 || kw[i - 1] === ' ';
-          const afterIdx = i + q.length;
-          const after = afterIdx === kw.length || kw[afterIdx] === ' ';
-          if (before && after) {
-            score = Math.max(score, 45);
-          }
-        } else if (tokens.length >= 2) {
-          let matched = 0;
-          for (const t of tokens) {
-            if (kw.includes(t)) matched++;
-          }
-          if (matched === tokens.length) {
-            score = Math.max(score, 25 + matched * 3);
-          }
-        }
-      }
-
-      if (score > 0) {
-        // Shorter names rank higher (less specific clinical context = more generic match)
-        score -= Math.min(15, Math.floor(name.length / 20));
-        hits.push({ ...entry, score });
-      }
-    }
-
-    hits.sort((a, b) => b.score - a.score || a.name.length - b.name.length);
-    return hits.slice(0, max);
   }
 
   async _globalSuggestSimilar(query, max = 3) {
@@ -1744,6 +1611,30 @@ class ProtocolHelpApp {
     this._bindTermChips(container);
   }
 
+  _renderTopicChooser(query, topics, container) {
+    container.classList.remove('hidden');
+    container.innerHTML = `
+      <div class="global-result-card">
+        <div class="global-result-header">
+          <span class="global-result-topic">${this.escapeHtml(query)}</span>
+          <span class="global-result-meta">Which of these?</span>
+        </div>
+        <div class="global-result-body">
+          <ul class="scenario-preview-list guide-branches">
+            ${topics.map(t => `
+              <li class="scenario-preview-item">
+                <button type="button" class="scenario-preview-btn guide-branch dym-chip" data-term="${this.escapeHtml(t.topic)}">
+                  ${this.escapeHtml(t.topic)} <span class="age-tag">${t.count} scenarios</span>
+                </button>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      </div>
+    `;
+    this._bindTermChips(container);
+  }
+
   _bindTermChips(container) {
     const input = document.getElementById('globalSearchInput');
     container.querySelectorAll('.dym-chip').forEach(btn => {
@@ -1769,102 +1660,7 @@ class ProtocolHelpApp {
     `;
   }
 
-  _renderGlobalConceptResult({ concept }, container) {
-    const mappings = Array.isArray(concept.scenario_mappings) ? concept.scenario_mappings : [];
-    const displayName = concept.display_name || '';
-    // Collect distinct regions (in mapping order) and per-region counts so we can
-    // offer an in-place "Filter by region" chip row when a concept spans 2+ regions.
-    const regions = [];
-    const regionCounts = {};
-    for (const m of mappings) {
-      const r = m && m.region;
-      if (!r) continue;
-      if (!regions.includes(r)) regions.push(r);
-      regionCounts[r] = (regionCounts[r] || 0) + 1;
-    }
-    const primaryRegion = regions[0] || concept.body_region || 'neuro';
-
-    container.classList.remove('hidden');
-
-    // activeRegion === null means "all regions". Re-renders the card body in place.
-    const renderBody = (activeRegion) => {
-      const shown = activeRegion ? mappings.filter(m => m.region === activeRegion) : mappings;
-      const details = m => (this._scenarioById && this._scenarioById.get(String(m.scenario_id))) || {};
-      const footerRegion = activeRegion || primaryRegion;
-      const previews = shown.slice(0, Math.min(5, shown.length));
-      const regionChips = regions.length > 1 ? `
-        <div class="region-filter-chips">
-          <div class="region-filter-label">Filter by region:</div>
-          <div class="region-chips-container">
-            ${regions.map(r => `
-              <button type="button" class="filter-chip region-chip ${activeRegion === r ? 'active' : ''}" data-region="${this.escapeHtml(r)}">
-                ${this.escapeHtml(this.formatRegionName(r))}
-                <span class="region-count">${regionCounts[r]}</span>
-              </button>
-            `).join('')}
-          </div>
-        </div>
-      ` : '';
-
-      container.innerHTML = `
-        <div class="global-result-card">
-          <div class="global-result-header">
-            <span class="global-result-topic">${this.escapeHtml(displayName)}</span>
-            <span class="global-result-meta">Matched concept</span>
-          </div>
-          <div class="global-result-body">
-            <p class="global-result-recommendation">
-              ${shown.length} clinical scenario${shown.length === 1 ? '' : 's'}${activeRegion ? ` in ${this.escapeHtml(this.formatRegionName(activeRegion))}` : (regions.length ? ` mapped across ${regions.length} region${regions.length === 1 ? '' : 's'}` : '')}.
-            </p>
-            ${regionChips}
-            ${previews.length > 0 ? `
-              <ul class="scenario-preview-list" style="list-style:none;padding:0;margin:var(--space-sm) 0 0">
-                ${previews.map(p => `
-                  <li class="scenario-preview-item">
-                    <button type="button" class="scenario-preview-btn"
-                            data-region="${this.escapeHtml(details(p).region || p.region || primaryRegion)}"
-                            data-name="${this.escapeHtml(details(p).name || p.scenario_name || '')}">
-                      <div class="scenario-preview-row">
-                        <span class="scenario-preview-name">${this.escapeHtml(details(p).name || p.scenario_name || '')}</span>
-                        <span class="scenario-preview-region">${this.escapeHtml(this.formatRegionName(details(p).region || p.region || primaryRegion))}</span>
-                      </div>
-                      ${this._renderRecommendation(details(p).top_tier)}
-                    </button>
-                  </li>
-                `).join('')}
-              </ul>
-            ` : ''}
-          </div>
-          <div class="global-result-footer">
-            <span class="global-result-source">${this.escapeHtml(this._sourceLine())}</span>
-            <button class="global-result-action" data-region="${this.escapeHtml(footerRegion)}" data-topic="${this.escapeHtml(displayName)}">
-              See all ${shown.length} scenarios
-            </button>
-          </div>
-        </div>
-      `;
-
-      // Region filter chips: toggle in place (click active chip again to clear).
-      container.querySelectorAll('.region-chip').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const r = btn.getAttribute('data-region');
-          renderBody(activeRegion === r ? null : r);
-        });
-      });
-      // Footer action: open the active (or primary) region's full scenario view.
-      const action = container.querySelector('.global-result-action');
-      if (action) {
-        action.addEventListener('click', () => {
-          this.navigateToRegionSearch(action.getAttribute('data-region'), displayName);
-        });
-      }
-      this._bindScenarioButtons(container);
-    };
-
-    renderBody(null);
-  }
-
-  _renderGlobalScenarioListResult(query, scenarios, container, { meta = 'Scenario matches', notice = '', summary = '' } = {}) {
+  _renderGlobalScenarioListResult(query, scenarios, container, { meta = 'Matching scenarios', notice = '', summary = '' } = {}) {
     // Group by region for region buttons
     const regions = [];
     for (const s of scenarios) {
@@ -1880,7 +1676,7 @@ class ProtocolHelpApp {
         <div class="global-result-body">
           ${notice ? `<p class="global-result-recommendation"><strong>${this.escapeHtml(notice)}</strong></p>` : ''}
           <p class="global-result-recommendation">
-            ${summary ? this.escapeHtml(summary) : `${scenarios.length} scenario${scenarios.length === 1 ? '' : 's'} matched "<strong>${this.escapeHtml(query)}</strong>"${regions.length ? ` across ${regions.length} region${regions.length === 1 ? '' : 's'}` : ''}.`}
+            ${summary ? this.escapeHtml(summary) : `${scenarios.length} scenario${scenarios.length === 1 ? '' : 's'} matched "<strong>${this.escapeHtml(query)}</strong>".`}
           </p>
           <ul class="scenario-preview-list" style="list-style:none;padding:0;margin:var(--space-sm) 0 0">
             ${scenarios.map(s => `

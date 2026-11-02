@@ -5,7 +5,6 @@ portal. To refresh after a new capture:
 
 ```
 python tools/build_scenarios.py          # set ACR_RAW if the captures moved
-node tools/build_lunr_index.mjs
 python tools/generate_static_pages.py
 python tools/rebrand_coregrai.py --apply  # the generator still emits old brand strings
 node --test tests/*.mjs
@@ -23,4 +22,7 @@ New ACR topics that match no rule land in `other` (shown as General).
 The semantic fallback (`data/search/scenario_embeddings_v3.bin`) is built from the
 model in the separate radiology-ai-assistant repo with
 `tools/build_scenario_embeddings.py`. Scenarios added since that build are found by
-the ranker and keyword index, but not by the semantic fallback, until it is rebuilt.
+the ranker, but not by the semantic fallback, until it is rebuilt.
+
+`node tools/audit_matching.mjs` stress-tests matching. Add every bad match to
+`tests/clinical-gold.json` before fixing it.

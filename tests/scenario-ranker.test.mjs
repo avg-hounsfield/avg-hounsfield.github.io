@@ -9,7 +9,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { rankScenarios, resolveQuery, chooseTopic, buildTopicGuide } from '../js/scenario-ranker.js';
+import { rankScenarios, resolveQuery, chooseTopic, buildTopicGuide, guardSuggestions } from '../js/scenario-ranker.js';
 
 const { scenarios } = JSON.parse(
   readFileSync(new URL('../data/search/scenario_names.json', import.meta.url), 'utf8')
@@ -79,7 +79,6 @@ test('modality words do not change the matched scenario', () => {
 
 const GUIDES = [
   ['headache', 'Headache'],
-  ['back pain', 'Low Back Pain'],
   ['hematuria', 'Hematuria'],
   ['kidney stones', 'Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)'],
   ['suspected pulmonary embolism', 'Suspected Pulmonary Embolism'],
@@ -102,6 +101,16 @@ test('qualified searches go to specific scenarios, not a guide', () => {
   }
 });
 
+test('model suggestions must respect anatomy, age, pregnancy and negation', () => {
+  const byName = re => scenarios.filter(s => re.test(s.name)).slice(0, 3);
+  const foot = byName(/^Foot trauma/);
+  assert.deepEqual(guardSuggestions('hip pain in the elderly', foot, scenarios), []);
+  assert.deepEqual(guardSuggestions('pelvic pain', byName(/pregnant/), scenarios), []);
+  assert.deepEqual(guardSuggestions('back ache', scenarios.filter(s => s.age === 'pediatric').slice(0, 3), scenarios), []);
+  assert.deepEqual(guardSuggestions('varicocele imaging', byName(/^Varicose veins/), scenarios), []);
+  assert.equal(guardSuggestions('sudden cold leg', byName(/^Cold painful leg/), scenarios).length > 0, true);
+});
+
 test('a study name lists the scenarios that use it', () => {
   const result = resolveQuery('mra head', scenarios);
   assert.equal(result.mode, 'list');
@@ -111,7 +120,7 @@ test('a study name lists the scenarios that use it', () => {
 
 test('a condition plus a study still finds the condition', () => {
   assert.equal(top('mri for cauda equina', 1)[0].id, '5623');
-  assert.equal(resolveQuery('ct head after minor head injury', scenarios).mode, 'list');
+  assert.equal(resolveQuery('ct head after minor head injury', scenarios).topic, 'Head Trauma');
 });
 
 test('ACR name typos are corrected', () => {

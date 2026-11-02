@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radex-v3.0.2';
+const CACHE_NAME = 'radex-v3.1.2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -10,10 +10,8 @@ const STATIC_ASSETS = [
   '/js/scenario-ranker.js',
   '/js/intent-classifier.js',
   '/js/embedding-search.js',
-  '/js/lunr-scenario-search.js',
   '/js/radlite-api.js',
   '/js/protocol-builder.js',
-  '/js/vendor/lunr.min.js',
   '/manifest.json'
 ];
 
@@ -36,7 +34,6 @@ const DATA_ASSETS = [
   '/data/search/scenario_embeddings_v3_ids.json',
   '/data/search/topics.json',
   '/data/data-info.json',
-  '/data/search/lunr-scenarios.json',
   '/data/sequence-library.json',
   // Distilled student model bundle for in-browser semantic search.
   // Added in v2.22.0; ~35MB total adds noticeably to install time but enables
@@ -49,8 +46,7 @@ const DATA_ASSETS = [
   '/models/student-radiology/onnx/model_quantized.onnx'
 ];
 
-// External (cross-origin CDN) dependencies that should be cached. Lunr is now
-// self-hosted (js/vendor/lunr.min.js), so this list is currently empty.
+// External (cross-origin CDN) dependencies that should be cached.
 const EXTERNAL_ASSETS = [];
 
 // Send progress message to all window clients (including uncontrolled during install)
