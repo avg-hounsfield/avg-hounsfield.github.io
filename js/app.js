@@ -13,6 +13,7 @@ import { UI } from './ui.js?v=20260417a';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
+import { rankScenarios, isSpecificQuery, extractQualifiers } from './scenario-ranker.js?v=20261101a';
 
 // Regions that have a backing data/regions/<name>.json file. Used to guard
 // navigation so a summary card with a body label that has no region file
@@ -745,113 +746,78 @@ class ProtocolHelpApp {
     const reqId = (this._globalSearchSeq = (this._globalSearchSeq || 0) + 1);
     const stale = () => reqId !== this._globalSearchSeq;
 
-    // Find matching summary card
-    let card = this.summaryCards.findMatch(trimmed);
-
-    // If the summary card was matched by substring (not exact), check whether the
-    // user typed an exact concept synonym. Exact synonym beats substring card
-    // (e.g. "septic arthritis" should beat the generic "Arthritis" card).
-    if (card && card.topic.toLowerCase() !== trimmed.toLowerCase()) {
-      const exactConcept = await this._globalConceptLookupExact(trimmed);
-      if (exactConcept) {
-        this._renderGlobalConceptResult(exactConcept, resultContainer);
-        return;
-      }
-      // Substring override: if a multi-word concept synonym is strictly longer
-      // than the card topic AND has more words, prefer the concept. Catches
-      // "ivdu back pain fever" -> spine_infection over the "back pain" card,
-      // "elderly fall hip pain" -> fracture over the "hip pain" card.
-      const subConcept = await this._globalConceptLookupSubstringWithMatch(trimmed);
-      if (subConcept && subConcept.matchedSyn) {
-        const cardTopic = card.topic.toLowerCase();
-        const syn = subConcept.matchedSyn;
-        const synWords = syn.split(' ').length;
-        const cardWords = cardTopic.split(' ').length;
-        if (syn.length > cardTopic.length + 2 && synWords >= Math.max(2, cardWords + 1)) {
-          this._renderGlobalConceptResult(subConcept, resultContainer);
-          return;
-        }
-      }
-    }
-
-    if (!card) {
-      // Fall back to the concept_index (myositis, guillain_barre, ...)
-      const conceptHit = await this._globalConceptLookup(trimmed);
-      if (conceptHit) {
-        this._renderGlobalConceptResult(conceptHit, resultContainer);
-        return;
-      }
-
-      // Embedding fallback first (semantically aware, ~39% accurate on
-      // long-tail queries per eval). Distilled radiology student model finds
-      // semantically similar scenarios when concept misses. Loads on first
-      // use (~1-2s warmup); subsequent queries are fast.
-      try {
-        const embHits = await this._globalEmbeddingSearch(trimmed, 8);
-        if (stale()) return;
-        if (embHits.length > 0) {
-          this._renderGlobalScenarioListResult(trimmed, embHits, resultContainer);
-          return;
-        }
-      } catch (e) {
-        console.warn('[App] embedding search unavailable:', e?.message || e);
-      }
-
-      // Last-resort scenario-name + Lunr TF-IDF. Catches queries where the
-      // embedding also returned nothing. Lunr scores are noisier than
-      // embedding on the full eval, so it runs AFTER embedding, not before.
-      const nameMatches = await this._globalScenarioNameSearch(trimmed, 8);
-      if (stale()) return;
-      if (nameMatches.length > 0) {
-        this._renderGlobalScenarioListResult(trimmed, nameMatches, resultContainer);
-        return;
-      }
-
-      // Final fallback: "no quick answer" with did-you-mean chips
-      const suggestions = await this._globalSuggestSimilar(trimmed, 3);
-      if (stale()) return;
-      resultContainer.classList.remove('hidden');
-      resultContainer.innerHTML = `
-        <div class="global-result-card">
-          <div class="global-result-body">
-            <p class="global-result-recommendation">
-              No quick answer found for "<strong>${this.escapeHtml(trimmed)}</strong>".
-              Try the body region search below for more specific scenarios.
-            </p>
-            ${suggestions.length > 0 ? `
-              <div class="dym-row" style="margin-top: var(--space-md)">
-                <span class="dym-label">Did you mean:</span>
-                ${suggestions.map(s => `<button type="button" class="dym-chip" data-term="${this.escapeHtml(s.term)}">${this.escapeHtml(s.term)}</button>`).join('')}
-              </div>
-            ` : ''}
-          </div>
-        </div>
-      `;
-      const globalInput = document.getElementById('globalSearchInput');
-      resultContainer.querySelectorAll('.dym-chip').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const term = btn.getAttribute('data-term') || '';
-          if (globalInput) globalInput.value = term;
-          this.handleGlobalSearch(term);
-        });
-      });
+    // Show real scenarios, never a blended topic answer: a card's headline study
+    // and consensus figures have not been clinically verified. The card is only
+    // used to recognize the broad topic.
+    const card = this.summaryCards.findMatch(trimmed);
+    const ranked = await this._rankedScenarioResult(trimmed, card);
+    if (stale()) return;
+    if (ranked) {
+      this._renderGlobalScenarioListResult(ranked.heading, ranked.scenarios, resultContainer, ranked);
       return;
     }
 
-    // Classify intent to get assumed context
-    let intent = null;
-    try {
-      const classifier = await getIntentClassifier();
-      if (classifier) {
-        intent = await classifier.classify(trimmed);
-      }
-    } catch (e) {
-      // Intent classification is optional
+    // Fall back to the concept_index (myositis, guillain_barre, ...)
+    const conceptHit = await this._globalConceptLookup(trimmed);
+    if (conceptHit) {
+      this._renderGlobalConceptResult(conceptHit, resultContainer);
+      return;
     }
 
+    // Embedding fallback first (semantically aware, ~39% accurate on
+    // long-tail queries per eval). Distilled radiology student model finds
+    // semantically similar scenarios when concept misses. Loads on first
+    // use (~1-2s warmup); subsequent queries are fast.
+    try {
+      const embHits = await this._globalEmbeddingSearch(trimmed, 8);
+      if (stale()) return;
+      if (embHits.length > 0) {
+        this._renderGlobalScenarioListResult(trimmed, embHits, resultContainer);
+        return;
+      }
+    } catch (e) {
+      console.warn('[App] embedding search unavailable:', e?.message || e);
+    }
+
+    // Last-resort scenario-name + Lunr TF-IDF. Catches queries where the
+    // embedding also returned nothing. Lunr scores are noisier than
+    // embedding on the full eval, so it runs AFTER embedding, not before.
+    const nameMatches = await this._globalScenarioNameSearch(trimmed, 8);
     if (stale()) return;
-    // Render the card with intent context
-    this.renderGlobalSearchResult(card, resultContainer, intent);
+    if (nameMatches.length > 0) {
+      this._renderGlobalScenarioListResult(trimmed, nameMatches, resultContainer);
+      return;
+    }
+
+    // Final fallback: "no quick answer" with did-you-mean chips
+    const suggestions = await this._globalSuggestSimilar(trimmed, 3);
+    if (stale()) return;
+    resultContainer.classList.remove('hidden');
+    resultContainer.innerHTML = `
+      <div class="global-result-card">
+        <div class="global-result-body">
+          <p class="global-result-recommendation">
+            No quick answer found for "<strong>${this.escapeHtml(trimmed)}</strong>".
+            Try the body region search below for more specific scenarios.
+          </p>
+          ${suggestions.length > 0 ? `
+            <div class="dym-row" style="margin-top: var(--space-md)">
+              <span class="dym-label">Did you mean:</span>
+              ${suggestions.map(s => `<button type="button" class="dym-chip" data-term="${this.escapeHtml(s.term)}">${this.escapeHtml(s.term)}</button>`).join('')}
+            </div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+    const globalInput = document.getElementById('globalSearchInput');
+    resultContainer.querySelectorAll('.dym-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const term = btn.getAttribute('data-term') || '';
+        if (globalInput) globalInput.value = term;
+        this.handleGlobalSearch(term);
+      });
+    });
+    return;
   }
 
   renderGlobalSearchResult(card, container, intent = null) {
@@ -1337,17 +1303,8 @@ class ProtocolHelpApp {
       }
 
       // Check for summary card match on fresh searches
-      if (!isFilterChange) {
-        const summaryCard = this.summaryCards.findMatch(this.baseQuery);
-        if (summaryCard) {
-          this.ui.showSummaryCard(summaryCard, (topic) => {
-            // "See detailed scenarios" clicked - do nothing special, results are already showing
-            this.ui.hideSummaryCard();
-          }, result.intent);
-        } else {
-          this.ui.hideSummaryCard();
-        }
-      }
+      // Summary cards stay hidden until clinically verified; see handleGlobalSearch.
+      this.ui.hideSummaryCard();
 
       if (result.isConceptSearch && result.concept) {
         // Concept-based search - show concept header and phase filters
@@ -1444,6 +1401,43 @@ class ProtocolHelpApp {
     return conceptNormalize(s);
   }
 
+  // Returns { heading, scenarios, meta?, notice? } when the search should show
+  // ranked scenarios, or null to continue with the card and concept pipeline.
+  async _rankedScenarioResult(query, card) {
+    const idx = await this._ensureGlobalConceptIndex();
+    if (!idx || !idx.scenarioIndex) return null;
+
+    if (isSpecificQuery(query, card ? card.topic : null)) {
+      const hits = rankScenarios(query, idx.scenarioIndex);
+      if (hits.length > 0) return { heading: query, scenarios: hits };
+
+      // Never drop pregnancy or age silently: say that the nearest match lacks it.
+      const { pregnant, age } = extractQualifiers(query);
+      if (!pregnant && !age) return null;
+      const nearest = rankScenarios(query, idx.scenarioIndex, { relaxQualifiers: true });
+      if (nearest.length === 0) return null;
+      const missing = pregnant ? 'pregnancy' : `${age} patients`;
+      return {
+        heading: query,
+        scenarios: nearest,
+        notice: `No ACR scenario here is specific to ${missing}. These are the nearest general matches.`,
+      };
+    }
+
+    if (card) {
+      const hits = rankScenarios(card.topic, idx.scenarioIndex);
+      if (hits.length > 0) {
+        return {
+          heading: card.display_name || card.topic,
+          scenarios: hits,
+          meta: 'Depends on the presentation',
+          summary: 'The right study varies by scenario. Choose the closest match:',
+        };
+      }
+    }
+    return null;
+  }
+
   _conceptLevenshtein(a, b, cap = 1) {
     if (a === b) return 0;
     if (Math.abs(a.length - b.length) > cap) return cap + 1;
@@ -1471,7 +1465,7 @@ class ProtocolHelpApp {
       try {
         const [ciRes, snRes] = await Promise.all([
           fetch('data/search/concept_index.json?v=20260521a'),
-          fetch('data/search/scenario_names.json?v=20260521a'),
+          fetch('data/search/scenario_names.json?v=20261101a'),
         ]);
         if (!ciRes.ok) return null;
         const ci = await ciRes.json();
@@ -1495,6 +1489,8 @@ class ProtocolHelpApp {
               id: s.id,
               name: s.name,
               region: s.region,
+              age: s.age,
+              alsoRated: s.also_rated || [],
               normName: this._conceptNorm(s.name),
               normKeywords: Array.isArray(s.keywords) && s.keywords.length
                 ? this._conceptNorm(s.keywords.join(' '))
@@ -1794,8 +1790,8 @@ class ProtocolHelpApp {
 
   // Build the inline procedure chip for a scenario preview row.
   // Returns HTML string (empty if no procedure).
-  // Desktop shows full short-name + rating; mobile collapses to rating + modality
-  // via CSS classes (.proc-chip-text hides under 600px).
+  // Mobile wraps the name instead of hiding it: a rating beside only a modality
+  // does not say which study it refers to.
   _renderProcedureChip(proc) {
     if (!proc) return '';
     const rating = proc.rating || 0;
@@ -1920,7 +1916,7 @@ class ProtocolHelpApp {
     renderBody(null);
   }
 
-  _renderGlobalScenarioListResult(query, scenarios, container) {
+  _renderGlobalScenarioListResult(query, scenarios, container, { meta = 'Scenario matches', notice = '', summary = '' } = {}) {
     // Group by region for region buttons
     const regions = [];
     for (const s of scenarios) {
@@ -1931,11 +1927,12 @@ class ProtocolHelpApp {
       <div class="global-result-card">
         <div class="global-result-header">
           <span class="global-result-topic">${this.escapeHtml(query)}</span>
-          <span class="global-result-meta">Scenario matches</span>
+          <span class="global-result-meta">${this.escapeHtml(meta)}</span>
         </div>
         <div class="global-result-body">
+          ${notice ? `<p class="global-result-recommendation"><strong>${this.escapeHtml(notice)}</strong></p>` : ''}
           <p class="global-result-recommendation">
-            ${scenarios.length} scenario${scenarios.length === 1 ? '' : 's'} matched "<strong>${this.escapeHtml(query)}</strong>"${regions.length ? ` across ${regions.length} region${regions.length === 1 ? '' : 's'}` : ''}.
+            ${summary ? this.escapeHtml(summary) : `${scenarios.length} scenario${scenarios.length === 1 ? '' : 's'} matched "<strong>${this.escapeHtml(query)}</strong>"${regions.length ? ` across ${regions.length} region${regions.length === 1 ? '' : 's'}` : ''}.`}
           </p>
           <ul class="scenario-preview-list" style="list-style:none;padding:0;margin:var(--space-sm) 0 0">
             ${scenarios.map(s => `
@@ -1945,9 +1942,10 @@ class ProtocolHelpApp {
                         data-name="${this.escapeHtml(s.name)}">
                   <div class="scenario-preview-row">
                     <span class="scenario-preview-name">${this.escapeHtml(s.name)}</span>
-                    <span class="scenario-preview-region">${this.escapeHtml(s.region)}</span>
+                    <span class="scenario-preview-region">${s.age === 'pediatric' ? 'Pediatric - ' : ''}${this.escapeHtml(s.region)}</span>
                   </div>
                   ${this._renderProcedureChip(s.topProcedure)}
+                  ${s.alsoRated && s.alsoRated.length ? `<div class="scenario-preview-also" style="font-size:12px;margin-top:4px;opacity:0.8">Equally rated: ${this.escapeHtml(s.alsoRated.join(', '))}</div>` : ''}
                 </button>
               </li>
             `).join('')}

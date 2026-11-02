@@ -1935,8 +1935,8 @@ input:focus, button:focus {
 /* Mobile: collapse procedure chip to rating + modality only.
    Procedure name hides since the scenario name is already on the row above. */
 @media (max-width: 600px) {
-  .proc-chip-text {
-    display: none;
+  .proc-chip-name {
+    white-space: normal;
   }
   .proc-chip {
     gap: 6px;
