@@ -2,7 +2,7 @@
 CAPSTONE_PROJECT_REPORT.*
 
 # Development tools and build scripts
-tools/
+tools/*
 # ...except the static page generator (part of the project)
 !tools/generate_static_pages.py
 !tools/test_generate_static_pages.py
