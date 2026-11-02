@@ -1,8 +1,8 @@
 /**
  * Lunr-backed scenario name + keyword search.
  *
- * Uses the pre-built Lunr index at data/search/lunr-scenarios.json (8.7MB,
- * BM25-style TF-IDF over all 3,929 scenario names). Lunr handles
+ * Uses the pre-built Lunr index at data/search/lunr-scenarios.json, TF-IDF over
+ * every scenario's name, topic and keywords (tools/build_lunr_index.mjs). Lunr handles
  * tokenization, stemming, and scoring better than the ad-hoc substring
  * matching in app.js _globalScenarioNameSearch.
  *
@@ -13,7 +13,7 @@
  * Lunr global is loaded via the <script> tag in index.html.
  */
 
-const INDEX_URL = 'data/search/lunr-scenarios.json?v=20260521a';
+const INDEX_URL = 'data/search/lunr-scenarios.json?v=20261101b';
 
 let _index = null;
 let _docs = null;      // documents keyed by lunr internal id (string of int)

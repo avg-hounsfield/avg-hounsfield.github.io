@@ -13,16 +13,19 @@ import { UI } from './ui.js?v=20260417a';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
-import { rankScenarios, isSpecificQuery, extractQualifiers } from './scenario-ranker.js?v=20261101a';
+import { resolveQuery, buildTopicGuide } from './scenario-ranker.js?v=20261101c';
 
 // Regions that have a backing data/regions/<name>.json file. Used to guard
 // navigation so a summary card with a body label that has no region file
 // (e.g. "neck", "pelvis") falls back to global search instead of 404ing.
+// Below this, the distilled model is matching noise: nonsense input scores about
+// 0.3-0.4, while real clinical phrasing scores 0.45 and up.
+const EMBEDDING_MIN_SCORE = 0.45;
+const CLOSEST_MATCH_NOTICE = 'No scenario uses these words. These are the closest in meaning, so check that they fit.';
+
 const KNOWN_REGIONS = new Set(['neuro', 'spine', 'msk', 'abdomen', 'chest', 'vascular', 'breast', 'peds', 'other']);
-import { SummaryCards } from './summary-cards.js?v=20260417a';
 import * as embeddingSearch from './embedding-search.js?v=20260519b';
 import * as lunrSearch from './lunr-scenario-search.js?v=20260521a';
-import { getIntentClassifier } from './intent-classifier.js?v=20260417a';
 
 class ProtocolHelpApp {
   constructor() {
@@ -34,7 +37,8 @@ class ProtocolHelpApp {
     this.ui = new UI();
     this.radlite = new RadLiteAPI();
     this.protocolBuilder = new ProtocolBuilder();
-    this.summaryCards = new SummaryCards();
+    this.suggestionTopics = [];
+    this.dataInfo = null;
     this.debounceTimer = null;
     this.differentialTimer = null;
     this.protocolDebounceTimer = null;
@@ -180,8 +184,14 @@ class ProtocolHelpApp {
   async init() {
     this.bindEvents();
     this.initInstallPrompt();
-    // Load summary cards for global quick search
-    this.summaryCards.load();
+    this._loadSearchMetadata();
+    // Region pages link topics as /?q=<topic> so a guide can be shared directly.
+    const sharedQuery = new URLSearchParams(window.location.search).get('q');
+    if (sharedQuery) {
+      const input = document.getElementById('globalSearchInput');
+      if (input) input.value = sharedQuery;
+      this.handleGlobalSearch(sharedQuery);
+    }
     this.ui.setStatus('Ready');
     // Restore view from the URL hash so a refreshed/shared #protocols or
     // #builder link lands on the right view instead of always on Search.
@@ -681,11 +691,7 @@ class ProtocolHelpApp {
     document.getElementById('regionTitle').textContent = this.formatRegionName(region);
 
     try {
-      // Load region-specific data and summary cards in parallel
-      const [data] = await Promise.all([
-        this.dataLoader.loadRegion(region),
-        this.summaryCards.load() // Load summary cards (cached after first load)
-      ]);
+      const data = await this.dataLoader.loadRegion(region);
 
       // Initialize search engine with region data
       this.searchEngine = new SearchEngine(data);
@@ -746,14 +752,20 @@ class ProtocolHelpApp {
     const reqId = (this._globalSearchSeq = (this._globalSearchSeq || 0) + 1);
     const stale = () => reqId !== this._globalSearchSeq;
 
-    // Show real scenarios, never a blended topic answer: a card's headline study
-    // and consensus figures have not been clinically verified. The card is only
-    // used to recognize the broad topic.
-    const card = this.summaryCards.findMatch(trimmed);
-    const ranked = await this._rankedScenarioResult(trimmed, card);
+    const idx = await this._ensureGlobalConceptIndex();
     if (stale()) return;
-    if (ranked) {
-      this._renderGlobalScenarioListResult(ranked.heading, ranked.scenarios, resultContainer, ranked);
+    const resolved = idx && idx.scenarioIndex ? resolveQuery(trimmed, idx.scenarioIndex) : { mode: 'none' };
+
+    if (resolved.mode === 'guide') {
+      this._renderTopicGuide(resolved, idx.scenarioIndex, resultContainer);
+      return;
+    }
+    if (resolved.mode === 'list') {
+      this._renderGlobalScenarioListResult(trimmed, resolved.scenarios, resultContainer, resolved);
+      return;
+    }
+    if (resolved.mode === 'too-broad') {
+      this._renderTooBroad(trimmed, resultContainer);
       return;
     }
 
@@ -772,7 +784,7 @@ class ProtocolHelpApp {
       const embHits = await this._globalEmbeddingSearch(trimmed, 8);
       if (stale()) return;
       if (embHits.length > 0) {
-        this._renderGlobalScenarioListResult(trimmed, embHits, resultContainer);
+        this._renderGlobalScenarioListResult(trimmed, embHits, resultContainer, { notice: CLOSEST_MATCH_NOTICE });
         return;
       }
     } catch (e) {
@@ -785,7 +797,7 @@ class ProtocolHelpApp {
     const nameMatches = await this._globalScenarioNameSearch(trimmed, 8);
     if (stale()) return;
     if (nameMatches.length > 0) {
-      this._renderGlobalScenarioListResult(trimmed, nameMatches, resultContainer);
+      this._renderGlobalScenarioListResult(trimmed, nameMatches, resultContainer, { notice: CLOSEST_MATCH_NOTICE });
       return;
     }
 
@@ -809,110 +821,8 @@ class ProtocolHelpApp {
         </div>
       </div>
     `;
-    const globalInput = document.getElementById('globalSearchInput');
-    resultContainer.querySelectorAll('.dym-chip').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const term = btn.getAttribute('data-term') || '';
-        if (globalInput) globalInput.value = term;
-        this.handleGlobalSearch(term);
-      });
-    });
+    this._bindTermChips(resultContainer);
     return;
-  }
-
-  renderGlobalSearchResult(card, container, intent = null) {
-    const rec = card.primary_recommendation;
-    const displayName = card.display_name || card.topic;
-    // Deduplicate equivalent procedures (removes redundant namings like "CT brain" vs "CT head")
-    const rawEquivProcs = rec.equivalent_procedures || [];
-    const equivProcs = this.ui.deduplicateEquivalentProcedures(rawEquivProcs, rec.name);
-
-    // Build assumed context indicator if intent has a matched condition
-    let contextIndicator = '';
-    if (intent && intent.matchedCondition) {
-      const urgencyLabels = { 'acute': 'Acute', 'routine': 'Routine', 'chronic': 'Chronic' };
-      const urgencyColors = { 'acute': '#dc3545', 'routine': '#28a745', 'chronic': '#ffc107' };
-      const urgencyLabel = urgencyLabels[intent.urgency] || intent.urgency;
-      const urgencyColor = urgencyColors[intent.urgency] || '#6c757d';
-      contextIndicator = `
-        <div class="global-result-context" style="background: ${urgencyColor}15; border-left: 3px solid ${urgencyColor}; padding: 6px 10px; margin-bottom: 8px; font-size: 12px; color: ${urgencyColor};">
-          <strong>${urgencyLabel}</strong> context assumed for "${intent.matchedCondition}"
-        </div>
-      `;
-    }
-
-    let bodyContent = '';
-
-    if (card.card_type === 'CLINICAL_FIRST') {
-      bodyContent = `
-        <div class="global-result-clinical">
-          <strong>${card.no_imaging_pct}%</strong> of scenarios suggest clinical assessment before imaging
-        </div>
-        ${rec.name ? `
-          <p class="global-result-recommendation">
-            When imaging is indicated: <strong>${this.escapeHtml(rec.name)}</strong>
-          </p>
-        ` : ''}
-      `;
-    } else if (card.card_type === 'HIGH_VARIANCE') {
-      bodyContent = `
-        <div class="global-result-clinical">
-          Recommendations vary significantly based on clinical context.
-          Use the body region search below for specific guidance.
-        </div>
-      `;
-    } else {
-      // STRONG or CONDITIONAL
-      const consensusClass = rec.consensus_pct >= 70 ? '' : (rec.consensus_pct >= 40 ? 'moderate' : 'low');
-
-      // Show primary procedure, then deduplicated equivalents as alternatives
-      const primaryProc = rec.name || 'None';
-
-      bodyContent = `
-        <div class="global-result-procedures">
-          <span class="global-result-proc primary">${this.escapeHtml(this.truncateText(primaryProc, 35))}</span>
-          ${equivProcs.map(p => `<span class="global-result-proc">${this.escapeHtml(this.truncateText(p, 35))}</span>`).join('')}
-        </div>
-        <div class="global-result-consensus ${consensusClass}">
-          <span class="consensus-value">${rec.consensus_pct}%</span> consensus across ${card.scenario_count} scenarios
-        </div>
-        ${card.alternatives && card.alternatives.length > 0 ? `
-          <p class="global-result-recommendation" style="margin-top: var(--space-sm)">
-            Also consider: ${card.alternatives.slice(0, 2).map(a => `${this.escapeHtml(this.truncateText(a.name, 25))} (${a.percentage}%)`).join(', ')}
-          </p>
-        ` : ''}
-      `;
-    }
-
-    container.classList.remove('hidden');
-    container.innerHTML = `
-      <div class="global-result-card">
-        <div class="global-result-header">
-          <span class="global-result-topic">${this.escapeHtml(displayName)}</span>
-          <span class="global-result-meta">ACR Appropriateness Criteria</span>
-        </div>
-        ${contextIndicator}
-        <div class="global-result-body">
-          ${bodyContent}
-        </div>
-        <div class="global-result-footer">
-          <span class="global-result-source">Based on ${card.scenario_count} clinical scenarios</span>
-          <button class="global-result-action" data-region="${card.region}" data-topic="${card.topic}">
-            See detailed scenarios
-          </button>
-        </div>
-      </div>
-    `;
-
-    // Bind action button
-    const actionBtn = container.querySelector('.global-result-action');
-    if (actionBtn) {
-      actionBtn.addEventListener('click', () => {
-        const region = actionBtn.dataset.region;
-        const topic = actionBtn.dataset.topic;
-        this.navigateToRegionSearch(region, topic);
-      });
-    }
   }
 
   async navigateToRegionSearch(region, topic) {
@@ -1042,7 +952,7 @@ class ProtocolHelpApp {
     if (!suggestionsEl) return;
 
     const trimmed = query.trim().toLowerCase();
-    if (trimmed.length < 2 || !this.summaryCards?.cards?.length) {
+    if (trimmed.length < 2 || this.suggestionTopics.length === 0) {
       this.hideSearchSuggestions();
       return;
     }
@@ -1059,7 +969,7 @@ class ProtocolHelpApp {
     }
 
     // Score and filter matching cards
-    const scored = this.summaryCards.cards.map(card => {
+    const scored = this.suggestionTopics.map(card => {
       const topic = card.topic.toLowerCase();
       const displayName = (card.display_name || card.topic).toLowerCase();
       const topicWords = topic.split(/\s+/);
@@ -1401,41 +1311,21 @@ class ProtocolHelpApp {
     return conceptNormalize(s);
   }
 
-  // Returns { heading, scenarios, meta?, notice? } when the search should show
-  // ranked scenarios, or null to continue with the card and concept pipeline.
-  async _rankedScenarioResult(query, card) {
-    const idx = await this._ensureGlobalConceptIndex();
-    if (!idx || !idx.scenarioIndex) return null;
-
-    if (isSpecificQuery(query, card ? card.topic : null)) {
-      const hits = rankScenarios(query, idx.scenarioIndex);
-      if (hits.length > 0) return { heading: query, scenarios: hits };
-
-      // Never drop pregnancy or age silently: say that the nearest match lacks it.
-      const { pregnant, age } = extractQualifiers(query);
-      if (!pregnant && !age) return null;
-      const nearest = rankScenarios(query, idx.scenarioIndex, { relaxQualifiers: true });
-      if (nearest.length === 0) return null;
-      const missing = pregnant ? 'pregnancy' : `${age} patients`;
-      return {
-        heading: query,
-        scenarios: nearest,
-        notice: `No ACR scenario here is specific to ${missing}. These are the nearest general matches.`,
-      };
-    }
-
-    if (card) {
-      const hits = rankScenarios(card.topic, idx.scenarioIndex);
-      if (hits.length > 0) {
-        return {
-          heading: card.display_name || card.topic,
-          scenarios: hits,
-          meta: 'Depends on the presentation',
-          summary: 'The right study varies by scenario. Choose the closest match:',
-        };
+  // Topic titles feed autocomplete; the capture dates feed the source lines.
+  async _loadSearchMetadata() {
+    try {
+      const [topicsRes, infoRes] = await Promise.all([
+        fetch('data/search/topics.json?v=20261101b'),
+        fetch('data/data-info.json?v=20261101b'),
+      ]);
+      if (topicsRes.ok) {
+        const { topics } = await topicsRes.json();
+        this.suggestionTopics = topics.map(t => ({ topic: t.name, display_name: t.name, scenario_count: t.ids.length }));
       }
+      if (infoRes.ok) this.dataInfo = await infoRes.json();
+    } catch (e) {
+      console.warn('[App] search metadata unavailable:', e?.message || e);
     }
-    return null;
   }
 
   _conceptLevenshtein(a, b, cap = 1) {
@@ -1465,7 +1355,7 @@ class ProtocolHelpApp {
       try {
         const [ciRes, snRes] = await Promise.all([
           fetch('data/search/concept_index.json?v=20260521a'),
-          fetch('data/search/scenario_names.json?v=20261101a'),
+          fetch('data/search/scenario_names.json?v=20261101b'),
         ]);
         if (!ciRes.ok) return null;
         const ci = await ciRes.json();
@@ -1490,13 +1380,15 @@ class ProtocolHelpApp {
               name: s.name,
               region: s.region,
               age: s.age,
-              alsoRated: s.also_rated || [],
+              topic: s.topic,
+              top_tier: s.top_tier,
               normName: this._conceptNorm(s.name),
               normKeywords: Array.isArray(s.keywords) && s.keywords.length
                 ? this._conceptNorm(s.keywords.join(' '))
                 : '',
               topProcedure: s.top_procedure || null,
             }));
+            this._scenarioById = new Map(scenarioIndex.map(s => [String(s.id), s]));
           } catch (e) {
             console.warn('[App] scenario_names.json parse failed', e);
           }
@@ -1552,12 +1444,7 @@ class ProtocolHelpApp {
     const idx = await this._ensureGlobalConceptIndex();
     if (!idx || !idx.scenarioIndex) return [];
     const POOL = Math.max(max * 4, 30);
-    const hits = await embeddingSearch.search(query, POOL);
-    if (!this._scenarioById) {
-      const m = new Map();
-      for (const s of idx.scenarioIndex) m.set(String(s.id), s);
-      this._scenarioById = m;
-    }
+    const hits = (await embeddingSearch.search(query, POOL)).filter(h => h.score >= EMBEDDING_MIN_SCORE);
     const qNorm = this._conceptNorm(query);
     const qTokens = qNorm.split(/\s+/).filter(t => t.length >= 3);
 
@@ -1628,35 +1515,6 @@ class ProtocolHelpApp {
     return this._anatomyAbbrPairsCache;
   }
 
-  // Exact-only concept synonym lookup: used to short-circuit overly-greedy
-  // summary-card substring matches (e.g. "septic arthritis" -> "Arthritis" card).
-  async _globalConceptLookupExact(query) {
-    const idx = await this._ensureGlobalConceptIndex();
-    if (!idx) return null;
-    const q = this._conceptNorm(query);
-    const cid = idx.normMap[q];
-    if (!cid) return null;
-    const concept = idx.ci.concepts && idx.ci.concepts[cid];
-    if (!concept) return null;
-    return { conceptId: cid, concept };
-  }
-
-  // Substring concept lookup that also returns the matched synonym. Used to
-  // override a summary-card substring match when a longer multi-word concept
-  // synonym matches the same query (e.g. "ivdu back pain fever" beats the
-  // generic "back pain" card).
-  async _globalConceptLookupSubstringWithMatch(query) {
-    const idx = await this._ensureGlobalConceptIndex();
-    if (!idx) return null;
-    const q = this._conceptNorm(query);
-    if (q.length <= 3) return null;
-    const hit = matchConcept(q, idx.normMap);
-    if (!hit) return null;
-    const concept = idx.ci.concepts && idx.ci.concepts[hit.conceptId];
-    if (!concept) return null;
-    return { conceptId: hit.conceptId, concept, matchedSyn: hit.matchedSyn };
-  }
-
   // Search across all scenario names (and extracted clinical keywords) for
   // queries that don't hit a concept synonym. Returns up to `max` ranked matches.
   // Keyword matches score lower than name matches so name hits surface first.
@@ -1675,11 +1533,6 @@ class ProtocolHelpApp {
     try {
       const lunrHits = await lunrSearch.search(query, max * 2);
       if (lunrHits && lunrHits.length > 0) {
-        if (!this._scenarioById) {
-          const m = new Map();
-          for (const s of idx.scenarioIndex) m.set(String(s.id), s);
-          this._scenarioById = m;
-        }
         const enriched = [];
         for (const h of lunrHits) {
           const meta = this._scenarioById.get(String(h.id));
@@ -1788,29 +1641,130 @@ class ProtocolHelpApp {
     return out;
   }
 
-  // Build the inline procedure chip for a scenario preview row.
-  // Returns HTML string (empty if no procedure).
-  // Mobile wraps the name instead of hiding it: a rating beside only a modality
-  // does not say which study it refers to.
-  _renderProcedureChip(proc) {
-    if (!proc) return '';
-    const rating = proc.rating || 0;
-    const ratingClass = rating >= 7 ? 'rating-strong'
-                      : rating >= 4 ? 'rating-moderate'
-                      : 'rating-low';
-    const modality = (proc.modality || '').toUpperCase();
-    const procName = proc.name || '';
-    const contrastBadge = proc.usesContrast === 2 ? 'W/O+W contrast'
-                        : proc.usesContrast === 1 ? 'W contrast'
-                        : '';
+  // What ACR rates highest for a scenario, in words. All studies in that
+  // category are shown because ACR does not rank studies within a category.
+  _renderRecommendation(tier) {
+    if (!tier) return '';
+    const classes = { 'Usually Appropriate': 'high', 'May Be Appropriate': 'mid', 'Usually Not Appropriate': 'low' };
+    const body = tier.level === 'Usually Not Appropriate'
+      ? 'Imaging is usually not appropriate'
+      : tier.studies.map(n => this.escapeHtml(n)).join('; ');
     return `
-      <div class="proc-chip ${ratingClass}">
-        <span class="proc-chip-rating" aria-label="ACR rating ${rating} of 9">${rating}</span>
-        <span class="proc-chip-text">
-          <span class="proc-chip-name">${this.escapeHtml(procName)}</span>
-          ${contrastBadge ? `<span class="proc-chip-contrast">${this.escapeHtml(contrastBadge)}</span>` : ''}
-        </span>
-        ${modality ? `<span class="proc-chip-modality">${this.escapeHtml(modality)}</span>` : ''}
+      <div class="recommendation">
+        <span class="level-pill ${classes[tier.level]}">${this.escapeHtml(tier.level)}</span>
+        <span class="recommendation-studies">${body}</span>
+        ${tier.disagreement ? '<span class="disagreement-note">Panel disagreement</span>' : ''}
+      </div>
+    `;
+  }
+
+  _sourceLine() {
+    const info = this.dataInfo;
+    const month = info ? new Date(`${info.capturedTo}T00:00:00`).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : '';
+    return `Independent summary of ACR Appropriateness Criteria${month ? ` as of ${month}` : ''}. Confirm against the source.`;
+  }
+
+  _bindScenarioButtons(container) {
+    container.querySelectorAll('.scenario-preview-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const region = btn.getAttribute('data-region');
+        const name = btn.getAttribute('data-name') || '';
+        if (region) this.navigateToRegionSearch(region, name);
+      });
+    });
+  }
+
+  // Drops the leading phrase most of a topic's scenarios share, so a guide reads
+  // as its branches rather than the same words repeated.
+  _branchLabel(name, sharedLead) {
+    const lead = `${sharedLead}, `;
+    const label = sharedLead && name.startsWith(lead) ? name.slice(lead.length) : name;
+    return label.charAt(0).toUpperCase() + label.slice(1);
+  }
+
+  _renderTopicGuide({ topic, related }, scenarios, container) {
+    const groups = buildTopicGuide(topic, scenarios);
+    const all = groups.flatMap(g => g.scenarios);
+    const leads = new Map();
+    for (const s of all) {
+      const lead = s.name.split(',')[0];
+      leads.set(lead, (leads.get(lead) || 0) + 1);
+    }
+    const [topLead, topCount] = [...leads.entries()].sort((a, b) => b[1] - a[1])[0] || ['', 0];
+    const sharedLead = topCount > all.length * 0.6 ? topLead : '';
+
+    const row = s => `
+      <li class="scenario-preview-item">
+        <button type="button" class="scenario-preview-btn guide-branch"
+                data-region="${this.escapeHtml(s.region)}"
+                data-name="${this.escapeHtml(s.name)}">
+          ${this.escapeHtml(this._branchLabel(s.name, sharedLead))}${s.age === 'pediatric' ? ' <span class="age-tag">Pediatric</span>' : ''}
+        </button>
+      </li>
+    `;
+    const VISIBLE = 4;
+
+    container.classList.remove('hidden');
+    container.innerHTML = `
+      <div class="global-result-card">
+        <div class="global-result-header">
+          <span class="global-result-topic">${this.escapeHtml(topic)}</span>
+          <span class="global-result-meta">Depends on the presentation</span>
+        </div>
+        <div class="global-result-body">
+          ${groups.map(g => `
+            <section class="guide-group">
+              ${this._renderRecommendation(g)}
+              <ul class="scenario-preview-list guide-branches">
+                ${g.scenarios.slice(0, VISIBLE).map(row).join('')}
+              </ul>
+              ${g.scenarios.length > VISIBLE ? `
+                <details class="guide-more">
+                  <summary>${g.scenarios.length - VISIBLE} more</summary>
+                  <ul class="scenario-preview-list guide-branches">
+                    ${g.scenarios.slice(VISIBLE).map(row).join('')}
+                  </ul>
+                </details>
+              ` : ''}
+            </section>
+          `).join('')}
+          ${related && related.length ? `
+            <div class="guide-related">
+              <span class="dym-label">Related topics:</span>
+              ${related.map(t => `<button type="button" class="dym-chip" data-term="${this.escapeHtml(t)}">${this.escapeHtml(t)}</button>`).join('')}
+            </div>
+          ` : ''}
+        </div>
+        <div class="global-result-footer">
+          <span class="global-result-source">${this.escapeHtml(this._sourceLine())}</span>
+        </div>
+      </div>
+    `;
+    this._bindScenarioButtons(container);
+    this._bindTermChips(container);
+  }
+
+  _bindTermChips(container) {
+    const input = document.getElementById('globalSearchInput');
+    container.querySelectorAll('.dym-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const term = btn.getAttribute('data-term') || '';
+        if (input) input.value = term;
+        this.handleGlobalSearch(term);
+      });
+    });
+  }
+
+  _renderTooBroad(query, container) {
+    container.classList.remove('hidden');
+    container.innerHTML = `
+      <div class="global-result-card">
+        <div class="global-result-body">
+          <p class="global-result-recommendation">
+            "<strong>${this.escapeHtml(query)}</strong>" covers too many scenarios to give useful guidance.
+            Add a body part or presentation, such as "chest ${this.escapeHtml(query)}" or "${this.escapeHtml(query)} in a child".
+          </p>
+        </div>
       </div>
     `;
   }
@@ -1835,6 +1789,7 @@ class ProtocolHelpApp {
     // activeRegion === null means "all regions". Re-renders the card body in place.
     const renderBody = (activeRegion) => {
       const shown = activeRegion ? mappings.filter(m => m.region === activeRegion) : mappings;
+      const details = m => (this._scenarioById && this._scenarioById.get(String(m.scenario_id))) || {};
       const footerRegion = activeRegion || primaryRegion;
       const previews = shown.slice(0, Math.min(5, shown.length));
       const regionChips = regions.length > 1 ? `
@@ -1867,13 +1822,13 @@ class ProtocolHelpApp {
                 ${previews.map(p => `
                   <li class="scenario-preview-item">
                     <button type="button" class="scenario-preview-btn"
-                            data-region="${this.escapeHtml(p.region || primaryRegion)}"
-                            data-name="${this.escapeHtml(p.scenario_name || '')}">
+                            data-region="${this.escapeHtml(details(p).region || p.region || primaryRegion)}"
+                            data-name="${this.escapeHtml(details(p).name || p.scenario_name || '')}">
                       <div class="scenario-preview-row">
-                        <span class="scenario-preview-name">${this.escapeHtml(p.scenario_name || '')}</span>
-                        <span class="scenario-preview-region">${this.escapeHtml(p.region || primaryRegion)}</span>
+                        <span class="scenario-preview-name">${this.escapeHtml(details(p).name || p.scenario_name || '')}</span>
+                        <span class="scenario-preview-region">${this.escapeHtml(this.formatRegionName(details(p).region || p.region || primaryRegion))}</span>
                       </div>
-                      ${this._renderProcedureChip(p.top_procedure)}
+                      ${this._renderRecommendation(details(p).top_tier)}
                     </button>
                   </li>
                 `).join('')}
@@ -1881,7 +1836,7 @@ class ProtocolHelpApp {
             ` : ''}
           </div>
           <div class="global-result-footer">
-            <span class="global-result-source">From concept index</span>
+            <span class="global-result-source">${this.escapeHtml(this._sourceLine())}</span>
             <button class="global-result-action" data-region="${this.escapeHtml(footerRegion)}" data-topic="${this.escapeHtml(displayName)}">
               See all ${shown.length} scenarios
             </button>
@@ -1903,14 +1858,7 @@ class ProtocolHelpApp {
           this.navigateToRegionSearch(action.getAttribute('data-region'), displayName);
         });
       }
-      // Per-scenario click-through: navigate to the scenario's region, pre-fill its full name.
-      container.querySelectorAll('.scenario-preview-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const region = btn.getAttribute('data-region');
-          const name = btn.getAttribute('data-name') || '';
-          if (region) this.navigateToRegionSearch(region, name);
-        });
-      });
+      this._bindScenarioButtons(container);
     };
 
     renderBody(null);
@@ -1942,27 +1890,20 @@ class ProtocolHelpApp {
                         data-name="${this.escapeHtml(s.name)}">
                   <div class="scenario-preview-row">
                     <span class="scenario-preview-name">${this.escapeHtml(s.name)}</span>
-                    <span class="scenario-preview-region">${s.age === 'pediatric' ? 'Pediatric - ' : ''}${this.escapeHtml(s.region)}</span>
+                    <span class="scenario-preview-region">${s.age === 'pediatric' ? 'Pediatric - ' : ''}${this.escapeHtml(this.formatRegionName(s.region))}</span>
                   </div>
-                  ${this._renderProcedureChip(s.topProcedure)}
-                  ${s.alsoRated && s.alsoRated.length ? `<div class="scenario-preview-also" style="font-size:12px;margin-top:4px;opacity:0.8">Equally rated: ${this.escapeHtml(s.alsoRated.join(', '))}</div>` : ''}
+                  ${this._renderRecommendation(s.top_tier)}
                 </button>
               </li>
             `).join('')}
           </ul>
         </div>
         <div class="global-result-footer">
-          <span class="global-result-source">Direct scenario match</span>
+          <span class="global-result-source">${this.escapeHtml(this._sourceLine())}</span>
         </div>
       </div>
     `;
-    container.querySelectorAll('.scenario-preview-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const region = btn.getAttribute('data-region');
-        const name = btn.getAttribute('data-name') || '';
-        if (region) this.navigateToRegionSearch(region, name);
-      });
-    });
+    this._bindScenarioButtons(container);
   }
 
   _buildEmptyState(query) {

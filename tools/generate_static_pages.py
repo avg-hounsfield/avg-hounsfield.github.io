@@ -1,8 +1,10 @@
+import html
 import json
 import os
 import re
 from pathlib import Path
 from datetime import date
+from urllib.parse import quote
 
 BASE_URL = "https://www.protocolinfo.com"
 REPO_ROOT = Path(__file__).parent.parent
@@ -16,45 +18,50 @@ REGION_DISPLAY = {
     "vascular": "Vascular",
     "breast":   "Breast",
     "peds":     "Pediatric",
+    "other":    "General",
 }
 
 REGION_INTRO = {
     "neuro":    (
-        "ACR Appropriateness Criteria for neurological imaging covers clinical scenarios "
+        "Guidance summarized from the ACR Appropriateness Criteria for neurological imaging, covers clinical scenarios "
         "involving the brain, cranial nerves, and intracranial structures, including stroke, "
         "headache, seizure, dementia, and traumatic brain injury."
     ),
     "spine":    (
-        "ACR Appropriateness Criteria for spine imaging addresses clinical presentations "
+        "Guidance summarized from the ACR Appropriateness Criteria for spine imaging, addresses clinical presentations "
         "involving the cervical, thoracic, and lumbar spine, including back pain, radiculopathy, "
         "myelopathy, trauma, and suspected infection or malignancy."
     ),
     "msk":      (
-        "ACR Appropriateness Criteria for musculoskeletal imaging guides evaluation of "
+        "Guidance summarized from the ACR Appropriateness Criteria for musculoskeletal imaging, guides evaluation of "
         "joints, bones, and soft tissues across the body, covering acute injury, chronic pain, "
         "suspected fracture, infection, and bone or soft tissue tumors."
     ),
     "abdomen":  (
-        "ACR Appropriateness Criteria for abdominal and pelvic imaging covers clinical "
+        "Guidance summarized from the ACR Appropriateness Criteria for abdominal and pelvic imaging, covers clinical "
         "presentations including acute abdominal pain, liver and pancreatic masses, renal "
         "pathology, bowel obstruction, and gastrointestinal bleeding."
     ),
     "chest":    (
-        "ACR Appropriateness Criteria for chest imaging addresses suspected pulmonary "
+        "Guidance summarized from the ACR Appropriateness Criteria for chest imaging, addresses suspected pulmonary "
         "embolism, lung nodule evaluation, chest pain, suspected pneumonia, pleural effusion, "
         "and lung cancer screening."
     ),
     "vascular": (
-        "ACR Appropriateness Criteria for vascular imaging covers suspected aortic aneurysm "
+        "Guidance summarized from the ACR Appropriateness Criteria for vascular imaging, covers suspected aortic aneurysm "
         "and dissection, carotid stenosis, deep vein thrombosis, and peripheral arterial disease."
     ),
     "breast":   (
-        "ACR Appropriateness Criteria for breast imaging guides evaluation of breast cancer "
+        "Guidance summarized from the ACR Appropriateness Criteria for breast imaging, guides evaluation of breast cancer "
         "screening, palpable breast mass, nipple discharge, and breast pain."
     ),
     "peds":     (
-        "ACR Appropriateness Criteria for pediatric imaging addresses imaging evaluation "
+        "Guidance summarized from the ACR Appropriateness Criteria for pediatric imaging, addresses imaging evaluation "
         "in children, including suspected child abuse and pediatric-specific clinical scenarios."
+    ),
+    "other":    (
+        "Guidance summarized from the ACR Appropriateness Criteria for scenarios that span body "
+        "regions, including sepsis, major trauma, ICU patients, and systemic malignancy."
     ),
 }
 
@@ -67,6 +74,7 @@ REGION_ICONS = {
     "vascular": '<path d="M12 2c0 4-4 6-4 10a4 4 0 108 0c0-4-4-6-4-10z"/>',
     "breast":   '<circle cx="8" cy="12" r="4"/><circle cx="16" cy="12" r="4"/>',
     "peds":     '<circle cx="12" cy="6" r="4"/><path d="M12 10v6M8 22l4-6 4 6"/>',
+    "other":    '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
 }
 
 CSS_VERSION = "20260324a"
@@ -163,30 +171,25 @@ def load_data():
     Reads all JSON inputs and returns a dict:
       {
         'protocols': [...],
-        'cards': [...],
+        'region_topics': { 'neuro': [{'name': ..., 'count': ...}, ...], ... },
         'region_counts': { 'neuro': 1234, ... }
       }
     """
-    protocols_path = REPO_ROOT / "data" / "protocols.json"
-    cards_path = REPO_ROOT / "data" / "search" / "summary_cards.json"
-
-    with open(protocols_path, encoding="utf-8") as f:
+    with open(REPO_ROOT / "data" / "protocols.json", encoding="utf-8") as f:
         protocols = json.load(f)
 
-    with open(cards_path, encoding="utf-8") as f:
-        cards_data = json.load(f)
-    cards = cards_data["cards"]
-
     region_counts = {}
+    region_topics = {}
     for region in REGION_DISPLAY:
-        region_file = REPO_ROOT / "data" / "regions" / f"{region}.json"
-        if region_file.exists():
-            with open(region_file, encoding="utf-8") as f:
-                region_counts[region] = json.load(f).get("count", 0)
-        else:
-            region_counts[region] = 0
+        with open(REPO_ROOT / "data" / "regions" / f"{region}.json", encoding="utf-8") as f:
+            data = json.load(f)
+        region_counts[region] = data.get("count", 0)
+        counts = {}
+        for scenario in data.get("scenarios", []):
+            counts[scenario["topic"]] = counts.get(scenario["topic"], 0) + 1
+        region_topics[region] = [{"name": n, "count": c} for n, c in sorted(counts.items())]
 
-    return {"protocols": protocols, "cards": cards, "region_counts": region_counts}
+    return {"protocols": protocols, "region_topics": region_topics, "region_counts": region_counts}
 
 
 def shared_head(title, description, canonical, jsonld_dict):
@@ -392,26 +395,16 @@ def render_protocol(protocol, slug):
 </html>"""
 
 
-def render_region(region, cards, region_protocols, slug_map, protocols, scenario_count):
+def render_region(region, topics, region_protocols, slug_map, protocols, scenario_count):
     """Returns complete HTML string for one regional landing page."""
     label = REGION_DISPLAY[region]
     canonical = f"{BASE_URL}/regions/{region}/"
 
     # Meta description
-    topic_examples = [c["topic"] for c in cards[:3]]
-    if topic_examples:
-        topics_str = ", ".join(topic_examples[:-1]) + f", and {topic_examples[-1]}" if len(topic_examples) > 1 else topic_examples[0]
-        meta_desc = (
-            f"ACR Appropriateness Criteria for {label.lower()} imaging. "
-            f"Evidence-based recommendations for {scenario_count} clinical scenarios "
-            f"including {topics_str}."
-        )
-    else:
-        meta_desc = (
-            f"ACR Appropriateness Criteria for {label.lower()} imaging. "
-            f"Evidence-based recommendations for {scenario_count} clinical scenarios."
-        )
-    meta_desc = meta_desc[:160]
+    meta_desc = (
+        f"Quick {label.lower()} imaging guidance for {scenario_count} clinical scenarios, "
+        f"summarized from the ACR Appropriateness Criteria."
+    )[:160]
 
     jsonld = {
         "@context": "https://schema.org",
@@ -428,7 +421,7 @@ def render_region(region, cards, region_protocols, slug_map, protocols, scenario
         "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL}
     }
 
-    title = f"{label} Imaging - ACR Appropriateness Criteria | Radex"
+    title = f"{label} Imaging Guidance - Based on ACR Appropriateness Criteria | Radex"
     head = shared_head(title, meta_desc, canonical, jsonld)
 
     # Hero
@@ -443,34 +436,23 @@ def render_region(region, cards, region_protocols, slug_map, protocols, scenario
   </div>
 </div>"""
 
-    # Topic cards section
-    cards_html = ""
-    if cards:
-        badge_classes = {
-            "STRONG":         "topic-badge-strong",
-            "CONDITIONAL":    "topic-badge-cond",
-            "CLINICAL_FIRST": "topic-badge-clinical",
-            "HIGH_VARIANCE":  "topic-badge-variance",
-        }
-        card_items = ""
-        for card in cards:
-            primary = card.get("primary_recommendation") or {}
-            consensus = primary.get("consensus_pct", "")
-            rec_name = primary.get("name", "Clinical assessment")
-            card_type = card.get("card_type", "")
-            badge_cls = badge_classes.get(card_type, "topic-badge-variance")
-            badge_html = f'<span class="topic-badge {badge_cls}">{consensus}%</span>' if consensus else ""
-            card_items += f"""<div class="topic-card">
+    # Topic links open the generated guide for that ACR topic
+    topics_html = ""
+    if topics:
+        topic_items = ""
+        for topic in topics:
+            name = html.escape(topic["name"])
+            count = topic["count"]
+            topic_items += f"""<a class="topic-card" href="/?q={quote(topic['name'])}">
   <div class="topic-card-header">
-    <span class="topic-card-name">{card.get('display_name', '')}</span>
-    {badge_html}
+    <span class="topic-card-name">{name}</span>
   </div>
-  <p class="topic-card-meta">{rec_name} &bull; {card_type}</p>
-</div>
+  <p class="topic-card-meta">{count} scenario{'' if count == 1 else 's'}</p>
+</a>
 """
-        cards_html = f"""<h2 class="static-section-label">Clinical Topics</h2>
+        topics_html = f"""<h2 class="static-section-label">Clinical Topics</h2>
 <div class="topic-grid">
-{card_items}</div>"""
+{topic_items}</div>"""
 
     # Protocols section
     protocols_html = ""
@@ -491,12 +473,12 @@ def render_region(region, cards, region_protocols, slug_map, protocols, scenario
     body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
   {hero}
 
-  {cards_html}
+  {topics_html}
 
   {protocols_html}
 
   <a href="{BASE_URL}/#search" class="protocol-cta">
-    <span class="protocol-cta-label">Search {label} scenarios</span>
+    <span class="protocol-cta-label">Search all scenarios</span>
     <span class="protocol-cta-action">Open Radex &rarr;</span>
   </a>
 </div>"""
@@ -521,10 +503,10 @@ def render_region(region, cards, region_protocols, slug_map, protocols, scenario
 def render_about():
     """Returns complete HTML string for the about page."""
     canonical = f"{BASE_URL}/about/"
-    title = "About Radex - ACR Imaging Appropriateness Tool | CoreGRAI"
+    title = "About Radex - Quick Imaging Guidance | CoreGRAI"
     meta_desc = (
-        "Radex is a free, browser-based ACR Appropriateness Criteria reference tool "
-        "built for radiology residents. 3,200+ clinical scenarios, 72+ MRI protocols."
+        "Radex is a free, browser-based imaging guidance reference for clinicians, summarized "
+        "from the ACR Appropriateness Criteria. 3,900+ scenarios, 72+ MRI protocols."
     )
 
     jsonld = {
@@ -563,9 +545,9 @@ def render_about():
     head = shared_head(title, meta_desc, canonical, jsonld)
 
     stats_pills = "\n".join([
-        '<div class="scenario-pill">3,200+ ACR clinical scenarios</div>',
+        '<div class="scenario-pill">3,900+ clinical scenarios across 260+ topics</div>',
         '<div class="scenario-pill">72+ MRI protocols with sequence-level guidance</div>',
-        '<div class="scenario-pill">83% ACR scenario coverage via quick-answer cards</div>',
+        '<div class="scenario-pill">Every recommendation links to its ACR source scenario</div>',
         '<div class="scenario-pill">Client-side AI inference - fully private, no data sent to servers</div>',
         '<div class="scenario-pill">Offline-capable via Progressive Web App (PWA)</div>',
     ])
@@ -582,8 +564,9 @@ def render_about():
   <h1 style="margin-bottom:1.5rem;">About Radex</h1>
 
   <p style="color:var(--text-secondary);font-size:0.9375rem;line-height:1.6;margin-bottom:1.75rem;">
-    Radex is an educational reference tool designed for radiology residents and medical professionals
-    to quickly access imaging appropriateness criteria and MRI protocol information.
+    Radex is an educational reference that helps clinicians find generic imaging guidance quickly,
+    without working through the full ACR Appropriateness Criteria scenario by scenario. It is an
+    independent project and is not affiliated with or endorsed by the American College of Radiology.
   </p>
 
   <h2 class="static-section-label">Built By</h2>
@@ -593,9 +576,8 @@ def render_about():
     <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;">
       Radex was developed as a capstone project in radiology AI, motivated by a recurring challenge
       in clinical training: imaging appropriateness guidelines exist, but accessing them quickly at
-      the point of care remains cumbersome. Built on the ACR Appropriateness Criteria and validated
-      through systematic testing against 202 clinical queries, Radex is designed to reduce
-      time-to-answer from minutes to seconds without sacrificing evidence fidelity.
+      the point of care remains cumbersome. Radex is designed to reduce time-to-answer from minutes
+      to seconds while keeping every answer traceable to its source.
     </p>
   </div>
 
@@ -604,38 +586,27 @@ def render_about():
 {stats_pills}
   </div>
 
-  <h2 class="static-section-label">Data Sources &amp; Methodology</h2>
+  <h2 style="margin-bottom:0.75rem;font-size:1rem;">Data Sources &amp; Methodology</h2>
   <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
-    <strong>Appropriateness Criteria:</strong> Based on the ACR Appropriateness Criteria,
-    evidence-based guidelines developed by the American College of Radiology to assist referring
-    physicians and other providers in making the most appropriate imaging decisions.
-    The database covers 3,226 clinical scenarios across 10 body regions.
+    <strong>Source:</strong> Guidance is summarized from the ACR Appropriateness Criteria,
+    evidence-based guidelines developed by the American College of Radiology. Radex shows when its
+    data was captured, and that date may lag ACR updates, so confirm against the linked source.
+  </p>
+  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
+    <strong>How answers are built:</strong> A broad search opens a topic guide that groups scenarios
+    by what they recommend. A specific search goes to matching scenarios, with pregnancy and patient
+    age applied as filters. ACR categories are shown as published, including panel disagreement
+    flags, and studies in the same category are listed together because ACR does not rank them.
   </p>
   <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
     <strong>MRI Protocols:</strong> Sample protocols based on common clinical practice.
     Your institution may have different sequences, parameters, or protocols based on
     scanner hardware, software versions, radiologist preferences, and institutional policies.
   </p>
-  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
-    <strong>Consensus Algorithm:</strong> Each of the 74 quick-answer topic cards aggregates
-    all related ACR scenarios for that topic, scores imaging procedures by how often they appear
-    as the top-rated option, and classifies the result: Strong Consensus (&ge;70% agreement),
-    Conditional (40-69%), High Variance (&lt;40%), or Clinical Assessment First.
-    This transforms 3,226 individual scenarios into quick-answer summaries without losing the
-    underlying evidence base.
-  </p>
-  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
-    <strong>Manual Validation:</strong> All 74 topic cards were individually reviewed by a
-    clinical domain expert prior to publication. This audit step corrects cases where frequency
-    counting produces a mathematically correct but clinically incorrect primary recommendation
-    (for example, when surveillance scenarios dilute consensus for initial workup).
-  </p>
   <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:1.75rem;">
-    <strong>AI Methodology:</strong> The search system uses a hybrid architecture combining a
-    708 KB intent classifier (a custom 2-layer transformer quantized to INT8 for browser
-    deployment), explicit rule-based patterns, and a 375-term radiology semantic dictionary.
-    The hybrid approach achieves 82.2% phase accuracy and 86.6% urgency accuracy across 202
-    test queries, compared to 52% for rules alone.
+    <strong>AI:</strong> When no scenario matches a search directly, a small model running in your
+    browser suggests the closest scenarios by meaning. These results are labelled as closest
+    matches. Nothing you type is sent to a server for search.
   </p>
 
   <h2 class="static-section-label">Browse by Region</h2>
@@ -725,7 +696,6 @@ def build_sitemap(protocol_slugs):
 def main():
     data = load_data()
     protocols = data["protocols"]
-    cards = data["cards"]
     region_counts = data["region_counts"]
     slug_map = make_unique_slugs(protocols)
 
@@ -734,17 +704,16 @@ def main():
     # Protocol pages
     for i, protocol in enumerate(protocols):
         slug = slug_map[i]
-        html = render_protocol(protocol, slug)
-        write_file(Path("protocols") / slug / "index.html", html)
+        page = render_protocol(protocol, slug)
+        write_file(Path("protocols") / slug / "index.html", page)
         count += 1
 
     # Regional pages
     for region in REGION_DISPLAY:
-        region_cards = [c for c in cards if c.get("region") == region]
         region_protocols = [p for p in protocols if p.get("body_region") == region]
         scenario_count = region_counts.get(region, 0)
-        html = render_region(region, region_cards, region_protocols, slug_map, protocols, scenario_count)
-        write_file(Path("regions") / region / "index.html", html)
+        page = render_region(region, data["region_topics"][region], region_protocols, slug_map, protocols, scenario_count)
+        write_file(Path("regions") / region / "index.html", page)
         count += 1
 
     # About page

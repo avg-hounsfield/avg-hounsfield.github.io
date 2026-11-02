@@ -288,7 +288,7 @@ export class UI {
           <div class="scenario-card" role="button" tabindex="0" data-index="${group.originalIndices[0]}">
             <div class="scenario-title">${this.escapeHtml(group.formattedTitle)}</div>
             <div class="scenario-meta">
-              ${highRated > 0 ? `<span class="high-rated-count">${highRated} recommended</span> - ` : ''}
+              ${highRated > 0 ? `<span class="high-rated-count">${highRated} usually appropriate</span> - ` : ''}
               ${procCount} imaging options
             </div>
           </div>
@@ -466,13 +466,10 @@ export class UI {
       this.selectedScenario.textContent = displayName;
     }
 
-    // Filter out malformed entries (empty names, "Other" modality with no info)
+    // Filter out malformed entries
     const procedures = (scenario.procedures || []).filter(proc => {
       // Must have a name
-      if (!proc.name || proc.name.trim() === '') return false;
-      // Skip generic "Other" modality entries that are duplicates
-      if (proc.modality === 'Other' && (!proc.shortName || proc.shortName === proc.name)) return false;
-      return true;
+      return proc.name && proc.name.trim() !== '';
     });
 
     if (procedures.length === 0) {
@@ -487,22 +484,43 @@ export class UI {
     // Clinical priority sorting
     const sorted = this.sortProceduresClinically(procedures, scenario);
 
-    this.proceduresList.innerHTML = sorted.map((proc, index) => {
+    const pediatric = scenario.ageGroup === 'pediatric';
+    let currentLevel = null;
+    const rows = sorted.map((proc, index) => {
       const ratingClass = this.getRatingClass(proc.rating);
       const levelText = this.getRatingText(proc.rating);
       const isMRI = proc.modality === 'MRI';
+      const heading = levelText !== currentLevel
+        ? `<h3 class="procedure-group ${ratingClass}">${levelText}</h3>`
+        : '';
+      currentLevel = levelText;
+      const dose = this.formatDose(pediatric ? (proc.radiationDosePed || proc.radiationDose) : proc.radiationDose);
 
       return `
+        ${heading}
         <div class="procedure-card ${isMRI ? 'mri' : ''}" data-index="${index}">
-          <div class="procedure-rating ${ratingClass}">${proc.rating}</div>
           <div class="procedure-info">
             <div class="procedure-name">${this.escapeHtml(proc.shortName || proc.name)}</div>
-            <div class="procedure-level ${ratingClass}">${levelText}</div>
+            <div class="procedure-level">
+              ${dose ? this.escapeHtml(dose) : ''}
+              ${proc.hasDisagreement ? '<span class="disagreement-note">Panel disagreement</span>' : ''}
+            </div>
           </div>
           <span class="procedure-modality">${this.escapeHtml(proc.modality)}</span>
         </div>
       `;
     }).join('');
+
+    this.proceduresList.innerHTML = `
+      ${scenario.variant ? `<p class="scenario-variant">${this.escapeHtml(scenario.variant)}</p>` : ''}
+      ${rows}
+      ${scenario.sourceUrl ? `
+        <p class="scenario-source">
+          <a href="${this.escapeHtml(scenario.sourceUrl)}" target="_blank" rel="noopener">View this scenario on the ACR portal</a>
+          ${scenario.capturedAt ? ` - data captured ${this.escapeHtml(scenario.capturedAt)}` : ''}
+        </p>
+      ` : ''}
+    `;
 
     // Bind click events
     this.proceduresList.querySelectorAll('.procedure-card').forEach((card, index) => {
@@ -759,138 +777,6 @@ export class UI {
   // ========================================
   // Summary Card (Quick Consensus)
   // ========================================
-  showSummaryCard(card, onDetailedSearch, intent = null) {
-    const summaryCard = document.getElementById('summaryCard');
-    if (!summaryCard || !card) return;
-
-    const cardTypeClass = `card-type-${card.card_type.toLowerCase().replace('_', '-')}`;
-    summaryCard.className = `summary-card ${cardTypeClass}`;
-    summaryCard.classList.remove('hidden');
-
-    const cardTypeLabels = {
-      'STRONG': 'Strong Consensus',
-      'CONDITIONAL': 'Conditional',
-      'HIGH_VARIANCE': 'High Variance',
-      'CLINICAL_FIRST': 'Clinical First'
-    };
-
-    const cardTypeIcons = {
-      'STRONG': '<path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/>',
-      'CONDITIONAL': '<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>',
-      'HIGH_VARIANCE': '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
-      'CLINICAL_FIRST': '<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>'
-    };
-
-    const rec = card.primary_recommendation;
-    const displayName = card.display_name || card.topic;
-
-    let bodyContent = '';
-
-    if (card.card_type === 'CLINICAL_FIRST') {
-      bodyContent = `
-        <div class="summary-card-clinical-msg">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-          </svg>
-          <span><strong>${card.no_imaging_pct}%</strong> of scenarios suggest clinical assessment before imaging</span>
-        </div>
-        ${rec.name ? `
-          <div class="summary-card-recommendation" style="margin-top: var(--space-sm)">
-            <span class="summary-card-rec-label">When imaging needed:</span>
-            <span class="summary-card-rec-primary">${this.escapeHtml(rec.name)}</span>
-          </div>
-        ` : ''}
-      `;
-    } else if (card.card_type === 'HIGH_VARIANCE') {
-      bodyContent = `
-        <div class="summary-card-clinical-msg" style="background: rgba(244, 67, 54, 0.08)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--rating-low)">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-            <path d="M12 17h.01"/>
-          </svg>
-          <span>Recommendations vary significantly based on clinical context</span>
-        </div>
-      `;
-    } else {
-      // STRONG or CONDITIONAL
-      const rawEquivProcs = rec.equivalent_procedures || [];
-      // Deduplicate equivalent procedures (removes redundant namings like "CT brain" vs "CT head")
-      const equivProcs = this.deduplicateEquivalentProcedures(rawEquivProcs, rec.name);
-
-      bodyContent = `
-        <div class="summary-card-recommendation">
-          <span class="summary-card-rec-label">Primary:</span>
-          <span class="summary-card-rec-primary">${this.escapeHtml(rec.name || 'None')}</span>
-          ${rec.consensus_pct ? `<span class="summary-card-rec-consensus">(${rec.consensus_pct}% consensus)</span>` : ''}
-        </div>
-        ${equivProcs.length > 0 ? `
-          <div class="summary-card-equivalents">
-            ${equivProcs.map(p => `<span class="summary-card-equiv-chip">${this.escapeHtml(this.truncateProcedure(p, 30))}</span>`).join('')}
-          </div>
-        ` : ''}
-        ${card.alternatives && card.alternatives.length > 0 ? `
-          <div class="summary-card-alternatives">
-            <strong>Also consider:</strong>
-            ${card.alternatives.slice(0, 2).map(a => `${this.escapeHtml(this.truncateProcedure(a.name, 25))} (${a.percentage}%)`).join(', ')}
-          </div>
-        ` : ''}
-      `;
-    }
-
-    // Build assumed context indicator if intent has a matched condition
-    let contextIndicator = '';
-    if (intent && intent.matchedCondition) {
-      const urgencyLabels = { 'acute': 'Acute', 'routine': 'Routine', 'chronic': 'Chronic' };
-      const urgencyColors = { 'acute': '#dc3545', 'routine': '#28a745', 'chronic': '#ffc107' };
-      const urgencyLabel = urgencyLabels[intent.urgency] || intent.urgency;
-      const urgencyColor = urgencyColors[intent.urgency] || '#6c757d';
-      contextIndicator = `
-        <div class="summary-card-context" style="background: ${urgencyColor}15; border-left: 3px solid ${urgencyColor}; padding: 6px 10px; margin-bottom: 8px; font-size: 12px; color: ${urgencyColor};">
-          <strong>${urgencyLabel}</strong> context assumed for "${intent.matchedCondition}"
-        </div>
-      `;
-    }
-
-    summaryCard.innerHTML = `
-      <div class="summary-card-header">
-        <div class="summary-card-title-row">
-          <svg class="summary-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            ${cardTypeIcons[card.card_type] || cardTypeIcons['CONDITIONAL']}
-          </svg>
-          <span class="summary-card-title">${this.escapeHtml(displayName)}</span>
-          <span class="summary-card-badge">${cardTypeLabels[card.card_type] || card.card_type}</span>
-        </div>
-        <button class="summary-card-dismiss" title="Dismiss">&times;</button>
-      </div>
-      <div class="summary-card-meta">Based on ${card.scenario_count} ACR scenarios</div>
-      ${contextIndicator}
-      <div class="summary-card-body">
-        ${bodyContent}
-      </div>
-      <div class="summary-card-footer">
-        <span class="summary-card-source">ACR Appropriateness Criteria</span>
-        ${card.recommend_detailed_search || card.card_type === 'HIGH_VARIANCE' ? `
-          <button class="summary-card-action" id="summaryDetailedSearch">
-            See detailed scenarios &rarr;
-          </button>
-        ` : ''}
-      </div>
-    `;
-
-    // Bind dismiss button
-    const dismissBtn = summaryCard.querySelector('.summary-card-dismiss');
-    if (dismissBtn) {
-      dismissBtn.addEventListener('click', () => this.hideSummaryCard());
-    }
-
-    // Bind detailed search button
-    const detailBtn = summaryCard.querySelector('#summaryDetailedSearch');
-    if (detailBtn && onDetailedSearch) {
-      detailBtn.addEventListener('click', () => onDetailedSearch(card.topic));
-    }
-  }
-
   hideSummaryCard() {
     const summaryCard = document.getElementById('summaryCard');
     if (summaryCard) {
@@ -1010,7 +896,7 @@ export class UI {
           <div class="scenario-card" role="button" tabindex="0" data-phase="${this.escapeHtml(group.phase)}" data-index="${i}">
             <div class="scenario-title">${this.escapeHtml(formattedTitle)}</div>
             <div class="scenario-meta">
-              ${highRated > 0 ? `<span class="high-rated-count">${highRated} recommended</span> - ` : ''}
+              ${highRated > 0 ? `<span class="high-rated-count">${highRated} usually appropriate</span> - ` : ''}
               ${procCount} imaging options
             </div>
           </div>
@@ -1142,6 +1028,13 @@ export class UI {
     return 'low';
   }
 
+  formatDose(dose) {
+    if (!dose) return '';
+    if (dose === '0 mSv') return 'No ionizing radiation';
+    if (dose.toLowerCase() === 'varies') return 'Radiation: varies';
+    return `Radiation: ${dose}`;
+  }
+
   getRatingText(rating) {
     if (rating >= 7) return 'Usually Appropriate';
     if (rating >= 4) return 'May Be Appropriate';
@@ -1180,7 +1073,7 @@ export class UI {
         <div class="pathway-rec">
           <span class="pathway-rec-name">${this.escapeHtml(rec.name)}</span>
           <div class="pathway-rec-rating">
-            <span class="rating-badge ${this.getRatingClass(rec.rating)}">${rec.rating}</span>
+            <span class="rating-badge ${this.getRatingClass(rec.rating)}">${this.getRatingText(rec.rating)}</span>
           </div>
         </div>
       `).join('');

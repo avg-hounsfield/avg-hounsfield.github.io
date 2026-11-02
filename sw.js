@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radex-v2.32.0';
+const CACHE_NAME = 'radex-v3.0.2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -13,7 +13,6 @@ const STATIC_ASSETS = [
   '/js/lunr-scenario-search.js',
   '/js/radlite-api.js',
   '/js/protocol-builder.js',
-  '/js/summary-cards.js',
   '/js/vendor/lunr.min.js',
   '/manifest.json'
 ];
@@ -35,10 +34,9 @@ const DATA_ASSETS = [
   '/data/search/scenario_names.json',
   '/data/search/scenario_embeddings_v3.bin',
   '/data/search/scenario_embeddings_v3_ids.json',
-  '/data/search/summary_cards.json',
+  '/data/search/topics.json',
+  '/data/data-info.json',
   '/data/search/lunr-scenarios.json',
-  '/data/search/tfidf-index.json',
-  '/data/search/scenario_metadata.json',
   '/data/sequence-library.json',
   // Distilled student model bundle for in-browser semantic search.
   // Added in v2.22.0; ~35MB total adds noticeably to install time but enables

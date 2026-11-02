@@ -1,7 +1,7 @@
 {
   "name": "Radex - Imaging Appropriateness Guide",
   "short_name": "Radex",
-  "description": "Find appropriate imaging studies based on ACR Appropriateness Criteria. Built for radiology residents.",
+  "description": "Quick imaging guidance for clinicians, summarized from the ACR Appropriateness Criteria.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0b",

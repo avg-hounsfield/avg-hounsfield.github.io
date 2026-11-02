@@ -86,8 +86,8 @@ class TestMakeDisplayName(unittest.TestCase):
         self.assertFalse(result == result.upper())
 
 class TestConstants(unittest.TestCase):
-    def test_region_icons_has_all_8_regions(self):
-        expected = {"neuro", "spine", "msk", "abdomen", "chest", "vascular", "breast", "peds"}
+    def test_region_icons_has_all_regions(self):
+        expected = {"neuro", "spine", "msk", "abdomen", "chest", "vascular", "breast", "peds", "other"}
         self.assertEqual(set(REGION_ICONS.keys()), expected)
 
     def test_region_icons_values_are_nonempty_strings(self):
@@ -99,14 +99,8 @@ class TestConstants(unittest.TestCase):
         self.assertEqual(CSS_VERSION, "20260324a")
 
 class TestRenderRegion(unittest.TestCase):
-    def _make_card(self, topic="Headache", card_type="STRONG", consensus=95, rec_name="CT Head"):
-        return {
-            "display_name": topic,
-            "topic": topic,
-            "region": "neuro",
-            "card_type": card_type,
-            "primary_recommendation": {"name": rec_name, "consensus_pct": consensus},
-        }
+    def _make_card(self, topic="Headache", count=33):
+        return {"name": topic, "count": count}
 
     def _render(self, cards=None, protocols=None):
         if cards is None:
@@ -134,21 +128,14 @@ class TestRenderRegion(unittest.TestCase):
         html = self._render()
         self.assertIn('class="topic-card"', html)
 
-    def test_strong_badge_class(self):
-        html = self._render(cards=[self._make_card(card_type="STRONG")])
-        self.assertIn("topic-badge-strong", html)
+    def test_topic_links_open_the_guide(self):
+        html = self._render(cards=[self._make_card(topic="Low Back Pain")])
+        self.assertIn('href="/?q=Low%20Back%20Pain"', html)
 
-    def test_conditional_badge_class(self):
-        html = self._render(cards=[self._make_card(card_type="CONDITIONAL")])
-        self.assertIn("topic-badge-cond", html)
-
-    def test_consensus_pct_displayed(self):
-        html = self._render(cards=[self._make_card(consensus=95)])
-        self.assertIn("95%", html)
-
-    def test_zero_consensus_badge_omitted(self):
-        html = self._render(cards=[self._make_card(consensus=0)])
-        self.assertNotIn("0%", html)
+    def test_no_consensus_claims(self):
+        html = self._render()
+        self.assertNotIn("consensus", html.lower())
+        self.assertNotIn("%</span>", html)
 
     def test_protocols_use_protocol_list_class(self):
         protos = [{"canonical_procedure": "MRI Brain W/O Contrast",

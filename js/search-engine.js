@@ -4,6 +4,7 @@
  */
 import { getIntentClassifier } from './intent-classifier.js';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
+import { rankScenarios } from './scenario-ranker.js?v=20261101c';
 
 export class SearchEngine {
   constructor(regionData) {
@@ -157,7 +158,7 @@ export class SearchEngine {
     this.phraseIndex = new Map(); // For multi-word terms
 
     this.scenarios.forEach((scenario, idx) => {
-      const text = this._norm(`${scenario.name} ${scenario.description || ''}`);
+      const text = this._norm(`${scenario.name} ${scenario.topic || ''} ${scenario.variant || ''}`);
       const words = text.split(/\s+/).filter(w => w.length >= 2);
 
       // Index single words
@@ -228,6 +229,14 @@ export class SearchEngine {
 
     if (!this.initialized || this.scenarios.length === 0) {
       return { scenarios: [], grouped: null, concept: null, isConceptSearch: false, intent: null };
+    }
+
+    // A click from a global result carries the exact scenario name. Otherwise
+    // rank on the whole query so qualifiers count, as global search does.
+    const exact = this.scenarios.filter(s => s.name === query);
+    const ranked = exact.length > 0 ? exact : rankScenarios(query, this.scenarios, { max: limit });
+    if (ranked.length > 0) {
+      return { scenarios: ranked, grouped: null, concept: null, isConceptSearch: false, intent: null };
     }
 
     // Classify query intent for phase-aware ranking
