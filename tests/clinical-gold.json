@@ -1,90 +1,384 @@
 {
   "_note": "Searches and the answer each must give. Written from the ACR data by Claude, not yet clinician reviewed. mode: guide/list/choose. name: regex the first result must match. not: regex no shown result may match.",
   "cases": [
-    { "q": "back pain with cauda equina", "name": "cauda equina" },
-    { "q": "saddle anesthesia", "name": "cauda equina" },
-    { "q": "not pregnant rlq pain", "not": "pregnant" },
-    { "q": "nonpregnant pelvic pain", "not": "pregnant,|, pregnant" },
-    { "q": "rlq pain pregnant", "name": "pregnant" },
-    { "q": "PE in pregnancy", "name": "Pulmonary embolism.*pregnant" },
-    { "q": "pregnant headache", "name": "Headache.*pregnant" },
-    { "q": "pregnant trauma", "name": "trauma.*pregnant" },
-    { "q": "back pain no trauma", "name": "^Low back pain", "not": "low velocity trauma" },
-    { "q": "headache no red flags", "name": "no red flags" },
-    { "q": "headache with red flags", "mode": "guide", "topic": "Headache" },
-    { "q": "seizure first time", "topic": "Seizures and Epilepsy" },
-    { "q": "new onset seizure", "name": "^Seizure, new" },
-    { "q": "worst headache of my life", "name": "^Headache, severe, sudden onset", "not": "emoptysis" },
-    { "q": "thunderclap headache", "name": "^Headache, severe, sudden onset|thunderclap" },
-    { "q": "tension pneumothorax", "name": "pneumothorax", "not": "eadache" },
-    { "q": "spontaneous pneumothorax", "name": "pneumothorax", "not": "emodialysis" },
-    { "q": "painless jaundice", "name": "^Jaundice", "not": "aginal" },
-    { "q": "obstructive jaundice", "name": "^Jaundice", "not": "COPD" },
-    { "q": "pulmonary AVM", "name": "PAVM", "not": "^AVM" },
-    { "q": "brain mets", "name": "^Brain tumor metastatic", "not": "iron" },
-    { "q": "hyperthyroidism", "name": "^Thyrotoxicosis", "not": "ituitary" },
-    { "q": "pericarditis", "name": "pericardial", "not": "LUQ" },
-    { "q": "leg swelling", "name": "^DVT suspected", "not": "infection" },
-    { "q": "postpartum headache", "name": "^Headache.*peripartum", "not": "emorrhage" },
-    { "q": "fall from height", "name": "trauma", "not": "steopor|T score" },
-    { "q": "pneumonia child", "topic": "Pneumonia in the Immunocompetent Child" },
-    { "q": "fever 2 month old", "name": "^Fever", "not": "eadache" },
-    { "q": "ovarian cyst", "name": "^Adnexal mass", "not": "ancrea" },
-    { "q": "scrotal mass", "name": "^Scrotum abnormality, palpable", "not": "Without Antecedent Mass|no antecedent mass" },
-    { "q": "osteomyelitis foot diabetic", "topic": "Suspected Osteomyelitis of the Foot in Patients with Diabetes Mellitus" },
-    { "q": "shoulder pain after fall", "name": "^Shoulder pain, acute", "not": "abuse" },
-    { "q": "headache afebrile", "name": "^Headache", "not": "eizure" },
-    { "q": "urinary retention", "not": "detection|rostate cancer" },
-    { "q": "croup", "mode": "none" },
-    { "q": "lymphoma staging", "mode": "none" },
-    { "q": "CT abdomen pelvis with contrast for abdominal pain", "topic": "Acute Nonlocalized Abdominal Pain" },
-    { "q": "CTA neck for dissection", "name": "^Cervical vascular dissection" },
-    { "q": "left flank pain", "topic": "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)" },
-    { "q": "68F with abdominal pain", "topic": "Acute Nonlocalized Abdominal Pain" },
-    { "q": "dementia w/u when to MRI", "topic": "Dementia" },
-    { "q": "patient with progressive shortness of breath what imaging", "not": "ementia" },
-    { "q": "patient with new severe headache and vomiting imaging", "name": "^Headache", "not": "econium" },
-    { "q": "brain MR w/ and w/o for new mass", "not": "xillary" },
-    { "q": "cardiac tumor", "name": "^Cardiac mass", "not": "eart failure" },
-    { "q": "stroke within 6 hours", "topic": "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions" },
-    { "q": "wake up stroke", "topic": "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions" },
-    { "q": "facial droop", "name": "^Ischemic stroke suspected" },
-    { "q": "testicular torsion", "topic": "Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass" },
-    { "q": "ovarian torsion", "name": "gynecological", "not": "non-gynecological" },
-    { "q": "ectopic pregnancy", "topic": "First Trimester Vaginal Bleeding" },
-    { "q": "solitary thyroid nodule", "name": "Thyroid" },
-    { "q": "occult hip fracture", "name": "[Hh]ip", "not": "^Foot" },
-    { "q": "sciatica", "name": "^Low back pain" },
-    { "q": "neck pain", "name": "^Cervical spine pain" },
-    { "q": "epidural abscess", "topic": "Suspected Spine Infection" },
-    { "q": "cord compression", "topic": "Myelopathy" },
-    { "q": "whiplash", "name": "Cervical spine trauma" },
-    { "q": "ankle sprain", "name": "^Ankle trauma" },
-    { "q": "adrenal incidentaloma", "name": "[Aa]drenal" },
-    { "q": "gunshot abdomen", "name": "penetrating|Penetrating" },
-    { "q": "stab wound chest", "name": "penetrating|Penetrating" },
-    { "q": "rotator cuff tear", "name": "^Shoulder pain" },
-    { "q": "mesothelioma", "mode": "none" },
-    { "q": "pneumonia", "topic": "Acute Respiratory Illness in Immunocompetent Patients" },
-    { "q": "chest pain", "mode": "choose" },
-    { "q": "pelvic pain", "mode": "choose" },
-    { "q": "shoulder pain", "mode": "choose" },
-    { "q": "pancreatitis", "mode": "choose" },
-    { "q": "back pain", "mode": "choose" },
-    { "q": "abdominal pain", "topic": "Acute Nonlocalized Abdominal Pain" },
-    { "q": "breast lump", "name": "^Breast mass, palpable" },
-    { "q": "mammogram age 40", "mode": "choose" },
-    { "q": "colon cancer screening", "topic": "Colorectal Cancer Screening" },
-    { "q": "stroke protocol CT head", "topic": "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions" },
-    { "q": "CTA abdomen for mesenteric ischemia", "topic": "Imaging of Mesenteric Ischemia" },
-    { "q": "what is the next imaging after equivocal abdominal US", "mode": "none" },
-    { "q": "mi", "topic": "Chest Pain-Possible Acute Coronary Syndrome" },
-    { "q": "aortic dissection", "topic": "Suspected Acute Aortic Syndrome" },
-    { "q": "foot drop", "mode": "none" },
-    { "q": "appendicits", "name": "[Aa]ppendicitis", "not": "cancer" },
-    { "q": "hedache", "topic": "Headache" },
-    { "q": "pnemothorax", "name": "pneumothorax" },
-    { "q": "cholecystits", "name": "^RUQ pain|cholecystitis" },
-    { "q": "lower gi bleed", "mode": "none" }
+    {
+      "q": "back pain with cauda equina",
+      "name": "cauda equina"
+    },
+    {
+      "q": "saddle anesthesia",
+      "name": "cauda equina"
+    },
+    {
+      "q": "not pregnant rlq pain",
+      "not": "pregnant"
+    },
+    {
+      "q": "nonpregnant pelvic pain",
+      "not": "pregnant,|, pregnant"
+    },
+    {
+      "q": "rlq pain pregnant",
+      "name": "pregnant"
+    },
+    {
+      "q": "PE in pregnancy",
+      "name": "Pulmonary embolism.*pregnant"
+    },
+    {
+      "q": "pregnant headache",
+      "name": "Headache.*pregnant"
+    },
+    {
+      "q": "pregnant trauma",
+      "name": "trauma.*pregnant"
+    },
+    {
+      "q": "back pain no trauma",
+      "name": "^Low back pain",
+      "not": "low velocity trauma"
+    },
+    {
+      "q": "headache no red flags",
+      "name": "no red flags"
+    },
+    {
+      "q": "headache with red flags",
+      "mode": "guide",
+      "topic": "Headache"
+    },
+    {
+      "q": "seizure first time",
+      "topic": "Seizures and Epilepsy"
+    },
+    {
+      "q": "new onset seizure",
+      "name": "^Seizure, new"
+    },
+    {
+      "q": "worst headache of my life",
+      "name": "^Headache, severe, sudden onset",
+      "not": "emoptysis"
+    },
+    {
+      "q": "thunderclap headache",
+      "name": "^Headache, severe, sudden onset|thunderclap"
+    },
+    {
+      "q": "tension pneumothorax",
+      "name": "pneumothorax",
+      "not": "eadache"
+    },
+    {
+      "q": "spontaneous pneumothorax",
+      "name": "pneumothorax",
+      "not": "emodialysis"
+    },
+    {
+      "q": "painless jaundice",
+      "name": "^Jaundice",
+      "not": "aginal"
+    },
+    {
+      "q": "obstructive jaundice",
+      "name": "^Jaundice",
+      "not": "COPD"
+    },
+    {
+      "q": "pulmonary AVM",
+      "name": "PAVM",
+      "not": "^AVM"
+    },
+    {
+      "q": "brain mets",
+      "name": "^Brain tumor metastatic",
+      "not": "iron"
+    },
+    {
+      "q": "hyperthyroidism",
+      "name": "^Thyrotoxicosis",
+      "not": "ituitary"
+    },
+    {
+      "q": "pericarditis",
+      "name": "pericardial",
+      "not": "LUQ"
+    },
+    {
+      "q": "leg swelling",
+      "name": "^DVT suspected",
+      "not": "infection"
+    },
+    {
+      "q": "postpartum headache",
+      "name": "^Headache.*peripartum",
+      "not": "emorrhage"
+    },
+    {
+      "q": "fall from height",
+      "name": "trauma",
+      "not": "steopor|T score"
+    },
+    {
+      "q": "pneumonia child",
+      "topic": "Pneumonia in the Immunocompetent Child"
+    },
+    {
+      "q": "fever 2 month old",
+      "name": "^Fever",
+      "not": "eadache"
+    },
+    {
+      "q": "ovarian cyst",
+      "name": "^Adnexal mass",
+      "not": "ancrea"
+    },
+    {
+      "q": "scrotal mass",
+      "name": "^Scrotum abnormality, palpable",
+      "not": "Without Antecedent Mass|no antecedent mass"
+    },
+    {
+      "q": "osteomyelitis foot diabetic",
+      "topic": "Suspected Osteomyelitis of the Foot in Patients with Diabetes Mellitus"
+    },
+    {
+      "q": "shoulder pain after fall",
+      "name": "^Shoulder pain, acute",
+      "not": "abuse"
+    },
+    {
+      "q": "headache afebrile",
+      "name": "^Headache",
+      "not": "eizure"
+    },
+    {
+      "q": "urinary retention",
+      "not": "detection|rostate cancer"
+    },
+    {
+      "q": "croup",
+      "mode": "none"
+    },
+    {
+      "q": "lymphoma staging",
+      "mode": "none"
+    },
+    {
+      "q": "CT abdomen pelvis with contrast for abdominal pain",
+      "topic": "Acute Nonlocalized Abdominal Pain"
+    },
+    {
+      "q": "CTA neck for dissection",
+      "name": "^Cervical vascular dissection"
+    },
+    {
+      "q": "left flank pain",
+      "topic": "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+    },
+    {
+      "q": "68F with abdominal pain",
+      "topic": "Acute Nonlocalized Abdominal Pain"
+    },
+    {
+      "q": "dementia w/u when to MRI",
+      "topic": "Dementia"
+    },
+    {
+      "q": "patient with progressive shortness of breath what imaging",
+      "not": "ementia"
+    },
+    {
+      "q": "patient with new severe headache and vomiting imaging",
+      "name": "^Headache",
+      "not": "econium"
+    },
+    {
+      "q": "brain MR w/ and w/o for new mass",
+      "not": "[Aa]xill|[Tt]rauma",
+      "name": "[Bb]rain"
+    },
+    {
+      "q": "cardiac tumor",
+      "name": "^Cardiac mass",
+      "not": "eart failure"
+    },
+    {
+      "q": "stroke within 6 hours",
+      "topic": "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+    },
+    {
+      "q": "wake up stroke",
+      "topic": "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+    },
+    {
+      "q": "facial droop",
+      "name": "^Ischemic stroke suspected"
+    },
+    {
+      "q": "testicular torsion",
+      "topic": "Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass"
+    },
+    {
+      "q": "ovarian torsion",
+      "name": "gynecological",
+      "not": "non-gynecological"
+    },
+    {
+      "q": "ectopic pregnancy",
+      "topic": "First Trimester Vaginal Bleeding"
+    },
+    {
+      "q": "solitary thyroid nodule",
+      "name": "Thyroid"
+    },
+    {
+      "q": "occult hip fracture",
+      "name": "[Hh]ip",
+      "not": "^Foot"
+    },
+    {
+      "q": "sciatica",
+      "name": "^Low back pain"
+    },
+    {
+      "q": "neck pain",
+      "name": "^Cervical spine pain"
+    },
+    {
+      "q": "epidural abscess",
+      "topic": "Suspected Spine Infection"
+    },
+    {
+      "q": "cord compression",
+      "topic": "Myelopathy"
+    },
+    {
+      "q": "whiplash",
+      "name": "Cervical spine trauma"
+    },
+    {
+      "q": "ankle sprain",
+      "name": "^Ankle trauma"
+    },
+    {
+      "q": "adrenal incidentaloma",
+      "name": "[Aa]drenal"
+    },
+    {
+      "q": "gunshot abdomen",
+      "name": "penetrating|Penetrating"
+    },
+    {
+      "q": "stab wound chest",
+      "name": "penetrating|Penetrating"
+    },
+    {
+      "q": "rotator cuff tear",
+      "name": "^Shoulder pain"
+    },
+    {
+      "q": "mesothelioma",
+      "mode": "none"
+    },
+    {
+      "q": "pneumonia",
+      "topic": "Acute Respiratory Illness in Immunocompetent Patients"
+    },
+    {
+      "q": "chest pain",
+      "mode": "choose"
+    },
+    {
+      "q": "pelvic pain",
+      "mode": "choose"
+    },
+    {
+      "q": "shoulder pain",
+      "mode": "choose"
+    },
+    {
+      "q": "pancreatitis",
+      "mode": "choose"
+    },
+    {
+      "q": "back pain",
+      "mode": "choose"
+    },
+    {
+      "q": "abdominal pain",
+      "topic": "Acute Nonlocalized Abdominal Pain"
+    },
+    {
+      "q": "breast lump",
+      "name": "^Breast mass, palpable"
+    },
+    {
+      "q": "mammogram age 40",
+      "mode": "choose"
+    },
+    {
+      "q": "colon cancer screening",
+      "topic": "Colorectal Cancer Screening"
+    },
+    {
+      "q": "stroke protocol CT head",
+      "topic": "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+    },
+    {
+      "q": "CTA abdomen for mesenteric ischemia",
+      "topic": "Imaging of Mesenteric Ischemia"
+    },
+    {
+      "q": "what is the next imaging after equivocal abdominal US",
+      "mode": "none"
+    },
+    {
+      "q": "mi",
+      "topic": "Chest Pain-Possible Acute Coronary Syndrome"
+    },
+    {
+      "q": "aortic dissection",
+      "topic": "Suspected Acute Aortic Syndrome"
+    },
+    {
+      "q": "foot drop",
+      "mode": "none"
+    },
+    {
+      "q": "appendicits",
+      "name": "[Aa]ppendicitis",
+      "not": "cancer"
+    },
+    {
+      "q": "hedache",
+      "topic": "Headache"
+    },
+    {
+      "q": "pnemothorax",
+      "name": "pneumothorax"
+    },
+    {
+      "q": "cholecystits",
+      "name": "^RUQ pain|cholecystitis"
+    },
+    {
+      "q": "lower gi bleed",
+      "mode": "none"
+    },
+    {
+      "q": "MRI adrenal adenoma",
+      "name": "[Aa]drenal",
+      "not": "[Pp]ituitary"
+    },
+    {
+      "q": "adrenal adenoma",
+      "name": "[Aa]drenal",
+      "not": "[Pp]ituitary"
+    },
+    {
+      "q": "17 year old female pelvic pain",
+      "not": "[Pp]ostmenopausal"
+    }
   ]
 }

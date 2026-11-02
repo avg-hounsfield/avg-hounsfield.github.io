@@ -115,7 +115,8 @@ const SIDES = new Set(['left', 'right']);
 // study or soft words name another: "brain MR for new mass" is not an axillary
 // lump. Spine words sit in both the spine and the back group on purpose.
 const ANATOMY_GROUPS = [
-  ['head', 'skull', 'face', 'facial', 'orbit', 'eye', 'ear', 'sinus', 'nasal', 'jaw', 'mandibular', 'sella', 'iac'],
+  ['head', 'skull', 'face', 'facial', 'orbit', 'eye', 'ear', 'sinus', 'nasal', 'jaw', 'mandibular', 'sella', 'iac',
+    'brain', 'pituitary'],
   ['cervical', 'spine', 'thoracic', 'lumbar', 'lowback', 'back', 'sacrum'],
   ['chest', 'lung', 'heart', 'rib', 'thorax', 'breast', 'axilla', 'esophagus'],
   ['abdomen', 'liver', 'kidney', 'pancreas', 'spleen', 'bowel', 'colon', 'stomach', 'adrenal', 'biliary', 'gallbladder',
@@ -476,7 +477,7 @@ const ALIASES = [
   ['pyelo', 'pyelonephritis'], ['complicated uti', 'pyelonephritis complicated'], ['bladder infection', 'uti'],
   ['kidney mass', 'renal mass'], ['renal cyst', 'renal mass'],
   ['kidney cyst', 'renal mass'], ['bosniak', 'renal mass'], ['rcc', 'renal cell carcinoma'],
-  ['adrenal incidentaloma', 'adrenal mass'], ['adrenal nodule', 'adrenal mass'], ['adrenal lesion', 'adrenal mass'],
+  ['adrenal incidentaloma', 'adrenal mass'], ['adrenal adenoma', 'adrenal mass'], ['adrenal nodule', 'adrenal mass'], ['adrenal lesion', 'adrenal mass'],
   ['incidentaloma', 'mass incidental'], ['pheochromocytoma', 'adrenal mass'], ['pheo', 'adrenal mass'],
   ['elevated psa', 'prostate cancer suspected no prior biopsy'], ['high psa', 'prostate cancer suspected no prior biopsy'],
   ['rising psa', 'prostate cancer suspected no prior biopsy'], ['psa', 'prostate cancer'],
@@ -746,6 +747,8 @@ function normalizeSearch(query) {
   // Contrast phrases carry no clinical meaning and "without" would otherwise
   // negate the next clinical word.
   q = q.replace(/\b(with|without|w|wo|w o|no|non|pre|post)\s*(and\s*(with|without)\s*)?(iv\s*)?(contrast|con|gad|gadolinium)\b/g, ' ');
+  // "w/ and w/o" means contrast even when the word is left out.
+  q = q.replace(/\b(with|w)\s+(and|&)\s+(without|wo|w o)\b/g, ' ');
   // A sentence break ends a negation: "Not goiter. Euthyroid." negates goiter only.
   q = q.replace(/[.;]\s/g, ' xbreakx ');
   q = cleanWords(q)
@@ -846,11 +849,16 @@ function withoutPregnancy(text) {
 // Removes "ct head" / "head ct" and returns the body parts named by the study.
 function splitStudyPhrases(text) {
   const anatomy = new Set();
+  const words = [];
   const rest = text.replace(STUDY_RE, (m, a, b) => {
-    for (const w of (a || b).split(' ')) if (w !== 'and') anatomy.add(stem(w));
+    for (const w of (a || b).split(' ')) {
+      if (w === 'and') continue;
+      anatomy.add(stem(w));
+      words.push(w);
+    }
     return ' ';
   });
-  return { rest: rest.replace(/\s+/g, ' ').trim(), anatomy };
+  return { rest: rest.replace(/\s+/g, ' ').trim(), anatomy, words };
 }
 
 function negationScope(words, i, { bounded }) {
@@ -893,7 +901,7 @@ function parseQuery(query, index) {
 
 function parseWords(query, index) {
   const { age } = extractQualifiers(query);
-  const { rest, anatomy: studyAnatomy } = splitStudyPhrases(normalizeSearch(query));
+  const { rest, anatomy: studyAnatomy, words: studyWords } = splitStudyPhrases(normalizeSearch(query));
   const words = joinLowBack(withoutPregnancy(applyAliases(withoutAge(rest), { age })))
     .replace(/\bnon(?=[a-z]{5,})/g, 'non ')
     .split(/[ _]/)
@@ -941,6 +949,14 @@ function parseWords(query, index) {
   // term stated positively keeps its positive reading.
   const stated = new Set([...required, ...soft]);
   const negatedSet = new Set(negated.filter(t => !stated.has(t)));
+  // A study's body part with only generic words left ("brain MR for new mass")
+  // means that body part's mass: read it again with the body part placed
+  // before the generic word, so "brain mass" reaches its alias.
+  const generic = required.filter(t => DROPPABLE.includes(t));
+  if (studyAnatomy.size && required.length && generic.length === required.length) {
+    const placed = rest.replace(new RegExp(`\\b(${generic.join('|')})\\b`), `${studyWords.join(' ')} $1`);
+    if (placed !== rest) return parseWords(placed, index);
+  }
   // A search that is only a study ("xray knee") asks about that body part.
   if (required.length === 0) for (const t of studyAnatomy) required.push(t);
   return {
@@ -1191,6 +1207,9 @@ function topicsNaming(parsed, qualifiers, scenarios) {
     if (parsed.required.some(t => title.negative.has(t))) continue;
     const isChildTopic = (pediatric.get(topic) || 0) > counts.get(topic) / 2;
     if ((age === 'pediatric') !== isChildTopic) continue;
+    // Life stage follows a stated age here too, as in fitsPopulation.
+    if (qualifiers.years != null && qualifiers.years < 40 && title.positive.has('postmenopausal')) continue;
+    if (qualifiers.years != null && qualifiers.years >= 55 && title.positive.has('reproductive')) continue;
     const isPregnantTopic = (pregnantCount.get(topic) || 0) > counts.get(topic) / 2;
     if (pregnant && !isPregnantTopic) continue;
     if (notPregnant && isPregnantTopic) continue;
