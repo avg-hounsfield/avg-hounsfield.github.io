@@ -4,7 +4,7 @@
  */
 import { getIntentClassifier } from './intent-classifier.js';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
-import { rankScenarios } from './scenario-ranker.js?v=20261101f';
+import { rankScenarios } from './scenario-ranker.js?v=20261102a';
 
 export class SearchEngine {
   constructor(regionData) {

@@ -26,13 +26,13 @@ const MUST_FIND = [
   ['appendicitis in a child', ['4665', '4666', '4667'], 3],
   ['kidney stones', ['7217', '7216'], 3],
   ['kidney stones pregnant', ['7220'], 1],
-  ['thunderclap headache', ['1145'], 1],
+  ['thunderclap headache', ['7012', '1145'], 1],
   ['scaphoid fracture', ['7316', '7317', '7318', '1181', '4618', '4621', '4622'], 3],
   ['elevated lfts', ['7151', '7152', '7153', '7154'], 5],
   ['chest pain low risk', ['652', '654'], 3],
   ['hemoptysis in a smoker', ['5246', '5245', '5247'], 5],
   ['aortic dissection', ['5554'], 1],
-  ['aortic dissection surveillance', ['8011', '8013'], 2],
+  ['aortic dissection surveillance', ['8011', '8013', '8006', '6826'], 2],
 ];
 
 for (const [query, ids, n] of MUST_FIND) {
@@ -120,7 +120,9 @@ test('a study name lists the scenarios that use it', () => {
 
 test('a condition plus a study still finds the condition', () => {
   assert.equal(top('mri for cauda equina', 1)[0].id, '5623');
-  assert.equal(resolveQuery('ct head after minor head injury', scenarios).topic, 'Head Trauma');
+  const result = resolveQuery('ct head after minor head injury', scenarios);
+  assert.equal(result.mode, 'list');
+  assert.match(result.scenarios[0].name, /^Head trauma, acute, mild/);
 });
 
 test('ACR name typos are corrected', () => {

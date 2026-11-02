@@ -19,14 +19,20 @@ function shownNames(result) {
   return [];
 }
 
+// A guide shows a whole topic grouped by recommendation, so its "name" check
+// passes when any scenario of the topic matches; a list is judged by its first.
 for (const c of cases) {
   test(`gold: ${c.q}`, () => {
     const result = resolveQuery(c.q, scenarios);
-    const seen = JSON.stringify({ mode: result.mode, topic: result.topic, first: shownNames(result)[0] });
+    const shown = shownNames(result);
+    const seen = JSON.stringify({ mode: result.mode, topic: result.topic, first: shown[0] });
     if (c.mode !== 'none') assert.notEqual(result.mode, 'none', seen);
     if (c.mode) assert.equal(result.mode, c.mode, seen);
     if (c.topic) assert.equal(result.topic, c.topic, seen);
-    if (c.name) assert.match(shownNames(result)[0] || '', new RegExp(c.name), seen);
-    if (c.not) for (const name of shownNames(result)) assert.doesNotMatch(name, new RegExp(c.not), seen);
+    if (c.name) {
+      const re = new RegExp(c.name);
+      assert.ok(result.mode === 'guide' ? shown.some(n => re.test(n)) : re.test(shown[0] || ''), seen);
+    }
+    if (c.not) for (const name of shown) assert.doesNotMatch(name, new RegExp(c.not), seen);
   });
 }
