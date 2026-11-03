@@ -404,6 +404,25 @@
       "q": "arm pain after joint replacement",
       "not": "[Kk]nee|[Hh]ip|[Aa]nkle|[Ff]oot",
       "mode": "none"
+    },
+    {
+      "q": "hip prosthesis patient fell xray normal next step",
+      "not": "[Ss]eptic",
+      "mode": "recover"
+    },
+    {
+      "q": "swollen glands",
+      "name": "[Aa]denopathy|[Nn]eck",
+      "not": "[Cc]holangio|[Cc]ancer, initial staging|[Ss]pine"
+    },
+    {
+      "q": "swollen glands neck",
+      "not": "[Cc]holangio|[Ss]pine pain"
+    },
+    {
+      "q": "fast heart rate",
+      "not": "[Pp]ancreatitis|ablation",
+      "mode": "recover"
     }
   ]
 }
