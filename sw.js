@@ -33,6 +33,9 @@ const DATA_ASSETS = [
   '/data/search/scenario_names.json',
   '/data/search/scenario_embeddings_v3.bin',
   '/data/search/scenario_embeddings_v3_ids.json',
+  // Clinician phrasings filed under scenarios: the semantic fallback's second route.
+  '/data/search/phrasing_index_v1.bin',
+  '/data/search/phrasing_index_v1.json',
   '/data/search/topics.json',
   '/data/data-info.json',
   '/data/sequence-library.json',

@@ -13,18 +13,15 @@ import { UI } from './ui.js?v=20260417a';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
-import { resolveQuery, buildTopicGuide, guardSuggestions } from './scenario-ranker.js?v=20261104a';
+import { resolveQuery, buildTopicGuide } from './scenario-ranker.js?v=20261104a';
+import * as embeddingSearch from './embedding-search.js?v=20261105a';
+
+const CLOSEST_MATCH_NOTICE = 'No scenario uses these words. These are suggestions by meaning, so check that they fit.';
 
 // Regions that have a backing data/regions/<name>.json file. Used to guard
 // navigation so a summary card with a body label that has no region file
 // (e.g. "neck", "pelvis") falls back to global search instead of 404ing.
-// Below this, the distilled model is matching noise or guessing: nonsense input
-// scores 0.3-0.4, and about 40% of answers between 0.45 and 0.5 missed.
-const EMBEDDING_MIN_SCORE = 0.5;
-const CLOSEST_MATCH_NOTICE = 'No scenario uses these words. These are suggestions by meaning, so check that they fit.';
-
 const KNOWN_REGIONS = new Set(['neuro', 'spine', 'msk', 'abdomen', 'chest', 'vascular', 'breast', 'peds', 'other']);
-import * as embeddingSearch from './embedding-search.js?v=20260519b';
 
 class ProtocolHelpApp {
   constructor() {
@@ -1470,13 +1467,10 @@ class ProtocolHelpApp {
     return p;
   }
 
-  // Semantic search: embedding shortlist + additive lexical bonus.
-  //
-  // Pulls top-30 from the distilled student model and re-ranks with a small
-  // additive lexical bonus (anatomic abbreviation expansion). LAMBDA=0.05
-  // was the only hybrid weight that didn't regress vs pure embedding on the
-  // teacher pseudo-gold sweep, while still bumping anatomically-precise
-  // matches ("LLQ" <-> "left lower quadrant") above near-rivals.
+  // Semantic search: embedding shortlist + additive lexical bonus, held to
+  // the rules by guardSuggestions. The ranking itself lives in
+  // embedding-search.js (rankSuggestions) so tools/eval_semantic_fallback.mjs
+  // measures exactly what the page shows.
   //
   // We previously tried in-browser cross-encoder rerank (graise-ce, 23MB).
   // Sweep on the CE-blend held-out gold (tools/eval_student_plus_ce.py)
@@ -1488,75 +1482,8 @@ class ProtocolHelpApp {
     const idx = await this._ensureGlobalConceptIndex();
     if (!idx || !idx.scenarioIndex) return [];
     const POOL = Math.max(max * 4, 30);
-    const hits = (await embeddingSearch.search(query, POOL)).filter(h => h.score >= EMBEDDING_MIN_SCORE);
-    const qNorm = this._conceptNorm(query);
-    const qTokens = qNorm.split(/\s+/).filter(t => t.length >= 3);
-
-    const LAMBDA = 0.05;
-    const reranked = [];
-    for (const h of hits) {
-      const s = this._scenarioById.get(String(h.id));
-      if (!s) continue;
-      const lex = this._lexicalScore(qNorm, qTokens, s);
-      const fused = h.score + LAMBDA * lex;
-      reranked.push({ ...s, score: fused, embScore: h.score, lexScore: lex });
-    }
-    reranked.sort((a, b) => b.score - a.score);
-    return guardSuggestions(query, reranked, idx.scenarioIndex).slice(0, max);
-  }
-
-  // Lexical overlap between a normalized query and a scenario's normName +
-  // normKeywords. Bidirectional anatomic abbreviation expansion so "LLQ"
-  // in a scenario name matches "left lower quadrant" in the query and
-  // vice versa. Returns a score in [0, 1].
-  _lexicalScore(qNorm, qTokens, scenario) {
-    const name = scenario.normName || '';
-    const kw = scenario.normKeywords || '';
-    let weight = 0;
-    // Token-level overlap. Name match is weighted higher than keyword match.
-    for (const t of qTokens) {
-      if (name.includes(t)) weight += 2;
-      else if (kw && kw.includes(t)) weight += 1;
-    }
-    // Anatomic-locator abbreviation expansions. If the query phrases
-    // these as full words and the scenario uses the abbreviation, or
-    // vice versa, count it as a strong signal.
-    const ABBR_PAIRS = this._anatomyAbbrPairs();
-    for (const [abbr, full] of ABBR_PAIRS) {
-      const inName = name.includes(abbr) || name.includes(full);
-      const inKw = kw && (kw.includes(abbr) || kw.includes(full));
-      const inQuery = qNorm.includes(abbr) || qNorm.includes(full);
-      if (inQuery && (inName || inKw)) weight += 3;
-    }
-    return Math.tanh(weight / 4);
-  }
-
-  _anatomyAbbrPairs() {
-    if (!this._anatomyAbbrPairsCache) {
-      this._anatomyAbbrPairsCache = [
-        ['llq', 'left lower quadrant'],
-        ['rlq', 'right lower quadrant'],
-        ['luq', 'left upper quadrant'],
-        ['ruq', 'right upper quadrant'],
-        ['mi',  'myocardial infarction'],
-        ['pe',  'pulmonary embolism'],
-        ['dvt', 'deep vein thrombosis'],
-        ['sah', 'subarachnoid hemorrhage'],
-        ['sdh', 'subdural hematoma'],
-        ['gca', 'giant cell arteritis'],
-        ['ich', 'intracerebral hemorrhage'],
-        ['ms',  'multiple sclerosis'],
-        ['ra',  'rheumatoid arthritis'],
-        ['oa',  'osteoarthritis'],
-        ['ibd', 'inflammatory bowel disease'],
-        ['hcc', 'hepatocellular carcinoma'],
-        ['rcc', 'renal cell carcinoma'],
-        ['copd', 'chronic obstructive pulmonary disease'],
-        ['als', 'amyotrophic lateral sclerosis'],
-        ['fuo', 'fever of unknown origin'],
-      ];
-    }
-    return this._anatomyAbbrPairsCache;
+    const hits = await embeddingSearch.search(query, POOL);
+    return embeddingSearch.rankSuggestions(query, hits, idx.scenarioIndex, this._scenarioById, { max });
   }
 
   async _globalSuggestSimilar(query, max = 3) {
