@@ -1941,6 +1941,80 @@ input:focus, button:focus {
   margin-top: var(--space-md);
 }
 
+/* Recovery screen (nothing matched) and the chooser grouped by complaint:
+   labelled places to explore, never an answer. */
+.recover-words {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: var(--space-sm) 0 var(--space-xs);
+  font-size: 13px;
+}
+
+.recover-word {
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.recover-word.unknown {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.recover-group {
+  padding: var(--space-sm) 0;
+  border-top: 1px solid var(--border);
+}
+
+.recover-group:first-of-type {
+  border-top: 0;
+}
+
+.recover-group-title {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.recover-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.recover-chips .dym-chip {
+  text-align: left;
+  gap: 6px;
+}
+
+.recover-region {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.recover-region:hover,
+.recover-region:focus-visible {
+  text-decoration: underline;
+}
+
+.recover-note {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
 .procedure-group {
   margin: var(--space-md) 0 6px;
   font-size: 13px;

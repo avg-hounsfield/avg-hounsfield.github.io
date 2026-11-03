@@ -12,6 +12,20 @@
  * ACR's "headache, no red flags". Pregnancy, age and side act as filters.
  * Plain English, question words and study names are ignored, so a long
  * sentence is read for its clinical core.
+ *
+ * Three further readings keep a search from ending in a dead end:
+ * - Several complaints ("chest pain and shortness of breath"): a scenario that
+ *   names them all wins; otherwise each complaint's topics are offered, grouped
+ *   by complaint, instead of dropping one complaint.
+ * - A size ("8 mm lung nodule") is checked against the ranges ACR writes in
+ *   scenario names ("<6mm", "1-2cm", "greater than 2 cm and less than 4 cm").
+ *   A size outside every range never picks a wrong range: the topic is shown
+ *   with a note instead.
+ * - When nothing matches, the search is explained rather than refused: which
+ *   words were understood, which ACR never uses, the topics each understood
+ *   word points at, and the likely body region. Every suggestion passes the
+ *   same population, negation, side and body-region checks as an answer, and a
+ *   search ACR does not cover at all is told so.
  */
 import { conceptNormalize } from './concept-matcher.js?v=20260531a';
 
@@ -74,7 +88,7 @@ const STOPWORDS = new Set([
   'conditions', 'disorder', 'disorders', 'problem', 'problems', 'issue', 'issues', 'complication', 'complications',
   'type', 'types', 'form', 'forms', 'level', 'levels', 'ground', 'next', 'line',
   'standard', 'gold', 'initial', 'initially', 'start', 'started', 'starting', 'begin', 'began', 'onset', 'blood',
-  'pressure', 'picc', 'xbreakx',
+  'pressure', 'picc', 'xbreakx', 'xcommax',
   // where the patient is
   'ed', 'er', 'emergency', 'department', 'clinic', 'office', 'outpatient', 'inpatient', 'icu', 'ward', 'floor',
   'bedside', 'triage', 'urgent', 'urgently', 'stat', 'elective', 'setting', 'care', 'pcp', 'referral', 'referred',
@@ -101,7 +115,7 @@ const ANATOMY = new Set([
   'upper', 'lower',
   'head', 'neck', 'cervical', 'chest', 'lung', 'heart', 'abdomen', 'pelvis', 'spine', 'thoracic', 'lumbar', 'lowback',
   'back', 'sacrum', 'shoulder', 'elbow', 'forearm', 'wrist', 'hand', 'finger', 'hip', 'groin', 'thigh', 'femur', 'knee',
-  'leg', 'tibia', 'ankle', 'foot', 'toe', 'breast', 'axilla', 'kidney', 'liver', 'pancreas', 'spleen', 'bladder',
+  'leg', 'tibia', 'ankle', 'foot', 'toe', 'breast', 'axilla', 'kidney', 'liver', 'pancreas', 'pancrea', 'spleen', 'bladder',
   'prostate', 'uterus', 'ovary', 'adnexal', 'adrenal', 'bowel', 'colon', 'rectum', 'stomach', 'esophagus', 'thyroid',
   'orbit', 'eye', 'ear', 'sinus', 'aorta', 'scrotum', 'flank', 'face', 'facial', 'jaw', 'mandibular', 'skull', 'rib',
   'extremity', 'mesenteric', 'biliary', 'gallbladder', 'ureter', 'cervix', 'vaginal', 'penis', 'nasal',
@@ -117,12 +131,14 @@ const SIDES = new Set(['left', 'right']);
 const ANATOMY_GROUPS = [
   ['head', 'skull', 'face', 'facial', 'orbit', 'eye', 'ear', 'sinus', 'nasal', 'jaw', 'mandibular', 'sella', 'iac',
     'brain', 'pituitary'],
-  ['cervical', 'spine', 'thoracic', 'lumbar', 'lowback', 'back', 'sacrum'],
+  ['cervical', 'spine', 'thoracic', 'lumbar', 'lowback', 'back', 'sacrum', 'thyroid'],
   ['chest', 'lung', 'heart', 'rib', 'thorax', 'breast', 'axilla', 'esophagus'],
-  ['abdomen', 'liver', 'kidney', 'pancreas', 'spleen', 'bowel', 'colon', 'stomach', 'adrenal', 'biliary', 'gallbladder',
+  // "pancreas" stems to "pancrea", which is the form the index holds.
+  ['abdomen', 'liver', 'kidney', 'pancreas', 'pancrea', 'spleen', 'bowel', 'colon', 'stomach', 'adrenal', 'biliary', 'gallbladder',
     'mesenteric', 'flank', 'ureter', 'aorta'],
   ['pelvis', 'bladder', 'prostate', 'uterus', 'ovary', 'adnexal', 'rectum', 'scrotum', 'cervix', 'vaginal', 'penis', 'hip', 'groin'],
-  ['shoulder', 'elbow', 'forearm', 'wrist', 'hand', 'finger', 'thigh', 'femur', 'knee', 'leg', 'tibia', 'ankle', 'foot', 'toe', 'extremity'],
+  ['shoulder', 'elbow', 'forearm', 'wrist', 'hand', 'finger', 'thigh', 'femur', 'knee', 'leg', 'tibia', 'ankle', 'foot', 'toe', 'extremity',
+    'bone', 'joint', 'muscle', 'tendon', 'ligament'],
 ];
 const GROUP_OF = new Map(ANATOMY_GROUPS.flatMap((g, i) => g.map(t => [t, i])));
 const groupsOf = terms => new Set(terms.map(t => GROUP_OF.get(t)).filter(g => g !== undefined));
@@ -188,7 +204,9 @@ const EQUIVALENT = {
   deteriorating: 'deterioration', deteriorate: 'deterioration', admitted: 'admission', hospitalization: 'admission',
   hospitalised: 'admission', hospitalized: 'admission', ribs: 'rib', colorectal: 'colon', hypotensive: 'hypotension',
   normotensive: 'normotension', limping: 'limp', diabetic: 'diabetes', diabetics: 'diabetes', incidentally: 'incidental',
-  fibroid: 'fibroids', leiomyoma: 'fibroids', leiomyomas: 'fibroids', spinal: 'spine',
+  fibroid: 'fibroids', leiomyoma: 'fibroids', leiomyomas: 'fibroids', spinal: 'spine', axillary: 'axilla',
+  dilated: 'dilation', dilatation: 'dilation', dilate: 'dilation', clinically: 'clinical', chemo: 'chemotherapy',
+  flare: 'exacerbation', flares: 'exacerbation', murmurs: 'murmur',
 };
 
 // Phrases ACR writes two ways; both sides read the short one.
@@ -211,6 +229,10 @@ const TEXT_SYNONYMS = [
   ['negative x ray', 'radiographynegative'], ['radiographs negative or equivocal', 'radiographynegative'],
   // Two ACR wordings for the unstable trauma patient.
   ['hemodynamically unstable', 'hypotension'], ['hemodynamically stable', 'normotension'],
+  // ACR names say "hepatocellular cancer" and "cirrhotic" where the clinician
+  // writes HCC and cirrhosis, and files cirrhosis under chronic liver disease.
+  ['hepatocellular cancer', 'hcc'], ['hepatocellular carcinoma', 'hcc'], ['cirrhotic', 'liver disease chronic'],
+  ['vesicoureteral reflux', 'vur'],
 ];
 
 // Clinician shorthand and lay terms -> the wording ACR uses. Sorted longest
@@ -264,7 +286,7 @@ const ALIASES = [
   ['abusive head trauma', 'physical abuse'], ['shaken', 'physical abuse'],
   ['nonaccidental trauma', 'physical abuse'], ['non accidental trauma', 'physical abuse'],
   ['non accidental injury', 'physical abuse'], ['nonaccidental injury', 'physical abuse'], ['child abuse', 'physical abuse'],
-  ['nat', 'physical abuse'], ['skeletal survey', 'physical abuse skeletal survey'],
+  ['nat', 'physical abuse'],
   // spine
   ['saddle anesthesia', 'cauda equina'], ['saddle anaesthesia', 'cauda equina'], ['cauda equina syndrome', 'cauda equina'],
   ['spinal cord compression', 'myelopathy'], ['cord compression', 'myelopathy'], ['cord signal', 'myelopathy'],
@@ -297,8 +319,7 @@ const ALIASES = [
   ['worst headache', 'headache severe sudden'], ['thunderclap headache', 'headache severe sudden'],
   ['thunderclap', 'headache severe sudden'], ['sudden onset severe headache', 'headache severe sudden'],
   ['sudden severe headache', 'headache severe sudden'], ['acute severe headache', 'headache severe sudden'],
-  ['headache with fever', 'headache fever'], ['headache and fever', 'headache fever'], ['neck stiffness', ''],
-  ['stiff neck', ''], ['photophobia', ''],
+  ['headache with fever', 'headache fever'], ['headache and fever', 'headache fever'], ['photophobia', ''],
   ['migraine with aura', 'migraine'], ['migraine without aura', 'migraine'], ['migraine headache', 'migraine'],
   ['tension headache', 'headache tension type'], ['tension type headache', 'headache tension type'],
   ['cluster headache', 'headache trigeminal autonomic'], ['cluster headaches', 'headache trigeminal autonomic'],
@@ -514,8 +535,9 @@ const ALIASES = [
   ['retained products of conception', 'peripartum hemorrhage'], ['retained products', 'peripartum hemorrhage'], ['rpoc', 'peripartum hemorrhage'],
   ['heavy menstrual bleeding', 'uterine bleeding abnormal'], ['menorrhagia', 'uterine bleeding abnormal'],
   ['heavy periods', 'uterine bleeding abnormal'], ['abnormal uterine bleeding', 'uterine bleeding abnormal'],
-  ['aub', 'uterine bleeding abnormal'], ['postmenopausal bleeding', 'uterine bleeding abnormal'],
-  ['bleeding after menopause', 'uterine bleeding abnormal'], ['spotting after menopause', 'uterine bleeding abnormal'],
+  ['aub', 'uterine bleeding abnormal'], ['postmenopausal bleeding', 'uterine bleeding abnormal ~postmenopausal'],
+  ['bleeding after menopause', 'uterine bleeding abnormal ~postmenopausal'],
+  ['spotting after menopause', 'uterine bleeding abnormal ~postmenopausal'],
   ['post menopausal', 'postmenopausal'], ['pre menopausal', 'premenopausal'], ['peri menopausal', 'perimenopausal'],
   ['twin pregnancy', 'multiple gestations'], ['twins', 'multiple gestations'], ['twin gestation', 'multiple gestations'],
   ['triplets', 'multiple gestations'], ['anatomy scan', 'fetal anomaly screening'], ['fetal anatomy survey', 'fetal anomaly screening'],
@@ -575,14 +597,119 @@ const ALIASES = [
   ['bloody nipple discharge', 'nipple discharge pathologic'], ['cyclic breast pain', 'breast pain cyclical'],
   ['cyclical breast pain', 'breast pain cyclical'], ['lump under arm', 'axillary lump'], ['lump under the arm', 'axillary lump'],
   ['underarm lump', 'axillary lump'], ['armpit lump', 'axillary lump'], ['armpit', 'axilla'], ['underarm', 'axilla'],
-  ['axillary lymphadenopathy', 'axillary adenopathy'], ['ductal carcinoma in situ', 'dcis'],
+  // ACR files axillary nodes under the axillary lump; "adenopathy" only orders.
+  ['axillary lymphadenopathy', 'axillary lump ~adenopathy'], ['axillary adenopathy', 'axillary lump ~adenopathy'],
+  ['axillary lymph node', 'axillary lump ~adenopathy'], ['axillary lymph nodes', 'axillary lump ~adenopathy'],
+  ['ductal carcinoma in situ', 'dcis'],
   ['breast implant', 'breast implant'],
   // ordering phrases that are not clinical
   ['of choice', ''], ['first line', ''], ['next step', ''], ['what next', ''], ['when to', ''], ['do i need', ''],
   ['is this normal', ''], ['pack year', ''], ['pack years', ''], ['former smoker', ''], ['ex smoker', ''],
   ['with picc', ''], ['picc line', ''],
+  // two complaints ACR files as one presentation
+  ['cough and fever', 'acute respiratory illness'], ['fever and cough', 'acute respiratory illness'],
+  ['cough with fever', 'acute respiratory illness'], ['fever with cough', 'acute respiratory illness'],
+  ['cough fever', 'acute respiratory illness'], ['fever cough', 'acute respiratory illness'],
+  ['leg pain and back pain', 'low back pain radiculopathy'], ['back pain and leg pain', 'low back pain radiculopathy'],
+  ['back and leg pain', 'low back pain radiculopathy'],
+  ['jaw pain and chest pain', 'chest pain acute coronary syndrome'], ['chest pain and jaw pain', 'chest pain acute coronary syndrome'],
+  ['chest pain radiating to jaw', 'chest pain acute coronary syndrome'], ['chest pain radiating to the jaw', 'chest pain acute coronary syndrome'],
+  ['arm pain and chest pain', 'chest pain acute coronary syndrome'], ['chest pain and arm pain', 'chest pain acute coronary syndrome'],
+  ['chest pain radiating to the arm', 'chest pain acute coronary syndrome'], ['chest pain radiating to arm', 'chest pain acute coronary syndrome'],
+  ['chest pain radiating to the left arm', 'chest pain acute coronary syndrome'], ['chest pain radiating to left arm', 'chest pain acute coronary syndrome'],
+  ['chest pain and back pain', 'acute aortic syndrome and chest pain and back pain'],
+  ['back pain and chest pain', 'acute aortic syndrome and chest pain and back pain'],
+  ['chest and back pain', 'acute aortic syndrome and chest pain and back pain'],
+  // lay terms, eponyms and shorthand
+  ['cp', 'chest pain'], ['blacked out', 'syncope'], ['dizzy spells', 'dizziness'], ['dizzy spell', 'dizziness'],
+  ['seeing double', 'visual'], ['numb hand', 'cervical radiculopathy'], ['hand numbness', 'cervical radiculopathy'],
+  ['tingling fingers', 'cervical radiculopathy'], ['finger tingling', 'cervical radiculopathy'], ['hand tingling', 'cervical radiculopathy'],
+  ['face drooping', 'stroke focal neuro deficit'], ['amaurosis fugax', 'tia visual'],
+  ['buckle fracture', 'wrist trauma fracture'], ['torus fracture', 'wrist trauma fracture'], ['greenstick fracture', 'forearm trauma fracture'],
+  ['jersey finger', 'hand trauma'], ['mallet finger', 'hand trauma'], ['skiers thumb', 'hand trauma'], ['skier s thumb', 'hand trauma'],
+  ['gamekeeper thumb', 'hand trauma'], ['gamekeepers thumb', 'hand trauma'], ['gamekeeper s thumb', 'hand trauma'],
+  ['fnof', 'hip pain acute traumatic fracture'], ['bimalleolar fracture', 'ankle trauma fracture'], ['trimalleolar fracture', 'ankle trauma fracture'],
+  ['jones fracture', 'foot trauma fracture'], ['lisfranc', 'foot trauma'], ['acetabular fracture', 'hip pain acute traumatic fracture'],
+  ['snuffbox tenderness', 'wrist trauma fall'], ['wrist sprain', 'wrist trauma'], ['sternal fracture', 'chest trauma blunt'],
+  ['flail chest', 'chest trauma blunt rib fracture'], ['blowout fracture', 'orbital trauma'], ['eye injury', 'orbital trauma'],
+  ['quad tendon rupture', 'knee trauma'], ['quadriceps tendon rupture', 'knee trauma'], ['quadriceps rupture', 'knee trauma'],
+  ['patellar dislocation', 'knee trauma dislocation'], ['patella dislocation', 'knee trauma dislocation'],
+  ['ac joint separation', 'shoulder pain acute'], ['ac joint injury', 'shoulder pain acute'], ['ac separation', 'shoulder pain acute'],
+  ['slap tear', 'shoulder pain labral'], ['shoulder impingement', 'shoulder pain chronic'], ['impingement shoulder', 'shoulder pain chronic'],
+  ['tennis elbow', 'elbow pain chronic epicondylalgia'], ['lateral epicondylitis', 'elbow pain chronic epicondylalgia'],
+  ['golfers elbow', 'elbow pain chronic epicondylalgia'], ['golfer s elbow', 'elbow pain chronic epicondylalgia'],
+  ['medial epicondylitis', 'elbow pain chronic epicondylalgia'], ['cubital tunnel', 'elbow pain chronic'],
+  ['de quervain', 'wrist pain chronic'], ['de quervains', 'wrist pain chronic'], ['trigger finger', 'hand pain chronic'],
+  ['tfcc tear', 'wrist pain chronic'], ['tfcc', 'wrist pain chronic'], ['kienbock', 'wrist pain chronic'],
+  ['ganglion cyst', 'soft tissue mass wrist'], ['bakers cyst', 'knee pain chronic'], ['baker s cyst', 'knee pain chronic'],
+  ['baker cyst', 'knee pain chronic'], ['popliteal cyst', 'knee pain chronic'], ['prepatellar bursitis', 'knee pain'],
+  ['olecranon bursitis', 'elbow pain'], ['it band', 'knee pain chronic'], ['iliotibial band', 'knee pain chronic'],
+  ['jumpers knee', 'knee pain chronic'], ['jumper s knee', 'knee pain chronic'], ['patellar tendinitis', 'knee pain chronic'],
+  ['patellar tendinopathy', 'knee pain chronic'], ['osgood schlatter', 'knee pain chronic child'],
+  ['severs disease', 'heel pain child'], ['sever s disease', 'heel pain child'], ['perthes', 'limp hip child'],
+  ['legg calve perthes', 'limp hip child'], ['transient synovitis', 'limp hip child'], ['toxic synovitis', 'limp hip child'],
+  ['clicky hip', 'ddh'], ['clicky hips', 'ddh'], ['refusing to walk', 'limp'], ['refuses to walk', 'limp'],
+  ['wont walk', 'limp'], ['will not walk', 'limp'], ['mcl tear', 'knee internal derangement'], ['pcl tear', 'knee internal derangement'],
+  ['lcl tear', 'knee internal derangement'], ['fai', 'hip pain chronic'], ['femoroacetabular impingement', 'hip pain chronic'],
+  ['hip impingement', 'hip pain chronic'], ['bunion', 'foot pain chronic'], ['hallux valgus', 'foot pain chronic'],
+  ['gout toe', 'foot pain chronic crystalline arthritis gout'], ['podagra', 'foot pain chronic crystalline arthritis gout'],
+  ['shin splints', 'stress fracture tibia'], ['charcot foot', 'foot diabetic'], ['charcot', 'foot diabetic'],
+  ['felon', 'soft tissue infection hand'], ['paronychia', 'soft tissue infection hand'], ['fight bite', 'soft tissue infection hand'],
+  ['dog bite', 'soft tissue infection'], ['cat bite', 'soft tissue infection'], ['flexor tenosynovitis', 'soft tissue infection hand'],
+  ['menieres', 'vertigo hearing loss'], ['meniere s', 'vertigo hearing loss'], ['meniere', 'vertigo hearing loss'],
+  ['acoustic neuroma', 'hearing loss sensorineural'], ['vestibular schwannoma', 'hearing loss sensorineural'],
+  ['ear drainage', 'otitis'], ['otorrhea', 'otitis'], ['tongue deviation', 'cranial nerve palsy'], ['ptosis', 'horner syndrome'],
+  ['anisocoria', 'horner syndrome'], ['proptosis', 'exophthalmos'], ['parotitis', 'cervical mass'], ['salivary stone', 'cervical mass'],
+  ['sialadenitis', 'cervical mass'], ['thyroglossal duct cyst', 'cervical mass'], ['branchial cleft cyst', 'cervical mass'],
+  ['thyroid storm', 'thyrotoxicosis'], ['graves', 'thyrotoxicosis'], ['hashimoto', 'hypothyroidism'], ['hashimotos', 'hypothyroidism'],
+  ['hashimoto s', 'hypothyroidism'], ['hypercalcemia', 'hyperparathyroidism'], ['laryngeal cancer', 'head and neck cancer'],
+  ['globus', 'dysphagia'], ['odynophagia', 'dysphagia'], ['food stuck in throat', 'dysphagia'],
+  ['foreign body throat', 'ingested foreign body'], ['foreign body in throat', 'ingested foreign body'],
+  ['essential tremor', 'parkinsonian'], ['tremor', 'parkinsonian'], ['dystonia', 'parkinsonian'],
+  ['syrinx', 'myelopathy'], ['syringomyelia', 'myelopathy'], ['near syncope', 'presyncope'], ['pots', 'syncope'],
+  ['headache after lp', 'headache intracranial hypotension dural puncture'],
+  ['headache after lumbar puncture', 'headache intracranial hypotension dural puncture'],
+  ['pseudotumor', 'headache intracranial hypertension'], ['cavernoma', 'vascular malformation ~head'],
+  ['cavernous malformation', 'vascular malformation ~head'], ['rcvs', 'headache severe sudden'], ['prolactinoma', 'pituitary adenoma'],
+  ['sinus pain', 'sinusitis'], ['sinus pressure', 'sinusitis'], ['sinus congestion', 'sinusitis'], ['sinus headache', 'sinusitis headache'],
+  ['ear pain', 'otitis'], ['earache', 'otitis'], ['heart murmur', 'heart disease'],
+  ['open book pelvis', 'major blunt trauma ~pelvis'], ['open book fracture', 'major blunt trauma ~pelvis'],
+  ['pelvic fracture', 'major blunt trauma ~pelvis'], ['pelvic ring fracture', 'major blunt trauma ~pelvis'],
+  // entities ACR does not cover at all; nothing is offered for them
+  ['nursemaid elbow', ''], ['nursemaids elbow', ''], ['nursemaid s elbow', ''], ['pulled elbow', ''], ['sacral dimple', ''],
+  ['post concussion syndrome', 'head trauma mild'], ['post concussive', 'head trauma mild'], ['second impact', 'head trauma'],
+  ['afib', 'atrial fibrillation'], ['a fib', 'atrial fibrillation'], ['myocarditis', 'cardiomyopathy'], ['cardiomegaly', 'heart failure'],
+  ['asthma attack', 'asthma acute exacerbation'], ['asthma exacerbation', 'asthma acute exacerbation'],
+  ['cold foot', 'cold painful leg'], ['cold toes', 'cold painful leg'], ['blue toe', 'cold painful leg'],
+  ['choking child', 'aspirated foreign body child'], ['ibd flare', 'crohn disease acute exacerbation'],
+  ['volvulus', 'bowel obstruction'], ['ileus', 'small bowel obstruction'], ['perforated ulcer', 'abdomen pain acute'],
+  ['free air', 'abdomen pain acute'], ['pneumoperitoneum', 'abdomen pain acute'], ['renal abscess', 'pyelonephritis complicated'],
+  ['perinephric abscess', 'pyelonephritis complicated'], ['fournier', 'soft tissue infection necrotizing fasciitis'],
+  ['fourniers gangrene', 'soft tissue infection necrotizing fasciitis'], ['fournier s gangrene', 'soft tissue infection necrotizing fasciitis'],
+  ['hepatitis', 'liver disease'], ['spitting up', 'vomiting infant'], ['currant jelly stool', 'intussusception'],
+  ['currant jelly', 'intussusception'], ['handlebar injury', 'blunt trauma abdomen child'], ['impalement', 'penetrating trauma'],
+  ['blast injury', 'major blunt trauma'], ['sickle cell crisis', 'sickle cell'], ['sickle cell chest syndrome', 'chest pain sickle cell'],
+  ['acute chest syndrome', 'chest pain sickle cell'], ['giant cell arteritis', 'vasculitis'], ['temporal arteritis', 'vasculitis'],
+  ['gca', 'vasculitis'], ['aortic root', 'thoracic aorta'], ['ascending aorta', 'thoracic aorta'], ['ascending aortic', 'thoracic aorta'],
+  ['aortic injury', 'chest trauma blunt aorta'], ['traumatic aortic injury', 'chest trauma blunt aorta'],
+  ['cardiac contusion', 'chest trauma blunt cardiac injury'], ['myocardial contusion', 'chest trauma blunt cardiac injury'],
+  ['lymph node', 'adenopathy'], ['lymph nodes', 'adenopathy'], ['enlarged lymph node', 'adenopathy'],
+  ['enlarged lymph nodes', 'adenopathy'], ['lymphadenopathy', 'adenopathy'], ['dysuria', 'uti'],
+  // ACR's words for the features a measured lesion is described with
+  ['mural nodule', 'high risk features'], ['worrisome features', 'high risk features'], ['high risk stigmata', 'high risk features'],
+  ['after neoadjuvant chemotherapy', 'neoadjuvant chemotherapy completed'], ['after neoadjuvant chemo', 'neoadjuvant chemotherapy completed'],
+  ['post neoadjuvant chemotherapy', 'neoadjuvant chemotherapy completed'], ['post neoadjuvant chemo', 'neoadjuvant chemotherapy completed'],
+  ['completed neoadjuvant chemotherapy', 'neoadjuvant chemotherapy completed'],
+  ['completion of neoadjuvant chemotherapy', 'neoadjuvant chemotherapy completed'],
+  ['right upper lobe', 'lung'], ['left upper lobe', 'lung'], ['right lower lobe', 'lung'], ['left lower lobe', 'lung'],
+  ['right middle lobe', 'lung'], ['upper lobe', 'lung'], ['lower lobe', 'lung'], ['middle lobe', 'lung'], ['lingula', 'lung'],
 ];
 ALIASES.sort((a, b) => b[0].length - a[0].length);
+
+// "history of colon cancer" beside a measured lesion is ACR's "hx of
+// malignancy": the lesion's scenarios split on that, not on the cancer's site.
+const LESION_WORDS = /\b(mass|lesion|nodule|cyst|incidentaloma|adenoma)\b/;
+const CANCER_HISTORY_RE = /\b(?:history of|hx of|known|prior|previous|with|has|and|in (?:a )?patient with|patient with)\s+(?:a |an |history of )?(?:[a-z]+ ){0,2}(?:cancer|carcinoma|malignancy|melanoma|lymphoma|sarcoma)\b/g;
 
 // Aliases that depend on the rest of the search. "urinary retention" with back
 // pain means cauda equina; alone it is a bladder question. Those marked
@@ -617,6 +744,23 @@ const CONTEXT_ALIASES = [
   { phrase: 'torsion', when: /\b(scrotum|scrotal|testis|testicle|testicular|testes)\b/, to: 'scrotum pain acute' },
   { phrase: 'torsion', when: /\b(ovary|ovarian|adnexa|adnexal|pelvis|pelvic)\b/, to: 'pelvis pain gynecological' },
   { phrase: 'abscess', when: /\b(thigh|leg|arm|forearm|hand|foot|calf|shoulder|hip|knee|elbow|wrist|ankle|neck|extremity|buttock|gluteal|groin|lower|upper)\b/, to: 'soft tissue infection' },
+  // A stiff neck beside a headache changes nothing; beside a fever it is the
+  // neck that is asked about, softly.
+  { phrase: 'neck stiffness', when: /\b(headache|ha|migraine)\b/, to: '', before: true },
+  { phrase: 'stiff neck', when: /\b(headache|ha|migraine)\b/, to: '', before: true },
+  { phrase: 'neck stiffness', when: /./, to: '~cervical', before: true },
+  { phrase: 'stiff neck', when: /./, to: '~cervical', before: true },
+  // A skeletal survey is ACR's abuse workup when it is the whole search or
+  // abuse or a child is named; a myeloma skeletal survey is not an accusation.
+  { phrase: 'skeletal survey', when: /^\s*$|\b(abuse|nonaccidental|non accidental|nat|infant|baby|toddler|child|pediatric)\b/, to: 'physical abuse skeletal survey', before: true },
+  // The renal pelvis of a hydronephrosis is the kidney itself.
+  { phrase: 'renal pelvis', when: /\b(hydronephrosis|dilat\w*|aprpd|apd)\b/, to: '', before: true },
+  { phrase: 'renal pelvic', when: /\b(hydronephrosis|dilat\w*|aprpd|apd)\b/, to: '', before: true },
+  // A blunt mechanism makes the headache, the neck pain and the back a
+  // question of injury to the head and spine.
+  { phrase: 'headache', when: /\bblunt\b/, to: 'head trauma' },
+  { phrase: 'cervical pain', when: /\bblunt\b/, to: 'cervical spine trauma' },
+  { phrase: 'back', when: /\bblunt\b/, to: 'spine' },
 ];
 
 // "<part> pain after a fall" asks about the injury, so the mechanism replaces
@@ -653,16 +797,41 @@ const UNASKED_QUALIFIERS = ['follow', 'preoperative', 'preprocedure', 'tevar', '
   'pathologic', 'insufficiency', 'acalculous', 'fungal', 'invasive', 'complicated', 'immunocompromised', 'neutropenia',
   'screening', 'sepsis', 'abuse', 'transplant', 'pavm', 'postmenopausal', 'premenopausal', 'sickle', 'arteriopathy',
   'hiv', 'diabetes', 'diabetic', 'cancer', 'tumor', 'exacerbation', 'management', 'intervention', 'candidate',
-  'silicone', 'saline', 'implant', 'cutaneous', 'revasc', 'revascularization'];
+  'silicone', 'saline', 'implant', 'cutaneous', 'revasc', 'revascularization', 'penetrating', 'transgender',
+  'transfeminine', 'transmasculine', 'neoadjuvant', 'chemotherapy', 'planning', 'surgical', 'inflammatory', 'wall',
+  'infection'];
 
 // Topic titles a generic search should not open when a plainer title also
 // fits: procedure planning and the immunocompromised branch are asked for.
 const TITLE_UNASKED = ['management', 'planning', 'interventional', 'immunocompromised'];
 
-// Opposites: a search for one must not lead with the other.
+// Opposites: a search for one is never answered with the other.
 const ANTONYMS = [['acute', 'chronic'], ['blunt', 'penetrating'], ['upper', 'lower'], ['premenopausal', 'postmenopausal'],
   ['immunocompetent', 'immunocompromised'], ['ballistic', 'nonballistic'], ['painful', 'painless'], ['pulsatile', 'nonpulsatile'],
-  ['bilious', 'nonbilious'], ['gynecological', 'nongynecological'], ['ischemic', 'nonischemic'], ['focal', 'nonlocalized']];
+  ['bilious', 'nonbilious'], ['gynecological', 'nongynecological'], ['ischemic', 'nonischemic'], ['focal', 'nonlocalized'],
+  ['postmenopausal', 'reproductive'], ['first', 'second'], ['first', 'third'], ['second', 'third'], ['positive', 'negative'],
+  ['hypothyroidism', 'thyrotoxicosis'], ['euthyroid', 'thyrotoxicosis'], ['euthyroid', 'hypothyroidism'], ['benign', 'malignant'],
+  ['met', 'primary'],
+  // A chronic scenario is the opposite of an injury even when its name
+  // mentions an old one ("post trauma osteoarthritis"): judged by what was
+  // asked, not by what the name also happens to say.
+  ['trauma', 'chronic', 'strict']];
+
+// Whether a scenario or title states the opposite of a word the search asked,
+// by an antonym or, when `negation` is checked, by negating the word itself
+// ("nontraumatic", "no high risk features"). A name that says both words of a
+// pair is not the opposite of either, unless the pair is marked strict.
+function opposes({ positive, negative }, asked, { negation = true } = {}) {
+  if (negation && negatesAsked({ positive, negative }, asked)) return true;
+  return ANTONYMS.some(([a, b, strict]) => {
+    const clear = (want, other) => (strict ? !asked.has(other) : !positive.has(want));
+    return (asked.has(a) && positive.has(b) && clear(a, b)) || (asked.has(b) && positive.has(a) && clear(b, a));
+  });
+}
+
+function negatesAsked({ positive, negative }, asked) {
+  return Boolean(negative) && [...asked].some(t => negative.has(t) && !positive.has(t));
+}
 
 // A negated word also rules out scenarios built on what implies it: "no fever"
 // excludes sepsis, "no red flags" the red-flag headache branches.
@@ -677,9 +846,15 @@ const IMPLIES = {
 // Scenario names this long are the variant text itself, not a name.
 const MAX_NAME_WORDS = 22;
 
-const PREGNANT_RE = /\b(pregnant|pregnancy|gravid|gravida|trimester|gestation|gestational|prenatal|antenatal|obstetric|obstetrical|fetal|fetus|g\d+p\d+|\d+\s*(?:weeks|wks|wk)\s*(?:pregnant|gestation|ga|ega|gestational age)|iugr)\b/;
+// "antenatal" is not here: an antenatal diagnosis (hydronephrosis) describes
+// the infant, so it sits with the pediatric words.
+const PREGNANT_RE = /\b(pregnant|pregnancy|gravid|gravida|trimester|gestation|gestational|prenatal|obstetric|obstetrical|fetal|fetus|g\d+p\d+|\d+\s*(?:weeks|wks|wk)\s*(?:pregnant|gestation|ga|ega|gestational age)|iugr)\b/;
 const NOT_PREGNANT_RE = /\b(not pregnant|non pregnant|nonpregnant|negative pregnancy test|pregnancy test negative|negative hcg|hcg negative|negative beta hcg|beta hcg negative|not currently pregnant)\b/;
-const PEDIATRIC_RE = /\b(child|children|kid|kids|pediatric|pediatrics|peds|ped|infant|infants|toddler|neonate|neonatal|newborn|baby|babies|adolescent|teen|teenager|teenage|preemie|preterm infant|nicu|school age|boy|girl)\b/;
+const PEDIATRIC_RE = /\b(child|children|kid|kids|pediatric|pediatrics|peds|ped|infant|infants|toddler|neonate|neonatal|newborn|baby|babies|adolescent|teen|teenager|teenage|preemie|preterm infant|nicu|school age|boy|girl|antenatal)\b/;
+// Sex words in a search and in ACR titles and names. "Evaluation of the
+// Symptomatic Male Breast" is no answer to a search that never says male.
+const MALE_RE = /\b(male|males|man|men|boy|boys|gentleman)\b/i;
+const FEMALE_RE = /\b(female|females|woman|women|girl|girls|lady|pregnant|gravid)\b/i;
 const INFANT_RE = /\b(infant|infants|toddler|neonate|neonatal|newborn|baby|babies|preemie|nicu)\b/;
 const ADULT_RE = /\b(adult|adults|geriatric|elderly)\b/;
 // Ages as clinicians write them: "68F", "45 yo M", "2 month old", "age 40", "under 30".
@@ -697,20 +872,68 @@ const NEGATION_WORDS = ['no', 'not', 'without', 'denies', 'denied', 'denying', '
 // In a search, a negation stops at these words: "no fever with abdominal pain".
 // "or" continues it, as in ACR's own "no fever or leukocytosis".
 const NEGATION_BOUNDARY = new Set(['and', 'but', 'with', 'plus', 'in', 'on', 'at', 'after', 'before', 'since',
-  'who', 'which', 'that', 'when', 'while', 'then', 'now', 'also', 'initial', 'next', 'follow', 'imaging', 'xbreakx']);
+  'who', 'which', 'that', 'when', 'while', 'then', 'now', 'also', 'initial', 'next', 'follow', 'imaging', 'xbreakx',
+  'xcommax']);
 const NEGATION_REACH = 3;
+
+// Words that join one complaint to the next. Commas and sentence breaks are
+// kept as tokens by normalizeSearch so they can split complaints too.
+const CONJUNCTIONS = new Set(['and', 'with', 'plus', 'also', 'xcommax', 'xbreakx']);
 
 // One-word searches too general to point at any one topic.
 const TOO_BROAD = new Set(['pain', 'mass', 'lesion', 'tumor', 'cancer', 'trauma', 'fracture', 'infection', 'normal',
   'bleeding', 'swelling', 'disease']);
 
+// Words that cannot stand for a complaint or point a recovery at a topic on
+// their own: generic findings, sides of a region, stages of care, and the
+// fragments of longer terms ("cell" of sickle cell, "loss" of hearing loss).
+const RECOVERY_GENERIC = new Set([...TOO_BROAD, 'upper', 'lower', 'extremity', 'staging', 'screening', 'follow',
+  'initial', 'imaging', 'suspected', 'known', 'next', 'acute', 'chronic', 'loss', 'cell', 'syndrome', 'type', 'grade',
+  'stage', 'small', 'large', 'giant', 'body', 'wall', 'duct', 'node', 'tissue', 'soft', 'weakness', 'symptom', 'history',
+  'left', 'right', 'features', 'feature', 'high', 'low', 'risk', 'dysfunction', 'short', 'long', 'term', 'radiation',
+  'therapy', 'treatment', 'injury', 'transient', 'density', 'iron', 'deficiency', 'survey']);
+// A one-word search is also too broad when its scenarios spread over the
+// body: "fever" alone names headaches, bellies and spines.
+const MIN_BROAD_NAMES = 8;
+// A word named in more than this share of ACR scenarios is a modifier, not a topic.
+const MAX_SPECIFIC_SHARE = 0.1;
+// How much of the vote one region needs before recovery names it, and before
+// a word in a search naming no body part counts as pointing anywhere: the
+// scenarios naming "abscess" spread over several regions, those naming
+// "headache" do not.
+const MIN_REGION_SHARE = 0.6;
+// A topic is offered for a word when its title names the word, or when enough
+// of its scenarios do: this share of the topic, or this many scenarios.
+const MIN_TOPIC_SHARE = 0.15;
+const MIN_TOPIC_SCENARIOS = 3;
+// A data region counts as one a body part lives in when this share of the
+// scenarios naming the part sit there, or this many of them do.
+const MIN_GROUP_REGION_SHARE = 0.05;
+const MIN_REGION_NAMES = 3;
+// Adult scenarios this scarce among those naming a word make it a child's word.
+const MIN_ADULT_SHARE = 0.2;
+const MAX_RECOVERY_TOPICS = 5;
+const MAX_RECOVERY_SCENARIOS = 3;
+// An age that picks out more scenarios than this leaves the topic's guide to answer.
+const MAX_AGE_LIST = 4;
+
+// Sizes. A search's "8 mm", "4.5cm" or "1.5-cm" is read in millimetres and
+// checked against the range a scenario names.
+const SIZE_UNIT_RE = 'mm|cm|millimet(?:er|re)s?|centimet(?:er|re)s?';
+const SIZE_NUM = '\\d+(?:\\.\\d+)?';
+const QUERY_SIZE_RE = new RegExp(`(?<![\\d.])(${SIZE_NUM})\\s*-?\\s*(${SIZE_UNIT_RE})\\b`, 'g');
+const REGION_LABELS = {
+  neuro: 'Neuro', spine: 'Spine', chest: 'Chest', abdomen: 'Abdomen', msk: 'Musculoskeletal', vascular: 'Vascular',
+  breast: 'Breast', peds: 'Pediatric', other: 'General',
+};
+
 const SOFT_MATCH_BONUS = 0.08;
 const KEYWORD_BONUS = 0.03;
 const NAME_MATCH_BONUS = 0.12;
 const INITIAL_BONUS = 0.03;
+const SIZE_FIT_BONUS = 0.15;
 const POPULATION_PENALTY = 0.3;
 const UNASKED_PENALTY = 0.12;
-const ANTONYM_PENALTY = 0.5;
 const EXTRA_WORD_PENALTY = 0.006;
 const MIN_DROPPABLE_FREQUENCY = 10;
 const MIN_CORRECTABLE_LENGTH = 5;
@@ -741,7 +964,9 @@ const SLASH_SHORTHAND = [
 ];
 
 // "ectopic pregnancy" names a diagnosis, not a pregnant patient to filter on.
-function normalizeSearch(query) {
+// Commas are kept as tokens only when the caller splits complaints on them;
+// otherwise they vanish so "fever, no source" still reads as one phrase.
+function normalizeSearch(query, { keepCommas = false } = {}) {
   let q = String(query).toLowerCase();
   for (const [re, to] of SLASH_SHORTHAND) q = q.replace(re, to);
   // Contrast phrases carry no clinical meaning and "without" would otherwise
@@ -749,8 +974,14 @@ function normalizeSearch(query) {
   q = q.replace(/\b(with|without|w|wo|w o|no|non|pre|post)\s*(and\s*(with|without)\s*)?(iv\s*)?(contrast|con|gad|gadolinium)\b/g, ' ');
   // "w/ and w/o" means contrast even when the word is left out.
   q = q.replace(/\b(with|w)\s+(and|&)\s+(without|wo|w o)\b/g, ' ');
+  // A measurement is read separately by extractSizes; here it would only
+  // split "4.5" into two numbers.
+  q = q.replace(QUERY_SIZE_RE, ' ')
+    .replace(/\bsub\s*-?\s*centimet(?:er|re)\b|\bsubcentimet(?:er|re)\b|\bsub\s*-?\s*cm\b|\bsubcm\b|\bmillimetric\b/g, ' ');
   // A sentence break ends a negation: "Not goiter. Euthyroid." negates goiter only.
   q = q.replace(/[.;]\s/g, ' xbreakx ');
+  // A comma or "+" joins one complaint to the next, like "and".
+  if (keepCommas) q = q.replace(/\s*[&+]\s*/g, ' and ').replace(/,\s*/g, ' xcommax ');
   q = cleanWords(q)
     .replace(/\b(ectopic|molar) pregnancy\b/g, (m, w) => (w === 'molar' ? 'gestational trophoblastic disease' : w))
     .replace(/\bmolar\b/g, 'gestational trophoblastic disease');
@@ -769,16 +1000,26 @@ const protect = text => joinLowBack(text).trim().split(' ').filter(Boolean).join
 
 function applyAliases(text, { age } = {}) {
   let out = ` ${text.replace(/\bthe\b/g, ' ').replace(/\s+/g, ' ')} `;
+  let mechanism = false;
   out = out.replace(PAIN_AFTER_TRAUMA_RE, (m, cause) => {
+    mechanism = true;
     if (/^(fall|falling)$/.test(cause)) return 'trauma fall';
     if (/^(twist|twisting)$/.test(cause)) return 'trauma twisting';
     if (/^(accident|collision|crash|mvc|mva)$/.test(cause)) return 'blunt trauma';
     if (/^foosh$/.test(cause)) return 'wrist trauma fall';
     return 'trauma';
   });
+  // The mechanism belongs to every painful part named: "ankle pain and knee
+  // pain after a fall" is two injuries.
+  if (mechanism) out = out.replace(/ pain /g, ' trauma ');
+  // A cancer in the history of a measured lesion is ACR's "hx of malignancy".
+  if (LESION_WORDS.test(out)) out = out.replace(CANCER_HISTORY_RE, ' malignancy ');
+  // A phrase an earlier alias produced is joined with "_" and matched as such.
   const context = ({ phrase, when, to }) => {
-    if (out.includes(` ${phrase} `) && when.test(out.replace(` ${phrase} `, ' ').replace(/_/g, ' '))) {
-      out = out.split(` ${phrase} `).join(` ${protect(to)} `);
+    for (const form of [phrase, phrase.replace(/ /g, '_')]) {
+      if (out.includes(` ${form} `) && when.test(out.replace(` ${form} `, ' ').replace(/_/g, ' '))) {
+        out = out.split(` ${form} `).join(` ${protect(to)} `);
+      }
     }
   };
   for (const c of CONTEXT_ALIASES) if (c.before) context(c);
@@ -790,6 +1031,12 @@ function applyAliases(text, { age } = {}) {
   if (age === 'pediatric') out = out.replace(/ (cant|cannot|unable to|not) (bear weight|bearing weight|walk) /g, ' limp ');
   for (const [from, to] of ALIASES) out = out.split(` ${from} `).join(` ${protect(to)} `);
   for (const c of CONTEXT_ALIASES) if (!c.before) context(c);
+  // ACR files an adult's cough and fever under acute respiratory illness and
+  // a child's under pneumonia; a child's skeletal survey is the abuse workup.
+  if (age === 'pediatric') {
+    out = out.split(' acute_respiratory_illness ').join(' pneumonia ');
+    out = out.split(' skeletal survey ').join(' physical_abuse_skeletal_survey ');
+  }
   return out.replace(/\s+/g, ' ').trim();
 }
 
@@ -818,7 +1065,12 @@ export function extractQualifiers(query) {
   if (/\bleft\b/.test(q) && !/\bright\b/.test(q)) sides.add('left');
   if (/\bright\b/.test(q) && !/\bleft\b/.test(q)) sides.add('right');
   const gcs = q.match(GCS_QUERY_RE);
-  return { pregnant: !notPregnant && PREGNANT_RE.test(q), notPregnant, age, years, infant, teen, sides, gcs: gcs ? Number(gcs[1]) : null };
+  const pregnant = !notPregnant && PREGNANT_RE.test(q);
+  const sex = pregnant || FEMALE_RE.test(q) ? 'female' : MALE_RE.test(q) ? 'male' : null;
+  return {
+    pregnant, notPregnant, age, years, infant, teen, sides, sex, gcs: gcs ? Number(gcs[1]) : null,
+    sizes: extractSizes(query),
+  };
 }
 
 // Ages go before aliases are read ("neck pain child after fall" is a neck
@@ -899,13 +1151,37 @@ function parseQuery(query, index) {
   return parsed;
 }
 
-function parseWords(query, index) {
+// The clinical words of a search after shorthand, aliases, ages and pregnancy
+// words are read, with the body parts its study names kept apart.
+function aliasedWords(query, options = {}) {
   const { age } = extractQualifiers(query);
-  const { rest, anatomy: studyAnatomy, words: studyWords } = splitStudyPhrases(normalizeSearch(query));
+  const { rest, anatomy: studyAnatomy, words: studyWords } = splitStudyPhrases(normalizeSearch(query, options));
   const words = joinLowBack(withoutPregnancy(applyAliases(withoutAge(rest), { age })))
     .replace(/\bnon(?=[a-z]{5,})/g, 'non ')
     .split(/[ _]/)
     .filter(Boolean);
+  return { words, rest, studyAnatomy, studyWords };
+}
+
+function parseWords(query, index) {
+  const { words, rest, studyAnatomy, studyWords } = aliasedWords(query);
+  const parsed = classifyWords(words, index, studyAnatomy);
+  const { required } = parsed;
+  // A study's body part with only generic words left ("brain MR for new mass")
+  // means that body part's mass: read it again with the body part placed
+  // before the generic word, so "brain mass" reaches its alias.
+  const generic = required.filter(t => DROPPABLE.includes(t));
+  if (studyAnatomy.size && required.length && generic.length === required.length) {
+    const placed = rest.replace(new RegExp(`\\b(${generic.join('|')})\\b`), `${studyWords.join(' ')} $1`);
+    if (placed !== rest) return parseWords(placed, index);
+  }
+  // A search that is only a study ("xray knee") asks about that body part.
+  if (required.length === 0) for (const t of studyAnatomy) required.push(t);
+  return { ...parsed, required: [...new Set(required)], soft: parsed.soft.filter(t => !required.includes(t)) };
+}
+
+/** Sorts aliased words into { required, soft, negated } stemmed terms. */
+function classifyWords(words, index, studyAnatomy = new Set()) {
   const required = [];
   const soft = [...studyAnatomy];
   const negated = [];
@@ -949,22 +1225,50 @@ function parseWords(query, index) {
   // term stated positively keeps its positive reading.
   const stated = new Set([...required, ...soft]);
   const negatedSet = new Set(negated.filter(t => !stated.has(t)));
-  // A study's body part with only generic words left ("brain MR for new mass")
-  // means that body part's mass: read it again with the body part placed
-  // before the generic word, so "brain mass" reaches its alias.
-  const generic = required.filter(t => DROPPABLE.includes(t));
-  if (studyAnatomy.size && required.length && generic.length === required.length) {
-    const placed = rest.replace(new RegExp(`\\b(${generic.join('|')})\\b`), `${studyWords.join(' ')} $1`);
-    if (placed !== rest) return parseWords(placed, index);
-  }
-  // A search that is only a study ("xray knee") asks about that body part.
-  if (required.length === 0) for (const t of studyAnatomy) required.push(t);
   return {
     required: [...new Set(required)],
     soft: [...new Set(soft)].filter(t => !required.includes(t)),
     negated: [...negatedSet],
     studyAnatomy: [...studyAnatomy],
   };
+}
+
+/**
+ * The complaints of a search, split at "and", "with", commas and sentence
+ * breaks after aliases are read, so "shortness of breath" stays one complaint.
+ * Each is parsed on its own; the whole search's negation applies to all.
+ */
+function splitComplaints(query, index) {
+  const { words, studyAnatomy } = aliasedWords(query, { keepCommas: true });
+  const segments = [];
+  let current = [];
+  for (const w of words) {
+    if (CONJUNCTIONS.has(w)) {
+      if (current.length) segments.push(current);
+      current = [];
+    } else current.push(w);
+  }
+  if (current.length) segments.push(current);
+  const parsed = segments.map(seg => classifyWords(seg, index)).filter(p => p.required.length);
+  // The user's own words for each complaint, aligned when the split agrees.
+  const raw = joinLowBack(withoutPregnancy(withoutAge(splitStudyPhrases(normalizeSearch(query, { keepCommas: true })).rest)))
+    .split(' ').filter(Boolean);
+  const labels = [];
+  current = [];
+  for (const w of raw) {
+    if (CONJUNCTIONS.has(w)) {
+      if (current.length) labels.push(current);
+      current = [];
+    } else current.push(w);
+  }
+  if (current.length) labels.push(current);
+  const clean = seg => seg.filter(w => !STOPWORDS.has(w) && !/^\d/.test(w) && !NEGATION_WORDS.includes(w)).join(' ');
+  const labelled = labels.map(clean).filter(Boolean);
+  return parsed.map((p, i) => ({
+    ...p,
+    label: labelled.length === parsed.length ? labelled[i] : [...p.required, ...p.soft].join(' '),
+    studyAnatomy: [...studyAnatomy],
+  }));
 }
 
 /**
@@ -1012,6 +1316,174 @@ function gcsRange(name) {
   return [a, a];
 }
 
+// ---- Sizes --------------------------------------------------------------
+
+// ACR writes bounds in words and symbols; both become <, <=, > or >=.
+function normalizeSizeText(text) {
+  return String(text).toLowerCase()
+    .replace(/≤/g, ' <= ').replace(/≥/g, ' >= ')
+    .replace(/\b(?:less than or equal to|equal to or less than|no more than|no larger than|not more than|up to|at most)\b/g, ' <= ')
+    .replace(/\b(?:greater than or equal to|equal to or greater than|equal to or more than|more than or equal to|at least|no less than|no smaller than)\b/g, ' >= ')
+    .replace(/\b(?:less than|smaller than|under|below)\b/g, ' < ')
+    .replace(/\b(?:greater than|larger than|more than|over|above|exceeding)\b/g, ' > ')
+    .replace(/\s+/g, ' ');
+}
+
+const unitMm = unit => (/^c/.test(unit) ? 10 : 1);
+const SIZE_RANGE_RE = new RegExp(`(${SIZE_NUM})\\s*(${SIZE_UNIT_RE})?\\s*(?:to|-|–|through|and)\\s*(${SIZE_NUM})\\s*(${SIZE_UNIT_RE})\\b`, 'g');
+const SIZE_BOUND_RE = new RegExp(`(<=|>=|<|>)\\s*(${SIZE_NUM})\\s*(${SIZE_UNIT_RE})\\b`, 'g');
+const SIZE_TRAILING_RE = new RegExp(`(${SIZE_NUM})\\s*(${SIZE_UNIT_RE})\\s*(?:or|and) (larger|greater|more|bigger|smaller|less|fewer)\\b`, 'g');
+
+/**
+ * Size ranges named in ACR text, in millimetres, in order of appearance:
+ * "<6mm", ">=6mm", "1-2cm", "1 to 3 cm", "2 cm or less", and "greater than
+ * 2 cm and less than 4 cm" as one range. Bounds without a unit (days, pack
+ * years, GCS, percentages) are not sizes.
+ */
+export function parseSizeRanges(text) {
+  return sizeSpans(normalizeSizeText(text)).map(({ min, max, minInc, maxInc }) => ({ min, max, minInc, maxInc }));
+}
+
+function sizeSpans(t) {
+  const found = [];
+  const free = (a, b) => !found.some(r => a < r.end && b > r.at);
+  const add = (m, range) => found.push({ ...range, at: m.index, end: m.index + m[0].length });
+  for (const m of t.matchAll(SIZE_RANGE_RE)) {
+    // "> 2 cm and < 4 cm" is two bounds, merged below, not a range of 2 to 4.
+    if (/[<>=]\s*$/.test(t.slice(0, m.index))) continue;
+    const unit = unitMm(m[4]);
+    const lo = Number(m[1]) * (m[2] ? unitMm(m[2]) : unit);
+    const hi = Number(m[3]) * unit;
+    if (lo <= hi) add(m, { min: lo, max: hi, minInc: true, maxInc: true });
+  }
+  for (const m of t.matchAll(SIZE_BOUND_RE)) {
+    if (!free(m.index, m.index + m[0].length)) continue;
+    const v = Number(m[2]) * unitMm(m[3]);
+    const op = m[1];
+    add(m, op[0] === '<' ? { min: null, max: v, minInc: false, maxInc: op === '<=' } : { min: v, max: null, minInc: op === '>=', maxInc: false });
+  }
+  for (const m of t.matchAll(SIZE_TRAILING_RE)) {
+    if (!free(m.index, m.index + m[0].length)) continue;
+    const v = Number(m[1]) * unitMm(m[2]);
+    const upward = /^(larger|greater|more|bigger)$/.test(m[3]);
+    add(m, upward ? { min: v, max: null, minInc: true, maxInc: false } : { min: null, max: v, minInc: false, maxInc: true });
+  }
+  found.sort((a, b) => a.at - b.at);
+  // A lower bound followed by an upper bound, joined by "and" or a comma, is one range.
+  const merged = [];
+  for (const r of found) {
+    const prev = merged[merged.length - 1];
+    if (prev && prev.max === null && r.min === null && r.max !== null && r.max > prev.min &&
+        /^[\s,]*(?:and|but)?[\s,]*$/.test(t.slice(prev.end, r.at))) {
+      merged[merged.length - 1] = { ...prev, max: r.max, maxInc: r.maxInc, end: r.end };
+      continue;
+    }
+    merged.push(r);
+  }
+  return merged;
+}
+
+const rangeFits = (r, v) =>
+  (r.min === null || (r.minInc ? v >= r.min - 1e-9 : v > r.min + 1e-9)) &&
+  (r.max === null || (r.maxInc ? v <= r.max + 1e-9 : v < r.max - 1e-9));
+
+// Whether two ranges share any value. Ranges that only touch share the point
+// when both include it: "<6mm" and "6 mm" do not, ">=6mm" and "6 mm" do.
+function rangesOverlap(a, b) {
+  const lo = Math.max(a.min ?? -Infinity, b.min ?? -Infinity);
+  const hi = Math.min(a.max ?? Infinity, b.max ?? Infinity);
+  if (lo < hi - 1e-9) return true;
+  if (Math.abs(lo - hi) > 1e-9) return false;
+  const includes = (r, v) => rangeFits(r, v);
+  return includes(a, lo) && includes(b, lo);
+}
+
+/**
+ * Whether a scenario's sizes admit a search's. Sizes are compared in the order
+ * each writes them, so "vulvar cancer 1 cm with 0.5 mm invasion" meets ACR's
+ * "primary tumor <=2cm, <=1mm stromal invasion" bound for bound.
+ */
+function sizesFit(docRanges, queryRanges) {
+  const n = Math.min(docRanges.length, queryRanges.length);
+  for (let i = 0; i < n; i++) if (!rangesOverlap(docRanges[i], queryRanges[i])) return false;
+  return true;
+}
+
+/**
+ * Measurements in a search, as ranges in millimetres: "8 mm" and "4.5cm" are
+ * points, "<6mm" and "subcentimeter" are bounds, "1-2 cm" a range.
+ */
+export function extractSizes(query) {
+  const t = normalizeSizeText(query)
+    .replace(/\bsub\s*-?\s*centimet(?:er|re)\b|\bsubcentimet(?:er|re)\b|\bsub\s*-?\s*cm\b|\bsubcm\b|\bmillimetric\b/g, ' < 1 cm ');
+  const spans = sizeSpans(t);
+  const taken = (a, b) => spans.some(s => a < s.end && b > s.at);
+  const points = [];
+  for (const m of t.matchAll(QUERY_SIZE_RE)) {
+    if (taken(m.index, m.index + m[0].length)) continue;
+    const v = Number(m[1]) * unitMm(m[2]);
+    points.push({ min: v, max: v, minInc: true, maxInc: true, at: m.index });
+  }
+  return [...spans, ...points].sort((a, b) => a.at - b.at).map(({ min, max, minInc, maxInc }) => ({ min, max, minInc, maxInc }));
+}
+
+export function formatSize(mm) {
+  return mm < 10 ? `${Number(mm.toFixed(1))} mm` : `${Number((mm / 10).toFixed(1))} cm`;
+}
+
+/** A size range as the user would write it: "8 mm", "under 6 mm", "1 cm to 2 cm". */
+export function formatRange(r) {
+  if (r.min !== null && r.max !== null) return Math.abs(r.min - r.max) < 1e-9 ? formatSize(r.min) : `${formatSize(r.min)} to ${formatSize(r.max)}`;
+  if (r.max !== null) return `${r.maxInc ? 'up to' : 'under'} ${formatSize(r.max)}`;
+  return `${r.minInc ? 'at least' : 'over'} ${formatSize(r.min)}`;
+}
+
+// ---- Ages -------------------------------------------------------------------
+
+// Age ranges in ACR text, in years: "(male<25y)", ">60yo", "Ped 0-9y", "Age
+// less than 30", "40 years of age or older", "younger than 25 years of age",
+// "Patient 50 to 80 years of age". A number of years is an age only when it
+// is written as one: with a cue word before it or "of age" or "old" after it,
+// or in ACR's compact "60yo" and "0-9y". Hormone years, pack years and years
+// since surgery are not ages.
+const AGE_CUE = '(?:age|aged|ped|peds|child|children|adult|adults|male|males|female|females|patient|patients|individuals|women|men|person|persons)';
+const AGE_UNIT = '(?:yo|y|yrs?|years?)';
+function parseAgeRanges(text) {
+  const t = normalizeSizeText(text).replace(/\b(\d{1,3})(yo|y)\b/g, '$1 $2 of age');
+  const found = [];
+  const add = (m, r) => found.push({ ...r, at: m.index });
+  // "age 30 to 39", "ped 0 to 9 y", "adult 30 to 39 years of age"
+  for (const m of t.matchAll(new RegExp(`\\b${AGE_CUE}\\b[^.,;:()]{0,24}?\\b(\\d{1,3})\\s*(?:-|to|–)\\s*(\\d{1,3})(?:\\s*${AGE_UNIT}\\b)?(?!\\s*(?:mm|cm|%|pack|month|week|day|hour|min))`, 'g'))) {
+    add(m, { min: Number(m[1]), max: Number(m[2]), minInc: true, maxInc: true });
+  }
+  // "age < 30", "male >= 25 y of age", "age > 65 years"
+  for (const m of t.matchAll(new RegExp(`\\b${AGE_CUE}\\b[^.,;:()]{0,24}?(<=|>=|<|>)\\s*(\\d{1,3})(?:\\s*${AGE_UNIT}\\b)?(?!\\s*(?:mm|cm|%|pack|month|week|day|hour|min))`, 'g'))) {
+    const v = Number(m[2]);
+    add(m, m[1][0] === '<' ? { min: null, max: v, minInc: false, maxInc: m[1] === '<=' } : { min: v, max: null, minInc: m[1] === '>=', maxInc: false });
+  }
+  // "younger than 25 years", "older than 65"
+  for (const m of t.matchAll(new RegExp(`\\b(younger|older) than (\\d{1,3})(?:\\s*${AGE_UNIT}\\b)?(?!\\s*(?:month|week|day))`, 'g'))) {
+    const v = Number(m[2]);
+    add(m, m[1] === 'younger' ? { min: null, max: v, minInc: false, maxInc: false } : { min: v, max: null, minInc: false, maxInc: false });
+  }
+  // "40 years of age or older", "5 years of age or older", "25 years or older"
+  for (const m of t.matchAll(new RegExp(`\\b(\\d{1,3})\\s*${AGE_UNIT}\\b(?:\\s*of age|\\s*old)?\\s*(?:or|and) (older|greater|more|younger|less)\\b`, 'g'))) {
+    const v = Number(m[1]);
+    add(m, /^(older|greater|more)$/.test(m[2]) ? { min: v, max: null, minInc: true, maxInc: false } : { min: null, max: v, minInc: false, maxInc: true });
+  }
+  found.sort((a, b) => a.at - b.at);
+  return found.map(({ min, max, minInc, maxInc }) => ({ min, max, minInc, maxInc }));
+}
+
+// The ranges a parser finds in a scenario's name, else in its longer text;
+// null when neither names any.
+function rangesOf(parse, name, text) {
+  const inName = parse(name);
+  if (inName.length) return inName;
+  const inText = parse(text);
+  return inText.length ? inText : null;
+}
+
 const indexCache = new WeakMap();
 
 const INFANT_TEXT_RE = /\b(infant|infants|newborn|neonate|neonatal|toddler|child|children|pediatric|adolescent|after birth|of life|preterm|premature|months? of age)\b/i;
@@ -1021,10 +1493,20 @@ const PREGNANT_NAME_RE = /\b(pregnan\w*|gestation\w*|trimester|gravid|fetal|fetu
 // mature child" scenarios as pediatric; the text says otherwise.
 function populationOf(scenario) {
   const tagged = scenario.age || scenario.ageGroup;
-  const text = `${scenario.name} ${scenario.search || scenario.variant || ''}`;
+  const text = `${scenario.name} ${scenario.search || scenario.variant || ''} ${scenario.topic || ''}`;
   if (tagged === 'adult' && INFANT_TEXT_RE.test(text) && !/\badult\b/i.test(text)) return 'pediatric';
   if (tagged === 'pediatric' && /\badult or\b/i.test(text)) return 'any';
   return tagged;
+}
+
+// A scenario written for one sex, read from its title and name: "Evaluation
+// of the Symptomatic Male Breast", "Female Infertility". Null when either.
+function sexOf(text) {
+  const male = MALE_RE.test(text);
+  const female = FEMALE_RE.test(text);
+  if (male && !female) return 'male';
+  if (female && !male) return 'female';
+  return null;
 }
 
 function buildIndex(scenarios) {
@@ -1051,31 +1533,79 @@ function buildIndex(scenarios) {
     const isPregnant = PREGNANT_NAME_RE.test(cleanWords(shortName)) && !/\b(not pregnant|nonpregnant|postpartum|peripartum)\b/i.test(shortName);
     return {
       scenario: s, nameText, detail, keywords, named, all, lowerName, population: populationOf(s), isPregnant,
+      literal: new Set(cleanWords(shortName).split(' ').map(stem)),
+      sex: sexOf(`${s.topic || ''} . ${shortName}`),
       gcs: gcsRange(shortName),
+      // The size and age ranges named, from the name before the longer text.
+      sizeRanges: rangesOf(parseSizeRanges, shortName, `${s.search || ''}. ${s.variant || ''}`),
+      ageRange: (rangesOf(parseAgeRanges, shortName, `${s.search || ''}. ${s.variant || ''}`) || [])[0] || null,
     };
   });
+  const topicCounts = new Map();
+  const topicRegionVotes = new Map();
+  for (const s of scenarios) {
+    if (!s.topic) continue;
+    topicCounts.set(s.topic, (topicCounts.get(s.topic) || 0) + 1);
+    const votes = topicRegionVotes.get(s.topic) || new Map();
+    votes.set(s.region, (votes.get(s.region) || 0) + 1);
+    topicRegionVotes.set(s.topic, votes);
+  }
+  // The data region most of a topic's scenarios sit in.
+  const topicRegion = new Map([...topicRegionVotes].map(([topic, votes]) =>
+    [topic, [...votes.entries()].sort((a, b) => b[1] - a[1])[0][0]]));
   const titles = new Map();
   const titleKeys = new Map();
   for (const s of scenarios) {
     if (!s.topic || titles.has(s.topic)) continue;
     const parsed = parseText(s.topic.replace(/\bchild\b/gi, ' '));
     const joined = joinLowBack([...parsed.positive].join(' '), { keepBack: true }).split(' ').filter(Boolean).map(stem);
-    titles.set(s.topic, { positive: new Set(joined), negative: parsed.negative, key: cleanWords(s.topic).replace(/\s/g, '') });
+    titles.set(s.topic, { positive: new Set(joined), negative: parsed.negative, key: cleanWords(s.topic).replace(/\s/g, ''), sex: sexOf(s.topic) });
   }
   // Two spellings of one topic title are one topic for choosing purposes.
   for (const [topic, title] of titles) {
     if (!titleKeys.has(title.key)) titleKeys.set(title.key, []);
     titleKeys.get(title.key).push(topic);
   }
-  const index = { docs, docFreq, nameFreq, detailFreq, bigrams, total: scenarios.length, titles, titleKeys };
+  // The data regions each body part's scenarios sit in, read from the data:
+  // chest words live in chest, breast and vascular scenarios; a "Headache,
+  // fever" scenario names no body part but sits in neuro, where a search for
+  // the chest must not reach. A topic whose title names the part counts
+  // whatever its share.
+  // Only names that write the part itself count, not "torso" standing for it;
+  // a region holds the part when it has a fair share or several of its names.
+  const termRegions = new Map();
+  for (const term of GROUP_OF.keys()) {
+    const counts = new Map();
+    let total = 0;
+    for (const doc of docs) {
+      if (!doc.literal.has(term)) continue;
+      counts.set(doc.scenario.region, (counts.get(doc.scenario.region) || 0) + 1);
+      total++;
+    }
+    const regions = new Set([...counts].filter(([, n]) => n >= total * MIN_GROUP_REGION_SHARE || n >= MIN_REGION_NAMES).map(([r]) => r));
+    // A title that writes the part itself (not "torso" standing for it).
+    for (const [topic] of titles) {
+      if (cleanWords(topic).split(' ').map(stem).includes(term) && topicRegion.has(topic)) regions.add(topicRegion.get(topic));
+    }
+    if (regions.size) termRegions.set(term, regions);
+  }
+  const index = {
+    docs, docFreq, nameFreq, detailFreq, bigrams, total: scenarios.length, titles, titleKeys, topicCounts, topicRegion,
+    termRegions,
+  };
   indexCache.set(scenarios, index);
   return index;
 }
 
-function fitsPopulation(doc, { pregnant, notPregnant, age, years, sides, gcs }) {
+function fitsPopulation(doc, { pregnant, notPregnant, age, years, sides, gcs, sex, sizes }) {
   if (pregnant && !doc.isPregnant) return false;
   if (notPregnant && doc.isPregnant) return false;
   if (age && doc.population !== age && doc.population !== 'any') return false;
+  if (sex && doc.sex && doc.sex !== sex) return false;
+  // An age in the search must sit inside the age range a scenario names, and
+  // a size inside its size range.
+  if (years !== null && years !== undefined && doc.ageRange && !rangeFits(doc.ageRange, years)) return false;
+  if (sizes && sizes.length && doc.sizeRanges && !sizesFit(doc.sizeRanges, sizes)) return false;
   // Life stage follows a stated age: no postmenopausal answer for a 17 year old.
   if (years !== null && years !== undefined) {
     if (years < 40 && doc.nameText.positive.has('postmenopausal')) return false;
@@ -1096,40 +1626,40 @@ function contradictsNegation(doc, negated) {
   return negated.some(t => statesPositively(t) || (IMPLIES[t] || []).some(statesPositively));
 }
 
-function scoreDocs(parsed, docs, qualifiers) {
+function scoreDocs(parsed, index, qualifiers, { scope } = {}) {
   const scored = [];
   const asked = new Set([...parsed.required, ...parsed.soft]);
-  // Regions the search names, through any of its words or its study.
-  const askedRegions = groupsOf([...asked]);
-  for (const doc of docs) {
+  // Regions the search names, through any of its words or its study, as
+  // body-part groups for the words a scenario names and as data regions for
+  // where it lives. One complaint of several may be held to its own.
+  const { groups: askedRegions, anatomy } = scope || scopeOf([...asked]);
+  const allowed = allowedRegions(index, anatomy);
+  for (const doc of index.docs) {
     const { scenario, nameText, keywords, named } = doc;
     if (!fitsPopulation(doc, qualifiers)) continue;
     if (!parsed.required.every(t => named.has(t))) continue;
     if (contradictsNegation(doc, parsed.negated)) continue;
-    if (askedRegions.size) {
-      const docRegions = groupsOf([...nameText.positive]);
-      if (docRegions.size && ![...docRegions].some(g => askedRegions.has(g))) continue;
-    }
+    // A scenario that names a body part is judged by it; one that names none
+    // ("LUQ pain, fever") is judged by the region it lives in.
+    const docRegions = groupsOf([...nameText.positive]);
+    if (askedRegions.size && docRegions.size && ![...docRegions].some(g => askedRegions.has(g))) continue;
+    if (allowed && !docRegions.size && !allowed.has(scenario.region)) continue;
     // Abuse is an accusation: never surfaced unless asked for or the search is
     // about an infant, the population ACR's abuse scenarios describe.
     if (named.has('abuse') && !asked.has('abuse') && !qualifiers.infant) continue;
+    // The opposite of what was asked is no answer.
+    if (opposes(nameText, asked, { negation: false })) continue;
 
     let score = 0;
-    for (const t of parsed.required) {
-      score += nameText.positive.has(t) ? 1 + NAME_MATCH_BONUS : 0.8;
-      // "with red flags" must not lead with ACR's "no red flags".
-      if (nameText.negative.has(t) && !nameText.positive.has(t)) score -= 1.5;
-    }
+    for (const t of parsed.required) score += nameText.positive.has(t) ? 1 + NAME_MATCH_BONUS : 0.8;
     score /= parsed.required.length || 1;
     for (const t of parsed.soft) {
       if (named.has(t)) score += SOFT_MATCH_BONUS;
       else if (keywords.has(t)) score += KEYWORD_BONUS;
     }
     for (const t of parsed.negated) if (nameText.negative.has(t)) score += NAME_MATCH_BONUS;
-    for (const [a, b] of ANTONYMS) {
-      if (asked.has(a) && nameText.positive.has(b) && !nameText.positive.has(a)) score -= ANTONYM_PENALTY;
-      if (asked.has(b) && nameText.positive.has(a) && !nameText.positive.has(b)) score -= ANTONYM_PENALTY;
-    }
+    // A scenario whose size range admits the measurement leads those that name none.
+    if (qualifiers.sizes && qualifiers.sizes.length && doc.sizeRanges) score += SIZE_FIT_BONUS;
 
     if (!qualifiers.age && doc.population === 'pediatric') score -= POPULATION_PENALTY;
     if (!qualifiers.pregnant && doc.isPregnant) score -= POPULATION_PENALTY;
@@ -1139,12 +1669,19 @@ function scoreDocs(parsed, docs, qualifiers) {
     scored.push({ scenario, score, doc });
   }
   let ranked = scored.sort((a, b) => b.score - a.score);
+  // A scenario that negates a word the search asked ("no high risk features"
+  // for "high risk features", "no red flags" for "with red flags") gives way
+  // to one that states it; alone, it is still the nearest ACR comes.
+  if (ranked.some(h => !negatesAsked(h.doc.nameText, asked))) ranked = ranked.filter(h => !negatesAsked(h.doc.nameText, asked));
   // A search that names no age is an adult search when adult scenarios exist;
   // ACR's child scenarios appear only when nothing else fits. A teenager's
   // search keeps both.
   if (!qualifiers.age && !qualifiers.teen && ranked.some(h => h.doc.population !== 'pediatric')) {
     ranked = ranked.filter(h => h.doc.population !== 'pediatric');
   }
+  // Likewise, a search that never says male is not answered by scenarios
+  // written for men when others fit.
+  if (!qualifiers.sex && ranked.some(h => h.doc.sex !== 'male')) ranked = ranked.filter(h => h.doc.sex !== 'male');
   // A search that negates a term ACR itself negates in a name wants those
   // scenarios: "headache no red flags" is the "no red flags" branch.
   if (parsed.negated.length && ranked.some(h => parsed.negated.every(t => h.doc.nameText.negative.has(t)))) {
@@ -1181,8 +1718,9 @@ export function rankScenarios(query, scenarios, { max = 8, relaxQualifiers = fal
   const index = buildIndex(scenarios);
   const parsed = parseQuery(query, index);
   if (parsed.required.length === 0 && parsed.soft.length === 0) return [];
-  const qualifiers = relaxQualifiers ? { sides: extractQualifiers(query).sides } : extractQualifiers(query);
-  return dedupe(scoreDocs(parsed, index.docs, qualifiers), max);
+  const all = extractQualifiers(query);
+  const qualifiers = relaxQualifiers ? { sides: all.sides, sizes: all.sizes } : all;
+  return dedupe(scoreDocs(parsed, index, qualifiers), max);
 }
 
 /** ACR topics whose titles contain the whole search, closest title first. */
@@ -1207,6 +1745,10 @@ function topicsNaming(parsed, qualifiers, scenarios) {
     if (parsed.required.some(t => title.negative.has(t))) continue;
     const isChildTopic = (pediatric.get(topic) || 0) > counts.get(topic) / 2;
     if ((age === 'pediatric') !== isChildTopic) continue;
+    // A topic written for one sex opens only for that sex; a search that
+    // names none is not about the male breast.
+    if (title.sex === 'male' && qualifiers.sex !== 'male') continue;
+    if (title.sex === 'female' && qualifiers.sex === 'male') continue;
     // Life stage follows a stated age here too, as in fitsPopulation.
     if (qualifiers.years != null && qualifiers.years < 40 && title.positive.has('postmenopausal')) continue;
     if (qualifiers.years != null && qualifiers.years >= 55 && title.positive.has('reproductive')) continue;
@@ -1295,6 +1837,7 @@ export function guardSuggestions(query, suggestions, scenarios) {
     if (!fitsPopulation(doc, qualifiers)) return false;
     if (!qualifiers.pregnant && doc.isPregnant) return false;
     if (!qualifiers.age && doc.population === 'pediatric') return false;
+    if (!qualifiers.sex && doc.sex === 'male') return false;
     if (doc.named.has('abuse') && !asked.has('abuse')) return false;
     if (contradictsNegation(doc, parsed.negated)) return false;
     // Sharing no clinical word is a guess (varicocele -> varicose veins).
@@ -1346,19 +1889,31 @@ function correctSpelling(query, scenarios) {
 
 /**
  * Decides what a search should show. Returns one of:
- *   { mode: 'guide', topic, related }      a search that names one ACR topic
- *   { mode: 'choose', topics }             several topics fit; the user picks
- *   { mode: 'list', scenarios, notice? }   specific search
- *   { mode: 'too-broad' }                  a word that points at no one topic
- *   { mode: 'none' }                       nothing matched; use fallback search
+ *   { mode: 'guide', topic, related, notice? }   a search that names one ACR topic
+ *   { mode: 'choose', topics, notice?, groups? } several topics fit; the user picks.
+ *                                               groups: [{ complaint, topics }] when
+ *                                               each complaint of several has its own
+ *   { mode: 'list', scenarios, notice? }         specific search
+ *   { mode: 'too-broad' }                        a word that points at no one topic
+ *   { mode: 'recover', understood, unknown, groups, region }
+ *                                               nothing matched; places to explore:
+ *                                               groups [{ term, display, topics }],
+ *                                               region { key, label } or null
+ *   { mode: 'none', understood, unknown, reason } nothing matched and nothing to
+ *                                               suggest; ACR does not cover it
+ * Topics carry { topic, count, query }: query is the search a chip should run,
+ * which keeps the search's pregnancy or age.
  */
 export function resolveQuery(query, scenarios) {
   const corrected = correctSpelling(query, scenarios);
-  if (corrected) {
-    const result = resolveExact(corrected, scenarios);
-    if (result.mode !== 'none') return { ...result, corrected };
-  }
-  return resolveExact(query, scenarios);
+  const result = resolveExact(query, scenarios);
+  if (!corrected) return result;
+  const fixed = resolveExact(corrected, scenarios);
+  const answered = r => !['none', 'recover'].includes(r.mode);
+  if (answered(fixed)) return { ...fixed, corrected };
+  if (answered(result)) return result;
+  // Neither is an answer; the corrected spelling explains more when it has topics.
+  return fixed.mode === 'recover' && result.mode !== 'recover' ? { ...fixed, corrected } : result;
 }
 
 function withPopulationNotice(scenarios, docsById, { age, pregnant }) {
@@ -1385,7 +1940,365 @@ function droppableTerms(parsed, index) {
     .sort((a, b) => rank(a) - rank(b) || (index.docFreq.get(b) || 0) - (index.docFreq.get(a) || 0));
 }
 
+// A word that can stand for a complaint on its own or point a recovery at a
+// topic: named by some scenario, by few enough to mean something, and not a
+// generic finding or a stage of care.
+function isSpecific(term, index) {
+  if (RECOVERY_GENERIC.has(term) || SOFT_TERMS.has(term) || UNASKED_QUALIFIERS.includes(term)) return false;
+  const named = index.nameFreq.get(term) || 0;
+  return named > 0 && named <= index.total * MAX_SPECIFIC_SHARE;
+}
+
+// The body parts some words name: as groups, for the words a scenario or
+// title names, and as the words themselves, for the data regions they live in.
+function scopeOf(terms) {
+  const anatomy = terms.filter(t => GROUP_OF.has(t));
+  return { groups: groupsOf(anatomy), anatomy };
+}
+
+// The data regions a scenario may come from when the search names body parts:
+// the regions those parts' scenarios sit in, plus the general ones. Null when
+// the search names no body part.
+function allowedRegions(index, anatomy) {
+  const known = anatomy.filter(t => index.termRegions.has(t));
+  if (!known.length) return null;
+  return new Set(['other', ...known.flatMap(t => [...index.termRegions.get(t)])]);
+}
+
+// A scenario that names a different organ of the same region, and not the one
+// asked, is about that other organ: a renal cyst search is not answered by a
+// pancreatic cyst. Spine words are near-synonyms and are not held to this;
+// nor are sides and limbs in general.
+const ORGAN_EXEMPT = new Set(['upper', 'lower', 'extremity', 'back', 'lowback', 'spine', 'cervical', 'thoracic', 'lumbar', 'sacrum']);
+function wrongOrgan(doc, anatomy) {
+  const docAnatomy = [...doc.nameText.positive].filter(t => GROUP_OF.has(t) && !ORGAN_EXEMPT.has(t));
+  // A part the search also named is never the wrong organ ("groin and hip").
+  return anatomy.some(a => !ORGAN_EXEMPT.has(a) && !doc.nameText.positive.has(a) &&
+    docAnatomy.some(b => b !== a && !anatomy.includes(b) && GROUP_OF.get(b) === GROUP_OF.get(a)));
+}
+
+// A topic title offered as a suggestion must sit in a region the search named
+// (by its words and by where its scenarios live), must not be the opposite of
+// what was asked, and must not state a word the search negated.
+function titleCompatible(topic, index, asked, scope, negated) {
+  const title = index.titles.get(topic);
+  if (!title) return false;
+  const groups = groupsOf([...title.positive]);
+  if (scope.groups.size && groups.size && ![...groups].some(g => scope.groups.has(g))) return false;
+  const allowed = allowedRegions(index, scope.anatomy);
+  if (allowed && !groups.size && !allowed.has(index.topicRegion.get(topic))) return false;
+  if (negated.some(t => title.positive.has(t))) return false;
+  return !opposes(title, asked);
+}
+
+// A scenario offered as a suggestion passes every check an answer passes:
+// population, negation, body region and organ, side, the abuse rule and
+// antonyms. The organ check always uses every body part the search named.
+function suggestible(doc, index, parsed, qualifiers, asked, scope, population = qualifiers) {
+  if (!fitsPopulation(doc, population)) return false;
+  if (contradictsNegation(doc, parsed.negated)) return false;
+  const docRegions = groupsOf([...doc.nameText.positive]);
+  if (scope.groups.size && docRegions.size && ![...docRegions].some(g => scope.groups.has(g))) return false;
+  const allowed = allowedRegions(index, scope.anatomy);
+  if (allowed && !docRegions.size && !allowed.has(doc.scenario.region)) return false;
+  if (wrongOrgan(doc, [...asked].filter(t => GROUP_OF.has(t)))) return false;
+  if (doc.named.has('abuse') && !asked.has('abuse') && !qualifiers.infant) return false;
+  return !opposes(doc.nameText, asked);
+}
+
+// The share of a list held by its commonest value, and that value.
+function dominant(values) {
+  const counts = new Map();
+  for (const v of values) counts.set(v, (counts.get(v) || 0) + 1);
+  const [best, n] = [...counts.entries()].sort((a, b) => b[1] - a[1])[0] || [null, 0];
+  return { best, share: values.length ? n / values.length : 0 };
+}
+
+// Whether a word belongs to one body region by itself: the scenarios naming
+// "headache" sit in neuro and those naming "dyspnea" in the chest, while
+// "fever" and "abscess" name topics all over the body, however many of them
+// happen to be abdominal.
+function localizes(term, index) {
+  if (!index.localizing) index.localizing = new Map();
+  if (index.localizing.has(term)) return index.localizing.get(term);
+  const naming = index.docs.filter(d => d.nameText.positive.has(term));
+  const { best, share } = dominant(naming.map(d => d.scenario.region));
+  const elsewhere = new Set(naming.filter(d => d.scenario.region !== best && d.scenario.region !== 'other').map(d => d.scenario.topic));
+  const result = share >= MIN_REGION_SHARE && elsewhere.size <= 1;
+  index.localizing.set(term, result);
+  return result;
+}
+
+// The body regions suggestions for some words are held to. Words that are
+// body parts, or that belong to one region by themselves, carry their own:
+// in "headache and knee pain" the headache is not a knee question. A word
+// that belongs nowhere in particular ("fever") borrows the regions the rest
+// of the search named.
+function scopeFor(terms, index, asked) {
+  const own = scopeOf(terms);
+  if (own.groups.size) return own;
+  return terms.some(t => localizes(t, index)) ? scopeOf([]) : scopeOf([...asked]);
+}
+
+/**
+ * Ranks the topics of scenarios that name some words: topics whose title
+ * names one of the words first, then by how many scenarios point there. A
+ * topic pointed at only in passing (few of its scenarios, a small share of
+ * them) is left out, and so is one whose title adds a stage or population
+ * that was not asked, unless its title names the word itself.
+ */
+function topicsFor(terms, docs, index, asked) {
+  const votes = new Map();
+  const named = new Map();
+  for (const doc of docs) {
+    const topic = doc.scenario.topic;
+    if (!topic) continue;
+    // A scenario that also names another asked word points more surely.
+    const weight = 1 + [...asked].filter(t => !terms.includes(t) && doc.nameText.positive.has(t)).length;
+    votes.set(topic, (votes.get(topic) || 0) + weight);
+    named.set(topic, (named.get(topic) || 0) + 1);
+  }
+  const title = topic => index.titles.get(topic);
+  const titleNames = topic => Boolean(title(topic) && terms.some(t => title(topic).positive.has(t)));
+  return [...votes.keys()]
+    .filter(topic => {
+      const n = named.get(topic);
+      // A topic that holds every scenario naming the word is the word's home
+      // ("Inflammatory Ear Disease" for otitis), whatever its title adds.
+      if (n < docs.length && unaskedTitle(topic, index, asked)) return false;
+      if (titleNames(topic)) return true;
+      // Enough of the topic, enough scenarios, or most of what names the word at all.
+      return n / (index.topicCounts.get(topic) || 1) >= MIN_TOPIC_SHARE || n >= MIN_TOPIC_SCENARIOS || n * 2 >= docs.length;
+    })
+    .sort((a, b) => Number(titleNames(b)) - Number(titleNames(a)) || votes.get(b) - votes.get(a));
+}
+
+// A title that adds a stage, mechanism or population the search never named.
+function unaskedTitle(topic, index, asked) {
+  const title = index.titles.get(topic);
+  return Boolean(title) && [...UNASKED_QUALIFIERS, ...TITLE_UNASKED].some(t => title.positive.has(t) && !asked.has(t));
+}
+
+// The search a topic chip runs: the title, kept to the search's pregnancy or
+// age so what it opens is still filtered.
+function topicQuery(topic, qualifiers) {
+  if (qualifiers.pregnant && !/pregnan/i.test(topic)) return `${topic} pregnant`;
+  if (qualifiers.age === 'pediatric' && !/child|infant|pediatric|neonat/i.test(topic)) return `${topic} child`;
+  return topic;
+}
+
+// Topics for one complaint of several: titles naming it, else the topics its
+// best scenarios belong to, held to the whole search's regions, population
+// and negation.
+function complaintTopics(seg, parsed, qualifiers, index, scenarios) {
+  const segParsed = { ...seg, negated: parsed.negated };
+  const asked = new Set([...parsed.required, ...parsed.soft]);
+  const scope = scopeFor([...seg.required, ...seg.soft], index, asked);
+  // Of the titles naming the complaint, the plain ones first.
+  const named = topicsNaming(segParsed, qualifiers, scenarios);
+  const plain = named.filter(n => !unaskedTitle(n.topic, index, asked));
+  let topics = (plain.length ? plain : named).map(n => n.topic);
+  if (topics.length === 0) {
+    const hits = scoreDocs(segParsed, index, qualifiers, { scope })
+      .filter(h => suggestible(h.doc, index, parsed, qualifiers, asked, scope))
+      .map(h => h.doc);
+    topics = topicsFor(seg.required.filter(t => isSpecific(t, index)), hits, index, asked);
+  }
+  return topics
+    .filter(t => titleCompatible(t, index, asked, scope, parsed.negated))
+    .slice(0, MAX_RECOVERY_TOPICS)
+    .map(t => ({ topic: t, count: index.topicCounts.get(t) || 0, query: topicQuery(t, qualifiers) }));
+}
+
+/**
+ * A search of several complaints that no one scenario covers: each
+ * complaint's topics, grouped by complaint, instead of dropping a complaint.
+ * Needs two complaints that each carry a specific word and each find topics.
+ */
+function multiComplaint(query, parsed, qualifiers, index, scenarios) {
+  const segments = splitComplaints(query, index).filter(seg => seg.required.some(t => isSpecific(t, index)));
+  if (segments.length < 2) return null;
+  const groups = segments
+    .map(seg => ({ complaint: seg.label, topics: complaintTopics(seg, parsed, qualifiers, index, scenarios) }))
+    .filter(g => g.topics.length);
+  if (groups.length < 2) return null;
+  const seen = new Set();
+  const topics = groups.flatMap(g => g.topics).filter(t => !seen.has(t.topic) && seen.add(t.topic));
+  return {
+    mode: 'choose', grouped: true, groups, topics,
+    notice: 'No single ACR scenario covers all of these together. These are the topics for each complaint.',
+  };
+}
+
+// The word of the search a stemmed term came from, for display.
+function originalWord(query, term) {
+  const tokens = normalizeSearch(query).split(' ').filter(Boolean);
+  return tokens.find(w => stem(w) === term) || term;
+}
+
+/**
+ * Explains a search nothing matched, instead of refusing it: the words
+ * understood and the words ACR never uses, the topics each understood word
+ * points at, and the likely body region. A word that points nowhere safe is
+ * left out, and with no topics at all the answer is an honest "none".
+ */
+function recover(query, parsed, qualifiers, index, scenarios) {
+  const terms = [...new Set([...parsed.required, ...parsed.soft])];
+  const knownTerm = t => (index.docFreq.get(t) || 0) > 0;
+  const unknown = parsed.required.filter(t => !knownTerm(t)).map(t => originalWord(query, t));
+  const understood = terms.filter(knownTerm).map(t => originalWord(query, t));
+  const asked = new Set(terms);
+  const groups = [];
+  const regionVotes = new Map();
+  const shown = new Set();
+  // A word is read with the complaint it sits in: the cyst of "bone cyst"
+  // belongs to the bone, while in "headache and knee pain" each complaint
+  // keeps its own region.
+  const segments = splitComplaints(query, index);
+  const segmentOf = term => segments.find(seg => seg.required.includes(term) || seg.soft.includes(term));
+  // The rarest word first: "nodule" before "lung".
+  const specific = terms.filter(t => isSpecific(t, index))
+    .sort((a, b) => (index.nameFreq.get(a) || 0) - (index.nameFreq.get(b) || 0));
+  for (const term of specific) {
+    const naming = index.docs.filter(doc => doc.nameText.positive.has(term));
+    // A word written in a scenario or two that share nothing else with the
+    // search is too thin to point anywhere beside the search's other words:
+    // the "hilar" of a hilar cholangiocarcinoma is not hilar adenopathy.
+    if (specific.length > 1 && naming.length < MIN_TOPIC_SCENARIOS &&
+        !naming.some(doc => [...asked].some(t => t !== term && doc.nameText.positive.has(t)))) continue;
+    // With no body part asked, a word must belong to one region to point anywhere.
+    const seg = segmentOf(term);
+    const scope = scopeFor(seg ? [...seg.required, ...seg.soft] : [term], index, asked);
+    if (!scope.groups.size && !localizes(term, index) && !GROUP_OF.has(term)) continue;
+    // Scenarios that also name a body part the search named are about the
+    // right organ: "thyroid nodule" is not pointed at lung nodules, and when
+    // none of those pass the checks, nothing else stands in for them.
+    const askedAnatomy = [...asked].filter(t => GROUP_OF.has(t) && !ORGAN_EXEMPT.has(t));
+    const consistent = naming.filter(doc => askedAnatomy.some(a => doc.nameText.positive.has(a)));
+    let docs = (consistent.length ? consistent : naming).filter(doc => suggestible(doc, index, parsed, qualifiers, asked, scope));
+    // A search that names no age is an adult search when adult scenarios
+    // exist, unless the word is a child's ("scoliosis"), when both are kept.
+    let pediatricOnly = false;
+    if (!qualifiers.age && !qualifiers.teen) {
+      const adult = docs.filter(d => d.population !== 'pediatric');
+      if (adult.length >= docs.length * MIN_ADULT_SHARE) docs = adult;
+      else pediatricOnly = adult.length === 0 && docs.length > 0;
+    }
+    if (!qualifiers.sex && docs.some(d => d.sex !== 'male')) docs = docs.filter(d => d.sex !== 'male');
+    if (docs.length === 0) continue;
+    const topics = topicsFor([term], docs, index, asked)
+      .filter(topic => !shown.has(topic) && titleCompatible(topic, index, asked, scope, parsed.negated))
+      .slice(0, MAX_RECOVERY_TOPICS)
+      .map(topic => ({ topic, count: index.topicCounts.get(topic) || 0, query: topicQuery(topic, qualifiers) }));
+    if (topics.length === 0) continue;
+    for (const t of topics) shown.add(t.topic);
+    // The region is read from the scenarios behind the topics offered, and
+    // the scenarios that name most of the search are offered themselves.
+    const offered = new Set(topics.map(t => t.topic));
+    const behind = docs.filter(doc => offered.has(doc.scenario.topic));
+    for (const doc of behind) regionVotes.set(doc.scenario.region, (regionVotes.get(doc.scenario.region) || 0) + 1);
+    const namesAsked = doc => [...asked].filter(t => doc.nameText.positive.has(t)).length;
+    const picks = dedupe(behind
+      .map(doc => ({ scenario: doc.scenario, score: namesAsked(doc) - [...doc.nameText.positive].length * EXTRA_WORD_PENALTY }))
+      .sort((a, b) => b.score - a.score), MAX_RECOVERY_SCENARIOS);
+    groups.push({ term, display: originalWord(query, term), topics, scenarios: picks, pediatricOnly });
+  }
+  if (groups.length === 0) {
+    const reason = terms.length === 0 ? 'no-clinical-words'
+      : parsed.required.length && unknown.length === parsed.required.length ? 'unknown-words' : 'uncovered';
+    return { mode: 'none', understood, unknown, reason };
+  }
+  let region = null;
+  if (qualifiers.age === 'pediatric') region = { key: 'peds', label: REGION_LABELS.peds };
+  else {
+    const total = [...regionVotes.values()].reduce((a, b) => a + b, 0);
+    const [best, n] = [...regionVotes.entries()].sort((a, b) => b[1] - a[1])[0] || [];
+    if (best && REGION_LABELS[best] && n >= total * MIN_REGION_SHARE) region = { key: best, label: REGION_LABELS[best] };
+  }
+  // Everything offered, flat, for callers and tests that read one list.
+  const topics = groups.flatMap(g => g.topics);
+  const suggested = dedupe(groups.flatMap(g => g.scenarios.map(scenario => ({ scenario }))), MAX_RECOVERY_SCENARIOS * 2);
+  return { mode: 'recover', understood, unknown, groups, topics, scenarios: suggested, region };
+}
+
 function resolveExact(query, scenarios) {
+  const result = resolveTerms(query, scenarios);
+  // A size no scenario here names is said to be unused, never ignored silently.
+  const sizes = extractSizes(query);
+  if (sizes.length && !result.sizeChecked && !['none', 'recover', 'too-broad'].includes(result.mode) && !result.notice) {
+    result.notice = `No ACR scenario here names a size range, so ${formatRange(sizes[0])} was not used.`;
+  }
+  return result;
+}
+
+// A scenario whose name adds a stage, treatment or population the search
+// never asked for.
+function unaskedName(doc, asked) {
+  return UNASKED_QUALIFIERS.some(t => doc.nameText.positive.has(t) && !asked.has(t));
+}
+
+/**
+ * A measurement or an age in the search picks among the scenarios that split
+ * on it. The candidates are the scenarios naming every word of the search in
+ * their own name: a breast mass is not measured against the axilla topic's
+ * breast cancers. Returns a result, or null when nothing here names a range.
+ */
+function resolveByRange(parsed, qualifiers, index, kind) {
+  const asked = new Set([...parsed.required, ...parsed.soft]);
+  const strict = h => parsed.required.every(t => h.doc.nameText.positive.has(t));
+  const has = kind === 'size' ? (doc => doc.sizeRanges) : (doc => doc.ageRange);
+  const unqualified = kind === 'size' ? { ...qualifiers, sizes: [] } : { ...qualifiers, years: null };
+  const ranged = scoreDocs(parsed, index, unqualified).filter(h => strict(h) && has(h.doc));
+  if (!ranged.length) return null;
+  const label = kind === 'size' ? formatRange(qualifiers.sizes[0]) : `age ${qualifiers.years}`;
+  const checked = { sizeChecked: kind === 'size', ageChecked: kind === 'age' };
+  const all = scoreDocs(parsed, index, qualifiers).filter(strict);
+  const fits = all.filter(h => has(h.doc));
+  // A scenario that names no range but reads the search clearly better is the
+  // answer: "palpable breast mass 3 cm" is the palpable mass, not a measured
+  // breast cancer mid chemotherapy. Clearly better means two or more fewer
+  // stages, treatments or populations the search never asked for.
+  const unaskedCount = h => UNASKED_QUALIFIERS.filter(t => h.doc.nameText.positive.has(t) && !asked.has(t)).length;
+  const bestUnranged = all.find(h => !has(h.doc));
+  if (fits.length && bestUnranged && unaskedCount(bestUnranged) + 2 <= unaskedCount(fits[0])) return null;
+  if (fits.length) {
+    // Among the fits, the plain ones: no treatment stage or population that
+    // was not asked.
+    const plain = fits.filter(h => !unaskedName(h.doc, asked) && (qualifiers.pregnant || !h.doc.isPregnant));
+    const picked = plain.length ? plain : fits;
+    if (kind === 'age') {
+      // An age lists scenarios only where it is what tells them apart: the
+      // same name written for several ages, or an age in the name itself, and
+      // few enough to read. A 12 year old's scoliosis or a 65 year old's bone
+      // density still opens the topic's guide.
+      const fitIds = new Set(fits.map(h => String(h.doc.scenario.id)));
+      const misses = ranged.filter(h => !fitIds.has(String(h.doc.scenario.id)));
+      const name = h => h.doc.scenario.name;
+      const splitsByAge = misses.some(m => fits.some(f => name(f) === name(m))) || fits.some(f => parseAgeRanges(name(f)).length > 0);
+      if (!splitsByAge || dedupe(picked, MAX_AGE_LIST + 1).length > MAX_AGE_LIST) return null;
+    }
+    return {
+      mode: 'list', scenarios: dedupe(picked, 8), ...checked,
+      notice: kind === 'size' ? `Scenarios whose size range includes ${label}.` : `Scenarios written for ${label}.`,
+    };
+  }
+  // Outside every range named here. Scenarios that name no range still
+  // answer as usual; with none, the topic is shown with its ranges, never a
+  // range the measurement does not fit.
+  const neutral = scoreDocs(parsed, index, qualifiers).filter(h => strict(h) && !has(h.doc));
+  if (neutral.length) return null;
+  const topics = [...new Set(ranged.map(h => h.doc.scenario.topic))];
+  const notice = kind === 'size'
+    ? `No ACR scenario here names a size range that includes ${label}. The ranges ACR does name are shown instead.`
+    : `No ACR scenario here is written for ${label}. The whole topic is shown instead.`;
+  if (topics.length === 1) return { mode: 'guide', topic: topics[0], related: [], notice, ...checked };
+  return {
+    mode: 'choose', notice, ...checked,
+    topics: topics.slice(0, 8).map(t => ({ topic: t, count: index.topicCounts.get(t) || 0, query: t })),
+  };
+}
+
+function resolveTerms(query, scenarios) {
   const byStudy = scenariosUsingStudy(query, scenarios);
   if (byStudy.length > 0) {
     return { mode: 'list', scenarios: byStudy.slice(0, 8), summary: `Scenarios where "${query}" is usually appropriate:` };
@@ -1396,14 +2309,29 @@ function resolveExact(query, scenarios) {
   const parsed = parseQuery(query, index);
   const qualifiers = extractQualifiers(query);
   const { pregnant, notPregnant, age } = qualifiers;
-  if (parsed.required.length + parsed.soft.length === 0) return { mode: 'none' };
+  if (parsed.required.length + parsed.soft.length === 0) return { mode: 'none', understood: [], unknown: [], reason: 'no-clinical-words' };
 
-  if (parsed.required.length === 1 && parsed.soft.length === 0 && !pregnant && !age &&
-      TOO_BROAD.has(parsed.required[0])) {
-    return { mode: 'too-broad' };
+  // One word that points at no one topic: a generic finding, or a word whose
+  // scenarios spread over the body ("fever") without a topic of its own.
+  if (parsed.required.length === 1 && parsed.soft.length === 0 && parsed.negated.length === 0 && !pregnant && !age) {
+    const [word] = parsed.required;
+    const spread = (index.nameFreq.get(word) || 0) >= MIN_BROAD_NAMES && !GROUP_OF.has(word) && !localizes(word, index) &&
+      topicsNaming(parsed, qualifiers, scenarios).length === 0;
+    if (TOO_BROAD.has(word) || spread) return { mode: 'too-broad' };
   }
 
-  const scored = scoreDocs(parsed, index.docs, qualifiers);
+  const scored = scoreDocs(parsed, index, qualifiers);
+
+  // A size or an age in the search picks among the scenarios that split on it.
+  if (qualifiers.sizes.length) {
+    const bySize = resolveByRange(parsed, qualifiers, index, 'size');
+    if (bySize) return bySize;
+  }
+  if (qualifiers.years !== null) {
+    const byAge = resolveByRange(parsed, qualifiers, index, 'age');
+    if (byAge) return byAge;
+  }
+
   if (!notPregnant && parsed.negated.length === 0) {
     const named = topicsNaming(parsed, qualifiers, scenarios);
     const exact = named.filter(n => n.extra === 0);
@@ -1428,11 +2356,18 @@ function resolveExact(query, scenarios) {
           : clinical.some(t => best.doc.nameText.positive.has(t) && minority(t));
         if (specificList) return { mode: 'list', scenarios: dedupe(scored, 8) };
       }
-      let related = named.filter(n => n !== pick).map(n => n.topic);
+      // Related topics pass the checks an answer passes: the region, the
+      // negation, and no stage, mechanism or population that was not asked.
+      // A title with many words of its own is about something else.
+      const asked = new Set([...parsed.required, ...parsed.soft]);
+      const scope = scopeOf([...asked]);
+      const relatable = n => n.topic !== pick.topic && n.extra <= 3 &&
+        titleCompatible(n.topic, index, asked, scope, parsed.negated) && !unaskedTitle(n.topic, index, asked);
+      let related = named.filter(relatable).map(n => n.topic);
       // "knee pain" opens the chronic topic; ACR files the injury under "trauma".
       if (parsed.required.includes('pain') && parsed.required.length > 1) {
         const anatomyOnly = { ...parsed, required: parsed.required.filter(t => t !== 'pain') };
-        related = related.concat(topicsNaming(anatomyOnly, qualifiers, scenarios).map(n => n.topic).filter(t => t !== pick.topic));
+        related = related.concat(topicsNaming(anatomyOnly, qualifiers, scenarios).filter(relatable).map(n => n.topic));
       }
       return { mode: 'guide', topic: pick.topic, related: [...new Set(related)].slice(0, 3) };
     }
@@ -1443,7 +2378,7 @@ function resolveExact(query, scenarios) {
       const best = scored[0];
       const specific = parsed.soft.filter(t => !parsed.studyAnatomy.includes(t) && !named.some(n => index.titles.get(n.topic).positive.has(t)));
       if (best && specific.some(t => best.doc.nameText.positive.has(t))) return { mode: 'list', scenarios: dedupe(scored, 8) };
-      return { mode: 'choose', topics: named.slice(0, 8).map(n => ({ topic: n.topic, count: n.count })) };
+      return { mode: 'choose', topics: named.slice(0, 8).map(n => ({ topic: n.topic, count: n.count, query: topicQuery(n.topic, qualifiers) })) };
     }
   }
 
@@ -1456,8 +2391,12 @@ function resolveExact(query, scenarios) {
     const namedInName = parsed.required.filter(t => best.doc.nameText.positive.has(t)).length;
     if (namedInName < parsed.required.length && droppable.length && parsed.required.length >= 2) {
       const kept = parsed.required.filter(t => t !== droppable[0]);
-      const partial = scoreDocs({ ...parsed, required: kept }, index.docs, qualifiers);
+      const partial = scoreDocs({ ...parsed, required: kept }, index, qualifiers);
       if (partial.length && kept.every(t => partial[0].doc.nameText.positive.has(t)) && partial[0].score > best.score) {
+        // Several complaints that no scenario names together are offered one
+        // by one rather than one of them being dropped.
+        const grouped = multiComplaint(query, parsed, qualifiers, index, scenarios);
+        if (grouped) return grouped;
         return {
           mode: 'list',
           scenarios: dedupe(partial, 8),
@@ -1465,14 +2404,26 @@ function resolveExact(query, scenarios) {
         };
       }
     }
+    // A match carried only by the longer text of a scenario about something
+    // else ("Vertigo ... hearing loss" for hearing loss and tinnitus) gives
+    // way to the complaints' own topics when they have several.
+    if (namedInName < parsed.required.length) {
+      const grouped = multiComplaint(query, parsed, qualifiers, index, scenarios);
+      if (grouped && new Set(grouped.topics.map(t => t.topic)).size > 1) return grouped;
+    }
     // Pediatric scenarios alone answer an unqualified search only when no
     // adult scenario fits a generic word less: "painful lump under jaw" is the
-    // adult neck mass, not a child's spine lump.
+    // adult neck mass, not a child's spine lump. Several complaints with
+    // adult topics of their own are offered those first.
     const hits = dedupe(scored, 8);
     const notice = withPopulationNotice(hits, docsById, qualifiers);
+    if (notice) {
+      const grouped = multiComplaint(query, parsed, qualifiers, index, scenarios);
+      if (grouped) return grouped;
+    }
     if (notice && droppable.length && parsed.required.length >= 2) {
       const kept = parsed.required.filter(t => t !== droppable[0]);
-      const adult = scoreDocs({ ...parsed, required: kept }, index.docs, qualifiers).filter(h => h.doc.population !== 'pediatric');
+      const adult = scoreDocs({ ...parsed, required: kept }, index, qualifiers).filter(h => h.doc.population !== 'pediatric');
       if (adult.length && kept.every(t => adult[0].doc.nameText.positive.has(t))) {
         return {
           mode: 'list',
@@ -1487,16 +2438,19 @@ function resolveExact(query, scenarios) {
   // ACR's word for the same idea: an infant's femur "fracture" is its "injury".
   const fallbackTerms = parsed.required.map(t => FALLBACK_EQUIVALENT[t] || t);
   if (fallbackTerms.some((t, i) => t !== parsed.required[i])) {
-    const hits = dedupe(scoreDocs({ ...parsed, required: fallbackTerms }, index.docs, qualifiers), 8);
+    const hits = dedupe(scoreDocs({ ...parsed, required: fallbackTerms }, index, qualifiers), 8);
     if (hits.length > 0) return { mode: 'list', scenarios: hits, notice: withPopulationNotice(hits, docsById, qualifiers) };
   }
+
+  const grouped = multiComplaint(query, parsed, qualifiers, index, scenarios);
+  if (grouped) return grouped;
 
   // Drop one uninformative word and say so. Pregnancy is kept while a word
   // goes; an age gives way first, so a child's "elbow fracture" reaches the
   // adult fracture scenario with a notice rather than any pediatric elbow text.
   const dropOne = quals => {
     if (parsed.required.length < 2 || droppable.length === 0) return null;
-    const partial = dedupe(scoreDocs({ ...parsed, required: parsed.required.filter(t => t !== droppable[0]) }, index.docs, quals), 8);
+    const partial = dedupe(scoreDocs({ ...parsed, required: parsed.required.filter(t => t !== droppable[0]) }, index, quals), 8);
     if (partial.length === 0) return null;
     return {
       mode: 'list',
@@ -1509,18 +2463,40 @@ function resolveExact(query, scenarios) {
     if (dropped) return dropped;
   }
 
-  if (pregnant || age) {
+  // Pregnancy or age give way only when ACR has no topic of its own for the
+  // population and the complaint: a child's chest pain has "Chest Pain-Child"
+  // to explore, so adult pleural effusions are not borrowed for it.
+  const populationTopic = (pregnant || age) && [...index.titles.entries()].some(([topic, title]) =>
+    parsed.required.some(t => isSpecific(t, index) && title.positive.has(t)) &&
+    index.docs.some(doc => doc.scenario.topic === topic && fitsPopulation(doc, { ...qualifiers, sizes: [], years: null }) &&
+      (pregnant ? doc.isPregnant : doc.population === age)));
+  if ((pregnant || age) && !populationTopic) {
     // Never drop pregnancy or age silently: say that the nearest match lacks
     // it. The nearest matches must agree on a topic; a spread of unrelated
     // scenarios is a guess, not an answer. Pregnancy asks for full agreement.
     // A child's search may fall back to adult scenarios; an adult's never to
     // a child's.
-    const relaxed = { sides: qualifiers.sides, years: qualifiers.years, gcs: qualifiers.gcs, age: age === 'adult' ? 'adult' : null };
-    const nearest = scoreDocs(parsed, index.docs, relaxed);
+    const relaxed = { sides: qualifiers.sides, years: qualifiers.years, gcs: qualifiers.gcs, sizes: qualifiers.sizes, age: age === 'adult' ? 'adult' : null };
+    const nearest = scoreDocs(parsed, index, relaxed);
     const lead = nearest[0]?.doc.scenario.topic;
     const agreeing = nearest.slice(0, 3).filter(h => h.doc.scenario.topic === lead).length;
     if (nearest.length > 0 && (pregnant ? agreeing === Math.min(3, nearest.length) : agreeing * 2 > Math.min(3, nearest.length))) {
       const missing = pregnant ? 'pregnancy' : `${age} patients`;
+      // When the lead topic has scenarios written for the population that
+      // name part of the search, those come before the general ones: a
+      // pregnant headache with visual change shows the pregnant headaches.
+      const own = index.docs.filter(doc => doc.scenario.topic === lead && fitsPopulation(doc, qualifiers) &&
+        (pregnant ? doc.isPregnant : doc.population === age) && parsed.required.some(t => doc.nameText.positive.has(t)));
+      if (own.length) {
+        const unmet = parsed.required.filter(t => !own.some(doc => doc.nameText.positive.has(t))).map(t => originalWord(query, t));
+        const ranked = own.map(doc => ({ scenario: doc.scenario, score: parsed.required.filter(t => doc.nameText.positive.has(t)).length }))
+          .sort((a, b) => b.score - a.score);
+        return {
+          mode: 'list',
+          scenarios: dedupe(ranked, 8),
+          notice: `No ACR scenario for ${missing} mentions "${unmet.join('", "')}"; these are the ${missing} scenarios of ${lead}.`,
+        };
+      }
       return {
         mode: 'list',
         scenarios: dedupe(nearest.filter(h => h.doc.scenario.topic === lead), 8),
@@ -1531,7 +2507,7 @@ function resolveExact(query, scenarios) {
 
   const dropped = dropOne(qualifiers);
   if (dropped) return dropped;
-  return { mode: 'none' };
+  return recover(query, parsed, qualifiers, index, scenarios);
 }
 
 /** For tooling: how a search is read, and how a scenario is indexed. */
@@ -1544,8 +2520,14 @@ export function _debugDoc(id, scenarios) {
   const doc = buildIndex(scenarios).docs.find(d => String(d.scenario.id) === String(id));
   if (!doc) return null;
   return {
-    name: doc.scenario.name, population: doc.population, isPregnant: doc.isPregnant, gcs: doc.gcs,
+    name: doc.scenario.name, population: doc.population, isPregnant: doc.isPregnant, sex: doc.sex, gcs: doc.gcs,
+    sizeRanges: doc.sizeRanges, ageRange: doc.ageRange,
     namePositive: [...doc.nameText.positive], nameNegative: [...doc.nameText.negative],
     detailNegative: [...doc.detail.negative], keywords: [...doc.keywords],
   };
+}
+
+export function _debugIndex(scenarios) {
+  const { termRegions, topicRegion } = buildIndex(scenarios);
+  return { termRegions: [...termRegions].map(([term, regions]) => [term, [...regions]]), topicRegion: [...topicRegion] };
 }

@@ -16,9 +16,13 @@ const read = url => JSON.parse(readFileSync(new URL(url, import.meta.url), 'utf8
 const { scenarios } = read('../data/search/scenario_names.json');
 const { cases, pass_floor } = read('./redteam-gold.json');
 
+// Everything a result puts in front of the user. The topics a chooser or a
+// recovery screen suggests are judged by "not" exactly as answers are.
 function shownNames(result) {
   if (result.mode === 'guide') return scenarios.filter(s => s.topic === result.topic).map(s => s.name);
   if (result.mode === 'list') return result.scenarios.map(s => s.name);
+  if (result.mode === 'choose') return result.topics.map(t => t.topic);
+  if (result.mode === 'recover') return result.groups.flatMap(g => g.topics.map(t => t.topic));
   return [];
 }
 
@@ -26,16 +30,19 @@ function shownNames(result) {
  * Returns [] when the case passes, else the reasons it fails. A guide shows a
  * whole topic grouped by recommendation, so its "name" check passes when any
  * scenario of the topic matches; a list is judged by its first result.
+ * "recover" is a non-answer like "none": a case expecting an answer fails on
+ * either, and a case expecting "none" accepts either.
  */
 export function judge(c, result) {
   const shown = shownNames(result);
   const reasons = [];
-  if (c.mode !== 'none' && result.mode === 'none') reasons.push('mode none');
-  if (c.mode && result.mode !== c.mode) reasons.push(`mode ${result.mode}`);
+  const deadEnd = result.mode === 'none' || result.mode === 'recover';
+  if (c.mode !== 'none' && deadEnd) reasons.push(`mode ${result.mode}`);
+  else if (c.mode && result.mode !== c.mode && !(c.mode === 'none' && result.mode === 'recover')) reasons.push(`mode ${result.mode}`);
   if (c.topic && result.topic !== c.topic) reasons.push(`topic ${result.topic}`);
   if (c.name) {
     const re = new RegExp(c.name);
-    const hit = result.mode === 'guide' ? shown.some(n => re.test(n)) : re.test(shown[0] || '');
+    const hit = result.mode === 'guide' || result.mode === 'choose' ? shown.some(n => re.test(n)) : re.test(shown[0] || '');
     if (!hit) reasons.push(`first "${shown[0] || ''}" !~ /${c.name}/`);
   }
   if (c.not) for (const name of shown) if (new RegExp(c.not).test(name)) reasons.push(`shown "${name}" ~ /${c.not}/`);

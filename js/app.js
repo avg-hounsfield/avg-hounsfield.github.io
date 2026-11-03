@@ -7,13 +7,13 @@
 
 console.log('[Radex] Loading app.js module...');
 
-import { SearchEngine } from './search-engine.js?v=20260417a';
+import { SearchEngine } from './search-engine.js?v=20261103a';
 import { DataLoader } from './data-loader.js?v=20260417a';
 import { UI } from './ui.js?v=20260417a';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
-import { resolveQuery, buildTopicGuide, guardSuggestions } from './scenario-ranker.js?v=20261102a';
+import { resolveQuery, buildTopicGuide, guardSuggestions } from './scenario-ranker.js?v=20261103a';
 
 // Regions that have a backing data/regions/<name>.json file. Used to guard
 // navigation so a summary card with a body label that has no region file
@@ -765,7 +765,7 @@ class ProtocolHelpApp {
       return;
     }
     if (resolved.mode === 'choose') {
-      this._renderTopicChooser(resolved.corrected || trimmed, resolved.topics, resultContainer);
+      this._renderTopicChooser(resolved.corrected || trimmed, resolved, resultContainer);
       return;
     }
     if (resolved.mode === 'too-broad') {
@@ -773,43 +773,117 @@ class ProtocolHelpApp {
       return;
     }
 
-    // Embedding fallback first (semantically aware, ~39% accurate on
-    // long-tail queries per eval). Distilled radiology student model finds
-    // semantically similar scenarios when concept misses. Loads on first
-    // use (~1-2s warmup); subsequent queries are fast.
+    // Nothing matched as written ("recover" or "none"). The recovery screen
+    // explains the search and offers places to explore; it is shown at once,
+    // then the distilled semantic model's suggestions (held to the same rules
+    // by guardSuggestions) are added when the model has loaded (~1-2s on first
+    // use). Nothing on this screen is presented as the answer.
+    const suggestions = resolved.mode === 'none' ? await this._globalSuggestSimilar(trimmed, 3) : [];
+    if (stale()) return;
+    this._renderRecovery(trimmed, resolved, [], suggestions, resultContainer);
     try {
-      const embHits = await this._globalEmbeddingSearch(trimmed, 8);
+      const embHits = await this._globalEmbeddingSearch(trimmed, 6);
       if (stale()) return;
-      if (embHits.length > 0) {
-        this._renderGlobalScenarioListResult(trimmed, embHits, resultContainer, { notice: CLOSEST_MATCH_NOTICE });
-        return;
-      }
+      if (embHits.length > 0) this._renderRecovery(trimmed, resolved, embHits, suggestions, resultContainer);
     } catch (e) {
       console.warn('[App] embedding search unavailable:', e?.message || e);
     }
+  }
 
-    // Final fallback: "no quick answer" with did-you-mean chips
-    const suggestions = await this._globalSuggestSimilar(trimmed, 3);
-    if (stale()) return;
-    resultContainer.classList.remove('hidden');
-    resultContainer.innerHTML = `
-      <div class="global-result-card">
+  // The screen for a search nothing matched: what was understood and what ACR
+  // never says, the topics each understood word points at, the likely body
+  // region, the model's guarded suggestions, and spelling chips. Every topic
+  // and scenario here is a place to explore, labelled so.
+  _renderRecovery(query, resolved, embHits, suggestions, container) {
+    const esc = s => this.escapeHtml(s);
+    const understood = (resolved.understood || []).filter(w => !(resolved.unknown || []).includes(w));
+    const unknown = resolved.unknown || [];
+    const groups = resolved.groups || [];
+    const region = resolved.region;
+    const hasPlaces = groups.length > 0 || embHits.length > 0 || Boolean(region);
+
+    let lead;
+    if (resolved.reason === 'no-clinical-words') {
+      lead = `No clinical terms were found in "<strong>${esc(query)}</strong>". Try a symptom, finding or body part, such as "chest pain" or "renal mass".`;
+    } else if (!hasPlaces) {
+      lead = `ACR has no Appropriateness Criteria scenario for "<strong>${esc(query)}</strong>".` +
+        (unknown.length ? ` ACR never uses the word${unknown.length > 1 ? 's' : ''} ${unknown.map(w => `"${esc(w)}"`).join(', ')}.` : '') +
+        (understood.length && unknown.length === 0 ? ' The words it does use do not point to any one topic together.' : '') +
+        ' The Criteria cover clinical presentations, not contrast, device or technique questions.';
+    } else {
+      lead = `No ACR scenario matches "<strong>${esc(query)}</strong>" as written. Below are places to explore, not an answer.`;
+    }
+
+    const words = (understood.length || unknown.length) && hasPlaces ? `
+      <div class="recover-words" aria-label="How the search was read">
+        ${understood.length ? `<span class="dym-label">Understood:</span>${understood.map(w => `<span class="recover-word">${esc(w)}</span>`).join('')}` : ''}
+        ${unknown.length ? `<span class="dym-label">Not in ACR:</span>${unknown.map(w => `<span class="recover-word unknown">${esc(w)}</span>`).join('')}` : ''}
+      </div>` : '';
+
+    const scenarioRow = s => `
+      <li class="scenario-preview-item">
+        <button type="button" class="scenario-preview-btn" data-region="${esc(s.region)}" data-name="${esc(s.name)}">
+          <div class="scenario-preview-row">
+            <span class="scenario-preview-name">${esc(s.name)}</span>
+            <span class="scenario-preview-region">${s.age === 'pediatric' ? 'Pediatric - ' : ''}${esc(this.formatRegionName(s.region))}</span>
+          </div>
+          ${this._renderRecommendation(s.top_tier)}
+        </button>
+      </li>`;
+
+    const groupHtml = groups.map(g => `
+      <section class="recover-group">
+        <h3 class="recover-group-title">Topics that mention "${esc(g.display)}"${g.pediatricOnly ? ' <span class="age-tag">pediatric only</span>' : ''}</h3>
+        <div class="recover-chips">
+          ${g.topics.map(t => `<button type="button" class="dym-chip" data-term="${esc(t.query || t.topic)}">${esc(t.topic)} <span class="age-tag">${t.count} scenario${t.count === 1 ? '' : 's'}</span></button>`).join('')}
+        </div>
+        ${g.scenarios && g.scenarios.length ? `
+          <p class="recover-note">Scenarios in these topics that name the most of your search:</p>
+          <ul class="scenario-preview-list" style="list-style:none;padding:0;margin:6px 0 0">${g.scenarios.map(scenarioRow).join('')}</ul>` : ''}
+      </section>`).join('');
+
+    const regionHtml = region ? `
+      <section class="recover-group">
+        <h3 class="recover-group-title">Likely body region</h3>
+        <a class="recover-region" href="/regions/${esc(region.key)}/">Browse all ${esc(region.label)} scenarios</a>
+      </section>` : '';
+
+    const modelHtml = embHits.length ? `
+      <section class="recover-group">
+        <h3 class="recover-group-title">Suggestions by meaning</h3>
+        <p class="recover-note">${esc(CLOSEST_MATCH_NOTICE)}</p>
+        <ul class="scenario-preview-list" style="list-style:none;padding:0;margin:6px 0 0">${embHits.map(scenarioRow).join('')}</ul>
+      </section>` : '';
+
+    const dymHtml = suggestions.length ? `
+      <div class="dym-row" style="margin-top: var(--space-md)">
+        <span class="dym-label">Did you mean:</span>
+        ${suggestions.map(s => `<button type="button" class="dym-chip" data-term="${esc(s.term)}">${esc(s.term)}</button>`).join('')}
+      </div>` : '';
+
+    container.classList.remove('hidden');
+    container.innerHTML = `
+      <div class="global-result-card recover-card">
+        <div class="global-result-header">
+          <span class="global-result-topic">${esc(query)}</span>
+          <span class="global-result-meta">${hasPlaces ? 'Places to explore, not an answer' : 'No ACR scenario'}</span>
+        </div>
         <div class="global-result-body">
-          <p class="global-result-recommendation">
-            No quick answer found for "<strong>${this.escapeHtml(trimmed)}</strong>".
-            Try the body region search below for more specific scenarios.
-          </p>
-          ${suggestions.length > 0 ? `
-            <div class="dym-row" style="margin-top: var(--space-md)">
-              <span class="dym-label">Did you mean:</span>
-              ${suggestions.map(s => `<button type="button" class="dym-chip" data-term="${this.escapeHtml(s.term)}">${this.escapeHtml(s.term)}</button>`).join('')}
-            </div>
-          ` : ''}
+          <p class="global-result-recommendation">${lead}</p>
+          ${words}
+          ${groupHtml}
+          ${regionHtml}
+          ${modelHtml}
+          ${dymHtml}
+          ${!hasPlaces ? '<p class="recover-note">Try the body region search below, or rephrase with a symptom, finding or body part.</p>' : ''}
+        </div>
+        <div class="global-result-footer">
+          <span class="global-result-source">${esc(this._sourceLine())}</span>
         </div>
       </div>
     `;
-    this._bindTermChips(resultContainer);
-    return;
+    this._bindScenarioButtons(container);
+    this._bindTermChips(container);
   }
 
   async navigateToRegionSearch(region, topic) {
@@ -1549,7 +1623,7 @@ class ProtocolHelpApp {
     return label.charAt(0).toUpperCase() + label.slice(1);
   }
 
-  _renderTopicGuide({ topic, related }, scenarios, container) {
+  _renderTopicGuide({ topic, related, notice }, scenarios, container) {
     const groups = buildTopicGuide(topic, scenarios);
     const all = groups.flatMap(g => g.scenarios);
     const leads = new Map();
@@ -1579,6 +1653,7 @@ class ProtocolHelpApp {
           <span class="global-result-meta">Depends on the presentation</span>
         </div>
         <div class="global-result-body">
+          ${notice ? `<p class="global-result-recommendation"><strong>${this.escapeHtml(notice)}</strong></p>` : ''}
           ${groups.map(g => `
             <section class="guide-group">
               ${this._renderRecommendation(g)}
@@ -1611,24 +1686,33 @@ class ProtocolHelpApp {
     this._bindTermChips(container);
   }
 
-  _renderTopicChooser(query, topics, container) {
+  // Several topics fit. With `groups`, the search had several complaints that
+  // no one scenario covers, and each complaint's topics are shown under it.
+  // A chip runs its topic's own search (t.query keeps the search's pregnancy
+  // or age), which opens that topic's guide.
+  _renderTopicChooser(query, { topics = [], groups = null, notice = '' }, container) {
+    const chip = t => `
+      <li class="scenario-preview-item">
+        <button type="button" class="scenario-preview-btn guide-branch dym-chip" data-term="${this.escapeHtml(t.query || t.topic)}">
+          ${this.escapeHtml(t.topic)} <span class="age-tag">${t.count} scenario${t.count === 1 ? '' : 's'}</span>
+        </button>
+      </li>`;
+    const body = groups && groups.length ? groups.map(g => `
+        <section class="recover-group">
+          <h3 class="recover-group-title">For "${this.escapeHtml(g.complaint)}"</h3>
+          <ul class="scenario-preview-list guide-branches">${g.topics.map(chip).join('')}</ul>
+        </section>`).join('')
+      : `<ul class="scenario-preview-list guide-branches">${topics.map(chip).join('')}</ul>`;
     container.classList.remove('hidden');
     container.innerHTML = `
       <div class="global-result-card">
         <div class="global-result-header">
           <span class="global-result-topic">${this.escapeHtml(query)}</span>
-          <span class="global-result-meta">Which of these?</span>
+          <span class="global-result-meta">${groups && groups.length ? 'Topics for each complaint' : 'Which of these?'}</span>
         </div>
         <div class="global-result-body">
-          <ul class="scenario-preview-list guide-branches">
-            ${topics.map(t => `
-              <li class="scenario-preview-item">
-                <button type="button" class="scenario-preview-btn guide-branch dym-chip" data-term="${this.escapeHtml(t.topic)}">
-                  ${this.escapeHtml(t.topic)} <span class="age-tag">${t.count} scenarios</span>
-                </button>
-              </li>
-            `).join('')}
-          </ul>
+          ${notice ? `<p class="global-result-recommendation"><strong>${this.escapeHtml(notice)}</strong></p>` : ''}
+          ${body}
         </div>
       </div>
     `;

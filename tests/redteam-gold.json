@@ -1,6 +1,6 @@
 {
   "_note":"Red-team searches for the Radex matcher and the answer each must give. Written from data/search/scenario_names.json by Claude (not clinician reviewed). Same format as tests/clinical-gold.json: mode guide/list/choose/none; topic: exact ACR topic for a guide; name: regex the first shown result must match; not: regex no shown result may match. Cases that currently fail are the point: see redteam-results.json for grades and what the matcher returned.",
-  "pass_floor":736,
+  "pass_floor":737,
   "cases": [
     {"q":"back pain with cauda equina","name":"cauda equina"},
     {"q":"LBP with urinary retention and saddle anesthesia","name":"cauda equina"},
@@ -213,7 +213,7 @@
     {"q":"rib fracture","topic":"Rib Fractures"},
     {"q":"rib pain after CPR","name":"after CPR"},
     {"q":"blunt chest trauma","name":"hest trauma"},
-    {"q":"sternal fracture","mode":"none"},
+    {"q":"sternal fracture","topic":"Blunt Chest Trauma-Suspected Cardiac Injury","_edited":"was mode none; \"sternal fracture\" now reads as blunt chest trauma, which ACR files under suspected cardiac injury"},
     {"q":"stab wound chest","name":"^Chest trauma, penetrating"},
     {"q":"GSW chest","name":"^Chest trauma, penetrating, ballistic"},
     {"q":"GSW abdomen","name":"penetrating, ballistic"},

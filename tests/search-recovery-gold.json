@@ -1,0 +1,336 @@
+{
+  "_note": "Gold cases for three search mechanisms: multi-complaint searches (choose grouped by complaint), size-aware matching, and recovery instead of a dead end. Written from the ACR data by Claude, not yet clinician reviewed. Fields: mode (exact); topic; name (regex the first listed scenario must match); groups (minimum number of complaint groups); group_topics (regexes, each must match a topic in some group); topics (regex some recovery topic must match); not (regex no shown scenario or suggested topic may match); region (recovery region key); unknown (words that must be reported as not found); notice (regex the notice must match).",
+  "cases": [
+    {
+      "feature": "multi-complaint",
+      "q": "chest pain and shortness of breath",
+      "mode": "choose",
+      "groups": 2,
+      "group_topics": ["Chest Pain", "Dyspnea"],
+      "not": "Child|Pregnan"
+    },
+    {
+      "feature": "multi-complaint",
+      "q": "fever and headache",
+      "mode": "list",
+      "name": "^Headache, fever"
+    },
+    {
+      "feature": "multi-complaint",
+      "q": "abdominal pain with vomiting and fever",
+      "mode": "list",
+      "name": "^Abd pain, acute, nonlocalized, fever"
+    },
+    {
+      "feature": "multi-complaint",
+      "q": "headache and knee pain",
+      "mode": "choose",
+      "groups": 2,
+      "group_topics": ["^Headache$", "Knee"],
+      "not": "Child|Hip|Shoulder"
+    },
+    {
+      "feature": "multi-complaint",
+      "q": "hematuria and cough",
+      "mode": "choose",
+      "groups": 2,
+      "group_topics": ["Hematuria", "Cough|Respiratory"],
+      "not": "Child"
+    },
+    {
+      "feature": "multi-complaint",
+      "q": "knee pain and swelling",
+      "mode": "list",
+      "name": "^Knee pain",
+      "not": "Child|Hip"
+    },
+    {
+      "feature": "multi-complaint",
+      "q": "shortness of breath and leg swelling",
+      "mode": "choose",
+      "groups": 2,
+      "group_topics": ["Dyspnea", "Deep Vein Thrombosis|DVT"],
+      "not": "Upper-Extremity|Upper Extremity|Child"
+    },
+    {
+      "feature": "multi-complaint",
+      "q": "child with headache and knee pain",
+      "mode": "choose",
+      "groups": 2,
+      "group_topics": ["Headache-Child", "Knee"],
+      "not": "^Headache$|Osteonecrosis|Arthroplasty"
+    },
+    {
+      "feature": "multi-complaint",
+      "q": "dizziness and hearing loss",
+      "not": "Child|Pregnan"
+    },
+    {
+      "feature": "size",
+      "q": "8 mm lung nodule",
+      "mode": "list",
+      "name": "^Pulmonary nodule on chest CT, incidental, indeterminate, >=6mm",
+      "not": "<6mm"
+    },
+    {
+      "feature": "size",
+      "q": "4 mm pulmonary nodule",
+      "mode": "list",
+      "name": "<6mm",
+      "not": ">=6mm|1 to 3 cm"
+    },
+    {
+      "feature": "size",
+      "q": "lung nodule 0.5 cm",
+      "mode": "list",
+      "name": "<6mm",
+      "not": ">=6mm|1 to 3 cm"
+    },
+    {
+      "feature": "size",
+      "q": "lung nodule 2 cm",
+      "mode": "list",
+      "name": ">=6mm|1 to 3 cm",
+      "not": "<6mm"
+    },
+    {
+      "feature": "size",
+      "q": "adrenal nodule 3 cm",
+      "mode": "list",
+      "name": "^Adrenal mass, indeterminate, >2cm and <4cm",
+      "not": "<1cm|1-2cm|>=4cm"
+    },
+    {
+      "feature": "size",
+      "q": "adrenal mass 5 cm",
+      "mode": "list",
+      "name": ">=4cm",
+      "not": "<1cm|1-2cm|>2cm and <4cm|, <4cm"
+    },
+    {
+      "feature": "size",
+      "q": "1.5 cm adrenal mass",
+      "mode": "list",
+      "name": "1-2cm",
+      "not": "<1cm|>2cm|>=4cm"
+    },
+    {
+      "feature": "size",
+      "q": "adrenal mass 3 cm no history of malignancy",
+      "mode": "list",
+      "name": ">2cm and <4cm.*no hx of malignancy",
+      "not": ", hx of malignancy|<1cm|1-2cm|>=4cm"
+    },
+    {
+      "feature": "size",
+      "q": "pancreatic cyst 3 cm",
+      "mode": "list",
+      "name": "^Pancreas cyst, >2.5cm",
+      "not": "<=2.5cm"
+    },
+    {
+      "feature": "size",
+      "q": "pancreatic cyst 2 cm",
+      "mode": "list",
+      "name": "^Pancreas cyst, <=2.5cm",
+      "not": ">2.5cm"
+    },
+    {
+      "feature": "size",
+      "q": "pancreatic duct dilation 8 mm",
+      "mode": "list",
+      "name": "^Pancreas duct dilation, >7mm"
+    },
+    {
+      "feature": "size",
+      "q": "pancreatic duct dilation 5 mm",
+      "mode": "guide",
+      "topic": "Pancreatic Cyst",
+      "notice": "5 mm"
+    },
+    {
+      "feature": "size",
+      "q": "liver lesion 1 cm",
+      "mode": "guide",
+      "topic": "Liver Lesion-Initial Characterization",
+      "notice": "1 cm"
+    },
+    {
+      "feature": "size",
+      "q": "liver lesion 2 cm on ultrasound",
+      "mode": "list",
+      "name": "^Liver lesion, >1cm",
+      "not": "<1cm"
+    },
+    {
+      "feature": "size",
+      "q": "breast cancer 3 cm axilla",
+      "mode": "list",
+      "name": ">2cm",
+      "not": "<=2cm"
+    },
+    {
+      "feature": "size",
+      "q": "4.5 cm AAA",
+      "mode": "choose",
+      "group_topics": ["Abdominal Aortic Aneurysm"],
+      "notice": "size"
+    },
+    {
+      "feature": "size",
+      "q": "renal cyst 1.5cm",
+      "mode": "guide",
+      "topic": "Indeterminate Renal Mass"
+    },
+    {
+      "feature": "size",
+      "q": "0.8 cm",
+      "mode": "none"
+    },
+    {
+      "feature": "recovery",
+      "q": "knee xyzzy",
+      "mode": "recover",
+      "topics": "Knee",
+      "region": "msk",
+      "unknown": ["xyzzy"],
+      "not": "Child|Hip|Shoulder|Ankle|^Spine|Low Back"
+    },
+    {
+      "feature": "recovery",
+      "q": "left knee xyzzy",
+      "mode": "recover",
+      "topics": "Knee",
+      "region": "msk",
+      "not": "Child|Hip|Shoulder"
+    },
+    {
+      "feature": "recovery",
+      "q": "headache xyzzy",
+      "mode": "recover",
+      "topics": "^Headache$",
+      "region": "neuro",
+      "unknown": ["xyzzy"],
+      "not": "Child|Back|Knee"
+    },
+    {
+      "feature": "recovery",
+      "q": "liver xyzzy",
+      "mode": "recover",
+      "topics": "Liver",
+      "region": "abdomen",
+      "not": "Lung|Renal|Kidney|Child"
+    },
+    {
+      "feature": "recovery",
+      "q": "pulmonary nodule foo",
+      "mode": "recover",
+      "topics": "Pulmonary Nodule",
+      "region": "chest",
+      "unknown": ["foo"],
+      "not": "Thyroid|Child"
+    },
+    {
+      "feature": "recovery",
+      "q": "child with hip xyzzy",
+      "mode": "recover",
+      "topics": "Child|Limping|Developmental Dysplasia",
+      "region": "peds",
+      "not": "Osteonecrosis|Chronic Hip Pain$|Avascular|Abuse|Arthroplasty"
+    },
+    {
+      "feature": "recovery",
+      "q": "pregnant with headache xyzzy",
+      "mode": "recover",
+      "topics": "Headache",
+      "not": "Child"
+    },
+    {
+      "feature": "recovery",
+      "q": "headache xyzzy no fever",
+      "mode": "recover",
+      "topics": "Headache",
+      "not": "Fever|Sepsis"
+    },
+    {
+      "feature": "recovery",
+      "q": "retropharyngeal abscess child",
+      "mode": "none",
+      "unknown": ["retropharyngeal"],
+      "not": "Pneumonia|Abdominal|Breast"
+    },
+    {
+      "feature": "recovery",
+      "q": "shunt malfunction",
+      "mode": "none",
+      "unknown": ["shunt"],
+      "not": "Dialysis|Fistula"
+    },
+    {
+      "feature": "recovery",
+      "q": "abdominal pain and diarrhea",
+      "mode": "recover",
+      "topics": "Abdominal Pain",
+      "region": "abdomen",
+      "unknown": ["diarrhea"],
+      "not": "Melanoma|Osteomyelitis|Child|Breast|Lung"
+    },
+    {
+      "feature": "recovery",
+      "q": "chest pain and fever",
+      "mode": "choose",
+      "groups": 2,
+      "group_topics": ["Chest Pain", "Respiratory"],
+      "not": "Headache|Quadrant|Pancreatitis|Spine|Child|Sepsis"
+    },
+    {
+      "feature": "recovery",
+      "q": "contrast allergy",
+      "mode": "none",
+      "unknown": ["allergy"]
+    },
+    {
+      "feature": "recovery",
+      "q": "claustrophobia",
+      "mode": "none",
+      "unknown": ["claustrophobia"]
+    },
+    {
+      "feature": "recovery",
+      "q": "pacemaker MRI safety",
+      "mode": "none"
+    },
+    {
+      "feature": "recovery",
+      "q": "asdfgh qwerty",
+      "mode": "none",
+      "unknown": ["asdfgh", "qwerty"]
+    },
+    {
+      "feature": "recovery",
+      "q": "lower gi bleed",
+      "mode": "none",
+      "not": "Upper"
+    },
+    {
+      "feature": "recovery",
+      "q": "sternal fracture",
+      "mode": "guide",
+      "topic": "Blunt Chest Trauma-Suspected Cardiac Injury",
+      "not": "Rib fracture suspected, pathological|Child"
+    },
+    {
+      "feature": "recovery",
+      "q": "lymphoma staging",
+      "mode": "none",
+      "not": "elanoma"
+    },
+    {
+      "feature": "recovery",
+      "q": "tension pneumothorax xyzzy",
+      "mode": "recover",
+      "topics": "Pneumothorax|Chest|Dyspnea|Trauma",
+      "not": "eadache"
+    }
+  ]
+}

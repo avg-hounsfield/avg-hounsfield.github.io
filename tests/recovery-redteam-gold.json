@@ -1,0 +1,9461 @@
+{
+ "_note": "Test cases for three Radex search features, written against data/search/scenario_names.json (ACR Appropriateness Criteria). Not clinician reviewed. Arrays: sizes (feature B, size-aware matching), multi (feature A, multi-complaint searches), recover (feature C, recovery instead of a dead end; every q here returns mode \"none\" with the current resolveQuery). Each case: q = the search; expected = array of alternatives, the case passes when ANY alternative is satisfied; forbidden = regex that no shown scenario name may match and, unless forbidden_topics is present, no offered topic name may match (an empty string means nothing is forbidden; \".\" means nothing at all may be shown); forbidden_topics = optional regex for offered topic names only (empty string: topics are not checked; used where forbidden is a pregnancy lookahead that topic titles cannot satisfy); rationale = one line; current = what resolveQuery returned when this file was built. An alternative may contain: modes (array; result.mode must be one of them; omitted = any mode but \"none\"), ids (list mode: the FIRST shown scenario id must be one of them; recover mode: at least one suggested scenario id must be one of them), topic_groups (array of arrays; for EVERY group at least one of its topics must be offered), nothing (true: no scenario and no topic may be shown or offered; mode none or an empty recovery screen). Offered topics = guide: result.topic plus result.related; choose: result.topics[].topic; list: the topics of result.scenarios; recover: every topic the recovery screen names or suggests, plus the topics of any suggested scenario. Shown scenario names = list: result.scenarios[].name; recover: names of every suggested scenario; guide and choose: none (a guide shows a whole topic grouped by rating and asserts no single scenario, so forbidden is checked against its topic names only). Extra fields: sizes[].size_mm = the size in mm the matcher should read (null when wording like \"subcentimeter\" has no single value); gap = true when no ACR range covers the size, so no range scenario may be asserted; honest = true when ACR has nothing and the only acceptable answers are none or an empty recovery screen. The owner rule applies to recovery suggestions too: no wrong body part, no ignored pregnancy/age/negation, no opposite condition, no dropped disease word. See cases.test.mjs beside this file for a reference grader.",
+ "generated_at": "2026-11-02T16:57:41.422Z",
+ "counts": {
+  "sizes": 125,
+  "multi": 106,
+  "recover": 248,
+  "recover_honest": 41
+ },
+ "sizes": [
+  {
+   "q": "8 mm lung nodule",
+   "size_mm": 8,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "8 mm is >=6 mm: 7161, never the <6mm scenario.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "5 mm pulmonary nodule incidental",
+   "size_mm": 5,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7160"
+     ]
+    }
+   ],
+   "forbidden": ">=6mm",
+   "rationale": "5 mm is <6 mm: 7160.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "6 mm lung nodule on CT",
+   "size_mm": 6,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "Boundary: ACR writes \"equal to or greater than 6 mm\", so exactly 6 mm belongs to >=6mm.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "6mm nodule lung",
+   "size_mm": 6,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "No space between number and unit; same boundary as above.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "nodule 6.0 mm",
+   "size_mm": 6,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "Decimal written as 6.0; still the >=6mm scenario.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "0.8 cm pulmonary nodule",
+   "size_mm": 8,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "Unit conversion: 0.8 cm = 8 mm.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "0.5 cm lung nodule",
+   "size_mm": 5,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7160"
+     ]
+    }
+   ],
+   "forbidden": ">=6mm",
+   "rationale": "Unit conversion: 0.5 cm = 5 mm, <6mm.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "0.4cm lung nodule",
+   "size_mm": 4,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7160"
+     ]
+    }
+   ],
+   "forbidden": ">=6mm",
+   "rationale": "Unit conversion with no space: 0.4cm = 4 mm.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "12 mm lung nodule",
+   "size_mm": 12,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "12 mm is >=6 mm. (The 1-3 cm management scenarios need smoker/enlarging context not given here.)",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "lung nodule 4mm",
+   "size_mm": 4,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7160"
+     ]
+    }
+   ],
+   "forbidden": ">=6mm",
+   "rationale": "Size after the finding, no space before unit.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "3 mm nodule right upper lobe",
+   "size_mm": 3,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7160"
+     ]
+    }
+   ],
+   "forbidden": ">=6mm",
+   "rationale": "Lobe wording must not hide that this is a lung nodule.",
+   "current": "none"
+  },
+  {
+   "q": "5.5 mm nodule",
+   "size_mm": 5.5,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7160"
+     ]
+    }
+   ],
+   "forbidden": ">=6mm",
+   "rationale": "Decimal mm just under the cutoff stays <6mm.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "1 cm lung nodule",
+   "size_mm": 10,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7161",
+      "8516",
+      "8517",
+      "8518",
+      "8519",
+      "8520",
+      "8521"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "10 mm is >=6 mm; the 1-3 cm management scenarios are also acceptable.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "1.2 cm pulmonary nodule incidental",
+   "size_mm": 12,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7161",
+      "8516",
+      "8517",
+      "8518",
+      "8519",
+      "8520",
+      "8521"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "Incidental 12 mm nodule: >=6mm scenario; 1 to 3 cm scenarios acceptable.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "pulmonary nodule 0.6 cm",
+   "size_mm": 6,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "Boundary written in cm: 0.6 cm = 6 mm = >=6mm.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "lung nodule <6mm",
+   "size_mm": 5,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7160"
+     ]
+    }
+   ],
+   "forbidden": ">=6mm",
+   "rationale": "User writes the ACR cutoff itself.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "lung nodule >= 6mm",
+   "size_mm": 6,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "User writes the ACR cutoff itself with a space.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "subcentimeter lung nodule",
+   "size_mm": null,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Incidentally Detected Indeterminate Pulmonary Nodule"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Liver|Adrenal|Pancrea",
+   "rationale": "\"Subcentimeter\" spans both nodule ranges; opening the topic or either range is fine, but never another organ.",
+   "current": "none"
+  },
+  {
+   "q": "2 cm solitary pulmonary nodule smoker",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "8516",
+      "8517",
+      "8518",
+      "8519",
+      "8520",
+      "8521",
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "2 cm falls in the \"1 to 3 cm\" solitary nodule scenarios; >=6mm incidental also covers it.",
+   "current": "list: 8517 Adult. Serially, enlarging solitary solid pulmonary nodule, now 1 to 3 cm in diameter. Person who smokes. Next step."
+  },
+  {
+   "q": "2.5 cm lung nodule enlarging smoker",
+   "size_mm": 25,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "8517",
+      "8519"
+     ]
+    }
+   ],
+   "forbidden": "<6mm|Stable 1 to 3 cm",
+   "rationale": "Enlarging 1-3 cm nodule in a smoker is 8517 (or 8519); not the stable scenario.",
+   "current": "list: 8517 Adult. Serially, enlarging solitary solid pulmonary nodule, now 1 to 3 cm in diameter. Person who smokes. Next step."
+  },
+  {
+   "q": "stable 2 cm lung nodule unchanged 2 years smoker",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "8516"
+     ]
+    }
+   ],
+   "forbidden": "<6mm|enlarging",
+   "rationale": "Stable 1-3 cm nodule for 2 years in a smoker is 8516.",
+   "current": "list: 8516 Adult. Stable 1 to 3 cm solitary solid pulmonary nodule. Unchanged in diameter for 2 years. Person who smokes. Next step."
+  },
+  {
+   "q": "ground glass nodule 15 mm persistent",
+   "size_mm": 15,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "8521"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "Persistent 1-3 cm ground glass nodule is 8521.",
+   "current": "list: 8521 Adult. 1 to 3 cm solitary ground glass pulmonary nodule which has persisted on short interval follow-up. Findings suspicious for primary lung adenocarcinoma. Next step"
+  },
+  {
+   "q": "5 cm lung mass",
+   "size_mm": 50,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Radiologic Management of Pulmonary Nodules and Masses",
+       "Noninvasive Clinical Staging of Primary Lung Cancer",
+       "Incidentally Detected Indeterminate Pulmonary Nodule"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "<6mm|1 to 3 cm",
+   "rationale": "No ACR range covers a 5 cm mass; the 1-3 cm and <6mm scenarios must not be asserted. Pointing at nodule/mass management or lung cancer staging is fine.",
+   "gap": true,
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "4 cm lung nodule",
+   "size_mm": 40,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Radiologic Management of Pulmonary Nodules and Masses",
+       "Noninvasive Clinical Staging of Primary Lung Cancer",
+       "Incidentally Detected Indeterminate Pulmonary Nodule"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "<6mm|1 to 3 cm",
+   "rationale": "Outside the 1-3 cm range and really a mass; must not be shown as a 1-3 cm nodule.",
+   "gap": true,
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "lung nodule 7 mm pregnant",
+   "size_mm": 7,
+   "expected": [
+    {
+     "modes": [
+      "list",
+      "recover"
+     ],
+     "ids": [
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "No pregnant nodule scenario exists; the >=6mm scenario with a notice is honest, the <6mm one is wrong.",
+   "current": "list: 7159 Pulmonary nodule on chest radiography, incidental, indeterminate, next imaging study"
+  },
+  {
+   "q": "lung nodule 8 mm in a child",
+   "size_mm": 8,
+   "expected": [
+    {
+     "modes": [
+      "list",
+      "recover",
+      "none"
+     ],
+     "topic_groups": [
+      [
+       "Incidentally Detected Indeterminate Pulmonary Nodule"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "ACR topic is adults >=35; a child search needs a population notice and must never show the <6mm range.",
+   "current": "list: 7159 Pulmonary nodule on chest radiography, incidental, indeterminate, next imaging study"
+  },
+  {
+   "q": "lung nodule 9 mm 30 year old",
+   "size_mm": 9,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "Age 30 is below the ACR >=35 wording but the >=6mm scenario is still the honest nearest match.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "8 mm lung nodule on chest xray",
+   "size_mm": 8,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7159",
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "Found on radiography: 7159 is the ACR scenario; >=6mm acceptable.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "6 mm nodule seen on CT abdomen",
+   "size_mm": 6,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7162",
+      "7161"
+     ]
+    }
+   ],
+   "forbidden": "<6mm",
+   "rationale": "Nodule on an incomplete thoracic CT (abdomen CT) is 7162; >=6mm acceptable.",
+   "current": "guide: Incidentally Detected Indeterminate Pulmonary Nodule"
+  },
+  {
+   "q": "adrenal nodule 3 cm",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5608",
+      "5610"
+     ]
+    }
+   ],
+   "forbidden": "<1cm|1-2cm|>=4cm",
+   "rationale": "3 cm sits in \">2cm and <4cm\" (or \"<4cm\" with malignancy history).",
+   "current": "guide: Adrenal Mass Evaluation"
+  },
+  {
+   "q": "adrenal mass 1.5 cm",
+   "size_mm": 15,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5607",
+      "5610"
+     ]
+    }
+   ],
+   "forbidden": "<1cm|>2cm|>=4cm",
+   "rationale": "1.5 cm is the 1-2cm scenario.",
+   "current": "guide: Adrenal Mass Evaluation"
+  },
+  {
+   "q": "adrenal incidentaloma 2 cm",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5607",
+      "5610"
+     ]
+    }
+   ],
+   "forbidden": "<1cm|>2cm and <4cm|>=4cm",
+   "rationale": "Boundary: 2 cm is inside \"1 to 2 cm\", not \">2cm\".",
+   "current": "guide: Adrenal Mass Evaluation"
+  },
+  {
+   "q": "adrenal mass 1 cm",
+   "size_mm": 10,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5607",
+      "5610"
+     ]
+    }
+   ],
+   "forbidden": "<1cm|>2cm|>=4cm",
+   "rationale": "Boundary: 1 cm is inside \"1 to 2 cm\", not \"<1cm\".",
+   "current": "guide: Adrenal Mass Evaluation"
+  },
+  {
+   "q": "adrenal mass 4 cm",
+   "size_mm": 40,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5609",
+      "5611"
+     ]
+    }
+   ],
+   "forbidden": "<1cm|1-2cm|>2cm and <4cm|<4cm",
+   "rationale": "Boundary: ACR writes \"greater than or equal to 4 cm\", so 4 cm is >=4cm.",
+   "current": "guide: Adrenal Mass Evaluation"
+  },
+  {
+   "q": "adrenal mass 40 mm",
+   "size_mm": 40,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5609",
+      "5611"
+     ]
+    }
+   ],
+   "forbidden": "<1cm|1-2cm|<4cm",
+   "rationale": "Same boundary written in mm.",
+   "current": "guide: Adrenal Mass Evaluation"
+  },
+  {
+   "q": "adrenal mass 3 cm history of cancer",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5610"
+     ]
+    }
+   ],
+   "forbidden": ">=4cm|no hx of malignancy",
+   "rationale": "With a cancer history the <4cm malignancy scenario applies.",
+   "current": "list: 5610 Adrenal mass, <4cm on imaging, no benign features, hx of malignancy, adrenal specific follow up imaging"
+  },
+  {
+   "q": "adrenal mass 5 cm known lung cancer",
+   "size_mm": 50,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5611"
+     ]
+    }
+   ],
+   "forbidden": "<4cm|no hx of malignancy",
+   "rationale": ">=4cm with malignancy history.",
+   "current": "none"
+  },
+  {
+   "q": "adrenal mass 3.5 cm with history of melanoma",
+   "size_mm": 35,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5610"
+     ]
+    }
+   ],
+   "forbidden": ">=4cm|no hx of malignancy",
+   "rationale": "<4cm with malignancy history.",
+   "current": "none"
+  },
+  {
+   "q": "adrenal mass 6 cm no history of cancer",
+   "size_mm": 60,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5609"
+     ]
+    }
+   ],
+   "forbidden": ", hx of malignancy|<4cm|1-2cm|<1cm",
+   "rationale": ">=4cm without malignancy history; the \"no history\" negation must be read.",
+   "current": "list: 5606 Adrenal mass, indeterminate, <1cm on imaging, no benign features, no hx of malignancy, follow up imaging"
+  },
+  {
+   "q": "0.8 cm adrenal nodule",
+   "size_mm": 8,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5606",
+      "5610"
+     ]
+    }
+   ],
+   "forbidden": "1-2cm|>2cm|>=4cm",
+   "rationale": "0.8 cm = 8 mm = <1cm.",
+   "current": "guide: Adrenal Mass Evaluation"
+  },
+  {
+   "q": "8 mm adrenal nodule",
+   "size_mm": 8,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5606",
+      "5610"
+     ]
+    }
+   ],
+   "forbidden": "1-2cm|>2cm|>=4cm",
+   "rationale": "Same in mm.",
+   "current": "guide: Adrenal Mass Evaluation"
+  },
+  {
+   "q": "adrenal nodule 25 mm",
+   "size_mm": 25,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5608",
+      "5610"
+     ]
+    }
+   ],
+   "forbidden": "<1cm|1-2cm|>=4cm",
+   "rationale": "25 mm = 2.5 cm, inside >2cm and <4cm.",
+   "current": "guide: Adrenal Mass Evaluation"
+  },
+  {
+   "q": "adrenal mass 1.8cm",
+   "size_mm": 18,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5607",
+      "5610"
+     ]
+    }
+   ],
+   "forbidden": "<1cm|>2cm|>=4cm",
+   "rationale": "No space before unit; 1-2cm.",
+   "current": "guide: Adrenal Mass Evaluation"
+  },
+  {
+   "q": "adrenal mass 2.2 cm",
+   "size_mm": 22,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5608",
+      "5610"
+     ]
+    }
+   ],
+   "forbidden": "<1cm|1-2cm|>=4cm",
+   "rationale": "Just over 2 cm is the >2cm and <4cm scenario.",
+   "current": "guide: Adrenal Mass Evaluation"
+  },
+  {
+   "q": "adrenal mass 3 cm in a child",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list",
+      "recover",
+      "none"
+     ],
+     "topic_groups": [
+      [
+       "Adrenal Mass Evaluation"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "<1cm|1-2cm|>=4cm",
+   "rationale": "Adrenal topic is adult; a child search needs a notice and must not show a wrong range either.",
+   "current": "list: 5606 Adrenal mass, indeterminate, <1cm on imaging, no benign features, no hx of malignancy, follow up imaging"
+  },
+  {
+   "q": "liver lesion 8 mm on ultrasound",
+   "size_mm": 8,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "2164",
+      "5445"
+     ]
+    }
+   ],
+   "forbidden": ">1cm",
+   "rationale": "<1cm on US: ACR only has the malignancy-history and chronic-liver-disease variants (no \"normal liver <1cm\" scenario exists).",
+   "current": "guide: Liver Lesion-Initial Characterization"
+  },
+  {
+   "q": "1.5 cm liver lesion cirrhosis",
+   "size_mm": 15,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5440",
+      "5441",
+      "5442"
+     ]
+    }
+   ],
+   "forbidden": "<1cm",
+   "rationale": ">1cm with chronic liver disease.",
+   "current": "list: 5440 Liver lesion, >1cm, incidental finding on US, chronic liver disease"
+  },
+  {
+   "q": "2 cm indeterminate liver lesion on CT",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5436",
+      "5438"
+     ]
+    }
+   ],
+   "forbidden": "<1cm",
+   "rationale": ">1cm on noncontrast/single-phase CT.",
+   "current": "guide: Liver Lesion-Initial Characterization"
+  },
+  {
+   "q": "liver lesion 1 cm",
+   "size_mm": 10,
+   "expected": [
+    {
+     "modes": [
+      "guide",
+      "choose",
+      "recover",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Liver Lesion-Initial Characterization"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Exactly 1 cm is covered by neither \"<1cm\" nor \">1cm\": do not silently pick one; opening the topic or offering both ranges is right.",
+   "gap": true,
+   "current": "guide: Liver Lesion-Initial Characterization"
+  },
+  {
+   "q": "liver lesion 10 mm",
+   "size_mm": 10,
+   "expected": [
+    {
+     "modes": [
+      "guide",
+      "choose",
+      "recover",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Liver Lesion-Initial Characterization"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Same boundary gap written in mm.",
+   "gap": true,
+   "current": "guide: Liver Lesion-Initial Characterization"
+  },
+  {
+   "q": "7 mm liver lesion history of colon cancer",
+   "size_mm": 7,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "2164",
+      "5443",
+      "5444"
+     ]
+    }
+   ],
+   "forbidden": ">1cm|Metastatic liver disease",
+   "rationale": "<1cm with extrahepatic malignancy. Today \"lesion\" is dropped and the metastatic liver disease management scenarios are shown, which asserts a diagnosis the search did not make.",
+   "current": "list: 6265 Metastatic liver disease: Multifocal bilobar colorectal carcinoma (liver dominant or isolated)."
+  },
+  {
+   "q": "2 cm liver lesion in patient with breast cancer on CT",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5438"
+     ]
+    }
+   ],
+   "forbidden": "<1cm",
+   "rationale": ">1cm, CT, extrahepatic malignancy.",
+   "current": "none"
+  },
+  {
+   "q": "liver lesion 12 mm incidental normal liver US",
+   "size_mm": 12,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "2165"
+     ]
+    }
+   ],
+   "forbidden": "<1cm|chronic liver disease|hx of extrahepatic malignancy",
+   "rationale": ">1cm on US, normal liver, no malignancy.",
+   "current": "list: 2165 Liver lesion, >1cm, indeterminate on US, normal liver, no extrahepatic malignancy"
+  },
+  {
+   "q": "0.6 cm liver lesion MRI chronic liver disease",
+   "size_mm": 6,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5447"
+     ]
+    }
+   ],
+   "forbidden": ">1cm",
+   "rationale": "<1cm on noncontrast MRI with chronic liver disease.",
+   "current": "list: 5440 Liver lesion, >1cm, incidental finding on US, chronic liver disease"
+  },
+  {
+   "q": "liver lesion 9mm ultrasound cirrhosis",
+   "size_mm": 9,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5445"
+     ]
+    }
+   ],
+   "forbidden": ">1cm",
+   "rationale": "<1cm on US with chronic liver disease; \"9mm\" has no space.",
+   "current": "list: 5440 Liver lesion, >1cm, incidental finding on US, chronic liver disease"
+  },
+  {
+   "q": "subcentimeter liver lesion hx of malignancy",
+   "size_mm": null,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "2164",
+      "5443",
+      "5444"
+     ]
+    }
+   ],
+   "forbidden": ">1cm",
+   "rationale": "\"Subcentimeter\" is a size word meaning <1 cm.",
+   "current": "none"
+  },
+  {
+   "q": "3 cm liver lesion",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "2165",
+      "2168",
+      "5436",
+      "5437",
+      "5438",
+      "5439",
+      "5440",
+      "5441",
+      "5442"
+     ]
+    }
+   ],
+   "forbidden": "<1cm",
+   "rationale": "Any >1cm variant is acceptable when modality and history are not given.",
+   "current": "guide: Liver Lesion-Initial Characterization"
+  },
+  {
+   "q": "25 mm liver lesion on MRI",
+   "size_mm": 25,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5437",
+      "5439",
+      "5442"
+     ]
+    }
+   ],
+   "forbidden": "<1cm",
+   "rationale": ">1cm on MRI.",
+   "current": "guide: Liver Lesion-Initial Characterization"
+  },
+  {
+   "q": "hcc 2 cm cirrhosis",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6257"
+     ]
+    }
+   ],
+   "forbidden": "3 to 5 cm|greater than 5 cm",
+   "rationale": "Solitary HCC <3 cm.",
+   "current": "list: 2449 Liver disease, chronic, hx of HCC, post treatment imaging"
+  },
+  {
+   "q": "hcc 4 cm cirrhosis",
+   "size_mm": 40,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6258"
+     ]
+    }
+   ],
+   "forbidden": "less than 3 cm|greater than 5 cm",
+   "rationale": "Solitary HCC 3 to 5 cm.",
+   "current": "list: 2449 Liver disease, chronic, hx of HCC, post treatment imaging"
+  },
+  {
+   "q": "hcc 6 cm multifocal",
+   "size_mm": 60,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6259"
+     ]
+    }
+   ],
+   "forbidden": "less than 3 cm|3 to 5 cm",
+   "rationale": "Multifocal disease with a tumor >5 cm. Today this returns none.",
+   "current": "none"
+  },
+  {
+   "q": "hepatocellular carcinoma 3 cm solitary cirrhotic",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6258"
+     ]
+    }
+   ],
+   "forbidden": "less than 3 cm|greater than 5 cm",
+   "rationale": "Boundary: 3 cm belongs to \"3 to 5 cm\", not \"less than 3 cm\".",
+   "current": "list: 2449 Liver disease, chronic, hx of HCC, post treatment imaging"
+  },
+  {
+   "q": "solitary hcc 5 cm",
+   "size_mm": 50,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6258"
+     ]
+    }
+   ],
+   "forbidden": "less than 3 cm|Multifocal",
+   "rationale": "Boundary: 5 cm belongs to \"3 to 5 cm\"; the >5 cm scenario is multifocal.",
+   "current": "list: 2449 Liver disease, chronic, hx of HCC, post treatment imaging"
+  },
+  {
+   "q": "hcc 25 mm cirrhosis",
+   "size_mm": 25,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6257"
+     ]
+    }
+   ],
+   "forbidden": "3 to 5 cm|greater than 5 cm",
+   "rationale": "25 mm = 2.5 cm, <3 cm.",
+   "current": "list: 2449 Liver disease, chronic, hx of HCC, post treatment imaging"
+  },
+  {
+   "q": "hcc 3cm",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6258"
+     ]
+    }
+   ],
+   "forbidden": "less than 3 cm",
+   "rationale": "No space before unit; boundary into 3 to 5 cm.",
+   "current": "list: 2449 Liver disease, chronic, hx of HCC, post treatment imaging"
+  },
+  {
+   "q": "intrahepatic cholangiocarcinoma 2 cm peripheral",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6261"
+     ]
+    }
+   ],
+   "forbidden": "Hilar|greater than 3 cm|Hepatocellular",
+   "rationale": "Peripheral iCCA <3 cm; never the HCC scenarios.",
+   "current": "list: 6261 Intrahepatic cholangiocarcinoma: Peripheral hepatic lobar cholangiocarcinoma, less than 3 cm; no biliary ductal dilatation, macroscopic vascular invasion, regional lymphadenopathy, or distant metastases."
+  },
+  {
+   "q": "hilar cholangiocarcinoma 4 cm",
+   "size_mm": 40,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6262"
+     ]
+    }
+   ],
+   "forbidden": "Peripheral|less than 3 cm|Hepatocellular",
+   "rationale": "Hilar CCA >3 cm.",
+   "current": "list: 6262 Ductal cholangiocarcinoma: Hilar cholangiocarcinoma, greater than 3 cm with poorly defined margins, vascular invasion, and periportal lymphadenopathy."
+  },
+  {
+   "q": "pancreatic cyst 2 cm incidental",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5216"
+     ]
+    }
+   ],
+   "forbidden": ">2.5cm|>7mm",
+   "rationale": "<=2.5 cm cyst.",
+   "current": "guide: Pancreatic Cyst"
+  },
+  {
+   "q": "pancreatic cyst 3 cm",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5217",
+      "5218"
+     ]
+    }
+   ],
+   "forbidden": "<=2.5cm|>7mm",
+   "rationale": ">2.5 cm; high-risk status not given so either variant.",
+   "current": "guide: Pancreatic Cyst"
+  },
+  {
+   "q": "pancreatic cyst 2.5 cm",
+   "size_mm": 25,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5216"
+     ]
+    }
+   ],
+   "forbidden": ">2.5cm",
+   "rationale": "Boundary: ACR writes \"less than or equal to 2.5 cm\".",
+   "current": "guide: Pancreatic Cyst"
+  },
+  {
+   "q": "pancreatic cyst 26 mm",
+   "size_mm": 26,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5217",
+      "5218"
+     ]
+    }
+   ],
+   "forbidden": "<=2.5cm",
+   "rationale": "Just over the boundary, in mm.",
+   "current": "guide: Pancreatic Cyst"
+  },
+  {
+   "q": "pancreatic cyst 30 mm",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5217",
+      "5218"
+     ]
+    }
+   ],
+   "forbidden": "<=2.5cm",
+   "rationale": "mm form of 3 cm.",
+   "current": "guide: Pancreatic Cyst"
+  },
+  {
+   "q": "pancreas cyst 25mm",
+   "size_mm": 25,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5216"
+     ]
+    }
+   ],
+   "forbidden": ">2.5cm",
+   "rationale": "Boundary in mm with no space.",
+   "current": "guide: Pancreatic Cyst"
+  },
+  {
+   "q": "pancreatic cyst 3 cm with mural nodule",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5218"
+     ]
+    }
+   ],
+   "forbidden": "<=2.5cm|no high risk features",
+   "rationale": "A mural nodule is a high-risk feature.",
+   "current": "none"
+  },
+  {
+   "q": "4 cm pancreatic cyst no worrisome features",
+   "size_mm": 40,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5217"
+     ]
+    }
+   ],
+   "forbidden": "<=2.5cm|, high risk features",
+   "rationale": "Negation: no worrisome features selects the no-high-risk variant.",
+   "current": "guide: Pancreatic Cyst"
+  },
+  {
+   "q": "pancreatic cyst 7 mm",
+   "size_mm": 7,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5216"
+     ]
+    }
+   ],
+   "forbidden": ">2.5cm|>7mm",
+   "rationale": "A 7 mm cyst is a <=2.5cm cyst; the 7 mm duct cutoff must not capture it.",
+   "current": "guide: Pancreatic Cyst"
+  },
+  {
+   "q": "pancreatic duct 9 mm dilated",
+   "size_mm": 9,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5219"
+     ]
+    }
+   ],
+   "forbidden": "cyst",
+   "rationale": "Main duct >7 mm. Today this returns none.",
+   "current": "none"
+  },
+  {
+   "q": "main pancreatic duct dilated 1 cm IPMN suspected",
+   "size_mm": 10,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5219"
+     ]
+    }
+   ],
+   "forbidden": "Pancreas cyst, [<>]",
+   "rationale": "Duct 1 cm = 10 mm > 7 mm.",
+   "current": "none"
+  },
+  {
+   "q": "pancreatic duct 5 mm",
+   "size_mm": 5,
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover",
+      "guide",
+      "choose"
+     ],
+     "topic_groups": [
+      [
+       "Pancreatic Cyst"
+      ]
+     ]
+    }
+   ],
+   "forbidden": ">7mm",
+   "rationale": "No ACR range covers a 5 mm duct. Today the >7mm scenario is listed, which is the silent wrong-range pick the feature must stop.",
+   "gap": true,
+   "current": "list: 5219 Pancreas duct dilation, >7mm, IPMN suspected, initial evaluation"
+  },
+  {
+   "q": "pancreatic duct 7 mm",
+   "size_mm": 7,
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover",
+      "guide",
+      "choose"
+     ],
+     "topic_groups": [
+      [
+       "Pancreatic Cyst"
+      ]
+     ]
+    }
+   ],
+   "forbidden": ">7mm",
+   "rationale": "Exactly 7 mm is not \"greater than 7 mm\".",
+   "gap": true,
+   "current": "list: 5219 Pancreas duct dilation, >7mm, IPMN suspected, initial evaluation"
+  },
+  {
+   "q": "breast cancer 1.5 cm node negative axilla",
+   "size_mm": 15,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5931"
+     ]
+    }
+   ],
+   "forbidden": ">2cm|node positive",
+   "rationale": "Newly diagnosed <=2 cm, clinically node negative.",
+   "current": "list: 5931 Breast cancer, <=2cm, newly diagnosed, clinical node negative, diagnostic mammo or DBT performed, initial axilla imaging"
+  },
+  {
+   "q": "3 cm breast cancer axillary imaging newly diagnosed",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5933",
+      "5934"
+     ]
+    }
+   ],
+   "forbidden": "<=2cm|neoadjuvant",
+   "rationale": ">2 cm newly diagnosed; not the neoadjuvant scenarios.",
+   "current": "list: 3209 Axillary adenopathy, breast cancer suspected"
+  },
+  {
+   "q": "newly diagnosed 2 cm breast cancer clinically node positive axillary ultrasound",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5932"
+     ]
+    }
+   ],
+   "forbidden": ">2cm|node negative",
+   "rationale": "Boundary: \"2 cm or less\" includes 2 cm.",
+   "current": "list: 6761 Breast cancer, clinically node positive, evaluate axilla, prior to neoadjuvant chemo, initial imaging"
+  },
+  {
+   "q": "breast cancer 2.5 cm node negative after neoadjuvant chemo axilla",
+   "size_mm": 25,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5936"
+     ]
+    }
+   ],
+   "forbidden": "<=2cm|newly diagnosed",
+   "rationale": ">2 cm, node negative, after neoadjuvant chemotherapy.",
+   "current": "list: 6760 Breast cancer, clinically node negative, evaluate axilla, prior to neoadjuvant chemo, initial imaging"
+  },
+  {
+   "q": "breast cancer 20 mm node negative axilla staging",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5931"
+     ]
+    }
+   ],
+   "forbidden": ">2cm",
+   "rationale": "Boundary in mm.",
+   "current": "none"
+  },
+  {
+   "q": "breast cancer 21 mm node negative axilla",
+   "size_mm": 21,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5933"
+     ]
+    }
+   ],
+   "forbidden": "<=2cm",
+   "rationale": "Just over 2 cm in mm.",
+   "current": "list: 5931 Breast cancer, <=2cm, newly diagnosed, clinical node negative, diagnostic mammo or DBT performed, initial axilla imaging"
+  },
+  {
+   "q": "2 cm breast mass",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6802",
+      "6808",
+      "6814"
+     ]
+    }
+   ],
+   "forbidden": "Breast cancer, [<>]|axilla",
+   "rationale": "A palpable breast mass has no size range in ACR; the axilla \"<=2cm/>2cm\" scenarios are about newly diagnosed cancer and must not be shown.",
+   "current": "list: 6802 Breast mass, palpable, initial imaging"
+  },
+  {
+   "q": "1 cm breast lump 25 year old",
+   "size_mm": 10,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6808"
+     ]
+    }
+   ],
+   "forbidden": "Breast cancer, [<>]|axilla|40 years",
+   "rationale": "Age selects the under-30 palpable mass scenario; size is irrelevant.",
+   "current": "list: 6802 Breast mass, palpable, initial imaging"
+  },
+  {
+   "q": "palpable breast mass 3 cm 45F",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6802"
+     ]
+    }
+   ],
+   "forbidden": "Breast cancer, [<>]|axilla|younger than 30",
+   "rationale": "Age >=40 palpable mass; size must not route to >2cm axilla imaging.",
+   "current": "list: 6802 Breast mass, palpable, initial imaging"
+  },
+  {
+   "q": "vulvar cancer 1.5 cm staging",
+   "size_mm": 15,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5483",
+      "5533",
+      "5534"
+     ]
+    }
+   ],
+   "forbidden": ">4 cm",
+   "rationale": "1.5 cm fits <=2cm or <=4cm (invasion depth not given); never >4 cm.",
+   "current": "guide: Staging and Follow-up of Vulvar Cancer"
+  },
+  {
+   "q": "vulvar cancer 5 cm staging",
+   "size_mm": 50,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5535",
+      "5536"
+     ]
+    }
+   ],
+   "forbidden": "<=2cm|<=4cm",
+   "rationale": ">4 cm primary.",
+   "current": "guide: Staging and Follow-up of Vulvar Cancer"
+  },
+  {
+   "q": "vulvar cancer 3 cm staging",
+   "size_mm": 30,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5533",
+      "5534"
+     ]
+    }
+   ],
+   "forbidden": "<=2cm|>4 cm",
+   "rationale": "3 cm is >2 and <=4.",
+   "current": "guide: Staging and Follow-up of Vulvar Cancer"
+  },
+  {
+   "q": "vulvar cancer 4 cm",
+   "size_mm": 40,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5533",
+      "5534"
+     ]
+    }
+   ],
+   "forbidden": "<=2cm|>4 cm",
+   "rationale": "Boundary: \"less than or equal to 4 cm\".",
+   "current": "guide: Staging and Follow-up of Vulvar Cancer"
+  },
+  {
+   "q": "vulvar cancer 1 cm with 0.5 mm stromal invasion",
+   "size_mm": 10,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5483"
+     ]
+    }
+   ],
+   "forbidden": ">1mm|>4 cm",
+   "rationale": "Two sizes: 1 cm tumor and 0.5 mm invasion select the <=2cm/<=1mm scenario; \"0.5 mm\" must not be read as 0.5 cm.",
+   "current": "list: 5483 Vulvar cancer, primary tumor <=2cm, confined to vulva or perineum, <=1mm stromal invasion, initial pretreatment staging"
+  },
+  {
+   "q": "vulvar cancer 2 cm with 2 mm stromal invasion",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5533",
+      "5534"
+     ]
+    }
+   ],
+   "forbidden": "<=1mm|>4 cm",
+   "rationale": "Tumor <=4 cm with >1 mm invasion.",
+   "current": "list: 5483 Vulvar cancer, primary tumor <=2cm, confined to vulva or perineum, <=1mm stromal invasion, initial pretreatment staging"
+  },
+  {
+   "q": "antenatal hydronephrosis 10 mm aprpd neonatal ultrasound",
+   "size_mm": 10,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5354"
+     ]
+    }
+   ],
+   "forbidden": "greater than 15|moderate to severe|pregnant",
+   "rationale": "APRPD <15 mm is mild. Today \"antenatal\" is read as a pregnant adult and the pregnant hydronephrosis scenarios are shown: wrong patient.",
+   "current": "list: 5354 Hydronephrosis, antenatal, isolated mild hydronephrosis on initial neonatal US"
+  },
+  {
+   "q": "antenatal hydronephrosis 20 mm on newborn ultrasound",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5357",
+      "5417",
+      "5422"
+     ]
+    }
+   ],
+   "forbidden": "isolated mild|pregnant",
+   "rationale": "APRPD >15 mm is moderate to severe.",
+   "current": "list: 7396 Hydronephrosis, unknown cause, symptomatic, initial imaging"
+  },
+  {
+   "q": "neonatal hydronephrosis renal pelvis 8 mm",
+   "size_mm": 8,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5354"
+     ]
+    }
+   ],
+   "forbidden": "moderate to severe|pregnant",
+   "rationale": "Infant with mild hydronephrosis.",
+   "current": "none"
+  },
+  {
+   "q": "antenatal hydronephrosis 15 mm",
+   "size_mm": 15,
+   "expected": [
+    {
+     "modes": [
+      "guide",
+      "choose",
+      "recover",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Antenatal Hydronephrosis-Infant"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnant",
+   "rationale": "Exactly 15 mm is in neither \"<15 mm\" nor \">15 mm\"; must not silently pick, and must stay in the infant topic.",
+   "gap": true,
+   "current": "list: 7397 Hydronephrosis, unknown cause, asymptomatic, pregnant, initial imaging"
+  },
+  {
+   "q": "height loss 5 cm osteoporosis vertebral fracture risk",
+   "size_mm": 50,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6299",
+      "6296",
+      "6300"
+     ]
+    }
+   ],
+   "forbidden": "Liver|Adrenal|Pancrea|Pulmonary",
+   "rationale": "Height loss >4 cm is a vertebral fracture risk criterion.",
+   "current": "list: 6299 Vertebral fracture risk, T scores <−1.0, height loss >4cm, follow up imaging"
+  },
+  {
+   "q": "height loss 2 cm T score -1.5",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list",
+      "guide",
+      "recover"
+     ],
+     "topic_groups": [
+      [
+       "Osteoporosis and Bone Mineral Density"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "height loss >4cm|Liver|Adrenal|Pancrea|Pulmonary",
+   "rationale": "2 cm does not meet the >4 cm criterion; the topic is right but the >4cm scenario must not be asserted.",
+   "gap": true,
+   "current": "list: 6299 Vertebral fracture risk, T scores <−1.0, height loss >4cm, follow up imaging"
+  },
+  {
+   "q": "4.5 cm AAA",
+   "size_mm": 45,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "4698"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Abdominal Aortic Aneurysm Follow-up (Without Repair)",
+       "Abdominal Aortic Aneurysm or Dissection-Interventional Planning and Follow-up",
+       "Pulsatile Abdominal Mass, Suspected Abdominal Aortic Aneurysm",
+       "Screening for Abdominal Aortic Aneurysm"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Thoracic|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "ACR AAA scenarios carry no size; 4.5 cm must not block the AAA match or route elsewhere.",
+   "current": "choose: Screening for Abdominal Aortic Aneurysm | Abdominal Aortic Aneurysm Follow-up (Without Repair) | Pulsatile Abdominal Mass, Suspected Abdominal Aortic Aneurysm | Abdominal Aortic Aneurysm or Dissection-Interventional Planning and Follow-up"
+  },
+  {
+   "q": "AAA 5.5 cm",
+   "size_mm": 55,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "4698"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Abdominal Aortic Aneurysm Follow-up (Without Repair)",
+       "Abdominal Aortic Aneurysm or Dissection-Interventional Planning and Follow-up"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Thoracic|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Repair-threshold AAA: surveillance or interventional planning topics.",
+   "current": "choose: Screening for Abdominal Aortic Aneurysm | Abdominal Aortic Aneurysm Follow-up (Without Repair) | Pulsatile Abdominal Mass, Suspected Abdominal Aortic Aneurysm | Abdominal Aortic Aneurysm or Dissection-Interventional Planning and Follow-up"
+  },
+  {
+   "q": "aaa 3.2 cm surveillance",
+   "size_mm": 32,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "4698"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Abdominal Aortic Aneurysm Follow-up (Without Repair)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Thoracic|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Small AAA surveillance.",
+   "current": "guide: Abdominal Aortic Aneurysm Follow-up (Without Repair)"
+  },
+  {
+   "q": "aortic root 4.5 cm",
+   "size_mm": 45,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Thoracic Aortic Aneurysm or Dissection-Treatment Planning and Follow-Up",
+       "Nontraumatic Aortic Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "AAA|Abdominal aortic|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Thoracic aorta: never the abdominal aneurysm topics.",
+   "current": "list: 7191 TAVR, preintervention planning, aortic root assessment, initial imaging"
+  },
+  {
+   "q": "ascending aorta 5 cm",
+   "size_mm": 50,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Thoracic Aortic Aneurysm or Dissection-Treatment Planning and Follow-Up",
+       "Nontraumatic Aortic Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "AAA|Abdominal aortic|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Thoracic aorta.",
+   "current": "none"
+  },
+  {
+   "q": "renal cyst 1.5cm",
+   "size_mm": 15,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Indeterminate Renal Mass"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "ACR renal mass scenarios have no size; 1.5 cm must not pull liver or adrenal ranges.",
+   "current": "guide: Indeterminate Renal Mass"
+  },
+  {
+   "q": "renal mass 3 cm",
+   "size_mm": 30,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Indeterminate Renal Mass"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Same.",
+   "current": "guide: Indeterminate Renal Mass"
+  },
+  {
+   "q": "bosniak 2F cyst 2 cm",
+   "size_mm": 20,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Indeterminate Renal Mass"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Ped|child|Child|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "\"2F\" is a cyst class, not a 2-year-old female; today returns none.",
+   "current": "none"
+  },
+  {
+   "q": "thyroid nodule 1.5 cm",
+   "size_mm": 15,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "4657"
+     ]
+    }
+   ],
+   "forbidden": "Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Palpable thyroid nodule has no size range in ACR.",
+   "current": "list: 4657 Thyroid nodule, palpable, euthyroid"
+  },
+  {
+   "q": "thyroid nodule 8mm",
+   "size_mm": 8,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "4657"
+     ]
+    }
+   ],
+   "forbidden": "Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Same, mm with no space.",
+   "current": "list: 4657 Thyroid nodule, palpable, euthyroid"
+  },
+  {
+   "q": "2 cm thyroid nodule hyperthyroid",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "4659"
+     ]
+    }
+   ],
+   "forbidden": "euthyroid|Hypothyroidism|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Hyperthyroid contradicts the \"euthyroid\" nodule scenario; thyrotoxicosis is the honest pick.",
+   "current": "none"
+  },
+  {
+   "q": "ovarian cyst 5 cm",
+   "size_mm": 50,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Clinically Suspected Adnexal Mass, No Acute Symptoms"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnant|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Adnexal mass scenarios have no size.",
+   "current": "guide: Clinically Suspected Adnexal Mass, No Acute Symptoms"
+  },
+  {
+   "q": "6 cm ovarian cyst postmenopausal",
+   "size_mm": 60,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7520",
+      "4705",
+      "7522",
+      "1171",
+      "7523"
+     ]
+    }
+   ],
+   "forbidden": "premenopausal|pregnant|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Postmenopausal adnexal mass scenarios only.",
+   "current": "list: 7520 Adnexal mass suspected, no acute symptoms, postmenopausal, initial imaging"
+  },
+  {
+   "q": "splenic lesion 2 cm",
+   "size_mm": 20,
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    },
+    {
+     "topic_groups": [
+      [
+       "Acute Left Upper Quadrant Pain",
+       "Palpable Abdominal Mass-Suspected Neoplasm"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "ACR has no splenic lesion topic: honest none, or an explore pointer to LUQ pain / abdominal mass; never a liver or adrenal range.",
+   "current": "none"
+  },
+  {
+   "q": "mediastinal mass 6 cm",
+   "size_mm": 60,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5502",
+      "5503",
+      "5504",
+      "5505",
+      "5541",
+      "5542"
+     ]
+    }
+   ],
+   "forbidden": "Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Mediastinal mass scenarios have no size.",
+   "current": "list: 5502 Mediastinal mass suspected, initial imaging"
+  },
+  {
+   "q": "soft tissue mass thigh 5 cm",
+   "size_mm": 50,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6976",
+      "6949",
+      "6992",
+      "7008"
+     ]
+    }
+   ],
+   "forbidden": "Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Soft tissue mass of the thigh; size irrelevant.",
+   "current": "list: 6976 Soft tissue mass, thigh, nonsuperficial, initial imaging"
+  },
+  {
+   "q": "lymph node 1.2 cm neck",
+   "size_mm": 12,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Neck Mass/Adenopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "melanoma|Melanoma|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "A neck node is the neck mass/adenopathy topic; today melanoma staging scenarios lead, a diagnosis the search never made.",
+   "current": "list: 8722 Cutaneous melanoma, neck, newly diagnosed, positive lymph nodes on wide excision, initial staging"
+  },
+  {
+   "q": "kidney stone 7 mm",
+   "size_mm": 7,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7217",
+      "7216"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnant|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Stone scenarios have no size; 7 mm must not pull the pancreatic duct >7mm scenario.",
+   "current": "guide: Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+  },
+  {
+   "q": "ureteral stone 4 mm",
+   "size_mm": 4,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7217",
+      "7216"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnant|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Same; 4 mm must not pull the <6mm nodule.",
+   "current": "guide: Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+  },
+  {
+   "q": "6 mm kidney stone pregnant",
+   "size_mm": 6,
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7220",
+      "7219"
+     ]
+    }
+   ],
+   "forbidden": "^(?!.*([Pp]regnan|[Pp]eripartum|[Aa]ntenatal|[Tt]rimester|[Gg]estation|[Ff]etal)).*",
+   "rationale": "Pregnant stone scenario; size must not pull the 6 mm nodule cutoff and non-pregnant scenarios must not show.",
+   "forbidden_topics": "Pulmonary|Pancrea|Liver|Adrenal",
+   "current": "list: 7220 Flank pain, acute, stone disease suspected, pregnant, initial imaging"
+  },
+  {
+   "q": "endometrial stripe 6 mm postmenopausal bleeding",
+   "size_mm": 6,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Abnormal Uterine Bleeding",
+       "Pretreatment Evaluation and Follow-Up of Endometrial Cancer"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Pulmonary|pregnan|Trimester|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "6 mm is the pulmonary nodule cutoff but this is uterine; abnormal uterine bleeding topic.",
+   "current": "none"
+  },
+  {
+   "q": "fibroid 8 cm",
+   "size_mm": 80,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Fibroids",
+       "Management of Uterine Fibroids"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Fibroid scenarios have no size.",
+   "current": "guide: Fibroids"
+  },
+  {
+   "q": "pleural effusion 2 cm",
+   "size_mm": 20,
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Workup of Pleural Effusion or Pleural Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Breast cancer|axilla|Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "Pleural effusion scenarios have no size; 2 cm must not pull the axilla cutoff.",
+   "current": "guide: Workup of Pleural Effusion or Pleural Disease"
+  },
+  {
+   "q": "gallbladder polyp 8 mm",
+   "size_mm": 8,
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    },
+    {
+     "topic_groups": [
+      [
+       "Right Upper Quadrant Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Liver lesion|Adrenal mass|Pancreas (cyst|duct)|Pulmonary nodule|Breast cancer, [<>]|Vulvar cancer|Hepatocellular",
+   "rationale": "ACR has no gallbladder polyp topic; honest none or at most RUQ pain as explore; never the nodule or liver ranges.",
+   "current": "none"
+  }
+ ],
+ "multi": [
+  {
+   "q": "fever and headache",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7017"
+     ]
+    }
+   ],
+   "forbidden": "Abd pain|LUQ|Spine",
+   "rationale": "ACR has \"Headache, fever\": it should lead; fever scenarios about other body parts must not show.",
+   "current": "list: 7017 Headache, fever, initial imaging"
+  },
+  {
+   "q": "headache with fever and neck stiffness",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7017"
+     ]
+    }
+   ],
+   "forbidden": "Abd pain|LUQ|Spine",
+   "rationale": "Same scenario; neck stiffness has no ACR word and must not derail.",
+   "current": "list: 7017 Headache, fever, initial imaging"
+  },
+  {
+   "q": "fever and neck stiffness",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7017"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Headache",
+       "Altered Mental Status, Coma, Delirium, and Psychosis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Abd pain|LUQ pain|Cervical spine|Neck Mass",
+   "rationale": "Meningitis has no topic; the headache-fever scenario is the honest pointer. Today abdominal pain with fever is shown.",
+   "current": "list: 7017 Headache, fever, initial imaging"
+  },
+  {
+   "q": "headache and neck stiffness",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7017",
+      "7023"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Headache"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Cervical spine trauma|Neck Mass",
+   "rationale": "Headache topic; never neck trauma or neck mass.",
+   "current": "guide: Headache"
+  },
+  {
+   "q": "abdominal pain with vomiting and fever",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "1133"
+     ]
+    }
+   ],
+   "forbidden": "Penetrating|Headache",
+   "rationale": "ACR \"Abd pain, acute, nonlocalized, fever\" covers it.",
+   "current": "list: 1133 Abd pain, acute, nonlocalized, fever, initial exam"
+  },
+  {
+   "q": "abdominal pain fever",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "1133"
+     ]
+    }
+   ],
+   "forbidden": "Penetrating|Headache",
+   "rationale": "Same.",
+   "current": "list: 1133 Abd pain, acute, nonlocalized, fever, initial exam"
+  },
+  {
+   "q": "RUQ pain and fever",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6701",
+      "6704",
+      "6705",
+      "6700"
+     ]
+    }
+   ],
+   "forbidden": "no fever",
+   "rationale": "RUQ pain scenarios; the \"no fever\" variants contradict the search.",
+   "current": "list: 6704 RUQ pain, fever, high WBC count , biliary disease suspected, US negative, next imaging study"
+  },
+  {
+   "q": "back pain and fever",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Spine Infection"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "no red flags|Inflammatory",
+   "rationale": "Back pain with fever is the spine infection topic.",
+   "current": "list: 5805 Spine infection suspected, cervical, neck or back pain, with or without fever, dialysis, initial imaging"
+  },
+  {
+   "q": "fever and back pain IVDU",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5786",
+      "5784",
+      "5785",
+      "5790"
+     ]
+    }
+   ],
+   "forbidden": "no red flags",
+   "rationale": "IV drug use variant of spine infection.",
+   "current": "list: 5784 Spine infection suspected, cervical, neck or back pain, with or without fever, IV drug use, initial imaging"
+  },
+  {
+   "q": "back pain and urinary retention",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5623"
+     ]
+    }
+   ],
+   "forbidden": "no red flags|Prostatic|BPH",
+   "rationale": "Cauda equina scenario covers both complaints; urinary retention must not route to BPH.",
+   "current": "list: 5623 Low back pain, cauda equina syndrome suspected, initial imaging"
+  },
+  {
+   "q": "seizure and fever",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "1170",
+      "1182"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Seizures and Epilepsy",
+       "Seizures-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Only pediatric febrile seizure scenarios exist; showing them with the pediatric-only notice is honest.",
+   "current": "list: 1170 Seizure, simple, febrile, initial imaging"
+  },
+  {
+   "q": "fever and limp child",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "4555",
+      "4505",
+      "4506",
+      "4507",
+      "4508",
+      "4509",
+      "4556"
+     ]
+    }
+   ],
+   "forbidden": "acute limp, (non localized|hip pain|thigh pain|knee pain|lower leg pain|ankle pain|foot pain)$",
+   "rationale": "Limping child with fever is the infection-suspected limp scenario; the no-infection variants contradict the fever.",
+   "current": "list: 4555 Ped <=5yo, acute limp, non localized, infection suspected"
+  },
+  {
+   "q": "limp and fever 3 year old",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "4555",
+      "4505",
+      "4506",
+      "4507",
+      "4508",
+      "4509",
+      "4556"
+     ]
+    }
+   ],
+   "forbidden": "acute limp, (non localized|hip pain|thigh pain|knee pain|lower leg pain|ankle pain|foot pain)$",
+   "rationale": "Same with an age.",
+   "current": "list: 4555 Ped <=5yo, acute limp, non localized, infection suspected"
+  },
+  {
+   "q": "limp and knee pain child",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "4501",
+      "4506"
+     ]
+    }
+   ],
+   "forbidden": "adult|Arthroplasty|Chronic Knee",
+   "rationale": "Limp localized to the knee.",
+   "current": "list: 4501 Ped <=5yo, acute limp, knee pain"
+  },
+  {
+   "q": "hip pain and knee pain",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6732",
+      "6734"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Chronic Hip Pain",
+       "Chronic Knee Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Developmental",
+   "rationale": "ACR has a chronic hip pain scenario that names knee pain; otherwise offer both joints.",
+   "current": "list: 6732 Hip pain, chronic, knee pain, hip osteoarthritis on radiography, next imaging study, quantify pain from hip pathology"
+  },
+  {
+   "q": "vertigo and hearing loss",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Hearing Loss and/or Vertigo"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Cholesteatoma, surgical planning|Neoplasm",
+   "rationale": "One topic covers both.",
+   "current": "guide: Hearing Loss and/or Vertigo"
+  },
+  {
+   "q": "hearing loss and tinnitus",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "994",
+      "995",
+      "3530"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Hearing Loss and/or Vertigo",
+       "Tinnitus"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Cholesteatoma, surgical planning|Neoplasm|^Vertigo",
+   "rationale": "Hearing loss scenarios or the tinnitus topic; today chronic vertigo scenarios (Dizziness and Ataxia topic) lead although vertigo was not mentioned.",
+   "forbidden_topics": "Dizziness and Ataxia",
+   "current": "list: 7370 Vertigo, chronic, recurrent, unilateral hearing loss, initial imaging"
+  },
+  {
+   "q": "dizziness and hearing loss",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Hearing Loss and/or Vertigo",
+       "Dizziness and Ataxia"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Cholesteatoma, surgical planning|Neoplasm",
+   "rationale": "Either topic covers it.",
+   "current": "list: 7370 Vertigo, chronic, recurrent, unilateral hearing loss, initial imaging"
+  },
+  {
+   "q": "nausea and vertigo",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Hearing Loss and/or Vertigo",
+       "Dizziness and Ataxia"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Pancreatitis|Exophthalmos|Enophthalmos",
+   "rationale": "Nausea alone matches pancreatitis and orbit scenarios today; with vertigo it is a vestibular question.",
+   "current": "guide: Hearing Loss and/or Vertigo"
+  },
+  {
+   "q": "jaundice and weight loss",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Jaundice"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Vaginal|COPD",
+   "rationale": "Jaundice topic covers it.",
+   "current": "guide: Jaundice"
+  },
+  {
+   "q": "hemoptysis and weight loss",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Hemoptysis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Headache",
+   "rationale": "Hemoptysis topic covers it.",
+   "current": "guide: Hemoptysis"
+  },
+  {
+   "q": "dysphagia and weight loss",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Dysphagia"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Dysphagia topic covers it.",
+   "current": "guide: Dysphagia"
+  },
+  {
+   "q": "cough and weight loss smoker",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5591"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Chronic Cough",
+       "Lung Cancer Screening"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "no lung cancer risk",
+   "rationale": "Chronic cough with increased lung cancer risk.",
+   "current": "guide: Chronic Cough"
+  },
+  {
+   "q": "cough and fever",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Respiratory Illness in Immunocompetent Patients"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chronic Cough",
+   "rationale": "Acute respiratory illness (the immunocompromised topic as a related link is acceptable; as the answer it is not, see the child cases).",
+   "current": "guide: Acute Respiratory Illness in Immunocompetent Patients"
+  },
+  {
+   "q": "productive cough and fever and chest pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Respiratory Illness in Immunocompetent Patients"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Sepsis|Chronic Cough|Pleural effusion suspected, noninfectious",
+   "rationale": "Acute respiratory illness; sepsis is not implied.",
+   "current": "list: 828 Respiratory illness, acute, immunodeficiency, initial exam"
+  },
+  {
+   "q": "cough fever child",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Pneumonia in the Immunocompetent Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "immunodeficiency|Immunocompromised|Chronic Cough",
+   "rationale": "Child with cough and fever is the pediatric pneumonia topic; today the adult immunodeficiency scenario is shown.",
+   "current": "list: 828 Respiratory illness, acute, immunodeficiency, initial exam"
+  },
+  {
+   "q": "fever and cough infant",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Pneumonia in the Immunocompetent Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "immunodeficiency|Immunocompromised|Chronic Cough",
+   "rationale": "Same for an infant.",
+   "current": "list: 828 Respiratory illness, acute, immunodeficiency, initial exam"
+  },
+  {
+   "q": "cough and wheezing child",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Pneumonia in the Immunocompetent Child",
+       "Ingested or Aspirated Foreign Body-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "immunodeficiency|Chronic Cough|adult",
+   "rationale": "Pediatric pneumonia or aspirated foreign body; today returns none.",
+   "current": "none"
+  },
+  {
+   "q": "headache fever child",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "3395"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Headache-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "no red flags",
+   "rationale": "Pediatric infection-related headache.",
+   "current": "list: 3395 Headache, infection-related, initial exam"
+  },
+  {
+   "q": "headache and vomiting child",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Headache-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Vomiting in Infants|adult",
+   "rationale": "Pediatric headache topic.",
+   "current": "guide: Headache-Child"
+  },
+  {
+   "q": "abdominal pain and fever child",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Abdominal Pain-Child",
+       "Suspected Appendicitis-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "post op|Abscess, liver",
+   "rationale": "Pediatric abdominal pain or appendicitis topics; today adult scenarios with a notice.",
+   "current": "list: 1133 Abd pain, acute, nonlocalized, fever, initial exam"
+  },
+  {
+   "q": "abdominal pain and vomiting child",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Abdominal Pain-Child",
+       "Suspected Appendicitis-Child",
+       "Vomiting in Infants"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating|post op",
+   "rationale": "Pediatric abdominal pain topics.",
+   "current": "guide: Abdominal Pain-Child"
+  },
+  {
+   "q": "fever and seizure child",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "1170",
+      "1182"
+     ]
+    }
+   ],
+   "forbidden": "adult",
+   "rationale": "Febrile seizure.",
+   "current": "list: 1170 Seizure, simple, febrile, initial imaging"
+  },
+  {
+   "q": "head injury and vomiting child",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5284"
+     ]
+    }
+   ],
+   "forbidden": "abuse suspected|Head trauma, acute, mild, GCS 13-15",
+   "rationale": "Pediatric head trauma with vomiting; the adult mild head trauma scenarios are the wrong population.",
+   "current": "list: 5284 Head trauma, minor, acute, blunt, GCS=15, vomiting, not abuse, initial imaging"
+  },
+  {
+   "q": "fever and dysuria child",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Urinary Tract Infection–Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnan|Prostatic|Recurrent Lower Urinary Tract Infections in Females",
+   "rationale": "Pediatric UTI topic.",
+   "current": "none"
+  },
+  {
+   "q": "fever and ear pain child",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Inflammatory Ear Disease",
+       "Fever Without Source or Unknown Origin-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Cholesteatoma, surgical planning|Neoplasm",
+   "rationale": "Otitis / fever topics, never ear surgery planning.",
+   "current": "none"
+  },
+  {
+   "q": "fever and joint pain child",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Osteomyelitis or Septic Arthritis-Child (Excluding Axial Skeleton)",
+       "Joint Pain: Idiopathic Arthritis-Child",
+       "Acutely Limping Child Up To Age 5"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Crystalline|Erosive|Arthroplasty",
+   "rationale": "Pediatric septic joint / arthritis topics; adult crystalline arthritis is wrong population.",
+   "current": "none"
+  },
+  {
+   "q": "swollen knee and fever",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+       "Chronic Knee Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty",
+   "rationale": "Septic arthritis topic.",
+   "current": "list: 6427 Soft tissue infection suspected, knee, radiography findings suggest soft tissue swelling, next imaging study"
+  },
+  {
+   "q": "vomiting and poor feeding infant",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5463"
+     ]
+    }
+   ],
+   "forbidden": "Pancreatitis|Exophthalmos",
+   "rationale": "Infant vomiting with poor feeding.",
+   "current": "list: 5463 Vomiting, poor feeding, initial imaging"
+  },
+  {
+   "q": "bilious vomiting newborn",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5402",
+      "5465",
+      "5466",
+      "5467"
+     ]
+    }
+   ],
+   "forbidden": "nonbilious|Pancreatitis",
+   "rationale": "Bilious vomiting in a neonate is malrotation until proven otherwise.",
+   "current": "list: 5402 Vomiting, bilious, malrotation suspected, initial imaging"
+  },
+  {
+   "q": "fever no source infant",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Fever Without Source or Unknown Origin-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Headache|Abd pain|adult",
+   "rationale": "Pediatric fever without source topic.",
+   "current": "list: 7992 Fever, without source, neutropenia, initial imaging"
+  },
+  {
+   "q": "breast lump and nipple discharge",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Palpable Breast Masses",
+       "Evaluation of Nipple Discharge"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "axilla|Axilla|male",
+   "rationale": "Two breast topics. Today the first result is \"Breast mass palpable, breast cancer suspected\" from the Symptomatic Male Breast topic: no sex was given, so that population must not lead.",
+   "forbidden_topics": "Male Breast|Axilla",
+   "current": "list: 3207 Breast mass palpable, breast cancer suspected"
+  },
+  {
+   "q": "testicular pain and nausea",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Pancreatitis|Exophthalmos",
+   "rationale": "Scrotal pain topic.",
+   "current": "guide: Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass"
+  },
+  {
+   "q": "scrotal pain and abdominal pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass"
+      ],
+      [
+       "Acute Nonlocalized Abdominal Pain",
+       "Right Lower Quadrant Pain",
+       "Left Lower Quadrant Pain",
+       "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Penetrating",
+   "rationale": "Testicular torsion vs referred pain: offer the scrotal topic and an abdominal pain topic.",
+   "current": "none"
+  },
+  {
+   "q": "RLQ pain and vomiting",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Right Lower Quadrant Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnan",
+   "rationale": "RLQ pain topic covers it.",
+   "current": "guide: Right Lower Quadrant Pain"
+  },
+  {
+   "q": "epigastric pain and vomiting",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Epigastric Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Deep Inferior Epigastric|Breast Reconstruction",
+   "rationale": "Epigastric pain; the DIEP flap topic shares a word and must not be offered as related.",
+   "current": "guide: Epigastric Pain"
+  },
+  {
+   "q": "nausea vomiting and abdominal pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Nonlocalized Abdominal Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating",
+   "rationale": "Nonlocalized abdominal pain; penetrating trauma must not be offered as related.",
+   "current": "guide: Acute Nonlocalized Abdominal Pain"
+  },
+  {
+   "q": "abdominal pain and distension",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Suspected Small-Bowel Obstruction",
+       "Acute Nonlocalized Abdominal Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating",
+   "rationale": "Distension points at bowel obstruction.",
+   "current": "guide: Acute Nonlocalized Abdominal Pain"
+  },
+  {
+   "q": "constipation and abdominal distension",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Suspected Small-Bowel Obstruction",
+       "Acute Nonlocalized Abdominal Pain",
+       "Abdominal Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating",
+   "rationale": "Obstruction topics; the pediatric constipation scenario only with its notice.",
+   "current": "none"
+  },
+  {
+   "q": "weight loss and abdominal pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Nonlocalized Abdominal Pain",
+       "Palpable Abdominal Mass-Suspected Neoplasm"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating",
+   "rationale": "Abdominal pain or suspected neoplasm.",
+   "current": "guide: Acute Nonlocalized Abdominal Pain"
+  },
+  {
+   "q": "diarrhea and abdominal pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Nonlocalized Abdominal Pain",
+       "Left Lower Quadrant Pain",
+       "Crohn Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Penetrating",
+   "rationale": "No ACR diarrhea topic; abdominal pain, LLQ (colitis/diverticulitis) or Crohn are the directions.",
+   "current": "none"
+  },
+  {
+   "q": "rectal bleeding and abdominal pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Nonlocalized Abdominal Pain",
+       "Left Lower Quadrant Pain",
+       "Crohn Disease",
+       "Anorectal Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Upper Gastrointestinal|Nonvariceal|Child",
+   "rationale": "Lower GI bleeding has no topic; abdominal pain topics are the direction. Never upper GI bleeding.",
+   "current": "none"
+  },
+  {
+   "q": "melena and abdominal pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Nonvariceal Upper Gastrointestinal Bleeding",
+       "Epigastric Pain",
+       "Acute Nonlocalized Abdominal Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Melena is upper GI bleeding.",
+   "current": "none"
+  },
+  {
+   "q": "hematemesis and epigastric pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Nonvariceal Upper Gastrointestinal Bleeding",
+       "Epigastric Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Upper GI bleeding.",
+   "current": "none"
+  },
+  {
+   "q": "abdominal pain and jaundice",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Jaundice",
+       "Right Upper Quadrant Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Vaginal",
+   "rationale": "Jaundice or RUQ pain.",
+   "current": "none"
+  },
+  {
+   "q": "abdominal pain and chest pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Nonlocalized Abdominal Pain",
+       "Epigastric Pain"
+      ],
+      [
+       "Chest Pain-Possible Acute Coronary Syndrome",
+       "Suspected Acute Aortic Syndrome",
+       "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating|Child",
+   "rationale": "Two regions: offer an abdominal topic and a chest pain topic.",
+   "current": "list: 7731 Torso trauma, penetrating, hypotensive, initial imaging"
+  },
+  {
+   "q": "flank pain and hematuria",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7217",
+      "7216"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+      ],
+      [
+       "Hematuria"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnan|Child",
+   "rationale": "Stone disease covers both; otherwise offer stone and hematuria topics.",
+   "current": "none"
+  },
+  {
+   "q": "hematuria and flank pain",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7217",
+      "7216"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+      ],
+      [
+       "Hematuria"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnan|Child",
+   "rationale": "Same, reversed.",
+   "current": "none"
+  },
+  {
+   "q": "dysuria and flank pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Pyelonephritis",
+       "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|pregnan",
+   "rationale": "Pyelonephritis or stone.",
+   "current": "none"
+  },
+  {
+   "q": "dysuria and fever",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Pyelonephritis",
+       "Recurrent Lower Urinary Tract Infections in Females"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Adult UTI/pyelonephritis.",
+   "current": "none"
+  },
+  {
+   "q": "dysuria and hematuria",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Hematuria",
+       "Acute Pyelonephritis",
+       "Recurrent Lower Urinary Tract Infections in Females"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Hematuria or infection topics.",
+   "current": "none"
+  },
+  {
+   "q": "pelvic pain and vaginal bleeding",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Pelvic Pain in the Reproductive Age Group",
+       "First Trimester Vaginal Bleeding"
+      ],
+      [
+       "Abnormal Uterine Bleeding",
+       "First Trimester Vaginal Bleeding",
+       "Acute Pelvic Pain in the Reproductive Age Group"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Postmenopausal Subacute",
+   "rationale": "Pelvic pain and bleeding: reproductive-age pelvic pain, abnormal uterine bleeding, or first trimester bleeding (ectopic).",
+   "current": "none"
+  },
+  {
+   "q": "vaginal bleeding and abdominal pain first trimester",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "First Trimester Vaginal Bleeding"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Second and Third|Postmenopausal|^(?!.*([Pp]regnan|[Pp]eripartum|[Aa]ntenatal|[Tt]rimester|[Gg]estation|[Ff]etal)).*",
+   "rationale": "First trimester bleeding topic only.",
+   "forbidden_topics": "Second and Third|Postmenopausal",
+   "current": "none"
+  },
+  {
+   "q": "postmenopausal bleeding and pelvic pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Abnormal Uterine Bleeding",
+       "Postmenopausal Acute Pelvic Pain",
+       "Postmenopausal Subacute or Chronic Pelvic Pain",
+       "Pretreatment Evaluation and Follow-Up of Endometrial Cancer"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Trimester|pregnan|Reproductive Age",
+   "rationale": "Postmenopausal topics only.",
+   "current": "none"
+  },
+  {
+   "q": "cough and hemoptysis",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Hemoptysis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Headache",
+   "rationale": "Hemoptysis topic covers it; today returns none.",
+   "current": "none"
+  },
+  {
+   "q": "hemoptysis and chest pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Hemoptysis",
+       "Suspected Pulmonary Embolism"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Headache",
+   "rationale": "Hemoptysis or PE.",
+   "current": "none"
+  },
+  {
+   "q": "chest pain and shortness of breath",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Chest Pain-Possible Acute Coronary Syndrome",
+       "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease",
+       "Suspected Acute Aortic Syndrome",
+       "Suspected Pulmonary Embolism"
+      ],
+      [
+       "Suspected Pulmonary Embolism",
+       "Chronic Dyspnea-Noncardiovascular Origin",
+       "Dyspnea-Suspected Cardiac Origin (Ischemia Already Excluded)",
+       "Suspected and Known Heart Failure",
+       "Chest Pain-Possible Acute Coronary Syndrome"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Dyspnea, chronic, chest wall disease|Pleural effusion suspected|pregnan|Child",
+   "rationale": "Offer a chest pain topic and a dyspnea/PE topic. Today \"pain\" is dropped and chronic chest-wall dyspnea is shown.",
+   "current": "list: 4548 Dyspnea, chronic, chest wall disease suspected, initial imaging"
+  },
+  {
+   "q": "dyspnea and chest pain and palpitations",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Chest Pain-Possible Acute Coronary Syndrome",
+       "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease",
+       "Suspected Acute Aortic Syndrome",
+       "Suspected Pulmonary Embolism"
+      ],
+      [
+       "Suspected Pulmonary Embolism",
+       "Chronic Dyspnea-Noncardiovascular Origin",
+       "Dyspnea-Suspected Cardiac Origin (Ischemia Already Excluded)",
+       "Suspected and Known Heart Failure",
+       "Chest Pain-Possible Acute Coronary Syndrome"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Dyspnea, chronic, chest wall disease|Pleural effusion suspected|pregnan|Child",
+   "rationale": "Palpitations has no ACR word; the other two complaints still get their topics.",
+   "current": "none"
+  },
+  {
+   "q": "chest pain shortness of breath pregnant",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6225"
+     ]
+    }
+   ],
+   "forbidden": "^(?!.*([Pp]regnan|[Pp]eripartum|[Aa]ntenatal|[Tt]rimester|[Gg]estation|[Ff]etal)).*",
+   "rationale": "Pregnant PE scenario leads; nothing non-pregnant may show.",
+   "forbidden_topics": "",
+   "current": "none"
+  },
+  {
+   "q": "pregnant chest pain and dyspnea",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "6225"
+     ]
+    }
+   ],
+   "forbidden": "^(?!.*([Pp]regnan|[Pp]eripartum|[Aa]ntenatal|[Tt]rimester|[Gg]estation|[Ff]etal)).*",
+   "rationale": "Same.",
+   "forbidden_topics": "",
+   "current": "none"
+  },
+  {
+   "q": "pregnant abdominal pain and vomiting",
+   "expected": [
+    {
+     "modes": [
+      "list",
+      "recover"
+     ],
+     "topic_groups": [
+      [
+       "Acute Nonlocalized Abdominal Pain",
+       "Right Lower Quadrant Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating",
+   "rationale": "No pregnant nonlocalized abdominal pain scenario exists; a notice or a pointer to RLQ pain in pregnancy is honest.",
+   "current": "list: 3567 Abd pain, acute, nonlocalized, initial exam"
+  },
+  {
+   "q": "pregnant headache and vision changes",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "4798",
+      "7015"
+     ]
+    }
+   ],
+   "forbidden": "^(?!.*([Pp]regnan|[Pp]eripartum|[Aa]ntenatal|[Tt]rimester|[Gg]estation|[Ff]etal)).*",
+   "rationale": "ACR has \"Headache, new onset, pregnant\"; today it is missed and a non-pregnant scenario is shown with a pregnancy notice.",
+   "forbidden_topics": "",
+   "current": "list: 2081 Headache, intracranial hypertension features, initial imaging"
+  },
+  {
+   "q": "chest pain and dyspnea in a child",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Chest Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chest pain, (low|high|acute|chronic)|Pleural effusion suspected|Dyspnea, chronic",
+   "rationale": "Pediatric chest pain topic; today adult pleural effusion scenarios with a notice.",
+   "current": "list: 7272 Pleural effusion suspected, noninfectious, chest pain, initial imaging"
+  },
+  {
+   "q": "dyspnea and leg swelling",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Suspected Pulmonary Embolism",
+       "Suspected and Known Heart Failure"
+      ],
+      [
+       "Suspected Lower Extremity Deep Vein Thrombosis",
+       "Chronic Dyspnea-Noncardiovascular Origin",
+       "Dyspnea-Suspected Cardiac Origin (Ischemia Already Excluded)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnan|Child",
+   "rationale": "PE/heart failure, or offer DVT and dyspnea topics.",
+   "current": "none"
+  },
+  {
+   "q": "leg swelling and chest pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Suspected Pulmonary Embolism"
+      ],
+      [
+       "Suspected Lower Extremity Deep Vein Thrombosis",
+       "Chest Pain-Possible Acute Coronary Syndrome"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnan|Child",
+   "rationale": "PE, or DVT plus a chest pain topic.",
+   "current": "none"
+  },
+  {
+   "q": "chest pain and back pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Suspected Acute Aortic Syndrome"
+      ],
+      [
+       "Chest Pain-Possible Acute Coronary Syndrome",
+       "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease",
+       "Thoracic Back Pain",
+       "Low Back Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnan|Child|Inflammatory",
+   "rationale": "Aortic syndrome is the combination; otherwise chest pain and back pain topics.",
+   "current": "none"
+  },
+  {
+   "q": "syncope and chest pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Syncope"
+      ],
+      [
+       "Chest Pain-Possible Acute Coronary Syndrome",
+       "Suspected Acute Aortic Syndrome",
+       "Suspected Pulmonary Embolism"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Chest Wall",
+   "rationale": "Syncope plus a chest pain topic.",
+   "current": "none"
+  },
+  {
+   "q": "palpitations and syncope",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5530"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Syncope"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Cardiovascular syncope.",
+   "current": "none"
+  },
+  {
+   "q": "headache and vision loss",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Headache"
+      ],
+      [
+       "Vision Loss",
+       "Orbits, Vision, and Visual Loss"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|pregnan",
+   "rationale": "Both topics.",
+   "current": "none"
+  },
+  {
+   "q": "headache and seizure",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Headache"
+      ],
+      [
+       "Seizures and Epilepsy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|febrile",
+   "rationale": "Both topics.",
+   "current": "none"
+  },
+  {
+   "q": "dizziness and headache",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Dizziness and Ataxia"
+      ],
+      [
+       "Headache"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Both topics.",
+   "current": "none"
+  },
+  {
+   "q": "headache and facial droop",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "7352"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "no red flags",
+   "rationale": "Stroke scenario leads.",
+   "current": "none"
+  },
+  {
+   "q": "confusion and fever",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Altered Mental Status, Coma, Delirium, and Psychosis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Altered mental status topic.",
+   "current": "none"
+  },
+  {
+   "q": "sinus pain and headache",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Sinonasal Disease"
+      ],
+      [
+       "Headache"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Venous sinus thrombosis|Silent sinus",
+   "rationale": "Rhinosinusitis plus headache; today \"sinus\" is read as venous sinus thrombosis.",
+   "current": "none"
+  },
+  {
+   "q": "ear pain and hearing loss",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Inflammatory Ear Disease"
+      ],
+      [
+       "Hearing Loss and/or Vertigo"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Cholesteatoma, surgical planning|Neoplasm",
+   "rationale": "Otitis plus hearing loss; today cholesteatoma surgical planning leads.",
+   "current": "list: 4460 Cholesteatoma, surgical planning"
+  },
+  {
+   "q": "eye pain and vision loss",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Orbits, Vision, and Visual Loss",
+       "Vision Loss"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Trauma|trauma",
+   "rationale": "Orbit/vision topics; no trauma was mentioned.",
+   "current": "none"
+  },
+  {
+   "q": "neck mass and dysphagia",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Neck Mass/Adenopathy"
+      ],
+      [
+       "Dysphagia",
+       "Staging and Post-Therapy Assessment of Head and Neck Cancer"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Penetrating",
+   "rationale": "Neck mass plus dysphagia (or head and neck cancer).",
+   "current": "none"
+  },
+  {
+   "q": "sore throat and neck swelling",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Neck Mass/Adenopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating|Cancer|cancer",
+   "rationale": "Neck mass topic; cancer staging is not implied.",
+   "current": "none"
+  },
+  {
+   "q": "hoarseness and dysphagia",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Dysphagia",
+       "Cranial Neuropathy",
+       "Staging and Post-Therapy Assessment of Head and Neck Cancer"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Dysphagia, vocal cord paralysis or head and neck cancer.",
+   "current": "none"
+  },
+  {
+   "q": "neck pain and arm weakness",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Cervical Pain or Cervical Radiculopathy",
+       "Myelopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating Neck|Neck Mass",
+   "rationale": "Cervical radiculopathy/myelopathy.",
+   "current": "none"
+  },
+  {
+   "q": "low back pain and leg weakness",
+   "expected": [
+    {
+     "modes": [
+      "list"
+     ],
+     "ids": [
+      "5623"
+     ]
+    },
+    {
+     "topic_groups": [
+      [
+       "Low Back Pain",
+       "Myelopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnan|Child|Inflammatory",
+   "rationale": "Low back pain (cauda equina/radiculopathy) or myelopathy.",
+   "current": "none"
+  },
+  {
+   "q": "leg pain and back pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Low Back Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Cold, Painful Leg|DVT|Inflammatory",
+   "rationale": "Radicular leg pain; never acute limb ischemia or DVT.",
+   "current": "none"
+  },
+  {
+   "q": "shoulder pain and neck pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Cervical Pain or Cervical Radiculopathy"
+      ],
+      [
+       "Chronic Shoulder Pain",
+       "Acute Shoulder Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Penetrating",
+   "rationale": "Cervical topic plus a shoulder topic.",
+   "current": "none"
+  },
+  {
+   "q": "shoulder pain and chest pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Chest Pain-Possible Acute Coronary Syndrome",
+       "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Child",
+   "rationale": "Chest pain radiating to the shoulder is a cardiac question first.",
+   "current": "none"
+  },
+  {
+   "q": "jaw pain and chest pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Chest Pain-Possible Acute Coronary Syndrome",
+       "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "fracture|Facial Trauma|midface|Child",
+   "rationale": "Jaw pain with chest pain is angina; today jaw pain alone finds midface fracture.",
+   "current": "none"
+  },
+  {
+   "q": "arm pain and chest pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Chest Pain-Possible Acute Coronary Syndrome",
+       "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "DVT|AVF|fistula|trauma|Child",
+   "rationale": "Same; today arm pain alone finds upper extremity DVT and dialysis fistula scenarios.",
+   "current": "none"
+  },
+  {
+   "q": "knee pain and ankle pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Chronic Knee Pain",
+       "Acute Trauma to the Knee"
+      ],
+      [
+       "Chronic Ankle Pain",
+       "Acute Trauma to the Ankle"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Child",
+   "rationale": "Offer both joints.",
+   "current": "none"
+  },
+  {
+   "q": "ankle pain and knee pain after fall",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Trauma to the Knee"
+      ],
+      [
+       "Acute Trauma to the Ankle"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chronic|chronic|Arthroplasty",
+   "rationale": "Both acute trauma topics; chronic topics contradict the fall.",
+   "current": "none"
+  },
+  {
+   "q": "wrist pain and elbow pain after fall",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Hand and Wrist Trauma"
+      ],
+      [
+       "Acute Elbow and Forearm Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chronic|chronic",
+   "rationale": "Both acute topics.",
+   "current": "none"
+  },
+  {
+   "q": "hand pain and wrist pain after fall",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Hand and Wrist Trauma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chronic|chronic",
+   "rationale": "Acute hand and wrist trauma; today chronic tendon injury scenarios lead and the fall is ignored.",
+   "current": "list: 7322 Hand pain, chronic, tendon injury suspected, radiography normal, next imaging study"
+  },
+  {
+   "q": "foot pain and ankle pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Chronic Foot Pain",
+       "Acute Trauma to the Foot"
+      ],
+      [
+       "Chronic Ankle Pain",
+       "Acute Trauma to the Ankle"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Diabetes|Child",
+   "rationale": "Offer both; diabetic foot osteomyelitis is not implied.",
+   "current": "none"
+  },
+  {
+   "q": "elbow pain and shoulder pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Chronic Elbow Pain",
+       "Acute Elbow and Forearm Pain"
+      ],
+      [
+       "Chronic Shoulder Pain",
+       "Acute Shoulder Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Child",
+   "rationale": "Offer both joints.",
+   "current": "none"
+  },
+  {
+   "q": "groin pain and hip pain",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Chronic Hip Pain",
+       "Acute Hip Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Developmental|Child",
+   "rationale": "Hip topics (hernia optional).",
+   "current": "none"
+  },
+  {
+   "q": "neck pain and headache after car accident",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Acute Spinal Trauma"
+      ],
+      [
+       "Head Trauma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "no trauma|no red flags|Cervical Pain or Cervical Radiculopathy",
+   "rationale": "Cervical spine trauma plus head trauma; the nontraumatic neck pain topic contradicts the crash.",
+   "current": "none"
+  },
+  {
+   "q": "fever and rash",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover",
+      "choose"
+     ],
+     "topic_groups": []
+    }
+   ],
+   "forbidden": "Headache|Abd pain|LUQ|Spine",
+   "rationale": "Rash has no ACR topic and fever alone matches nothing specific: honest, never a fever scenario about another complaint.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "fever and chills and rigors",
+   "expected": [
+    {
+     "topic_groups": [
+      [
+       "Sepsis"
+      ]
+     ]
+    },
+    {
+     "modes": [
+      "none",
+      "recover"
+     ]
+    }
+   ],
+   "forbidden": "Headache|Abd pain|LUQ|Child",
+   "rationale": "Only sepsis is a reasonable pointer; fever scenarios about other complaints are not.",
+   "current": "list: 7017 Headache, fever, initial imaging"
+  }
+ ],
+ "recover": [
+  {
+   "q": "contrast allergy",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "Contrast reactions are not an ACR Appropriateness Criteria topic; the \"contraindication to iodinated contrast\" renal mass scenarios are not an answer.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "claustrophobia MRI",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "Not an ACR AC topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "pacemaker MRI safety",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "MRI safety is not an ACR AC topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "metformin and contrast",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "Not an ACR AC topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "breastfeeding after contrast",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "Not an ACR AC topic; the lactating breast imaging topic is about breast complaints, not contrast.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "iodine allergy premedication",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "Not an ACR AC topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "pregnant CT radiation risk",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "Radiation counselling is not an ACR AC topic; pregnancy topics about other complaints are not an answer.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "croup",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic; the pediatric foreign body topic is not croup.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "bronchiolitis",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "lymphoma staging",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": "Leukemia|.",
+   "rationale": "No lymphoma topic; leukemia staging is a different disease and the many scenarios whose text mentions lymphoma as a differential are not an answer.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "lower gi bleed",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": "Upper Gastrointestinal|Nonvariceal|.",
+   "rationale": "No lower GI bleeding topic; upper GI bleeding is the opposite direction.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "hematochezia",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": "Upper Gastrointestinal|Nonvariceal|.",
+   "rationale": "Same.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "ulcerative colitis",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": "Crohn|.",
+   "rationale": "ACR has Crohn disease only; swapping the disease word is the embarrassment the existing gold already forbids.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "depression",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "insomnia",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "dka",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "hyponatremia",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "conjunctivitis",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic; orbit scenarios are not conjunctivitis.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "hemorrhoids",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic; anorectal disease scenarios concern fistula and abscess.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "strep",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "erectile dysfunction",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "tox screen positive",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "shingles",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "measles",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "undescended testis",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic (existing gold agrees); palpable scrotal abnormality is a different question.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "nursemaid elbow",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "The only elbow topic is adult; offering it for a toddler ignores age.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "kid won't use arm",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": "[Aa]buse|.",
+   "rationale": "No pediatric upper-extremity trauma topic; suggesting abuse unprompted would embarrass.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "elder abuse",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": "Child|Ped|.",
+   "rationale": "The abuse topics are pediatric; offering them for an elderly patient ignores age.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "shunt malfunction",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic (existing gold agrees).",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "macrocephaly infant",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic (existing gold agrees).",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "gunshot extremity",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": "Torso|Neck|Head|Abdomen|Pelvis|.",
+   "rationale": "No extremity penetrating trauma topic; torso, neck or head trauma is the wrong body part.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "penile fracture",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "short stature",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic (bone age is not an ACR AC question).",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "preparticipation",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "clubfoot",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "sacral dimple",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic in this data.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "hypotonia infant",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "burn",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "anaphylaxis",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "lyme",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "cp",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chest Pain-Possible Acute Coronary Syndrome",
+       "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease",
+       "Chronic Chest Pain-Noncardiac Etiology Unlikely: Low to Intermediate Probability of Coronary Artery Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Cerebral",
+   "rationale": "ED shorthand for chest pain; offer chest pain topics (and ask which).",
+   "current": "none"
+  },
+  {
+   "q": "dizzy spells",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Dizziness and Ataxia",
+       "Syncope"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Dizziness or syncope.",
+   "current": "none"
+  },
+  {
+   "q": "blacked out",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Syncope",
+       "Seizures and Epilepsy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Syncope or seizure.",
+   "current": "none"
+  },
+  {
+   "q": "seeing double",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Orbits, Vision, and Visual Loss",
+       "Cranial Neuropathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Diplopia scenario lives in the orbits topic.",
+   "current": "none"
+  },
+  {
+   "q": "numb hand",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Cervical Pain or Cervical Radiculopathy",
+       "Plexopathy",
+       "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions",
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|trauma|Trauma",
+   "rationale": "Radiculopathy, plexopathy, stroke/TIA or hand pain.",
+   "current": "none"
+  },
+  {
+   "q": "tingling fingers",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Cervical Pain or Cervical Radiculopathy",
+       "Plexopathy",
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|trauma|Trauma",
+   "rationale": "Same.",
+   "current": "none"
+  },
+  {
+   "q": "face drooping",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions",
+       "Cranial Neuropathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Stroke or Bell palsy.",
+   "current": "none"
+  },
+  {
+   "q": "buckle fracture",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hand and Wrist Trauma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chronic|chronic",
+   "rationale": "Distal radius buckle fracture: hand and wrist trauma.",
+   "current": "none"
+  },
+  {
+   "q": "greenstick fracture",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hand and Wrist Trauma",
+       "Acute Elbow and Forearm Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chronic|chronic",
+   "rationale": "Forearm trauma topics.",
+   "current": "none"
+  },
+  {
+   "q": "jersey finger",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hand and Wrist Trauma",
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Foot|Toe",
+   "rationale": "Finger tendon injury.",
+   "current": "none"
+  },
+  {
+   "q": "mallet finger",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hand and Wrist Trauma",
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Foot|Toe",
+   "rationale": "Finger tendon injury.",
+   "current": "none"
+  },
+  {
+   "q": "skier's thumb",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hand and Wrist Trauma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Foot|Toe",
+   "rationale": "Thumb UCL injury.",
+   "current": "none"
+  },
+  {
+   "q": "gamekeeper thumb",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hand and Wrist Trauma",
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Foot|Toe",
+   "rationale": "Thumb UCL injury.",
+   "current": "none"
+  },
+  {
+   "q": "fnof",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hip Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Developmental|Chronic",
+   "rationale": "Fractured neck of femur: acute traumatic hip pain.",
+   "current": "none"
+  },
+  {
+   "q": "bimalleolar fracture",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Trauma to the Ankle"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chronic|Foot",
+   "rationale": "Ankle trauma.",
+   "current": "none"
+  },
+  {
+   "q": "jones fracture",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Trauma to the Foot"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chronic|Diabetes",
+   "rationale": "Fifth metatarsal: foot trauma.",
+   "current": "none"
+  },
+  {
+   "q": "quad tendon rupture",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Trauma to the Knee",
+       "Chronic Knee Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty",
+   "rationale": "Knee tendon injury.",
+   "current": "none"
+  },
+  {
+   "q": "patellar dislocation",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Trauma to the Knee"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Chronic",
+   "rationale": "Knee trauma.",
+   "current": "none"
+  },
+  {
+   "q": "ac joint separation",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Shoulder Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Chronic",
+   "rationale": "Acute shoulder injury.",
+   "current": "none"
+  },
+  {
+   "q": "sternal fracture",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Blunt Chest Trauma-Suspected Cardiac Injury",
+       "Major Blunt Trauma",
+       "Rib Fractures"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Nontraumatic|Child",
+   "rationale": "Blunt chest trauma topics (existing gold accepted none; explore pointers are better).",
+   "current": "none"
+  },
+  {
+   "q": "flail chest",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Rib Fractures",
+       "Major Blunt Trauma",
+       "Blunt Chest Trauma-Suspected Cardiac Injury"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Nontraumatic|Child",
+   "rationale": "Rib fractures / major blunt trauma.",
+   "current": "none"
+  },
+  {
+   "q": "cavitary lesion",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Imaging of Possible Tuberculosis",
+       "Acute Respiratory Illness in Immunocompetent Patients",
+       "Radiologic Management of Pulmonary Nodules and Masses"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "TB, pneumonia/abscess or lung mass topics.",
+   "current": "none"
+  },
+  {
+   "q": "asthma attack",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Respiratory Illness in Immunocompetent Patients",
+       "Routine Chest Imaging"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Immunocompromised",
+   "rationale": "Acute respiratory illness.",
+   "current": "none"
+  },
+  {
+   "q": "wheezing adult",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Respiratory Illness in Immunocompetent Patients",
+       "Chronic Dyspnea-Noncardiovascular Origin",
+       "Tracheobronchial Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Immunocompromised",
+   "rationale": "Adult airway topics; the pediatric foreign body topic is wrong population.",
+   "current": "none"
+  },
+  {
+   "q": "palpitations",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Syncope",
+       "Nonischemic Myocardial Disease with Clinical Manifestations (Ischemic Cardiomyopathy Already Excluded)",
+       "Preprocedural Planning for Left Atrial Procedures in Atrial Fibrillation"
+      ]
+     ]
+    },
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Weak pointers at best; honest none also acceptable.",
+   "current": "none"
+  },
+  {
+   "q": "afib new onset",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Preprocedural Planning for Left Atrial Procedures in Atrial Fibrillation",
+       "Workup of Noncerebral Systemic Arterial Embolic Source",
+       "Suspected and Known Heart Failure"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Atrial fibrillation planning / embolic source / heart failure.",
+   "current": "none"
+  },
+  {
+   "q": "heart murmur",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Congenital or Acquired Heart Disease",
+       "Infective Endocarditis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Vascular Malformation|murmur, wrist",
+   "rationale": "Cardiac topics; \"vascular murmur, wrist\" shares the word and is the wrong body part.",
+   "current": "none"
+  },
+  {
+   "q": "myocarditis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Nonischemic Myocardial Disease with Clinical Manifestations (Ischemic Cardiomyopathy Already Excluded)",
+       "Chest Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Nonischemic myocardial disease.",
+   "current": "none"
+  },
+  {
+   "q": "cardiomegaly",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected and Known Heart Failure",
+       "Nonischemic Myocardial Disease with Clinical Manifestations (Ischemic Cardiomyopathy Already Excluded)",
+       "Routine Chest Imaging"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Heart failure / cardiomyopathy.",
+   "current": "none"
+  },
+  {
+   "q": "cold foot",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Sudden Onset of Cold, Painful Leg",
+       "Lower Extremity Arterial Claudication-Imaging Assessment for Revascularization"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Diabetes",
+   "rationale": "Acute limb ischemia or claudication.",
+   "current": "none"
+  },
+  {
+   "q": "blue toe",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Sudden Onset of Cold, Painful Leg",
+       "Workup of Noncerebral Systemic Arterial Embolic Source",
+       "Nonatherosclerotic Peripheral Arterial Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Embolic / ischemic limb topics.",
+   "current": "none"
+  },
+  {
+   "q": "lymphedema",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Lower Extremity Chronic Venous Disease",
+       "Suspected Lower Extremity Deep Vein Thrombosis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Leg swelling topics (existing gold accepted none).",
+   "current": "none"
+  },
+  {
+   "q": "charcot foot",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Osteomyelitis of the Foot in Patients with Diabetes Mellitus",
+       "Chronic Foot Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Trauma",
+   "rationale": "Diabetic foot topics.",
+   "current": "none"
+  },
+  {
+   "q": "gangrene",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Sudden Onset of Cold, Painful Leg",
+       "Suspected Osteomyelitis of the Foot in Patients with Diabetes Mellitus",
+       "Lower Extremity Arterial Claudication-Imaging Assessment for Revascularization",
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Ischemia / infection topics.",
+   "current": "none"
+  },
+  {
+   "q": "aspirated peanut",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Ingested or Aspirated Foreign Body-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Trauma",
+   "rationale": "Pediatric aspirated foreign body.",
+   "current": "none"
+  },
+  {
+   "q": "choking child",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Ingested or Aspirated Foreign Body-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "adult|Trauma",
+   "rationale": "Pediatric aspirated foreign body.",
+   "current": "none"
+  },
+  {
+   "q": "stridor",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Ingested or Aspirated Foreign Body-Child",
+       "Tracheobronchial Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Neck Mass",
+   "rationale": "Airway topics.",
+   "current": "none"
+  },
+  {
+   "q": "retropharyngeal abscess",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Neck Mass/Adenopathy"
+      ]
+     ]
+    },
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": "Cancer|cancer|Penetrating",
+   "rationale": "Neck mass is the only ACR neighbour; honest none also acceptable (existing gold).",
+   "current": "none"
+  },
+  {
+   "q": "peritonsillar abscess",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Neck Mass/Adenopathy"
+      ]
+     ]
+    },
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": "Cancer|cancer|Penetrating",
+   "rationale": "Same.",
+   "current": "none"
+  },
+  {
+   "q": "parotitis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Neck Mass/Adenopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Cancer|cancer|Penetrating",
+   "rationale": "Parotid region mass scenario.",
+   "current": "none"
+  },
+  {
+   "q": "salivary stone",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Neck Mass/Adenopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Cancer|cancer|Flank|Urolith|stone disease",
+   "rationale": "Salivary, not urinary, stone.",
+   "current": "none"
+  },
+  {
+   "q": "thyroglossal duct cyst",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Neck Mass/Adenopathy",
+       "Thyroid Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Thyroid cancer|Pancrea|Renal",
+   "rationale": "Midline neck mass.",
+   "current": "none"
+  },
+  {
+   "q": "branchial cleft cyst",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Neck Mass/Adenopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Pancrea|Renal|Liver",
+   "rationale": "Lateral neck mass.",
+   "current": "none"
+  },
+  {
+   "q": "thyroid storm",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Thyroid Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Hypothyroidism",
+   "rationale": "Thyrotoxicosis; hypothyroidism is the opposite condition.",
+   "current": "none"
+  },
+  {
+   "q": "graves",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Thyroid Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Hypothyroidism",
+   "rationale": "Thyrotoxicosis.",
+   "current": "none"
+  },
+  {
+   "q": "hashimoto",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Thyroid Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Thyrotoxicosis",
+   "rationale": "Hypothyroidism; thyrotoxicosis is the opposite condition.",
+   "current": "none"
+  },
+  {
+   "q": "hypercalcemia",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Parathyroid Adenoma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Parathyroid adenoma.",
+   "current": "none"
+  },
+  {
+   "q": "sickle cell crisis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Osteonecrosis",
+       "Cerebrovascular Disease-Child",
+       "Acute Respiratory Illness in Immunocompetent Patients",
+       "Chest Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Osteonecrosis, pediatric stroke, chest syndrome.",
+   "current": "none"
+  },
+  {
+   "q": "sickle cell chest syndrome",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Respiratory Illness in Immunocompetent Patients",
+       "Chest Pain-Child",
+       "Suspected Pulmonary Embolism"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Acute chest syndrome.",
+   "current": "none"
+  },
+  {
+   "q": "hepatomegaly",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Liver Disease",
+       "Abnormal Liver Function Tests",
+       "Palpable Abdominal Mass-Suspected Neoplasm"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Liver topics.",
+   "current": "none"
+  },
+  {
+   "q": "ascites",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Liver Disease",
+       "Abnormal Liver Function Tests"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Chronic liver disease (existing gold accepted none).",
+   "current": "none"
+  },
+  {
+   "q": "hepatitis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Abnormal Liver Function Tests",
+       "Chronic Liver Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Liver topics.",
+   "current": "none"
+  },
+  {
+   "q": "ibd flare",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Crohn Disease",
+       "Crohn Disease-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Crohn disease topics.",
+   "current": "none"
+  },
+  {
+   "q": "toxic megacolon",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Nonlocalized Abdominal Pain",
+       "Crohn Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Abdominal pain / IBD.",
+   "current": "none"
+  },
+  {
+   "q": "volvulus",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Small-Bowel Obstruction",
+       "Acute Nonlocalized Abdominal Pain",
+       "Vomiting in Infants"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Bowel obstruction topics; midgut volvulus lives in infant vomiting.",
+   "current": "none"
+  },
+  {
+   "q": "hirschsprung",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Vomiting in Infants",
+       "Abdominal Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "adult|Small-Bowel Obstruction$",
+   "rationale": "Neonatal obstruction topics.",
+   "current": "none"
+  },
+  {
+   "q": "meckel",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Abdominal Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Upper Gastrointestinal",
+   "rationale": "Pediatric abdominal pain.",
+   "current": "none"
+  },
+  {
+   "q": "gastroenteritis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Abdominal Pain-Child",
+       "Acute Nonlocalized Abdominal Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating",
+   "rationale": "Abdominal pain topics.",
+   "current": "none"
+  },
+  {
+   "q": "ileus",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Small-Bowel Obstruction"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Bowel obstruction.",
+   "current": "none"
+  },
+  {
+   "q": "perforated ulcer",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Nonlocalized Abdominal Pain",
+       "Epigastric Pain",
+       "Nonvariceal Upper Gastrointestinal Bleeding"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Diabetic|decubitus",
+   "rationale": "Perforation: abdominal pain topics; skin ulcer scenarios are wrong.",
+   "current": "none"
+  },
+  {
+   "q": "free air",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Nonlocalized Abdominal Pain",
+       "Epigastric Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Pneumoperitoneum.",
+   "current": "none"
+  },
+  {
+   "q": "pneumoperitoneum",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Nonlocalized Abdominal Pain",
+       "Epigastric Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Same.",
+   "current": "none"
+  },
+  {
+   "q": "anemia with gi bleed",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Nonvariceal Upper Gastrointestinal Bleeding"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Upper GI bleeding is the only GI bleeding topic.",
+   "current": "none"
+  },
+  {
+   "q": "fever unknown origin adult",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Sepsis",
+       "Infective Endocarditis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Adult FUO: sepsis of unknown origin; the fever topic is pediatric and must not be offered.",
+   "current": "none"
+  },
+  {
+   "q": "night sweats",
+   "expected": [
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": ".",
+   "rationale": "No ACR topic; the symptom alone names no scenario.",
+   "honest": true,
+   "current": "none"
+  },
+  {
+   "q": "bacteremia",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Infective Endocarditis",
+       "Sepsis",
+       "Suspected Spine Infection"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Endocarditis / sepsis / spine infection.",
+   "current": "none"
+  },
+  {
+   "q": "renal abscess",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Pyelonephritis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|pregnan",
+   "rationale": "Pyelonephritis topic.",
+   "current": "none"
+  },
+  {
+   "q": "perinephric abscess",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Pyelonephritis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|pregnan",
+   "rationale": "Pyelonephritis topic.",
+   "current": "none"
+  },
+  {
+   "q": "fournier",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+       "Anorectal Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Soft tissue infection / anorectal disease.",
+   "current": "none"
+  },
+  {
+   "q": "hyperemesis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Gestational Trophoblastic Disease",
+       "First Trimester Vaginal Bleeding"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Vomiting in Infants|Epigastric|^(?!.*([Pp]regnan|[Pp]eripartum|[Aa]ntenatal|[Tt]rimester|[Gg]estation|[Ff]etal)).*",
+   "rationale": "Pregnancy topics only.",
+   "forbidden_topics": "Vomiting in Infants|Epigastric",
+   "current": "none"
+  },
+  {
+   "q": "preeclampsia",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Headache",
+       "Growth Disturbances–Risk of Fetal Growth Restriction"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "^(?!.*([Pp]regnan|[Pp]eripartum|[Aa]ntenatal|[Tt]rimester|[Gg]estation|[Ff]etal)).*",
+   "rationale": "Pregnant headache scenario or fetal growth topic; nothing non-pregnant.",
+   "forbidden_topics": "",
+   "current": "none"
+  },
+  {
+   "q": "laryngeal cancer",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Staging and Post-Therapy Assessment of Head and Neck Cancer"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Head and neck cancer.",
+   "current": "none"
+  },
+  {
+   "q": "food poisoning",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Abdominal Pain-Child",
+       "Acute Nonlocalized Abdominal Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating",
+   "rationale": "Abdominal pain topics are the only ACR neighbours.",
+   "current": "none"
+  },
+  {
+   "q": "globus",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Dysphagia"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Dysphagia.",
+   "current": "none"
+  },
+  {
+   "q": "odynophagia",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Dysphagia"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Dysphagia.",
+   "current": "none"
+  },
+  {
+   "q": "food stuck in throat",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Dysphagia",
+       "Ingested or Aspirated Foreign Body-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Dysphagia or (child) foreign body.",
+   "current": "none"
+  },
+  {
+   "q": "foreign body throat",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Dysphagia",
+       "Ingested or Aspirated Foreign Body-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Foot|Hand|Wrist|Soft Tissue",
+   "rationale": "Throat, not an extremity foreign body.",
+   "current": "none"
+  },
+  {
+   "q": "nosebleed",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Sinonasal Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Facial Trauma",
+   "rationale": "Sinonasal topic; no trauma mentioned.",
+   "current": "none"
+  },
+  {
+   "q": "blowout fracture",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Imaging of Facial Trauma Following Primary Survey",
+       "Orbits, Vision, and Visual Loss"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Nontraumatic|no trauma",
+   "rationale": "Orbital floor fracture.",
+   "current": "none"
+  },
+  {
+   "q": "eye injury",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Imaging of Facial Trauma Following Primary Survey",
+       "Orbits, Vision, and Visual Loss"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Nontraumatic|no trauma",
+   "rationale": "Orbital trauma scenario.",
+   "current": "none"
+  },
+  {
+   "q": "eye pain",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Orbits, Vision, and Visual Loss",
+       "Headache"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Trauma|trauma",
+   "rationale": "Orbits / headache topics.",
+   "current": "none"
+  },
+  {
+   "q": "proptosis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Orbits, Vision, and Visual Loss",
+       "Orbital Imaging and Vision Loss-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "(?<!non)traumatic|Trauma",
+   "rationale": "Exophthalmos scenario.",
+   "current": "none",
+   "forbidden_original": "Trauma|trauma",
+   "_edited": "forbidden /trauma/ matched ACR's \"nontraumatic\", the exophthalmos scenario the case wants"
+  },
+  {
+   "q": "ptosis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Horner Syndrome",
+       "Cranial Neuropathy",
+       "Orbits, Vision, and Visual Loss"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Horner syndrome / cranial neuropathy.",
+   "current": "none"
+  },
+  {
+   "q": "anisocoria",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Horner Syndrome",
+       "Cranial Neuropathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Horner syndrome.",
+   "current": "none"
+  },
+  {
+   "q": "visual field defect",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Vision Loss",
+       "Orbits, Vision, and Visual Loss",
+       "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions",
+       "Neuroendocrine Imaging"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Vision loss / stroke / pituitary.",
+   "current": "none"
+  },
+  {
+   "q": "amaurosis fugax",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions",
+       "Vision Loss"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "TIA / vision loss.",
+   "current": "none"
+  },
+  {
+   "q": "sudden vision loss one eye",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Vision Loss",
+       "Orbits, Vision, and Visual Loss"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Trauma",
+   "rationale": "Vision loss topics.",
+   "current": "none"
+  },
+  {
+   "q": "ear drainage",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Inflammatory Ear Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Cholesteatoma, surgical planning",
+   "rationale": "Inflammatory ear disease.",
+   "current": "none"
+  },
+  {
+   "q": "menieres",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Hearing Loss and/or Vertigo"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Cholesteatoma, surgical planning",
+   "rationale": "Hearing loss and vertigo.",
+   "current": "none"
+  },
+  {
+   "q": "tongue deviation",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Cranial Neuropathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Tongue weakness scenario.",
+   "current": "none"
+  },
+  {
+   "q": "agitation",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Altered Mental Status, Coma, Delirium, and Psychosis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Altered mental status.",
+   "current": "none"
+  },
+  {
+   "q": "tremor",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Movement Disorders and Neurodegenerative Diseases"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Movement disorders.",
+   "current": "none"
+  },
+  {
+   "q": "essential tremor",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Movement Disorders and Neurodegenerative Diseases"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Movement disorders.",
+   "current": "none"
+  },
+  {
+   "q": "dystonia",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Movement Disorders and Neurodegenerative Diseases"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Movement disorders.",
+   "current": "none"
+  },
+  {
+   "q": "syrinx",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Myelopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Myelopathy.",
+   "current": "none"
+  },
+  {
+   "q": "tethered cord",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Back Pain-Child",
+       "Scoliosis-Child",
+       "Myelopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "adult",
+   "rationale": "Pediatric spine topics.",
+   "current": "none"
+  },
+  {
+   "q": "near syncope",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Syncope"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Syncope.",
+   "current": "none"
+  },
+  {
+   "q": "pots",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Syncope",
+       "Dizziness and Ataxia"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Syncope / dizziness.",
+   "current": "none"
+  },
+  {
+   "q": "headache after lp",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Imaging of Suspected Intracranial Hypotension",
+       "Headache"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|no red flags",
+   "rationale": "Intracranial hypotension.",
+   "current": "none"
+  },
+  {
+   "q": "pseudotumor",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Headache",
+       "Vision Loss",
+       "Orbits, Vision, and Visual Loss"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Brain Tumor|tumor|Tumor",
+   "rationale": "Idiopathic intracranial hypertension; \"tumor\" is the wrong read.",
+   "current": "none"
+  },
+  {
+   "q": "cavernoma",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Cerebrovascular Diseases-Aneurysm, Vascular Malformation, and Subarachnoid Hemorrhage",
+       "Seizures and Epilepsy",
+       "Brain Tumors"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Vascular malformation topic.",
+   "current": "none"
+  },
+  {
+   "q": "rcvs",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Headache",
+       "Cerebrovascular Diseases-Aneurysm, Vascular Malformation, and Subarachnoid Hemorrhage",
+       "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Thunderclap headache / vasospasm.",
+   "current": "none"
+  },
+  {
+   "q": "encephalitis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Altered Mental Status, Coma, Delirium, and Psychosis",
+       "Headache",
+       "Seizures and Epilepsy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "no red flags",
+   "rationale": "Altered mental status / headache with fever (existing gold accepted none).",
+   "current": "none"
+  },
+  {
+   "q": "meningitis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Headache",
+       "Altered Mental Status, Coma, Delirium, and Psychosis",
+       "Fever Without Source or Unknown Origin-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "no red flags",
+   "rationale": "Headache with fever / AMS.",
+   "current": "none"
+  },
+  {
+   "q": "prolactinoma",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Neuroendocrine Imaging",
+       "Brain Tumors"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Pituitary adenoma scenario.",
+   "current": "none"
+  },
+  {
+   "q": "optic neuritis ms",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Demyelinating Diseases",
+       "Orbits, Vision, and Visual Loss",
+       "Vision Loss"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Demyelinating disease / optic neuritis.",
+   "current": "none"
+  },
+  {
+   "q": "guillain barre",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Myelopathy",
+       "Plexopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "MRI spine to exclude myelopathy.",
+   "current": "none"
+  },
+  {
+   "q": "myasthenia gravis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Imaging of Mediastinal Masses"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Thymoma: mediastinal mass.",
+   "current": "none"
+  },
+  {
+   "q": "als",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Myelopathy",
+       "Movement Disorders and Neurodegenerative Diseases"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Motor neuron disease workup.",
+   "current": "none"
+  },
+  {
+   "q": "peripheral neuropathy",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Plexopathy",
+       "Myelopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Plexopathy / myelopathy.",
+   "current": "none"
+  },
+  {
+   "q": "diabetic neuropathy",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Plexopathy",
+       "Suspected Osteomyelitis of the Foot in Patients with Diabetes Mellitus",
+       "Chronic Foot Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Diabetic foot or plexopathy.",
+   "current": "none"
+  },
+  {
+   "q": "spondylolisthesis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Low Back Pain",
+       "Back Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Trauma|trauma",
+   "rationale": "Low back pain topics.",
+   "current": "none"
+  },
+  {
+   "q": "kyphosis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Scoliosis-Child",
+       "Management of Vertebral Compression Fractures",
+       "Osteoporosis and Bone Mineral Density",
+       "Thoracic Back Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Spinal deformity topics.",
+   "current": "none"
+  },
+  {
+   "q": "bone mets",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Low Back Pain",
+       "Management of Vertebral Compression Fractures",
+       "Myelopathy",
+       "Malignant or Aggressive Primary Musculoskeletal Tumor-Staging And Surveillance"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Primary Bone",
+   "rationale": "Metastatic disease: spinal mets / pathologic fracture topics; primary bone tumor is the opposite question.",
+   "current": "none"
+  },
+  {
+   "q": "osteosarcoma",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Primary Bone Tumors",
+       "Malignant or Aggressive Primary Musculoskeletal Tumor-Staging And Surveillance"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Primary bone tumor topics.",
+   "current": "none"
+  },
+  {
+   "q": "ewing",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Primary Bone Tumors",
+       "Malignant or Aggressive Primary Musculoskeletal Tumor-Staging And Surveillance"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Primary bone tumor topics.",
+   "current": "none"
+  },
+  {
+   "q": "bone cyst",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Primary Bone Tumors"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Pancrea|Renal|Liver|Adnexal",
+   "rationale": "Bone lesion; cyst must not route to abdominal cysts.",
+   "current": "none"
+  },
+  {
+   "q": "fibrous dysplasia",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Primary Bone Tumors"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Hip-Child|Developmental",
+   "rationale": "Bone lesion; \"dysplasia\" must not route to hip dysplasia.",
+   "current": "none"
+  },
+  {
+   "q": "pagets",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Primary Bone Tumors",
+       "Osteoporosis and Bone Mineral Density"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Breast|Nipple",
+   "rationale": "Paget disease of bone, not of the nipple.",
+   "current": "none"
+  },
+  {
+   "q": "lupus",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Extremity Joint Pain-Suspected Inflammatory Arthritis, Crystalline Arthritis, or Erosive Osteoarthritis",
+       "Diffuse Lung Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Inflammatory arthritis / ILD.",
+   "current": "none"
+  },
+  {
+   "q": "scleroderma",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Diffuse Lung Disease",
+       "Dysphagia",
+       "Chronic Extremity Joint Pain-Suspected Inflammatory Arthritis, Crystalline Arthritis, or Erosive Osteoarthritis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "ILD / esophageal dysmotility.",
+   "current": "none"
+  },
+  {
+   "q": "giant cell arteritis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Noncerebral Vasculitis",
+       "Vision Loss",
+       "Headache"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Vasculitis topics.",
+   "current": "none"
+  },
+  {
+   "q": "temporal arteritis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Noncerebral Vasculitis",
+       "Vision Loss",
+       "Headache"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Dementia",
+   "rationale": "Vasculitis; \"temporal\" must not pull dementia (temporal lobe).",
+   "current": "none"
+  },
+  {
+   "q": "polymyalgia",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Noncerebral Vasculitis",
+       "Chronic Shoulder Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "PMR.",
+   "current": "none"
+  },
+  {
+   "q": "myositis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+       "Chronic Extremity Joint Pain-Suspected Inflammatory Arthritis, Crystalline Arthritis, or Erosive Osteoarthritis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Soft tissue inflammation.",
+   "current": "none"
+  },
+  {
+   "q": "rhabdo",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+       "Renal Failure"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Muscle injury / renal failure.",
+   "current": "none"
+  },
+  {
+   "q": "compartment syndrome",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Sudden Onset of Cold, Painful Leg",
+       "Major Blunt Trauma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Limb emergency topics.",
+   "current": "none"
+  },
+  {
+   "q": "hanging",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Spinal Trauma",
+       "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating",
+   "rationale": "Cervical spine and vascular injury.",
+   "current": "none"
+  },
+  {
+   "q": "strangulation",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Spinal Trauma",
+       "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating",
+   "rationale": "Same.",
+   "current": "none"
+  },
+  {
+   "q": "drowning",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Respiratory Illness in Immunocompetent Patients",
+       "Intensive Care Unit Patients"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Aspiration pneumonitis.",
+   "current": "none"
+  },
+  {
+   "q": "overdose",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Altered Mental Status, Coma, Delirium, and Psychosis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Altered mental status.",
+   "current": "none"
+  },
+  {
+   "q": "alcohol withdrawal",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Altered Mental Status, Coma, Delirium, and Psychosis",
+       "Seizures and Epilepsy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "AMS / seizure.",
+   "current": "none"
+  },
+  {
+   "q": "wernicke",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Altered Mental Status, Coma, Delirium, and Psychosis",
+       "Dementia"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "AMS.",
+   "current": "none"
+  },
+  {
+   "q": "carbon monoxide",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Altered Mental Status, Coma, Delirium, and Psychosis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "AMS.",
+   "current": "none"
+  },
+  {
+   "q": "smoke inhalation",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Respiratory Illness in Immunocompetent Patients",
+       "Tracheobronchial Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Airway injury.",
+   "current": "none"
+  },
+  {
+   "q": "failure to thrive",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Vomiting in Infants"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "[Aa]buse",
+   "rationale": "Infant feeding/vomiting topic; abuse must not be suggested unprompted.",
+   "current": "none"
+  },
+  {
+   "q": "spitting up",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Vomiting in Infants"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Pancreatitis|Exophthalmos",
+   "rationale": "Infant reflux scenario.",
+   "current": "none"
+  },
+  {
+   "q": "colic infant",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Vomiting in Infants",
+       "Abdominal Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Flank|Urolith|stone",
+   "rationale": "Infant colic, not renal colic.",
+   "current": "none"
+  },
+  {
+   "q": "blood in stool infant",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Abdominal Pain-Child",
+       "Vomiting in Infants"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Upper Gastrointestinal|adult",
+   "rationale": "Intussusception / NEC scenarios.",
+   "current": "none"
+  },
+  {
+   "q": "currant jelly stool",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Abdominal Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Upper Gastrointestinal|adult",
+   "rationale": "Intussusception.",
+   "current": "none"
+  },
+  {
+   "q": "encopresis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Abdominal Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "adult|Small-Bowel",
+   "rationale": "Pediatric constipation scenario.",
+   "current": "none"
+  },
+  {
+   "q": "bedwetting",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Urinary Tract Infection–Child",
+       "Back Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Prostatic|Prostate|Postmenopausal|Pelvic Floor",
+   "rationale": "Pediatric urinary topics only.",
+   "current": "none"
+  },
+  {
+   "q": "vur",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Urinary Tract Infection–Child",
+       "Antenatal Hydronephrosis-Infant"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnan|Prostat",
+   "rationale": "Vesicoureteral reflux follow-up scenario.",
+   "current": "none"
+  },
+  {
+   "q": "posterior urethral valves",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Antenatal Hydronephrosis-Infant",
+       "Urinary Tract Infection–Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "pregnan|Prostat",
+   "rationale": "Infant hydronephrosis topic.",
+   "current": "none"
+  },
+  {
+   "q": "scoliosis screening",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Scoliosis-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Pediatric scoliosis.",
+   "current": "none"
+  },
+  {
+   "q": "post concussion syndrome",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Head Trauma",
+       "Head Trauma-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating",
+   "rationale": "Head trauma topics.",
+   "current": "none"
+  },
+  {
+   "q": "second impact",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Head Trauma",
+       "Head Trauma-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Penetrating",
+   "rationale": "Head trauma topics.",
+   "current": "none"
+  },
+  {
+   "q": "back pain after mvc",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Spinal Trauma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "no red flags|Inflammatory|no trauma|low velocity",
+   "rationale": "Spine trauma, not nontraumatic back pain.",
+   "current": "none"
+  },
+  {
+   "q": "handlebar injury",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Major Blunt Trauma",
+       "Abdominal Pain-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "[Aa]buse",
+   "rationale": "Blunt abdominal trauma; abuse must not be suggested.",
+   "current": "none"
+  },
+  {
+   "q": "impalement",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Penetrating Torso Trauma",
+       "Penetrating Trauma-Lower Abdomen and Pelvis",
+       "Penetrating Neck Injury"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Penetrating trauma topics.",
+   "current": "none"
+  },
+  {
+   "q": "blast injury",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Major Blunt Trauma",
+       "Penetrating Torso Trauma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Trauma topics.",
+   "current": "none"
+  },
+  {
+   "q": "open book pelvis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Major Blunt Trauma",
+       "Acute Hip Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Developmental|Pelvic Floor",
+   "rationale": "Pelvic ring injury.",
+   "current": "none"
+  },
+  {
+   "q": "acetabular fracture",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hip Pain",
+       "Major Blunt Trauma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Developmental|Chronic",
+   "rationale": "Acute traumatic hip pain.",
+   "current": "none"
+  },
+  {
+   "q": "tib fib fracture",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Trauma to the Knee",
+       "Acute Trauma to the Ankle"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chronic|Arthroplasty",
+   "rationale": "Leg trauma topics.",
+   "current": "none"
+  },
+  {
+   "q": "shin splints",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Stress (Fatigue/Insufficiency) Fracture, Including Sacrum, Excluding Other Vertebrae",
+       "Chronic Knee Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Trauma",
+   "rationale": "Stress injury.",
+   "current": "none"
+  },
+  {
+   "q": "it band",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Knee Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Trauma",
+   "rationale": "Chronic knee pain.",
+   "current": "none"
+  },
+  {
+   "q": "jumpers knee",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Knee Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Trauma",
+   "rationale": "Chronic knee pain.",
+   "current": "none"
+  },
+  {
+   "q": "osgood schlatter",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Knee Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Trauma|Limping Child",
+   "rationale": "Adolescent chronic knee pain; the under-5 limp topic is the wrong age.",
+   "current": "none"
+  },
+  {
+   "q": "sever's disease",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Foot Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Diabetes|Trauma",
+   "rationale": "Pediatric heel pain.",
+   "current": "none"
+  },
+  {
+   "q": "scfe",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hip Pain",
+       "Chronic Hip Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Developmental Dysplasia|Limping Child",
+   "rationale": "Adolescent hip; infant DDH and under-5 limp are the wrong age.",
+   "current": "none"
+  },
+  {
+   "q": "slipped capital femoral epiphysis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hip Pain",
+       "Chronic Hip Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Developmental Dysplasia|Limping Child",
+   "rationale": "Same.",
+   "current": "none"
+  },
+  {
+   "q": "perthes",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acutely Limping Child Up To Age 5",
+       "Chronic Hip Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Developmental Dysplasia",
+   "rationale": "Childhood hip.",
+   "current": "none"
+  },
+  {
+   "q": "transient synovitis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acutely Limping Child Up To Age 5",
+       "Osteomyelitis or Septic Arthritis-Child (Excluding Axial Skeleton)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|adult",
+   "rationale": "Limping child / septic hip.",
+   "current": "none"
+  },
+  {
+   "q": "toxic synovitis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acutely Limping Child Up To Age 5",
+       "Osteomyelitis or Septic Arthritis-Child (Excluding Axial Skeleton)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|adult",
+   "rationale": "Same.",
+   "current": "none"
+  },
+  {
+   "q": "clicky hip",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Developmental Dysplasia of the Hip-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Chronic Hip|Acute Hip",
+   "rationale": "Infant hip dysplasia.",
+   "current": "none"
+  },
+  {
+   "q": "refusing to walk",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acutely Limping Child Up To Age 5"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "adult|Arthroplasty",
+   "rationale": "Limping child.",
+   "current": "none"
+  },
+  {
+   "q": "mcl tear",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Trauma to the Knee",
+       "Chronic Knee Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Elbow",
+   "rationale": "Knee ligament.",
+   "current": "none"
+  },
+  {
+   "q": "pcl tear",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Trauma to the Knee",
+       "Chronic Knee Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Elbow",
+   "rationale": "Knee ligament.",
+   "current": "none"
+  },
+  {
+   "q": "baker's cyst",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Knee Pain",
+       "Suspected Lower Extremity Deep Vein Thrombosis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Pancrea|Renal|Liver|Adnexal",
+   "rationale": "Popliteal cyst; not an abdominal cyst.",
+   "current": "none"
+  },
+  {
+   "q": "popliteal cyst",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Knee Pain",
+       "Suspected Lower Extremity Deep Vein Thrombosis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Pancrea|Renal|Liver|Adnexal",
+   "rationale": "Same.",
+   "current": "none"
+  },
+  {
+   "q": "prepatellar bursitis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Knee Pain",
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Shoulder|Hip",
+   "rationale": "Knee.",
+   "current": "none"
+  },
+  {
+   "q": "olecranon bursitis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Elbow Pain",
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Shoulder|Hip|Knee",
+   "rationale": "Elbow.",
+   "current": "none"
+  },
+  {
+   "q": "fai",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Hip Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Developmental",
+   "rationale": "Femoroacetabular impingement.",
+   "current": "none"
+  },
+  {
+   "q": "femoroacetabular impingement",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Hip Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Developmental|Ankle|Shoulder",
+   "rationale": "Hip impingement, not ankle or shoulder impingement.",
+   "current": "none"
+  },
+  {
+   "q": "calf strain",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Lower Extremity Deep Vein Thrombosis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Calf pain: exclude DVT.",
+   "current": "none"
+  },
+  {
+   "q": "bunion",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Foot Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Diabetes|Trauma",
+   "rationale": "Forefoot.",
+   "current": "none"
+  },
+  {
+   "q": "hallux valgus",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Foot Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Diabetes|Trauma",
+   "rationale": "Forefoot.",
+   "current": "none"
+  },
+  {
+   "q": "gout toe",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Extremity Joint Pain-Suspected Inflammatory Arthritis, Crystalline Arthritis, or Erosive Osteoarthritis",
+       "Chronic Foot Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Crystalline arthritis.",
+   "current": "none"
+  },
+  {
+   "q": "podagra",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Extremity Joint Pain-Suspected Inflammatory Arthritis, Crystalline Arthritis, or Erosive Osteoarthritis",
+       "Chronic Foot Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Gout of the first MTP.",
+   "current": "none"
+  },
+  {
+   "q": "impingement shoulder",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Shoulder Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Ankle|Hip",
+   "rationale": "Shoulder impingement.",
+   "current": "none"
+  },
+  {
+   "q": "slap tear",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Shoulder Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Arthroplasty|Hip",
+   "rationale": "Shoulder labrum.",
+   "current": "none"
+  },
+  {
+   "q": "tennis elbow",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Elbow Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Acute|Child",
+   "rationale": "Lateral epicondylitis.",
+   "current": "none"
+  },
+  {
+   "q": "golfer's elbow",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Elbow Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Acute|Child",
+   "rationale": "Medial epicondylitis.",
+   "current": "none"
+  },
+  {
+   "q": "cubital tunnel",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Elbow Pain",
+       "Plexopathy"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Ulnar neuropathy at the elbow.",
+   "current": "none"
+  },
+  {
+   "q": "ulnar neuropathy",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Elbow Pain",
+       "Plexopathy",
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Same.",
+   "current": "none"
+  },
+  {
+   "q": "de quervain",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Trauma|Foot",
+   "rationale": "Wrist tenosynovitis.",
+   "current": "none"
+  },
+  {
+   "q": "trigger finger",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Trauma|Foot",
+   "rationale": "Hand.",
+   "current": "none"
+  },
+  {
+   "q": "ganglion cyst",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Hand and Wrist Pain",
+       "Soft Tissue Masses"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Pancrea|Renal|Liver|Adnexal",
+   "rationale": "Wrist ganglion; not an abdominal cyst.",
+   "current": "none"
+  },
+  {
+   "q": "snuffbox tenderness",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hand and Wrist Trauma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chronic",
+   "rationale": "Scaphoid injury.",
+   "current": "none"
+  },
+  {
+   "q": "wrist sprain",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Hand and Wrist Trauma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Chronic",
+   "rationale": "Acute wrist injury.",
+   "current": "none"
+  },
+  {
+   "q": "tfcc tear",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Foot|Ankle",
+   "rationale": "Wrist.",
+   "current": "none"
+  },
+  {
+   "q": "kienbock",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Foot|Ankle",
+   "rationale": "Lunate osteonecrosis.",
+   "current": "none"
+  },
+  {
+   "q": "felon",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "^Foot|, foot|Diabetic foot|diabetes",
+   "rationale": "Fingertip infection: hand, never the foot or diabetic foot scenarios.",
+   "forbidden_topics": "of the Foot|to the Foot|Chronic Foot|Diabetes Mellitus|Vision|Orbit",
+   "current": "none",
+   "forbidden_original": "foot|Foot|Diabet",
+   "_edited": "forbidden caught ACR's own parenthetical \"(Excluding Spine and Diabetic Foot)\" in hand scenario names; now matches foot scenarios only"
+  },
+  {
+   "q": "paronychia",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "^Foot|, foot|Diabetic foot|diabetes",
+   "rationale": "Nail fold infection.",
+   "forbidden_topics": "of the Foot|to the Foot|Chronic Foot|Diabetes Mellitus|Vision|Orbit",
+   "current": "none",
+   "forbidden_original": "foot|Foot|Diabet",
+   "_edited": "forbidden caught ACR's own parenthetical \"(Excluding Spine and Diabetic Foot)\" in hand scenario names; now matches foot scenarios only"
+  },
+  {
+   "q": "flexor tenosynovitis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+       "Chronic Hand and Wrist Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "^Foot|, foot|Diabetic foot|diabetes",
+   "rationale": "Hand infection.",
+   "forbidden_topics": "of the Foot|to the Foot|Chronic Foot|Diabetes Mellitus|Vision|Orbit",
+   "current": "none",
+   "forbidden_original": "foot|Foot|Diabet",
+   "_edited": "forbidden caught ACR's own parenthetical \"(Excluding Spine and Diabetic Foot)\" in hand scenario names; now matches foot scenarios only"
+  },
+  {
+   "q": "fight bite",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+       "Acute Hand and Wrist Trauma"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "^Foot|, foot|Diabetic foot|diabetes|Vision|Orbit",
+   "rationale": "Hand wound; \"bite\" must not pull orbit scenarios.",
+   "forbidden_topics": "of the Foot|to the Foot|Chronic Foot|Diabetes Mellitus|Vision|Orbit",
+   "current": "none",
+   "forbidden_original": "foot|Foot|Diabet|Vision|Orbit",
+   "_edited": "forbidden caught ACR's own parenthetical \"(Excluding Spine and Diabetic Foot)\" in hand scenario names; now matches foot scenarios only"
+  },
+  {
+   "q": "dog bite",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Vision|Orbit",
+   "rationale": "Soft tissue infection; \"bite\" must not pull orbit scenarios.",
+   "current": "none"
+  },
+  {
+   "q": "kawasaki",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Congenital or Acquired Heart Disease",
+       "Evaluation of Coronary Artery Anomalies"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "adult",
+   "rationale": "Coronary aneurysm surveillance.",
+   "current": "none"
+  },
+  {
+   "q": "rheumatic fever",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Congenital or Acquired Heart Disease"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "",
+   "rationale": "Valvular disease.",
+   "current": "none"
+  },
+  {
+   "q": "r/o torsion",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass",
+       "Acute Pelvic Pain in the Reproductive Age Group"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Postmenopausal",
+   "rationale": "Testicular or ovarian torsion: offer both.",
+   "current": "none"
+  },
+  {
+   "q": "r/o meningitis",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Headache",
+       "Altered Mental Status, Coma, Delirium, and Psychosis",
+       "Fever Without Source or Unknown Origin-Child"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "no red flags",
+   "rationale": "Headache with fever.",
+   "current": "none"
+  },
+  {
+   "q": "r/o free air",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Acute Nonlocalized Abdominal Pain",
+       "Epigastric Pain"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Perforation.",
+   "current": "none"
+  },
+  {
+   "q": "r/o aortic injury",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Major Blunt Trauma",
+       "Blunt Chest Trauma-Suspected Cardiac Injury"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Nontraumatic|Screening|Follow-up",
+   "rationale": "Traumatic aortic injury, not aneurysm screening.",
+   "current": "none"
+  },
+  {
+   "q": "r/o cardiac contusion",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Blunt Chest Trauma-Suspected Cardiac Injury"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Nontraumatic",
+   "rationale": "Blunt cardiac injury scenarios.",
+   "current": "none"
+  },
+  {
+   "q": "r/o urethral injury",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Major Blunt Trauma",
+       "Penetrating Trauma-Lower Abdomen and Pelvis"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child|Prostat",
+   "rationale": "Pelvic trauma.",
+   "current": "none"
+  },
+  {
+   "q": "r/o acoustic neuroma",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Hearing Loss and/or Vertigo",
+       "Tinnitus"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Asymmetric sensorineural hearing loss.",
+   "current": "none"
+  },
+  {
+   "q": "r/o vestibular schwannoma",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Hearing Loss and/or Vertigo",
+       "Tinnitus"
+      ]
+     ]
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "Same.",
+   "current": "none"
+  },
+  {
+   "q": "r/o myeloma",
+   "expected": [
+    {
+     "modes": [
+      "recover",
+      "choose",
+      "guide",
+      "list"
+     ],
+     "topic_groups": [
+      [
+       "Management of Vertebral Compression Fractures",
+       "Osteoporosis and Bone Mineral Density",
+       "Suspected Primary Bone Tumors"
+      ]
+     ]
+    },
+    {
+     "modes": [
+      "none",
+      "recover"
+     ],
+     "nothing": true
+    }
+   ],
+   "forbidden": "Child",
+   "rationale": "No myeloma topic; pathologic fracture topics or honest none.",
+   "current": "none"
+  }
+ ],
+ "pass_floor": {
+  "sizes": 116,
+  "multi": 97,
+  "recover": 182
+ }
+}
