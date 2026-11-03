@@ -1,0 +1,4 @@
+{
+  "_note": "Alias phrases tools/mine_aliases_gate.mjs must never accept, whatever the tests say: rejected by the second-model judge or by hand review as clinically wrong or ambiguous. Each entry: from (the normalised phrase), why, source (judge model or 'hand review').",
+  "exclude": []
+}

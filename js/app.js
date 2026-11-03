@@ -7,13 +7,13 @@
 
 console.log('[Radex] Loading app.js module...');
 
-import { SearchEngine } from './search-engine.js?v=20261103a';
+import { SearchEngine } from './search-engine.js?v=20261104a';
 import { DataLoader } from './data-loader.js?v=20260417a';
 import { UI } from './ui.js?v=20260417a';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
-import { resolveQuery, buildTopicGuide, guardSuggestions } from './scenario-ranker.js?v=20261103a';
+import { resolveQuery, buildTopicGuide, guardSuggestions } from './scenario-ranker.js?v=20261104a';
 
 // Regions that have a backing data/regions/<name>.json file. Used to guard
 // navigation so a summary card with a body label that has no region file

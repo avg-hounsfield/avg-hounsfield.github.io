@@ -28,6 +28,7 @@
  *   search ACR does not cover at all is told so.
  */
 import { conceptNormalize } from './concept-matcher.js?v=20260531a';
+import { MINED_ALIASES } from './aliases-mined.js?v=20261104a';
 
 // Words that carry no clinical meaning here, including modality words: "mri for
 // cauda equina" should reach the same scenario as "cauda equina". Plain English
@@ -237,8 +238,10 @@ const TEXT_SYNONYMS = [
 
 // Clinician shorthand and lay terms -> the wording ACR uses. Sorted longest
 // first below, so a longer phrase wins over a shorter one inside it, and the
-// output of one alias is never read again by another.
-const ALIASES = [
+// output of one alias is never read again by another. Written by hand and
+// verified against scenario names; the mined table (js/aliases-mined.js) is
+// merged in after it, and a hand-written phrase always wins over a mined one.
+const HAND_ALIASES = [
   // red flags
   ['with red flags', ''], ['and red flags', ''], ['red flags present', ''], ['positive red flags', ''],
   ['red flag symptoms', ''], ['red flag features', ''],
@@ -704,7 +707,21 @@ const ALIASES = [
   ['right upper lobe', 'lung'], ['left upper lobe', 'lung'], ['right lower lobe', 'lung'], ['left lower lobe', 'lung'],
   ['right middle lobe', 'lung'], ['upper lobe', 'lung'], ['lower lobe', 'lung'], ['middle lobe', 'lung'], ['lingula', 'lung'],
 ];
-ALIASES.sort((a, b) => b[0].length - a[0].length);
+
+// The hand-written table, then the mined phrases it does not already name,
+// longest phrase first. Equal lengths keep this order, so a hand-written
+// phrase is read before a mined one of the same length.
+function mergeAliases(hand, mined) {
+  const seen = new Set(hand.map(([from]) => from));
+  const merged = [...hand];
+  for (const pair of mined) {
+    if (seen.has(pair[0])) continue;
+    seen.add(pair[0]);
+    merged.push(pair);
+  }
+  return merged.sort((a, b) => b[0].length - a[0].length);
+}
+let ALIASES = mergeAliases(HAND_ALIASES, MINED_ALIASES);
 
 // "history of colon cancer" beside a measured lesion is ACR's "hx of
 // malignancy": the lesion's scenarios split on that, not on the cancer's site.
@@ -1869,7 +1886,31 @@ function editDistance(a, b, cap) {
   return rows[a.length][b.length];
 }
 
-const ALIAS_WORDS = new Set(ALIASES.flatMap(([from]) => from.split(' ')).concat(CONTEXT_ALIASES.map(c => c.phrase).flatMap(p => p.split(' '))));
+const aliasWords = table => new Set(table.flatMap(([from]) => from.split(' ')).concat(CONTEXT_ALIASES.map(c => c.phrase).flatMap(p => p.split(' '))));
+let ALIAS_WORDS = aliasWords(ALIASES);
+
+/**
+ * For the alias-mining tools: swaps the mined table in place so candidates can
+ * be tried without reloading the module. The hand-written table is untouched.
+ */
+export function _setMinedAliases(mined) {
+  ALIASES = mergeAliases(HAND_ALIASES, mined);
+  ALIAS_WORDS = aliasWords(ALIASES);
+}
+
+/** For tooling: the alias table in force, and the hand-written part of it. */
+export function _aliasTables() {
+  return { all: ALIASES.map(p => [...p]), hand: HAND_ALIASES.map(p => [...p]) };
+}
+
+/**
+ * For tooling: a phrase as the alias step sees it, so a mined alias is written
+ * in the form that will match: lowercase, punctuation and "the" gone, ACR's
+ * two-way phrases in their short form ("dvt"), ages and study names removed.
+ */
+export function _normalizeAliasPhrase(text) {
+  return withoutAge(splitStudyPhrases(normalizeSearch(text)).rest).replace(/\bthe\b/g, ' ').replace(/\s+/g, ' ').trim();
+}
 
 // Corrects misspelled words against the vocabulary of ACR scenario names, one
 // edit at most. Short words, known words, and negating forms of known words
@@ -2602,3 +2643,17 @@ export function _debugIndex(scenarios) {
   const { termRegions, topicRegion } = buildIndex(scenarios);
   return { termRegions: [...termRegions].map(([term, regions]) => [term, [...regions]]), topicRegion: [...topicRegion] };
 }
+
+/** For tooling: the stemmed terms a scenario is indexed under, and the vocabulary of all of them. */
+export function _docTerms(id, scenarios) {
+  const index = buildIndex(scenarios);
+  const doc = index.docs.find(d => String(d.scenario.id) === String(id));
+  if (!doc) return null;
+  return { named: [...doc.named], all: [...doc.all], nameWords: [...doc.nameText.positive], population: doc.population, isPregnant: doc.isPregnant };
+}
+
+export function _vocabulary(scenarios) {
+  return { docFreq: [...buildIndex(scenarios).docFreq], stopwords: [...STOPWORDS], softTerms: [...SOFT_TERMS] };
+}
+
+export const _stem = stem;

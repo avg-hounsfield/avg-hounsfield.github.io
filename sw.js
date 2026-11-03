@@ -1,4 +1,4 @@
-const CACHE_NAME = 'radex-v3.3.0';
+const CACHE_NAME = 'radex-v3.4.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -8,6 +8,7 @@ const STATIC_ASSETS = [
   '/js/data-loader.js',
   '/js/search-engine.js',
   '/js/scenario-ranker.js',
+  '/js/aliases-mined.js',
   '/js/intent-classifier.js',
   '/js/embedding-search.js',
   '/js/radlite-api.js',

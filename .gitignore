@@ -9,6 +9,10 @@ tools/*
 !tools/test_normalize.py
 !tools/build_scenarios.py
 !tools/audit_matching.mjs
+# Alias mining (clinician phrasings -> ACR wording, built offline)
+!tools/mine_aliases_generate.py
+!tools/mine_aliases_screen.py
+!tools/mine_aliases_gate.mjs
 
 # ML models (large binaries kept out of git by default).
 # Tracked exceptions (added via `git add -f`): models/acr-minilm/,
