@@ -423,6 +423,10 @@
       "q": "fast heart rate",
       "not": "[Pp]ancreatitis|ablation",
       "mode": "recover"
+    },
+    {
+      "q": "tachycardia",
+      "not": "[Pp]ancreatitis"
     }
   ]
 }
