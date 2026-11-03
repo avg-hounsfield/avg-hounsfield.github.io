@@ -2528,7 +2528,16 @@ function resolveTerms(query, scenarios) {
     // adult scenario fits a generic word less: "painful lump under jaw" is the
     // adult neck mass, not a child's spine lump. Several complaints with
     // adult topics of their own are offered those first.
-    const hits = dedupe(scored, 8);
+    // Beside a scenario named for the search, one that only mentions it in
+    // its patient description is not about it: "tachycardia" lists atrial
+    // tachycardia, not necrotizing pancreatitis whose text lists tachycardia.
+    const namesAll = h => parsed.required.every(t => h.doc.nameText.positive.has(t));
+    const namesSome = h => {
+      const title = index.titles.get(h.doc.scenario.topic);
+      return parsed.required.some(t => h.doc.nameText.positive.has(t) || (title && title.positive.has(t)));
+    };
+    const focused = parsed.required.length && scored.some(namesAll) ? scored.filter(namesSome) : scored;
+    const hits = dedupe(focused, 8);
     const notice = withPopulationNotice(hits, docsById, qualifiers);
     if (notice) {
       const grouped = multiComplaint(query, parsed, qualifiers, index, scenarios);

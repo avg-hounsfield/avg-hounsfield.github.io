@@ -13,7 +13,7 @@
  */
 
 import { conceptNormalize } from './concept-matcher.js?v=20260531a';
-import { guardSuggestions } from './scenario-ranker.js?v=20261104a';
+import { guardSuggestions } from './scenario-ranker.js?v=20261104b';
 
 // Model name relative to env.localModelPath (set below).
 const MODEL_NAME = 'student-radiology';
