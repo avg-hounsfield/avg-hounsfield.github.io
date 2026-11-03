@@ -35,6 +35,7 @@ Usage:
     python tools/mine_aliases_screen.py --judge tools/cache/alias-mining/accepted_for_judge.json
 """
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -56,6 +57,9 @@ PHRASINGS = REPO / 'data' / 'eval' / 'mined_phrasings.json'
 DENSE_TOPIC_K = 10      # target topic within the dense top-10 ...
 CE_TOPIC_K = 3          # ... or within the cross-encoder top-3 of (dense top-20 + target)
 CE_POOL = 20
+# The judge is always the other model family from the one that proposed a pair.
+JUDGE_FOR_ANTHROPIC = 'google/gemini-3.1-pro-preview'
+JUDGE_FOR_GOOGLE = 'anthropic/claude-opus-5.5'
 
 sys.path.insert(0, str(REPO / 'tools'))
 from mine_aliases_generate import OpenRouter, find_api_key, parse_json_object, log, short_name  # noqa: E402
@@ -290,16 +294,16 @@ def judge(args):
         models = set(p.get('models', []))
         judges = []
         if any(m.startswith('anthropic/') for m in models):
-            judges.append('google/gemini-3.1-pro-preview')
+            judges.append(JUDGE_FOR_ANTHROPIC)
         if any(m.startswith('google/') for m in models) or not judges:
-            judges.append('anthropic/claude-sonnet-4.6')
+            judges.append(JUDGE_FOR_GOOGLE)
         for jm in judges:
             groups[jm].append(p)
     for jm, plist in groups.items():
         for b in range(0, len(plist), args.batch):
             batch = plist[b:b + args.batch]
-            key = jm.replace('/', '__') + '-' + str(abs(hash(tuple(p['from'] + '\t' + p['to'] + '\t' + ','.join(p['ids'][:3]) for p in batch))))
-            path = jdir / f'{key}.json'
+            digest = hashlib.sha1('\n'.join(p['from'] + '\t' + p['to'] + '\t' + ','.join(p['ids'][:3]) for p in batch).encode('utf-8')).hexdigest()[:16]
+            path = jdir / f"{jm.replace('/', '__').replace(':', '--')}-{digest}.json"
             if path.exists():
                 parsed = json.loads(path.read_text(encoding='utf-8'))['parsed']
             else:

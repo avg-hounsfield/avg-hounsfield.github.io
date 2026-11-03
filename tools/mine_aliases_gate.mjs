@@ -30,6 +30,7 @@
  *   node tools/mine_aliases_gate.mjs --verify              measure the module as written and check for regressions
  * Options: --exclude data/eval/mined_aliases_exclusions.json (phrases never to accept; judge and hand review)
  *          --candidates tools/cache/alias-mining/candidates.json
+ *          --min-gain 2 (keep only aliases that helped at least this many train phrasings; the shipped setting)
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import {
@@ -584,6 +585,20 @@ if (flag('--baseline') || flag('--verify')) {
     accepted.length = 0; accepted.push(...kept);
     _setMinedAliases(accepted);
   }
+  // A minimum gain keeps an alias that helped only one train phrasing just
+  // when several scenarios or both model families proposed it. An alias fitted
+  // to one phrasing rarely generalises: on the hold-out, everything accepted
+  // (1,863) reached 50.5% strict with two more wrong answers than before,
+  // this policy (559) 50.1% with none, and gain >= 2 alone (369) 48.3%.
+  const minGain = Number(option('--min-gain', 1)) || 1;
+  if (minGain > 1) {
+    const supported = p => p.scenario_ids.length >= 2 || p.models.length >= 2;
+    const kept = accepted.filter(([from]) => { const p = provenance.get(from); return p && (p.gain >= minGain || supported(p)); });
+    for (const [from, to] of accepted) if (!kept.some(p => p[0] === from)) { decisions.push({ from, to, accepted: false, reason: `pruned: gain below ${minGain} and a single supporting scenario and model` }); provenance.delete(from); }
+    log(`min gain ${minGain} (or several supporting scenarios or models): keeping ${kept.length} of ${accepted.length}`);
+    accepted.length = 0; accepted.push(...kept);
+    _setMinedAliases(accepted);
+  }
   const final = fullEvaluation();
   const finalSummary = summarize(final.itemStates, final.phrasingStates);
   const finalRegressions = [];
@@ -598,7 +613,7 @@ if (flag('--baseline') || flag('--verify')) {
   for (const d of decisions.filter(d => !d.accepted)) gateReasons[d.reason.replace(/\(.*\)|".*"/g, '').trim()] = (gateReasons[d.reason.replace(/\(.*\)|".*"/g, '').trim()] || 0) + 1;
   writeFileSync(new URL('gate_report.json', cacheDir), JSON.stringify({
     generated_at: new Date().toISOString(),
-    counts: { pairs: raw.length, screened: raw.filter(c => c.screened).length, structural_ok: prepared.length, with_potential: ordered.length, tried, accepted: accepted.length },
+    counts: { pairs: raw.length, screened: raw.filter(c => c.screened).length, structural_ok: prepared.length, with_potential: ordered.length, tried, accepted_by_gate: decisions.filter(d => d.accepted).length, kept: accepted.length, min_gain: minGain },
     structural_rejections: rejectedReasons, gate_rejections: gateReasons,
     before: baseSummary, after: finalSummary, regressions: finalRegressions,
   }, null, 1));

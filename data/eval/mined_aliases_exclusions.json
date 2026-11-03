@@ -1,4 +1,534 @@
 {
-  "_note": "Alias phrases tools/mine_aliases_gate.mjs must never accept, whatever the tests say: rejected by the second-model judge or by hand review as clinically wrong or ambiguous. Each entry: from (the normalised phrase), why, source (judge model or 'hand review').",
-  "exclude": []
+ "_note": "Alias phrases tools/mine_aliases_gate.mjs must never accept, whatever the tests say: rejected by the second-model judge or by hand review as clinically wrong or ambiguous. Each entry: from (the normalised phrase), why, source (judge model or 'hand review').",
+ "exclude": [
+  {
+   "from": "cup",
+   "why": "acetabular cup of a hip arthroplasty, not an unknown primary",
+   "source": "hand review"
+  },
+  {
+   "from": "dash",
+   "why": "DASH is also an outcome score and a diet",
+   "source": "hand review"
+  },
+  {
+   "from": "endo",
+   "why": "endocrine, endoscopy, endovascular or endometrial",
+   "source": "hand review"
+  },
+  {
+   "from": "eye",
+   "why": "a body part the ranker groups by region; remapping it loses the region",
+   "source": "hand review"
+  },
+  {
+   "from": "fused",
+   "why": "a fused joint or surgical fusion is not spine ankylosis",
+   "source": "hand review"
+  },
+  {
+   "from": "lad",
+   "why": "left anterior descending artery",
+   "source": "hand review"
+  },
+  {
+   "from": "marks",
+   "why": "too generic for skin injury",
+   "source": "hand review"
+  },
+  {
+   "from": "pas",
+   "why": "PAS stain, pulmonary artery stenosis, physician assistants",
+   "source": "hand review"
+  },
+  {
+   "from": "pni",
+   "why": "peripheral nerve injury as often as penetrating neck injury",
+   "source": "hand review"
+  },
+  {
+   "from": "ptc",
+   "why": "percutaneous transhepatic cholangiography",
+   "source": "hand review"
+  },
+  {
+   "from": "scc",
+   "why": "spinal cord compression",
+   "source": "hand review"
+  },
+  {
+   "from": "scd",
+   "why": "sudden cardiac death, sequential compression devices",
+   "source": "hand review"
+  },
+  {
+   "from": "shot",
+   "why": "a steroid or flu shot is not ballistic trauma",
+   "source": "hand review"
+  },
+  {
+   "from": "tga",
+   "why": "transient global amnesia",
+   "source": "hand review"
+  },
+  {
+   "from": "tof",
+   "why": "time-of-flight MRA",
+   "source": "hand review"
+  },
+  {
+   "from": "6 months",
+   "why": "a duration or an age, not chronicity",
+   "source": "hand review"
+  },
+  {
+   "from": "bone lesion on",
+   "why": "a bone lesion is not a suspected malignancy",
+   "source": "hand review"
+  },
+  {
+   "from": "breech",
+   "why": "an obstetric presentation, not a generic risk factor",
+   "source": "hand review"
+  },
+  {
+   "from": "buzzing",
+   "why": "buzzing in the ears is tinnitus, not a thrill",
+   "source": "hand review"
+  },
+  {
+   "from": "came back",
+   "why": "too generic for local recurrence",
+   "source": "hand review"
+  },
+  {
+   "from": "congenital heart disease",
+   "why": "would strip the word the Congenital Heart Disease topic is named by",
+   "source": "hand review"
+  },
+  {
+   "from": "crepitus",
+   "why": "joint crepitus is not soft tissue gas",
+   "source": "hand review"
+  },
+  {
+   "from": "deflated",
+   "why": "too generic for implant rupture",
+   "source": "hand review"
+  },
+  {
+   "from": "dermal sinus tract",
+   "why": "a dysraphism, not a draining infected sinus",
+   "source": "hand review"
+  },
+  {
+   "from": "dilated ducts",
+   "why": "breast duct ectasia is not biliary obstruction",
+   "source": "hand review"
+  },
+  {
+   "from": "emphysema",
+   "why": "subcutaneous emphysema is not COPD",
+   "source": "hand review"
+  },
+  {
+   "from": "endograft",
+   "why": "abdominal endografts (EVAR) are not TEVAR",
+   "source": "hand review"
+  },
+  {
+   "from": "erosions",
+   "why": "too generic (gastric, rheumatoid erosions)",
+   "source": "hand review"
+  },
+  {
+   "from": "groin pain",
+   "why": "hernia and scrotal causes, not only the hip",
+   "source": "hand review"
+  },
+  {
+   "from": "hot swollen",
+   "why": "a hot swollen leg is DVT or cellulitis, not septic arthritis",
+   "source": "hand review"
+  },
+  {
+   "from": "light smoker",
+   "why": "loses the pack-year inequality that splits the screening scenarios",
+   "source": "hand review"
+  },
+  {
+   "from": "heavy smoker",
+   "why": "loses the pack-year inequality that splits the screening scenarios",
+   "source": "hand review"
+  },
+  {
+   "from": "long term",
+   "why": "too generic for central line duration",
+   "source": "hand review"
+  },
+  {
+   "from": "lung abscess",
+   "why": "drops the lung from the search",
+   "source": "hand review"
+  },
+  {
+   "from": "neck node",
+   "why": "a neck node is adenopathy, not head and neck cancer",
+   "source": "hand review"
+  },
+  {
+   "from": "neck trauma",
+   "why": "penetrating neck injury is its own topic, not cervical spine trauma",
+   "source": "hand review"
+  },
+  {
+   "from": "numbness tingling",
+   "why": "radiculopathy, demyelination and stroke as often as carpal tunnel",
+   "source": "hand review"
+  },
+  {
+   "from": "pain out of proportion",
+   "why": "mesenteric ischemia and compartment syndrome as well",
+   "source": "hand review"
+  },
+  {
+   "from": "paraplegia",
+   "why": "nontraumatic cord compression as well as injury",
+   "source": "hand review"
+  },
+  {
+   "from": "phalanx",
+   "why": "toe phalanges are not the hand",
+   "source": "hand review"
+  },
+  {
+   "from": "placed",
+   "why": "too generic (stent, line placed)",
+   "source": "hand review"
+  },
+  {
+   "from": "post resection",
+   "why": "a stage, not a surveillance purpose",
+   "source": "hand review"
+  },
+  {
+   "from": "post rt",
+   "why": "post radiation of anything, not a plexopathy syndrome",
+   "source": "hand review"
+  },
+  {
+   "from": "pulled",
+   "why": "a pulled muscle is not a tube removal",
+   "source": "hand review"
+  },
+  {
+   "from": "ra suspected",
+   "why": "rheumatoid arthritis is seropositive, not seronegative",
+   "source": "hand review"
+  },
+  {
+   "from": "radiation induced",
+   "why": "too generic for a plexopathy syndrome",
+   "source": "hand review"
+  },
+  {
+   "from": "radiculopathy confirmed",
+   "why": "nontraumatic radiculopathy is not a nerve root injury",
+   "source": "hand review"
+  },
+  {
+   "from": "rapidly spreading",
+   "why": "a rash spreads too; not necrotizing fasciitis by itself",
+   "source": "hand review"
+  },
+  {
+   "from": "red hot",
+   "why": "a red hot joint may be gout or septic arthritis, not soft tissue infection",
+   "source": "hand review"
+  },
+  {
+   "from": "regurgitation",
+   "why": "valvular or gastric regurgitation, not only pulmonary valve dysfunction",
+   "source": "hand review"
+  },
+  {
+   "from": "resected",
+   "why": "a stage, not a surveillance purpose",
+   "source": "hand review"
+  },
+  {
+   "from": "scoliosis on xray",
+   "why": "scoliosis does not imply malignancy",
+   "source": "hand review"
+  },
+  {
+   "from": "short duration",
+   "why": "too generic for central line duration",
+   "source": "hand review"
+  },
+  {
+   "from": "sibling",
+   "why": "a sibling is a family history as often as a household contact",
+   "source": "hand review"
+  },
+  {
+   "from": "spinal fracture",
+   "why": "a traumatic spine fracture is not an osteoporotic VCF",
+   "source": "hand review"
+  },
+  {
+   "from": "stiff knee",
+   "why": "osteoarthritis, not only arthrofibrosis",
+   "source": "hand review"
+  },
+  {
+   "from": "suspected arthritis",
+   "why": "drops the arthritis the arthritis topics are named by",
+   "source": "hand review"
+  },
+  {
+   "from": "throbbing",
+   "why": "a throbbing headache is not a pulsatile mass",
+   "source": "hand review"
+  },
+  {
+   "from": "transplant pt",
+   "why": "renal transplant dysfunction is its own topic; not every transplant question is about immunocompromise",
+   "source": "hand review"
+  },
+  {
+   "from": "1st mtp",
+   "to": "foot",
+   "why": "1st mtp is a specific joint, foot is broader",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "abdominal wall",
+   "to": "abdomen",
+   "why": "Abdominal wall is superficial, abdomen implies internal organs",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "bacteremia",
+   "to": "sepsis",
+   "why": "Bacteremia is not synonymous with sepsis",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "bilateral clear",
+   "to": "physiologic",
+   "why": "Fragment is ambiguous; not equivalent to physiologic",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "cia",
+   "to": "common iliac artery",
+   "why": "cia is an abbreviation with multiple common meanings",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "dark urine pale stools",
+   "to": "obstruction",
+   "why": "Cholestasis signs do not imply mechanical obstruction",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "dialysis access",
+   "to": "dialysis fistula",
+   "why": "dialysis access includes grafts, making fistula too narrow",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "entire",
+   "to": "complete",
+   "why": "Common non-clinical word",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "epigastric pain odynophagia",
+   "to": "epigastric pain",
+   "why": "Drops odynophagia which changes clinical meaning",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "esrd",
+   "to": "dialysis",
+   "why": "ESRD does not equal dialysis",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "gymnast",
+   "to": "repetitive activity",
+   "why": "Occupation, not equivalent to repetitive activity",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "hpt",
+   "to": "hyperparathyroidism",
+   "why": "HPT also commonly means hypertension",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "iph",
+   "to": "intraparenchymal hemorrhage",
+   "why": "IPH has several meanings, e.g., pulmonary hemosiderosis",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "losing weight",
+   "to": "unintentional weight loss",
+   "why": "Weight loss may be intentional",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "lump under one arm",
+   "to": "axillary lump palpable new unilateral",
+   "why": "adds new and palpable which are not in the from phrase",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "metaphyseal lucency",
+   "to": "suggestive of osteomyelitis",
+   "why": "metaphyseal lucency has many causes besides osteomyelitis",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "milky",
+   "to": "physiologic",
+   "why": "Milky discharge may be galactorrhea, not physiologic",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "normotensive treatment",
+   "to": "initial therapy",
+   "why": "Normotensive treatment is not synonymous with initial therapy.",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "on biologic therapy",
+   "to": "treatment response",
+   "why": "Being on biologic therapy is not synonymous with treatment response.",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "outside window",
+   "to": "emergent treatment contraindicated",
+   "why": "Ambiguous; time window differs from contraindication",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "poor echo",
+   "to": "tte inadequate assessment",
+   "why": "Ambiguous: echogenicity, or TEE rather than TTE",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "possible tumor",
+   "to": "suspected malignancy",
+   "why": "Tumor includes benign lesions; malignancy is narrower",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "routine check",
+   "to": "initial imaging",
+   "why": "routine check is too broad and does not specifically mean initial imaging",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "seeing things",
+   "to": "visual hallucinations",
+   "why": "Would corrupt 'trouble seeing things' vision-loss searches",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "shooting down arm",
+   "to": "radiating",
+   "why": "Drops the arm location cue; loses body region",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "shooting down leg",
+   "to": "radiating",
+   "why": "Leg radiation implies lumbar, not thoracic; loses region",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "small breast cancer",
+   "to": "breast cancer newly diagnosed",
+   "why": "small breast cancer is not synonymous with newly diagnosed",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "sternum",
+   "to": "chest",
+   "why": "sternum is narrower than chest and may route incorrectly",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "sunken eye",
+   "to": "enophthalmos",
+   "why": "Sunken eyes commonly signals dehydration, not enophthalmos",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "tonic clonic",
+   "to": "generalized",
+   "why": "Tonic-clonic seizures may be focal onset; not necessarily primary generalized",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "trying to conceive",
+   "to": "infertility",
+   "why": "Trying to conceive does not necessarily imply infertility.",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "tyrer cuzick",
+   "to": "estimated lifetime risk",
+   "why": "Tyrer-Cuzick is a model used to estimate lifetime risk, not the risk itself.",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "vasovagal",
+   "to": "low probability",
+   "why": "Vasovagal syncope is a specific diagnosis, not just low probability.",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "wakes at night",
+   "to": "night pain",
+   "why": "Night waking also means nocturia, night terrors, other causes",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "wakes up at night",
+   "to": "night pain",
+   "why": "Night waking is not specific to night pain",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "xray shows osteo",
+   "to": "radiography findings suggest osteomyelitis",
+   "why": "Osteo also means osteoarthritis, osteoporosis, osteopenia",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "xray shows sti",
+   "to": "radiography findings suggest soft tissue infection",
+   "why": "STI usually means sexually transmitted infection",
+   "source": "anthropic/claude-opus-5.5"
+  },
+  {
+   "from": "xray unremarkable",
+   "to": "radiographynegative",
+   "why": "Missing space in the replacement term.",
+   "source": "google/gemini-3.1-pro-preview"
+  },
+  {
+   "from": "xrays unremarkable",
+   "to": "radiographynegative or inconclusive",
+   "why": "Missing space in the replacement term.",
+   "source": "google/gemini-3.1-pro-preview"
+  }
+ ]
 }
