@@ -33,7 +33,7 @@ for (const c of cases) {
     const shown = shownNames(result);
     const seen = JSON.stringify({ mode: result.mode, topic: result.topic, first: shown[0] });
     const deadEnd = result.mode === 'none' || result.mode === 'recover';
-    if (c.mode !== 'none') assert.ok(!deadEnd, seen);
+    if (c.mode !== 'none' && c.mode !== 'recover') assert.ok(!deadEnd, seen);
     if (c.mode && !(c.mode === 'none' && result.mode === 'recover')) assert.equal(result.mode, c.mode, seen);
     if (c.topic) assert.equal(result.topic, c.topic, seen);
     if (c.name) {

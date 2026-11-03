@@ -1262,7 +1262,14 @@ function splitComplaints(query, index) {
     } else current.push(w);
   }
   if (current.length) labels.push(current);
-  const clean = seg => seg.filter(w => !STOPWORDS.has(w) && !/^\d/.test(w) && !NEGATION_WORDS.includes(w)).join(' ');
+  // Labels keep inner words ("shortness of breath") and lose only filler at the
+  // edges and numbers.
+  const clean = seg => {
+    const words = seg.filter(w => !/^\d/.test(w) && !NEGATION_WORDS.includes(w));
+    while (words.length && STOPWORDS.has(words[0])) words.shift();
+    while (words.length && STOPWORDS.has(words[words.length - 1])) words.pop();
+    return words.join(' ');
+  };
   const labelled = labels.map(clean).filter(Boolean);
   return parsed.map((p, i) => ({
     ...p,
@@ -1928,11 +1935,20 @@ function withPopulationNotice(scenarios, docsById, { age, pregnant }) {
 // deformity" is not a wrist vascular malformation).
 const DROPPABLE = ['swelling', 'normal', 'disease', 'lesion', 'pain', 'mass'];
 
+// Body parts too large to point at one ACR question by themselves.
+const VAGUE_PARTS = new Set(['arm', 'leg', 'extremity', 'limb', 'upper', 'lower']);
+// Generic, or only the mechanism: "leg trauma" is as unspecific as "leg pain".
+const VAGUE_COMPANIONS = new Set(['trauma']);
+
 // The words a search would drop if nothing matches: a generic word ("pain",
 // "mass") or a modifier ACR uses often in variant text but never in a name. A
 // disease word is never dropped, so "tension pneumothorax" cannot become
 // tension headache and "lymphoma staging" cannot become melanoma staging.
 function droppableTerms(parsed, index) {
+  // Dropping the only clinical word leaves just a body part: "arm pain" is not
+  // a question about whatever ACR files under "upper extremity" (DVT, dialysis
+  // access). That search belongs on the recovery screen instead.
+  if (parsed.required.filter(t => !ANATOMY.has(t)).length <= 1) return [];
   const rank = t => (DROPPABLE.includes(t) ? DROPPABLE.indexOf(t) : DROPPABLE.length);
   return parsed.required
     .filter(t => !ANATOMY.has(t) && (DROPPABLE.includes(t) ||
@@ -2142,6 +2158,46 @@ function originalWord(query, term) {
  * points at, and the likely body region. A word that points nowhere safe is
  * left out, and with no topics at all the answer is an honest "none".
  */
+// ACR files limb complaints under the joint or segment, so a whole-limb search
+// is offered each part's topics, read with the search's own words ("knee" with
+// "trauma" opens Acute Trauma to the Knee).
+const LIMB_PARTS = {
+  arm: ['shoulder', 'elbow', 'forearm', 'wrist', 'hand'],
+  leg: ['hip', 'thigh', 'knee', 'ankle', 'foot'],
+};
+
+function limbRecovery(query, parsed, qualifiers, index, scenarios) {
+  const has = t => parsed.required.includes(t);
+  const limb = has('arm') || (has('upper') && has('extremity')) ? 'arm'
+    : has('leg') || (has('lower') && has('extremity')) ? 'leg' : null;
+  if (!limb) return null;
+  const words = parsed.required.filter(t => !VAGUE_PARTS.has(t));
+  const groups = [];
+  const shown = new Set();
+  for (const part of LIMB_PARTS[limb].map(stem)) {
+    const withWords = topicsNaming({ ...parsed, required: [part, ...words] }, qualifiers, scenarios);
+    const named = withWords.length ? withWords : topicsNaming({ ...parsed, required: [part] }, qualifiers, scenarios);
+    // Follow-up topics ("Imaging After Total Hip Arthroplasty") wait to be asked for.
+    const followUp = n => !parsed.required.includes('arthroplasty') && index.titles.get(n.topic).positive.has('arthroplasty');
+    const topics = named.filter(n => !shown.has(n.topic) && n.unasked === 0 && !followUp(n)).slice(0, MAX_RECOVERY_TOPICS)
+      .map(n => ({ topic: n.topic, count: n.count, query: topicQuery(n.topic, qualifiers) }));
+    if (topics.length === 0) continue;
+    for (const t of topics) shown.add(t.topic);
+    groups.push({ term: part, display: part, topics, scenarios: [], pediatricOnly: false });
+  }
+  if (groups.length === 0) return null;
+  const terms = [...new Set([...parsed.required, ...parsed.soft])];
+  return {
+    mode: 'recover',
+    understood: terms.map(t => originalWord(query, t)),
+    unknown: [],
+    groups,
+    topics: groups.flatMap(g => g.topics),
+    scenarios: [],
+    region: qualifiers.age === 'pediatric' ? { key: 'peds', label: REGION_LABELS.peds } : { key: 'msk', label: REGION_LABELS.msk },
+  };
+}
+
 function recover(query, parsed, qualifiers, index, scenarios) {
   const terms = [...new Set([...parsed.required, ...parsed.soft])];
   const knownTerm = t => (index.docFreq.get(t) || 0) > 0;
@@ -2150,6 +2206,11 @@ function recover(query, parsed, qualifiers, index, scenarios) {
   const asked = new Set(terms);
   const groups = [];
   const regionVotes = new Map();
+  // A search about the arm is never offered leg topics, nor the reverse.
+  const askedLimb = asked.has('arm') || (asked.has('upper') && asked.has('extremity')) ? 'arm'
+    : asked.has('leg') || (asked.has('lower') && asked.has('extremity')) ? 'leg' : null;
+  const otherParts = askedLimb ? LIMB_PARTS[askedLimb === 'arm' ? 'leg' : 'arm'].map(stem) : [];
+  const otherLimb = topic => otherParts.some(part => index.titles.get(topic).positive.has(part));
   const shown = new Set();
   // A word is read with the complaint it sits in: the cyst of "bone cyst"
   // belongs to the bone, while in "headache and knee pain" each complaint
@@ -2187,7 +2248,7 @@ function recover(query, parsed, qualifiers, index, scenarios) {
     if (!qualifiers.sex && docs.some(d => d.sex !== 'male')) docs = docs.filter(d => d.sex !== 'male');
     if (docs.length === 0) continue;
     const topics = topicsFor([term], docs, index, asked)
-      .filter(topic => !shown.has(topic) && titleCompatible(topic, index, asked, scope, parsed.negated))
+      .filter(topic => !shown.has(topic) && titleCompatible(topic, index, asked, scope, parsed.negated) && !otherLimb(topic))
       .slice(0, MAX_RECOVERY_TOPICS)
       .map(topic => ({ topic, count: index.topicCounts.get(topic) || 0, query: topicQuery(topic, qualifiers) }));
     if (topics.length === 0) continue;
@@ -2318,6 +2379,16 @@ function resolveTerms(query, scenarios) {
     const spread = (index.nameFreq.get(word) || 0) >= MIN_BROAD_NAMES && !GROUP_OF.has(word) && !localizes(word, index) &&
       topicsNaming(parsed, qualifiers, scenarios).length === 0;
     if (TOO_BROAD.has(word) || spread) return { mode: 'too-broad' };
+  }
+
+  // A whole limb with only generic words ("arm pain", "leg swelling") names no
+  // one ACR question: answering would pick whatever ACR files under that limb
+  // (DVT, dialysis access, limb ischemia). Offer the limb's topics instead.
+  const isVague = t => VAGUE_PARTS.has(t) || DROPPABLE.includes(t) || VAGUE_COMPANIONS.has(t);
+  const limb = t => VAGUE_PARTS.has(t) && t !== 'upper' && t !== 'lower';
+  if (parsed.required.length && parsed.required.every(isVague) && parsed.required.some(limb) &&
+      parsed.negated.length === 0) {
+    return limbRecovery(query, parsed, qualifiers, index, scenarios) || recover(query, parsed, qualifiers, index, scenarios);
   }
 
   const scored = scoreDocs(parsed, index, qualifiers);

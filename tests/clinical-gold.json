@@ -379,6 +379,31 @@
     {
       "q": "17 year old female pelvic pain",
       "not": "[Pp]ostmenopausal"
+    },
+    {
+      "q": "arm pain",
+      "mode": "recover",
+      "not": "DVT|AVF|[Dd]ialysis"
+    },
+    {
+      "q": "leg pain",
+      "mode": "recover",
+      "not": "Cold, Painful Leg|DVT|AVF"
+    },
+    {
+      "q": "lower extremity pain",
+      "mode": "recover",
+      "not": "malformation|claudication"
+    },
+    {
+      "q": "leg pain after fall",
+      "mode": "recover",
+      "not": "neurologic disorder"
+    },
+    {
+      "q": "arm pain after joint replacement",
+      "not": "[Kk]nee|[Hh]ip|[Aa]nkle|[Ff]oot",
+      "mode": "none"
     }
   ]
 }
