@@ -1,0 +1,1 @@
+{"model":"tools/cache/distill/student_v4_kdcos","encoder":"torch","source":"data/eval/mined_phrasings.json","split":"train","scenario_ids":"scenario_embeddings_v3_ids.json","count":11379,"dim":384,"layout":["int8 vectors [count*dim]","float16 scales [count]","uint16 scenario rows [count]"],"int8_cosine_fidelity":0.99997}

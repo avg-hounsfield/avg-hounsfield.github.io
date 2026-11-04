@@ -17,15 +17,19 @@
  * Usage:
  *   node tools/eval_semantic_fallback.mjs --hits tools/cache/semantic-eval/hits-baseline.json [--min-score 0.5]
  *   node tools/eval_semantic_fallback.mjs --hits A.json --compare B.json     before/after table
- *   node tools/eval_semantic_fallback.mjs --hits A.json --calibrate          threshold sweep on train + probes
+ *   node tools/eval_semantic_fallback.mjs --hits A.json --calibrate          threshold sweeps on train + persona + probes
+ *       [--calibrate-set holdout] [--phrase-min 0.6] [--phrase-only]
+ *   (for the phrasing threshold use the leave-one-out hits, --mask-self in the embed step, so a
+ *    train phrasing is not simply found as itself)
  *   node tools/eval_semantic_fallback.mjs --hits A.json --dump 50 [--seed 7] [--set holdout|persona|all]
  *   node tools/eval_semantic_fallback.mjs --hits A.json --show "foot drop" "weak legs after epidural"
+ * --no-phrases ignores the phrasing hits in a file (the model's own wording route alone).
  * The summary is also written beside the hits file as <hits>.summary.json.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolveQuery } from '../js/scenario-ranker.js';
 import { conceptNormalize } from '../js/concept-matcher.js';
-import { rankSuggestions, mergeHits, EMBEDDING_MIN_SCORE, PHRASE_MIN_SCORE } from '../js/embedding-search.js';
+import { rankSuggestions, mergeHits, EMBEDDING_MIN_SCORE, PHRASE_MIN_SCORE, PHRASE_DISCOUNT } from '../js/embedding-search.js';
 
 const root = new URL('../', import.meta.url);
 const read = p => JSON.parse(readFileSync(p.startsWith('/') || /^[A-Za-z]:/.test(p) ? p : new URL(p, root), 'utf8'));
@@ -53,6 +57,7 @@ const siteRegion = r => SITE_REGION[r] || r;
 
 const minScore = Number(option('--min-score', EMBEDDING_MIN_SCORE));
 const phraseMin = Number(option('--phrase-min', PHRASE_MIN_SCORE));
+const phraseDiscount = Number(option('--phrase-discount', PHRASE_DISCOUNT));
 const MAX_SHOWN = 6;
 
 function loadHits(path) {
@@ -61,11 +66,12 @@ function loadHits(path) {
 }
 
 /** The model's hit list for a search, scenario hits merged with phrasing hits when the file has them. */
-function hitsFor(data, text, { usePhrases = true } = {}) {
+const NO_PHRASES = flag('--no-phrases');
+function hitsFor(data, text, { usePhrases = !NO_PHRASES, phraseMin: pm = phraseMin } = {}) {
   const direct = (data.hits[text] || []).map(([id, score]) => ({ id: String(id), score }));
-  if (!usePhrases || !data.phits || !data.phits[text]) return direct;
+  if (!usePhrases || !data.phits || !data.phits[text]) return mergeHits(direct, []);
   const phrase = data.phits[text].map(([row, id, score]) => ({ row, id: String(id), score }));
-  return mergeHits(direct, phrase, { phraseMin });
+  return mergeHits(direct, phrase, { phraseMin: pm, phraseDiscount });
 }
 
 // The rules run first; the model only speaks on a recovery screen.
@@ -108,10 +114,17 @@ function judgeModel(data, item) {
   };
 }
 
-function judgeFallback(data, item, opts) {
+function judgeFallback(data, item, opts = {}) {
   const shown = suggest(data, item.q, opts);
   const top = shown[0] || null;
-  const out = { shown: shown.length, none: shown.length === 0 };
+  const raw = hitsFor(data, item.q, opts)[0];
+  const rawTop = raw ? byId.get(raw.id) : null;
+  const out = {
+    shown: shown.length, none: shown.length === 0,
+    // What the model alone would have led with, had the threshold and guard not spoken.
+    rawAbove: Boolean(raw && raw.score >= (opts.minScore ?? minScore)),
+    rawTop1Topic: Boolean(rawTop && item.topics.has(rawTop.topic)),
+  };
   if (top) {
     out.top1Id = item.ids.has(String(top.id));
     out.top1Topic = item.topics.has(top.topic);
@@ -130,7 +143,7 @@ const rate = (n, d) => (d ? +(n / d).toFixed(4) : null);
 function evaluateSet(data, items, { outOfTaxonomy = false } = {}) {
   const have = items.filter(it => data.hits[it.q]);
   const model = { n: have.length, top1Id: 0, top1Topic: 0, top5Id: 0, top5Topic: 0 };
-  const fb = { n: 0, shown: 0, none: 0, top1Id: 0, top1Topic: 0, top5Id: 0, top5Topic: 0, wrongTopic: 0, wrongRegion: 0, anyWrongRegion: 0 };
+  const fb = { n: 0, shown: 0, none: 0, top1Id: 0, top1Topic: 0, top5Id: 0, top5Topic: 0, wrongTopic: 0, wrongRegion: 0, anyWrongRegion: 0, guardSilencedCorrect: 0, guardSilencedAll: 0, guardRemovedWrong: 0 };
   const modes = {};
   for (const it of have) {
     if (!outOfTaxonomy) {
@@ -142,6 +155,11 @@ function evaluateSet(data, items, { outOfTaxonomy = false } = {}) {
     if (!reachesModel(it.q)) continue;
     fb.n++;
     const j = judgeFallback(data, it);
+    // The guard's cost and worth: a correct model lead it silenced or displaced,
+    // a model lead above threshold with nothing left, a wrong lead it removed.
+    if (j.rawAbove && j.rawTop1Topic && (j.none || !j.top1Topic)) fb.guardSilencedCorrect++;
+    if (j.rawAbove && j.none) fb.guardSilencedAll++;
+    if (j.rawAbove && !j.rawTop1Topic && (j.none || j.top1Topic)) fb.guardRemovedWrong++;
     if (j.none) { fb.none++; continue; }
     fb.shown++;
     for (const k of ['top1Id', 'top1Topic', 'top5Id', 'top5Topic', 'wrongTopic', 'wrongRegion', 'anyWrongRegion']) fb[k] += j[k] ? 1 : 0;
@@ -161,6 +179,7 @@ function evaluateSet(data, items, { outOfTaxonomy = false } = {}) {
       wrongTopicOfShown: rate(fb.wrongTopic, fb.shown), wrongRegionOfShown: rate(fb.wrongRegion, fb.shown), anyWrongRegionOfShown: rate(fb.anyWrongRegion, fb.shown),
       // Wrong top suggestion as a share of everything that reached the fallback: the number to keep down.
       wrongTopicRate: rate(fb.wrongTopic, fb.n), wrongRegionRate: rate(fb.wrongRegion, fb.n),
+      guardSilencedCorrect: fb.guardSilencedCorrect, guardSilencedAll: fb.guardSilencedAll, guardRemovedWrong: fb.guardRemovedWrong,
     },
   };
 }
@@ -184,7 +203,7 @@ function evaluateAll(data) {
     personaOutOfTaxonomy: evaluateSet(data, personaItems.filter(p => p.outOfTaxonomy), { outOfTaxonomy: true }),
     probes: evaluateProbes(data),
   };
-  return { hits: data.path, model: data.model, scenarioBin: data.scenario_bin, phraseIndex: data.phrase_index || null, minScore, phraseMin, sets };
+  return { hits: data.path, model: data.model, scenarioBin: data.scenario_bin, phraseIndex: NO_PHRASES ? null : data.phrase_index || null, minScore, phraseMin, phraseDiscount, sets };
 }
 
 // ---- Reporting ----
@@ -198,7 +217,8 @@ function printSummary(summary) {
     console.log(`  model only       top-1 scenario ${f(s.model.top1Id)}  top-1 topic ${f(s.model.top1Topic)}  top-5 scenario ${f(s.model.top5Id)}  top-5 topic ${f(s.model.top5Topic)}`);
     console.log(`  reach fallback   ${fb.n}  show a suggestion ${fb.shown} (${f(fb.shownRate)})  no suggestion ${fb.none} (${f(fb.noneRate)})`);
     console.log(`  guarded (of ${fb.n}) top-1 scenario ${f(fb.top1Id)}  top-1 topic ${f(fb.top1Topic)}  top-5 scenario ${f(fb.top5Id)}  top-5 topic ${f(fb.top5Topic)}`);
-    console.log(`  wrong top suggestion: topic ${fb.wrongTopic ?? '-'} = ${f(fb.wrongTopicRate)} of fallback (${f(fb.wrongTopicOfShown)} of shown); region ${f(fb.wrongRegionRate)} of fallback (${f(fb.wrongRegionOfShown)} of shown); any shown wrong region ${f(fb.anyWrongRegionOfShown)} of shown`);
+    console.log(`  wrong top suggestion: topic ${f(fb.wrongTopicRate)} of fallback (${f(fb.wrongTopicOfShown)} of shown); region ${f(fb.wrongRegionRate)} of fallback (${f(fb.wrongRegionOfShown)} of shown); any shown wrong region ${f(fb.anyWrongRegionOfShown)} of shown`);
+    console.log(`  guard: silenced/displaced a correct model lead ${fb.guardSilencedCorrect}; left nothing of a lead above threshold ${fb.guardSilencedAll}; removed a wrong lead ${fb.guardRemovedWrong}`);
   }
   const oot = summary.sets.personaOutOfTaxonomy;
   console.log(`\n== persona, out of ACR's taxonomy: ${oot.n}; reach fallback ${oot.fallback.n}; show a suggestion ${oot.fallback.shown} (${f(oot.fallback.shownRate)})`);
@@ -230,26 +250,42 @@ function printCompare(a, b) {
   console.log(`== probes above threshold: ${a.sets.probes.aboveThreshold} -> ${b.sets.probes.aboveThreshold}; showing: ${a.sets.probes.showing} -> ${b.sets.probes.showing}; max score ${a.sets.probes.maxScore.toFixed(3)} -> ${b.sets.probes.maxScore.toFixed(3)}`);
 }
 
-// Threshold sweep on the train phrasings that reach the fallback, plus the probes.
-function calibrate(data) {
-  const train = phrasingItems.filter(p => p.split === 'train' && data.hits[p.q] && reachesModel(p.q));
+// Threshold sweeps on the phrasings that reach the fallback, plus the probes.
+// The scenario threshold is swept with the phrasing route off, then (when the
+// hits carry phrasings) the phrasing threshold is swept with the scenario
+// threshold fixed. --calibrate-set holdout reports the sweep on the hold-out
+// instead (for reading, not for choosing).
+function calibrate(data, split = 'train') {
+  const items = phrasingItems.filter(p => p.split === split && data.hits[p.q] && reachesModel(p.q));
   const probes = Object.entries(data.sets).filter(([, tags]) => tags.includes('probes')).map(([q]) => q);
-  console.log(`\ncalibration on ${train.length} train phrasings that reach the fallback and ${probes.length} probes`);
-  console.log('  thr    shown   top1-topic(of shown)  wrong-topic(of shown)  wrong-region(of shown)  top1-topic(of all)  probes>=thr  probes shown');
-  for (let thr = 0.3; thr <= 0.72; thr += 0.02) {
-    const t = +thr.toFixed(2);
-    let shown = 0, top1 = 0, wrong = 0, wrongRegion = 0;
-    for (const it of train) {
-      const j = judgeFallback(data, it, { minScore: t });
-      if (j.none) continue;
-      shown++;
-      top1 += j.top1Topic ? 1 : 0;
-      wrong += j.wrongTopic ? 1 : 0;
-      wrongRegion += j.wrongRegion ? 1 : 0;
+  const personaFb = personaItems.filter(p => !p.outOfTaxonomy && data.hits[p.q] && reachesModel(p.q));
+  const sweep = (label, values, optsFor) => {
+    console.log(`\n${label}: ${items.length} ${split} phrasings and ${personaFb.length} persona searches that reach the fallback, ${probes.length} probes`);
+    console.log('  value   shown   top1-topic(shown)  wrong-topic(shown)  wrong-region(shown)  top1-topic(all) | persona shown  top1(all)  wrong(shown) | probes>=thr  shown');
+    for (const v of values) {
+      const opts = optsFor(v);
+      const tally = list => {
+        let shown = 0, top1 = 0, wrong = 0, wrongRegion = 0;
+        for (const it of list) {
+          const j = judgeFallback(data, it, opts);
+          if (j.none) continue;
+          shown++;
+          top1 += j.top1Topic ? 1 : 0;
+          wrong += j.wrongTopic ? 1 : 0;
+          wrongRegion += j.wrongRegion ? 1 : 0;
+        }
+        return { shown, top1, wrong, wrongRegion, n: list.length };
+      };
+      const a = tally(items), b = tally(personaFb);
+      const probeAbove = probes.filter(q => (hitsFor(data, q, opts)[0]?.score ?? 0) >= (opts.minScore ?? minScore)).length;
+      const probeShown = probes.filter(q => suggest(data, q, opts).length).length;
+      console.log(`  ${v.toFixed(2)}   ${pct(a.shown, a.n).padStart(6)}  ${pct(a.top1, a.shown).padStart(12)}  ${pct(a.wrong, a.shown).padStart(14)}  ${pct(a.wrongRegion, a.shown).padStart(15)}  ${pct(a.top1, a.n).padStart(12)} | ${pct(b.shown, b.n).padStart(8)}  ${pct(b.top1, b.n).padStart(8)}  ${pct(b.wrong, b.shown).padStart(8)} | ${String(probeAbove).padStart(6)}  ${String(probeShown).padStart(5)}`);
     }
-    const probeAbove = probes.filter(q => (hitsFor(data, q)[0]?.score ?? 0) >= t).length;
-    const probeShown = probes.filter(q => suggest(data, q, { minScore: t }).length).length;
-    console.log(`  ${t.toFixed(2)}  ${pct(shown, train.length).padStart(6)}  ${pct(top1, shown).padStart(12)}  ${pct(wrong, shown).padStart(16)}  ${pct(wrongRegion, shown).padStart(18)}  ${pct(top1, train.length).padStart(14)}  ${String(probeAbove).padStart(8)}  ${String(probeShown).padStart(8)}`);
+  };
+  const range = (from, to, step) => Array.from({ length: Math.round((to - from) / step) + 1 }, (_, i) => +(from + i * step).toFixed(2));
+  if (!flag('--phrase-only')) sweep('scenario threshold (phrasing route off)', range(0.3, 0.72, 0.02), t => ({ minScore: t, usePhrases: false }));
+  if (data.phits) {
+    sweep(`phrasing threshold (scenario threshold ${minScore})`, range(0.4, 0.9, 0.02), t => ({ minScore, phraseMin: t }));
   }
 }
 
@@ -287,14 +323,14 @@ const hitsPath = option('--hits');
 if (!hitsPath) { console.error('usage: node tools/eval_semantic_fallback.mjs --hits <hits.json> [--compare <other.json>] [--calibrate] [--dump N] [--show q ...]'); process.exit(2); }
 const data = loadHits(hitsPath);
 if (flag('--calibrate')) {
-  calibrate(data);
+  calibrate(data, option('--calibrate-set', 'train'));
 } else if (flag('--dump')) {
   dump(data, Number(option('--dump', 50)), Number(option('--seed', 20261103)), option('--set', 'holdout'));
 } else if (flag('--show')) {
   show(data, options('--show'));
 } else {
   const summary = evaluateAll(data);
-  const outPath = (hitsPath.startsWith('/') || /^[A-Za-z]:/.test(hitsPath) ? hitsPath : new URL(hitsPath, root).pathname.replace(/^\/([A-Za-z]:)/, '$1')).replace(/\.json$/, '') + '.summary.json';
+  const outPath = (hitsPath.startsWith('/') || /^[A-Za-z]:/.test(hitsPath) ? hitsPath : new URL(hitsPath, root).pathname.replace(/^\/([A-Za-z]:)/, '$1')).replace(/\.json$/, '') + (NO_PHRASES ? '.nophrases' : '') + (option('--tag') ? `.${option('--tag')}` : '') + '.summary.json';
   writeFileSync(outPath, JSON.stringify(summary, null, 1));
   if (flag('--compare')) {
     const other = evaluateAll(loadHits(option('--compare')));

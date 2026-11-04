@@ -4,12 +4,19 @@
  * Loads on demand (not on page load) since the model is ~34MB. First query
  * after page load takes ~1-2 seconds to warm up; subsequent queries are ~50ms.
  *
- * Model: BAAI/bge-small-en-v1.5 fine-tuned via knowledge distillation from
- * BGE-large-LoRA (coregrai radiology backend). 384-dim, CLS pooling,
- * L2-normalized. INT8 quantized ONNX.
+ * Model: BAAI/bge-small-en-v1.5 retrained on the train split of the mined
+ * clinician phrasings (data/eval/mined_phrasings.json) with the gold scenario
+ * as positive, the CoreGRAi bge-large LoRA retriever's near misses as hard
+ * negatives and its score distribution as soft labels
+ * (tools/semantic_fallback_train.py). 384-dim, CLS pooling, L2-normalized,
+ * INT8 quantized ONNX (tools/semantic_fallback_export.py).
  *
- * Scenario corpus is precomputed by tools/build_scenario_embeddings.py and
- * stored at data/search/scenario_embeddings_v3.bin (FP16, shape [N, 384]).
+ * Two indexes, both built by tools/build_semantic_index.py with the fp32
+ * student: every scenario's name plus ACR's variant text
+ * (data/search/scenario_embeddings_v3.bin, FP16 [N, 384]) and the train-split
+ * clinician phrasings filed under their scenarios
+ * (data/search/phrasing_index_v1.bin, INT8 rows). A search is scored against
+ * both and a scenario takes the better route (mergeHits).
  */
 
 import { conceptNormalize } from './concept-matcher.js?v=20260531a';
@@ -22,10 +29,13 @@ const EMBEDDINGS_IDS = 'data/search/scenario_embeddings_v3_ids.json';
 // jsdelivr forces an ESM build with /+esm; pinned to a major version.
 const TRANSFORMERS_CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0/+esm';
 
-// Below this, the distilled model is matching noise or guessing: nonsense input
-// scores 0.3-0.4, and about 40% of answers between 0.45 and 0.5 missed.
-// Calibrated by tools/eval_semantic_fallback.mjs on the train phrasings.
-export const EMBEDDING_MIN_SCORE = 0.5;
+// Below this, the student is matching noise or guessing. Calibrated with
+// tools/eval_semantic_fallback.mjs --calibrate on the train phrasings and the
+// probes: nonsense ("zzqqxx", "my cat is sad") scores under 0.45 and the
+// closest off-topic probe ("contrast allergy" against a vasculitis scenario)
+// 0.526, while the train phrasings that reach the fallback lead with the right
+// topic 92.5% of the time at this threshold.
+export const EMBEDDING_MIN_SCORE = 0.54;
 // Weight of the lexical bonus in the fused score. 0.05 was the only hybrid
 // weight that did not regress against pure embedding on the teacher
 // pseudo-gold sweep, while still lifting anatomically precise matches ("LLQ"
@@ -33,8 +43,15 @@ export const EMBEDDING_MIN_SCORE = 0.5;
 export const LEXICAL_LAMBDA = 0.05;
 // A clinician phrasing in the index must match this closely before its
 // scenario is suggested through it. Phrasing-to-phrasing scores run higher
-// than phrasing-to-ACR-wording scores, so this sits above EMBEDDING_MIN_SCORE.
-export const PHRASE_MIN_SCORE = 0.5;
+// than phrasing-to-ACR-wording scores, so this sits above EMBEDDING_MIN_SCORE
+// (the off-topic probes' closest phrasing scores 0.563; calibrated on the
+// leave-one-out train hits, where another phrasing of the same scenario has to
+// be found).
+export const PHRASE_MIN_SCORE = 0.62;
+// Taken off a phrasing match's score when it competes with direct matches, so
+// a phrasing of a neighbouring scenario does not displace ACR's own wording of
+// the right one.
+export const PHRASE_DISCOUNT = 0.05;
 
 // Clinician phrasings filed under scenarios (train split of
 // data/eval/mined_phrasings.json), built by tools/build_semantic_index.py.
@@ -287,7 +304,7 @@ export function lexicalBonus(qNorm, qTokens, scenario) {
  * direct: [{ id, score }]; phrase: [{ row, id, score }] where id is the
  * scenario the phrasing belongs to.
  */
-export function mergeHits(direct, phrase, { phraseMin = PHRASE_MIN_SCORE } = {}) {
+export function mergeHits(direct, phrase, { phraseMin = PHRASE_MIN_SCORE, phraseDiscount = PHRASE_DISCOUNT } = {}) {
   const merged = new Map();
   for (const h of direct) merged.set(String(h.id), { id: String(h.id), score: h.score, direct: h.score, phrase: 0, via: 'scenario' });
   for (const p of phrase) {
@@ -295,7 +312,10 @@ export function mergeHits(direct, phrase, { phraseMin = PHRASE_MIN_SCORE } = {})
     const id = String(p.id);
     const cur = merged.get(id) || { id, score: 0, direct: 0, phrase: 0, via: 'scenario' };
     if (p.score > cur.phrase) { cur.phrase = p.score; cur.phraseRow = p.row; }
-    if (p.score > cur.score) { cur.score = p.score; cur.via = 'phrase'; }
+    // A phrasing match ranks a little below an equally close match on ACR's
+    // own wording, so it fills gaps rather than displacing a direct hit.
+    const ranked = p.score - phraseDiscount;
+    if (ranked > cur.score) { cur.score = ranked; cur.via = 'phrase'; }
     merged.set(id, cur);
   }
   return [...merged.values()].sort((a, b) => b.score - a.score);

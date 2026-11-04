@@ -131,6 +131,9 @@ def main():
     ap.add_argument("--grad-checkpoint", action="store_true", default=True)
     ap.add_argument("--no-grad-checkpoint", dest="grad_checkpoint", action="store_false")
     ap.add_argument("--eval-every", type=int, default=0, help="also evaluate every N steps (0: per epoch)")
+    ap.add_argument("--augment", type=float, default=0.0,
+                    help="probability of wrapping a training phrasing in the way a clinician asks about imaging "
+                         "('ct for ...', 'mri ... protocol', 'workup of ...'), so the student also reads that style")
     args = ap.parse_args()
 
     import torch
@@ -169,6 +172,22 @@ def main():
         other = next((c for c in pool if not c["same_region"]), None)
         tscore = {c["id"]: s for c, s in zip(cands, teacher_scores(cands, args.teacher))}
         prepared.append({"q": r["q"], "gold": gold, "pool": pool, "sib": sib, "other": other, "tscore": tscore})
+
+    # How clinicians wrap a question around a presentation. Modality words carry
+    # no meaning for the rules (STOPWORDS in scenario-ranker.js) and should carry
+    # none for the student either.
+    PREFIXES = ["ct for ", "mri for ", "us for ", "imaging for ", "imaging of ", "workup of ", "work up ",
+                "best imaging for ", "which imaging for ", "what imaging for ", "next step imaging ",
+                "ct vs mri for ", "mri or ct for ", "xray for ", "ultrasound for ", "pet ct for ",
+                "evaluation of ", "appropriate imaging ", "how to image ", "initial study for "]
+    SUFFIXES = [" imaging", " protocol", " workup", " what imaging", " which study", " ct or mri",
+                " mri protocol", " ct protocol", " next imaging", " initial imaging", " imaging recommendation",
+                " acr", " guidelines", " what to order", " best test"]
+
+    def augment_query(q):
+        if args.augment <= 0 or random.random() >= args.augment:
+            return q
+        return random.choice(PREFIXES) + q if random.random() < 0.6 else q + random.choice(SUFFIXES)
 
     def draw_negatives(p, k):
         picks = []
@@ -239,7 +258,7 @@ def main():
                     doc_ids.append(c["id"])
                 cand_teacher.append([p["tscore"][c["id"]] for c in cands])
             with torch.autocast(device_type=device.type, dtype=torch.float16, enabled=use_amp):
-                q_emb = trainer.encode_batch([p["q"] for p in batch], 64)
+                q_emb = trainer.encode_batch([augment_query(p["q"]) for p in batch], 64)
                 d_emb = torch.cat([trainer.encode_batch(doc_texts[i:i + 160], 128) for i in range(0, len(doc_texts), 160)])
                 logits = (q_emb @ d_emb.T).float() * args.scale  # (B, D)
                 # Mask every copy of an anchor's gold scenario except its own positive.

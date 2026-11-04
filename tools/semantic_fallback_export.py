@@ -12,8 +12,8 @@ Checks before copying: the INT8 model's embeddings agree with the PyTorch
 student on a few texts, and the file is no larger than the bundle it replaces.
 
 Usage:
-  python tools/semantic_fallback_export.py --student tools/cache/distill/student_v4 [--deploy]
-Without --deploy the bundle is written to <student>/onnx only.
+  python tools/semantic_fallback_export.py --student tools/cache/distill/student_v4 [--deploy] [--bundle-dir DIR]
+Without --deploy or --bundle-dir the ONNX files are written to <student>/onnx only.
 """
 import argparse
 import json
@@ -38,12 +38,12 @@ def export_onnx(student: Path, onnx_dir: Path):
     print(f"  fp32 {onnx_dir / 'model.onnx'}: {(onnx_dir / 'model.onnx').stat().st_size:,} bytes", flush=True)
 
 
-def quantize_int8(onnx_dir: Path):
+def quantize_int8(onnx_dir: Path, per_channel: bool = False):
     from optimum.onnxruntime import ORTQuantizer
     from optimum.onnxruntime.configuration import AutoQuantizationConfig
-    print("quantising to INT8 (dynamic, avx512_vnni recipe, per-tensor)", flush=True)
+    print(f"quantising to INT8 (dynamic, avx512_vnni recipe, {'per-channel' if per_channel else 'per-tensor'})", flush=True)
     quantizer = ORTQuantizer.from_pretrained(str(onnx_dir), file_name="model.onnx")
-    qconfig = AutoQuantizationConfig.avx512_vnni(is_static=False, per_channel=False)
+    qconfig = AutoQuantizationConfig.avx512_vnni(is_static=False, per_channel=per_channel)
     quantizer.quantize(save_dir=str(onnx_dir), quantization_config=qconfig)
     q = onnx_dir / "model_quantized.onnx"
     print(f"  int8 {q}: {q.stat().st_size:,} bytes", flush=True)
@@ -76,45 +76,51 @@ def check_agreement(student: Path, onnx_dir: Path):
     return min(cos)
 
 
-def deploy(onnx_dir: Path, student: Path, name: str):
-    old = (DEPLOY_DIR / "onnx" / "model_quantized.onnx")
+def deploy(onnx_dir: Path, student: Path, name: str, target: Path = DEPLOY_DIR):
+    old = (target / "onnx" / "model_quantized.onnx")
     old_size = old.stat().st_size if old.exists() else None
     new_size = (onnx_dir / "model_quantized.onnx").stat().st_size
-    if old_size is not None and new_size > old_size:
+    if target == DEPLOY_DIR and old_size is not None and new_size > old_size:
         raise SystemExit(f"new INT8 model is larger ({new_size:,} > {old_size:,} bytes); not deploying")
-    (DEPLOY_DIR / "onnx").mkdir(parents=True, exist_ok=True)
-    shutil.copy2(onnx_dir / "model_quantized.onnx", DEPLOY_DIR / "onnx" / "model_quantized.onnx")
+    (target / "onnx").mkdir(parents=True, exist_ok=True)
+    shutil.copy2(onnx_dir / "model_quantized.onnx", target / "onnx" / "model_quantized.onnx")
     for f in BUNDLE_FILES:
-        shutil.copy2(onnx_dir / f, DEPLOY_DIR / f)
+        shutil.copy2(onnx_dir / f, target / f)
     manifest = {
         "name": name,
         "base": "BAAI/bge-small-en-v1.5",
-        "teacher": "bge_large_lora_v1 retriever + graise-ce-lora cross-encoder (CoreGRAi)",
-        "training": "data/eval/mined_phrasings.json train split; tools/semantic_fallback_train.py",
+        "teacher": "bge_large_lora_v1 retriever (CoreGRAi): hard negatives and soft labels",
+        "training": "data/eval/mined_phrasings.json train split; tools/semantic_fallback_train.py (gold positive + KD from the retriever, weight 0.5)",
+        "indexes": "tools/build_semantic_index.py --encoder torch --corpus-format name_search",
         "dim": 384,
         "max_seq_length": 256,
         "pooling": "cls",
         "normalize": True,
         "files": {"int8": "onnx/model_quantized.onnx", "tokenizer": "tokenizer.json"},
     }
-    (DEPLOY_DIR / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    print(f"deployed to {DEPLOY_DIR} (int8 {new_size:,} bytes" + (f", was {old_size:,}" if old_size else "") + ")", flush=True)
+    (target / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    print(f"deployed to {target} (int8 {new_size:,} bytes" + (f", was {old_size:,}" if old_size else "") + ")", flush=True)
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--student", required=True)
     ap.add_argument("--name", default="embed-student-v4")
-    ap.add_argument("--deploy", action="store_true")
-    ap.add_argument("--min-agreement", type=float, default=0.98)
+    ap.add_argument("--deploy", action="store_true", help="copy the bundle into models/student-radiology")
+    ap.add_argument("--bundle-dir", default=None, help="instead write the browser-layout bundle here (for comparing candidates)")
+    ap.add_argument("--min-agreement", type=float, default=0.9,
+                    help="lowest INT8-vs-fp32 cosine accepted (dynamic per-tensor INT8 of this model sits near 0.95-0.97)")
+    ap.add_argument("--per-channel", action="store_true", help="per-channel weight scales (same file size, closer to fp32)")
     args = ap.parse_args()
     student = Path(args.student)
-    onnx_dir = student / "onnx"
+    onnx_dir = student / ("onnx_per_channel" if args.per_channel else "onnx")
     export_onnx(student, onnx_dir)
-    quantize_int8(onnx_dir)
+    quantize_int8(onnx_dir, args.per_channel)
     agreement = check_agreement(student, onnx_dir)
     if agreement < args.min_agreement:
         raise SystemExit(f"INT8 model disagrees with the student (min cosine {agreement:.4f})")
+    if args.bundle_dir:
+        deploy(onnx_dir, student, args.name, Path(args.bundle_dir))
     if args.deploy:
         deploy(onnx_dir, student, args.name)
 

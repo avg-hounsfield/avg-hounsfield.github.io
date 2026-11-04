@@ -48,7 +48,7 @@ PROBES = [
 ]
 
 
-def load_queries(sets):
+def load_queries(sets, extra=None):
     """Every evaluation search, keyed by text, with the sets it belongs to."""
     out = {}
     def add(text, tag):
@@ -67,6 +67,9 @@ def load_queries(sets):
     if "probes" in sets:
         for p in PROBES:
             add(p, "probes")
+    if extra:
+        for q in json.loads(Path(extra).read_text(encoding="utf-8")):
+            add(q, "extra")
     return out
 
 
@@ -147,14 +150,18 @@ def main():
     ap.add_argument("--scenario-bin", default="data/search/scenario_embeddings_v3.bin")
     ap.add_argument("--scenario-ids", default="data/search/scenario_embeddings_v3_ids.json")
     ap.add_argument("--phrase-index", default=None, help="data/search/phrasing_index_v1.bin (its .json sits beside it)")
+    ap.add_argument("--mask-self", action="store_true",
+                    help="leave-one-out: a search never matches the phrasing row with its own text "
+                         "(needs the builder's tools/cache/distill/phrasing_index_*.rows.json)")
     ap.add_argument("--sets", default="holdout,train,persona,probes")
+    ap.add_argument("--extra", default=None, help="JSON list of further searches to record (tagged 'extra')")
     ap.add_argument("--k", type=int, default=30)
     ap.add_argument("--threads", type=int, default=None)
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
-    sets = set(args.sets.split(","))
-    queries = load_queries(sets)
+    sets = set(args.sets.split(",")) if args.sets else set()
+    queries = load_queries(sets, args.extra)
     texts = list(queries.keys())
     print(f"{len(texts)} distinct searches from {sorted(sets)}")
 
@@ -188,7 +195,21 @@ def main():
         "hits": hits,
     }
     if P is not None:
-        p_idx, p_val = top_k(Q @ P.T, args.k)
+        psims = Q @ P.T
+        if args.mask_self:
+            side = ROOT / "tools" / "cache" / "distill" / (Path(args.phrase_index).stem + ".rows.json")
+            rows_meta = json.loads(side.read_text(encoding="utf-8"))
+            by_text = {}
+            for r, t in enumerate(rows_meta["texts"]):
+                by_text.setdefault(t.strip().lower(), []).append(r)
+            masked = 0
+            for qi, text in enumerate(texts):
+                for r in by_text.get(text.strip().lower(), []):
+                    psims[qi, r] = -1.0
+                    masked += 1
+            print(f"masked {masked} self rows (leave-one-out)")
+            out["mask_self"] = True
+        p_idx, p_val = top_k(psims, args.k)
         phits = {}
         for qi, text in enumerate(texts):
             # [phrasing row, scenario id of that phrasing, score]

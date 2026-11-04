@@ -81,6 +81,7 @@ def main():
     args = ap.parse_args()
 
     out_dir = ROOT / args.out_dir
+    out_dir.mkdir(parents=True, exist_ok=True)
     scenarios = json.loads((ROOT / "data/search/scenario_names.json").read_text(encoding="utf-8"))["scenarios"]
     ids = [str(s["id"]) for s in scenarios]
     row_of = {sid: i for i, sid in enumerate(ids)}
@@ -142,6 +143,13 @@ def main():
         "int8_cosine_fidelity": round(fidelity, 5),
     }, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"wrote {pbin} ({pbin.stat().st_size:,} bytes) and {pjson.name}; int8 fidelity {fidelity:.5f}", flush=True)
+    # The texts behind the rows, for the evaluation only (not shipped): lets
+    # semantic_fallback_embed.py --mask-self score a train phrasing against
+    # every phrasing but itself.
+    side = ROOT / "tools" / "cache" / "distill" / f"phrasing_index_{args.phrase_version}.rows.json"
+    side.parent.mkdir(parents=True, exist_ok=True)
+    side.write_text(json.dumps({"texts": phr_texts, "rows": phr_rows}, ensure_ascii=False), encoding="utf-8")
+    print(f"wrote {side} (evaluation side file)", flush=True)
 
 
 if __name__ == "__main__":

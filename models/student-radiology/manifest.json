@@ -1,14 +1,15 @@
 {
-  "name": "embed-student-v1",
+  "name": "embed-student-v4kd",
   "base": "BAAI/bge-small-en-v1.5",
-  "teacher": "BGE-large-LoRA v1 (coregrai)",
+  "teacher": "bge_large_lora_v1 retriever (CoreGRAi): hard negatives and soft labels",
+  "training": "data/eval/mined_phrasings.json train split; tools/semantic_fallback_train.py (gold positive + KD from the retriever, weight 0.5)",
+  "indexes": "tools/build_semantic_index.py --encoder torch --corpus-format name_search",
   "dim": 384,
   "max_seq_length": 256,
   "pooling": "cls",
   "normalize": true,
   "files": {
-    "fp32": "model.onnx",
-    "int8": "model_quantized.onnx",
+    "int8": "onnx/model_quantized.onnx",
     "tokenizer": "tokenizer.json"
   }
 }
