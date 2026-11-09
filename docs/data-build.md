@@ -13,6 +13,10 @@ python tools/test_generate_static_pages.py
 
 `python tools/build_scenarios.py --check` reports counts without writing files.
 
+`generate_static_pages.py` also writes one page per ACR topic under `topics/`, the
+`topics/` index, and the sitemap. These are the pages search engines index; the
+app's own results at `/?q=` are not indexable.
+
 Then bump `CACHE_NAME` in `sw.js`, `CURRENT_SW_VERSION` in `index.html`, and the
 `?v=` values on the data fetches, or returning visitors keep the old data.
 

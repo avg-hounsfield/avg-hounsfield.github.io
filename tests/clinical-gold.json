@@ -343,7 +343,8 @@
     },
     {
       "q": "foot drop",
-      "mode": "none"
+      "mode": "choose",
+      "not": "[Ff]oot trauma|Ottawa"
     },
     {
       "q": "appendicits",
@@ -427,6 +428,14 @@
     {
       "q": "tachycardia",
       "not": "[Pp]ancreatitis"
+    },
+    {
+      "q": "new foot drop after surgery",
+      "mode": "choose"
+    },
+    {
+      "q": "wrist drop",
+      "mode": "choose"
     }
   ]
 }

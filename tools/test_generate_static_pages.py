@@ -96,7 +96,7 @@ class TestConstants(unittest.TestCase):
             self.assertTrue(len(svg) > 0, f"REGION_ICONS[{region!r}] is empty")
 
     def test_css_version_updated(self):
-        self.assertEqual(CSS_VERSION, "20260324a")
+        self.assertEqual(CSS_VERSION, "20261109a")
 
 class TestRenderRegion(unittest.TestCase):
     def _make_card(self, topic="Headache", count=33):
@@ -128,9 +128,9 @@ class TestRenderRegion(unittest.TestCase):
         html = self._render()
         self.assertIn('class="topic-card"', html)
 
-    def test_topic_links_open_the_guide(self):
+    def test_topic_links_open_the_topic_page(self):
         html = self._render(cards=[self._make_card(topic="Low Back Pain")])
-        self.assertIn('href="/?q=Low%20Back%20Pain"', html)
+        self.assertIn('href="/topics/low-back-pain/"', html)
 
     def test_no_consensus_claims(self):
         html = self._render()

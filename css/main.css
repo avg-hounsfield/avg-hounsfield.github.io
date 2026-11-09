@@ -6501,3 +6501,15 @@ a.anatomy-btn {
   font-size: 0.75rem;
   color: var(--text-muted);
 }
+
+
+/* Static topic pages */
+.breadcrumbs { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; }
+.breadcrumbs a, .topic-source a, .topic-scenario a { color: var(--accent); }
+.topic-source { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin: 0.75rem 0 1.25rem; }
+.topic-group { margin-top: 1.75rem; }
+.topic-group h2.recommendation { font-size: 0.95rem; font-weight: 600; margin: 0; }
+.topic-group-count { font-size: 0.75rem; color: var(--text-muted); margin: 4px 0 0; }
+.topic-scenario { padding: 12px 0; border-top: 1px solid rgba(255, 255, 255, 0.08); margin-top: 12px; }
+.topic-scenario h3 { font-size: 0.9375rem; font-weight: 600; margin: 0 0 4px; }
+.topic-scenario p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin: 2px 0; }

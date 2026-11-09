@@ -7,14 +7,14 @@
 
 console.log('[Radex] Loading app.js module...');
 
-import { SearchEngine } from './search-engine.js?v=20261104b';
+import { SearchEngine } from './search-engine.js?v=20261109a';
 import { DataLoader } from './data-loader.js?v=20260417a';
 import { UI } from './ui.js?v=20260417a';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20260417a';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
-import { resolveQuery, buildTopicGuide } from './scenario-ranker.js?v=20261104b';
-import * as embeddingSearch from './embedding-search.js?v=20261105a';
+import { resolveQuery, buildTopicGuide, topicSlug } from './scenario-ranker.js?v=20261109a';
+import * as embeddingSearch from './embedding-search.js?v=20261109a';
 
 const CLOSEST_MATCH_NOTICE = 'No scenario uses these words. These are suggestions by meaning, so check that they fit.';
 
@@ -1606,6 +1606,7 @@ class ProtocolHelpApp {
         </div>
         <div class="global-result-footer">
           <span class="global-result-source">${this.escapeHtml(this._sourceLine())}</span>
+          <a class="global-result-action" href="/topics/${topicSlug(topic)}/">Full topic page</a>
         </div>
       </div>
     `;

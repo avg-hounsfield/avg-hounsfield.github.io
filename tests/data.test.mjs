@@ -5,7 +5,8 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { topicSlug } from '../js/scenario-ranker.js';
 
 const load = path => JSON.parse(readFileSync(new URL(`../data/${path}`, import.meta.url), 'utf8'));
 const regionFiles = readdirSync(new URL('../data/regions/', import.meta.url));
@@ -62,4 +63,10 @@ test('copied portal text is not published', () => {
     assert.ok(!JSON.stringify(s).includes('ACR AC Portal'), s.id);
     assert.equal(s.description, undefined);
   }
+});
+
+test('every topic has a static page at the slug the app links to', () => {
+  const topics = [...new Set(scenarios.map(s => s.topic))];
+  const missing = topics.filter(t => !existsSync(new URL(`../topics/${topicSlug(t)}/index.html`, import.meta.url)));
+  assert.deepEqual(missing, []);
 });

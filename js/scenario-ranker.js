@@ -2324,8 +2324,41 @@ function recover(query, parsed, qualifiers, index, scenarios) {
   return { mode: 'recover', understood, unknown, groups, topics, scenarios: suggested, region };
 }
 
+/** URL slug of an ACR topic's static page; mirrors topic_slug in tools/generate_static_pages.py. */
+export function topicSlug(topic) {
+  return String(topic).toLowerCase()
+    .replace(/[\u2013\u2014/:(),-]/g, ' ')
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9 ]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+}
+
+// Presentations ACR files under several topics, none of which names them. A
+// search that would otherwise end without an answer asks which is meant.
+// Not yet clinician reviewed; see tests/clinical-gold.json.
+const CLARIFY = [
+  { phrase: 'foot drop', topics: ['Low Back Pain', 'Plexopathy', 'Myelopathy'] },
+  { phrase: 'wrist drop', topics: ['Cervical Pain or Cervical Radiculopathy', 'Plexopathy'] },
+];
+
+function clarify(query, scenarios) {
+  const text = ` ${cleanWords(query)} `;
+  const entry = CLARIFY.find(c => text.includes(` ${c.phrase} `));
+  if (!entry) return null;
+  const { topicCounts } = buildIndex(scenarios);
+  const topics = entry.topics.filter(t => topicCounts.has(t)).map(t => ({ topic: t, count: topicCounts.get(t), query: t }));
+  if (topics.length < 2) return null;
+  return {
+    mode: 'choose',
+    topics,
+    notice: `ACR has no scenario named for ${entry.phrase}. Which of these fits the presentation?`,
+  };
+}
+
 function resolveExact(query, scenarios) {
-  const result = resolveTerms(query, scenarios);
+  let result = resolveTerms(query, scenarios);
+  if (result.mode === 'recover' || result.mode === 'none') result = clarify(query, scenarios) || result;
   // A size no scenario here names is said to be unused, never ignored silently.
   const sizes = extractSizes(query);
   if (sizes.length && !result.sizeChecked && !['none', 'recover', 'too-broad'].includes(result.mode) && !result.notice) {

@@ -77,7 +77,7 @@ REGION_ICONS = {
     "other":    '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
 }
 
-CSS_VERSION = "20260324a"
+CSS_VERSION = "20261109a"
 
 
 def slugify(text):
@@ -238,6 +238,8 @@ def shared_footer():
   <div class="footer-content">
     <div class="footer-links">
       <a href="/about/" class="footer-link">About</a>
+      <span class="footer-divider">|</span>
+      <a href="/topics/" class="footer-link">All topics</a>
       <span class="footer-divider">|</span>
       <a href="/privacy-policy.html" class="footer-link">Terms</a>
       <span class="footer-divider">|</span>
@@ -441,9 +443,9 @@ def render_region(region, topics, region_protocols, slug_map, protocols, scenari
     if topics:
         topic_items = ""
         for topic in topics:
-            name = html.escape(topic["name"])
+            name = html.escape(clean_topic_name(topic["name"]))
             count = topic["count"]
-            topic_items += f"""<a class="topic-card" href="/?q={quote(topic['name'])}">
+            topic_items += f"""<a class="topic-card" href="/topics/{topic_slug(topic['name'])}/">
   <div class="topic-card-header">
     <span class="topic-card-name">{name}</span>
   </div>
@@ -477,12 +479,288 @@ def render_region(region, topics, region_protocols, slug_map, protocols, scenari
 
   {protocols_html}
 
+  <p class="topic-source"><a href="/topics/">Browse all topics</a></p>
+
   <a href="{BASE_URL}/#search" class="protocol-cta">
     <span class="protocol-cta-label">Search all scenarios</span>
     <span class="protocol-cta-action">Open Radex &rarr;</span>
   </a>
 </div>"""
 
+    return f"""<!DOCTYPE html>
+<html lang="en">
+{head}
+<body>
+  <div class="app">
+    {shared_header()}
+    <main class="main">
+      <section class="anatomy-section">
+        {body}
+      </section>
+    </main>
+    {shared_footer()}
+  </div>
+</body>
+</html>"""
+
+
+LEVELS = ["Usually Appropriate", "May Be Appropriate", "Usually Not Appropriate"]
+LEVEL_CLASS = {"Usually Appropriate": "high", "May Be Appropriate": "mid", "Usually Not Appropriate": "low"}
+
+
+def clean_topic_name(name):
+    """ACR writes some topic titles with en or em dashes; show one plain form."""
+    return re.sub(r"\s*[\u2013\u2014]\s*", "-", name).strip()
+
+
+def topic_slug(name):
+    """URL slug for an ACR topic. Dash and slash variants of one title share a slug."""
+    text = re.sub(r"[\u2013\u2014/:(),-]", " ", name)
+    return slugify(re.sub(r"\s+", " ", text).strip())
+
+
+def load_topics():
+    """
+    Every ACR topic with its scenarios, keyed by slug:
+      { slug: {'name', 'slug', 'region', 'scenarios': [...]} }
+    Scenarios are read from the region files and de-duplicated by id, because
+    pediatric scenarios are listed under their own region and under peds.
+    """
+    topics = {}
+    seen = set()
+    for region_file in sorted((REPO_ROOT / "data" / "regions").glob("*.json")):
+        with open(region_file, encoding="utf-8") as f:
+            for scenario in json.load(f).get("scenarios", []):
+                if scenario["id"] in seen:
+                    continue
+                seen.add(scenario["id"])
+                slug = topic_slug(scenario["topic"])
+                topic = topics.setdefault(slug, {
+                    "name": clean_topic_name(scenario["topic"]),
+                    "slug": slug,
+                    "region": scenario.get("region", "other"),
+                    "scenarios": [],
+                })
+                topic["scenarios"].append(scenario)
+    for topic in topics.values():
+        topic["scenarios"].sort(key=lambda s: s["name"])
+    return topics
+
+
+def top_tier(scenario):
+    """The highest ACR category a scenario uses, and the studies in it."""
+    for level in LEVELS:
+        studies = [p["name"] for p in scenario["procedures"] if p["ratingLevel"] == level]
+        if studies:
+            return level, studies
+    return None, []
+
+
+def group_by_recommendation(scenarios):
+    """Scenarios grouped by what ACR rates highest, best category first."""
+    groups = {}
+    for scenario in scenarios:
+        level, studies = top_tier(scenario)
+        if not level:
+            continue
+        key = (level, tuple(sorted(studies)))
+        groups.setdefault(key, {"level": level, "studies": studies, "scenarios": []})["scenarios"].append(scenario)
+    return sorted(groups.values(), key=lambda g: (LEVELS.index(g["level"]), -len(g["scenarios"])))
+
+
+def capture_month():
+    """Month and year of the newest ACR capture, as shown beside every answer."""
+    with open(REPO_ROOT / "data" / "data-info.json", encoding="utf-8") as f:
+        captured = json.load(f)["capturedTo"]
+    return date.fromisoformat(captured).strftime("%B %Y"), captured
+
+
+def topic_title(name):
+    title = f"{name} - Imaging Appropriateness (ACR) | Radex"
+    return title if len(title) <= 70 else f"{name} - Imaging Appropriateness"
+
+
+def render_topic(topic, related):
+    """Returns complete HTML for one ACR topic page."""
+    name = topic["name"]
+    esc = html.escape
+    region = topic["region"]
+    region_label = REGION_DISPLAY.get(region, "General")
+    canonical = f"{BASE_URL}/topics/{topic['slug']}/"
+    scenarios = topic["scenarios"]
+    count = len(scenarios)
+    month, captured = capture_month()
+    groups = group_by_recommendation(scenarios)
+    plural = "" if count == 1 else "s"
+
+    meta_desc = (
+        f"Which imaging study to order for {name}: {count} clinical scenario{plural} with the studies "
+        f"ACR rates usually appropriate. Independent summary of the ACR Appropriateness Criteria."
+    )
+    if len(meta_desc) > 160:
+        meta_desc = f"{name}: which imaging to order across {count} clinical scenario{plural}, summarized from the ACR Appropriateness Criteria."
+
+    jsonld = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "MedicalWebPage",
+                "name": f"{name} - Imaging Appropriateness",
+                "url": canonical,
+                "description": meta_desc,
+                "about": {"@type": "MedicalCondition", "name": name},
+                "specialty": {"@type": "MedicalSpecialty", "name": "Radiology"},
+                "audience": {"@type": "MedicalAudience", "audienceType": "Clinician"},
+                "lastReviewed": captured,
+                "author": {"@type": "Person", "name": "Patrick Matulich", "honorificSuffix": "DO", "jobTitle": "Radiology Resident"},
+                "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL},
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Radex", "item": f"{BASE_URL}/"},
+                    {"@type": "ListItem", "position": 2, "name": f"{region_label} imaging", "item": f"{BASE_URL}/regions/{region}/"},
+                    {"@type": "ListItem", "position": 3, "name": name, "item": canonical},
+                ],
+            },
+        ],
+    }
+    head = shared_head(esc(topic_title(name)), esc(meta_desc), canonical, jsonld)
+
+    sections = ""
+    for group in groups:
+        level = group["level"]
+        if level == "Usually Not Appropriate":
+            summary = "Imaging is usually not appropriate"
+        else:
+            summary = "; ".join(esc(s) for s in group["studies"])
+        items = ""
+        for scenario in group["scenarios"]:
+            lower = [p["name"] for p in scenario["procedures"] if p["ratingLevel"] == "May Be Appropriate"]
+            may = f'<p><strong>May be appropriate:</strong> {"; ".join(esc(s) for s in lower)}</p>' if lower and level == "Usually Appropriate" else ""
+            flagged = any(p.get("hasDisagreement") for p in scenario["procedures"] if p["ratingLevel"] == level)
+            note = '<p><em>ACR notes panel disagreement for this scenario.</em></p>' if flagged else ""
+            child = ' <span class="age-tag">Pediatric</span>' if scenario.get("ageGroup") == "pediatric" else ""
+            items += f"""<article class="topic-scenario">
+  <h3>{esc(scenario['name'])}{child}</h3>
+  <p>{esc(scenario.get('variant', ''))}</p>
+  {may}{note}
+  <p><a href="{esc(scenario['sourceUrl'])}" target="_blank" rel="noopener nofollow">ACR source for this scenario</a></p>
+</article>
+"""
+        n = len(group["scenarios"])
+        sections += f"""<section class="topic-group">
+  <h2 class="recommendation"><span class="level-pill {LEVEL_CLASS[level]}">{level}</span> <span class="recommendation-studies">{summary}</span></h2>
+  <p class="topic-group-count">{n} scenario{'' if n == 1 else 's'}</p>
+  {items}</section>
+"""
+
+    related_html = ""
+    if related:
+        links = "".join(
+            f'<a class="topic-card" href="/topics/{r["slug"]}/"><div class="topic-card-header">'
+            f'<span class="topic-card-name">{esc(r["name"])}</span></div>'
+            f'<p class="topic-card-meta">{len(r["scenarios"])} scenario{"" if len(r["scenarios"]) == 1 else "s"}</p></a>\n'
+            for r in related
+        )
+        related_html = f"""<h2 class="static-section-label">Related {esc(region_label)} topics</h2>
+<div class="topic-grid">
+{links}</div>"""
+
+    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="/">Radex</a> &rsaquo; <a href="/regions/{region}/">{esc(region_label)} imaging</a> &rsaquo; <a href="/topics/">Topics</a>
+  </nav>
+  <h1 class="static-hero-title">{esc(name)}: which imaging to order</h1>
+  <p class="static-hero-desc">
+    {count} clinical scenario{plural} from the ACR Appropriateness Criteria topic "{esc(name)}", grouped by the
+    imaging study ACR rates highest for each. Studies listed together share the same ACR category;
+    ACR does not rank studies within a category.
+  </p>
+  <p class="topic-source">
+    Independent summary of the ACR Appropriateness Criteria as of {month}. Not affiliated with or endorsed by
+    the American College of Radiology. For education; confirm against the linked source and your institution's protocols.
+  </p>
+
+  <a href="{BASE_URL}/?q={quote(name)}" class="protocol-cta">
+    <span class="protocol-cta-label">Search within {esc(name)}</span>
+    <span class="protocol-cta-action">Open in Radex &rarr;</span>
+  </a>
+
+  {sections}
+
+  {related_html}
+</div>"""
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+{head}
+<body>
+  <div class="app">
+    {shared_header()}
+    <main class="main">
+      <section class="anatomy-section">
+        {body}
+      </section>
+    </main>
+    {shared_footer()}
+  </div>
+</body>
+</html>"""
+
+
+def related_topics(topic, topics, limit=8):
+    """Topics in the same region, those sharing title words first."""
+    words = set(re.findall(r"[a-z]{4,}", topic["name"].lower())) - {"suspected", "imaging", "child", "acute", "chronic", "with", "after"}
+    others = [t for t in topics.values() if t["region"] == topic["region"] and t["slug"] != topic["slug"]]
+    shared = lambda t: len(words & set(re.findall(r"[a-z]{4,}", t["name"].lower())))
+    return sorted(others, key=lambda t: (-shared(t), t["name"]))[:limit]
+
+
+def render_topic_index(topics):
+    """Returns complete HTML for /topics/, every topic grouped by body region."""
+    canonical = f"{BASE_URL}/topics/"
+    total = sum(len(t["scenarios"]) for t in topics.values())
+    title = "Imaging Appropriateness by Topic - ACR Criteria Summaries | Radex"
+    meta_desc = (
+        f"Browse {len(topics)} clinical topics and {total:,} scenarios: which imaging study to order, "
+        f"summarized from the ACR Appropriateness Criteria."
+    )
+    jsonld = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Imaging appropriateness topics",
+        "url": canonical,
+        "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL},
+    }
+    head = shared_head(title, meta_desc, canonical, jsonld)
+    sections = ""
+    for region, label in REGION_DISPLAY.items():
+        in_region = sorted((t for t in topics.values() if t["region"] == region), key=lambda t: t["name"])
+        if not in_region:
+            continue
+        links = "".join(
+            f'<a class="topic-card" href="/topics/{t["slug"]}/"><div class="topic-card-header">'
+            f'<span class="topic-card-name">{html.escape(t["name"])}</span></div>'
+            f'<p class="topic-card-meta">{len(t["scenarios"])} scenario{"" if len(t["scenarios"]) == 1 else "s"}</p></a>\n'
+            for t in in_region
+        )
+        sections += f"""<h2 class="static-section-label"><a href="/regions/{region}/">{label}</a></h2>
+<div class="topic-grid">
+{links}</div>
+"""
+    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
+  <h1 class="static-hero-title">Imaging appropriateness by topic</h1>
+  <p class="static-hero-desc">
+    {len(topics)} clinical topics covering {total:,} scenarios. Each page lists which imaging studies the
+    ACR Appropriateness Criteria rate usually appropriate, grouped by presentation.
+  </p>
+  {sections}
+  <a href="{BASE_URL}/" class="protocol-cta">
+    <span class="protocol-cta-label">Search all scenarios</span>
+    <span class="protocol-cta-action">Open Radex &rarr;</span>
+  </a>
+</div>"""
     return f"""<!DOCTYPE html>
 <html lang="en">
 {head}
@@ -659,7 +937,7 @@ def render_about():
 </html>"""
 
 
-def build_sitemap(protocol_slugs):
+def build_sitemap(protocol_slugs, topic_slugs=()):
     """Returns a complete sitemap XML string for all generated pages."""
     today = date.today().isoformat()
 
@@ -681,6 +959,10 @@ def build_sitemap(protocol_slugs):
 
     for region in REGION_DISPLAY:
         entry(f"/regions/{region}/", "0.8", "monthly")
+
+    entry("/topics/", "0.8", "monthly")
+    for slug in topic_slugs:
+        entry(f"/topics/{slug}/", "0.8", "monthly")
 
     for slug in protocol_slugs:
         entry(f"/protocols/{slug}/", "0.7", "monthly")
@@ -716,12 +998,20 @@ def main():
         write_file(Path("regions") / region / "index.html", page)
         count += 1
 
+    # Topic pages and their index
+    topics = load_topics()
+    for topic in topics.values():
+        write_file(Path("topics") / topic["slug"] / "index.html", render_topic(topic, related_topics(topic, topics)))
+        count += 1
+    write_file(Path("topics") / "index.html", render_topic_index(topics))
+    count += 1
+
     # About page
     write_file(Path("about") / "index.html", render_about())
     count += 1
 
     # Sitemap
-    sitemap_xml = build_sitemap(list(slug_map.values()))
+    sitemap_xml = build_sitemap(list(slug_map.values()), sorted(topics))
     write_file(Path("sitemap.xml"), sitemap_xml)
     count += 1
 

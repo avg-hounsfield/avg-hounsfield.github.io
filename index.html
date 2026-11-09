@@ -69,7 +69,7 @@
   <!-- Theme Color -->
   <meta name="theme-color" content="#9B5DE5">
 
-  <link rel="stylesheet" href="css/main.css?v=20261103a">
+  <link rel="stylesheet" href="css/main.css?v=20261109a">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>R</text></svg>">
   <link rel="manifest" href="manifest.json">
 </head>
@@ -243,12 +243,13 @@
             <span>General</span>
           </a>
         </div>
+        <p class="topic-source" style="text-align:center;"><a href="/topics/">Browse all 262 topics A to Z</a></p>
       </section>
 
       <!-- Protocols Section (for direct protocol lookup) -->
       <section class="protocols-section hidden" id="protocolsSection">
         <div class="protocols-header">
-          <h1 class="section-title">MRI Protocol Lookup</h1>
+          <h2 class="section-title">MRI Protocol Lookup</h2>
           <p class="section-subtitle">Search for a specific MRI protocol to view sequences and parameters</p>
         </div>
 
@@ -655,7 +656,7 @@
       <!-- Builder Section -->
       <section class="builder-section hidden" id="builderSection">
         <div class="builder-header">
-          <h1 class="section-title">Protocol Builder</h1>
+          <h2 class="section-title">Protocol Builder</h2>
           <p class="section-subtitle">Create custom MRI protocols for experimentation and learning</p>
         </div>
 
@@ -883,6 +884,8 @@
         <div class="footer-links">
           <a href="/about/" class="footer-link" id="aboutBtn">About</a>
           <span class="footer-divider">|</span>
+          <a href="/topics/" class="footer-link">All topics</a>
+          <span class="footer-divider">|</span>
           <a href="/privacy-policy.html" class="footer-link" id="termsBtn">Terms</a>
           <span class="footer-divider">|</span>
           <a href="https://www.acr.org/Clinical-Resources/Clinical-Tools-and-Reference/Appropriateness-Criteria" target="_blank" rel="noopener" class="footer-link">ACR Guidelines</a>
@@ -1068,7 +1071,7 @@
   <script>
     // Service worker registration and install progress
     // Keep CURRENT_SW_VERSION in sync with CACHE_NAME in sw.js
-    const CURRENT_SW_VERSION = 'radex-v3.5.0';
+    const CURRENT_SW_VERSION = 'radex-v3.6.0';
 
     if ('serviceWorker' in navigator) {
       // Listen for install progress messages from the SW
@@ -1118,6 +1121,6 @@
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.0/dist/ort.min.js"></script>
   <!-- Self-hosted (was unpkg CDN) so the TF-IDF scenario ranking can't be lost
        when the CDN is unreachable, and to guarantee reliable offline caching. -->
-  <script type="module" src="js/app.js?v=20261105a"></script>
+  <script type="module" src="js/app.js?v=20261109a"></script>
 </body>
 </html>
