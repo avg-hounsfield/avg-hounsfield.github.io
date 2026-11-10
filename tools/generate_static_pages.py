@@ -77,7 +77,7 @@ REGION_ICONS = {
     "other":    '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
 }
 
-CSS_VERSION = "20261109a"
+CSS_VERSION = "20261109b"
 
 
 def slugify(text):
@@ -423,7 +423,7 @@ def render_region(region, topics, region_protocols, slug_map, protocols, scenari
         "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL}
     }
 
-    title = f"{label} Imaging Guidance - Based on ACR Appropriateness Criteria | Radex"
+    title = f"{label} Imaging: ACR Appropriateness Criteria Summaries | Radex"
     head = shared_head(title, meta_desc, canonical, jsonld)
 
     # Hero
@@ -433,7 +433,7 @@ def render_region(region, topics, region_protocols, slug_map, protocols, scenari
     {icon_paths}
   </svg>
   <div>
-    <h1 class="static-hero-title">{label} Imaging Appropriateness</h1>
+    <h1 class="static-hero-title">{label} imaging: ACR Appropriateness Criteria summaries</h1>
     <p class="static-hero-desc">{REGION_INTRO[region]}</p>
   </div>
 </div>"""
@@ -576,8 +576,10 @@ def capture_month():
 
 
 def topic_title(name):
-    title = f"{name} - Imaging Appropriateness (ACR) | Radex"
-    return title if len(title) <= 70 else f"{name} - Imaging Appropriateness"
+    # People search "acr appropriateness criteria <topic>" (Search Console,
+    # Nov 2026), so the title says exactly that.
+    title = f"{name}: ACR Appropriateness Criteria Summary | Radex"
+    return title if len(title) <= 70 else f"{name}: ACR Appropriateness Criteria Summary"
 
 
 def render_topic(topic, related):
@@ -605,7 +607,7 @@ def render_topic(topic, related):
         "@graph": [
             {
                 "@type": "MedicalWebPage",
-                "name": f"{name} - Imaging Appropriateness",
+                "name": f"{name}: ACR Appropriateness Criteria summary",
                 "url": canonical,
                 "description": meta_desc,
                 "about": {"@type": "MedicalCondition", "name": name},
@@ -671,7 +673,8 @@ def render_topic(topic, related):
   <nav class="breadcrumbs" aria-label="Breadcrumb">
     <a href="/">Radex</a> &rsaquo; <a href="/regions/{region}/">{esc(region_label)} imaging</a> &rsaquo; <a href="/topics/">Topics</a>
   </nav>
-  <h1 class="static-hero-title">{esc(name)}: which imaging to order</h1>
+  <h1 class="static-hero-title">{esc(name)}: ACR Appropriateness Criteria summary</h1>
+  <p class="topic-kicker">Which imaging to order</p>
   <p class="static-hero-desc">
     {count} clinical scenario{plural} from the ACR Appropriateness Criteria topic "{esc(name)}", grouped by the
     imaging study ACR rates highest for each. Studies listed together share the same ACR category;
@@ -721,7 +724,7 @@ def render_topic_index(topics):
     """Returns complete HTML for /topics/, every topic grouped by body region."""
     canonical = f"{BASE_URL}/topics/"
     total = sum(len(t["scenarios"]) for t in topics.values())
-    title = "Imaging Appropriateness by Topic - ACR Criteria Summaries | Radex"
+    title = "ACR Appropriateness Criteria Summaries by Topic | Radex"
     meta_desc = (
         f"Browse {len(topics)} clinical topics and {total:,} scenarios: which imaging study to order, "
         f"summarized from the ACR Appropriateness Criteria."

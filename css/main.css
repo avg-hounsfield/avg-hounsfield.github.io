@@ -6513,3 +6513,4 @@ a.anatomy-btn {
 .topic-scenario { padding: 12px 0; border-top: 1px solid rgba(255, 255, 255, 0.08); margin-top: 12px; }
 .topic-scenario h3 { font-size: 0.9375rem; font-weight: 600; margin: 0 0 4px; }
 .topic-scenario p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin: 2px 0; }
+.topic-kicker { font-size: 0.9rem; color: var(--text-secondary); margin: 0 0 0.5rem; }
