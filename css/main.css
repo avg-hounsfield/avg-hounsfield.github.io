@@ -6725,8 +6725,15 @@ a.anatomy-btn {
   overflow-wrap: anywhere;
 }
 
+/* Eight grouped rows fit without scrolling on a desktop screen. */
+.search-suggestions {
+  max-height: min(70vh, 480px);
+}
+
 .search-suggestions .suggestion-meta {
-  flex: 0 1 45%;
+  display: block;
+  flex: 0 1 auto;
+  max-width: 45%;
   min-width: 0;
   margin-left: 0;
   overflow: hidden;
