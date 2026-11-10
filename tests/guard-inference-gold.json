@@ -1,0 +1,6228 @@
+{
+ "_note": "Test cases for two search improvements in GRAi Imaging Guide, written against data/search/scenario_names.json (ACR Appropriateness Criteria). Not clinician reviewed. Reference grader: cases.test.mjs beside this file. guard_pass: a suggestion the guard must let through. q = the search; ids = scenario ids, the case passes when guardSuggestions(q, [scenario], scenarios) keeps AT LEAST ONE of them (several ids are given when ACR splits the answer into equally fair branches); kind = synonym | quadrant | extremity | lay | pregnancy | pediatric; why = one line; names = the scenario names for reading; today = pass | blocked with the code as it stood when this file was built. guard_block: a suggestion the guard must remove. q, id (one scenario), kind = region | side | population | opposite | negated, why, name, topic, today = blocked | PASSES (wrong). Any guard_block pair that survives the guard is a hard failure. inference: q = the search; kind = infer | negated | unchanged. offer = topics, the case needs AT LEAST ONE of them offered anywhere in the result of resolveQuery (empty = nothing required). must_not_offer = topics that may not be offered anywhere (hard failure when kind is negated). forbidden = regex no shown scenario name may match and, unless forbidden_topics is present, no offered topic title may match (empty string = nothing forbidden); forbidden_topics = optional regex for topic titles only (empty string = titles not checked). kind infer: the inferred topic must be OFFERED, not asserted; it counts as asserted when result.mode is \"guide\" with that topic, or result.mode is \"list\" whose first scenario belongs to it and the result carries no label (a truthy field named inferred, inference, question, suggestion, suggested, offer or label, or a notice). Asserted cases fail the case and are counted, with a ceiling at the baseline count (baseline.asserted). kind negated: the inference must not fire. kind unchanged: no inference is justified, the result signature (mode, sorted offered topics, shown scenario ids) must equal today. today = that signature when this file was built. Offered topics = every string in the result equal to an ACR topic title, plus the topic of every scenario object in it (keys understood, unknown, corrected, query and reason are not read). Shown scenarios = every scenario object in the result. A guide shows a whole topic and asserts no single scenario, so forbidden reaches it through the topic title only.",
+ "generated_at": "2026-11-10T09:09:32.238Z",
+ "counts": {
+  "guard_pass": 141,
+  "guard_block": 137,
+  "inference": 142,
+  "inference_infer": 77,
+  "inference_negated": 38,
+  "inference_unchanged": 27
+ },
+ "guard_pass": [
+  {
+   "q": "kidney mass",
+   "ids": [
+    "628"
+   ],
+   "kind": "synonym",
+   "why": "renal = kidney",
+   "names": [
+    "Renal mass, indeterminate, no contraindication to iodinated or gadolinium based contrast, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "kidney failure",
+   "ids": [
+    "5495",
+    "1006",
+    "1007"
+   ],
+   "kind": "synonym",
+   "why": "renal failure",
+   "names": [
+    "Renal failure, kidney disease unknown duration, initial imaging",
+    "Renal failure, acute kidney injury, initial imaging",
+    "Renal failure, chronic kidney disease, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "kidney transplant not working",
+   "ids": [
+    "1184"
+   ],
+   "kind": "synonym",
+   "why": "renal transplant dysfunction",
+   "names": [
+    "Renal transplant dysfunction, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "kidney cancer staging",
+   "ids": [
+    "7024"
+   ],
+   "kind": "synonym",
+   "why": "renal cell carcinoma staging",
+   "names": [
+    "Renal cell carcinoma, no contraindication to iodinated or gadolinium based contrast, staging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "narrowed kidney artery causing high blood pressure",
+   "ids": [
+    "640",
+    "2488"
+   ],
+   "kind": "synonym",
+   "why": "renovascular hypertension",
+   "names": [
+    "HTN, high suspicion renal vascular, normal renal function",
+    "HTN, high suspicion renal vascular, decreased renal function"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "swollen kidney on ultrasound",
+   "ids": [
+    "7396",
+    "7393"
+   ],
+   "kind": "lay",
+   "why": "hydronephrosis on prior imaging",
+   "names": [
+    "Hydronephrosis, unknown cause, symptomatic, initial imaging",
+    "Hydronephrosis, unknown cause, unilateral, asymptomatic, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "hepatic abscess",
+   "ids": [
+    "495"
+   ],
+   "kind": "synonym",
+   "why": "hepatic = liver",
+   "names": [
+    "Abscess, liver"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "elevated liver enzymes",
+   "ids": [
+    "7151",
+    "7153"
+   ],
+   "kind": "lay",
+   "why": "abnormal liver function tests",
+   "names": [
+    "Abnormal liver function tests, hepatocellular predominance, mild aminotransferase increase , initial imaging",
+    "Abnormal liver function tests, hepatocellular predominance, severe aminotransferase increase, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "scarring of the liver",
+   "ids": [
+    "2429"
+   ],
+   "kind": "lay",
+   "why": "chronic liver disease, fibrosis",
+   "names": [
+    "Liver disease, chronic, fibrosis suspected, diagnosis and staging, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "cardiac failure",
+   "ids": [
+    "4528",
+    "7909"
+   ],
+   "kind": "synonym",
+   "why": "cardiac = heart",
+   "names": [
+    "Heart failure suspected, no hx of heart failure, initial imaging",
+    "Heart failure, etiology unknown, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "heart tumor",
+   "ids": [
+    "8461"
+   ],
+   "kind": "synonym",
+   "why": "cardiac mass",
+   "names": [
+    "Cardiac mass suspected, no known cardiac mass, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "heart valve infection",
+   "ids": [
+    "658"
+   ],
+   "kind": "lay",
+   "why": "infective endocarditis",
+   "names": [
+    "Infective endocarditis suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "lung nodule",
+   "ids": [
+    "7159"
+   ],
+   "kind": "synonym",
+   "why": "pulmonary = lung",
+   "names": [
+    "Pulmonary nodule on chest radiography, incidental, indeterminate, next imaging study"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "blood clot in the lung",
+   "ids": [
+    "6222",
+    "6223",
+    "6224"
+   ],
+   "kind": "lay",
+   "why": "pulmonary embolism",
+   "names": [
+    "Pulmonary embolism suspected, low pretest probability, positive D-dimer, initial imaging",
+    "Pulmonary embolism suspected, intermediate pretest probability, positive D-dimer, initial imaging",
+    "Pulmonary embolism suspected, high pretest probability, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "high blood pressure in the lungs",
+   "ids": [
+    "6243"
+   ],
+   "kind": "lay",
+   "why": "pulmonary hypertension",
+   "names": [
+    "Pulmonary hypertension suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "scarring of the lungs",
+   "ids": [
+    "5593"
+   ],
+   "kind": "lay",
+   "why": "diffuse (fibrotic) lung disease",
+   "names": [
+    "Diffuse lung disease suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "neck pain for months",
+   "ids": [
+    "731",
+    "736"
+   ],
+   "kind": "synonym",
+   "why": "neck = cervical spine",
+   "names": [
+    "Cervical spine pain, chronic, no radiculopathy, no trauma, no red flags, initial imaging",
+    "Cervical spine pain, chronic, radiculopathy, no trauma, no red flags, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "pinched nerve in neck",
+   "ids": [
+    "4689",
+    "736",
+    "7966"
+   ],
+   "kind": "lay",
+   "why": "cervical radiculopathy",
+   "names": [
+    "Cervical spine pain, acute, radiculopathy, no trauma, no red flags, initial imaging",
+    "Cervical spine pain, chronic, radiculopathy, no trauma, no red flags, initial imaging",
+    "Cervical spine pain, increasing, radiculopathy, no trauma, no red flags, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "lumbar pain",
+   "ids": [
+    "5618",
+    "5619",
+    "5620"
+   ],
+   "kind": "synonym",
+   "why": "lumbar = low back",
+   "names": [
+    "Low back pain, acute, no red flags, no prior management, initial imaging",
+    "Low back pain, chronic, no red flags, no prior management, initial imaging",
+    "Low back pain, subacute, no red flags, no prior management, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "pain in the small of my back",
+   "ids": [
+    "5618",
+    "5619",
+    "5620"
+   ],
+   "kind": "lay",
+   "why": "low back pain",
+   "names": [
+    "Low back pain, acute, no red flags, no prior management, initial imaging",
+    "Low back pain, chronic, no red flags, no prior management, initial imaging",
+    "Low back pain, subacute, no red flags, no prior management, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "mid back pain",
+   "ids": [
+    "7800"
+   ],
+   "kind": "synonym",
+   "why": "mid back = thoracic back",
+   "names": [
+    "Thoracic back pain, acute, no radiculopathy, no red flags, no prior management, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "pain between the shoulder blades",
+   "ids": [
+    "7800"
+   ],
+   "kind": "lay",
+   "why": "thoracic back pain; \"shoulder\" is not the body part asked",
+   "names": [
+    "Thoracic back pain, acute, no radiculopathy, no red flags, no prior management, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "upper left abdominal pain",
+   "ids": [
+    "8411"
+   ],
+   "kind": "quadrant",
+   "why": "LUQ",
+   "names": [
+    "LUQ pain, acute, NOS, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "pain under left ribs",
+   "ids": [
+    "8411"
+   ],
+   "kind": "quadrant",
+   "why": "LUQ",
+   "names": [
+    "LUQ pain, acute, NOS, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "enlarged spleen",
+   "ids": [
+    "8409"
+   ],
+   "kind": "quadrant",
+   "why": "splenomegaly; spleen lives in the LUQ",
+   "names": [
+    "LUQ pain, acute, splenomegaly suspected, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "spleen pain",
+   "ids": [
+    "8409",
+    "8411"
+   ],
+   "kind": "quadrant",
+   "why": "LUQ pain",
+   "names": [
+    "LUQ pain, acute, splenomegaly suspected, initial imaging",
+    "LUQ pain, acute, NOS, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "right upper abdominal pain",
+   "ids": [
+    "6700"
+   ],
+   "kind": "quadrant",
+   "why": "RUQ",
+   "names": [
+    "RUQ pain, etiology unknown, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "pain below right ribs after a fatty meal",
+   "ids": [
+    "6701",
+    "6700"
+   ],
+   "kind": "quadrant",
+   "why": "RUQ, biliary",
+   "names": [
+    "RUQ pain, biliary disease suspected, initial imaging",
+    "RUQ pain, etiology unknown, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "gallbladder attack",
+   "ids": [
+    "6701"
+   ],
+   "kind": "lay",
+   "why": "RUQ pain, biliary disease suspected",
+   "names": [
+    "RUQ pain, biliary disease suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "gallstones",
+   "ids": [
+    "6701"
+   ],
+   "kind": "lay",
+   "why": "biliary disease",
+   "names": [
+    "RUQ pain, biliary disease suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "right lower abdominal pain",
+   "ids": [
+    "6314"
+   ],
+   "kind": "quadrant",
+   "why": "RLQ",
+   "names": [
+    "RLQ pain, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "pain in lower right belly",
+   "ids": [
+    "6314"
+   ],
+   "kind": "quadrant",
+   "why": "RLQ",
+   "names": [
+    "RLQ pain, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "left lower abdominal pain",
+   "ids": [
+    "7110"
+   ],
+   "kind": "quadrant",
+   "why": "LLQ",
+   "names": [
+    "LLQ pain, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "lower left belly pain",
+   "ids": [
+    "7110"
+   ],
+   "kind": "quadrant",
+   "why": "LLQ",
+   "names": [
+    "LLQ pain, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "rolled my ankle and cannot put weight on it",
+   "ids": [
+    "5405",
+    "5407",
+    "5408"
+   ],
+   "kind": "extremity",
+   "why": "ankle trauma, unable to bear weight",
+   "names": [
+    "Ankle trauma, up to 3 weeks after injury, no exclusionary criteria, unable to bear weight immediately after in",
+    "Ankle trauma, up to 3 weeks after injury, no exclusionary criteria, unable to take 4 steps, initial imaging",
+    "Ankle trauma, up to 3 weeks after injury, no exclusionary criteria, Ottawa rules positive, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "sprained wrist",
+   "ids": [
+    "4618"
+   ],
+   "kind": "extremity",
+   "why": "wrist trauma",
+   "names": [
+    "Wrist trauma, initial exam"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "jammed finger",
+   "ids": [
+    "4617"
+   ],
+   "kind": "extremity",
+   "why": "finger = hand trauma",
+   "names": [
+    "Hand trauma, initial exam"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "thumb injury",
+   "ids": [
+    "4617"
+   ],
+   "kind": "extremity",
+   "why": "thumb = hand trauma",
+   "names": [
+    "Hand trauma, initial exam"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "broken collarbone",
+   "ids": [
+    "7864"
+   ],
+   "kind": "extremity",
+   "why": "clavicle fracture sits under acute shoulder pain",
+   "names": [
+    "Shoulder pain, acute, clavicle fracture on radiography, next imaging study"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "shoulder popped out of socket",
+   "ids": [
+    "7869",
+    "7870",
+    "7872"
+   ],
+   "kind": "lay",
+   "why": "shoulder dislocation",
+   "names": [
+    "Shoulder pain, acute, hx or physical exam consistent with dislocation, radiography indeterminate, next imaging",
+    "Shoulder pain, acute, hx or physical exam consistent with dislocation, radiography negative, next imaging stud",
+    "Shoulder pain, acute, hx or physical exam consistent with dislocation, radiography positive, next imaging stud"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "frozen shoulder",
+   "ids": [
+    "6745"
+   ],
+   "kind": "lay",
+   "why": "adhesive capsulitis",
+   "names": [
+    "Shoulder pain, chronic, adhesive capsulitis suspected, radiography inconclusive, next imaging study"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "tennis elbow",
+   "ids": [
+    "6337",
+    "6338"
+   ],
+   "kind": "lay",
+   "why": "epicondylalgia",
+   "names": [
+    "Elbow pain, chronic, epicondylalgia suspected, refractory to empirical treatment, radiography nonspecific, nex",
+    "Elbow pain, chronic, epicondylalgia suspected, refractory to empirical treatment, radiography normal, next ima"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "ball of foot pain",
+   "ids": [
+    "5454",
+    "5455",
+    "5456"
+   ],
+   "kind": "lay",
+   "why": "metatarsalgia",
+   "names": [
+    "Metatarsalgia, chronic, negative or equivocal radiography, sesamoiditis suspected, next imaging study",
+    "Metatarsalgia, chronic, negative or equivocal radiography, mortons neuroma suspected, next imaging study",
+    "Metatarsalgia, chronic, negative or equivocal radiography, intermetatarsal bursitis suspected, next imaging st"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "gout in the big toe",
+   "ids": [
+    "6843",
+    "6910",
+    "6918"
+   ],
+   "kind": "extremity",
+   "why": "toe = foot; ACR has no toe scenarios",
+   "names": [
+    "Foot pain, chronic, crystalline arthritis suspected, gout, initial imaging",
+    "Foot pain, chronic, gout suspected, radiography inconclusive, next imaging study",
+    "Foot pain, chronic, gout suspected, radiography normal, next imaging study"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "cellulitis of the calf",
+   "ids": [
+    "6377"
+   ],
+   "kind": "extremity",
+   "why": "calf = lower leg soft tissue infection",
+   "names": [
+    "Soft tissue infection suspected, lower leg, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "infected finger",
+   "ids": [
+    "6370"
+   ],
+   "kind": "extremity",
+   "why": "finger = hand soft tissue infection",
+   "names": [
+    "Soft tissue infection suspected, hand, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "thigh bone stress fracture",
+   "ids": [
+    "7535"
+   ],
+   "kind": "extremity",
+   "why": "thigh bone = femur",
+   "names": [
+    "Stress fracture suspected, femur, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "shin splints in a runner",
+   "ids": [
+    "7528"
+   ],
+   "kind": "lay",
+   "why": "tibial stress injury",
+   "names": [
+    "Stress fracture suspected, tibia and fibula, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "knee gave out playing soccer",
+   "ids": [
+    "5319",
+    "5320",
+    "5321"
+   ],
+   "kind": "lay",
+   "why": "knee trauma, twisting",
+   "names": [
+    "Knee trauma, fall or twisting, focal tenderness, initial imaging",
+    "Knee trauma, fall or twisting, effusion, initial imaging",
+    "Knee trauma, fall or twisting, cannot bear weight, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "knee replacement hurts",
+   "ids": [
+    "7173"
+   ],
+   "kind": "lay",
+   "why": "knee replaced, symptomatic",
+   "names": [
+    "Knee replaced, follow-up, symptomatic, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "hip replacement pain",
+   "ids": [
+    "7164"
+   ],
+   "kind": "lay",
+   "why": "hip replaced, symptomatic",
+   "names": [
+    "Hip replaced, symptomatic, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "leg cramps when walking",
+   "ids": [
+    "6244"
+   ],
+   "kind": "lay",
+   "why": "arterial claudication",
+   "names": [
+    "Arterial claudication, revascularization assessment, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "blood clot in the calf",
+   "ids": [
+    "669"
+   ],
+   "kind": "lay",
+   "why": "lower extremity DVT; scenario name carries no body part",
+   "names": [
+    "DVT suspected, initial exam"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "swollen arm after PICC line",
+   "ids": [
+    "670"
+   ],
+   "kind": "lay",
+   "why": "upper extremity DVT",
+   "names": [
+    "Upper extremity DVT suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "bulging leg veins",
+   "ids": [
+    "7193"
+   ],
+   "kind": "lay",
+   "why": "varicose veins",
+   "names": [
+    "Varicose veins, lower extremity, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "foot suddenly cold and blue",
+   "ids": [
+    "578"
+   ],
+   "kind": "extremity",
+   "why": "acute limb ischemia; foot = leg here",
+   "names": [
+    "Cold painful leg, sudden onset, vascular compromise suspected, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "coughing up blood",
+   "ids": [
+    "5246",
+    "5245"
+   ],
+   "kind": "lay",
+   "why": "hemoptysis",
+   "names": [
+    "Hemoptysis, nonmassive, initial imaging",
+    "Hemoptysis, massive, life threatening, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "peeing blood",
+   "ids": [
+    "5317"
+   ],
+   "kind": "lay",
+   "why": "gross hematuria",
+   "names": [
+    "Hematuria, gross, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "blood in semen",
+   "ids": [
+    "8374"
+   ],
+   "kind": "lay",
+   "why": "hematospermia",
+   "names": [
+    "Hematospermia, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "passed out",
+   "ids": [
+    "5530",
+    "5532"
+   ],
+   "kind": "lay",
+   "why": "syncope",
+   "names": [
+    "Syncope, cardiovascular etiology suspected, initial imaging",
+    "Syncope, low probability of cardiovascular etiology, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "ringing in the ears",
+   "ids": [
+    "3419",
+    "3418"
+   ],
+   "kind": "lay",
+   "why": "tinnitus",
+   "names": [
+    "Tinnitus, nonpulsatile, bilateral, no hearing loss, no neurologic deficit, no trauma, initial imaging",
+    "Tinnitus, nonpulsatile, unilateral, no hearing loss, no neurologic deficit, no trauma, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "room spinning",
+   "ids": [
+    "7365",
+    "7366",
+    "7368",
+    "997"
+   ],
+   "kind": "lay",
+   "why": "vertigo",
+   "names": [
+    "Vertigo, episodic, brief, triggered by specific head movements, initial imaging",
+    "Vertigo, acute, persistent, normal neuro exam, HINTS exam, consistent with peripheral vertigo, initial imaging",
+    "Vertigo, acute, persistent, abnormal neuro exam, initial imaging",
+    "Vertigo, episodic, peripheral, initial exam"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "trouble swallowing",
+   "ids": [
+    "903",
+    "904"
+   ],
+   "kind": "lay",
+   "why": "dysphagia",
+   "names": [
+    "Dysphagia, oropharyngeal, unexplained",
+    "Dysphagia, retrosternal, not immunocompromised"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "yellow skin and eyes",
+   "ids": [
+    "4685"
+   ],
+   "kind": "lay",
+   "why": "jaundice",
+   "names": [
+    "Jaundice, initial exam"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "heartburn",
+   "ids": [
+    "5564"
+   ],
+   "kind": "lay",
+   "why": "acid reflux; not a heart question",
+   "names": [
+    "Epigastric pain, acid reflux suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "stomach ulcer",
+   "ids": [
+    "5567"
+   ],
+   "kind": "lay",
+   "why": "peptic ulcer",
+   "names": [
+    "Epigastric pain, peptic ulcer suspected, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "kidney stone",
+   "ids": [
+    "7216",
+    "7217"
+   ],
+   "kind": "lay",
+   "why": "stone disease, flank pain",
+   "names": [
+    "Flank pain, acute, stone disease suspected, remote hx of stone disease, initial imaging",
+    "Flank pain, acute, stone disease suspected, no hx of stone disease, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "kidney infection",
+   "ids": [
+    "6245"
+   ],
+   "kind": "lay",
+   "why": "pyelonephritis",
+   "names": [
+    "Pyelonephritis suspected, acute, uncomplicated, first time presentation, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "bladder infections keep coming back",
+   "ids": [
+    "1004",
+    "5411"
+   ],
+   "kind": "lay",
+   "why": "recurrent lower UTI",
+   "names": [
+    "UTI, lower urinary tract, recurrent, uncomplicated, no risk factors",
+    "UTI, lower urinary tract, recurrent, frequent relapses"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "enlarged prostate",
+   "ids": [
+    "629"
+   ],
+   "kind": "lay",
+   "why": "BPH",
+   "names": [
+    "Benign prostatic hyperplasia (BPH) suspected"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "testicle pain",
+   "ids": [
+    "7833"
+   ],
+   "kind": "synonym",
+   "why": "testicle = scrotal pain",
+   "names": [
+    "Scrotal pain, acute, nontraumatic, no antecedent mass, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "lump in testicle",
+   "ids": [
+    "5968",
+    "5969"
+   ],
+   "kind": "synonym",
+   "why": "palpable scrotal abnormality",
+   "names": [
+    "Scrotum abnormality, palpable, newly diagnosed, no hx of infection, initial imaging",
+    "Scrotum abnormality, palpable, newly diagnosed, no hx of trauma, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "heavy periods",
+   "ids": [
+    "5378"
+   ],
+   "kind": "lay",
+   "why": "abnormal uterine bleeding",
+   "names": [
+    "Uterine bleeding, abnormal, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "cannot get pregnant",
+   "ids": [
+    "5239",
+    "5240"
+   ],
+   "kind": "lay",
+   "why": "infertility; the word pregnant here is not a pregnant patient",
+   "names": [
+    "Infertility, evaluate ovulatory function and reserve, initial imaging",
+    "Infertility, tubal occlusion suspected, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "ovarian cyst",
+   "ids": [
+    "877",
+    "7520"
+   ],
+   "kind": "synonym",
+   "why": "adnexal mass",
+   "names": [
+    "Adnexal mass suspected, no acute symptoms, premenopausal, initial imaging",
+    "Adnexal mass suspected, no acute symptoms, postmenopausal, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "groin bulge when coughing",
+   "ids": [
+    "6235"
+   ],
+   "kind": "lay",
+   "why": "inguinal hernia",
+   "names": [
+    "Groin hernia suspected, inguinal, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "belly button hernia",
+   "ids": [
+    "6230"
+   ],
+   "kind": "lay",
+   "why": "umbilical hernia",
+   "names": [
+    "Abdominal wall hernia suspected, umbilical, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "memory loss",
+   "ids": [
+    "7953",
+    "7952"
+   ],
+   "kind": "lay",
+   "why": "cognitive impairment",
+   "names": [
+    "Cognitive impairment, memory deficits, Alzheimer disease suspected, typical clinical presentation, initial ima",
+    "Cognitive impairment, mild, dementia criteria not met, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "confusion",
+   "ids": [
+    "4730",
+    "4736"
+   ],
+   "kind": "lay",
+   "why": "altered mental status",
+   "names": [
+    "Altered mental status, intracranial pathology suspected, initial imaging",
+    "Altered mental status, medical illness suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "mini stroke",
+   "ids": [
+    "7351"
+   ],
+   "kind": "lay",
+   "why": "TIA",
+   "names": [
+    "TIA, symptoms resolved, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "worst headache of my life",
+   "ids": [
+    "7012"
+   ],
+   "kind": "lay",
+   "why": "sudden severe headache",
+   "names": [
+    "Headache, severe, sudden onset, maximal severity within an hour, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "double vision",
+   "ids": [
+    "3437"
+   ],
+   "kind": "lay",
+   "why": "diplopia",
+   "names": [
+    "Diplopia, initial exam"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "droopy face on one side",
+   "ids": [
+    "6192",
+    "6195"
+   ],
+   "kind": "lay",
+   "why": "unilateral facial weakness",
+   "names": [
+    "Facial weakness, unilateral, isolated, initial imaging",
+    "Bell palsy, unilateral, isolated, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "loss of smell",
+   "ids": [
+    "6185"
+   ],
+   "kind": "lay",
+   "why": "anosmia",
+   "names": [
+    "Anosmia, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "bulging eye",
+   "ids": [
+    "3426"
+   ],
+   "kind": "lay",
+   "why": "exophthalmos",
+   "names": [
+    "Exophthalmos, nontraumatic, initial exam"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "swimmers ear",
+   "ids": [
+    "7877"
+   ],
+   "kind": "lay",
+   "why": "otitis externa",
+   "names": [
+    "Otitis externa, uncomplicated, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "going deaf in one ear",
+   "ids": [
+    "994",
+    "3530",
+    "995"
+   ],
+   "kind": "lay",
+   "why": "hearing loss",
+   "names": [
+    "Hearing loss, sensorineural, initial exam",
+    "Hearing loss, conductive, no mass in ear, initial exam",
+    "Hearing loss, mixed conductive and sensorineural, initial exam"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "overactive thyroid",
+   "ids": [
+    "4659"
+   ],
+   "kind": "lay",
+   "why": "thyrotoxicosis",
+   "names": [
+    "Thyrotoxicosis"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "underactive thyroid",
+   "ids": [
+    "4660"
+   ],
+   "kind": "lay",
+   "why": "hypothyroidism",
+   "names": [
+    "Hypothyroidism, primary"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "lump in neck",
+   "ids": [
+    "4632"
+   ],
+   "kind": "lay",
+   "why": "neck mass",
+   "names": [
+    "Neck mass, nonpulsatile"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "broken nose",
+   "ids": [
+    "6023"
+   ],
+   "kind": "lay",
+   "why": "nasal fracture",
+   "names": [
+    "Nasal deformity, palpable, nasal fracture suspected, initial imaging following primary survey"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "broken jaw",
+   "ids": [
+    "6028"
+   ],
+   "kind": "lay",
+   "why": "mandibular fracture",
+   "names": [
+    "Gingival hemorrhage, mandibular fracture suspected, initial imaging following primary survey"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "stuffy nose and face pressure for two weeks",
+   "ids": [
+    "5989"
+   ],
+   "kind": "lay",
+   "why": "acute rhinosinusitis",
+   "names": [
+    "Rhinosinusitis, acute, <4 wks, uncomplicated, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "spot on the lung",
+   "ids": [
+    "7159"
+   ],
+   "kind": "lay",
+   "why": "pulmonary nodule",
+   "names": [
+    "Pulmonary nodule on chest radiography, incidental, indeterminate, next imaging study"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "fluid around the lung",
+   "ids": [
+    "7270",
+    "7271",
+    "7272"
+   ],
+   "kind": "lay",
+   "why": "pleural effusion",
+   "names": [
+    "Pleural effusion suspected, noninfectious, dyspnea, initial imaging",
+    "Pleural effusion suspected, noninfectious, cough, initial imaging",
+    "Pleural effusion suspected, noninfectious, chest pain, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "narrowed windpipe",
+   "ids": [
+    "7738"
+   ],
+   "kind": "lay",
+   "why": "tracheal stenosis",
+   "names": [
+    "Tracheal stenosis suspected, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "heart attack",
+   "ids": [
+    "654",
+    "5215"
+   ],
+   "kind": "lay",
+   "why": "acute coronary syndrome",
+   "names": [
+    "Chest pain, low to intermed prob acute coronary syndrome, initial imaging",
+    "Chest pain, high prob acute coronary syndrome, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "armpit lump",
+   "ids": [
+    "5929"
+   ],
+   "kind": "lay",
+   "why": "axillary lump",
+   "names": [
+    "Axillary lump, palpable, new, unilateral, initial axilla imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "nipple leaking fluid",
+   "ids": [
+    "6214",
+    "6210"
+   ],
+   "kind": "lay",
+   "why": "nipple discharge",
+   "names": [
+    "Nipple discharge, pathologic, initial imaging",
+    "Nipple discharge, physiologic, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "man with enlarged breasts",
+   "ids": [
+    "4571"
+   ],
+   "kind": "lay",
+   "why": "gynecomastia",
+   "names": [
+    "Gynecomastia"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "vomiting blood",
+   "ids": [
+    "2377"
+   ],
+   "kind": "lay",
+   "why": "upper GI bleeding",
+   "names": [
+    "Upper GI bleeding suspected, nonvariceal, no endoscopy, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "bowel blockage",
+   "ids": [
+    "916"
+   ],
+   "kind": "lay",
+   "why": "small bowel obstruction",
+   "names": [
+    "Small bowel obstruction suspected, acute presentation, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "inflamed pancreas",
+   "ids": [
+    "2103"
+   ],
+   "kind": "lay",
+   "why": "pancreatitis",
+   "names": [
+    "Pancreatitis suspected, typical presentation"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "abscess near the anus",
+   "ids": [
+    "5555"
+   ],
+   "kind": "lay",
+   "why": "perianal abscess",
+   "names": [
+    "Perianal abscess suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "belly aneurysm screening",
+   "ids": [
+    "7343",
+    "7344"
+   ],
+   "kind": "lay",
+   "why": "AAA screening",
+   "names": [
+    "AAA screening, asymptomatic, with or without family hx of AAA",
+    "AAA screening, asymptomatic, with or without smoking hx"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "womb cancer staging",
+   "ids": [
+    "5386",
+    "5387",
+    "5388"
+   ],
+   "kind": "lay",
+   "why": "endometrial cancer",
+   "names": [
+    "Endometrial cancer, pretreatment staging, all grades, assess local tumor extension",
+    "Endometrial cancer, pretreatment evaluation, low grade, assess lymph node and mets",
+    "Endometrial cancer, pretreatment staging, high grade, assess lymph node and mets"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "bowel cancer staging",
+   "ids": [
+    "8326"
+   ],
+   "kind": "lay",
+   "why": "colon cancer",
+   "names": [
+    "Colon cancer, staging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "stomach cancer staging",
+   "ids": [
+    "8523",
+    "8524"
+   ],
+   "kind": "synonym",
+   "why": "gastric adenocarcinoma",
+   "names": [
+    "Gastric adenocarcinoma, suspected, locoregional staging",
+    "Gastric adenocarcinoma, staging for distant mets"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "bleeding at 8 weeks pregnant",
+   "ids": [
+    "861"
+   ],
+   "kind": "pregnancy",
+   "why": "first trimester bleeding",
+   "names": [
+    "Vaginal bleeding, first trimester, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "bleeding at 30 weeks pregnant",
+   "ids": [
+    "871",
+    "5391"
+   ],
+   "kind": "pregnancy",
+   "why": "bleeding after first trimester",
+   "names": [
+    "Vaginal bleeding, after first trimester, painless, initial imaging",
+    "Vaginal bleeding, after first trimester, painful, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "bleeding after giving birth",
+   "ids": [
+    "5359",
+    "5361"
+   ],
+   "kind": "lay",
+   "why": "postpartum hemorrhage",
+   "names": [
+    "Postpartum hemorrhage, <= 24 hrs after vaginal delivery, initial Imaging",
+    "Postpartum hemorrhage, >24hrs to <= 6wks hrs after vaginal delivery, initial Imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "expecting twins",
+   "ids": [
+    "7756",
+    "7760"
+   ],
+   "kind": "pregnancy",
+   "why": "multiple gestations; search has no pregnancy word",
+   "names": [
+    "Multiple gestations suspected, dichorionic, first trimester, initial imaging",
+    "Multiple gestations, dichorionic, first trimester US performed, next imaging study"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "molar pregnancy",
+   "ids": [
+    "4786"
+   ],
+   "kind": "lay",
+   "why": "gestational trophoblastic disease",
+   "names": [
+    "Gestational trophoblastic disease (GTD) suspected"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "pregnant with right lower belly pain and fever",
+   "ids": [
+    "6316"
+   ],
+   "kind": "pregnancy",
+   "why": "the pregnant RLQ scenario",
+   "names": [
+    "RLQ pain, fever, leukocytosis, appendicitis suspected, pregnant, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "pregnant with a blood clot in the lung",
+   "ids": [
+    "6225"
+   ],
+   "kind": "pregnancy",
+   "why": "PE in pregnancy",
+   "names": [
+    "Pulmonary embolism suspected, pregnant, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "pregnant with a kidney stone",
+   "ids": [
+    "7220"
+   ],
+   "kind": "pregnancy",
+   "why": "stone disease, pregnant",
+   "names": [
+    "Flank pain, acute, stone disease suspected, pregnant, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "pregnant with a kidney infection",
+   "ids": [
+    "6255"
+   ],
+   "kind": "pregnancy",
+   "why": "pyelonephritis, pregnant",
+   "names": [
+    "Pyelonephritis suspected, acute, pregnant, no other complications, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "kid swallowed a coin",
+   "ids": [
+    "8453"
+   ],
+   "kind": "pediatric",
+   "why": "ingested foreign body",
+   "names": [
+    "Ingested foreign body suspected, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "toddler swallowed a button battery",
+   "ids": [
+    "8453"
+   ],
+   "kind": "pediatric",
+   "why": "ingested foreign body",
+   "names": [
+    "Ingested foreign body suspected, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "child inhaled a peanut",
+   "ids": [
+    "8452"
+   ],
+   "kind": "pediatric",
+   "why": "aspirated foreign body",
+   "names": [
+    "Aspirated foreign body suspected, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "toddler choked on a toy and is now wheezing",
+   "ids": [
+    "8452"
+   ],
+   "kind": "pediatric",
+   "why": "aspirated foreign body",
+   "names": [
+    "Aspirated foreign body suspected, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "2 year old refusing to walk",
+   "ids": [
+    "1117",
+    "4555"
+   ],
+   "kind": "pediatric",
+   "why": "acutely limping child",
+   "names": [
+    "Ped <=5yo, acute limp, non localized",
+    "Ped <=5yo, acute limp, non localized, infection suspected"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "toddler limping",
+   "ids": [
+    "1117"
+   ],
+   "kind": "pediatric",
+   "why": "acute limp",
+   "names": [
+    "Ped <=5yo, acute limp, non localized"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "baby projectile vomiting",
+   "ids": [
+    "815"
+   ],
+   "kind": "pediatric",
+   "why": "pyloric stenosis",
+   "names": [
+    "Vomiting, nonbilious, new onset, hypertrophic pyloric stenosis suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "newborn throwing up green",
+   "ids": [
+    "5402"
+   ],
+   "kind": "pediatric",
+   "why": "bilious vomiting",
+   "names": [
+    "Vomiting, bilious, malrotation suspected, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "newborn vomiting who has not passed meconium",
+   "ids": [
+    "5464"
+   ],
+   "kind": "pediatric",
+   "why": "scenario is tagged age=adult in the data although it is an infant scenario",
+   "names": [
+    "Vomiting, no meconium passage, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "baby hip click",
+   "ids": [
+    "787",
+    "790",
+    "4696",
+    "4694",
+    "4695"
+   ],
+   "kind": "pediatric",
+   "why": "developmental dysplasia of the hip",
+   "names": [
+    "Hip dysplasia suspected",
+    "Hip dysplasia suspected",
+    "Hip dysplasia suspected",
+    "Hip dysplasia suspected, equivocal physical exam or risk factors",
+    "Hip dysplasia suspected, equivocal physical exam or risk factors"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "kid bumped his head",
+   "ids": [
+    "2046",
+    "5280",
+    "5281",
+    "5282"
+   ],
+   "kind": "pediatric",
+   "why": "minor head trauma, child",
+   "names": [
+    "Head trauma, minor, acute, blunt, low risk per PECARN, not abuse, initial imaging",
+    "Head trauma, minor, acute, blunt, GCS=15, loss of consciousness, not abuse, initial imaging",
+    "Head trauma, minor, acute, blunt, GCS=15, severe mechanism of injury, not abuse, initial imaging",
+    "Head trauma, minor, acute, blunt, GCS=15, scalp hematoma,, not abuse, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "toddler fever fit",
+   "ids": [
+    "1170",
+    "1182"
+   ],
+   "kind": "pediatric",
+   "why": "febrile seizure",
+   "names": [
+    "Seizure, simple, febrile, initial imaging",
+    "Seizure, complex, febrile, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "child with a fever and no obvious cause",
+   "ids": [
+    "7990",
+    "7991",
+    "7993"
+   ],
+   "kind": "pediatric",
+   "why": "fever without source",
+   "names": [
+    "Fever, without source, occult pneumonia suspected, initial imaging",
+    "Fever, without source, low risk for occult pneumonia, initial imaging",
+    "Fever, unknown origin, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "child chest infection",
+   "ids": [
+    "5223"
+   ],
+   "kind": "pediatric",
+   "why": "community acquired pneumonia",
+   "names": [
+    "Community acquired pneumonia suspected, uncomplicated, immunocompetent, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "kindergartner with a bladder infection",
+   "ids": [
+    "7274",
+    "7275",
+    "7276",
+    "7277",
+    "7278",
+    "7279"
+   ],
+   "kind": "pediatric",
+   "why": "UTI, child",
+   "names": [
+    "UTI, first febrile, response to medical management, initial imaging",
+    "UTI, first febrile, response to medical management, initial imaging",
+    "UTI, first febrile, response to medical management, initial imaging",
+    "UTI, first febrile, response to medical management, initial imaging",
+    "UTI, atypical, initial imaging",
+    "UTI, recurrent febrile, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "14 year old with lower back pain",
+   "ids": [
+    "8105"
+   ],
+   "kind": "pediatric",
+   "why": "lumbar spine pain, child",
+   "names": [
+    "Lumbar spine pain, no red flags, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "unsteady wobbly child",
+   "ids": [
+    "6286",
+    "6289",
+    "6290"
+   ],
+   "kind": "pediatric",
+   "why": "ataxia, child",
+   "names": [
+    "Ataxia, acute, no recent trauma, initial imaging",
+    "Ataxia, chronic, progressive, initial imaging",
+    "Ataxia, chronic, nonprogressive, initial imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "child with early puberty",
+   "ids": [
+    "4709",
+    "4710"
+   ],
+   "kind": "pediatric",
+   "why": "precocious puberty",
+   "names": [
+    "Precocious puberty",
+    "Precocious puberty"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "newborn with swollen kidneys seen before birth",
+   "ids": [
+    "5352"
+   ],
+   "kind": "pediatric",
+   "why": "antenatal hydronephrosis",
+   "names": [
+    "Hydronephrosis, antenatal, initial neonatal imaging"
+   ],
+   "today": "blocked"
+  },
+  {
+   "q": "kid with tummy pain and red jelly stool",
+   "ids": [
+    "8457"
+   ],
+   "kind": "pediatric",
+   "why": "intussusception",
+   "names": [
+    "Abdominal pain, acute, intussusception suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "6 year old with tummy ache who has not pooped in days",
+   "ids": [
+    "8456"
+   ],
+   "kind": "pediatric",
+   "why": "constipation",
+   "names": [
+    "Abdominal pain, acute, constipation suspected, initial imaging"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "child with sore neck after trampoline fall",
+   "ids": [
+    "4670"
+   ],
+   "kind": "pediatric",
+   "why": "neck trauma, child",
+   "names": [
+    "Neck trauma, uncomplicated"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "child with a sinus infection",
+   "ids": [
+    "806"
+   ],
+   "kind": "pediatric",
+   "why": "sinusitis, child",
+   "names": [
+    "Ped, sinusitis, acute, uncomplicated, initial exam"
+   ],
+   "today": "pass"
+  },
+  {
+   "q": "preschooler with a belly ache and fever, appendix?",
+   "ids": [
+    "4665",
+    "4666",
+    "4667"
+   ],
+   "kind": "pediatric",
+   "why": "suspected appendicitis, child",
+   "names": [
+    "Appendicitis suspected, low clinical risk, initial exam",
+    "Appendicitis suspected, intermediate clinical risk, initial exam",
+    "Appendicitis suspected, high clinical risk, initial exam"
+   ],
+   "today": "blocked"
+  }
+ ],
+ "guard_block": [
+  {
+   "q": "enlarged spleen",
+   "id": "6700",
+   "kind": "region",
+   "why": "RUQ is the liver side",
+   "name": "RUQ pain, etiology unknown, initial imaging",
+   "topic": "Right Upper Quadrant Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "enlarged spleen",
+   "id": "628",
+   "kind": "region",
+   "why": "renal mass is another organ",
+   "name": "Renal mass, indeterminate, no contraindication to iodinated or gadolinium based contrast, initial imaging",
+   "topic": "Indeterminate Renal Mass",
+   "today": "blocked"
+  },
+  {
+   "q": "enlarged spleen",
+   "id": "2429",
+   "kind": "region",
+   "why": "liver disease is another organ",
+   "name": "Liver disease, chronic, fibrosis suspected, diagnosis and staging, initial imaging",
+   "topic": "Chronic Liver Disease",
+   "today": "blocked"
+  },
+  {
+   "q": "kidney mass",
+   "id": "5606",
+   "kind": "region",
+   "why": "adrenal mass",
+   "name": "Adrenal mass, indeterminate, <1cm on imaging, no benign features, no hx of malignancy, follow up imaging",
+   "topic": "Adrenal Mass Evaluation",
+   "today": "blocked"
+  },
+  {
+   "q": "kidney mass",
+   "id": "5436",
+   "kind": "region",
+   "why": "liver lesion",
+   "name": "Liver lesion, >1cm, indeterminate on noncontrast or single phase CT, normal liver, no extrahepatic malignancy",
+   "topic": "Liver Lesion-Initial Characterization",
+   "today": "blocked"
+  },
+  {
+   "q": "kidney mass",
+   "id": "5216",
+   "kind": "region",
+   "why": "pancreatic cyst",
+   "name": "Pancreas cyst, <=2.5cm, incidental, initial evaluation",
+   "topic": "Pancreatic Cyst",
+   "today": "blocked"
+  },
+  {
+   "q": "kidney stone",
+   "id": "6701",
+   "kind": "region",
+   "why": "gallstone disease",
+   "name": "RUQ pain, biliary disease suspected, initial imaging",
+   "topic": "Right Upper Quadrant Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "gallstones",
+   "id": "7217",
+   "kind": "region",
+   "why": "urinary stone disease",
+   "name": "Flank pain, acute, stone disease suspected, no hx of stone disease, initial imaging",
+   "topic": "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)",
+   "today": "blocked"
+  },
+  {
+   "q": "kidney failure",
+   "id": "4528",
+   "kind": "region",
+   "why": "heart failure",
+   "name": "Heart failure suspected, no hx of heart failure, initial imaging",
+   "topic": "Suspected and Known Heart Failure",
+   "today": "blocked"
+  },
+  {
+   "q": "heart failure",
+   "id": "1006",
+   "kind": "region",
+   "why": "renal failure",
+   "name": "Renal failure, acute kidney injury, initial imaging",
+   "topic": "Renal Failure",
+   "today": "blocked"
+  },
+  {
+   "q": "liver failure",
+   "id": "5495",
+   "kind": "region",
+   "why": "renal failure",
+   "name": "Renal failure, kidney disease unknown duration, initial imaging",
+   "topic": "Renal Failure",
+   "today": "blocked"
+  },
+  {
+   "q": "kidney transplant not working",
+   "id": "8449",
+   "kind": "region",
+   "why": "liver transplant",
+   "name": "Liver transplant, postoperative complications, vascular etiology suspected, initial imaging",
+   "topic": "Imaging After Liver Transplant",
+   "today": "blocked"
+  },
+  {
+   "q": "liver transplant complication",
+   "id": "1184",
+   "kind": "region",
+   "why": "renal transplant",
+   "name": "Renal transplant dysfunction, initial imaging",
+   "topic": "Renal Transplant Dysfunction",
+   "today": "blocked"
+  },
+  {
+   "q": "kidney cancer staging",
+   "id": "7831",
+   "kind": "region",
+   "why": "bladder cancer",
+   "name": "Bladder cancer, muscle invasive, pretreatment staging",
+   "topic": "Pretreatment Staging of Urothelial Cancer",
+   "today": "blocked"
+  },
+  {
+   "q": "heart tumor",
+   "id": "7904",
+   "kind": "region",
+   "why": "brain tumor",
+   "name": "Brain tumor on prior imaging, intra-axial suspected, pretreatment evaluation",
+   "topic": "Brain Tumors",
+   "today": "blocked"
+  },
+  {
+   "q": "brain tumor",
+   "id": "8461",
+   "kind": "region",
+   "why": "cardiac mass",
+   "name": "Cardiac mass suspected, no known cardiac mass, initial imaging",
+   "topic": "Evaluation of Cardiac Masses",
+   "today": "blocked"
+  },
+  {
+   "q": "lung nodule",
+   "id": "4657",
+   "kind": "region",
+   "why": "thyroid nodule",
+   "name": "Thyroid nodule, palpable, euthyroid",
+   "topic": "Thyroid Disease",
+   "today": "blocked"
+  },
+  {
+   "q": "thyroid nodule",
+   "id": "7160",
+   "kind": "region",
+   "why": "pulmonary nodule",
+   "name": "Pulmonary nodule on chest CT, incidental, indeterminate, <6mm, next imaging study",
+   "topic": "Incidentally Detected Indeterminate Pulmonary Nodule",
+   "today": "blocked"
+  },
+  {
+   "q": "blood clot in the lung",
+   "id": "7357",
+   "kind": "region",
+   "why": "cerebral venous sinus thrombosis",
+   "name": "Venous sinus thrombosis suspected, initial imaging",
+   "topic": "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions",
+   "today": "blocked"
+  },
+  {
+   "q": "neck pain",
+   "id": "862",
+   "kind": "region",
+   "why": "cervical cancer is the uterine cervix",
+   "name": "Cervical cancer, pretreatment, clinically visible lesion, local tumor staging",
+   "topic": "Pretreatment Evaluation and Follow-up of Invasive Cancer of the Cervix",
+   "today": "blocked"
+  },
+  {
+   "q": "cervical cancer",
+   "id": "4726",
+   "kind": "region",
+   "why": "cervical spine pain with malignancy is the neck",
+   "name": "Cervical spine pain, acute, no trauma, malignancy, initial imaging",
+   "topic": "Cervical Pain or Cervical Radiculopathy",
+   "today": "blocked"
+  },
+  {
+   "q": "cervical spine fracture",
+   "id": "5302",
+   "kind": "region",
+   "why": "gravid cervix",
+   "name": "Gravid cervix assessment, hx of preterm birth, initial imaging",
+   "topic": "Assessment of Gravid Cervix",
+   "today": "blocked"
+  },
+  {
+   "q": "lump in neck",
+   "id": "5929",
+   "kind": "region",
+   "why": "axillary lump",
+   "name": "Axillary lump, palpable, new, unilateral, initial axilla imaging",
+   "topic": "Imaging of the Axilla",
+   "today": "blocked"
+  },
+  {
+   "q": "armpit lump",
+   "id": "4632",
+   "kind": "region",
+   "why": "neck mass",
+   "name": "Neck mass, nonpulsatile",
+   "topic": "Neck Mass/Adenopathy",
+   "today": "blocked"
+  },
+  {
+   "q": "breast lump",
+   "id": "6948",
+   "kind": "region",
+   "why": "soft tissue mass of the wrist",
+   "name": "Soft tissue mass, wrist, superficial, initial imaging",
+   "topic": "Soft Tissue Masses",
+   "today": "blocked"
+  },
+  {
+   "q": "lump on wrist",
+   "id": "6802",
+   "kind": "region",
+   "why": "breast mass",
+   "name": "Breast mass, palpable, initial imaging",
+   "topic": "Palpable Breast Masses",
+   "today": "blocked"
+  },
+  {
+   "q": "lumbar pain",
+   "id": "731",
+   "kind": "region",
+   "why": "cervical spine pain",
+   "name": "Cervical spine pain, chronic, no radiculopathy, no trauma, no red flags, initial imaging",
+   "topic": "Cervical Pain or Cervical Radiculopathy",
+   "today": "blocked"
+  },
+  {
+   "q": "neck pain",
+   "id": "5618",
+   "kind": "region",
+   "why": "low back pain",
+   "name": "Low back pain, acute, no red flags, no prior management, initial imaging",
+   "topic": "Low Back Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "mid back pain",
+   "id": "5618",
+   "kind": "region",
+   "why": "low back, not thoracic",
+   "name": "Low back pain, acute, no red flags, no prior management, initial imaging",
+   "topic": "Low Back Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "slipped disc in the lumbar spine",
+   "id": "6233",
+   "kind": "region",
+   "why": "lumbar abdominal wall hernia",
+   "name": "Abdominal wall hernia suspected, lumbar, initial imaging",
+   "topic": "Hernia",
+   "today": "blocked"
+  },
+  {
+   "q": "sprained ankle",
+   "id": "4618",
+   "kind": "region",
+   "why": "wrist trauma",
+   "name": "Wrist trauma, initial exam",
+   "topic": "Acute Hand and Wrist Trauma",
+   "today": "blocked"
+  },
+  {
+   "q": "broken wrist",
+   "id": "5405",
+   "kind": "region",
+   "why": "ankle trauma",
+   "name": "Ankle trauma, up to 3 weeks after injury, no exclusionary criteria, unable to bear weight immediately after in",
+   "topic": "Acute Trauma to the Ankle",
+   "today": "blocked"
+  },
+  {
+   "q": "jammed finger",
+   "id": "1084",
+   "kind": "region",
+   "why": "foot trauma; finger is not toe",
+   "name": "Foot trauma, Ottawa rules negative, initial imaging",
+   "topic": "Acute Trauma to the Foot",
+   "today": "blocked"
+  },
+  {
+   "q": "knee replacement hurts",
+   "id": "7164",
+   "kind": "region",
+   "why": "hip replaced",
+   "name": "Hip replaced, symptomatic, initial imaging",
+   "topic": "Imaging after Total Hip Arthroplasty",
+   "today": "blocked"
+  },
+  {
+   "q": "hip replacement pain",
+   "id": "5984",
+   "kind": "region",
+   "why": "shoulder replaced",
+   "name": "Shoulder replaced, symptomatic, Initial imaging",
+   "topic": "Imaging After Shoulder Arthroplasty",
+   "today": "blocked"
+  },
+  {
+   "q": "tennis elbow",
+   "id": "6737",
+   "kind": "region",
+   "why": "rotator cuff, shoulder",
+   "name": "Shoulder pain, chronic, rotator cuff disorders suspected, no hx of surgery, radiography normal, next imaging s",
+   "topic": "Chronic Shoulder Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "frozen shoulder",
+   "id": "6337",
+   "kind": "region",
+   "why": "elbow",
+   "name": "Elbow pain, chronic, epicondylalgia suspected, refractory to empirical treatment, radiography nonspecific, nex",
+   "topic": "Chronic Elbow Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "heel pain",
+   "id": "7326",
+   "kind": "region",
+   "why": "hand pain",
+   "name": "Hand pain, chronic, tendon pathology suspected, radiography normal, next imaging study",
+   "topic": "Chronic Hand and Wrist Pain",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "gout in the big toe",
+   "id": "6858",
+   "kind": "region",
+   "why": "wrist gout",
+   "name": "Wrist pain, chronic, crystalline arthritis suspected, gout, initial imaging",
+   "topic": "Chronic Extremity Joint Pain-Suspected Inflammatory Arthritis, Crystalline Arthritis, or Erosive Osteoarthritis",
+   "today": "blocked"
+  },
+  {
+   "q": "infected finger",
+   "id": "6379",
+   "kind": "region",
+   "why": "foot infection",
+   "name": "Soft tissue infection suspected, foot, initial imaging",
+   "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+   "today": "blocked"
+  },
+  {
+   "q": "blood clot in the calf",
+   "id": "670",
+   "kind": "region",
+   "why": "upper extremity DVT",
+   "name": "Upper extremity DVT suspected, initial imaging",
+   "topic": "Suspected Upper-Extremity Deep Vein Thrombosis",
+   "today": "blocked"
+  },
+  {
+   "q": "swollen arm after PICC line",
+   "id": "669",
+   "kind": "region",
+   "why": "lower extremity DVT; the body part is only in the topic title",
+   "name": "DVT suspected, initial exam",
+   "topic": "Suspected Lower Extremity Deep Vein Thrombosis",
+   "today": "blocked"
+  },
+  {
+   "q": "leg cramps when walking",
+   "id": "6708",
+   "kind": "region",
+   "why": "upper extremity arterial occlusion",
+   "name": "Arterial occlusion, upper extremity, embolic etiology suspected, next imaging study, determine source",
+   "topic": "Workup of Noncerebral Systemic Arterial Embolic Source",
+   "today": "blocked"
+  },
+  {
+   "q": "broken nose",
+   "id": "6028",
+   "kind": "region",
+   "why": "mandibular fracture",
+   "name": "Gingival hemorrhage, mandibular fracture suspected, initial imaging following primary survey",
+   "topic": "Imaging of Facial Trauma Following Primary Survey",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "broken jaw",
+   "id": "6023",
+   "kind": "region",
+   "why": "nasal fracture",
+   "name": "Nasal deformity, palpable, nasal fracture suspected, initial imaging following primary survey",
+   "topic": "Imaging of Facial Trauma Following Primary Survey",
+   "today": "blocked"
+  },
+  {
+   "q": "swimmers ear",
+   "id": "5989",
+   "kind": "region",
+   "why": "sinusitis",
+   "name": "Rhinosinusitis, acute, <4 wks, uncomplicated, initial imaging",
+   "topic": "Sinonasal Disease",
+   "today": "blocked"
+  },
+  {
+   "q": "bulging eye",
+   "id": "7895",
+   "kind": "region",
+   "why": "otitis media",
+   "name": "Otitis media, vertigo, initial imaging",
+   "topic": "Inflammatory Ear Disease",
+   "today": "blocked"
+  },
+  {
+   "q": "bowel cancer staging",
+   "id": "8523",
+   "kind": "region",
+   "why": "gastric cancer",
+   "name": "Gastric adenocarcinoma, suspected, locoregional staging",
+   "topic": "Staging and Follow-up of Gastric Cancer",
+   "today": "blocked"
+  },
+  {
+   "q": "stomach cancer staging",
+   "id": "6317",
+   "kind": "region",
+   "why": "esophageal cancer",
+   "name": "Esophageal cancer, newly diagnosed, pretreatment clinical staging, initial imaging",
+   "topic": "Staging and Follow-up of Esophageal Cancer",
+   "today": "blocked"
+  },
+  {
+   "q": "womb cancer staging",
+   "id": "862",
+   "kind": "region",
+   "why": "cervical cancer",
+   "name": "Cervical cancer, pretreatment, clinically visible lesion, local tumor staging",
+   "topic": "Pretreatment Evaluation and Follow-up of Invasive Cancer of the Cervix",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "womb cancer staging",
+   "id": "650",
+   "kind": "region",
+   "why": "ovarian cancer",
+   "name": "Ovarian cancer, pretreatment staging",
+   "topic": "Staging and Follow-up of Ovarian Cancer",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "testicle pain",
+   "id": "5482",
+   "kind": "region",
+   "why": "postmenopausal pelvic pain",
+   "name": "Pelvic pain, acute, postmenopausal, initial imaging",
+   "topic": "Postmenopausal Acute Pelvic Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "enlarged prostate",
+   "id": "4658",
+   "kind": "region",
+   "why": "goiter",
+   "name": "Goiter suspected",
+   "topic": "Thyroid Disease",
+   "today": "blocked"
+  },
+  {
+   "q": "water on the brain",
+   "id": "7396",
+   "kind": "region",
+   "why": "hydronephrosis",
+   "name": "Hydronephrosis, unknown cause, symptomatic, initial imaging",
+   "topic": "Hydronephrosis on Prior Imaging-Unknown Cause",
+   "today": "blocked"
+  },
+  {
+   "q": "heartburn",
+   "id": "4528",
+   "kind": "region",
+   "why": "heart failure",
+   "name": "Heart failure suspected, no hx of heart failure, initial imaging",
+   "topic": "Suspected and Known Heart Failure",
+   "today": "blocked"
+  },
+  {
+   "q": "belly aneurysm screening",
+   "id": "5925",
+   "kind": "region",
+   "why": "cerebral aneurysm screening",
+   "name": "Cerebral aneurysm screening, high risk",
+   "topic": "Cerebrovascular Diseases-Aneurysm, Vascular Malformation, and Subarachnoid Hemorrhage",
+   "today": "blocked"
+  },
+  {
+   "q": "brain aneurysm screening",
+   "id": "7343",
+   "kind": "region",
+   "why": "AAA screening",
+   "name": "AAA screening, asymptomatic, with or without family hx of AAA",
+   "topic": "Screening for Abdominal Aortic Aneurysm",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "narrowed kidney artery causing high blood pressure",
+   "id": "7360",
+   "kind": "region",
+   "why": "carotid stenosis",
+   "name": "Carotid stenosis, asymptomatic, surveillance",
+   "topic": "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions",
+   "today": "blocked"
+  },
+  {
+   "q": "yellow skin and eyes",
+   "id": "5317",
+   "kind": "region",
+   "why": "hematuria",
+   "name": "Hematuria, gross, initial imaging",
+   "topic": "Hematuria",
+   "today": "blocked"
+  },
+  {
+   "q": "pain under left ribs",
+   "id": "6700",
+   "kind": "side",
+   "why": "right upper quadrant",
+   "name": "RUQ pain, etiology unknown, initial imaging",
+   "topic": "Right Upper Quadrant Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "pain under right ribs",
+   "id": "8411",
+   "kind": "side",
+   "why": "left upper quadrant",
+   "name": "LUQ pain, acute, NOS, initial imaging",
+   "topic": "Acute Left Upper Quadrant Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "upper left abdominal pain",
+   "id": "7110",
+   "kind": "side",
+   "why": "left LOWER quadrant",
+   "name": "LLQ pain, initial imaging",
+   "topic": "Left Lower Quadrant Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "right lower abdominal pain",
+   "id": "6700",
+   "kind": "side",
+   "why": "right UPPER quadrant",
+   "name": "RUQ pain, etiology unknown, initial imaging",
+   "topic": "Right Upper Quadrant Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "lower left belly pain",
+   "id": "6314",
+   "kind": "side",
+   "why": "right lower quadrant",
+   "name": "RLQ pain, initial imaging",
+   "topic": "Right Lower Quadrant Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "right upper abdominal pain",
+   "id": "8411",
+   "kind": "side",
+   "why": "left upper quadrant",
+   "name": "LUQ pain, acute, NOS, initial imaging",
+   "topic": "Acute Left Upper Quadrant Pain",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "appendicitis",
+   "id": "7111",
+   "kind": "side",
+   "why": "LLQ diverticulitis",
+   "name": "LLQ pain, diverticulitis suspected, initial imaging",
+   "topic": "Left Lower Quadrant Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "diverticulitis",
+   "id": "6315",
+   "kind": "side",
+   "why": "RLQ appendicitis",
+   "name": "RLQ pain, fever, leukocytosis, appendicitis suspected, initial imaging",
+   "topic": "Right Lower Quadrant Pain",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "right leg claudication",
+   "id": "7854",
+   "kind": "side",
+   "why": "scenario is the left leg",
+   "name": "Adult. Nonsmoker, sedentary lifestyle. Left lower-extremity claudication on walking, asymmetrically diminished",
+   "topic": "Management of Iliac Artery Occlusive Disease",
+   "today": "blocked"
+  },
+  {
+   "q": "left leg claudication",
+   "id": "7858",
+   "kind": "side",
+   "why": "scenario is the right leg",
+   "name": "Adult. Past medical history significant for diabetes mellitus, hypertension, and smoking. Increasing claudicat",
+   "topic": "Management of Iliac Artery Occlusive Disease",
+   "today": "blocked"
+  },
+  {
+   "q": "pregnant with right lower belly pain and fever",
+   "id": "6315",
+   "kind": "population",
+   "why": "non-pregnant scenario",
+   "name": "RLQ pain, fever, leukocytosis, appendicitis suspected, initial imaging",
+   "topic": "Right Lower Quadrant Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "pregnant with a blood clot in the lung",
+   "id": "6224",
+   "kind": "population",
+   "why": "non-pregnant scenario",
+   "name": "Pulmonary embolism suspected, high pretest probability, initial imaging",
+   "topic": "Suspected Pulmonary Embolism",
+   "today": "blocked"
+  },
+  {
+   "q": "pregnant with a kidney stone",
+   "id": "7217",
+   "kind": "population",
+   "why": "non-pregnant scenario",
+   "name": "Flank pain, acute, stone disease suspected, no hx of stone disease, initial imaging",
+   "topic": "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)",
+   "today": "blocked"
+  },
+  {
+   "q": "pregnant with a kidney infection",
+   "id": "6245",
+   "kind": "population",
+   "why": "non-pregnant scenario",
+   "name": "Pyelonephritis suspected, acute, uncomplicated, first time presentation, initial imaging",
+   "topic": "Acute Pyelonephritis",
+   "today": "blocked"
+  },
+  {
+   "q": "pregnant with a new headache",
+   "id": "7023",
+   "kind": "population",
+   "why": "non-pregnant scenario",
+   "name": "Headache, no red flags, initial imaging",
+   "topic": "Headache",
+   "today": "blocked"
+  },
+  {
+   "q": "ovarian cyst, not pregnant",
+   "id": "4749",
+   "kind": "population",
+   "why": "pregnant scenario",
+   "name": "Adnexal mass suspected, no acute symptoms, pregnant, initial imaging",
+   "topic": "Clinically Suspected Adnexal Mass, No Acute Symptoms",
+   "today": "blocked"
+  },
+  {
+   "q": "peeing blood",
+   "id": "5316",
+   "kind": "population",
+   "why": "pregnant scenario for a search that names no pregnancy",
+   "name": "Hematuria, microscopic, pregnant, initial imaging",
+   "topic": "Hematuria",
+   "today": "blocked"
+  },
+  {
+   "q": "breast pain",
+   "id": "8381",
+   "kind": "population",
+   "why": "pregnant scenario for a search that names no pregnancy",
+   "name": "Breast pain, focal, pregnant, initial imaging",
+   "topic": "Breast Imaging During Pregnancy",
+   "today": "blocked"
+  },
+  {
+   "q": "cannot get pregnant",
+   "id": "6225",
+   "kind": "population",
+   "why": "PE in pregnancy",
+   "name": "Pulmonary embolism suspected, pregnant, initial imaging",
+   "topic": "Suspected Pulmonary Embolism",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "headache",
+   "id": "1143",
+   "kind": "population",
+   "why": "pediatric scenario for a search that names no child",
+   "name": "Headache, primary, initial exam",
+   "topic": "Headache-Child",
+   "today": "blocked"
+  },
+  {
+   "q": "child with a headache",
+   "id": "7013",
+   "kind": "population",
+   "why": "adult scenario",
+   "name": "Headache, tension type, neuro exam normal, initial imaging",
+   "topic": "Headache",
+   "today": "blocked"
+  },
+  {
+   "q": "70 year old limping",
+   "id": "1117",
+   "kind": "population",
+   "why": "child up to age 5",
+   "name": "Ped <=5yo, acute limp, non localized",
+   "topic": "Acutely Limping Child Up To Age 5",
+   "today": "blocked"
+  },
+  {
+   "q": "toddler limping",
+   "id": "6714",
+   "kind": "population",
+   "why": "adult chronic hip pain",
+   "name": "Hip pain, chronic, initial imaging",
+   "topic": "Chronic Hip Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "toddler limping",
+   "id": "3438",
+   "kind": "population",
+   "why": "adult claudication",
+   "name": "Claudication, prior revasc, initial exam",
+   "topic": "Lower Extremity Arterial Revascularization-Post-Therapy Imaging",
+   "today": "blocked"
+  },
+  {
+   "q": "baby projectile vomiting",
+   "id": "916",
+   "kind": "population",
+   "why": "adult small bowel obstruction",
+   "name": "Small bowel obstruction suspected, acute presentation, initial imaging",
+   "topic": "Suspected Small-Bowel Obstruction",
+   "today": "blocked"
+  },
+  {
+   "q": "kid swallowed a coin",
+   "id": "903",
+   "kind": "population",
+   "why": "adult dysphagia",
+   "name": "Dysphagia, oropharyngeal, unexplained",
+   "topic": "Dysphagia",
+   "today": "blocked"
+  },
+  {
+   "q": "kid swallowed a coin",
+   "id": "4623",
+   "kind": "population",
+   "why": "adult hand trauma with foreign body",
+   "name": "Hand trauma, penetrating, foreign body suspected, neg radiography",
+   "topic": "Acute Hand and Wrist Trauma",
+   "today": "blocked"
+  },
+  {
+   "q": "baby hip click",
+   "id": "7941",
+   "kind": "population",
+   "why": "adult traumatic hip pain",
+   "name": "Hip pain, acute, traumatic, initial imaging",
+   "topic": "Acute Hip Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "toddler fever fit",
+   "id": "935",
+   "kind": "population",
+   "why": "adult new seizure",
+   "name": "Seizure, new, no trauma, initial imaging",
+   "topic": "Seizures and Epilepsy",
+   "today": "blocked"
+  },
+  {
+   "q": "45 year old with a first seizure",
+   "id": "1170",
+   "kind": "population",
+   "why": "pediatric febrile seizure",
+   "name": "Seizure, simple, febrile, initial imaging",
+   "topic": "Seizures-Child",
+   "today": "blocked"
+  },
+  {
+   "q": "child chest infection",
+   "id": "4557",
+   "kind": "population",
+   "why": "adult respiratory illness",
+   "name": "Respiratory illness, acute, immunocompetent, physical exam positive, initial imaging",
+   "topic": "Acute Respiratory Illness in Immunocompetent Patients",
+   "today": "blocked"
+  },
+  {
+   "q": "14 year old with lower back pain",
+   "id": "5618",
+   "kind": "population",
+   "why": "adult low back pain",
+   "name": "Low back pain, acute, no red flags, no prior management, initial imaging",
+   "topic": "Low Back Pain",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "elderly woman with low back pain",
+   "id": "8105",
+   "kind": "population",
+   "why": "pediatric back pain",
+   "name": "Lumbar spine pain, no red flags, initial imaging",
+   "topic": "Back Pain-Child",
+   "today": "blocked"
+  },
+  {
+   "q": "kid bumped his head",
+   "id": "2199",
+   "kind": "population",
+   "why": "adult head trauma",
+   "name": "Head trauma, acute, mild, GCS 13-15, imaging indicated per clinical decision rule, initial imaging",
+   "topic": "Head Trauma",
+   "today": "blocked"
+  },
+  {
+   "q": "30 year old hit his head",
+   "id": "2046",
+   "kind": "population",
+   "why": "pediatric head trauma",
+   "name": "Head trauma, minor, acute, blunt, low risk per PECARN, not abuse, initial imaging",
+   "topic": "Head Trauma-Child",
+   "today": "blocked"
+  },
+  {
+   "q": "woman due for breast cancer screening",
+   "id": "8340",
+   "kind": "population",
+   "why": "male breast cancer screening",
+   "name": "Breast cancer screening, average risk",
+   "topic": "Male Breast Cancer Screening",
+   "today": "blocked"
+  },
+  {
+   "q": "baby with a fever",
+   "id": "7251",
+   "kind": "population",
+   "why": "adult sepsis",
+   "name": "Sepsis suspected, non specific symptoms, unknown origin, initial imaging",
+   "topic": "Sepsis",
+   "today": "blocked"
+  },
+  {
+   "q": "child with a tummy ache",
+   "id": "5566",
+   "kind": "population",
+   "why": "adult epigastric pain",
+   "name": "Epigastric pain, gastritis suspected, initial imaging",
+   "topic": "Epigastric Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "kindergartner with a bladder infection",
+   "id": "1004",
+   "kind": "population",
+   "why": "adult recurrent UTI",
+   "name": "UTI, lower urinary tract, recurrent, uncomplicated, no risk factors",
+   "topic": "Recurrent Lower Urinary Tract Infections in Females",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "adult scoliosis",
+   "id": "4583",
+   "kind": "population",
+   "why": "pediatric scoliosis",
+   "name": "Ped, scoliosis, congenital, lumbar spine",
+   "topic": "Scoliosis-Child",
+   "today": "blocked"
+  },
+  {
+   "q": "kid swallowed a coin",
+   "id": "8452",
+   "kind": "opposite",
+   "why": "aspirated, not ingested",
+   "name": "Aspirated foreign body suspected, initial imaging",
+   "topic": "Ingested or Aspirated Foreign Body-Child",
+   "today": "blocked"
+  },
+  {
+   "q": "child inhaled a peanut",
+   "id": "8453",
+   "kind": "opposite",
+   "why": "ingested, not aspirated",
+   "name": "Ingested foreign body suspected, initial imaging",
+   "topic": "Ingested or Aspirated Foreign Body-Child",
+   "today": "blocked"
+  },
+  {
+   "q": "pulsatile tinnitus",
+   "id": "3419",
+   "kind": "opposite",
+   "why": "nonpulsatile",
+   "name": "Tinnitus, nonpulsatile, bilateral, no hearing loss, no neurologic deficit, no trauma, initial imaging",
+   "topic": "Tinnitus",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "small cell lung cancer staging",
+   "id": "849",
+   "kind": "opposite",
+   "why": "non-small cell",
+   "name": "Lung cancer, non-small cell, staging",
+   "topic": "Noninvasive Clinical Staging of Primary Lung Cancer",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "stab wound to the chest",
+   "id": "836",
+   "kind": "opposite",
+   "why": "blunt chest trauma",
+   "name": "Chest trauma, blunt, rib fracture suspected",
+   "topic": "Rib Fractures",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "blunt chest trauma",
+   "id": "7736",
+   "kind": "opposite",
+   "why": "penetrating",
+   "name": "Chest trauma, penetrating, nonballistic, normotensive, initial imaging",
+   "topic": "Penetrating Torso Trauma",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "bleeding at 8 weeks pregnant",
+   "id": "871",
+   "kind": "opposite",
+   "why": "after first trimester",
+   "name": "Vaginal bleeding, after first trimester, painless, initial imaging",
+   "topic": "Second and Third Trimester Vaginal Bleeding",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "bleeding at 30 weeks pregnant",
+   "id": "861",
+   "kind": "opposite",
+   "why": "first trimester",
+   "name": "Vaginal bleeding, first trimester, initial imaging",
+   "topic": "First Trimester Vaginal Bleeding",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "postmenopausal ovarian cyst",
+   "id": "877",
+   "kind": "opposite",
+   "why": "premenopausal",
+   "name": "Adnexal mass suspected, no acute symptoms, premenopausal, initial imaging",
+   "topic": "Clinically Suspected Adnexal Mass, No Acute Symptoms",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "premenopausal adnexal mass",
+   "id": "7520",
+   "kind": "opposite",
+   "why": "postmenopausal",
+   "name": "Adnexal mass suspected, no acute symptoms, postmenopausal, initial imaging",
+   "topic": "Clinically Suspected Adnexal Mass, No Acute Symptoms",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "newborn throwing up green",
+   "id": "814",
+   "kind": "opposite",
+   "why": "nonbilious reflux",
+   "name": "Vomiting, nonbilious, uncomplicated esophageal reflux suspected, initial imaging",
+   "topic": "Vomiting in Infants",
+   "today": "blocked"
+  },
+  {
+   "q": "acute pancreatitis",
+   "id": "8689",
+   "kind": "opposite",
+   "why": "chronic pancreatitis suspected",
+   "name": "Chronic pancreatitis suspected, initial imaging",
+   "topic": "Chronic Pancreatitis",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "chronic knee pain",
+   "id": "5319",
+   "kind": "opposite",
+   "why": "acute knee trauma",
+   "name": "Knee trauma, fall or twisting, focal tenderness, initial imaging",
+   "topic": "Acute Trauma to the Knee",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "gross hematuria",
+   "id": "5326",
+   "kind": "opposite",
+   "why": "microscopic",
+   "name": "Hematuria, microscopic, no risk factors, initial imaging",
+   "topic": "Hematuria",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "overactive thyroid",
+   "id": "4660",
+   "kind": "opposite",
+   "why": "hypothyroidism",
+   "name": "Hypothyroidism, primary",
+   "topic": "Thyroid Disease",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "underactive thyroid",
+   "id": "4659",
+   "kind": "opposite",
+   "why": "thyrotoxicosis",
+   "name": "Thyrotoxicosis",
+   "topic": "Thyroid Disease",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "unstable after car crash",
+   "id": "5205",
+   "kind": "opposite",
+   "why": "hemodynamically stable",
+   "name": "Major blunt trauma, hemodynamically stable, NOS, initial imaging",
+   "topic": "Major Blunt Trauma",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "conductive hearing loss",
+   "id": "994",
+   "kind": "opposite",
+   "why": "sensorineural",
+   "name": "Hearing loss, sensorineural, initial exam",
+   "topic": "Hearing Loss and/or Vertigo",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "secondary hyperparathyroidism",
+   "id": "5575",
+   "kind": "opposite",
+   "why": "primary",
+   "name": "Hyperparathyroidism, primary, initial imaging",
+   "topic": "Parathyroid Adenoma",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "acute neck pain",
+   "id": "731",
+   "kind": "opposite",
+   "why": "chronic",
+   "name": "Cervical spine pain, chronic, no radiculopathy, no trauma, no red flags, initial imaging",
+   "topic": "Cervical Pain or Cervical Radiculopathy",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "chest pain, no trauma",
+   "id": "836",
+   "kind": "negated",
+   "why": "blunt chest trauma",
+   "name": "Chest trauma, blunt, rib fracture suspected",
+   "topic": "Rib Fractures",
+   "today": "blocked"
+  },
+  {
+   "q": "headache, no fever",
+   "id": "7017",
+   "kind": "negated",
+   "why": "headache with fever",
+   "name": "Headache, fever, initial imaging",
+   "topic": "Headache",
+   "today": "blocked"
+  },
+  {
+   "q": "upper left belly pain without fever",
+   "id": "8410",
+   "kind": "negated",
+   "why": "LUQ pain with fever",
+   "name": "LUQ pain, acute, fever, initial imaging",
+   "topic": "Acute Left Upper Quadrant Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "RUQ pain no fever",
+   "id": "6704",
+   "kind": "negated",
+   "why": "RUQ pain with fever",
+   "name": "RUQ pain, fever, high WBC count , biliary disease suspected, US negative, next imaging study",
+   "topic": "Right Upper Quadrant Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "knee pain, no injury",
+   "id": "5319",
+   "kind": "negated",
+   "why": "knee trauma",
+   "name": "Knee trauma, fall or twisting, focal tenderness, initial imaging",
+   "topic": "Acute Trauma to the Knee",
+   "today": "blocked"
+  },
+  {
+   "q": "neck mass, not pulsatile",
+   "id": "4633",
+   "kind": "negated",
+   "why": "pulsatile neck mass",
+   "name": "Neck mass, pulsatile",
+   "topic": "Neck Mass/Adenopathy",
+   "today": "blocked"
+  },
+  {
+   "q": "short of breath, PE ruled out",
+   "id": "6224",
+   "kind": "negated",
+   "why": "PE suspected",
+   "name": "Pulmonary embolism suspected, high pretest probability, initial imaging",
+   "topic": "Suspected Pulmonary Embolism",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "scrotal lump, no trauma",
+   "id": "5967",
+   "kind": "negated",
+   "why": "hx of trauma",
+   "name": "Scrotum abnormality, palpable, newly diagnosed, hx of trauma, initial imaging",
+   "topic": "Newly Diagnosed Palpable Scrotal Abnormality",
+   "today": "blocked"
+  },
+  {
+   "q": "pelvic pain, negative pregnancy test",
+   "id": "1041",
+   "kind": "negated",
+   "why": "positive beta-hCG",
+   "name": "Pelvic pain, acute, positive beta-hCG, gynecological etiology suspected, initial imaging",
+   "topic": "Acute Pelvic Pain in the Reproductive Age Group",
+   "today": "blocked"
+  },
+  {
+   "q": "low back pain, no cancer history",
+   "id": "5632",
+   "kind": "negated",
+   "why": "spinal mets suspected",
+   "name": "Low back pain, spinal mets suspected, initial imaging",
+   "topic": "Low Back Pain",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "neck pain without radiculopathy",
+   "id": "4689",
+   "kind": "negated",
+   "why": "radiculopathy",
+   "name": "Cervical spine pain, acute, radiculopathy, no trauma, no red flags, initial imaging",
+   "topic": "Cervical Pain or Cervical Radiculopathy",
+   "today": "blocked"
+  },
+  {
+   "q": "flank pain, not pregnant",
+   "id": "7220",
+   "kind": "negated",
+   "why": "pregnant",
+   "name": "Flank pain, acute, stone disease suspected, pregnant, initial imaging",
+   "topic": "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)",
+   "today": "blocked"
+  },
+  {
+   "q": "back pain, no fever, infection not suspected",
+   "id": "5631",
+   "kind": "negated",
+   "why": "infection suspected",
+   "name": "Low back pain, infection suspected, initial imaging",
+   "topic": "Low Back Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "child seizure, no head injury",
+   "id": "801",
+   "kind": "negated",
+   "why": "post head trauma",
+   "name": "Seizure, post head trauma, not abuse, initial imaging",
+   "topic": "Seizures-Child",
+   "today": "PASSES (wrong)"
+  },
+  {
+   "q": "abdominal pain, no fever",
+   "id": "1133",
+   "kind": "negated",
+   "why": "nonlocalized abdominal pain with fever",
+   "name": "Abd pain, acute, nonlocalized, fever, initial exam",
+   "topic": "Acute Nonlocalized Abdominal Pain",
+   "today": "blocked"
+  },
+  {
+   "q": "trouble swallowing, not immunocompromised",
+   "id": "905",
+   "kind": "negated",
+   "why": "immunocompromised",
+   "name": "Dysphagia, retrosternal, immunocompromised",
+   "topic": "Dysphagia",
+   "today": "blocked"
+  },
+  {
+   "q": "toddler limping, no fever, infection not suspected",
+   "id": "4555",
+   "kind": "negated",
+   "why": "infection suspected",
+   "name": "Ped <=5yo, acute limp, non localized, infection suspected",
+   "topic": "Acutely Limping Child Up To Age 5",
+   "today": "blocked"
+  },
+  {
+   "q": "leg swelling, DVT ruled out",
+   "id": "669",
+   "kind": "negated",
+   "why": "DVT suspected",
+   "name": "DVT suspected, initial exam",
+   "topic": "Suspected Lower Extremity Deep Vein Thrombosis",
+   "today": "PASSES (wrong)"
+  }
+ ],
+ "inference": [
+  {
+   "q": "shortness of breath and leg swelling",
+   "kind": "infer",
+   "offer": [
+    "Suspected Pulmonary Embolism"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "why": "dyspnea + leg swelling: PE (heart failure may also be offered)",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Chronic Dyspnea-Noncardiovascular Origin",
+     "Dyspnea-Suspected Cardiac Origin (Ischemia Already Excluded)",
+     "Suspected Lower Extremity Deep Vein Thrombosis"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "short of breath with one swollen calf",
+   "kind": "infer",
+   "offer": [
+    "Suspected Pulmonary Embolism",
+    "Suspected Lower Extremity Deep Vein Thrombosis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "why": "PE / DVT",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Chronic Dyspnea-Noncardiovascular Origin",
+     "Dyspnea-Suspected Cardiac Origin (Ischemia Already Excluded)",
+     "Suspected Lower Extremity Deep Vein Thrombosis"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "pleuritic chest pain after a long flight",
+   "kind": "infer",
+   "offer": [
+    "Suspected Pulmonary Embolism"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "why": "PE",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Chest Pain-Possible Acute Coronary Syndrome",
+     "Chronic Chest Pain-High Probability of Coronary Artery Disease",
+     "Chronic Chest Pain-Noncardiac Etiology Unlikely: Low to Intermediate Probability of Coronary Artery Disease",
+     "Preprocedural Chest or Cardiac Imaging for Cardiothoracic Surgery",
+     "Routine Chest Imaging"
+    ],
+    "ids": [
+     "577",
+     "5215",
+     "5974",
+     "577",
+     "5215",
+     "5974"
+    ]
+   }
+  },
+  {
+   "q": "sudden dyspnea three days after hip replacement",
+   "kind": "infer",
+   "offer": [
+    "Suspected Pulmonary Embolism"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "why": "post-op PE",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Hip Pain",
+     "Chronic Hip Pain",
+     "Imaging after Total Hip Arthroplasty",
+     "Osteonecrosis",
+     "Sepsis",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "7229",
+     "7226",
+     "7164",
+     "7163",
+     "7166",
+     "7229",
+     "7226",
+     "7164",
+     "7163",
+     "7166"
+    ]
+   }
+  },
+  {
+   "q": "tachycardia and hypoxia after recent surgery",
+   "kind": "infer",
+   "offer": [
+    "Suspected Pulmonary Embolism"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "why": "PE",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Back Pain-Child"
+    ],
+    "ids": [
+     "8112",
+     "8119",
+     "8132",
+     "8112",
+     "8119",
+     "8132"
+    ]
+   }
+  },
+  {
+   "q": "coughing blood with a swollen leg",
+   "kind": "infer",
+   "offer": [
+    "Suspected Pulmonary Embolism",
+    "Hemoptysis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "why": "PE",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Hemoptysis",
+     "Suspected Lower Extremity Deep Vein Thrombosis"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "pregnant, tachycardic, hypoxic",
+   "kind": "infer",
+   "offer": [
+    "Suspected Pulmonary Embolism"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^(?!.*(pregnan|gestation|trimester|fetal|placenta))",
+   "forbidden_topics": "Child|Sepsis",
+   "why": "PE in pregnancy; only the pregnant scenario may be named",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "pregnant with shortness of breath and calf pain",
+   "kind": "infer",
+   "offer": [
+    "Suspected Pulmonary Embolism"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^(?!.*(pregnan|gestation|trimester|fetal|placenta))",
+   "forbidden_topics": "Child",
+   "why": "PE in pregnancy",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "dyspnea and pleuritic pain two weeks postpartum",
+   "kind": "infer",
+   "offer": [
+    "Suspected Pulmonary Embolism"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "why": "postpartum PE",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Chronic Dyspnea-Noncardiovascular Origin",
+     "Dyspnea-Suspected Cardiac Origin (Ischemia Already Excluded)",
+     "Postpartum Hemorrhage"
+    ],
+    "ids": [
+     "5358",
+     "5359",
+     "5360",
+     "4544",
+     "4545",
+     "4549",
+     "5358",
+     "5359",
+     "5360",
+     "4544",
+     "4545",
+     "4549"
+    ]
+   }
+  },
+  {
+   "q": "chills and rigors",
+   "kind": "infer",
+   "offer": [
+    "Sepsis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "sepsis",
+   "today": {
+    "mode": "too-broad",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "fever, hypotension, tachycardia",
+   "kind": "infer",
+   "offer": [
+    "Sepsis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "sepsis",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Acute Nonlocalized Abdominal Pain",
+     "Acute Pancreatitis",
+     "Acute Respiratory Illness in Immunocompetent Patients",
+     "Headache",
+     "Imaging of Suspected Intracranial Hypotension",
+     "Right Lower Quadrant Pain",
+     "Right Upper Quadrant Pain"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "febrile, confused, low blood pressure",
+   "kind": "infer",
+   "offer": [
+    "Sepsis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "sepsis",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Acute Nonlocalized Abdominal Pain",
+     "Acute Respiratory Illness in Immunocompetent Patients",
+     "Altered Mental Status, Coma, Delirium, and Psychosis",
+     "Headache",
+     "Imaging of Suspected Intracranial Hypotension",
+     "Right Lower Quadrant Pain",
+     "Right Upper Quadrant Pain"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "rigors after urinary catheter change",
+   "kind": "infer",
+   "offer": [
+    "Sepsis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "urosepsis",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Central Venous Access Device and Site Selection",
+     "Intensive Care Unit Patients",
+     "Pelvic Floor Dysfunction in Females"
+    ],
+    "ids": [
+     "5523",
+     "5524",
+     "6775",
+     "5946",
+     "5949",
+     "5945",
+     "5523",
+     "5524",
+     "6775",
+     "5946",
+     "5949",
+     "5945"
+    ]
+   }
+  },
+  {
+   "q": "FOOSH with deformity",
+   "kind": "infer",
+   "offer": [
+    "Acute Hand and Wrist Trauma"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Ankle|Foot|Knee|Hip|Shoulder",
+   "why": "wrist trauma",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Hand and Wrist Trauma",
+     "Osteonecrosis",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "4618",
+     "4700",
+     "4622",
+     "4618",
+     "4700",
+     "4622"
+    ]
+   }
+  },
+  {
+   "q": "FOOSH snuffbox tenderness",
+   "kind": "infer",
+   "offer": [
+    "Acute Hand and Wrist Trauma"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Ankle|Foot|Knee|Hip",
+   "why": "scaphoid: wrist trauma",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Acute Hand and Wrist Trauma"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "fell on outstretched hand, dinner fork deformity",
+   "kind": "infer",
+   "offer": [
+    "Acute Hand and Wrist Trauma"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Ankle|Foot|Knee|Hip",
+   "why": "Colles: wrist trauma",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Hand and Wrist Trauma",
+     "Chronic Hand and Wrist Pain",
+     "Osteonecrosis",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "4617",
+     "4702",
+     "6599",
+     "4617",
+     "4702",
+     "6599"
+    ]
+   }
+  },
+  {
+   "q": "tearing chest pain radiating to the back",
+   "kind": "infer",
+   "offer": [
+    "Suspected Acute Aortic Syndrome"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "aortic dissection",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease",
+     "Blunt Chest Trauma-Suspected Cardiac Injury",
+     "Chest Pain-Possible Acute Coronary Syndrome",
+     "Preprocedural Chest or Cardiac Imaging for Cardiothoracic Surgery",
+     "Routine Chest Imaging",
+     "Suspected Acute Aortic Syndrome"
+    ],
+    "ids": [
+     "5554",
+     "5215",
+     "654",
+     "652",
+     "5554",
+     "5215",
+     "654",
+     "652"
+    ]
+   }
+  },
+  {
+   "q": "chest pain with unequal arm blood pressures",
+   "kind": "infer",
+   "offer": [
+    "Suspected Acute Aortic Syndrome"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "aortic dissection",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Chest Pain-Possible Acute Coronary Syndrome",
+     "Chronic Chest Pain-High Probability of Coronary Artery Disease",
+     "Chronic Chest Pain-Noncardiac Etiology Unlikely: Low to Intermediate Probability of Coronary Artery Disease",
+     "Preprocedural Chest or Cardiac Imaging for Cardiothoracic Surgery",
+     "Routine Chest Imaging"
+    ],
+    "ids": [
+     "577",
+     "5215",
+     "5974",
+     "577",
+     "5215",
+     "5974"
+    ]
+   }
+  },
+  {
+   "q": "crushing chest pain radiating to left arm",
+   "kind": "infer",
+   "offer": [
+    "Chest Pain-Possible Acute Coronary Syndrome"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "ACS",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease",
+     "Acute Respiratory Illness in Immunocompetent Patients",
+     "Blunt Chest Trauma-Suspected Cardiac Injury",
+     "Chest Pain-Possible Acute Coronary Syndrome",
+     "Preprocedural Chest or Cardiac Imaging for Cardiothoracic Surgery",
+     "Routine Chest Imaging",
+     "Suspected Acute Aortic Syndrome"
+    ],
+    "ids": [
+     "5215",
+     "654",
+     "8569",
+     "5554",
+     "652",
+     "4560",
+     "5215",
+     "654",
+     "8569",
+     "5554",
+     "652",
+     "4560"
+    ]
+   }
+  },
+  {
+   "q": "chest pressure with sweating and nausea",
+   "kind": "infer",
+   "offer": [
+    "Chest Pain-Possible Acute Coronary Syndrome"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "ACS",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease",
+     "Acute Respiratory Illness in Immunocompetent Patients",
+     "Blunt Chest Trauma-Suspected Cardiac Injury",
+     "Chest Pain-Possible Acute Coronary Syndrome",
+     "Preprocedural Chest or Cardiac Imaging for Cardiothoracic Surgery",
+     "Routine Chest Imaging",
+     "Suspected Acute Aortic Syndrome"
+    ],
+    "ids": [
+     "5215",
+     "654",
+     "8569",
+     "5554",
+     "652",
+     "4560",
+     "5215",
+     "654",
+     "8569",
+     "5554",
+     "652",
+     "4560"
+    ]
+   }
+  },
+  {
+   "q": "fever and new murmur in an IV drug user",
+   "kind": "infer",
+   "offer": [
+    "Infective Endocarditis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "endocarditis",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Clinically Suspected Vascular Malformation of the Extremities",
+     "Suspected Spine Infection"
+    ],
+    "ids": [
+     "5784",
+     "5785",
+     "5790",
+     "4814",
+     "4816",
+     "4817",
+     "5784",
+     "5785",
+     "5790",
+     "4814",
+     "4816",
+     "4817"
+    ]
+   }
+  },
+  {
+   "q": "orthopnea and leg edema",
+   "kind": "infer",
+   "offer": [
+    "Suspected and Known Heart Failure"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "why": "heart failure",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Lower Extremity Chronic Venous Disease",
+     "Soft Tissue Masses",
+     "Sudden Onset of Cold, Painful Leg"
+    ],
+    "ids": [
+     "7196",
+     "6975",
+     "7195",
+     "7196",
+     "6975",
+     "7195"
+    ]
+   }
+  },
+  {
+   "q": "wakes up gasping at night with swollen ankles",
+   "kind": "infer",
+   "offer": [
+    "Suspected and Known Heart Failure"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "why": "PND: heart failure",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Trauma to the Ankle",
+     "Back Pain-Child",
+     "Chronic Ankle Pain",
+     "Osteonecrosis",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "8107",
+     "8124",
+     "8127",
+     "701",
+     "699",
+     "703",
+     "8107",
+     "8124",
+     "8127",
+     "701",
+     "699",
+     "703"
+    ]
+   }
+  },
+  {
+   "q": "one calf swollen and tender",
+   "kind": "infer",
+   "offer": [
+    "Suspected Lower Extremity Deep Vein Thrombosis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Upper",
+   "why": "DVT",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Trauma to the Knee"
+    ],
+    "ids": [
+     "5319",
+     "1081",
+     "5319",
+     "1081"
+    ]
+   }
+  },
+  {
+   "q": "swollen leg after a long flight",
+   "kind": "infer",
+   "offer": [
+    "Suspected Lower Extremity Deep Vein Thrombosis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Upper",
+   "why": "DVT",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Suspected Lower Extremity Deep Vein Thrombosis"
+    ],
+    "ids": [
+     "669",
+     "669"
+    ]
+   }
+  },
+  {
+   "q": "arm swelling with a PICC line",
+   "kind": "infer",
+   "offer": [
+    "Suspected Upper-Extremity Deep Vein Thrombosis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Lower Extremity Deep",
+   "why": "upper extremity DVT",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Suspected Upper-Extremity Deep Vein Thrombosis"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "facial swelling and distended neck veins",
+   "kind": "infer",
+   "offer": [
+    "Thoracic Venous Occlusions-Suspected Superior Vena Cava Syndrome"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "SVC syndrome",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Spinal Trauma",
+     "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions",
+     "Cervical Pain or Cervical Radiculopathy",
+     "Cranial Neuropathy",
+     "Imaging of Facial Trauma Following Primary Survey",
+     "Myelopathy",
+     "Neck Mass/Adenopathy",
+     "Thoracic Venous Occlusions-Suspected Superior Vena Cava Syndrome"
+    ],
+    "ids": [
+     "6190",
+     "6192",
+     "6193",
+     "8445",
+     "8447",
+     "4632",
+     "4633",
+     "7363",
+     "6190",
+     "6192",
+     "6193",
+     "8445",
+     "8447",
+     "4632"
+    ]
+   }
+  },
+  {
+   "q": "sudden worst headache with neck stiffness",
+   "kind": "infer",
+   "offer": [
+    "Headache",
+    "Cerebrovascular Diseases-Aneurysm, Vascular Malformation, and Subarachnoid Hemorrhage"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "SAH",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Cervical Pain or Cervical Radiculopathy",
+     "Headache",
+     "Inflammatory Ear Disease"
+    ],
+    "ids": [
+     "7012",
+     "7023",
+     "7017",
+     "4693",
+     "4908",
+     "4909",
+     "7018",
+     "7894"
+    ]
+   }
+  },
+  {
+   "q": "headache worse standing, better lying down",
+   "kind": "infer",
+   "offer": [
+    "Imaging of Suspected Intracranial Hypotension",
+    "Headache"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "intracranial hypotension",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Headache",
+     "Imaging of Suspected Intracranial Hypotension"
+    ],
+    "ids": [
+     "7023",
+     "7017",
+     "7020",
+     "7023",
+     "7017",
+     "7020"
+    ]
+   }
+  },
+  {
+   "q": "facial droop and slurred speech",
+   "kind": "infer",
+   "offer": [
+    "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "stroke",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+    ],
+    "ids": [
+     "7352"
+    ]
+   }
+  },
+  {
+   "q": "sudden weakness on one side of the body",
+   "kind": "infer",
+   "offer": [
+    "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "stroke",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Cerebrovascular Disease-Child",
+     "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+    ],
+    "ids": [
+     "7352",
+     "5315",
+     "5342",
+     "7352",
+     "5315",
+     "5342"
+    ]
+   }
+  },
+  {
+   "q": "ptosis, miosis, anhidrosis",
+   "kind": "infer",
+   "offer": [
+    "Horner Syndrome"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "Horner syndrome",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Horner Syndrome"
+    ],
+    "ids": [
+     "8358",
+     "8356",
+     "8351",
+     "8358",
+     "8356",
+     "8351"
+    ]
+   }
+  },
+  {
+   "q": "urinary incontinence, gait disturbance and memory loss",
+   "kind": "infer",
+   "offer": [
+    "Dementia"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "normal pressure hydrocephalus",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Dementia"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "resting tremor and shuffling gait",
+   "kind": "infer",
+   "offer": [
+    "Movement Disorders and Neurodegenerative Diseases"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "parkinsonism",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Back Pain-Child"
+    ],
+    "ids": [
+     "8106",
+     "8125",
+     "8126",
+     "8106",
+     "8125",
+     "8126"
+    ]
+   }
+  },
+  {
+   "q": "fever, flank pain and dysuria",
+   "kind": "infer",
+   "offer": [
+    "Acute Pyelonephritis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "why": "pyelonephritis",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Acute Left Upper Quadrant Pain",
+     "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)",
+     "Acute Pancreatitis",
+     "Recurrent Lower Urinary Tract Infections in Females",
+     "Right Lower Quadrant Pain"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "colicky flank pain radiating to the groin with blood in urine",
+   "kind": "infer",
+   "offer": [
+    "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "why": "renal colic",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)",
+     "Hematuria"
+    ],
+    "ids": [
+     "7217",
+     "7220",
+     "7219",
+     "5317",
+     "5326",
+     "5316",
+     "7217",
+     "7220",
+     "7219",
+     "5317",
+     "5326",
+     "5316"
+    ]
+   }
+  },
+  {
+   "q": "periumbilical pain that moved to the right side, fever",
+   "kind": "infer",
+   "offer": [
+    "Right Lower Quadrant Pain"
+   ],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta|LLQ|LUQ",
+   "why": "appendicitis",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "epigastric pain radiating to the back with high lipase",
+   "kind": "infer",
+   "offer": [
+    "Acute Pancreatitis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "pancreatitis",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Epigastric Pain"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "abdominal pain after meals, weight loss, fear of eating",
+   "kind": "infer",
+   "offer": [
+    "Imaging of Mesenteric Ischemia",
+    "Radiologic Management of Mesenteric Ischemia"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "chronic mesenteric ischemia",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Nonlocalized Abdominal Pain",
+     "Hernia",
+     "Pulsatile Abdominal Mass, Suspected Abdominal Aortic Aneurysm",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "3567",
+     "1133",
+     "3566",
+     "3567",
+     "1133",
+     "3566"
+    ]
+   }
+  },
+  {
+   "q": "abdominal pain out of proportion to exam with atrial fibrillation",
+   "kind": "infer",
+   "offer": [
+    "Imaging of Mesenteric Ischemia",
+    "Radiologic Management of Mesenteric Ischemia"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "acute mesenteric ischemia",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Nonlocalized Abdominal Pain",
+     "Hernia",
+     "Preprocedural Planning for Left Atrial Procedures in Atrial Fibrillation",
+     "Pulsatile Abdominal Mass, Suspected Abdominal Aortic Aneurysm",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "7281",
+     "7285",
+     "7286",
+     "3567",
+     "1133",
+     "3566",
+     "7281",
+     "7285",
+     "7286",
+     "3567",
+     "1133",
+     "3566"
+    ]
+   }
+  },
+  {
+   "q": "vomiting, abdominal distension, no flatus, prior abdominal surgery",
+   "kind": "infer",
+   "offer": [
+    "Suspected Small-Bowel Obstruction"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "SBO",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Suspected Small-Bowel Obstruction"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "painless jaundice and weight loss",
+   "kind": "infer",
+   "offer": [
+    "Jaundice",
+    "Screening, Locoregional Assessment, and Surveillance of Pancreatic Ductal Adenocarcinoma"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "malignant biliary obstruction",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Jaundice"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "hematemesis and melena",
+   "kind": "infer",
+   "offer": [
+    "Nonvariceal Upper Gastrointestinal Bleeding"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "upper GI bleed",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Nonvariceal Upper Gastrointestinal Bleeding"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "on warfarin with flank pain and falling hemoglobin",
+   "kind": "infer",
+   "offer": [
+    "Suspected Retroperitoneal Bleed"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "retroperitoneal bleed",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+    ],
+    "ids": [
+     "7217",
+     "7220",
+     "7219",
+     "7217",
+     "7220",
+     "7219"
+    ]
+   }
+  },
+  {
+   "q": "sudden leg pain, pale, no pulses",
+   "kind": "infer",
+   "offer": [
+    "Sudden Onset of Cold, Painful Leg"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Upper",
+   "why": "acute limb ischemia",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Lower Extremity Chronic Venous Disease",
+     "Soft Tissue Masses",
+     "Sudden Onset of Cold, Painful Leg"
+    ],
+    "ids": [
+     "578",
+     "7196",
+     "6975",
+     "578",
+     "7196",
+     "6975"
+    ]
+   }
+  },
+  {
+   "q": "calf pain when walking, relieved by rest",
+   "kind": "infer",
+   "offer": [
+    "Lower Extremity Arterial Claudication-Imaging Assessment for Revascularization"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Upper",
+   "why": "claudication",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "arm numbness and swelling when raising arms overhead",
+   "kind": "infer",
+   "offer": [
+    "Thoracic Outlet Syndrome"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Lower",
+   "why": "thoracic outlet syndrome",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Cervical Pain or Cervical Radiculopathy",
+     "Thoracic Back Pain"
+    ],
+    "ids": [
+     "7807",
+     "736",
+     "4689",
+     "7807",
+     "736",
+     "4689"
+    ]
+   }
+  },
+  {
+   "q": "missed period, pelvic pain, positive pregnancy test",
+   "kind": "infer",
+   "offer": [
+    "Acute Pelvic Pain in the Reproductive Age Group",
+    "First Trimester Vaginal Bleeding"
+   ],
+   "must_not_offer": [],
+   "forbidden": "negative beta|[Pp]ostmenopausal",
+   "why": "ectopic pregnancy",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Pelvic Pain in the Reproductive Age Group"
+    ],
+    "ids": [
+     "1043",
+     "1041",
+     "1043",
+     "1041"
+    ]
+   }
+  },
+  {
+   "q": "painful periods, pain with intercourse, trouble conceiving",
+   "kind": "infer",
+   "offer": [
+    "Endometriosis",
+    "Female Infertility"
+   ],
+   "must_not_offer": [],
+   "forbidden": "[Pp]ostmenopausal",
+   "why": "endometriosis",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Headache"
+    ],
+    "ids": [
+     "7014",
+     "7016",
+     "7014",
+     "7016"
+    ]
+   }
+  },
+  {
+   "q": "twisted knee, heard a pop, now swollen",
+   "kind": "infer",
+   "offer": [
+    "Acute Trauma to the Knee"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Ankle|Wrist|Hip",
+   "why": "knee ligament injury",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Trauma to the Knee",
+     "Osteonecrosis",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "5320",
+     "683",
+     "5319",
+     "5320",
+     "683",
+     "5319"
+    ]
+   }
+  },
+  {
+   "q": "inversion injury, cannot bear weight",
+   "kind": "infer",
+   "offer": [
+    "Acute Trauma to the Ankle"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Wrist|Hand|Knee",
+   "why": "ankle injury",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "elderly fall, leg shortened and externally rotated",
+   "kind": "infer",
+   "offer": [
+    "Acute Hip Pain"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Ankle|Wrist|Child",
+   "why": "hip fracture",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Lower Extremity Chronic Venous Disease",
+     "Soft Tissue Masses",
+     "Sudden Onset of Cold, Painful Leg"
+    ],
+    "ids": [
+     "7196",
+     "6975",
+     "7195",
+     "7196",
+     "6975",
+     "7195"
+    ]
+   }
+  },
+  {
+   "q": "diabetic with foot ulcer and exposed bone",
+   "kind": "infer",
+   "offer": [
+    "Suspected Osteomyelitis of the Foot in Patients with Diabetes Mellitus"
+   ],
+   "must_not_offer": [],
+   "forbidden": "hand|wrist",
+   "why": "diabetic foot osteomyelitis",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Trauma to the Foot",
+     "Chronic Foot Pain",
+     "Osteonecrosis",
+     "Osteoporosis and Bone Mineral Density",
+     "Soft Tissue Masses",
+     "Suspected Osteomyelitis of the Foot in Patients with Diabetes Mellitus"
+    ],
+    "ids": [
+     "4793",
+     "8404",
+     "8403",
+     "8542",
+     "8539",
+     "6601",
+     "6294",
+     "6292",
+     "6302",
+     "4793",
+     "8404",
+     "8403",
+     "8542",
+     "8539",
+     "6601"
+    ]
+   }
+  },
+  {
+   "q": "hot swollen knee with fever",
+   "kind": "infer",
+   "offer": [
+    "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)"
+   ],
+   "must_not_offer": [],
+   "forbidden": "hip|ankle|wrist|shoulder",
+   "why": "septic arthritis",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Trauma to the Knee",
+     "Chronic Knee Pain",
+     "Fever Without Source or Unknown Origin-Child",
+     "Osteonecrosis",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "7992",
+     "7993",
+     "7990",
+     "4579",
+     "4531",
+     "6597",
+     "7992",
+     "7993",
+     "7990",
+     "4579",
+     "4531",
+     "6597"
+    ]
+   }
+  },
+  {
+   "q": "back pain, fever, IV drug use",
+   "kind": "infer",
+   "offer": [
+    "Suspected Spine Infection",
+    "Low Back Pain"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "spine infection",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Suspected Spine Infection"
+    ],
+    "ids": [
+     "5784",
+     "5785",
+     "5790",
+     "5786",
+     "5787",
+     "5789",
+     "5788",
+     "5805"
+    ]
+   }
+  },
+  {
+   "q": "young man with back pain and morning stiffness that improves with exercise",
+   "kind": "infer",
+   "offer": [
+    "Inflammatory Back Pain: Known or Suspected Axial Spondyloarthropathy"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "axial spondyloarthritis",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Hematuria",
+     "Low Back Pain",
+     "Thoracic Back Pain"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "numb thumb and index finger at night",
+   "kind": "infer",
+   "offer": [
+    "Chronic Hand and Wrist Pain"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Foot|Ankle",
+   "why": "carpal tunnel syndrome",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Hand and Wrist Trauma",
+     "Chronic Hand and Wrist Pain",
+     "Osteonecrosis",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "4617",
+     "4702",
+     "6599",
+     "4617",
+     "4702",
+     "6599"
+    ]
+   }
+  },
+  {
+   "q": "hip pain on long term steroids",
+   "kind": "infer",
+   "offer": [
+    "Osteonecrosis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "knee|shoulder|ankle",
+   "why": "avascular necrosis",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Hip Pain",
+     "Chronic Hip Pain",
+     "Osteonecrosis",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "6714",
+     "7941",
+     "6715",
+     "6714",
+     "7941",
+     "6715"
+    ]
+   }
+  },
+  {
+   "q": "military recruit with shin pain after marching",
+   "kind": "infer",
+   "offer": [
+    "Stress (Fatigue/Insufficiency) Fracture, Including Sacrum, Excluding Other Vertebrae"
+   ],
+   "must_not_offer": [],
+   "forbidden": "wrist|hand|shoulder",
+   "why": "tibial stress fracture",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "night sweats, weight loss and hemoptysis, recent immigrant",
+   "kind": "infer",
+   "offer": [
+    "Imaging of Possible Tuberculosis",
+    "Hemoptysis"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "tuberculosis",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Hemoptysis"
+    ],
+    "ids": [
+     "5246",
+     "5247",
+     "5245",
+     "5246",
+     "5247",
+     "5245"
+    ]
+   }
+  },
+  {
+   "q": "fever and productive cough",
+   "kind": "infer",
+   "offer": [
+    "Acute Respiratory Illness in Immunocompetent Patients"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "pneumonia",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Acute Respiratory Illness in Immunocompetent Patients"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "fever and cough in a transplant patient",
+   "kind": "infer",
+   "offer": [
+    "Acute Respiratory Illness in Immunocompromised Patients"
+   ],
+   "must_not_offer": [],
+   "forbidden": "^Ped\\b|-Child|\\bChild\\b|Infant",
+   "why": "pneumonia, immunocompromised",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Acute Respiratory Illness in Immunocompromised Patients"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "weight loss, heat intolerance and tremor",
+   "kind": "infer",
+   "offer": [
+    "Thyroid Disease"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "thyrotoxicosis",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Dementia",
+     "Movement Disorders and Neurodegenerative Diseases"
+    ],
+    "ids": [
+     "5222",
+     "7960",
+     "5222",
+     "7960"
+    ]
+   }
+  },
+  {
+   "q": "high calcium and high PTH",
+   "kind": "infer",
+   "offer": [
+    "Parathyroid Adenoma"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "hyperparathyroidism",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "resistant hypertension with an abdominal bruit",
+   "kind": "infer",
+   "offer": [
+    "Renovascular Hypertension"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "renovascular hypertension",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Nonlocalized Abdominal Pain",
+     "Hernia",
+     "Pulsatile Abdominal Mass, Suspected Abdominal Aortic Aneurysm",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "3567",
+     "1133",
+     "3566",
+     "3567",
+     "1133",
+     "3566"
+    ]
+   }
+  },
+  {
+   "q": "older man with weak stream, hesitancy and nocturia",
+   "kind": "infer",
+   "offer": [
+    "Lower Urinary Tract Symptoms: Suspicion of Benign Prostatic Hyperplasia"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Females",
+   "why": "BPH",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "elevated PSA",
+   "kind": "infer",
+   "offer": [
+    "Pretreatment Detection, Surveillance, and Staging of Prostate Cancer"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "prostate cancer suspected",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Pretreatment Detection, Surveillance, and Staging of Prostate Cancer"
+    ],
+    "ids": [
+     "6820"
+    ]
+   }
+  },
+  {
+   "q": "toddler with currant jelly stool, drawing up legs",
+   "kind": "infer",
+   "offer": [
+    "Abdominal Pain-Child"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "intussusception",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "3 week old with projectile vomiting",
+   "kind": "infer",
+   "offer": [
+    "Vomiting in Infants"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "pyloric stenosis",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Vomiting in Infants"
+    ],
+    "ids": [
+     "815"
+    ]
+   }
+  },
+  {
+   "q": "toddler refuses to bear weight and has a fever",
+   "kind": "infer",
+   "offer": [
+    "Acutely Limping Child Up To Age 5",
+    "Osteomyelitis or Septic Arthritis-Child (Excluding Axial Skeleton)"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "septic hip / osteomyelitis",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Acutely Limping Child Up To Age 5"
+    ],
+    "ids": [
+     "4555",
+     "4505",
+     "4506",
+     "4508",
+     "4509",
+     "4556",
+     "4507"
+    ]
+   }
+  },
+  {
+   "q": "infant with bruises and fractures of different ages",
+   "kind": "infer",
+   "offer": [
+    "Suspected Physical Abuse-Child",
+    "Suspected Physical Abuse \u2014 Child"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "physical abuse; a question, never an assertion",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Suspected Physical Abuse \u2014 Child",
+     "Suspected Physical Abuse-Child"
+    ],
+    "ids": [
+     "8625",
+     "8651",
+     "8666",
+     "8640",
+     "2453",
+     "8629",
+     "8631",
+     "8633"
+    ]
+   }
+  },
+  {
+   "q": "child had a choking episode and now wheezes",
+   "kind": "infer",
+   "offer": [
+    "Ingested or Aspirated Foreign Body-Child"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "aspirated foreign body",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "child with fever, cough and fast breathing",
+   "kind": "infer",
+   "offer": [
+    "Pneumonia in the Immunocompetent Child"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "pneumonia",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Fever Without Source or Unknown Origin-Child",
+     "Pneumonia in the Immunocompetent Child"
+    ],
+    "ids": [
+     "5299",
+     "7990",
+     "5225",
+     "5299",
+     "7990",
+     "5225"
+    ]
+   }
+  },
+  {
+   "q": "child with fever and burning urination",
+   "kind": "infer",
+   "offer": [
+    "Urinary Tract Infection\u2013Child"
+   ],
+   "must_not_offer": [],
+   "forbidden": "Females",
+   "why": "UTI",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "child with morning headaches and vomiting",
+   "kind": "infer",
+   "offer": [
+    "Headache-Child"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "raised intracranial pressure",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Back Pain-Child",
+     "Headache-Child"
+    ],
+    "ids": [
+     "8115",
+     "8116",
+     "8135",
+     "1143",
+     "1144",
+     "3395",
+     "8115",
+     "8116",
+     "8135",
+     "1143",
+     "1144",
+     "3395"
+    ]
+   }
+  },
+  {
+   "q": "child with a wobbly gait after chickenpox",
+   "kind": "infer",
+   "offer": [
+    "Ataxia-Child"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "post-infectious cerebellar ataxia",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Back Pain-Child"
+    ],
+    "ids": [
+     "8106",
+     "8125",
+     "8126",
+     "8106",
+     "8125",
+     "8126"
+    ]
+   }
+  },
+  {
+   "q": "sudden severe testicle pain in a teenager",
+   "kind": "infer",
+   "offer": [
+    "Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass"
+   ],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "torsion",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass"
+    ],
+    "ids": [
+     "7833"
+    ]
+   }
+  },
+  {
+   "q": "shortness of breath, no leg swelling",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Pulmonary Embolism",
+    "Suspected Lower Extremity Deep Vein Thrombosis"
+   ],
+   "forbidden": "embol",
+   "why": "the search negates the PE cue",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Chronic Dyspnea-Noncardiovascular Origin",
+     "Dyspnea-Suspected Cardiac Origin (Ischemia Already Excluded)",
+     "Workup of Pleural Effusion or Pleural Disease"
+    ],
+    "ids": [
+     "4544",
+     "4545",
+     "7270",
+     "4549",
+     "7995",
+     "4546",
+     "5977",
+     "5978"
+    ]
+   }
+  },
+  {
+   "q": "chest pain, PE ruled out",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Pulmonary Embolism",
+    "Imaging for Pulmonary Embolism, Known Clot",
+    "Management of Acute Pulmonary Embolism"
+   ],
+   "forbidden": "embol",
+   "why": "PE excluded",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease",
+     "Chest Pain-Possible Acute Coronary Syndrome",
+     "Chronic Chest Pain-High Probability of Coronary Artery Disease",
+     "Chronic Chest Pain-Noncardiac Etiology Unlikely: Low to Intermediate Probability of Coronary Artery Disease",
+     "Imaging for Pulmonary Embolism, Known Clot",
+     "Suspected Pulmonary Embolism"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "pleuritic chest pain, negative CTPA",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Pulmonary Embolism"
+   ],
+   "forbidden": "embolism suspected",
+   "why": "PE excluded by imaging",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease",
+     "Chest Pain-Possible Acute Coronary Syndrome",
+     "Chronic Chest Pain-High Probability of Coronary Artery Disease",
+     "Chronic Chest Pain-Noncardiac Etiology Unlikely: Low to Intermediate Probability of Coronary Artery Disease",
+     "Nontraumatic Chest Wall Pain"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "shortness of breath and leg swelling, PE excluded",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Pulmonary Embolism",
+    "Imaging for Pulmonary Embolism, Known Clot",
+    "Management of Acute Pulmonary Embolism"
+   ],
+   "forbidden": "embol",
+   "why": "PE excluded",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Chronic Dyspnea-Noncardiovascular Origin",
+     "Dyspnea-Suspected Cardiac Origin (Ischemia Already Excluded)",
+     "Imaging for Pulmonary Embolism, Known Clot",
+     "Suspected Lower Extremity Deep Vein Thrombosis",
+     "Suspected Pulmonary Embolism"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "shortness of breath and leg swelling, known heart failure, PE excluded",
+   "kind": "negated",
+   "offer": [
+    "Suspected and Known Heart Failure"
+   ],
+   "must_not_offer": [
+    "Suspected Pulmonary Embolism",
+    "Imaging for Pulmonary Embolism, Known Clot",
+    "Management of Acute Pulmonary Embolism"
+   ],
+   "forbidden": "embol",
+   "why": "PE excluded; heart failure remains",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Dyspnea-Suspected Cardiac Origin (Ischemia Already Excluded)",
+     "Imaging for Pulmonary Embolism, Known Clot",
+     "Suspected Lower Extremity Deep Vein Thrombosis",
+     "Suspected Pulmonary Embolism",
+     "Suspected and Known Heart Failure"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "bilateral leg swelling, no shortness of breath",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Pulmonary Embolism"
+   ],
+   "forbidden": "embol",
+   "why": "no dyspnea",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Suspected Lower Extremity Deep Vein Thrombosis"
+    ],
+    "ids": [
+     "669"
+    ]
+   }
+  },
+  {
+   "q": "swollen leg after a long flight, no shortness of breath, no chest pain",
+   "kind": "negated",
+   "offer": [
+    "Suspected Lower Extremity Deep Vein Thrombosis"
+   ],
+   "must_not_offer": [
+    "Suspected Pulmonary Embolism"
+   ],
+   "forbidden": "embol",
+   "why": "DVT yes, PE no",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Suspected Lower Extremity Deep Vein Thrombosis"
+    ],
+    "ids": [
+     "669",
+     "669"
+    ]
+   }
+  },
+  {
+   "q": "leg swelling, DVT ruled out",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Lower Extremity Deep Vein Thrombosis",
+    "Suspected Pulmonary Embolism"
+   ],
+   "forbidden": "DVT|embol",
+   "why": "DVT excluded",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Suspected Lower Extremity Deep Vein Thrombosis"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "calf pain, negative duplex",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Lower Extremity Deep Vein Thrombosis"
+   ],
+   "forbidden": "DVT suspected",
+   "why": "DVT excluded by imaging",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Acute Shoulder Pain",
+     "Acute Trauma to the Ankle",
+     "Acute Trauma to the Foot",
+     "Chronic Foot Pain",
+     "Chronic Knee Pain",
+     "Suspected Lower Extremity Deep Vein Thrombosis"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "pregnant, tachycardic, not hypoxic, PE excluded",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Pulmonary Embolism",
+    "Imaging for Pulmonary Embolism, Known Clot",
+    "Management of Acute Pulmonary Embolism"
+   ],
+   "forbidden": "embol",
+   "why": "PE excluded",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "not pregnant, tachycardic, hypoxic",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "pregnan|gestation|trimester|fetal|placenta",
+   "forbidden_topics": "Pregnan|Gestation|Trimester|Fetal|Placenta|Gravid",
+   "why": "pregnancy negated: no pregnant scenario",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Back Pain-Child"
+    ],
+    "ids": [
+     "8112",
+     "8119",
+     "8132",
+     "8112",
+     "8119",
+     "8132"
+    ]
+   }
+  },
+  {
+   "q": "fever without chills or rigors",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Sepsis"
+   ],
+   "forbidden": "^Sepsis",
+   "why": "rigors negated",
+   "today": {
+    "mode": "too-broad",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "chills, sepsis ruled out",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Sepsis"
+   ],
+   "forbidden": "^Sepsis",
+   "why": "sepsis excluded",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "chills and rigors after transfusion, not septic",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Sepsis"
+   ],
+   "forbidden": "^Sepsis",
+   "why": "sepsis negated",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "fever, normal blood pressure, no tachycardia, not septic",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Sepsis"
+   ],
+   "forbidden": "^Sepsis",
+   "why": "sepsis negated",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)"
+    ],
+    "ids": [
+     "6552",
+     "6568",
+     "6569",
+     "6570",
+     "6571",
+     "6572",
+     "6573",
+     "6574"
+    ]
+   }
+  },
+  {
+   "q": "wrist pain, no fall, no injury",
+   "kind": "negated",
+   "offer": [
+    "Chronic Hand and Wrist Pain"
+   ],
+   "must_not_offer": [
+    "Acute Hand and Wrist Trauma"
+   ],
+   "forbidden": "trauma",
+   "why": "trauma negated",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Chronic Extremity Joint Pain-Suspected Inflammatory Arthritis, Crystalline Arthritis, or Erosive Osteoarthritis",
+     "Chronic Hand and Wrist Pain"
+    ],
+    "ids": [
+     "741",
+     "6856",
+     "6857",
+     "6858",
+     "6859",
+     "6860",
+     "1154",
+     "7313"
+    ]
+   }
+  },
+  {
+   "q": "FOOSH, no wrist pain, no deformity, elbow pain only",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Acute Hand and Wrist Trauma"
+   ],
+   "forbidden": "^Wrist trauma|^Wrist fracture",
+   "why": "wrist negated; elbow is the complaint",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Acute Hand and Wrist Trauma"
+    ],
+    "ids": [
+     "4618",
+     "4700",
+     "4622",
+     "4621",
+     "4699",
+     "4617",
+     "4624",
+     "4702"
+    ]
+   }
+  },
+  {
+   "q": "tearing chest pain, dissection ruled out",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Acute Aortic Syndrome"
+   ],
+   "forbidden": "aortic syndrome|dissection",
+   "why": "dissection excluded",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Abdominal Aortic Aneurysm or Dissection-Interventional Planning and Follow-up",
+     "Suspected Acute Aortic Syndrome",
+     "Thoracoabdominal Aortic Aneurysm or Dissection: Treatment Planning and Follow-Up"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "chest pain, ACS ruled out",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Chest Pain-Possible Acute Coronary Syndrome"
+   ],
+   "forbidden": "acute coronary",
+   "why": "ACS excluded",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Chest Pain-Possible Acute Coronary Syndrome"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "fever and new murmur, endocarditis excluded",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Infective Endocarditis"
+   ],
+   "forbidden": "endocarditis",
+   "why": "endocarditis excluded",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Acute Nonlocalized Abdominal Pain",
+     "Acute Respiratory Illness in Immunocompetent Patients",
+     "Clinically Suspected Vascular Malformation of the Extremities",
+     "Headache",
+     "Infective Endocarditis",
+     "Right Lower Quadrant Pain",
+     "Right Upper Quadrant Pain"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "orthopnea, heart failure excluded",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected and Known Heart Failure"
+   ],
+   "forbidden": "Heart failure",
+   "why": "heart failure excluded",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Blunt Chest Trauma-Suspected Cardiac Injury",
+     "Congenital or Acquired Heart Disease",
+     "Dialysis Fistula Malfunction",
+     "Dyspnea-Suspected Cardiac Origin (Ischemia Already Excluded)",
+     "Evaluation of Cardiac Masses",
+     "Preprocedural Chest or Cardiac Imaging for Cardiothoracic Surgery",
+     "Suspected and Known Heart Failure"
+    ],
+    "ids": [
+     "4528",
+     "7910",
+     "7909",
+     "8461",
+     "5362",
+     "5363",
+     "4528",
+     "7910",
+     "7909",
+     "8461",
+     "5362",
+     "5363"
+    ]
+   }
+  },
+  {
+   "q": "low back pain, no saddle anesthesia, no urinary retention",
+   "kind": "negated",
+   "offer": [
+    "Low Back Pain"
+   ],
+   "must_not_offer": [],
+   "forbidden": "cauda equina",
+   "forbidden_topics": "",
+   "why": "cauda equina cues negated",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Low Back Pain"
+    ],
+    "ids": [
+     "5618",
+     "5619",
+     "5620",
+     "5627",
+     "5628",
+     "5626",
+     "5629",
+     "5632"
+    ]
+   }
+  },
+  {
+   "q": "facial droop, stroke ruled out",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+   ],
+   "forbidden": "stroke|infarct|TIA",
+   "why": "stroke excluded",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions"
+    ],
+    "ids": [
+     "7352"
+    ]
+   }
+  },
+  {
+   "q": "headache, gradual onset, no neck stiffness, not sudden",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Cerebrovascular Diseases-Aneurysm, Vascular Malformation, and Subarachnoid Hemorrhage"
+   ],
+   "forbidden": "sudden onset|thunderclap|SAH",
+   "why": "SAH cues negated",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Cervical Pain or Cervical Radiculopathy",
+     "Headache",
+     "Inflammatory Ear Disease"
+    ],
+    "ids": [
+     "7023",
+     "7017",
+     "4693",
+     "4908",
+     "4909",
+     "7018",
+     "7894",
+     "947"
+    ]
+   }
+  },
+  {
+   "q": "flank pain, no fever, no dysuria, pyelonephritis unlikely",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Acute Pyelonephritis"
+   ],
+   "forbidden": "Pyelonephritis",
+   "why": "pyelonephritis negated",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+    ],
+    "ids": [
+     "7217",
+     "7216",
+     "7221",
+     "7218",
+     "7220",
+     "7219"
+    ]
+   }
+  },
+  {
+   "q": "fever and dysuria, no flank pain",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Acute Pyelonephritis",
+    "Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)"
+   ],
+   "forbidden": "Pyelonephritis|Flank pain",
+   "why": "flank pain negated",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Acute Pancreatitis",
+     "Acute Respiratory Illness in Immunocompetent Patients",
+     "Headache",
+     "Recurrent Lower Urinary Tract Infections in Females"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "vomiting, no distension, passing flatus, no obstruction",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Small-Bowel Obstruction"
+   ],
+   "forbidden": "obstruction",
+   "why": "obstruction negated",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Acute Pancreatitis",
+     "Cranial Neuropathy",
+     "Hemoptysis",
+     "Jaundice",
+     "Orbits, Vision, and Visual Loss"
+    ],
+    "ids": [
+     "4801",
+     "3426",
+     "3427",
+     "3436",
+     "3437",
+     "4685",
+     "5246",
+     "6185"
+    ]
+   }
+  },
+  {
+   "q": "abdominal pain after meals, mesenteric ischemia excluded",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Imaging of Mesenteric Ischemia",
+    "Radiologic Management of Mesenteric Ischemia"
+   ],
+   "forbidden": "[Mm]esenteric ischemia",
+   "why": "ischemia excluded",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Imaging of Mesenteric Ischemia",
+     "Radiologic Management of Mesenteric Ischemia"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "swollen knee, no fever, infection not suspected",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "infection|[Ss]eptic|[Oo]steomyelitis",
+   "forbidden_topics": "Infection|Septic|Sepsis",
+   "why": "infection negated",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)"
+    ],
+    "ids": [
+     "6438",
+     "6445",
+     "6434"
+    ]
+   }
+  },
+  {
+   "q": "diabetic foot ulcer, osteomyelitis ruled out",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Osteomyelitis of the Foot in Patients with Diabetes Mellitus"
+   ],
+   "forbidden": "[Oo]steomyelitis",
+   "why": "osteomyelitis excluded",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Suspected Osteomyelitis of the Foot in Patients with Diabetes Mellitus"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "back pain, no fever, no IV drug use, infection not suspected",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Spine Infection"
+   ],
+   "forbidden": "infection",
+   "why": "infection negated",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Low Back Pain",
+     "Thoracic Back Pain"
+    ],
+    "ids": [
+     "5618",
+     "5619",
+     "5620",
+     "5627",
+     "5628",
+     "7800",
+     "7801",
+     "7806"
+    ]
+   }
+  },
+  {
+   "q": "infant vomiting, not projectile, not bilious",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "\\bbilious|pyloric",
+   "forbidden_topics": "",
+   "why": "both cues negated",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Head Trauma-Child",
+     "Orbital Imaging and Vision Loss-Child",
+     "Seizures-Child",
+     "Vomiting in Infants"
+    ],
+    "ids": [
+     "814",
+     "815",
+     "5464",
+     "5463",
+     "5284",
+     "7391",
+     "800",
+     "802"
+    ]
+   }
+  },
+  {
+   "q": "toddler with a bruise from a witnessed fall, abuse not suspected",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Suspected Physical Abuse-Child",
+    "Suspected Physical Abuse \u2014 Child"
+   ],
+   "forbidden": "abuse suspected|Physical abuse",
+   "why": "abuse negated",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Suspected Physical Abuse-Child"
+    ],
+    "ids": [
+     "8625",
+     "8651",
+     "8666",
+     "8625",
+     "8651",
+     "8666"
+    ]
+   }
+  },
+  {
+   "q": "child choking episode, foreign body excluded",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Ingested or Aspirated Foreign Body-Child"
+   ],
+   "forbidden": "foreign body",
+   "why": "foreign body excluded",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Ingested or Aspirated Foreign Body-Child"
+    ],
+    "ids": [
+     "8452",
+     "8453",
+     "8454",
+     "8452",
+     "8453",
+     "8454"
+    ]
+   }
+  },
+  {
+   "q": "missed period, pelvic pain, negative pregnancy test",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "First Trimester Vaginal Bleeding"
+   ],
+   "forbidden": "positive beta|, pregnant|trimester",
+   "why": "pregnancy excluded",
+   "today": {
+    "mode": "recover",
+    "topics": [
+     "Acute Pelvic Pain in the Reproductive Age Group",
+     "Clinically Suspected Adnexal Mass, No Acute Symptoms",
+     "Hernia",
+     "Pelvic Floor Dysfunction in Females",
+     "Soft Tissue Masses"
+    ],
+    "ids": [
+     "1044",
+     "1042",
+     "5943",
+     "1044",
+     "1042",
+     "5943"
+    ]
+   }
+  },
+  {
+   "q": "hemoptysis, no leg swelling, TB ruled out",
+   "kind": "negated",
+   "offer": [
+    "Hemoptysis"
+   ],
+   "must_not_offer": [
+    "Suspected Pulmonary Embolism",
+    "Imaging of Possible Tuberculosis"
+   ],
+   "forbidden": "embol|[Tt]uberculosis",
+   "why": "both inferences negated",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Hemoptysis",
+     "Imaging of Possible Tuberculosis"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "weight loss, no heat intolerance, thyroid normal",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Thyroid Disease"
+   ],
+   "forbidden": "[Tt]hyro",
+   "why": "thyroid negated",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Acute Respiratory Illness in Immunocompetent Patients",
+     "Dementia",
+     "Headache",
+     "Liver Lesion-Initial Characterization",
+     "Renovascular Hypertension"
+    ],
+    "ids": [
+     "2106",
+     "7013",
+     "611",
+     "7963",
+     "640",
+     "819",
+     "2165",
+     "5437"
+    ]
+   }
+  },
+  {
+   "q": "hip pain, never took steroids, no osteonecrosis",
+   "kind": "negated",
+   "offer": [],
+   "must_not_offer": [
+    "Osteonecrosis"
+   ],
+   "forbidden": "[Oo]steonecrosis",
+   "why": "AVN negated",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Acute Hip Pain",
+     "Chronic Extremity Joint Pain-Suspected Inflammatory Arthritis, Crystalline Arthritis, or Erosive Osteoarthritis",
+     "Chronic Hip Pain"
+    ],
+    "ids": [
+     "6714",
+     "7941",
+     "6871",
+     "6872",
+     "6873",
+     "6715",
+     "6716",
+     "6718"
+    ]
+   }
+  },
+  {
+   "q": "shortness of breath",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Chronic Dyspnea-Noncardiovascular Origin",
+     "Dyspnea-Suspected Cardiac Origin (Ischemia Already Excluded)"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "chest pain",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "choose",
+    "topics": [
+     "Acute Nonspecific Chest Pain-Low Probability of Coronary Artery Disease",
+     "Chest Pain-Possible Acute Coronary Syndrome",
+     "Chronic Chest Pain-High Probability of Coronary Artery Disease",
+     "Chronic Chest Pain-Noncardiac Etiology Unlikely: Low to Intermediate Probability of Coronary Artery Disease",
+     "Nontraumatic Chest Wall Pain"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "headache",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Headache"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "fever",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "too-broad",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "cough",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Chronic Cough"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "knee pain",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Acute Trauma to the Knee",
+     "Chronic Knee Pain"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "low back pain",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Low Back Pain"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "abdominal pain",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Acute Nonlocalized Abdominal Pain",
+     "Pulsatile Abdominal Mass, Suspected Abdominal Aortic Aneurysm"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "dizziness",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Dizziness and Ataxia"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "wrist pain",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Acute Hand and Wrist Trauma",
+     "Chronic Hand and Wrist Pain"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "tachycardia",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Preprocedural Planning for Left Atrial Procedures in Atrial Fibrillation"
+    ],
+    "ids": [
+     "7282"
+    ]
+   }
+  },
+  {
+   "q": "fatigue",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Stress (Fatigue/Insufficiency) Fracture, Including Sacrum, Excluding Other Vertebrae"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "nausea and vomiting",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Acute Pancreatitis",
+     "Cranial Neuropathy",
+     "Hemoptysis",
+     "Jaundice",
+     "Orbits, Vision, and Visual Loss"
+    ],
+    "ids": [
+     "4801",
+     "3426",
+     "3427",
+     "3436",
+     "3437",
+     "4685",
+     "5246",
+     "6185"
+    ]
+   }
+  },
+  {
+   "q": "anxiety",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "insomnia",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "sore throat",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "rash",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "pregnant",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "none",
+    "topics": [],
+    "ids": []
+   }
+  },
+  {
+   "q": "hematuria",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Hematuria"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "lung cancer screening",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Lung Cancer Screening"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "thyroid nodule",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Thyroid Disease"
+    ],
+    "ids": [
+     "4657"
+    ]
+   }
+  },
+  {
+   "q": "seizure",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Seizures and Epilepsy"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "syncope",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Syncope"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "pulmonary embolism suspected, high pretest probability",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Suspected Pulmonary Embolism"
+    ],
+    "ids": [
+     "6224",
+     "6220",
+     "6221",
+     "6222",
+     "6223"
+    ]
+   }
+  },
+  {
+   "q": "sepsis suspected, cough",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "list",
+    "topics": [
+     "Sepsis"
+    ],
+    "ids": [
+     "7228",
+     "7225",
+     "7229",
+     "7240",
+     "7242",
+     "7226",
+     "7230",
+     "7231"
+    ]
+   }
+  },
+  {
+   "q": "wrist trauma",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Acute Hand and Wrist Trauma"
+    ],
+    "ids": []
+   }
+  },
+  {
+   "q": "RLQ pain",
+   "kind": "unchanged",
+   "offer": [],
+   "must_not_offer": [],
+   "forbidden": "",
+   "why": "no inference is justified; must stay as it is today",
+   "today": {
+    "mode": "guide",
+    "topics": [
+     "Right Lower Quadrant Pain"
+    ],
+    "ids": []
+   }
+  }
+ ]
+}
