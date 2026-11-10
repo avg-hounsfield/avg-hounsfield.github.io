@@ -15,6 +15,8 @@ import { ProtocolBuilder } from './protocol-builder.js?v=20261109c';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
 import { resolveQuery, buildTopicGuide, topicSlug } from './scenario-ranker.js?v=20261109a';
 import * as embeddingSearch from './embedding-search.js?v=20261109a';
+import { buildFacetModel, facetState, toggleOption, acrSourceUrl } from './guide-facets.js?v=20261110a';
+import { feedbackMailto, FEEDBACK_NOTE } from './feedback-link.js?v=20261110a';
 
 const CLOSEST_MATCH_NOTICE = 'No scenario uses these words. These are suggestions by meaning, so check that they fit.';
 
@@ -753,16 +755,16 @@ class ProtocolHelpApp {
     const resolved = idx && idx.scenarioIndex ? resolveQuery(trimmed, idx.scenarioIndex) : { mode: 'none' };
 
     if (resolved.mode === 'guide') {
-      this._renderTopicGuide(resolved, idx.scenarioIndex, resultContainer);
+      this._renderTopicGuide(resolved, idx.scenarioIndex, resultContainer, { query: trimmed });
       return;
     }
     if (resolved.mode === 'list') {
       const notice = resolved.corrected ? `Showing results for "${resolved.corrected}".` : resolved.notice;
-      this._renderGlobalScenarioListResult(resolved.corrected || trimmed, resolved.scenarios, resultContainer, { ...resolved, notice });
+      this._renderGlobalScenarioListResult(resolved.corrected || trimmed, resolved.scenarios, resultContainer, { ...resolved, notice, typed: trimmed });
       return;
     }
     if (resolved.mode === 'choose') {
-      this._renderTopicChooser(resolved.corrected || trimmed, resolved, resultContainer);
+      this._renderTopicChooser(resolved.corrected || trimmed, { ...resolved, typed: trimmed }, resultContainer);
       return;
     }
     if (resolved.mode === 'too-broad') {
@@ -877,10 +879,22 @@ class ProtocolHelpApp {
         <div class="global-result-footer">
           <span class="global-result-source">${esc(this._sourceLine())}</span>
         </div>
+        ${this._feedbackHtml(query, hasPlaces ? 'recover' : 'none')}
       </div>
     `;
     this._bindScenarioButtons(container);
     this._bindTermChips(container);
+  }
+
+  // "This did not help": a mailto: link, so the user's own email app opens
+  // with a draft they can edit. The page itself records and sends nothing.
+  _feedbackHtml(query, kind, detail = '') {
+    return `
+      <div class="feedback-row">
+        <a class="feedback-link" href="${this.escapeHtml(feedbackMailto({ query, kind, detail }))}">This did not help</a>
+        <span class="feedback-note">${this.escapeHtml(FEEDBACK_NOTE)}</span>
+      </div>
+    `;
   }
 
   async navigateToRegionSearch(region, topic) {
@@ -1439,6 +1453,7 @@ class ProtocolHelpApp {
               region: s.region,
               age: s.age,
               topic: s.topic,
+              search: s.search,
               top_tier: s.top_tier,
               normName: this._conceptNorm(s.name),
               normKeywords: Array.isArray(s.keywords) && s.keywords.length
@@ -1550,16 +1565,113 @@ class ProtocolHelpApp {
     return label.charAt(0).toUpperCase() + label.slice(1);
   }
 
-  _renderTopicGuide({ topic, related, notice }, scenarios, container) {
-    const groups = buildTopicGuide(topic, scenarios);
-    const all = groups.flatMap(g => g.scenarios);
+  // One facet model per topic; built on first use (a few ms for the largest).
+  _facetModel(topic, scenarios) {
+    if (!this._facetModels) this._facetModels = new Map();
+    if (!this._facetModels.has(topic)) {
+      this._facetModels.set(topic, buildFacetModel(scenarios.filter(s => s.topic === topic && s.top_tier)));
+    }
+    return this._facetModels.get(topic);
+  }
+
+  // True when the scenarios are one ACR variant: the same patient description
+  // and the same top category. ACR's names often list one variant several
+  // times ("..., elderly" / "..., osteoporosis"), and the answer is the same.
+  _sameVariant(list) {
+    if (list.length === 0) return false;
+    const key = s => `${(s.search || s.name).trim().toLowerCase()}|${s.top_tier.level}|${[...s.top_tier.studies].sort().join('|')}`;
+    return list.every(s => key(s) === key(list[0]));
+  }
+
+  // The full answer for one ACR variant: its top category and every study in
+  // it, ACR's patient description, and where to check it.
+  _renderAnswer(list) {
+    const esc = s => this.escapeHtml(s);
+    const first = list[0];
+    const tier = { ...first.top_tier, disagreement: list.some(s => s.top_tier.disagreement) };
+    return `
+      <section class="guide-answer" aria-label="ACR recommendation">
+        ${list.length === 1
+          ? `<h3 class="guide-answer-name">${esc(first.name)}${first.age === 'pediatric' ? ' <span class="age-tag">Pediatric</span>' : ''}</h3>`
+          : `<h3 class="guide-answer-name">${list.length} scenarios, one ACR recommendation</h3>
+             <ul class="guide-answer-names">${list.map(s => `<li>${esc(s.name)}</li>`).join('')}</ul>`}
+        ${first.search ? `<p class="scenario-variant"><span class="dym-label">ACR patient description:</span> ${esc(first.search)}</p>` : ''}
+        ${this._renderRecommendation(tier)}
+        <div class="guide-answer-links">
+          <button type="button" class="scenario-preview-btn guide-answer-open"
+                  data-region="${esc(first.region)}" data-name="${esc(first.name)}">See every rated study</button>
+          <a class="global-result-action" href="${esc(acrSourceUrl(first.id))}" target="_blank" rel="noopener noreferrer">ACR source</a>
+        </div>
+      </section>
+    `;
+  }
+
+  // The narrowing buttons. Real buttons with aria-pressed; a long group shows
+  // its first few and a "more" button.
+  _renderFacetBar(state, expanded) {
+    if (state.groups.length === 0) return '';
+    const esc = s => this.escapeHtml(s);
+    const CAP = 6;
+    const button = o => `
+      <button type="button" class="facet-btn" data-facet="${esc(o.id)}" aria-pressed="${o.pressed}"${o.disabled ? ' disabled' : ''}>
+        <span class="facet-btn-label">${esc(o.label)}</span><span class="facet-count">${o.count}</span>
+      </button>`;
+    const group = g => {
+      const open = expanded.has(g.key);
+      // Pressed options always show, so a choice is never hidden behind "more".
+      const shown = open ? g.options : g.options.filter((o, i) => i < CAP || o.pressed);
+      const hidden = g.options.length - shown.length;
+      return `
+        <div class="facet-group" role="group" aria-label="${esc(g.label)}">
+          <span class="facet-label">${esc(g.label)}</span>
+          <div class="facet-options">
+            ${shown.map(button).join('')}
+            ${hidden > 0 || open && g.options.length > CAP ? `
+              <button type="button" class="facet-more" data-group="${esc(g.key)}" aria-expanded="${open}">
+                ${open ? 'Show fewer' : `${hidden} more`}
+              </button>` : ''}
+          </div>
+        </div>`;
+    };
+    const chosen = state.selection.length;
+    return `
+      <div class="facet-bar">
+        <div class="facet-head">
+          <span class="facet-title">Narrow to your patient</span>
+          <span class="facet-status" role="status" aria-live="polite"></span>
+          ${chosen ? '<button type="button" class="facet-clear">Clear all</button>' : ''}
+        </div>
+        ${state.groups.map(group).join('')}
+      </div>
+    `;
+  }
+
+  // view: { query, selection, expanded, focus } is what the narrowing buttons
+  // have set; a new search starts it empty.
+  _renderTopicGuide({ topic, related, notice }, scenarios, container, view = {}) {
+    const resolved = { topic, related, notice };
+    const selection = view.selection || [];
+    const expanded = view.expanded || new Set();
+    const model = this._facetModel(topic, scenarios);
+    const state = facetState(model, selection);
+    const narrowed = state.selection.length > 0;
+    const all = state.remaining;
+    const groups = buildTopicGuide(topic, all);
+    const isAnswer = this._sameVariant(all);
+
+    // The shared lead comes from the whole topic so labels do not change as
+    // the guide narrows.
     const leads = new Map();
-    for (const s of all) {
+    for (const s of model.scenarios) {
       const lead = s.name.split(',')[0];
       leads.set(lead, (leads.get(lead) || 0) + 1);
     }
     const [topLead, topCount] = [...leads.entries()].sort((a, b) => b[1] - a[1])[0] || ['', 0];
-    const sharedLead = topCount > all.length * 0.6 ? topLead : '';
+    const sharedLead = topCount > model.scenarios.length * 0.6 ? topLead : '';
+
+    // Scenarios that share a name differ only in ACR's description: show it.
+    const nameCounts = new Map();
+    for (const s of all) nameCounts.set(s.name, (nameCounts.get(s.name) || 0) + 1);
 
     const row = s => `
       <li class="scenario-preview-item">
@@ -1567,21 +1679,24 @@ class ProtocolHelpApp {
                 data-region="${this.escapeHtml(s.region)}"
                 data-name="${this.escapeHtml(s.name)}">
           ${this.escapeHtml(this._branchLabel(s.name, sharedLead))}${s.age === 'pediatric' ? ' <span class="age-tag">Pediatric</span>' : ''}
+          ${nameCounts.get(s.name) > 1 && s.search ? `<span class="guide-branch-desc">${this.escapeHtml(s.search)}</span>` : ''}
         </button>
       </li>
     `;
-    const VISIBLE = 4;
+    // A narrowed guide is short enough to show in full.
+    const VISIBLE = narrowed ? 12 : 4;
 
     container.classList.remove('hidden');
     container.innerHTML = `
       <div class="global-result-card">
         <div class="global-result-header">
           <span class="global-result-topic">${this.escapeHtml(topic)}</span>
-          <span class="global-result-meta">Depends on the presentation</span>
+          <span class="global-result-meta">${isAnswer ? 'ACR recommendation' : 'Depends on the presentation'}</span>
         </div>
         <div class="global-result-body">
           ${notice ? `<p class="global-result-recommendation"><strong>${this.escapeHtml(notice)}</strong></p>` : ''}
-          ${groups.map(g => `
+          ${this._renderFacetBar(state, expanded)}
+          ${isAnswer ? this._renderAnswer(all) : groups.map(g => `
             <section class="guide-group">
               ${this._renderRecommendation(g)}
               <ul class="scenario-preview-list guide-branches">
@@ -1608,17 +1723,58 @@ class ProtocolHelpApp {
           <span class="global-result-source">${this.escapeHtml(this._sourceLine())}</span>
           <a class="global-result-action" href="/topics/${topicSlug(topic)}/">Full topic page</a>
         </div>
+        ${this._feedbackHtml(view.query || topic, isAnswer ? 'answer' : 'guide', topic)}
       </div>
     `;
     this._bindScenarioButtons(container);
     this._bindTermChips(container);
+
+    // Narrowing buttons redraw the guide with the new selection and put the
+    // keyboard focus back on the button that was pressed.
+    const redraw = next => this._renderTopicGuide(resolved, scenarios, container, { query: view.query, selection, expanded, ...next });
+    container.querySelectorAll('.facet-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-facet');
+        redraw({ selection: toggleOption(state.selection, id), focus: { facet: id } });
+      });
+    });
+    container.querySelectorAll('.facet-more').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-group');
+        const next = new Set(expanded);
+        if (next.has(key)) next.delete(key);
+        else next.add(key);
+        redraw({ selection: state.selection, expanded: next, focus: { group: key } });
+      });
+    });
+    const clear = container.querySelector('.facet-clear');
+    if (clear) clear.addEventListener('click', () => redraw({ selection: [], focus: { first: true } }));
+
+    const status = container.querySelector('.facet-status');
+    const statusText = narrowed
+      ? `${all.length} of ${state.total} scenario${state.total === 1 ? '' : 's'}`
+      : `${state.total} scenarios`;
+    if (status && view.focus) {
+      // Set after the redraw so screen readers announce the new count.
+      status.textContent = '';
+      setTimeout(() => { status.textContent = statusText; }, 30);
+    } else if (status) {
+      status.textContent = statusText;
+    }
+    if (view.focus) {
+      const all$ = sel => [...container.querySelectorAll(sel)];
+      const target = view.focus.facet ? all$('.facet-btn').find(b => b.getAttribute('data-facet') === view.focus.facet)
+        : view.focus.group ? all$('.facet-more').find(b => b.getAttribute('data-group') === view.focus.group)
+        : null;
+      (target || container.querySelector('.facet-btn:not([disabled])'))?.focus({ preventScroll: true });
+    }
   }
 
   // Several topics fit. With `groups`, the search had several complaints that
   // no one scenario covers, and each complaint's topics are shown under it.
   // A chip runs its topic's own search (t.query keeps the search's pregnancy
   // or age), which opens that topic's guide.
-  _renderTopicChooser(query, { topics = [], groups = null, notice = '' }, container) {
+  _renderTopicChooser(query, { topics = [], groups = null, notice = '', typed = '' }, container) {
     const chip = t => `
       <li class="scenario-preview-item">
         <button type="button" class="scenario-preview-btn guide-branch dym-chip" data-term="${this.escapeHtml(t.query || t.topic)}">
@@ -1642,6 +1798,7 @@ class ProtocolHelpApp {
           ${notice ? `<p class="global-result-recommendation"><strong>${this.escapeHtml(notice)}</strong></p>` : ''}
           ${body}
         </div>
+        ${this._feedbackHtml(typed || query, 'choose')}
       </div>
     `;
     this._bindTermChips(container);
@@ -1668,11 +1825,12 @@ class ProtocolHelpApp {
             Add a body part or presentation, such as "chest ${this.escapeHtml(query)}" or "${this.escapeHtml(query)} in a child".
           </p>
         </div>
+        ${this._feedbackHtml(query, 'too-broad')}
       </div>
     `;
   }
 
-  _renderGlobalScenarioListResult(query, scenarios, container, { meta = 'Matching scenarios', notice = '', summary = '' } = {}) {
+  _renderGlobalScenarioListResult(query, scenarios, container, { meta = 'Matching scenarios', notice = '', summary = '', typed = '' } = {}) {
     // Group by region for region buttons
     const regions = [];
     for (const s of scenarios) {
@@ -1709,6 +1867,7 @@ class ProtocolHelpApp {
         <div class="global-result-footer">
           <span class="global-result-source">${this.escapeHtml(this._sourceLine())}</span>
         </div>
+        ${this._feedbackHtml(typed || query, 'list', `${scenarios.length} scenario${scenarios.length === 1 ? '' : 's'}`)}
       </div>
     `;
     this._bindScenarioButtons(container);
