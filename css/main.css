@@ -4618,7 +4618,7 @@ input:focus, button:focus {
 
   /* Add print footer */
   .protocol-detail::after {
-    content: "Radex - For educational purposes only. Verify with institutional protocols.";
+    content: "GRAi Imaging Guide - For educational purposes only. Verify with institutional protocols.";
     display: block;
     margin-top: 24pt;
     padding-top: 8pt;

@@ -77,7 +77,7 @@ REGION_ICONS = {
     "other":    '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
 }
 
-CSS_VERSION = "20261109b"
+CSS_VERSION = "20261109c"
 
 
 def slugify(text):
@@ -207,7 +207,7 @@ def shared_head(title, description, canonical, jsonld_dict):
   <meta property="og:title" content="{title}">
   <meta property="og:description" content="{description}">
   <meta property="og:url" content="{canonical}">
-  <meta property="og:site_name" content="Radex">
+  <meta property="og:site_name" content="GRAi Imaging Guide">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="{title}">
   <meta name="twitter:description" content="{description}">
@@ -224,11 +224,11 @@ def shared_header():
     return """<header class="header" role="banner">
   <div class="header-brand">
     <a href="https://www.protocolinfo.com/" style="text-decoration:none;">
-      <span class="brand-text">Radex</span>
+      <span class="brand-text">GRAi Imaging Guide</span>
     </a>
   </div>
   <nav class="header-nav" role="navigation" aria-label="Main navigation">
-    <a href="https://www.protocolinfo.com/" class="nav-link">Back to Radex</a>
+    <a href="https://www.protocolinfo.com/" class="nav-link">Back to search</a>
   </nav>
 </header>"""
 
@@ -302,10 +302,10 @@ def render_protocol(protocol, slug):
             "honorificSuffix": "DO",
             "jobTitle": "Radiology Resident"
         },
-        "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL}
+        "isPartOf": {"@type": "WebSite", "name": "GRAi Imaging Guide", "url": BASE_URL}
     }
 
-    title = f"{display_name} Protocol - Sequences & Indications | Radex"
+    title = f"{display_name} Protocol - Sequences & Indications | GRAi Imaging Guide"
     head = shared_head(title, meta_desc, canonical, jsonld)
 
     # Breadcrumb - region link only when region is in REGION_DISPLAY
@@ -319,7 +319,7 @@ def render_protocol(protocol, slug):
         region_crumb = '<span class="static-breadcrumb-sep">&rsaquo;</span>'
 
     breadcrumb = f"""<nav class="static-breadcrumb" aria-label="Breadcrumb">
-  <a href="/">Radex</a>
+  <a href="/">GRAi Imaging Guide</a>
   {region_crumb}
   <span>{display_name}</span>
 </nav>"""
@@ -367,7 +367,7 @@ def render_protocol(protocol, slug):
   </div>
 
   <h2 class="static-section-label">Indications</h2>
-  <p style="color:var(--text-secondary);font-size:0.9375rem;line-height:1.6;margin-bottom:1.75rem;">{indications_text or "See full protocol in Radex."}</p>
+  <p style="color:var(--text-secondary);font-size:0.9375rem;line-height:1.6;margin-bottom:1.75rem;">{indications_text or "See the full protocol in the app."}</p>
 
   <h2 class="static-section-label">Sequences</h2>
   {seq_table}
@@ -375,8 +375,8 @@ def render_protocol(protocol, slug):
   {scenarios_section}
 
   <a href="{BASE_URL}/#protocols" class="protocol-cta">
-    <span class="protocol-cta-label">View full protocol in the Radex app</span>
-    <span class="protocol-cta-action">Open in Radex &rarr;</span>
+    <span class="protocol-cta-label">View the full protocol in the app</span>
+    <span class="protocol-cta-action">Open the app &rarr;</span>
   </a>
 </div>"""
 
@@ -420,10 +420,10 @@ def render_region(region, topics, region_protocols, slug_map, protocols, scenari
             "honorificSuffix": "DO",
             "jobTitle": "Radiology Resident"
         },
-        "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL}
+        "isPartOf": {"@type": "WebSite", "name": "GRAi Imaging Guide", "url": BASE_URL}
     }
 
-    title = f"{label} Imaging: ACR Appropriateness Criteria Summaries | Radex"
+    title = f"{label} Imaging: ACR Appropriateness Criteria Summaries | GRAi Imaging Guide"
     head = shared_head(title, meta_desc, canonical, jsonld)
 
     # Hero
@@ -483,7 +483,7 @@ def render_region(region, topics, region_protocols, slug_map, protocols, scenari
 
   <a href="{BASE_URL}/#search" class="protocol-cta">
     <span class="protocol-cta-label">Search all scenarios</span>
-    <span class="protocol-cta-action">Open Radex &rarr;</span>
+    <span class="protocol-cta-action">Open the app &rarr;</span>
   </a>
 </div>"""
 
@@ -578,7 +578,7 @@ def capture_month():
 def topic_title(name):
     # People search "acr appropriateness criteria <topic>" (Search Console,
     # Nov 2026), so the title says exactly that.
-    title = f"{name}: ACR Appropriateness Criteria Summary | Radex"
+    title = f"{name}: ACR Appropriateness Criteria Summary | GRAi"
     return title if len(title) <= 70 else f"{name}: ACR Appropriateness Criteria Summary"
 
 
@@ -615,12 +615,12 @@ def render_topic(topic, related):
                 "audience": {"@type": "MedicalAudience", "audienceType": "Clinician"},
                 "lastReviewed": captured,
                 "author": {"@type": "Person", "name": "Patrick Matulich", "honorificSuffix": "DO", "jobTitle": "Radiology Resident"},
-                "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL},
+                "isPartOf": {"@type": "WebSite", "name": "GRAi Imaging Guide", "url": BASE_URL},
             },
             {
                 "@type": "BreadcrumbList",
                 "itemListElement": [
-                    {"@type": "ListItem", "position": 1, "name": "Radex", "item": f"{BASE_URL}/"},
+                    {"@type": "ListItem", "position": 1, "name": "GRAi Imaging Guide", "item": f"{BASE_URL}/"},
                     {"@type": "ListItem", "position": 2, "name": f"{region_label} imaging", "item": f"{BASE_URL}/regions/{region}/"},
                     {"@type": "ListItem", "position": 3, "name": name, "item": canonical},
                 ],
@@ -671,7 +671,7 @@ def render_topic(topic, related):
 
     body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
   <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <a href="/">Radex</a> &rsaquo; <a href="/regions/{region}/">{esc(region_label)} imaging</a> &rsaquo; <a href="/topics/">Topics</a>
+    <a href="/">GRAi Imaging Guide</a> &rsaquo; <a href="/regions/{region}/">{esc(region_label)} imaging</a> &rsaquo; <a href="/topics/">Topics</a>
   </nav>
   <h1 class="static-hero-title">{esc(name)}: ACR Appropriateness Criteria summary</h1>
   <p class="topic-kicker">Which imaging to order</p>
@@ -687,7 +687,7 @@ def render_topic(topic, related):
 
   <a href="{BASE_URL}/?q={quote(name)}" class="protocol-cta">
     <span class="protocol-cta-label">Search within {esc(name)}</span>
-    <span class="protocol-cta-action">Open in Radex &rarr;</span>
+    <span class="protocol-cta-action">Open the app &rarr;</span>
   </a>
 
   {sections}
@@ -724,7 +724,7 @@ def render_topic_index(topics):
     """Returns complete HTML for /topics/, every topic grouped by body region."""
     canonical = f"{BASE_URL}/topics/"
     total = sum(len(t["scenarios"]) for t in topics.values())
-    title = "ACR Appropriateness Criteria Summaries by Topic | Radex"
+    title = "ACR Appropriateness Criteria Summaries by Topic | GRAi Imaging Guide"
     meta_desc = (
         f"Browse {len(topics)} clinical topics and {total:,} scenarios: which imaging study to order, "
         f"summarized from the ACR Appropriateness Criteria."
@@ -734,7 +734,7 @@ def render_topic_index(topics):
         "@type": "CollectionPage",
         "name": "Imaging appropriateness topics",
         "url": canonical,
-        "isPartOf": {"@type": "WebSite", "name": "Radex", "url": BASE_URL},
+        "isPartOf": {"@type": "WebSite", "name": "GRAi Imaging Guide", "url": BASE_URL},
     }
     head = shared_head(title, meta_desc, canonical, jsonld)
     sections = ""
@@ -761,7 +761,7 @@ def render_topic_index(topics):
   {sections}
   <a href="{BASE_URL}/" class="protocol-cta">
     <span class="protocol-cta-label">Search all scenarios</span>
-    <span class="protocol-cta-action">Open Radex &rarr;</span>
+    <span class="protocol-cta-action">Open the app &rarr;</span>
   </a>
 </div>"""
     return f"""<!DOCTYPE html>
@@ -784,9 +784,9 @@ def render_topic_index(topics):
 def render_about():
     """Returns complete HTML string for the about page."""
     canonical = f"{BASE_URL}/about/"
-    title = "About Radex - Quick Imaging Guidance | CoreGRAI"
+    title = "About GRAi Imaging Guide (formerly Radex)"
     meta_desc = (
-        "Radex is a free, browser-based imaging guidance reference for clinicians, summarized "
+        "GRAi Imaging Guide is a free, browser-based imaging guidance reference for clinicians, summarized "
         "from the ACR Appropriateness Criteria. 3,900+ scenarios, 72+ MRI protocols."
     )
 
@@ -795,7 +795,8 @@ def render_about():
         "@graph": [
             {
                 "@type": "WebApplication",
-                "name": "Radex",
+                "name": "GRAi Imaging Guide",
+                "alternateName": "Radex",
                 "url": BASE_URL,
                 "applicationCategory": "MedicalApplication",
                 "isAccessibleForFree": True,
@@ -842,10 +843,11 @@ def render_about():
     )
 
     body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
-  <h1 style="margin-bottom:1.5rem;">About Radex</h1>
+  <h1 style="margin-bottom:1.5rem;">About GRAi Imaging Guide</h1>
+  <p style="color:var(--text-muted);font-size:0.8125rem;margin:-1rem 0 1.25rem;">Formerly called Radex.</p>
 
   <p style="color:var(--text-secondary);font-size:0.9375rem;line-height:1.6;margin-bottom:1.75rem;">
-    Radex is an educational reference that helps clinicians find generic imaging guidance quickly,
+    GRAi Imaging Guide is an educational reference that helps clinicians find generic imaging guidance quickly,
     without working through the full ACR Appropriateness Criteria scenario by scenario. It is an
     independent project and is not affiliated with or endorsed by the American College of Radiology.
   </p>
@@ -855,9 +857,9 @@ def render_about():
     <p style="font-weight:600;font-size:0.9375rem;margin-bottom:0.25rem;">Patrick Matulich, DO</p>
     <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:0.75rem;">Radiology Resident | CoreGRAI</p>
     <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;">
-      Radex was developed as a capstone project in radiology AI, motivated by a recurring challenge
+      GRAi Imaging Guide was developed as a capstone project in radiology AI, motivated by a recurring challenge
       in clinical training: imaging appropriateness guidelines exist, but accessing them quickly at
-      the point of care remains cumbersome. Radex is designed to reduce time-to-answer from minutes
+      the point of care remains cumbersome. GRAi Imaging Guide is designed to reduce time-to-answer from minutes
       to seconds while keeping every answer traceable to its source.
     </p>
   </div>
@@ -870,7 +872,7 @@ def render_about():
   <h2 style="margin-bottom:0.75rem;font-size:1rem;">Data Sources &amp; Methodology</h2>
   <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
     <strong>Source:</strong> Guidance is summarized from the ACR Appropriateness Criteria,
-    evidence-based guidelines developed by the American College of Radiology. Radex shows when its
+    evidence-based guidelines developed by the American College of Radiology. GRAi Imaging Guide shows when its
     data was captured, and that date may lag ACR updates, so confirm against the linked source.
   </p>
   <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
@@ -918,8 +920,8 @@ def render_about():
   </p>
 
   <a href="{BASE_URL}/" class="protocol-cta">
-    <span class="protocol-cta-label">Try Radex - free, browser-based</span>
-    <span class="protocol-cta-action">Open Radex &rarr;</span>
+    <span class="protocol-cta-label">Try GRAi Imaging Guide - free, browser-based</span>
+    <span class="protocol-cta-action">Open the app &rarr;</span>
   </a>
 </div>"""
 

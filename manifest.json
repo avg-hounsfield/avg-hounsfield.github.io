@@ -1,6 +1,6 @@
 {
-  "name": "Radex - Imaging Appropriateness Guide",
-  "short_name": "Radex",
+  "name": "GRAi Imaging Guide",
+  "short_name": "GRAi Guide",
   "description": "Quick imaging guidance for clinicians, summarized from the ACR Appropriateness Criteria.",
   "start_url": "/",
   "display": "standalone",

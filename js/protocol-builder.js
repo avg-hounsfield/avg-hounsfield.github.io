@@ -688,7 +688,7 @@ export class ProtocolBuilder {
     const exportData = {
       version: '1.0.0',
       exported_at: new Date().toISOString(),
-      source: 'Radex Protocol Builder',
+      source: 'GRAi Imaging Guide Protocol Builder',
       protocol: protocol
     };
 
@@ -700,7 +700,7 @@ export class ProtocolBuilder {
     const exportData = {
       version: '1.0.0',
       exported_at: new Date().toISOString(),
-      source: 'Radex Protocol Builder',
+      source: 'GRAi Imaging Guide Protocol Builder',
       protocols: this.customProtocols
     };
 

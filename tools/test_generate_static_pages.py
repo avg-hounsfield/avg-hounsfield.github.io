@@ -96,7 +96,7 @@ class TestConstants(unittest.TestCase):
             self.assertTrue(len(svg) > 0, f"REGION_ICONS[{region!r}] is empty")
 
     def test_css_version_updated(self):
-        self.assertEqual(CSS_VERSION, "20261109b")
+        self.assertEqual(CSS_VERSION, "20261109c")
 
 class TestRenderRegion(unittest.TestCase):
     def _make_card(self, topic="Headache", count=33):
