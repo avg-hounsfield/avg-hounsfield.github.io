@@ -100,7 +100,13 @@ export function suggest(index, query, { max = SUGGEST_MAX, checkPhrase = () => '
   if (q.length < MIN_QUERY) return [];
   const words = q.split(' ');
 
-  const topics = ranked(index.topics, q, words, 1, (a, b) => b.count - a.count || a.text.length - b.text.length);
+  // A search that names no child is an adult's: child topics follow the adult
+  // ones, and the closest title leads ("Low Back Pain" before "Back Pain-Child",
+  // which has more scenarios).
+  const asksChild = /\b(child|infant|ped|kid)/.test(q);
+  const childLast = e => (!asksChild && /\bchild\b|\binfant\b/.test(e.text) ? 1 : 0);
+  const topics = ranked(index.topics, q, words, 1, (a, b) => a.text.length - b.text.length || b.count - a.count)
+    .sort((a, b) => childLast(a.e) - childLast(b.e));
   const scenarios = ranked(index.scenarios, q, words, 1, (a, b) => a.text.length - b.text.length || (a.text < b.text ? -1 : 1));
 
   // Phrases must contain what was typed as typed; loose word matches against

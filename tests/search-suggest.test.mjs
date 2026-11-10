@@ -129,3 +129,14 @@ test('fast enough to run on every keystroke over all scenarios', () => {
   suggest(cold, 'pa', { checkPhrase: p => { checks++; return checkPhrase(p); } });
   assert.ok(checks <= 8, `${checks} phrase checks on one keystroke`);
 });
+
+test('adult topics lead a search that names no child', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { buildSuggestIndex, suggest } = await import('../js/search-suggest.js');
+  const { topics } = JSON.parse(readFileSync(new URL('../data/search/topics.json', import.meta.url), 'utf8'));
+  const index = buildSuggestIndex({ topics: topics.map(t => ({ name: t.name, count: t.ids.length })) });
+  const first = q => suggest(index, q).filter(s => s.kind === 'topic')[0].label;
+  assert.equal(first('back pain'), 'Low Back Pain');
+  assert.equal(first('headache'), 'Headache');
+  assert.match(first('headache child'), /Child/);
+});
