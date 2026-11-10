@@ -214,6 +214,7 @@ def shared_head(title, description, canonical, jsonld_dict):
   <meta name="theme-color" content="#9B5DE5">
   <link rel="stylesheet" href="/css/main.css?v={CSS_VERSION}">
   <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>G</text></svg>">
   <script type="application/ld+json">
 {jsonld_str}
   </script>
@@ -781,6 +782,37 @@ def render_topic_index(topics):
 </html>"""
 
 
+def render_not_found():
+    """Returns complete HTML for 404.html, which GitHub Pages serves for unknown URLs."""
+    head = shared_head("Page not found | GRAi Imaging Guide", "This page does not exist.", f"{BASE_URL}/", {
+        "@context": "https://schema.org", "@type": "WebPage", "name": "Page not found",
+    }).replace('content="index, follow"', 'content="noindex, follow"')
+    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
+  <h1 class="static-hero-title">Page not found</h1>
+  <p class="static-hero-desc">That address does not exist on GRAi Imaging Guide. Search for a clinical scenario or browse by topic.</p>
+  <a href="{BASE_URL}/" class="protocol-cta">
+    <span class="protocol-cta-label">Search all scenarios</span>
+    <span class="protocol-cta-action">Open the app &rarr;</span>
+  </a>
+  <p class="topic-source"><a href="/topics/">Browse all topics</a></p>
+</div>"""
+    return f"""<!DOCTYPE html>
+<html lang="en">
+{head}
+<body>
+  <div class="app">
+    {shared_header()}
+    <main class="main">
+      <section class="anatomy-section">
+        {body}
+      </section>
+    </main>
+    {shared_footer()}
+  </div>
+</body>
+</html>"""
+
+
 def render_about():
     """Returns complete HTML string for the about page."""
     canonical = f"{BASE_URL}/about/"
@@ -1013,6 +1045,9 @@ def main():
 
     # About page
     write_file(Path("about") / "index.html", render_about())
+    count += 1
+
+    write_file(Path("404.html"), render_not_found())
     count += 1
 
     # Sitemap
