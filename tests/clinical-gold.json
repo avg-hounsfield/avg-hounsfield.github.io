@@ -436,6 +436,11 @@
     {
       "q": "wrist drop",
       "mode": "choose"
+    },
+    {
+      "q": "enlarged spleen",
+      "name": "splenomegaly",
+      "not": "RUQ|RLQ|LLQ"
     }
   ]
 }

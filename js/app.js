@@ -7,14 +7,14 @@
 
 console.log('[GRAi Imaging Guide] Loading app.js module...');
 
-import { SearchEngine } from './search-engine.js?v=20261109a';
+import { SearchEngine } from './search-engine.js?v=20261111a';
 import { DataLoader } from './data-loader.js?v=20260417a';
 import { UI } from './ui.js?v=20261109d';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20261109c';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
-import { resolveQuery, buildTopicGuide, topicSlug, _aliasTables } from './scenario-ranker.js?v=20261109a';
-import * as embeddingSearch from './embedding-search.js?v=20261109a';
+import { resolveQuery, buildTopicGuide, topicSlug, _aliasTables } from './scenario-ranker.js?v=20261111a';
+import * as embeddingSearch from './embedding-search.js?v=20261111a';
 import { buildFacetModel, facetState, toggleOption, acrSourceUrl } from './guide-facets.js?v=20261110a';
 import { feedbackMailto, FEEDBACK_NOTE } from './feedback-link.js?v=20261110a';
 import { buildSuggestIndex, suggest, SUGGEST_GROUPS } from './search-suggest.js?v=20261110a';

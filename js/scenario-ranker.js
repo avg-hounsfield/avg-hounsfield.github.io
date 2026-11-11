@@ -701,6 +701,7 @@ const HAND_ALIASES = [
   ['cardiac contusion', 'chest trauma blunt cardiac injury'], ['myocardial contusion', 'chest trauma blunt cardiac injury'],
   ['lymph node', 'adenopathy'], ['lymph nodes', 'adenopathy'], ['enlarged lymph node', 'adenopathy'],
   ['swollen glands', 'neck adenopathy'], ['swollen gland', 'neck adenopathy'],
+  ['enlarged spleen', 'splenomegaly'], ['big spleen', 'splenomegaly'], ['spleen enlarged', 'splenomegaly'],
   ['enlarged lymph nodes', 'adenopathy'], ['lymphadenopathy', 'adenopathy'], ['dysuria', 'uti'],
   // ACR's words for the features a measured lesion is described with
   ['mural nodule', 'high risk features'], ['worrisome features', 'high risk features'], ['high risk stigmata', 'high risk features'],
