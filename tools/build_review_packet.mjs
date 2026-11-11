@@ -246,6 +246,10 @@ function parsePattern(src) {
     if (c === '[') {
       const j = src.indexOf(']', i); const body = src.slice(i + 1, j); i = j + 1;
       if (/^[-\u2013\u2014 ]+$/.test(body)) return { t: 'lit', v: '-' };
+      // [Aa]: either case of one letter, read as the lower case letter.
+      if (/^[A-Za-z]{2}$/.test(body) && body[0].toLowerCase() === body[1].toLowerCase()) return { t: 'lit', v: body[1].toLowerCase() };
+      // A few single characters with no ranges: any one of them.
+      if (body.length <= 4 && !/[\^\\-]/.test(body)) return { t: 'alt', alts: [...body].map(ch => ({ t: 'seq', items: [{ t: 'lit', v: ch }] })) };
       fail('character class');
     }
     i++; return { t: 'lit', v: c };
@@ -275,7 +279,37 @@ function wordings(src) {
   try { return expand(parsePattern(src)).map(s => s.replace(/\s+/g, ' ')); } catch (e) { return null; }
 }
 // "must <verb>" phrase for a name pattern: start with / contain / then later.
+const NOT_MENTION_RE = /^\^\(\?!\.\*\((.*)\)\)(?:\.\*)?$/;
+function splitTopAlternatives(src) {
+  const out = []; let depth = 0, cur = '';
+  for (let k = 0; k < src.length; k++) {
+    const ch = src[k];
+    if (ch === '\\') { cur += ch + (src[k + 1] || ''); k++; continue; }
+    if (ch === '(') depth++;
+    if (ch === ')') depth--;
+    if (ch === '|' && depth === 0) { out.push(cur); cur = ''; continue; }
+    cur += ch;
+  }
+  out.push(cur); return out;
+}
 function patternPhrase(src, context) {
+  // A top-level "^(?!.*(A|B)).*" alternative names what an item must mention.
+  const alts = splitTopAlternatives(src);
+  if (alts.length > 1 && alts.some(a => NOT_MENTION_RE.test(a))) {
+    const parts = alts.map(a => patternPhrase(a, context));
+    return parts.some(x => x === null) ? null : parts.join(', or ');
+  }
+  const nm = NOT_MENTION_RE.exec(src);
+  if (nm) {
+    const words = triggerWords(nm[1], context);
+    return words ? `leave out every one of ${words} (that is, everything shown must mention at least one of them)` : null;
+  }
+  // "(?<!non)traumatic": the word, but not right after the given letters.
+  const lb = /\(\?<!([a-z]+)\)([a-z]+)/.exec(src);
+  if (lb) {
+    const rest = patternPhrase(src.replace(`(?<!${lb[1]})`, ''), context);
+    return rest ? `${rest} (not counting ${q(lb[1] + lb[2])})` : null;
+  }
   const ws = wordings(src);
   if (!ws) { untranslatable.push({ context, pattern: src }); return null; }
   const phrases = [...new Set(ws.map(w => {
@@ -374,7 +408,7 @@ function changeOf(from, to) {
 
 // ------------------------------------------------------------ high-stakes conditions
 const TIME_CRITICAL = [
-  ['stroke', /\b(stroke|cva|tia|transient ischemic|hemipare\w*|hemipleg\w*|aphasia|dysarthria|slurred speech|facial droop|face droop|lvo|large vessel|last seen well|lsw|sided weakness|arm weakness|intraparenchymal|intracranial hemorrhage|intracerebral|brain bleed|ich)\b/i],
+  ['stroke', /\b(stroke|cva|tia|transient ischemic|hemipare\w*|hemipleg\w*|aphasia|dysarthria|slurred speech|facial droop|face droop|lvo|large vessel occlusion|last seen well|lsw|sided weakness|arm weakness|intraparenchymal|intracranial hemorrhage|intracerebral|brain bleed|ich)\b/i],
   ['subarachnoid hemorrhage', /\b(sah|subarachnoid|thunderclap|worst headache|sudden onset severe headache|headache,? severe,? sudden|sudden severe headache|rcvs|cerebral aneurysm|brain aneurysm)\b/i],
   ['cauda equina', /\b(cauda equina|saddle an(a)?esthesia|urinary retention|bowel or bladder dysfunction)\b/i],
   ['acute aortic syndrome', /\b(aortic dissection|dissection aort\w*|acute aortic|aortic syndrome|tearing|ripping|type [ab] dissection|ruptured aaa|ruptured aneurysm|pulse deficit|chest dissection|thoracic dissection)\b/i],
@@ -531,7 +565,7 @@ function forbidPlain(pattern, context, what) {
   if (pattern === undefined || pattern === '') return '';
   if (pattern === '.') return `nothing may be ${what}`;
   const p = patternPhrase(pattern, context);
-  return p ? `no ${what} item may ${p}` : `nothing ${what} may match a pattern too complex for plain words (see technical column)`;
+  return p ? `no ${what} may ${p}` : `nothing ${what} may match a pattern too complex for plain words (see technical column)`;
 }
 for (const group of ['sizes', 'multi', 'recover']) {
   for (const c of recov[group]) {
@@ -685,7 +719,7 @@ for (const [from, to] of T.HAND_ALIASES) {
 for (const [from, to] of minedActive) {
   const k = `mined|${to}`; if (!phraseGroups.has(k)) phraseGroups.set(k, { src: 'mined alias', to, froms: [] }); phraseGroups.get(k).froms.push(from);
 }
-function phraseRow({ key, kind, item, froms, to, src, technical, highExtra, refs, exampleQueries }) {
+function phraseRow({ key, kind, item, froms, to, src, technical, highExtra, refs, exampleQueries, expected }) {
   const qsx = exampleQueries || froms;
   const results = qsx.map(run);
   const distinct = [...new Set(results.map(shortDescribe))];
@@ -700,7 +734,7 @@ function phraseRow({ key, kind, item, froms, to, src, technical, highExtra, refs
   const assigns = changes.filter(c => c.kind === 'assigns' || c.kind === 'drops');
   const isNew = baseHand && src === 'hand-written alias' ? froms.filter(f => !baseHand.has(f)) : [];
   return addRow({
-    prefix: 'P', key, kind, item, expected: `Every search containing the phrase is ${targetPlain(to)}.`, current,
+    prefix: 'P', key, kind, item, expected: expected || `Every search containing the phrase is ${targetPlain(to)}.`, current,
     acr_top: acrTop(results[0]), agrees: '(not a test: judge whether the reading is right)', area: areaOfResult(results[0]),
     population: '', seconds: PHRASE_SEC.base + PHRASE_SEC.extra * (froms.length - 1), source: src + (isNew.length ? ` (new since ${BASE_COMMIT}: ${isNew.join(', ')})` : ''),
     technical, highStakes: why.length ? why.join(' | ') : null,
@@ -728,7 +762,7 @@ for (const c of T.CONTEXT_ALIASES) {
   let example = c.phrase;
   if (src !== '.' && !/^\^/.test(src)) { const w = (wordings(src) || [])[0]; if (w) example = `${c.phrase} ${w.replace(/[\u0001\u0002\u0003]/g, ' ').replace(/\.\.\./g, '').trim()}`; }
   phraseRow({
-    key: `context|${c.phrase}|${src}|${c.to}`, kind: 'context-dependent alias', froms: [c.phrase], to: c.to, src: 'hand-written context alias',
+    key: `context|${c.phrase}|${src}|${c.to}`, kind: 'context-dependent alias', froms: [c.phrase], to: c.to, src: 'hand-written context alias', expected: `Only when the condition holds, the phrase is ${targetPlain(c.to)}.`,
     item: `The phrase ${q(c.phrase)} is ${targetPlain(c.to)} ${cond}`, exampleQueries: [example],
     technical: `phrase=${c.phrase} ; when=/${src}/ ; to=${c.to}${c.before ? ' ; before plain aliases' : ''}`,
     refs: [`context:${c.phrase}`],
@@ -901,32 +935,31 @@ const FLAGS = [
   { ref: 'equiv:cva', probe: ['cva tenderness', 'fever and cva tenderness'], reason: '"CVA" is treated as stroke everywhere. "CVA tenderness" (costovertebral angle, a pyelonephritis or stone sign) is then read as stroke.' },
   { ref: 'phrase:urinary retention', probe: ['urinary retention in a woman', 'urinary retention'], reason: 'Without back or leg words, urinary retention is read as benign prostatic hyperplasia, a male-only topic, even when the search says the patient is a woman. "luts" and "lower urinary tract symptoms" do the same.' },
   { ref: 'phrase:toddler fracture', probe: ['toddler fracture'], reason: 'A toddler fracture is a tibial shaft fracture. The search currently answers first with a basilar skull fracture (head trauma) scenario, then abuse.' },
+  { ref: 'implies:dissection:aortic', probe: ['known aortic aneurysm, no dissection', 'chest pain no dissection'], reason: 'Ruling out dissection excludes every scenario that names "aortic". "Known aortic aneurysm, no dissection" then gets no answer and is pointed at the intracranial aneurysm topic.' },
   { ref: 'phrase:type b dissection', probe: ['type b dissection', 'acute type b dissection'], reason: 'An acute type B dissection is an acute aortic syndrome too. The alias sends it to the treatment-planning and follow-up topic, while type A goes to the acute topic.' },
   { ref: 'phrase:intracranial hemorrhage', probe: ['brain bleed', 'intracranial hemorrhage', 'ich'], reason: 'Intracranial hemorrhage, ICH and "brain bleed" are read as intraparenchymal hemorrhage only (not subarachnoid or subdural), and the first scenario shown is the follow-up imaging one, not initial imaging.' },
-  { ref: 'phrase:ptosis', probe: ['ptosis', 'anisocoria', 'ptosis and headache'], reason: 'Ptosis and anisocoria alone are read as Horner syndrome. A painful third nerve palsy (possible aneurysm) also presents with ptosis and a big pupil and belongs under cranial neuropathy or aneurysm.' },
   { ref: 'phrase:cant move arm', probe: ['cant move arm', 'suddenly cant move left arm'], reason: '"Cannot move arm" is read as acute shoulder pain, while "arm weakness" is read as stroke. Sudden inability to move an arm is a stroke presentation.' },
-  { ref: 'context:leg weakness', probe: ['leg weakness', 'sudden left leg weakness'], reason: 'With no back, fever or bladder words, leg weakness is read as myelopathy, even a sudden one-sided leg weakness, which is usually stroke (or radiculopathy).' },
+  { ref: 'phrase:sarcoma', probe: ['sarcoma', 'sarcoma femur'], reason: '"Sarcoma" is read as a soft tissue mass; bone sarcomas (osteosarcoma, Ewing) belong to suspected primary bone tumors. "Sarcoma" opens a soft tissue mass of the abdomen, and "sarcoma femur" opens osteomyelitis of the femur.' },
   { ref: 'phrase:ectopic', probe: ['ectopic', 'ectopic pregnancy pelvic pain', 'pelvic pain positive pregnancy test'], reason: '"Ectopic" goes to first trimester vaginal bleeding. An ectopic with pain but no bleeding sits under acute pelvic pain with a positive pregnancy test; "ectopic pregnancy pelvic pain" gets no direct answer.' },
+  { ref: 'context:leg weakness', probe: ['leg weakness', 'sudden left leg weakness'], reason: 'With no back, fever or bladder words, leg weakness is read as myelopathy, even a sudden one-sided leg weakness, which is usually stroke (or radiculopathy).' },
+  { ref: 'phrase:ptosis', probe: ['ptosis', 'anisocoria', 'ptosis and headache'], reason: 'Ptosis and anisocoria alone are read as Horner syndrome. A painful third nerve palsy (possible aneurysm) also presents with ptosis and a big pupil and belongs under cranial neuropathy or aneurysm.' },
+  { ref: 'phrase:lower abdominal pain', probe: ['lower abdominal pain man'], reason: 'Lower abdominal pain is read as pelvic pain, and a man is then offered postmenopausal and reproductive-age pelvic pain topics.' },
+  { ref: 'phrase:elevated psa', probe: ['rising psa', 'rising psa after radiation'], reason: 'Elevated, high and rising PSA all go to suspected cancer before any biopsy. After treatment a rising PSA means suspected recurrence: "rising psa after radiation" still opens the no-prior-biopsy scenario.' },
+  { ref: 'context:torsion', probe: ['torsion', 'torsion child'], reason: '"Torsion" alone gives no answer: the context rules need a scrotal or ovarian word and there is no clarify entry. Torsion is time-critical; a question (testicular or ovarian?) may be better than nothing.' },
   { ref: 'phrase:weight loss', probe: ['back pain weight loss', 'back pain with weight loss and night sweats'], reason: '"Weight loss" and "night sweats" are dropped from every search. In back pain they are red flags for cancer or infection, and dropping them returns generic back pain topics.' },
-  { ref: 'region:Cerebrovascular Diseases-Aneurysm, Vascular Malformation, and Subarachnoid Hemorrhage', probe: ['sah', 'thunderclap headache'], reason: 'The aneurysm and subarachnoid hemorrhage topic is filed under Vascular (its title says "vascular malformation"), while the stroke topic is under Neuro. Region filters for head searches may then treat SAH as another region.' },
-  { ref: 'phrase:torsion', probe: ['torsion', 'torsion child'], reason: '"Torsion" alone gives no answer: the context rules need a scrotal or ovarian word and there is no clarify entry. Torsion is time-critical; a question (testicular or ovarian?) may be better than nothing.' },
   { ref: 'phrase:groin injury', probe: ['groin injury', 'groin injury man'], reason: 'Groin trauma is read as acute traumatic hip pain only. In a man, a groin injury may be scrotal or testicular trauma.' },
-  { ref: 'phrase:sarcoma', probe: ['sarcoma', 'sarcoma femur'], reason: '"Sarcoma" is read as a soft tissue mass; bone sarcomas (osteosarcoma, Ewing) belong to suspected primary bone tumors. The first scenario shown is a soft tissue mass of the abdomen.' },
   { ref: 'phrase:herniated disc', probe: ['cervical disc herniation', 'cervical spinal stenosis'], reason: 'Herniated disc and spinal stenosis are read as low back pain with radiculopathy. Cervical forms then get no direct answer.' },
-  { ref: 'equiv:replacement', probe: ['hormone replacement therapy'], reason: '"Replacement" always means arthroplasty, so "hormone replacement therapy" and similar are read as joint replacement.' },
   { ref: 'phrase:volvulus', probe: ['volvulus infant', 'bilious vomiting infant'], reason: 'Volvulus is read as bowel obstruction. In an infant, midgut volvulus is the bilious vomiting emergency; the first answer is a child abdominal pain obstruction scenario.' },
-  { ref: 'implies:dissection:aortic', probe: ['known aortic aneurysm, no dissection', 'chest pain no dissection'], reason: 'Ruling out dissection excludes every scenario that names "aortic", including aneurysm follow-up and aortic valve scenarios.' },
-  { ref: 'phrase:elevated psa', probe: ['rising psa', 'rising psa after radiation'], reason: 'Elevated, high and rising PSA all go to suspected cancer before any biopsy. After treatment a rising PSA means suspected recurrence.' },
-  { ref: 'phrase:pseudotumor', probe: ['orbital pseudotumor'], reason: '"Pseudotumor" is read as idiopathic intracranial hypertension; orbital pseudotumor (orbital inflammation) is then misread.' },
+  { ref: 'infer:appendicitis', probe: ['child periumbilical pain moved to the right'], reason: 'The appendicitis inference never fires for a child (it is an adult entry), so a child with the classic migrating pain gets no question about Suspected Appendicitis-Child.' },
   { ref: 'phrase:hand numbness', probe: ['hand numbness', 'tingling fingers at night'], reason: 'Hand numbness and tingling fingers are read as cervical radiculopathy. Carpal tunnel syndrome is the commoner cause and sits under chronic hand and wrist pain.' },
+  { ref: 'phrase:pseudotumor', probe: ['orbital pseudotumor'], reason: '"Pseudotumor" is read as idiopathic intracranial hypertension; orbital pseudotumor (orbital inflammation) is then misread.' },
+  { ref: 'clarify:foot drop', probe: ['foot drop', 'wrist drop'], reason: 'Foot drop offers low back pain, plexopathy and myelopathy, but not stroke or a peroneal neuropathy. Wrist drop leaves out radial nerve palsy (for example after a humeral fracture).' },
   { ref: 'phrase:trouble walking', probe: ['trouble walking'], reason: '"Trouble walking" is read as ataxia; it is as often weakness, pain or cauda equina.' },
   { ref: 'phrase:tremor', probe: ['essential tremor'], reason: 'Tremor, essential tremor and dystonia are read as parkinsonian syndromes.' },
-  { ref: 'clarify:foot drop', probe: ['foot drop', 'wrist drop'], reason: 'Foot drop offers low back pain, plexopathy and myelopathy, but not stroke or a peroneal neuropathy. Wrist drop leaves out radial nerve palsy (for example after a humeral fracture).' },
+  { ref: 'equiv:replacement', probe: ['hormone replacement therapy'], reason: '"Replacement" always means arthroplasty, so "hormone replacement therapy" and similar are read as joint replacement.' },
   { ref: 'implies:flag:migraine', probe: ['headache no red flags'], reason: '"No red flags" also excludes migraine, tension, cluster, trigeminal and sinusitis headache scenarios, which are not red flags.' },
-  { ref: 'phrase:lower abdominal pain', probe: ['lower abdominal pain man'], reason: 'Lower abdominal pain is read as pelvic pain, and a man is then offered postmenopausal and reproductive-age pelvic pain topics.' },
-  { ref: 'equiv:neck', probe: ['neck abscess', 'neck mass'], reason: '"Neck" is the same word as "cervical", and "cervical" sits in the spine group of body parts, so neck soft tissue searches may be held to spine rules.' },
+  { ref: 'region:Cerebrovascular Diseases-Aneurysm, Vascular Malformation, and Subarachnoid Hemorrhage', probe: ['sah', 'thunderclap headache'], reason: 'The aneurysm and subarachnoid hemorrhage topic is filed under Vascular (its title says "vascular malformation"), while the stroke topic is under Neuro. Region filters for head searches may then treat SAH as another region.' },
   { ref: 'region:Suspected Physical Abuse-Child', probe: ['child abuse'], reason: 'The data has two abuse topics, "Suspected Physical Abuse-Child" (113 scenarios) and "Suspected Physical Abuse \u2014 Child" (7). A search opens one of them; the other may never be shown. Data issue, not a clinical one.' },
-  { ref: 'infer:appendicitis', probe: ['child periumbilical pain moved to the right'], reason: 'The appendicitis inference never fires for a child (it is an adult entry), so a child with the classic migrating pain gets no question about Suspected Appendicitis-Child.' },
 ];
 const flagRows = [];
 FLAGS.forEach((f, k) => {
@@ -977,6 +1010,8 @@ function emit(name, title, list) {
 // same time-critical presentations follow in a second file.
 const isCore = r => r.section !== 'search' || /clinical gold/.test(r.source);
 emit('00_high_stakes.csv', 'High stakes, core (start here): inference questions, clarify entries, time-critical phrase readings and clinical-gold searches, every rule that changes body region or population', high.filter(isCore));
+let tcEnd = 0;
+{ let t = 0; for (const r of high.filter(isCore)) { t += r.seconds || 0; if (tcOrder(tcOf(r)) < 99) tcEnd = Math.round(t / 60); } }
 emit('01_high_stakes_searches.csv', 'High stakes, second pass: the red-team and generated expected answers for the same time-critical presentations', high.filter(r => !isCore(r)));
 for (const area of AREAS) {
   const list = rows.filter(r => !highIds.has(r.id) && (r.section === 'search' || r.section === 'phrase' || r.section === 'rule') && (AREA_LABEL[r.area] ? r.area : 'general') === area);
@@ -1011,14 +1046,14 @@ try { commit = execFileSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: REPO
 const summary = [
   '# Review packet: summary',
   '',
-  `Built from commit ${commit} by \`node tools/build_review_packet.mjs\`. Every judgment below was written by AI models from the ACR data; none has been reviewed by a clinician.`,
+  `Built on commit ${commit} by \`node tools/build_review_packet.mjs\`. Every judgment below was written by AI models from the ACR data; none has been reviewed by a clinician.`,
   '',
   '| File | What it holds | Rows | Est. minutes |',
   '|---|---|---:|---:|',
   ...files.map(f => `| ${f.name} | ${f.title} | ${f.rows} | ${mins(f.seconds)} |`),
   `| **Total** | | **${files.reduce((s, f) => s + f.rows, 0)}** | **${mins(total)}** |`,
   '',
-  'Estimates: 45 s per search row (+8 s per extra search in a grouped row), 45 s per inference question, 15 s per phrase row (+3 s per extra phrasing), 6 to 15 s per word rule, 6 s per topic region, 40 s per machine flag.',
+  'Estimates: 35 s per search row (+6 s per extra search in a grouped row), 30 s per inference question, 12 s per phrase row (+2 s per extra phrasing), 6 to 15 s per word rule, 6 s per topic region, 40 s per machine flag.',
   '',
   '## What was collected',
   '',
@@ -1047,7 +1082,7 @@ ${files.map(f => `| ${f.name} | ${f.title} | ${f.rows} | ${mins(f.seconds)} |`).
 
 See SUMMARY.md for the counts behind these files.
 
-**Start with ${highFile.name}** (about ${mins(highFile.seconds)} minutes). It holds every inference question the site may ask, the clarify questions, the expected answers and phrase readings for time-critical presentations (stroke, subarachnoid hemorrhage, cauda equina, acute aortic syndrome, pulmonary embolism, torsion, ectopic pregnancy, appendicitis in children and in pregnancy, major trauma, child abuse, cord compression, sepsis), and every alias or rule that changes which body region or which population (child, pregnancy, sex, immune status) is answered. If you only have half an hour, this is the file. Of the test searches it holds only the curated clinical-gold set; ${files[1].name} (about ${mins(files[1].seconds)} minutes) holds the red-team and generated test searches for the same time-critical presentations and is the next thing to review.
+**Start with ${highFile.name}** (about ${mins(highFile.seconds)} minutes). It holds every inference question the site may ask, the clarify questions, the expected answers and phrase readings for time-critical presentations (stroke, subarachnoid hemorrhage, cauda equina, acute aortic syndrome, pulmonary embolism, torsion, ectopic pregnancy, appendicitis in children and in pregnancy, major trauma, child abuse, cord compression, sepsis), and every alias or rule that changes which body region or which population (child, pregnancy, sex, immune status) is answered. It is sorted most dangerous first, by presentation in the order just listed, and the **running total (minutes)** column shows how far you are: if you only have half an hour, start at the top and stop at 30; the rows about ${tcEnd ? `the time-critical presentations end at about minute ${tcEnd}` : 'the time-critical presentations come first'}, and the region and population rules follow. (The whole file is longer than half an hour because every inference question and every region or population change is in it; nothing was left out to make it shorter.) Of the test searches it holds only the curated clinical-gold set; ${files[1].name} (about ${mins(files[1].seconds)} minutes) holds the red-team and generated test searches for the same time-critical presentations and is the next thing to review.
 
 The area files (area_*.csv) then hold the rest of the searches and phrase readings, one file per body area. 30_word_rules.csv holds the general word rules, and 40_topic_regions.csv the body region of every ACR topic (about 6 seconds a row). 90_flagged_by_generator.csv lists what the script that built this packet suspects is wrong, with its reasons: these are machine-flagged guesses, not clinical verdicts, and are there to point your attention, not to replace it.
 

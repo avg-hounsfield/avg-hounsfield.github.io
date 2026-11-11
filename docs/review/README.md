@@ -8,12 +8,12 @@ That translation is full of clinical judgments: which phrase means which ACR sce
 
 | File | What it holds | Rows | Est. minutes |
 |---|---|---:|---:|
-| 00_high_stakes.csv | High stakes, core (start here): inference questions, clarify entries, time-critical phrase readings and clinical-gold searches, every rule that changes body region or population | 209 | 74 |
+| 00_high_stakes.csv | High stakes, core (start here): inference questions, clarify entries, time-critical phrase readings and clinical-gold searches, every rule that changes body region or population | 208 | 74 |
 | 01_high_stakes_searches.csv | High stakes, second pass: the red-team and generated expected answers for the same time-critical presentations | 209 | 127 |
 | area_neuro.csv | Searches and phrase readings: Neuro, head and neck | 334 | 155 |
 | area_spine.csv | Searches and phrase readings: Spine | 115 | 50 |
 | area_chest.csv | Searches and phrase readings: Chest and heart | 234 | 114 |
-| area_vascular.csv | Searches and phrase readings: Vascular | 123 | 54 |
+| area_vascular.csv | Searches and phrase readings: Vascular | 124 | 54 |
 | area_abdomen.csv | Searches and phrase readings: Abdomen, pelvis, obstetrics | 559 | 283 |
 | area_msk.csv | Searches and phrase readings: Musculoskeletal | 329 | 145 |
 | area_breast.csv | Searches and phrase readings: Breast | 75 | 31 |
@@ -21,11 +21,11 @@ That translation is full of clinical judgments: which phrase means which ACR sce
 | area_general.csv | Searches and phrase readings: General (no single area) | 99 | 47 |
 | 30_word_rules.csv | Word rules: same-meaning words, opposites, what a ruled-out word also rules out, quadrants, suggestion-check equivalences, negative tests | 262 | 40 |
 | 40_topic_regions.csv | Which body region each ACR topic is filed under | 263 | 26 |
-| 90_flagged_by_generator.csv | MACHINE-FLAGGED: what the generator suspects is wrong, with its reasoning | 31 | 20 |
+| 90_flagged_by_generator.csv | MACHINE-FLAGGED: what the generator suspects is wrong, with its reasoning | 30 | 20 |
 
 See SUMMARY.md for the counts behind these files.
 
-**Start with 00_high_stakes.csv** (about 74 minutes). It holds every inference question the site may ask, the clarify questions, the expected answers and phrase readings for time-critical presentations (stroke, subarachnoid hemorrhage, cauda equina, acute aortic syndrome, pulmonary embolism, torsion, ectopic pregnancy, appendicitis in children and in pregnancy, major trauma, child abuse, cord compression, sepsis), and every alias or rule that changes which body region or which population (child, pregnancy, sex, immune status) is answered. If you only have half an hour, this is the file. Of the test searches it holds only the curated clinical-gold set; 01_high_stakes_searches.csv (about 127 minutes) holds the red-team and generated test searches for the same time-critical presentations and is the next thing to review.
+**Start with 00_high_stakes.csv** (about 74 minutes). It holds every inference question the site may ask, the clarify questions, the expected answers and phrase readings for time-critical presentations (stroke, subarachnoid hemorrhage, cauda equina, acute aortic syndrome, pulmonary embolism, torsion, ectopic pregnancy, appendicitis in children and in pregnancy, major trauma, child abuse, cord compression, sepsis), and every alias or rule that changes which body region or which population (child, pregnancy, sex, immune status) is answered. It is sorted most dangerous first, by presentation in the order just listed, and the **running total (minutes)** column shows how far you are: if you only have half an hour, start at the top and stop at 30; the rows about the time-critical presentations end at about minute 44, and the region and population rules follow. (The whole file is longer than half an hour because every inference question and every region or population change is in it; nothing was left out to make it shorter.) Of the test searches it holds only the curated clinical-gold set; 01_high_stakes_searches.csv (about 127 minutes) holds the red-team and generated test searches for the same time-critical presentations and is the next thing to review.
 
 The area files (area_*.csv) then hold the rest of the searches and phrase readings, one file per body area. 30_word_rules.csv holds the general word rules, and 40_topic_regions.csv the body region of every ACR topic (about 6 seconds a row). 90_flagged_by_generator.csv lists what the script that built this packet suspects is wrong, with its reasons: these are machine-flagged guesses, not clinical verdicts, and are there to point your attention, not to replace it.
 
