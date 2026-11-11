@@ -131,7 +131,7 @@ const SIDES = new Set(['left', 'right']);
 // lump. Spine words sit in both the spine and the back group on purpose.
 const ANATOMY_GROUPS = [
   ['head', 'skull', 'face', 'facial', 'orbit', 'eye', 'ear', 'sinus', 'nasal', 'jaw', 'mandibular', 'sella', 'iac',
-    'brain', 'pituitary'],
+    'brain', 'pituitary', 'cerebral', 'intracranial'],
   ['cervical', 'spine', 'thoracic', 'lumbar', 'lowback', 'back', 'sacrum', 'thyroid'],
   ['chest', 'lung', 'heart', 'rib', 'thorax', 'breast', 'axilla', 'esophagus'],
   // "pancreas" stems to "pancrea", which is the form the index holds.
@@ -208,6 +208,9 @@ const EQUIVALENT = {
   fibroid: 'fibroids', leiomyoma: 'fibroids', leiomyomas: 'fibroids', spinal: 'spine', axillary: 'axilla',
   dilated: 'dilation', dilatation: 'dilation', dilate: 'dilation', clinically: 'clinical', chemo: 'chemotherapy',
   flare: 'exacerbation', flares: 'exacerbation', murmurs: 'murmur',
+  // Lay words no ACR scenario writes, read as the word ACR does write.
+  swallowed: 'ingested', inhaled: 'aspirated', womb: 'uterus', windpipe: 'trachea', tracheal: 'trachea',
+  collarbone: 'clavicle', narrowed: 'stenosis', narrowing: 'stenosis', nose: 'nasal',
 };
 
 // Phrases ACR writes two ways; both sides read the short one.
@@ -707,6 +710,25 @@ const HAND_ALIASES = [
   ['completion of neoadjuvant chemotherapy', 'neoadjuvant chemotherapy completed'],
   ['right upper lobe', 'lung'], ['left upper lobe', 'lung'], ['right lower lobe', 'lung'], ['left lower lobe', 'lung'],
   ['right middle lobe', 'lung'], ['upper lobe', 'lung'], ['lower lobe', 'lung'], ['middle lobe', 'lung'], ['lingula', 'lung'],
+  // Lay wording for a finding or a place ACR names directly (not yet clinician reviewed).
+  ['peeing blood', 'hematuria'], ['pee blood', 'hematuria'], ['blood in pee', 'hematuria'], ['blood in my pee', 'hematuria'],
+  ['bloody urine', 'hematuria'], ['yellow skin and eyes', 'jaundice'], ['turned yellow', 'jaundice'],
+  ['stomach ulcer', 'peptic ulcer'], ['overactive thyroid', 'thyrotoxicosis'], ['underactive thyroid', 'hypothyroidism'],
+  ['bulging eye', 'exophthalmos'], ['bulging eyes', 'exophthalmos'], ['going deaf', 'hearing loss'], ['deaf', 'hearing loss'],
+  ['deafness', 'hearing loss'], ['fluid around lung', 'pleural effusion'], ['fluid around lungs', 'pleural effusion'],
+  ['fluid on lungs', 'pleural effusion'], ['water on lungs', 'pleural effusion'],
+  ['inflamed pancreas', 'pancreatitis'], ['belly aneurysm', 'aaa'], ['abdominal aneurysm', 'aaa'], ['stomach aneurysm', 'aaa'],
+  ['bowel cancer', 'colon cancer'], ['after giving birth', 'postpartum'], ['after childbirth', 'postpartum'],
+  ['after delivery', 'postpartum'], ['gave birth', 'postpartum'], ['giving birth', 'postpartum'],
+  ['throwing up green', 'bilious vomiting'], ['green vomit', 'bilious vomiting'], ['vomiting green', 'bilious vomiting'],
+  ['throwing up', 'vomiting'], ['threw up', 'vomiting'], ['chest infection', 'pneumonia'], ['thigh bone', 'femur'],
+  ['shoulder blades', 'thoracic back'], ['shoulder blade', 'scapula'], ['cannot get pregnant', 'infertility'],
+  ['cant get pregnant', 'infertility'], ['can not get pregnant', 'infertility'], ['unable to get pregnant', 'infertility'],
+  ['trouble getting pregnant', 'infertility'], ['difficulty getting pregnant', 'infertility'], ['not getting pregnant', 'infertility'],
+  ['trouble conceiving', 'infertility'], ['unable to conceive', 'infertility'], ['cannot conceive', 'infertility'],
+  ['swollen kidneys', 'hydronephrosis'], ['keep coming back', 'recurrent'], ['keeps coming back', 'recurrent'],
+  ['coming back', 'recurrent'], ['came back', 'recurrent'], ['bladder infections', 'uti'], ['kidney infection', 'pyelonephritis'],
+  ['kidney infections', 'pyelonephritis'], ['narrowed windpipe', 'tracheal stenosis'],
 ];
 
 // The hand-written table, then the mined phrases it does not already name,
@@ -779,6 +801,9 @@ const CONTEXT_ALIASES = [
   { phrase: 'headache', when: /\bblunt\b/, to: 'head trauma' },
   { phrase: 'cervical pain', when: /\bblunt\b/, to: 'cervical spine trauma' },
   { phrase: 'back', when: /\bblunt\b/, to: 'spine' },
+  // Beside an injury or a bleed, "unstable" is the hemodynamically unstable
+  // patient; elsewhere it describes a joint, a fracture or angina.
+  { phrase: 'unstable', when: /\b(trauma|blunt|penetrating|crash|accident|collision|mvc|mva|gunshot|stab|stabbed|bleeding|hemorrhage|polytrauma)\b/, to: 'hypotension', before: true },
 ];
 
 // "<part> pain after a fall" asks about the injury, so the mechanism replaces
@@ -829,7 +854,8 @@ const ANTONYMS = [['acute', 'chronic'], ['blunt', 'penetrating'], ['upper', 'low
   ['bilious', 'nonbilious'], ['gynecological', 'nongynecological'], ['ischemic', 'nonischemic'], ['focal', 'nonlocalized'],
   ['postmenopausal', 'reproductive'], ['first', 'second'], ['first', 'third'], ['second', 'third'], ['positive', 'negative'],
   ['hypothyroidism', 'thyrotoxicosis'], ['euthyroid', 'thyrotoxicosis'], ['euthyroid', 'hypothyroidism'], ['benign', 'malignant'],
-  ['met', 'primary'],
+  ['met', 'primary'], ['gross', 'microscopic'], ['conductive', 'sensorineural'], ['primary', 'secondary'],
+  ['hypotension', 'normotension'], ['ingested', 'aspirated'],
   // A chronic scenario is the opposite of an injury even when its name
   // mentions an old one ("post trauma osteoarthritis"): judged by what was
   // asked, not by what the name also happens to say.
@@ -859,6 +885,8 @@ const IMPLIES = {
     'older', 'increasing', 'pregnant', 'peripartum', 'hiv', 'papilledema', 'post', 'trauma', 'tension', 'cervicogenic',
     'intracranial', 'otitis', 'sinusitis', 'migraine', 'cluster', 'trigeminal'],
   trauma: ['fall', 'blunt', 'penetrating', 'ballistic'],
+  cancer: ['met'],
+  infection: ['septic', 'sepsis', 'osteomyelitis', 'abscess', 'cellulitis'],
 };
 
 // Scenario names this long are the variant text itself, not a name.
@@ -866,9 +894,9 @@ const MAX_NAME_WORDS = 22;
 
 // "antenatal" is not here: an antenatal diagnosis (hydronephrosis) describes
 // the infant, so it sits with the pediatric words.
-const PREGNANT_RE = /\b(pregnant|pregnancy|gravid|gravida|trimester|gestation|gestational|prenatal|obstetric|obstetrical|fetal|fetus|g\d+p\d+|\d+\s*(?:weeks|wks|wk)\s*(?:pregnant|gestation|ga|ega|gestational age)|iugr)\b/;
-const NOT_PREGNANT_RE = /\b(not pregnant|non pregnant|nonpregnant|negative pregnancy test|pregnancy test negative|negative hcg|hcg negative|negative beta hcg|beta hcg negative|not currently pregnant)\b/;
-const PEDIATRIC_RE = /\b(child|children|kid|kids|pediatric|pediatrics|peds|ped|infant|infants|toddler|neonate|neonatal|newborn|baby|babies|adolescent|teen|teenager|teenage|preemie|preterm infant|nicu|school age|boy|girl|antenatal)\b/;
+const PREGNANT_RE = /\b(pregnant|pregnancy|expecting|expectant|gravid|gravida|trimester|gestation|gestational|prenatal|obstetric|obstetrical|fetal|fetus|g\d+p\d+|\d+\s*(?:weeks|wks|wk)\s*(?:pregnant|gestation|ga|ega|gestational age)|iugr)\b/;
+const NOT_PREGNANT_RE = /\b((?:cannot|cant|can not|unable to|not able to|failing to|struggling to|trouble|difficulty) (?:get|getting|become|becoming|fall|falling) pregnant|not getting pregnant|never been pregnant|not pregnant|non pregnant|nonpregnant|negative pregnancy test|pregnancy test negative|negative hcg|hcg negative|negative beta hcg|beta hcg negative|not currently pregnant)\b/;
+const PEDIATRIC_RE = /\b(child|children|kid|kids|pediatric|pediatrics|peds|ped|infant|infants|toddler|neonate|neonatal|newborn|baby|babies|adolescent|teen|teenager|teenage|preemie|preterm infant|nicu|school age|boy|girl|antenatal|kindergartner|kindergartener|kindergarten|preschooler|preschool|schoolchild|schoolboy|schoolgirl|grader|preteen|tween|youngster)\b/;
 // Sex words in a search and in ACR titles and names. "Evaluation of the
 // Symptomatic Male Breast" is no answer to a search that never says male.
 const MALE_RE = /\b(male|males|man|men|boy|boys|gentleman)\b/i;
@@ -981,12 +1009,66 @@ const SLASH_SHORTHAND = [
   [/\bv\/q\b/g, ' vq '], [/\ba\/w\b/g, ' with '], [/\bpt\.\s/g, ' patient '],
 ];
 
+// A negation written after what it negates: "PE ruled out", "abuse not
+// suspected", "endocarditis excluded", and the active "CT ruled out a bleed".
+// Each is rewritten as "no <words>" with a break after it, so the usual
+// negation reading applies. After a comma or a joining word the two words
+// before the phrase are negated ("pulmonary embolism ruled out"); elsewhere
+// only the last one, so "chest pain PE ruled out" keeps the chest pain.
+// "rule out PE" (present tense) still means PE is suspected and is untouched.
+const NEGATED_AFTER = '(?:(?:has|have|had) been |was |were |is |are |been |already |now |essentially |effectively )*(?:ruled out|excluded|not suspected|not likely|unlikely|not a concern|not present|not seen|not found)';
+const CLAUSE_END = '(?=\\s*(?:$|[,;.:]|\\band\\b|\\bbut\\b|\\bso\\b|\\bnow\\b|\\bwith\\b))';
+const NEGATED_AFTER_CLAUSE_RE = new RegExp(`(^|[,;.:]\\s*|\\b(?:and|but|with|then|so)\\s+)([a-z]+(?: [a-z]+)?) ${NEGATED_AFTER}${CLAUSE_END}`, 'g');
+const NEGATED_AFTER_WORD_RE = new RegExp(`\\b([a-z]+) ${NEGATED_AFTER}${CLAUSE_END}`, 'g');
+const NEGATING_VERB_RE = /\b(?:(?:has|have|had|was|were|been) )*(?:ruled out|excluded|negative for)\s+(?:a |an |the |any )?(?=[a-z])/g;
+function readTrailingNegation(q) {
+  return q
+    .replace(NEGATED_AFTER_CLAUSE_RE, (m, lead, words) => `${lead} no ${words} xbreakx `)
+    .replace(NEGATED_AFTER_WORD_RE, ' no $1 xbreakx ')
+    .replace(NEGATING_VERB_RE, ' no ');
+}
+
+// A side and a level of the abdomen are one place, not two independent words:
+// "right upper abdominal pain" is the right upper quadrant and never the left
+// upper one. Written either way round, with lay words for the abdomen, and as
+// "under the left ribs".
+const QUADRANT = { right: { upper: 'ruq', lower: 'rlq' }, left: { upper: 'luq', lower: 'llq' } };
+const BELLY_WORDS = '(?:abdominal|abdomen|abd|belly|tummy|stomach|quadrant)';
+const SIDE_LEVEL_RE = new RegExp(`\\b(right|left) (?:sided |side )?(upper|lower) (?:side of (?:the |my |her |his )?|part of (?:the |my |her |his )?)?${BELLY_WORDS}(?: quadrant)?\\b`, 'g');
+const LEVEL_SIDE_RE = new RegExp(`\\b(upper|lower) (right|left) (?:sided |side )?(?:side of (?:the |my |her |his )?|part of (?:the |my |her |his )?|of (?:the |my |her |his )?)?${BELLY_WORDS}(?: quadrant)?\\b`, 'g');
+const UNDER_RIBS_RE = /\b(?:under|below|beneath|underneath) (?:the |my |her |his )?(right|left) (?:ribs|rib cage|ribcage|rib)\b/g;
+function readQuadrants(q) {
+  return q
+    .replace(SIDE_LEVEL_RE, (m, side, level) => QUADRANT[side][level])
+    .replace(LEVEL_SIDE_RE, (m, level, side) => QUADRANT[side][level])
+    .replace(UNDER_RIBS_RE, (m, side) => QUADRANT[side].upper);
+}
+const QUADRANTS = new Set(['ruq', 'rlq', 'luq', 'llq']);
+const SIDE_WORDS = { left: ['left', 'luq', 'llq'], right: ['right', 'ruq', 'rlq'] };
+const SIDES_LIST = ['left', 'right'];
+// Diagnoses and organs that belong to one quadrant: a search for one is not
+// answered by a scenario named for another quadrant.
+const QUADRANT_OF = {
+  diverticulitis: 'llq', appendicitis: 'rlq', appendix: 'rlq', spleen: 'luq', splenomegaly: 'luq', gallbladder: 'ruq',
+  cholecystitis: 'ruq', biliary: 'ruq', liver: 'ruq',
+};
+
+// The stage of pregnancy a search states, in ACR's two bins: "first" (before
+// 14 weeks) or "late". Null when none is stated.
+function trimesterOf(q) {
+  if (/\b(?:first|1st) trimester\b/.test(q)) return 'first';
+  if (/\b(?:second|third|2nd|3rd) trimester\b/.test(q)) return 'late';
+  const weeks = q.match(/\b(\d{1,2})\s*(?:weeks|wks|wk)\b(?!\s*(?:old|ago|postpartum|post|after|of age|of pain|of symptoms|history))/);
+  return weeks ? (Number(weeks[1]) < 14 ? 'first' : 'late') : null;
+}
+
 // "ectopic pregnancy" names a diagnosis, not a pregnant patient to filter on.
 // Commas are kept as tokens only when the caller splits complaints on them;
 // otherwise they vanish so "fever, no source" still reads as one phrase.
 function normalizeSearch(query, { keepCommas = false } = {}) {
   let q = String(query).toLowerCase();
   for (const [re, to] of SLASH_SHORTHAND) q = q.replace(re, to);
+  q = readTrailingNegation(q);
   // Contrast phrases carry no clinical meaning and "without" would otherwise
   // negate the next clinical word.
   q = q.replace(/\b(with|without|w|wo|w o|no|non|pre|post)\s*(and\s*(with|without)\s*)?(iv\s*)?(contrast|con|gad|gadolinium)\b/g, ' ');
@@ -1003,6 +1085,7 @@ function normalizeSearch(query, { keepCommas = false } = {}) {
   q = cleanWords(q)
     .replace(/\b(ectopic|molar) pregnancy\b/g, (m, w) => (w === 'molar' ? 'gestational trophoblastic disease' : w))
     .replace(/\bmolar\b/g, 'gestational trophoblastic disease');
+  q = readQuadrants(q);
   return ` ${q} `.replace(RESULT_RE, ' ').replace(/\s+/g, ' ').trim();
 }
 
@@ -1080,14 +1163,17 @@ export function extractQualifiers(query) {
   const teen = years !== null && years >= 13 && years < 18;
   if (teen) age = null;
   const sides = new Set();
-  if (/\bleft\b/.test(q) && !/\bright\b/.test(q)) sides.add('left');
-  if (/\bright\b/.test(q) && !/\bleft\b/.test(q)) sides.add('right');
+  // A quadrant carries its side: "RUQ pain" is a right-sided search.
+  const saysLeft = /\b(left|luq|llq)\b/.test(q);
+  const saysRight = /\b(right|ruq|rlq)\b/.test(q);
+  if (saysLeft && !saysRight) sides.add('left');
+  if (saysRight && !saysLeft) sides.add('right');
   const gcs = q.match(GCS_QUERY_RE);
   const pregnant = !notPregnant && PREGNANT_RE.test(q);
   const sex = pregnant || FEMALE_RE.test(q) ? 'female' : MALE_RE.test(q) ? 'male' : null;
   return {
     pregnant, notPregnant, age, years, infant, teen, sides, sex, gcs: gcs ? Number(gcs[1]) : null,
-    sizes: extractSizes(query),
+    sizes: extractSizes(query), trimester: pregnant ? trimesterOf(q) : null,
   };
 }
 
@@ -1183,7 +1269,7 @@ function aliasedWords(query, options = {}) {
 
 function parseWords(query, index) {
   const { words, rest, studyAnatomy, studyWords } = aliasedWords(query);
-  const parsed = classifyWords(words, index, studyAnatomy);
+  const parsed = classifyWords(words, index, studyAnatomy, ownPositiveWords(rest));
   const { required } = parsed;
   // A study's body part with only generic words left ("brain MR for new mass")
   // means that body part's mass: read it again with the body part placed
@@ -1199,7 +1285,7 @@ function parseWords(query, index) {
 }
 
 /** Sorts aliased words into { required, soft, negated } stemmed terms. */
-function classifyWords(words, index, studyAnatomy = new Set()) {
+function classifyWords(words, index, studyAnatomy = new Set(), ownWords = null) {
   const required = [];
   const soft = [...studyAnatomy];
   const negated = [];
@@ -1241,14 +1327,37 @@ function classifyWords(words, index, studyAnatomy = new Set()) {
   }
   // "Suspected cardiac mass, no known cardiac mass" asks about the mass: a
   // term stated positively keeps its positive reading.
-  const stated = new Set([...required, ...soft]);
+  // That holds only for a term the search itself wrote: one that an alias
+  // inferred ("leg swelling" read as DVT) gives way to the search's own
+  // negation ("leg swelling, DVT ruled out").
+  const own = ownWords ? t => ownWords.has(t) : () => true;
+  const overruled = new Set(negated.filter(t => !own(t)));
+  const stated = new Set([...required, ...soft].filter(t => !overruled.has(t)));
   const negatedSet = new Set(negated.filter(t => !stated.has(t)));
   return {
-    required: [...new Set(required)],
-    soft: [...new Set(soft)].filter(t => !required.includes(t)),
+    required: [...new Set(required)].filter(t => !overruled.has(t)),
+    soft: [...new Set(soft)].filter(t => !required.includes(t) && !overruled.has(t)),
     negated: [...negatedSet],
     studyAnatomy: [...studyAnatomy],
   };
+}
+
+// The stemmed words a search states positively in its own wording, before any
+// alias is read.
+function ownPositiveWords(text) {
+  const words = joinLowBack(text).replace(/\bnon(?=[a-z]{5,})/g, 'non ').split(/[ _]/).filter(Boolean);
+  const own = new Set();
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    if (word === 'non') { i += 1; continue; }
+    if (NEGATION_WORDS.includes(word)) {
+      const scope = negationScope(words, i, { bounded: true });
+      i += scope.length ? words.slice(i + 1).indexOf(scope[scope.length - 1]) + 1 : 0;
+      continue;
+    }
+    own.add(stem(word));
+  }
+  return own;
 }
 
 /**
@@ -1558,6 +1667,11 @@ function buildIndex(scenarios) {
     const isPregnant = PREGNANT_NAME_RE.test(cleanWords(shortName)) && !/\b(not pregnant|nonpregnant|postpartum|peripartum)\b/i.test(shortName);
     return {
       scenario: s, nameText, detail, keywords, named, all, lowerName, population: populationOf(s), isPregnant,
+      // The side a scenario is written for, by a side word or a quadrant; a
+      // name too long to be a name is read from its text.
+      sides: new Set(SIDES_LIST.filter(side => SIDE_WORDS[side].some(w => (longName ? detail : nameText).positive.has(w)))),
+      trimester: /after first trimester|second (?:and|or) third trimester|second trimester|third trimester/.test(lowerName) ? 'late'
+        : /first trimester/.test(lowerName) ? 'first' : null,
       literal: new Set(cleanWords(shortName).split(' ').map(stem)),
       sex: sexOf(`${s.topic || ''} . ${shortName}`),
       gcs: gcsRange(shortName),
@@ -1622,9 +1736,11 @@ function buildIndex(scenarios) {
   return index;
 }
 
-function fitsPopulation(doc, { pregnant, notPregnant, age, years, sides, gcs, sex, sizes }) {
+function fitsPopulation(doc, { pregnant, notPregnant, age, years, sides, gcs, sex, sizes, trimester }) {
   if (pregnant && !doc.isPregnant) return false;
   if (notPregnant && doc.isPregnant) return false;
+  // 8 weeks is not answered by "after first trimester", nor 30 weeks by "first trimester".
+  if (trimester && doc.trimester && doc.trimester !== trimester) return false;
   if (age && doc.population !== age && doc.population !== 'any') return false;
   if (sex && doc.sex && doc.sex !== sex) return false;
   // An age in the search must sit inside the age range a scenario names, and
@@ -1637,7 +1753,7 @@ function fitsPopulation(doc, { pregnant, notPregnant, age, years, sides, gcs, se
     if (years >= 55 && (doc.nameText.positive.has('premenopausal') || doc.detail.positive.has('reproductive'))) return false;
   }
   if (sides && sides.size) {
-    for (const side of SIDES) if (!sides.has(side) && doc.nameText.positive.has(side)) return false;
+    for (const side of SIDES) if (!sides.has(side) && doc.sides.has(side)) return false;
   }
   if (gcs && doc.gcs && (gcs < doc.gcs[0] || gcs > doc.gcs[1])) return false;
   return true;
@@ -1646,8 +1762,10 @@ function fitsPopulation(doc, { pregnant, notPregnant, age, years, sides, gcs, se
 // Negation in the search excludes a scenario that states the term positively,
 // unless the scenario itself also negates it somewhere. What implies the term
 // counts too: "no fever" rules out sepsis.
-function contradictsNegation(doc, negated) {
-  const statesPositively = t => doc.nameText.positive.has(t) && !doc.nameText.negative.has(t) && !doc.detail.negative.has(t);
+function contradictsNegation(doc, negated, { nameOnly = false } = {}) {
+  // For a model suggestion the name alone decides: "Seizure, post head trauma"
+  // is no answer to "no head injury" whatever its longer text also negates.
+  const statesPositively = t => doc.nameText.positive.has(t) && !doc.nameText.negative.has(t) && (nameOnly || !doc.detail.negative.has(t));
   return negated.some(t => statesPositively(t) || (IMPLIES[t] || []).some(statesPositively));
 }
 
@@ -1850,25 +1968,184 @@ function scenariosUsingStudy(query, scenarios) {
  * age, side and negation, and must contain every body part the search named.
  */
 export function guardSuggestions(query, suggestions, scenarios) {
+  const ctx = guardContext(query, scenarios);
+  return suggestions.filter(s => guardReason(ctx, s) === null);
+}
+
+// ---- Guard equivalences (not yet clinician reviewed) ----
+// A word of the search on the left is also named by a scenario that writes
+// any entry on the right; an entry that is a list needs all of its words
+// ("lower" and "extremity" for the leg). Used for the body-part rule and the
+// shared-word rule of the guard only: these say "the same place or thing",
+// never "the answer", so they let a correct suggestion through without
+// turning a search into one. Written from the train split of the mined
+// phrasings (tools/guard_diagnose.mjs) and the red-team gold
+// (tests/guard-inference-gold.json); measured on the hold-out.
+const GUARD_COVER_SOURCE = {
+  // spine
+  lowback: ['lumbar', 'lumbosacral', 'thoracolumbar'],
+  lumbar: ['lowback', 'lumbosacral', 'thoracolumbar'],
+  back: ['spine', 'lumbar', 'thoracic', 'lowback', 'lumbosacral', 'thoracolumbar'],
+  spine: ['vertebral', 'lumbar', 'thoracic', 'lumbosacral', 'thoracolumbar', 'lowback'],
+  thoracic: ['thoracolumbar', ['mid', 'back']],
+  // limbs: a whole limb is named by any of its parts, a part by its bone
+  arm: [['upper', 'extremity'], 'humerus', 'forearm', 'elbow', 'wrist', 'hand', 'radius', 'ulna'],
+  leg: [['lower', 'extremity'], 'femur', 'thigh', 'tibia', 'fibula', 'knee', 'ankle', 'foot', 'claudication'],
+  thigh: ['femur', ['lower', 'extremity']],
+  femur: ['thigh', 'hip'],
+  hip: ['femur', 'pelvis', 'groin'],
+  groin: ['hip', 'inguinal'],
+  foot: ['metatarsal', 'metatarsalgia', 'forefoot', 'plantar', 'heel', 'toe', 'calcaneus', 'leg', ['lower', 'extremity']],
+  toe: ['foot', 'forefoot', 'metatarsal', 'metatarsalgia'],
+  heel: ['foot', 'plantar', 'calcaneus'],
+  forearm: ['radius', 'ulna'],
+  finger: ['hand'],
+  thumb: ['hand'],
+  hand: ['finger', 'metacarpal'],
+  shoulder: ['humerus', 'clavicle', 'rotator', 'glenohumeral', 'scapula'],
+  clavicle: ['shoulder'],
+  // chest
+  chest: ['thoracic', 'thorax', 'lung', 'mediastinal', 'pleural', 'respiratory', 'rib'],
+  lung: ['respiratory', 'pneumonia', 'pleural'],
+  heart: ['cad', 'coronary', 'myocardial', 'cardiomyopathy'],
+  rib: ['chest'],
+  trachea: ['airway'],
+  esophagus: ['esophageal', 'dysphagia'],
+  breast: ['mammography', 'mammo', 'dcis', 'mastectomy', 'nipple'],
+  // head and neck
+  head: ['intracranial', 'cerebral', 'cranial', 'skull'],
+  cerebral: ['head', 'intracranial', 'cranial'],
+  intracranial: ['head', 'cerebral', 'cranial'],
+  skull: ['head', 'cranial', 'calvarium'],
+  face: ['facial', 'midface', 'zygoma', 'zygomatic', 'maxillofacial', 'hemifacial', 'rhinosinusitis', 'sinusitis'],
+  facial: ['face', 'midface', 'maxillofacial', 'hemifacial'],
+  jaw: ['mandibular', 'tmj'],
+  mandibular: ['jaw', 'tmj'],
+  nasal: ['sinonasal', 'rhinosinusitis', 'epistaxis'],
+  eye: ['orbit', 'orbital', 'ocular', 'visual', 'vision', 'exophthalmo', 'optic'],
+  orbit: ['orbital', 'eye', 'ocular', 'exophthalmo'],
+  ear: ['hearing', 'tinnitus', 'otitis', 'vertigo'],
+  sinus: ['paranasal', 'sinusitis', 'rhinosinusitis', 'sinonasal'],
+  thyroid: ['goiter', 'thyrotoxicosis', 'hypothyroidism', 'hyperthyroidism'],
+  // abdomen and pelvis
+  abdomen: ['luq', 'ruq', 'rlq', 'llq', 'epigastric', 'abdominopelvic', 'aaa', 'appendicitis'],
+  stomach: ['abdomen', 'epigastric', 'peptic', 'gastritis', 'luq', 'ruq', 'rlq', 'llq'],
+  pelvis: ['adnexal', 'ovary', 'uterus', 'uterine', 'endometrial', 'gynecological', 'cervix', 'vaginal', 'rlq', 'llq'],
+  flank: ['kidney', 'stone', 'pyelonephritis', 'ureter', 'hydronephrosis'],
+  kidney: ['pyelonephritis', 'hydronephrosis'],
+  bladder: ['urinary', 'uti', 'void'],
+  ureter: ['flank', 'stone', 'urinary'],
+  liver: ['hcc', 'hepatocellular', 'cirrhosis', 'hepatobiliary'],
+  biliary: ['ruq', 'gallbladder', 'cholecystitis', 'cholangitis', 'jaundice'],
+  gallbladder: ['ruq', 'biliary', 'cholecystitis'],
+  spleen: ['splenomegaly', 'luq'],
+  pancrea: ['pancreatitis'],
+  bowel: ['colon', 'intestinal', 'enterocolitis', 'crohn'],
+  colon: ['bowel', 'diverticulitis', 'colitis'],
+  rectum: ['rectal', 'anal', 'anorectal', 'proctitis', 'perianal'],
+  aorta: ['aortic', 'aaa', 'aortopathy'],
+  uterus: ['uterine', 'endometrial', 'endometrium', 'fibroids', 'adenomyosis'],
+  ovary: ['adnexal'],
+  adnexal: ['ovary', 'tubal'],
+  vaginal: ['vagina', 'gynecological'],
+  scrotum: ['testis', 'testicular', 'epididymitis'],
+  testis: ['scrotum', 'testicular'],
+  prostate: ['bph', 'psa'],
+  // lay words for a finding
+  appendix: ['appendicitis', 'appendiceal'],
+  cramp: ['claudication'],
+  wobbly: ['ataxia'],
+  unsteady: ['ataxia'],
+  clumsy: ['ataxia'],
+  droopy: ['weakness', 'palsy'],
+  stuffy: ['rhinosinusitis', 'sinusitis'],
+  choked: ['aspirated'],
+  choking: ['aspirated'],
+  birth: ['neonatal', 'antenatal'],
+};
+const GUARD_COVER = new Map(Object.entries(GUARD_COVER_SOURCE).map(([term, alts]) =>
+  [stem(term), alts.map(a => (Array.isArray(a) ? a.map(stem) : [stem(a)]))]));
+// Body parts for the guard: the answer rules' list plus parts ACR has no
+// scenario named for, so they are never matched by the word alone.
+const GUARD_PARTS = new Set([...ANATOMY, 'heel', 'thumb', 'testis', 'trachea', 'clavicle', 'cerebral', 'intracranial', 'arm'].map(stem));
+// Body parts too broad to make a scenario about another part "the wrong organ".
+const GUARD_BROAD = new Set(['upper', 'lower', 'extremity', 'back', 'lowback', 'spine', 'cervical', 'thoracic', 'lumbar', 'sacrum', 'abdomen', 'pelvis', 'chest', 'head', 'face', 'facial', 'leg', 'arm', 'bone', 'joint',
+  'muscle', 'tendon', 'ligament', 'stomach', 'bowel', 'flank', 'groin']);
+
+const SPINE_WORDS = new Set(['lumbar', 'lowback', 'spine', 'back', 'thoracic', 'sacrum']);
+
+// Whether a scenario names a word of the search, in its own words or through
+// an equivalence.
+function covers(doc, term) {
+  if (doc.all.has(term)) return true;
+  const alts = GUARD_COVER.get(term);
+  return Boolean(alts) && alts.some(words => words.every(w => doc.all.has(w)));
+}
+const sameThing = (a, b) => a === b || (GUARD_COVER.get(a) || []).some(words => words.includes(b)) ||
+  (GUARD_COVER.get(b) || []).some(words => words.includes(a));
+
+// A scenario named for another organ of the same region and not for the one
+// asked: womb cancer is not cervical or ovarian cancer, a broken nose not a
+// mandibular fracture. Organs an equivalence ties together do not conflict.
+function guardWrongOrgan(doc, anatomy) {
+  const named = [...doc.nameText.positive].filter(t => GROUP_OF.has(t) && !GUARD_BROAD.has(t));
+  return anatomy.some(a => !GUARD_BROAD.has(a) && GROUP_OF.has(a) && !named.some(b => sameThing(a, b)) &&
+    named.some(b => !anatomy.some(x => sameThing(x, b)) && GROUP_OF.get(b) === GROUP_OF.get(a)));
+}
+
+function guardContext(query, scenarios) {
   const index = buildIndex(scenarios);
   const parsed = parseQuery(query, index);
   const qualifiers = extractQualifiers(query);
-  const anatomy = parsed.required.filter(t => ANATOMY.has(t));
-  const docs = new Map(index.docs.map(d => [String(d.scenario.id), d]));
+  if (!index.docsById) index.docsById = new Map(index.docs.map(d => [String(d.scenario.id), d]));
   const asked = new Set([...parsed.required, ...parsed.soft]);
-  return suggestions.filter(s => {
-    const doc = docs.get(String(s.id));
-    if (!doc) return false;
-    if (!fitsPopulation(doc, qualifiers)) return false;
-    if (!qualifiers.pregnant && doc.isPregnant) return false;
-    if (!qualifiers.age && doc.population === 'pediatric') return false;
-    if (!qualifiers.sex && doc.sex === 'male') return false;
-    if (doc.named.has('abuse') && !asked.has('abuse')) return false;
-    if (contradictsNegation(doc, parsed.negated)) return false;
-    // Sharing no clinical word is a guess (varicocele -> varicose veins).
-    if (parsed.required.length > 0 && !parsed.required.some(t => doc.all.has(t))) return false;
-    return anatomy.every(t => doc.all.has(t));
-  });
+  // "upper extremity" is the arm and "lower extremity" the leg: one place.
+  let anatomy = parsed.required.filter(t => GUARD_PARTS.has(t));
+  for (const [level, limb] of [['upper', 'arm'], ['lower', 'leg']]) {
+    if (anatomy.includes(level) && anatomy.includes('extremity')) {
+      anatomy = [...anatomy.filter(t => t !== level && t !== 'extremity' && t !== limb), limb];
+    }
+  }
+  anatomy = anatomy.filter(t => t !== 'extremity' || !anatomy.some(x => x === 'arm' || x === 'leg'));
+  // An abdominal aortic aneurysm is in the aorta, though "AAA" names no part.
+  if (asked.has('aaa') && !anatomy.includes('aorta')) anatomy.push('aorta');
+  // The quadrant the search names, or the one its diagnosis belongs to.
+  let quadrants = [...asked].filter(t => QUADRANTS.has(t));
+  if (!quadrants.length) quadrants = [...new Set([...asked].map(t => QUADRANT_OF[t]).filter(Boolean))];
+  // A teenager's search is answered from ACR's child scenarios when one fits.
+  const childFits = qualifiers.teen && index.docs.some(d => d.population === 'pediatric' && parsed.required.every(t => covers(d, t)));
+  return { index, parsed, qualifiers, anatomy, asked, quadrants, childFits };
+}
+
+// Why the guard removes a suggestion, or null when it may be shown.
+function guardReason({ index, parsed, qualifiers, anatomy, asked, quadrants, childFits }, s) {
+  const doc = index.docsById.get(String(s.id));
+  if (!doc) return 'unknown';
+  if (!fitsPopulation(doc, qualifiers)) return 'population';
+  if (!qualifiers.pregnant && doc.isPregnant) return 'pregnant';
+  if (!qualifiers.age && !qualifiers.teen && doc.population === 'pediatric') return 'pediatric';
+  if (childFits && doc.population === 'adult' && !doc.ageRange) return 'teen';
+  if (!qualifiers.sex && doc.sex === 'male') return 'sex';
+  if (doc.named.has('abuse') && !asked.has('abuse')) return 'abuse';
+  if (contradictsNegation(doc, parsed.negated, { nameOnly: true })) return 'negated';
+  // The opposite of what was asked (chronic for acute, nonpulsatile for
+  // pulsatile, "no trauma" for an injury) is no suggestion.
+  if (opposes(doc.nameText, asked)) return 'opposite';
+  // A lumbar hernia is in the abdominal wall, not the lumbar spine.
+  if (doc.nameText.positive.has('hernia') && !asked.has('hernia') && anatomy.some(t => SPINE_WORDS.has(t))) return 'homonym';
+  const docQuadrants = [...doc.nameText.positive].filter(t => QUADRANTS.has(t));
+  if (quadrants.length && docQuadrants.length && !docQuadrants.some(q => quadrants.includes(q))) return 'quadrant';
+  // Sharing no clinical word is a guess (varicocele -> varicose veins).
+  if (parsed.required.length > 0 && !parsed.required.some(t => covers(doc, t))) return 'shared';
+  const missing = anatomy.find(t => !covers(doc, t));
+  if (missing) return `anatomy:${missing}`;
+  return guardWrongOrgan(doc, anatomy) ? 'organ' : null;
+}
+
+/** For tooling: why the guard removes a scenario for a search (null when it passes), and how the search was read. */
+export function _guardReason(query, scenario, scenarios) {
+  const ctx = guardContext(query, scenarios);
+  return { reason: guardReason(ctx, scenario), required: ctx.parsed.required, soft: ctx.parsed.soft, negated: ctx.parsed.negated };
 }
 
 // Damerau-Levenshtein, so a swapped pair ("thyriod") is one edit.
