@@ -590,7 +590,7 @@
     {"q":"infant unexplained fracture","name":"abuse"},
     {"q":"femur fracture infant","name":"abuse","not":"^Stress fracture"},
     {"q":"rib fractures infant","name":"abuse","not":"^Stress fracture"},
-    {"q":"toddler fracture","name":"fracture|tibia","_edited":"ACR has no toddler fracture scenario; the infant tibia scenario is the nearest"},
+    {"q": "toddler fracture", "topic": "Acutely Limping Child Up To Age 5", "_edited": "ACR has no toddler fracture scenario; the limping young child topic is its home, not a skull fracture scenario"},
     {"q":"scoliosis","name":"scoliosis"},
     {"q":"breast lump","name":"^Breast mass, palpable"},
     {"q":"palpable breast mass","name":"^Breast mass, palpable"},

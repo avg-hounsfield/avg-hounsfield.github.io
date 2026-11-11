@@ -2643,24 +2643,43 @@ export function topicSlug(topic) {
 
 // Presentations ACR files under several topics, none of which names them. A
 // search that would otherwise end without an answer asks which is meant.
+// "always" entries ask even when the search would match something, because
+// what it matches is a different thing with the same words ("neck dissection"
+// is usually the cancer operation, not a torn artery). "unless" names the
+// words that settle the question. One topic opens its guide with the reason.
 // Not yet clinician reviewed; see tests/clinical-gold.json.
+const STROKE_TOPIC = 'Cerebrovascular Diseases-Stroke and Stroke-Related Conditions';
 const CLARIFY = [
-  { phrase: 'foot drop', topics: ['Low Back Pain', 'Plexopathy', 'Myelopathy'] },
-  { phrase: 'wrist drop', topics: ['Cervical Pain or Cervical Radiculopathy', 'Plexopathy'] },
+  { phrase: 'foot drop', topics: ['Low Back Pain', 'Plexopathy', 'Myelopathy', STROKE_TOPIC] },
+  { phrase: 'wrist drop', topics: ['Cervical Pain or Cervical Radiculopathy', 'Plexopathy', STROKE_TOPIC] },
+  { phrase: 'torsion', topics: ['Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass', 'Acute Pelvic Pain in the Reproductive Age Group'] },
+  {
+    phrase: 'neck dissection', always: true, unless: /\b(artery|arterial|vascular|carotid|vertebral|cta|mra|stroke)\b/,
+    topics: ['Staging and Post-Therapy Assessment of Head and Neck Cancer', STROKE_TOPIC],
+    reason: '"Neck dissection" can mean the cancer operation or a torn neck artery.',
+  },
+  {
+    phrase: 'sarcoma', always: true,
+    topics: ['Soft Tissue Masses', 'Suspected Primary Bone Tumors', 'Malignant or Aggressive Primary Musculoskeletal Tumor-Staging And Surveillance'],
+    reason: 'ACR files sarcoma by where it starts and by whether it is already diagnosed.',
+  },
+  {
+    phrase: 'toddler fracture', always: true,
+    topics: ['Acutely Limping Child Up To Age 5'],
+    reason: 'ACR has no scenario named for a toddler fracture; it covers the limping young child.',
+  },
 ];
 
-function clarify(query, scenarios) {
+function clarify(query, scenarios, { always = false } = {}) {
   const text = ` ${cleanWords(query)} `;
-  const entry = CLARIFY.find(c => text.includes(` ${c.phrase} `));
+  const entry = CLARIFY.find(c => !!c.always === always && text.includes(` ${c.phrase} `) && !(c.unless && c.unless.test(text)));
   if (!entry) return null;
   const { topicCounts } = buildIndex(scenarios);
   const topics = entry.topics.filter(t => topicCounts.has(t)).map(t => ({ topic: t, count: topicCounts.get(t), query: t }));
-  if (topics.length < 2) return null;
-  return {
-    mode: 'choose',
-    topics,
-    notice: `ACR has no scenario named for ${entry.phrase}. Which of these fits the presentation?`,
-  };
+  if (topics.length === 0) return null;
+  const reason = entry.reason || `ACR has no scenario named for ${entry.phrase}.`;
+  if (topics.length === 1) return { mode: 'guide', topic: topics[0].topic, related: [], notice: reason };
+  return { mode: 'choose', topics, notice: `${reason} Which of these fits the presentation?` };
 }
 
 // ---- Clinical inference, offered as a question ----
@@ -2896,6 +2915,8 @@ function infer(query, scenarios, base) {
 }
 
 function resolveExact(query, scenarios) {
+  const asked = clarify(query, scenarios, { always: true });
+  if (asked) return asked;
   let result = resolveTerms(query, scenarios);
   if (result.mode === 'recover' || result.mode === 'none') result = clarify(query, scenarios) || result;
   result = infer(query, scenarios, result) || result;

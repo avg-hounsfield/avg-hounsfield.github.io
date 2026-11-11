@@ -441,6 +441,37 @@
       "q": "enlarged spleen",
       "name": "splenomegaly",
       "not": "RUQ|RLQ|LLQ"
+    },
+    {
+      "q": "neck dissection",
+      "mode": "choose"
+    },
+    {
+      "q": "carotid dissection",
+      "name": "[Dd]issection"
+    },
+    {
+      "q": "sarcoma femur",
+      "mode": "choose",
+      "not": "[Oo]steomyelitis"
+    },
+    {
+      "q": "sarcoma",
+      "mode": "choose"
+    },
+    {
+      "q": "torsion",
+      "mode": "choose",
+      "not": "[Pp]ostmenopausal"
+    },
+    {
+      "q": "toddler fracture",
+      "topic": "Acutely Limping Child Up To Age 5",
+      "not": "[Ss]kull|abuse"
+    },
+    {
+      "q": "osteosarcoma",
+      "not": "[Oo]steomyelitis"
     }
   ]
 }
