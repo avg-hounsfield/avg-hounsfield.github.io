@@ -13,8 +13,11 @@ import { UI } from './ui.js?v=20261109d';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20261109c';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
-import { resolveQuery, buildTopicGuide, topicSlug } from './scenario-ranker.js?v=20261109a';
+import { resolveQuery, buildTopicGuide, topicSlug, _aliasTables } from './scenario-ranker.js?v=20261109a';
 import * as embeddingSearch from './embedding-search.js?v=20261109a';
+import { buildFacetModel, facetState, toggleOption, acrSourceUrl } from './guide-facets.js?v=20261110a';
+import { feedbackMailto, FEEDBACK_NOTE } from './feedback-link.js?v=20261110a';
+import { buildSuggestIndex, suggest, SUGGEST_GROUPS } from './search-suggest.js?v=20261110a';
 
 const CLOSEST_MATCH_NOTICE = 'No scenario uses these words. These are suggestions by meaning, so check that they fit.';
 
@@ -252,9 +255,13 @@ class ProtocolHelpApp {
         this.showSearchSuggestions(e.target.value);
       });
 
+      // Combobox keys: arrows walk the suggestions (wrapping at either end),
+      // Enter takes the active one or runs the search as typed, Escape closes
+      // the list and leaves the text alone.
       globalSearchInput.addEventListener('keydown', (e) => {
         const suggestionsEl = document.getElementById('searchSuggestions');
         const items = suggestionsEl?.querySelectorAll('.suggestion-item') || [];
+        const open = items.length > 0;
 
         if (e.key === 'Enter') {
           e.preventDefault();
@@ -264,18 +271,32 @@ class ProtocolHelpApp {
             this.handleGlobalSearch(globalSearchInput.value);
           }
           this.hideSearchSuggestions();
-        } else if (e.key === 'ArrowDown') {
+        } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
           e.preventDefault();
-          this.activeSuggestionIndex = Math.min(this.activeSuggestionIndex + 1, items.length - 1);
+          if (!open) {
+            this.showSearchSuggestions(globalSearchInput.value);
+            return;
+          }
+          const step = e.key === 'ArrowDown' ? 1 : -1;
+          const from = this.activeSuggestionIndex < 0 && step < 0 ? items.length : this.activeSuggestionIndex;
+          this.activeSuggestionIndex = (from + step + items.length) % items.length;
           this.updateActiveSuggestion(items);
-        } else if (e.key === 'ArrowUp') {
+        } else if (e.key === 'Home' && open && this.activeSuggestionIndex >= 0) {
           e.preventDefault();
-          this.activeSuggestionIndex = Math.max(this.activeSuggestionIndex - 1, -1);
+          this.activeSuggestionIndex = 0;
           this.updateActiveSuggestion(items);
-        } else if (e.key === 'Escape') {
+        } else if (e.key === 'End' && open && this.activeSuggestionIndex >= 0) {
+          e.preventDefault();
+          this.activeSuggestionIndex = items.length - 1;
+          this.updateActiveSuggestion(items);
+        } else if (e.key === 'Escape' && open) {
+          e.preventDefault();
           this.hideSearchSuggestions();
         }
       });
+
+      // Leaving the box (Tab, or a click elsewhere) closes the list.
+      globalSearchInput.addEventListener('blur', () => this.hideSearchSuggestions());
 
       globalSearchInput.addEventListener('focus', () => {
         if (globalSearchInput.value.trim().length >= 2) {
@@ -751,18 +772,19 @@ class ProtocolHelpApp {
     const idx = await this._ensureGlobalConceptIndex();
     if (stale()) return;
     const resolved = idx && idx.scenarioIndex ? resolveQuery(trimmed, idx.scenarioIndex) : { mode: 'none' };
+    if (idx && idx.scenarioIndex) this._rankerWarm = true;
 
     if (resolved.mode === 'guide') {
-      this._renderTopicGuide(resolved, idx.scenarioIndex, resultContainer);
+      this._renderTopicGuide(resolved, idx.scenarioIndex, resultContainer, { query: trimmed });
       return;
     }
     if (resolved.mode === 'list') {
       const notice = resolved.corrected ? `Showing results for "${resolved.corrected}".` : resolved.notice;
-      this._renderGlobalScenarioListResult(resolved.corrected || trimmed, resolved.scenarios, resultContainer, { ...resolved, notice });
+      this._renderGlobalScenarioListResult(resolved.corrected || trimmed, resolved.scenarios, resultContainer, { ...resolved, notice, typed: trimmed });
       return;
     }
     if (resolved.mode === 'choose') {
-      this._renderTopicChooser(resolved.corrected || trimmed, resolved, resultContainer);
+      this._renderTopicChooser(resolved.corrected || trimmed, { ...resolved, typed: trimmed }, resultContainer);
       return;
     }
     if (resolved.mode === 'too-broad') {
@@ -877,10 +899,22 @@ class ProtocolHelpApp {
         <div class="global-result-footer">
           <span class="global-result-source">${esc(this._sourceLine())}</span>
         </div>
+        ${this._feedbackHtml(query, hasPlaces ? 'recover' : 'none')}
       </div>
     `;
     this._bindScenarioButtons(container);
     this._bindTermChips(container);
+  }
+
+  // "This did not help": a mailto: link, so the user's own email app opens
+  // with a draft they can edit. The page itself records and sends nothing.
+  _feedbackHtml(query, kind, detail = '') {
+    return `
+      <div class="feedback-row">
+        <a class="feedback-link" href="${this.escapeHtml(feedbackMailto({ query, kind, detail }))}">This did not help</a>
+        <span class="feedback-note">${this.escapeHtml(FEEDBACK_NOTE)}</span>
+      </div>
+    `;
   }
 
   async navigateToRegionSearch(region, topic) {
@@ -930,187 +964,182 @@ class ProtocolHelpApp {
   // Search Suggestions (Autocomplete)
   // ========================================
 
-  // Medical abbreviations and layperson terms mapping
-  getSuggestionAliases() {
-    return {
-      // Medical abbreviations
-      'pe': ['pulmonary embolism'],
-      'cva': ['stroke'],
-      'tia': ['stroke'],
-      'mi': ['chest pain'],
-      'aaa': ['aortic aneurysm'],
-      'ms': ['multiple sclerosis'],
-      'acl': ['acl tear'],
-      'mcl': ['meniscus tear'],
-      'rotator': ['rotator cuff'],
-      'dvt': ['dvt'],
-      'oa': ['arthritis'],
-      'ra': ['arthritis'],
-      'avascular': ['osteonecrosis'],
-      'avn': ['osteonecrosis'],
-      'tbi': ['head trauma'],
-      'sci': ['spinal cord injury'],
-      'pad': ['peripheral arterial disease'],
-      'pvd': ['peripheral arterial disease'],
-      'gb': ['cholecystitis'],
-      'gallbladder': ['cholecystitis'],
-      'hcc': ['liver mass'],
-      'rcc': ['renal mass'],
-      'nsclc': ['lung cancer'],
-      'sclc': ['lung cancer'],
+  // The suggestion index: topic titles at once, then scenario names and the
+  // clinician phrasings the search understands as soon as the scenario data
+  // has loaded (it is fetched on the first keystroke rather than the first
+  // search). Built once.
+  _suggestIndexNow() {
+    const scenarios = this._globalConceptIdx && this._globalConceptIdx.scenarioIndex;
+    if (scenarios && this.suggestionTopics.length) {
+      if (!this._suggestIndex) {
+        this._suggestIndex = buildSuggestIndex({
+          topics: this.suggestionTopics.map(t => ({ name: t.topic, count: t.scenario_count })),
+          scenarios,
+          phrases: _aliasTables().all.map(pair => pair[0]),
+        });
+      }
+      return this._suggestIndex;
+    }
+    if (!this._suggestLoading) {
+      this._suggestLoading = this._ensureGlobalConceptIndex().then(() => {
+        this._suggestLoading = null;
+        // Redraw with the full index if the user is still typing.
+        const input = document.getElementById('globalSearchInput');
+        if (input && document.activeElement === input && this._suggestionsOpen) this.showSearchSuggestions(input.value);
+      });
+    }
+    if (!this._topicSuggestIndex || this._topicSuggestIndex.topics.length !== this.suggestionTopics.length) {
+      this._topicSuggestIndex = buildSuggestIndex({
+        topics: this.suggestionTopics.map(t => ({ name: t.topic, count: t.scenario_count })),
+      });
+    }
+    return this._topicSuggestIndex;
+  }
 
-      // Layperson terms
-      'heart attack': ['chest pain'],
-      'blood clot': ['pulmonary embolism', 'dvt'],
-      'clot': ['pulmonary embolism', 'dvt'],
-      'slipped disc': ['herniated disc'],
-      'bulging disc': ['herniated disc'],
-      'ruptured disc': ['herniated disc'],
-      'broken bone': ['fracture'],
-      'broken': ['fracture'],
-      'dizziness': ['vertigo'],
-      'dizzy': ['vertigo'],
-      'belly pain': ['abdominal pain'],
-      'stomach pain': ['abdominal pain'],
-      'tummy pain': ['abdominal pain'],
-      'lump': ['breast mass', 'soft tissue mass', 'thyroid nodule'],
-      'bump': ['soft tissue mass'],
-      'mass': ['breast mass', 'soft tissue mass', 'liver mass', 'renal mass'],
-      'tumor': ['brain tumor', 'bone tumor'],
-      'cancer': ['lung cancer', 'breast cancer', 'ovarian cancer', 'melanoma'],
-      'weakness': ['stroke', 'myelopathy'],
-      'numbness': ['stroke', 'radiculopathy', 'myelopathy'],
-      'tingling': ['radiculopathy', 'myelopathy'],
-      'paralysis': ['stroke', 'spinal cord injury'],
-      'confusion': ['dementia', 'stroke', 'head trauma'],
-      'memory': ['dementia'],
-      'forgetful': ['dementia'],
-      'gallstones': ['cholecystitis'],
-      'kidney stones': ['kidney stone'],
-      'stones': ['kidney stone', 'cholecystitis'],
-      'sciatica': ['radiculopathy', 'herniated disc'],
-      'pinched nerve': ['radiculopathy'],
-      'torn': ['acl tear', 'meniscus tear', 'rotator cuff'],
-      'tear': ['acl tear', 'meniscus tear', 'rotator cuff'],
-      'sprain': ['ankle pain', 'knee pain', 'wrist pain'],
-      'swelling': ['dvt', 'arthritis', 'soft tissue infection'],
-      'infection': ['soft tissue infection', 'spine infection', 'pneumonia', 'sepsis'],
-      'breathing': ['pulmonary embolism', 'pneumonia', 'pleural effusion'],
-      'shortness of breath': ['pulmonary embolism', 'pneumonia', 'pleural effusion'],
-      'sob': ['pulmonary embolism', 'pneumonia'],
-      'cough': ['pneumonia', 'lung cancer', 'lung nodule'],
-      'bleeding': ['head trauma'],
-      'bleed': ['head trauma', 'stroke'],
-      'aneurism': ['aneurysm', 'aortic aneurysm'], // common misspelling
-    };
+  // What the search shows for a clinician phrasing, in a few words; null when
+  // it shows nothing useful, so the phrasing is not offered.
+  _describePhrase(phrase) {
+    const scenarios = this._globalConceptIdx && this._globalConceptIdx.scenarioIndex;
+    if (!scenarios) return undefined;
+    // The search builds its index on first use, which is too slow for a
+    // keystroke: do that once in idle time and offer phrasings afterwards.
+    if (!this._rankerWarm) {
+      if (!this._rankerWarming) {
+        this._rankerWarming = true;
+        (window.requestIdleCallback || (fn => setTimeout(fn, 200)))(() => {
+          resolveQuery('headache', scenarios);
+          this._rankerWarm = true;
+        });
+      }
+      return undefined;
+    }
+    const r = resolveQuery(phrase, scenarios);
+    if (r.corrected) return null;
+    if (r.mode === 'guide') return r.topic;
+    if (r.mode === 'list') return `${r.scenarios.length} scenario${r.scenarios.length === 1 ? '' : 's'}`;
+    if (r.mode === 'choose') return 'Several topics';
+    return null;
   }
 
   showSearchSuggestions(query) {
     const suggestionsEl = document.getElementById('searchSuggestions');
     if (!suggestionsEl) return;
 
-    const trimmed = query.trim().toLowerCase();
-    if (trimmed.length < 2 || this.suggestionTopics.length === 0) {
+    const items = query.trim().length >= 2 && this.suggestionTopics.length
+      ? suggest(this._suggestIndexNow(), query, { checkPhrase: p => this._describePhrase(p) })
+      : [];
+    this._suggestionsOpen = true;
+    if (items.length === 0) {
       this.hideSearchSuggestions();
+      // Still waiting on the scenario data: stay ready to show when it lands.
+      this._suggestionsOpen = Boolean(this._suggestLoading);
       return;
     }
 
-    // Get alias mappings
-    const aliases = this.getSuggestionAliases();
-    const aliasTopics = new Set();
-
-    // Check for alias matches
-    for (const [alias, topics] of Object.entries(aliases)) {
-      if (alias.includes(trimmed) || trimmed.includes(alias)) {
-        topics.forEach(t => aliasTopics.add(t));
-      }
-    }
-
-    // Score and filter matching cards
-    const scored = this.suggestionTopics.map(card => {
-      const topic = card.topic.toLowerCase();
-      const displayName = (card.display_name || card.topic).toLowerCase();
-      const topicWords = topic.split(/\s+/);
-      const queryWords = trimmed.split(/\s+/);
-
-      let score = 0;
-
-      // Exact match (highest priority)
-      if (topic === trimmed || displayName === trimmed) {
-        score = 100;
-      }
-      // Topic starts with query
-      else if (topic.startsWith(trimmed) || displayName.startsWith(trimmed)) {
-        score = 80;
-      }
-      // Topic contains query as substring
-      else if (topic.includes(trimmed) || displayName.includes(trimmed)) {
-        score = 60;
-      }
-      // Query contains topic (user typed more than topic)
-      else if (trimmed.includes(topic)) {
-        score = 50;
-      }
-      // Alias match
-      else if (aliasTopics.has(topic)) {
-        score = 70;
-      }
-      // Word-level matching (any word matches)
-      else {
-        const matchedWords = queryWords.filter(qw =>
-          topicWords.some(tw => tw.includes(qw) || qw.includes(tw))
-        );
-        if (matchedWords.length > 0) {
-          score = 30 + (matchedWords.length * 10);
-        }
-      }
-
-      // Boost by scenario count for tiebreaking
-      if (score > 0) {
-        score += Math.min(card.scenario_count / 100, 5);
-      }
-
-      return { card, score };
-    })
-    .filter(item => item.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 8);
-
-    if (scored.length === 0) {
-      this.hideSearchSuggestions();
-      return;
-    }
-
-    // Render suggestions
-    suggestionsEl.innerHTML = scored.map(({ card }, i) => {
-      const displayName = card.display_name || card.topic;
-      const badge = card.card_type === 'STRONG' ? 'Strong' :
-                    card.card_type === 'CLINICAL_FIRST' ? 'Clinical' : '';
+    // One listbox, a labelled group per kind; option ids run in display order
+    // so the arrow keys walk straight down the list.
+    const esc = s => this.escapeHtml(s);
+    let n = 0;
+    suggestionsEl.innerHTML = SUGGEST_GROUPS.map(group => {
+      const members = items.filter(item => item.kind === group.kind);
+      if (members.length === 0) return '';
       return `
-        <div class="suggestion-item" role="option" id="suggestion-${i}" aria-selected="false" data-topic="${this.escapeHtml(card.topic)}" data-index="${i}">
-          <span class="suggestion-topic">${this.escapeHtml(displayName)}</span>
-          <span class="suggestion-meta">
-            ${badge ? `<span class="suggestion-badge">${badge}</span>` : ''}
-            ${card.scenario_count} scenarios
-          </span>
-        </div>
-      `;
+        <div role="group" aria-labelledby="suggestion-group-${group.kind}">
+          <div class="suggestion-heading" id="suggestion-group-${group.kind}" role="presentation">${esc(group.label)}</div>
+          ${members.map(item => {
+            const i = n++;
+            return `
+              <div class="suggestion-item" role="option" id="suggestion-${i}" aria-selected="false" data-index="${i}" data-kind="${item.kind}">
+                <span class="suggestion-topic">${esc(item.label)}</span>
+                <span class="suggestion-meta">${esc(item.detail)}</span>
+              </div>`;
+          }).join('')}
+        </div>`;
     }).join('');
+    const ordered = SUGGEST_GROUPS.flatMap(group => items.filter(item => item.kind === group.kind));
 
-    // Bind click events
-    suggestionsEl.querySelectorAll('.suggestion-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const topic = item.dataset.topic;
-        document.getElementById('globalSearchInput').value = topic;
-        this.hideSearchSuggestions();
-        this.handleGlobalSearch(topic);
-      });
+    suggestionsEl.querySelectorAll('.suggestion-item').forEach(el => {
+      // Keep the keyboard focus in the input when an option is pressed.
+      el.addEventListener('mousedown', e => e.preventDefault());
+      el.addEventListener('click', () => this._chooseSuggestion(ordered[Number(el.dataset.index)]));
     });
 
     suggestionsEl.classList.remove('hidden');
     this.activeSuggestionIndex = -1;
     const input = document.getElementById('globalSearchInput');
     if (input) { input.setAttribute('aria-expanded', 'true'); input.removeAttribute('aria-activedescendant'); }
+  }
+
+  // A topic or phrasing runs its search; a scenario opens its own answer.
+  _chooseSuggestion(item) {
+    if (!item) return;
+    const input = document.getElementById('globalSearchInput');
+    if (input) input.value = item.value;
+    this.hideSearchSuggestions();
+    if (item.kind === 'scenario' && this._scenarioById) {
+      const picked = item.ids.map(id => this._scenarioById.get(String(id))).filter(s => s && s.top_tier);
+      if (picked.length) {
+        this._renderScenarioPick(picked, document.getElementById('globalSearchResult'));
+        return;
+      }
+    }
+    if (item.kind === 'topic' && this._globalConceptIdx && this._globalConceptIdx.scenarioIndex) {
+      // Open this topic's guide even where the search would read the title
+      // another way (a one-scenario topic, a title shared with a symptom).
+      const scenarios = this._globalConceptIdx.scenarioIndex;
+      const resolved = resolveQuery(item.value, scenarios);
+      const same = resolved.mode === 'guide' && resolved.topic === item.value;
+      this._globalSearchSeq = (this._globalSearchSeq || 0) + 1;
+      this._renderTopicGuide(same ? resolved : { topic: item.value, related: [], notice: '' }, scenarios,
+        document.getElementById('globalSearchResult'), { query: item.value });
+      return;
+    }
+    this.handleGlobalSearch(item.value);
+  }
+
+  // A scenario chosen from the suggestions: its answer, and a way to the rest
+  // of its topic. Scenarios that share the name but not ACR's description are
+  // listed with their descriptions.
+  _renderScenarioPick(picked, container) {
+    if (!container) return;
+    // Supersede any search still in flight.
+    this._globalSearchSeq = (this._globalSearchSeq || 0) + 1;
+    const esc = s => this.escapeHtml(s);
+    const topic = picked[0].topic;
+    const count = this.suggestionTopics.find(t => t.topic === topic)?.scenario_count;
+    const isAnswer = this._sameVariant(picked);
+    container.classList.remove('hidden');
+    container.innerHTML = `
+      <div class="global-result-card">
+        <div class="global-result-header">
+          <span class="global-result-topic">${esc(topic)}</span>
+          <span class="global-result-meta">${isAnswer ? 'ACR recommendation' : 'Depends on the patient'}</span>
+        </div>
+        <div class="global-result-body">
+          ${isAnswer ? this._renderAnswer(picked) : `
+            <ul class="scenario-preview-list" style="list-style:none;padding:0;margin:0">
+              ${picked.map(s => `
+                <li class="scenario-preview-item">
+                  <button type="button" class="scenario-preview-btn" data-region="${esc(s.region)}" data-name="${esc(s.name)}">
+                    <span class="scenario-preview-name">${esc(s.name)}</span>
+                    <span class="guide-branch-desc">${esc(s.search || '')}</span>
+                    ${this._renderRecommendation(s.top_tier)}
+                  </button>
+                </li>`).join('')}
+            </ul>`}
+          <div class="guide-related">
+            <button type="button" class="dym-chip" data-term="${esc(topic)}">All ${count ? `${count} ` : ''}scenarios in ${esc(topic)}</button>
+          </div>
+        </div>
+        <div class="global-result-footer">
+          <span class="global-result-source">${esc(this._sourceLine())}</span>
+          <a class="global-result-action" href="/topics/${topicSlug(topic)}/">Full topic page</a>
+        </div>
+        ${this._feedbackHtml(picked[0].name, 'answer', topic)}
+      </div>
+    `;
+    this._bindScenarioButtons(container);
+    this._bindTermChips(container);
   }
 
   hideSearchSuggestions() {
@@ -1120,6 +1149,7 @@ class ProtocolHelpApp {
       suggestionsEl.innerHTML = '';
     }
     this.activeSuggestionIndex = -1;
+    this._suggestionsOpen = false;
     const input = document.getElementById('globalSearchInput');
     if (input) { input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); }
   }
@@ -1439,6 +1469,7 @@ class ProtocolHelpApp {
               region: s.region,
               age: s.age,
               topic: s.topic,
+              search: s.search,
               top_tier: s.top_tier,
               normName: this._conceptNorm(s.name),
               normKeywords: Array.isArray(s.keywords) && s.keywords.length
@@ -1550,16 +1581,113 @@ class ProtocolHelpApp {
     return label.charAt(0).toUpperCase() + label.slice(1);
   }
 
-  _renderTopicGuide({ topic, related, notice }, scenarios, container) {
-    const groups = buildTopicGuide(topic, scenarios);
-    const all = groups.flatMap(g => g.scenarios);
+  // One facet model per topic; built on first use (a few ms for the largest).
+  _facetModel(topic, scenarios) {
+    if (!this._facetModels) this._facetModels = new Map();
+    if (!this._facetModels.has(topic)) {
+      this._facetModels.set(topic, buildFacetModel(scenarios.filter(s => s.topic === topic && s.top_tier)));
+    }
+    return this._facetModels.get(topic);
+  }
+
+  // True when the scenarios are one ACR variant: the same patient description
+  // and the same top category. ACR's names often list one variant several
+  // times ("..., elderly" / "..., osteoporosis"), and the answer is the same.
+  _sameVariant(list) {
+    if (list.length === 0) return false;
+    const key = s => `${(s.search || s.name).trim().toLowerCase()}|${s.top_tier.level}|${[...s.top_tier.studies].sort().join('|')}`;
+    return list.every(s => key(s) === key(list[0]));
+  }
+
+  // The full answer for one ACR variant: its top category and every study in
+  // it, ACR's patient description, and where to check it.
+  _renderAnswer(list) {
+    const esc = s => this.escapeHtml(s);
+    const first = list[0];
+    const tier = { ...first.top_tier, disagreement: list.some(s => s.top_tier.disagreement) };
+    return `
+      <section class="guide-answer" aria-label="ACR recommendation">
+        ${list.length === 1
+          ? `<h3 class="guide-answer-name">${esc(first.name)}${first.age === 'pediatric' ? ' <span class="age-tag">Pediatric</span>' : ''}</h3>`
+          : `<h3 class="guide-answer-name">${list.length} scenarios, one ACR recommendation</h3>
+             <ul class="guide-answer-names">${list.map(s => `<li>${esc(s.name)}</li>`).join('')}</ul>`}
+        ${first.search ? `<p class="scenario-variant"><span class="dym-label">ACR patient description:</span> ${esc(first.search)}</p>` : ''}
+        ${this._renderRecommendation(tier)}
+        <div class="guide-answer-links">
+          <button type="button" class="scenario-preview-btn guide-answer-open"
+                  data-region="${esc(first.region)}" data-name="${esc(first.name)}">See every rated study</button>
+          <a class="global-result-action" href="${esc(acrSourceUrl(first.id))}" target="_blank" rel="noopener noreferrer">ACR source</a>
+        </div>
+      </section>
+    `;
+  }
+
+  // The narrowing buttons. Real buttons with aria-pressed; a long group shows
+  // its first few and a "more" button.
+  _renderFacetBar(state, expanded) {
+    if (state.groups.length === 0) return '';
+    const esc = s => this.escapeHtml(s);
+    const CAP = 6;
+    const button = o => `
+      <button type="button" class="facet-btn" data-facet="${esc(o.id)}" aria-pressed="${o.pressed}"${o.disabled ? ' disabled' : ''}>
+        <span class="facet-btn-label">${esc(o.label)}</span><span class="facet-count">${o.count}</span>
+      </button>`;
+    const group = g => {
+      const open = expanded.has(g.key);
+      // Pressed options always show, so a choice is never hidden behind "more".
+      const shown = open ? g.options : g.options.filter((o, i) => i < CAP || o.pressed);
+      const hidden = g.options.length - shown.length;
+      return `
+        <div class="facet-group" role="group" aria-label="${esc(g.label)}">
+          <span class="facet-label">${esc(g.label)}</span>
+          <div class="facet-options">
+            ${shown.map(button).join('')}
+            ${hidden > 0 || open && g.options.length > CAP ? `
+              <button type="button" class="facet-more" data-group="${esc(g.key)}" aria-expanded="${open}">
+                ${open ? 'Show fewer' : `${hidden} more`}
+              </button>` : ''}
+          </div>
+        </div>`;
+    };
+    const chosen = state.selection.length;
+    return `
+      <div class="facet-bar">
+        <div class="facet-head">
+          <span class="facet-title">Narrow to your patient</span>
+          <span class="facet-status" role="status" aria-live="polite"></span>
+          ${chosen ? '<button type="button" class="facet-clear">Clear all</button>' : ''}
+        </div>
+        ${state.groups.map(group).join('')}
+      </div>
+    `;
+  }
+
+  // view: { query, selection, expanded, focus } is what the narrowing buttons
+  // have set; a new search starts it empty.
+  _renderTopicGuide({ topic, related, notice }, scenarios, container, view = {}) {
+    const resolved = { topic, related, notice };
+    const selection = view.selection || [];
+    const expanded = view.expanded || new Set();
+    const model = this._facetModel(topic, scenarios);
+    const state = facetState(model, selection);
+    const narrowed = state.selection.length > 0;
+    const all = state.remaining;
+    const groups = buildTopicGuide(topic, all);
+    const isAnswer = this._sameVariant(all);
+
+    // The shared lead comes from the whole topic so labels do not change as
+    // the guide narrows.
     const leads = new Map();
-    for (const s of all) {
+    for (const s of model.scenarios) {
       const lead = s.name.split(',')[0];
       leads.set(lead, (leads.get(lead) || 0) + 1);
     }
     const [topLead, topCount] = [...leads.entries()].sort((a, b) => b[1] - a[1])[0] || ['', 0];
-    const sharedLead = topCount > all.length * 0.6 ? topLead : '';
+    const sharedLead = topCount > model.scenarios.length * 0.6 ? topLead : '';
+
+    // Scenarios that share a name differ only in ACR's description: show it.
+    const nameCounts = new Map();
+    for (const s of all) nameCounts.set(s.name, (nameCounts.get(s.name) || 0) + 1);
 
     const row = s => `
       <li class="scenario-preview-item">
@@ -1567,21 +1695,24 @@ class ProtocolHelpApp {
                 data-region="${this.escapeHtml(s.region)}"
                 data-name="${this.escapeHtml(s.name)}">
           ${this.escapeHtml(this._branchLabel(s.name, sharedLead))}${s.age === 'pediatric' ? ' <span class="age-tag">Pediatric</span>' : ''}
+          ${nameCounts.get(s.name) > 1 && s.search ? `<span class="guide-branch-desc">${this.escapeHtml(s.search)}</span>` : ''}
         </button>
       </li>
     `;
-    const VISIBLE = 4;
+    // A narrowed guide is short enough to show in full.
+    const VISIBLE = narrowed ? 12 : 4;
 
     container.classList.remove('hidden');
     container.innerHTML = `
       <div class="global-result-card">
         <div class="global-result-header">
           <span class="global-result-topic">${this.escapeHtml(topic)}</span>
-          <span class="global-result-meta">Depends on the presentation</span>
+          <span class="global-result-meta">${isAnswer ? 'ACR recommendation' : 'Depends on the presentation'}</span>
         </div>
         <div class="global-result-body">
           ${notice ? `<p class="global-result-recommendation"><strong>${this.escapeHtml(notice)}</strong></p>` : ''}
-          ${groups.map(g => `
+          ${this._renderFacetBar(state, expanded)}
+          ${isAnswer ? this._renderAnswer(all) : groups.map(g => `
             <section class="guide-group">
               ${this._renderRecommendation(g)}
               <ul class="scenario-preview-list guide-branches">
@@ -1608,17 +1739,58 @@ class ProtocolHelpApp {
           <span class="global-result-source">${this.escapeHtml(this._sourceLine())}</span>
           <a class="global-result-action" href="/topics/${topicSlug(topic)}/">Full topic page</a>
         </div>
+        ${this._feedbackHtml(view.query || topic, isAnswer ? 'answer' : 'guide', topic)}
       </div>
     `;
     this._bindScenarioButtons(container);
     this._bindTermChips(container);
+
+    // Narrowing buttons redraw the guide with the new selection and put the
+    // keyboard focus back on the button that was pressed.
+    const redraw = next => this._renderTopicGuide(resolved, scenarios, container, { query: view.query, selection, expanded, ...next });
+    container.querySelectorAll('.facet-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-facet');
+        redraw({ selection: toggleOption(state.selection, id), focus: { facet: id } });
+      });
+    });
+    container.querySelectorAll('.facet-more').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-group');
+        const next = new Set(expanded);
+        if (next.has(key)) next.delete(key);
+        else next.add(key);
+        redraw({ selection: state.selection, expanded: next, focus: { group: key } });
+      });
+    });
+    const clear = container.querySelector('.facet-clear');
+    if (clear) clear.addEventListener('click', () => redraw({ selection: [], focus: { first: true } }));
+
+    const status = container.querySelector('.facet-status');
+    const statusText = narrowed
+      ? `${all.length} of ${state.total} scenario${state.total === 1 ? '' : 's'}`
+      : `${state.total} scenarios`;
+    if (status && view.focus) {
+      // Set after the redraw so screen readers announce the new count.
+      status.textContent = '';
+      setTimeout(() => { status.textContent = statusText; }, 30);
+    } else if (status) {
+      status.textContent = statusText;
+    }
+    if (view.focus) {
+      const all$ = sel => [...container.querySelectorAll(sel)];
+      const target = view.focus.facet ? all$('.facet-btn').find(b => b.getAttribute('data-facet') === view.focus.facet)
+        : view.focus.group ? all$('.facet-more').find(b => b.getAttribute('data-group') === view.focus.group)
+        : null;
+      (target || container.querySelector('.facet-btn:not([disabled])'))?.focus({ preventScroll: true });
+    }
   }
 
   // Several topics fit. With `groups`, the search had several complaints that
   // no one scenario covers, and each complaint's topics are shown under it.
   // A chip runs its topic's own search (t.query keeps the search's pregnancy
   // or age), which opens that topic's guide.
-  _renderTopicChooser(query, { topics = [], groups = null, notice = '' }, container) {
+  _renderTopicChooser(query, { topics = [], groups = null, notice = '', typed = '' }, container) {
     const chip = t => `
       <li class="scenario-preview-item">
         <button type="button" class="scenario-preview-btn guide-branch dym-chip" data-term="${this.escapeHtml(t.query || t.topic)}">
@@ -1642,6 +1814,7 @@ class ProtocolHelpApp {
           ${notice ? `<p class="global-result-recommendation"><strong>${this.escapeHtml(notice)}</strong></p>` : ''}
           ${body}
         </div>
+        ${this._feedbackHtml(typed || query, 'choose')}
       </div>
     `;
     this._bindTermChips(container);
@@ -1668,11 +1841,12 @@ class ProtocolHelpApp {
             Add a body part or presentation, such as "chest ${this.escapeHtml(query)}" or "${this.escapeHtml(query)} in a child".
           </p>
         </div>
+        ${this._feedbackHtml(query, 'too-broad')}
       </div>
     `;
   }
 
-  _renderGlobalScenarioListResult(query, scenarios, container, { meta = 'Matching scenarios', notice = '', summary = '' } = {}) {
+  _renderGlobalScenarioListResult(query, scenarios, container, { meta = 'Matching scenarios', notice = '', summary = '', typed = '' } = {}) {
     // Group by region for region buttons
     const regions = [];
     for (const s of scenarios) {
@@ -1709,6 +1883,7 @@ class ProtocolHelpApp {
         <div class="global-result-footer">
           <span class="global-result-source">${this.escapeHtml(this._sourceLine())}</span>
         </div>
+        ${this._feedbackHtml(typed || query, 'list', `${scenarios.length} scenario${scenarios.length === 1 ? '' : 's'}`)}
       </div>
     `;
     this._bindScenarioButtons(container);
