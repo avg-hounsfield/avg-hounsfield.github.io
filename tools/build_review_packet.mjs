@@ -74,9 +74,9 @@ try {
 
 // ------------------------------------------------------------ ascii + csv
 const ASCII_MAP = {
-  '–': '-', '—': '-', '‒': '-', '−': '-', '‘': "'", '’': "'", '“': '"', '”': '"',
-  '≥': '>=', '≤': '<=', '×': 'x', '±': '+/-', '…': '...', ' ': ' ', '→': '->',
-  'µ': 'u', 'μ': 'u', '°': ' deg', '•': '-', 'é': 'e', 'è': 'e', 'ö': 'o', 'ü': 'u',
+  '\u2013': '-', '\u2014': '-', '\u2012': '-', '\u2212': '-', '\u2018': "'", '\u2019': "'", '\u201c': '"', '\u201d': '"',
+  '\u2265': '>=', '\u2264': '<=', '\u00d7': 'x', '\u00b1': '+/-', '\u2026': '...', '\u00a0': ' ', '\u2192': '->',
+  '\u00b5': 'u', '\u03bc': 'u', '\u00b0': ' deg', '\u2022': '-', '\u00e9': 'e', '\u00e8': 'e', '\u00f6': 'o', '\u00fc': 'u',
 };
 const ascii = s => String(s ?? '').replace(/[^\x00-\x7f]/g, ch => ASCII_MAP[ch] ?? (ch.normalize('NFKD').replace(/[^\x00-\x7f]/g, '') || '?'));
 const q = s => `"${ascii(s)}"`;
@@ -85,7 +85,7 @@ const COLUMNS = [
   ['id', 'id'],
   ['why_here', 'why this row is here'],
   ['kind', 'kind of judgment'],
-  ['item', 'the item, in plain words'],
+  ['item', 'the item in plain words'],
   ['expected', 'what it says the site should do'],
   ['current', 'what the site does now'],
   ['acr_top', 'top ACR category and studies now (first answer)'],
@@ -95,6 +95,7 @@ const COLUMNS = [
   ['area', 'area'],
   ['population', 'population read from the search'],
   ['minutes', 'est. seconds to review'],
+  ['cumulative', 'running total (minutes)'],
   ['source', 'source'],
   ['technical', 'technical (raw value, for the developer)'],
 ];
@@ -103,7 +104,7 @@ function csvCell(v) {
   return /[",]/.test(s) || /^[=+\-@]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 function writeCsv(name, rows) {
-  const lines = [COLUMNS.map(c => c[1]).join(',')];
+  const lines = [COLUMNS.map(c => csvCell(c[1])).join(',')];
   for (const r of rows) lines.push(COLUMNS.map(([k]) => csvCell(k === 'verdict' || k === 'comment' ? '' : r[k])).join(','));
   fs.writeFileSync(path.join(OUT, name), lines.join('\r\n') + '\r\n');
 }
@@ -244,7 +245,7 @@ function parsePattern(src) {
     if (c === '$') { i++; return { t: 'lit', v: '\u0002' }; }
     if (c === '[') {
       const j = src.indexOf(']', i); const body = src.slice(i + 1, j); i = j + 1;
-      if (/^[-–— ]+$/.test(body)) return { t: 'lit', v: '-' };
+      if (/^[-\u2013\u2014 ]+$/.test(body)) return { t: 'lit', v: '-' };
       fail('character class');
     }
     i++; return { t: 'lit', v: c };
@@ -309,23 +310,43 @@ const EXTRA_REGION = {
   arm: 5, calf: 5, elbow: 5, wrist: 5, thumb: 5, heel: 5, ankle: 5, knee: 5, shoulder: 5, femur: 5, tibia: 5, humerus: 5,
   neck: 0, cervical: 1, head: 0, brain: 0, intracranial: 0, lung: 2, cardiac: 2, heart: 2, axillary: 2, pancreas: 3,
 };
+// Phrases whose head or neck word is not the head or the neck, and
+// "cervical", which is the neck, the cervical spine or the uterine cervix.
+const REGION_PRE = [
+  [/\b(femoral|humeral|radial|fibular|metatarsal|bladder|pancreatic|pancreas) (head|neck)\b/g, 'limbpart'],
+  [/\bneck of (?:the )?(femur|humerus)\b/g, 'limbpart'],
+  [/\b(lumbar puncture|dural puncture|spinal headache|\blp\b)/g, ' '],
+  [/\bcervical (length|insufficiency|cancer|ca|os|stenosis of pregnancy)\b|\bshort cervix\b/g, 'cervix'],
+  [/\bcervical (spine|radiculopathy|myelopathy|vertebra\w*|pain|disc|disk|fusion|collar|trauma)\b/g, 'spine'],
+  [/\bcervical (mass|lymph\w*|adenopathy|node\w*|lump|swelling)\b/g, 'neckmass'],
+  [/\b(ascending|thoracic|descending) aort\w*\b/g, 'chest'],
+  [/\baort\w*\b|\baaa\b/g, ' '],
+];
 function regionsOf(text) {
   const out = new Set();
-  for (let w of ascii(text).toLowerCase().replace(/[~_]/g, ' ').split(/[^a-z]+/).filter(Boolean)) {
-    if (w === 'neck' || w === 'cervical') { out.add(w === 'neck' ? 0 : 1); continue; }
+  let t = ascii(text).toLowerCase().replace(/[~_]/g, ' ');
+  for (const [re, to] of REGION_PRE) t = t.replace(re, ` ${to} `);
+  for (const w of t.split(/[^a-z]+/).filter(Boolean)) {
+    if (w === 'limbpart') { out.add(5); continue; }
+    if (w === 'neckmass' || w === 'neck' || w === 'thyroid') { out.add(0); continue; }
+    if (w === 'cervical') continue;
     const e = EQUIV[w] || w;
-    const g = groupOf.has(e) ? groupOf.get(e) : groupOf.has(w) ? groupOf.get(w) : EXTRA_REGION[w] ?? EXTRA_REGION[e];
+    const g = EXTRA_REGION[w] ?? (groupOf.has(e) ? groupOf.get(e) : groupOf.has(w) ? groupOf.get(w) : EXTRA_REGION[e]);
     if (g !== undefined) out.add(g);
   }
   return out;
 }
+// Populations a phrase names or plainly implies. The site reads age, pregnancy
+// and sex from the search as typed, before any alias, so a phrase that loses a
+// population word does not lose the filter; a phrase that ADDS one is the
+// judgment to check (an adult's projectile vomiting read as pyloric stenosis).
 const POP_WORDS = {
-  child: /\b(child|children|kid|kids|pediatric|peds|ped|infant|infants|toddler|neonate|neonatal|newborn|baby|babies|adolescent|teen|boy|girl|nicu|preterm|osgood|perthes|ddh|scfe|limp|intussusception|pyloric|necrotizing enterocolitis)\b/,
-  pregnancy: /\b(pregnant|pregnancy|gravid|trimester|gestation|gestational|gestations|prenatal|obstetric|fetal|fetus|iugr|peripartum|postpartum|ectopic|miscarriage|abortion|placental|placenta|abruption|conception|twins?|triplets)\b/,
-  male: /\b(male|man|men|prostate|bph|psa|scrotum|scrotal|testis|testicular|testicle|penis|erectile)\b/,
-  female: /\b(female|woman|women|ovary|ovarian|adnexal|uterus|uterine|endometrial|vaginal|vulvar|menstrual|menopausal|postmenopausal|premenopausal|perimenopausal|fibroids|pcos)\b/,
+  child: /\b(child|children|kid|kids|pa?ediatric|peds|ped|infant|infants|toddler|neonate|neonatal|newborn|baby|babies|adolescent|teen|boy|girl|nicu|preterm|osgood|perthes|ddh|scfe|slipped capital|limp|intussusception|pyloric|necrotizing enterocolitis|nec|spitting up|severs?|sever s|developmental dysplasia|hip click|clicky|hip dysplasia|antenatal)\b/,
+  pregnancy: /\b(pregnan\w*|gravid|trimester|gestation\w*|prenatal|obstetric\w*|fetal|fetus|iugr|sga|intrauterine growth|peripartum|postpartum|pph|retained products|rpoc|birth|childbirth|delivery|ectopic|miscarriage|abortion|placental|placenta|abruption|conception|conceive|conceiving|twins?|triplets|preterm labor|short cervix|cervical length|cervical insufficiency|anatomy scan|nuchal)\b/,
+  male: /\b(male|males|man|men|gentleman|boy|prostate|bph|psa|mcrpc|scrotum|scrotal|testis|testes|testicles?|testicular|penis|penile|erectile|varicocele|hydrocele|spermatocele|epididym\w*|orchitis)\b/,
+  female: /\b(female|females|woman|women|lady|girl|womb|ovary|ovarian|adnexal|adnexa|uterus|uterine|endometri\w*|vaginal|vagina|vulvar|pv|svd|menstrual|periods|menorrhagia|aub|menopaus\w*|postmenopausal|premenopausal|perimenopausal|fibroids?|leiomyomas?|pcos|pregnan\w*|abruption|placent\w*|pph|postpartum|peripartum|birth|delivery|gave birth)\b/,
   elderly: /\b(elderly|older|geriatric)\b/,
-  immunocompromised: /\b(immunocompromised|hiv|aids|transplant|neutropenia|neutropenic)\b/,
+  immunocompromised: /\b(immuno\w+|hiv|aids|transplant|neutropeni\w*|chemo\w*)\b/,
 };
 const popsOf = text => new Set(Object.entries(POP_WORDS).filter(([, re]) => re.test(ascii(text).toLowerCase().replace(/[~_]/g, ' '))).map(([k]) => k));
 function changeOf(from, to) {
@@ -333,17 +354,20 @@ function changeOf(from, to) {
   const pf = popsOf(from), pt = popsOf(to);
   const notes = []; let kind = null;
   const lost = [...rf].filter(g => !rt.has(g)), gained = [...rt].filter(g => !rf.has(g));
-  if (rf.size && (lost.length || gained.length) && to.trim()) {
+  if (rf.size && gained.length) {
     kind = 'switch';
-    notes.push(`changes body region: ${[...rf].map(g => GROUP_NAMES[g]).join('/')} -> ${[...rt].map(g => GROUP_NAMES[g]).join('/') || 'none named'}`);
+    notes.push(`changes body region: ${[...rf].map(g => GROUP_NAMES[g]).join('/')} -> ${[...rt].map(g => GROUP_NAMES[g]).join('/')}`);
+  } else if (rf.size && lost.length && to.trim()) {
+    kind = 'drops';
+    notes.push(`no longer requires the body region it named (${lost.map(g => GROUP_NAMES[g]).join('/')})`);
   } else if (!rf.size && rt.size) {
-    kind = kind || 'assigns';
+    kind = 'assigns';
     notes.push(`assigns a body region the phrase did not name: ${[...rt].map(g => GROUP_NAMES[g]).join('/')}`);
   }
-  const plost = [...pf].filter(p => !pt.has(p)), pgain = [...pt].filter(p => !pf.has(p));
-  if (plost.length || pgain.length) {
+  const pgain = [...pt].filter(p => !pf.has(p));
+  if (pgain.length) {
     kind = 'population';
-    notes.push(`changes population: ${pgain.length ? `adds ${pgain.join(', ')}` : ''}${pgain.length && plost.length ? '; ' : ''}${plost.length ? `drops ${plost.join(', ')}` : ''}`);
+    notes.push(`adds a population the phrase did not name: ${pgain.join(', ')}`);
   }
   return { kind, note: notes.join('; ') };
 }
@@ -611,7 +635,7 @@ for (const c of gi.inference) {
 }
 
 // Group units that share one specific expectation: one verdict covers them.
-const SEARCH_SEC = { base: 45, extra: 8 };
+const SEARCH_SEC = { base: 35, extra: 6 };
 const groupsOut = new Map();
 for (const u of units) {
   const gkey = u.groupable ? `${u.family.startsWith('recovery') ? 'recovery' : u.family}|${u.sig}` : `${u.key}`;
@@ -643,7 +667,7 @@ for (const [gkey, list] of groupsOut) {
 }
 
 // ---------- phrase rules: hand aliases, mined aliases, context, whole-search, clarify
-const PHRASE_SEC = { base: 15, extra: 3 };
+const PHRASE_SEC = { base: 12, extra: 2 };
 function targetPlain(to) {
   if (!to.trim()) return 'ignored (the words are dropped from the search)';
   const soft = to.split(' ').filter(w => w.startsWith('~')).map(w => w.slice(1));
@@ -673,7 +697,7 @@ function phraseRow({ key, kind, item, froms, to, src, technical, highExtra, refs
   if (tc) why.push(`time-critical: ${tc}`);
   if (switched.length) why.push(switched.map(c => `${q(c.f)} ${c.note}`).join('; '));
   if (highExtra) why.push(highExtra);
-  const assigns = changes.filter(c => c.kind === 'assigns');
+  const assigns = changes.filter(c => c.kind === 'assigns' || c.kind === 'drops');
   const isNew = baseHand && src === 'hand-written alias' ? froms.filter(f => !baseHand.has(f)) : [];
   return addRow({
     prefix: 'P', key, kind, item, expected: `Every search containing the phrase is ${targetPlain(to)}.`, current,
@@ -751,9 +775,9 @@ for (const e of T.INFERENCES) {
     expected: `Offers ${e.offer.map(q).join(', ')} as a question beside whatever the search found on its own. Is the inference sound, are the trigger words right, and is the topic list right and in the right order?`,
     current: `Example search ${q(example)}: ${describe(r)}${fired ? '' : ' (this example did not fire the inference)'}`,
     acr_top: acrTop(r), agrees: fired ? 'fires on the example' : 'did NOT fire on the example', area: topicRegion.get(e.offer[0]) || 'general',
-    population: e.child ? (e.infant ? 'infant' : 'child') : 'adult', seconds: 45, source: 'INFERENCES table',
+    population: e.child ? (e.infant ? 'infant' : 'child') : 'adult', seconds: 30, source: 'INFERENCES table',
     technical: `id=${e.id} ; all=${e.all.map(x => `/${reSource(x)}/`).join(' ')}${e.raw ? ` ; raw=${e.raw.map(x => `/${reSource(x)}/`).join(' ')}` : ''} ; dx=/${reSource(e.dx)}/`,
-    highStakes: 'inference question (always reviewed first)',
+    highStakes: `inference question (always reviewed)${timeCritical(e.reason, e.offer.join(' ')) ? `; time-critical: ${timeCritical(e.reason, e.offer.join(' '))}` : ''}`,
   }, [`infer:${e.id}`]);
 }
 
@@ -901,7 +925,7 @@ const FLAGS = [
   { ref: 'implies:flag:migraine', probe: ['headache no red flags'], reason: '"No red flags" also excludes migraine, tension, cluster, trigeminal and sinusitis headache scenarios, which are not red flags.' },
   { ref: 'phrase:lower abdominal pain', probe: ['lower abdominal pain man'], reason: 'Lower abdominal pain is read as pelvic pain, and a man is then offered postmenopausal and reproductive-age pelvic pain topics.' },
   { ref: 'equiv:neck', probe: ['neck abscess', 'neck mass'], reason: '"Neck" is the same word as "cervical", and "cervical" sits in the spine group of body parts, so neck soft tissue searches may be held to spine rules.' },
-  { ref: 'region:Suspected Physical Abuse-Child', probe: ['child abuse'], reason: 'The data has two abuse topics, "Suspected Physical Abuse-Child" (113 scenarios) and "Suspected Physical Abuse — Child" (7). A search opens one of them; the other may never be shown. Data issue, not a clinical one.' },
+  { ref: 'region:Suspected Physical Abuse-Child', probe: ['child abuse'], reason: 'The data has two abuse topics, "Suspected Physical Abuse-Child" (113 scenarios) and "Suspected Physical Abuse \u2014 Child" (7). A search opens one of them; the other may never be shown. Data issue, not a clinical one.' },
   { ref: 'infer:appendicitis', probe: ['child periumbilical pain moved to the right'], reason: 'The appendicitis inference never fires for a child (it is an adult entry), so a child with the classic migrating pain gets no question about Suspected Appendicitis-Child.' },
 ];
 const flagRows = [];
@@ -934,15 +958,26 @@ const finalize = r => ({ ...r, why_here: r.whyOverride || r.highStakes || r.regi
 const high = rows.filter(r => r.highStakes && r.section !== 'region');
 const SECTION_ORDER = { rule: 0, phrase: 1, search: 2, word: 3 };
 const tcOrder = label => { const i = TIME_CRITICAL.findIndex(([l]) => label && label.includes(l)); return i < 0 ? 99 : i; };
-high.sort((a, b) => (a.kind.startsWith('inference question') ? -2 : a.kind === 'clarify question' ? -1 : 0) - (b.kind.startsWith('inference question') ? -2 : b.kind === 'clarify question' ? -1 : 0)
-  || tcOrder(a.highStakes) - tcOrder(b.highStakes) || SECTION_ORDER[a.section] - SECTION_ORDER[b.section] || a.id.localeCompare(b.id));
+// Most dangerous first, so the first half hour covers the time-critical
+// presentations: by presentation, then inference questions, clarify entries,
+// phrase readings, searches and word rules; then everything else in that order.
+const kindOrder = r => r.kind.startsWith('inference question') ? 0 : r.kind === 'clarify question' ? 1 : r.kind === 'whole-search alias' ? 2
+  : r.section === 'phrase' ? 3 : r.section === 'search' ? 4 : 5;
+const tcOf = r => { const m = /time-critical: ([^;|]+)/.exec(r.highStakes || ''); return m ? m[1].trim() : null; };
+high.sort((a, b) => tcOrder(tcOf(a)) - tcOrder(tcOf(b)) || kindOrder(a) - kindOrder(b) || a.id.localeCompare(b.id));
 const highIds = new Set(high.map(r => r.id));
 const files = [];
 function emit(name, title, list) {
-  writeCsv(name, list.map(finalize));
+  let run = 0;
+  writeCsv(name, list.map(r => { run += r.seconds || 0; return { ...finalize(r), cumulative: (run / 60).toFixed(1) }; }));
   files.push({ name, title, rows: list.length, seconds: list.reduce((s, r) => s + (r.seconds || 0), 0) });
 }
-emit('00_high_stakes.csv', 'High stakes: inference questions, clarify entries, time-critical presentations, region or population changes', high);
+// The 30-minute core holds every rule; of the expected search answers it holds
+// the curated clinical gold. The red-team and other generated searches about the
+// same time-critical presentations follow in a second file.
+const isCore = r => r.section !== 'search' || /clinical gold/.test(r.source);
+emit('00_high_stakes.csv', 'High stakes, core (start here): inference questions, clarify entries, time-critical phrase readings and clinical-gold searches, every rule that changes body region or population', high.filter(isCore));
+emit('01_high_stakes_searches.csv', 'High stakes, second pass: the red-team and generated expected answers for the same time-critical presentations', high.filter(r => !isCore(r)));
 for (const area of AREAS) {
   const list = rows.filter(r => !highIds.has(r.id) && (r.section === 'search' || r.section === 'phrase' || r.section === 'rule') && (AREA_LABEL[r.area] ? r.area : 'general') === area);
   list.sort((a, b) => SECTION_ORDER[a.section] - SECTION_ORDER[b.section] || (b.regionNote ? 1 : 0) - (a.regionNote ? 1 : 0) || a.kind.localeCompare(b.kind) || a.item.localeCompare(b.item));
@@ -1012,7 +1047,7 @@ ${files.map(f => `| ${f.name} | ${f.title} | ${f.rows} | ${mins(f.seconds)} |`).
 
 See SUMMARY.md for the counts behind these files.
 
-**Start with ${highFile.name}** (about ${mins(highFile.seconds)} minutes). It holds every inference question the site may ask, the clarify questions, the expected answers and phrase readings for time-critical presentations (stroke, subarachnoid hemorrhage, cauda equina, acute aortic syndrome, pulmonary embolism, torsion, ectopic pregnancy, appendicitis in children and in pregnancy, major trauma, child abuse, cord compression, sepsis), and every alias or rule that changes which body region or which population (child, pregnancy, sex, immune status) is answered. If you only have half an hour, this is the file.
+**Start with ${highFile.name}** (about ${mins(highFile.seconds)} minutes). It holds every inference question the site may ask, the clarify questions, the expected answers and phrase readings for time-critical presentations (stroke, subarachnoid hemorrhage, cauda equina, acute aortic syndrome, pulmonary embolism, torsion, ectopic pregnancy, appendicitis in children and in pregnancy, major trauma, child abuse, cord compression, sepsis), and every alias or rule that changes which body region or which population (child, pregnancy, sex, immune status) is answered. If you only have half an hour, this is the file. Of the test searches it holds only the curated clinical-gold set; ${files[1].name} (about ${mins(files[1].seconds)} minutes) holds the red-team and generated test searches for the same time-critical presentations and is the next thing to review.
 
 The area files (area_*.csv) then hold the rest of the searches and phrase readings, one file per body area. 30_word_rules.csv holds the general word rules, and 40_topic_regions.csv the body region of every ACR topic (about 6 seconds a row). 90_flagged_by_generator.csv lists what the script that built this packet suspects is wrong, with its reasons: these are machine-flagged guesses, not clinical verdicts, and are there to point your attention, not to replace it.
 
