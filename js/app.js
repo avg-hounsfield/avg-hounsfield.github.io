@@ -8,12 +8,12 @@
 console.log('[GRAi Imaging Guide] Loading app.js module...');
 
 import { SearchEngine } from './search-engine.js?v=20261111a';
-import { DataLoader } from './data-loader.js?v=20260417a';
+import { DataLoader } from './data-loader.js?v=20261111c';
 import { UI } from './ui.js?v=20261109d';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20261109c';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
-import { resolveQuery, buildTopicGuide, topicSlug, _aliasTables } from './scenario-ranker.js?v=20261111b';
+import { resolveQuery, buildTopicGuide, topicSlug, _aliasTables } from './scenario-ranker.js?v=20261111c';
 import * as embeddingSearch from './embedding-search.js?v=20261111a';
 import { buildFacetModel, facetState, toggleOption, acrSourceUrl } from './guide-facets.js?v=20261110a';
 import { feedbackMailto, FEEDBACK_NOTE } from './feedback-link.js?v=20261110a';
@@ -1403,8 +1403,8 @@ class ProtocolHelpApp {
   async _loadSearchMetadata() {
     try {
       const [topicsRes, infoRes] = await Promise.all([
-        fetch('data/search/topics.json?v=20261101b'),
-        fetch('data/data-info.json?v=20261101b'),
+        fetch('data/search/topics.json?v=20261111c'),
+        fetch('data/data-info.json?v=20261111c'),
       ]);
       if (topicsRes.ok) {
         const { topics } = await topicsRes.json();
@@ -1443,7 +1443,7 @@ class ProtocolHelpApp {
       try {
         const [ciRes, snRes] = await Promise.all([
           fetch('data/search/concept_index.json?v=20260521a'),
-          fetch('data/search/scenario_names.json?v=20261101b'),
+          fetch('data/search/scenario_names.json?v=20261111c'),
         ]);
         if (!ciRes.ok) return null;
         const ci = await ciRes.json();

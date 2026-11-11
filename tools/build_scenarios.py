@@ -43,6 +43,10 @@ DOSE_RE = re.compile(r'(msv|^varies$)', re.I)
 REGION_RULES = [
     ('breast', r'breast|mammo|\baxilla\b|nipple|epigastric arteries|lactating|ductal carcinoma'),
     ('msk', r'osteomyelitis'),
+    # Brain aneurysm, vascular malformation and subarachnoid hemorrhage are head
+    # topics, whatever the vascular rule below makes of their title (clinician
+    # reviewed 2026-11-11).
+    ('neuro', r'cerebrovascular'),
     ('chest', r'aortic valve|pulmonary arteriovenous|cardiothoracic|left atrial'),
     ('vascular', r'aortic|aneurysm, suspected|aortic aneurysm|claudication|arterial|venous|vascular malformation|'
                  r'vascular anomal|vasculitis|iliac artery|mesenteric ischemia|dialysis|thoracic outlet|renovascular|'
@@ -99,7 +103,9 @@ def parse_capture(content):
     current = []
     code = None
     for line in lines[1:]:
-        if code is None and not current and re.fullmatch(r'\d{5,}', line):
+        # The scenario's ACR code: the first line after the name, all digits.
+        # Older scenarios have four-digit codes.
+        if code is None and not current and not rows and re.fullmatch(r'\d{3,}', line):
             code = line
             continue
         if line.lower() == '(disagreement)':
@@ -271,6 +277,16 @@ def build():
             for s in group:
                 s['name'] = f"{s['name']} ({s['topic']})"
                 disambiguated += 1
+    # ACR writes one topic two ways ("Suspected Physical Abuse-Child" and
+    # "Suspected Physical Abuse — Child"). Titles that differ only in dashes
+    # and spacing are one topic, under the spelling most scenarios use.
+    def topic_key(topic):
+        return re.sub(r'\s*[-–—]\s*', '-', topic).lower()
+    spellings = collections.defaultdict(collections.Counter)
+    for s in scenarios:
+        spellings[topic_key(s['topic'])][s['topic']] += 1
+    for s in scenarios:
+        s['topic'] = spellings[topic_key(s['topic'])].most_common(1)[0][0]
     scenarios.sort(key=lambda s: int(s['id']))
     return scenarios, conflicts, failed, disambiguated
 

@@ -245,6 +245,8 @@ const TEXT_SYNONYMS = [
 // verified against scenario names; the mined table (js/aliases-mined.js) is
 // merged in after it, and a hand-written phrase always wins over a mined one.
 const HAND_ALIASES = [
+  // Clinician reviewed 2026-11-11: hormone replacement is not arthroplasty.
+  ['hormone replacement therapy', ''], ['hormone replacement', ''], ['estrogen replacement', ''], ['hrt', ''],
   // red flags
   ['with red flags', ''], ['and red flags', ''], ['red flags present', ''], ['positive red flags', ''],
   ['red flag symptoms', ''], ['red flag features', ''],
@@ -755,7 +757,26 @@ const CANCER_HISTORY_RE = /\b(?:history of|hx of|known|prior|previous|with|has|a
 // Aliases that depend on the rest of the search. "urinary retention" with back
 // pain means cauda equina; alone it is a bladder question. Those marked
 // `before` run ahead of the plain aliases, the rest on what is left after them.
+const DISC_PHRASES = ['cervical disc herniation', 'cervical disk herniation', 'herniated disc', 'herniated disk', 'disc herniation',
+  'disk herniation', 'slipped disc', 'slipped disk', 'bulging disc', 'bulging disk', 'spinal stenosis'];
+const NECK_CONTEXT = /\b(cervical|neck|arm|arms)\b/;
+const PSA_TREATED = /\b(after|post|following|radiation|radiotherapy|prostatectomy|treated|treatment|therapy|brachytherapy|recurrence|recurrent|adt|surgery)\b/;
+const BACK_CONTEXT = /\b(back|lbp|spine|lumbar|thoracic)\b/;
 const CONTEXT_ALIASES = [
+  // Clinician reviewed 2026-11-11 (docs/review/verdicts): a disc or stenosis
+  // named with the neck is cervical; a rising PSA after treatment is suspected
+  // recurrence; weight loss or night sweats with back pain are cancer red
+  // flags; the pain of an ectopic pregnancy does not change its topic.
+  ...DISC_PHRASES.map(phrase => ({ phrase, when: NECK_CONTEXT, to: 'cervical radiculopathy', before: true })),
+  ...['rising psa', 'psa rising', 'elevated psa', 'high psa', 'increasing psa'].map(phrase => (
+    { phrase, when: PSA_TREATED, to: 'prostate cancer recurrent disease suspected', before: true })),
+  ...['radiation therapy', 'radiotherapy', 'radiation', 'brachytherapy'].map(phrase => (
+    { phrase, when: /\b(psa|prostate)\b/, to: 'post nonsurgical local treatment', before: true })),
+  { phrase: 'weight loss', when: BACK_CONTEXT, to: 'cancer suspected', before: true },
+  { phrase: 'night sweats', when: BACK_CONTEXT, to: 'cancer suspected', before: true },
+  { phrase: 'lower abdominal pain', when: /\bectopic\b/, to: '', before: true },
+  { phrase: 'abdominal pain', when: /\bectopic\b/, to: '', before: true },
+  { phrase: 'pelvic pain', when: /\bectopic\b/, to: '', before: true },
   { phrase: 'urinary retention', when: /\b(back|lumbar|spine|spinal|leg|legs|saddle|weakness|incontinence|lbp|cauda)\b/, to: 'cauda equina', before: true },
   { phrase: 'bowel or bladder dysfunction', when: /\b(back|lumbar|spine|leg|legs|lbp)\b/, to: 'cauda equina', before: true },
   { phrase: 'bladder dysfunction', when: /\b(back|lumbar|spine|leg|legs|lbp)\b/, to: 'cauda equina', before: true },
@@ -879,12 +900,14 @@ function negatesAsked({ positive, negative }, asked) {
 }
 
 // A negated word also rules out scenarios built on what implies it: "no fever"
-// excludes sepsis, "no red flags" the red-flag headache branches.
+// excludes sepsis, "no red flags" the red-flag headache branches. Migraine,
+// tension, cluster, trigeminal and sinus headaches are not red flags and stay
+// (clinician reviewed 2026-11-11).
 const IMPLIES = {
   fever: ['sepsis'],
-  flag: ['fever', 'neuro', 'deficit', 'cancer', 'immunocompromised', 'thunderclap', 'sudden', 'hypotension', 'hypertension',
-    'older', 'increasing', 'pregnant', 'peripartum', 'hiv', 'papilledema', 'post', 'trauma', 'tension', 'cervicogenic',
-    'intracranial', 'otitis', 'sinusitis', 'migraine', 'cluster', 'trigeminal'],
+  flag: ['fever', 'deficit', 'cancer', 'immunocompromised', 'thunderclap', 'sudden', 'hypotension', 'hypertension',
+    'older', 'increasing', 'pregnant', 'peripartum', 'hiv', 'papilledema', 'post', 'trauma', 'intracranial',
+    'otitis', 'cervicogenic', 'orthostatic'],
   trauma: ['fall', 'blunt', 'penetrating', 'ballistic'],
   cancer: ['met'],
   infection: ['septic', 'sepsis', 'osteomyelitis', 'abscess', 'cellulitis'],
@@ -1664,6 +1687,22 @@ function sexOf(text) {
   return null;
 }
 
+// A scenario about anatomy only one sex has ("Postmenopausal Acute Pelvic
+// Pain", "prostate cancer"). Unlike sexOf this never hides a scenario from a
+// search that states no sex: it only keeps a man's search out of the female
+// pelvis and a woman's out of the prostate (clinician reviewed 2026-11-11).
+const FEMALE_ANATOMY_RE = /\b(postmenopausal|premenopausal|perimenopausal|reproductive age|ovar(?:y|ian|ies)|adnexal?|uter(?:us|ine)|fibroids?|endometri\w+|vagina\w*|vulva\w*|gynecolog\w+|postpartum|placenta\w*|trimester|gravid|cervix)\b/i;
+const MALE_ANATOMY_RE = /\b(prostat\w+|scrot\w+|testic\w+|testis|testes|hematospermia|penile|penis)\b/i;
+function bodySexOf(text) {
+  const stated = sexOf(text);
+  if (stated) return stated;
+  const male = MALE_ANATOMY_RE.test(text);
+  const female = FEMALE_ANATOMY_RE.test(text);
+  if (male && !female) return 'male';
+  if (female && !male) return 'female';
+  return null;
+}
+
 function buildIndex(scenarios) {
   const cached = indexCache.get(scenarios);
   if (cached) return cached;
@@ -1695,6 +1734,7 @@ function buildIndex(scenarios) {
         : /first trimester/.test(lowerName) ? 'first' : null,
       literal: new Set(cleanWords(shortName).split(' ').map(stem)),
       sex: sexOf(`${s.topic || ''} . ${shortName}`),
+      bodySex: bodySexOf(`${s.topic || ''} . ${shortName}`),
       gcs: gcsRange(shortName),
       // The size and age ranges named, from the name before the longer text.
       sizeRanges: rangesOf(parseSizeRanges, shortName, `${s.search || ''}. ${s.variant || ''}`),
@@ -1719,7 +1759,7 @@ function buildIndex(scenarios) {
     if (!s.topic || titles.has(s.topic)) continue;
     const parsed = parseText(s.topic.replace(/\bchild\b/gi, ' '));
     const joined = joinLowBack([...parsed.positive].join(' '), { keepBack: true }).split(' ').filter(Boolean).map(stem);
-    titles.set(s.topic, { positive: new Set(joined), negative: parsed.negative, key: cleanWords(s.topic).replace(/\s/g, ''), sex: sexOf(s.topic) });
+    titles.set(s.topic, { positive: new Set(joined), negative: parsed.negative, key: cleanWords(s.topic).replace(/\s/g, ''), sex: sexOf(s.topic), bodySex: bodySexOf(s.topic) });
   }
   // Two spellings of one topic title are one topic for choosing purposes.
   for (const [topic, title] of titles) {
@@ -1764,6 +1804,7 @@ function fitsPopulation(doc, { pregnant, notPregnant, age, years, sides, gcs, se
   if (trimester && doc.trimester && doc.trimester !== trimester) return false;
   if (age && doc.population !== age && doc.population !== 'any') return false;
   if (sex && doc.sex && doc.sex !== sex) return false;
+  if (sex && doc.bodySex && doc.bodySex !== sex) return false;
   // An age in the search must sit inside the age range a scenario names, and
   // a size inside its size range.
   if (years !== null && years !== undefined && doc.ageRange && !rangeFits(doc.ageRange, years)) return false;
@@ -1849,9 +1890,12 @@ function scoreDocs(parsed, index, qualifiers, { scope } = {}) {
   // written for men when others fit.
   if (!qualifiers.sex && ranked.some(h => h.doc.sex !== 'male')) ranked = ranked.filter(h => h.doc.sex !== 'male');
   // A search that negates a term ACR itself negates in a name wants those
-  // scenarios: "headache no red flags" is the "no red flags" branch.
-  if (parsed.negated.length && ranked.some(h => parsed.negated.every(t => h.doc.nameText.negative.has(t)))) {
-    ranked = ranked.filter(h => parsed.negated.every(t => h.doc.nameText.negative.has(t)));
+  // scenarios first: "headache no red flags" leads with the "no red flags"
+  // branch. The rest stay below it: a migraine or tension headache is also a
+  // headache without red flags (clinician reviewed 2026-11-11).
+  if (parsed.negated.length) {
+    const sameBranch = h => parsed.negated.every(t => h.doc.nameText.negative.has(t));
+    ranked = [...ranked.filter(sameBranch), ...ranked.filter(h => !sameBranch(h))];
   }
   return ranked;
 }
@@ -1915,6 +1959,7 @@ function topicsNaming(parsed, qualifiers, scenarios) {
     // names none is not about the male breast.
     if (title.sex === 'male' && qualifiers.sex !== 'male') continue;
     if (title.sex === 'female' && qualifiers.sex === 'male') continue;
+    if (qualifiers.sex && title.bodySex && title.bodySex !== qualifiers.sex) continue;
     // Life stage follows a stated age here too, as in fitsPopulation.
     if (qualifiers.years != null && qualifiers.years < 40 && title.positive.has('postmenopausal')) continue;
     if (qualifiers.years != null && qualifiers.years >= 55 && title.positive.has('reproductive')) continue;
@@ -2641,22 +2686,229 @@ export function topicSlug(topic) {
     .replace(/\s+/g, '-');
 }
 
-// Presentations ACR files under several topics, none of which names them. A
-// search that would otherwise end without an answer asks which is meant.
-// "always" entries ask even when the search would match something, because
-// what it matches is a different thing with the same words ("neck dissection"
-// is usually the cancer operation, not a torn artery). "unless" names the
-// words that settle the question. One topic opens its guide with the reason.
-// Not yet clinician reviewed; see tests/clinical-gold.json.
+// Presentations ACR files under several topics, none of which names them, and
+// words that mean two things. An entry answers with a question: which of these
+// topics is meant.
+//   phrase / match  the words that trigger it, read on the cleaned search
+//   always   ask even when the search would match something, because what it
+//            matches is a different thing with the same words. Without it the
+//            entry is used only when the search would end without an answer.
+//   unless   words that settle the question; the entry stands aside
+//   when     words that must also be present
+//   sex      'male', 'female' or 'unstated': the entry is for that search only
+//   only     the phrase must be the whole clinical content of the search
+//   topics   ACR topic titles, most likely first. { topic, query, sex } runs a
+//            narrower search from the button, or shows the topic to one sex.
+// One topic opens its guide with the reason. A child's search is offered the
+// child topic where ACR has one (CHILD_TOPIC).
+// Entries marked "reviewed" follow the clinician verdicts of 2026-11-11 in
+// docs/review/verdicts; the rest are not yet clinician reviewed. Every entry
+// has a case in tests/clinical-gold.json.
 const STROKE_TOPIC = 'Cerebrovascular Diseases-Stroke and Stroke-Related Conditions';
+const ANEURYSM_TOPIC = 'Cerebrovascular Diseases-Aneurysm, Vascular Malformation, and Subarachnoid Hemorrhage';
+const AORTIC_SYNDROME_TOPIC = 'Suspected Acute Aortic Syndrome';
+const THORACIC_AORTA_FOLLOWUP = 'Thoracic Aortic Aneurysm or Dissection-Treatment Planning and Follow-Up';
+const BPH_TOPIC = 'Lower Urinary Tract Symptoms: Suspicion of Benign Prostatic Hyperplasia';
+const SCROTAL_PAIN_TOPIC = 'Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass';
+const SCROTAL_MASS_TOPIC = 'Newly Diagnosed Palpable Scrotal Abnormality';
+const PELVIC_PAIN_TOPIC = 'Acute Pelvic Pain in the Reproductive Age Group';
+const PELVIC_FLOOR_TOPIC = 'Pelvic Floor Dysfunction in Females';
+const CAUDA_EQUINA = { topic: 'Low Back Pain', query: 'cauda equina' };
+const CHILD_TOPIC = {
+  [STROKE_TOPIC]: 'Cerebrovascular Disease-Child',
+  [ANEURYSM_TOPIC]: 'Cerebrovascular Disease-Child',
+  'Head Trauma': 'Head Trauma-Child',
+  'Low Back Pain': 'Back Pain-Child',
+  'Thoracic Back Pain': 'Back Pain-Child',
+  'Dizziness and Ataxia': 'Ataxia-Child',
+  Headache: 'Headache-Child',
+  'Orbits, Vision, and Visual Loss': 'Orbital Imaging and Vision Loss-Child',
+  'Right Lower Quadrant Pain': 'Suspected Appendicitis-Child',
+  'Left Lower Quadrant Pain': 'Abdominal Pain-Child',
+  'Acute Nonlocalized Abdominal Pain': 'Abdominal Pain-Child',
+};
+const BLEED_TRAUMA = /\b(trauma|traumatic|fall|fell|injury|accident|mvc|mva|assault|struck)\b/;
+const NO_TRAUMA = /\b(?:no|without|denies) (?:hx of |history of |recent |known )?trauma\b|\bnontraumatic\b|\bspontaneous\b/;
+const FOLLOW_UP_WORDS = /\b(follow|followup|surveillance|chronic|repair|repaired|tevar|post|planning|treated|history|hx|old|known|stable)\b/;
+const WEAK_LEG_SETTLED = /\b(retention|saddle|cauda|incontinence|back|spine|lumbar|thoracic|fever|infection|bilateral|both|trauma|fall|fell)\b/;
 const CLARIFY = [
-  { phrase: 'foot drop', topics: ['Low Back Pain', 'Plexopathy', 'Myelopathy', STROKE_TOPIC] },
-  { phrase: 'wrist drop', topics: ['Cervical Pain or Cervical Radiculopathy', 'Plexopathy', STROKE_TOPIC] },
-  { phrase: 'torsion', topics: ['Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass', 'Acute Pelvic Pain in the Reproductive Age Group'] },
+  // reviewed: the cancer operation, not a torn artery
   {
-    phrase: 'neck dissection', always: true, unless: /\b(artery|arterial|vascular|carotid|vertebral|cta|mra|stroke)\b/,
-    topics: ['Staging and Post-Therapy Assessment of Head and Neck Cancer', STROKE_TOPIC],
-    reason: '"Neck dissection" can mean the cancer operation or a torn neck artery.',
+    match: /\bneck dissection\b/, always: true, unless: /\b(artery|arterial|vascular|carotid|vertebral|cta|mra|stroke)\b/,
+    topics: ['Staging and Post-Therapy Assessment of Head and Neck Cancer'],
+    reason: '"Neck dissection" is read as the cancer operation. For a torn neck artery, search "carotid dissection" or "vertebral dissection".',
+  },
+  // reviewed: costovertebral angle tenderness is not a stroke
+  {
+    match: /\bcva (?:tenderness|tender|angle|pain)\b|\bcostovertebral\b/, always: true,
+    topics: ['Acute Pyelonephritis', 'Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)'],
+    reason: 'CVA tenderness is costovertebral angle tenderness, a sign of pyelonephritis or a kidney stone.',
+  },
+  // reviewed: urinary retention is a prostate question only in a man
+  {
+    match: /\burinary retention\b|\b(?:cant|cannot|unable to) (?:urinate|void|pee)\b/, always: true, sex: 'female',
+    unless: /\b(back|lumbar|spine|spinal|leg|legs|saddle|weakness|incontinence|lbp|cauda|postop|postoperative|catheter)\b/,
+    topics: [PELVIC_FLOOR_TOPIC, CAUDA_EQUINA, 'Fibroids', 'Clinically Suspected Adnexal Mass, No Acute Symptoms'],
+    reason: 'Urinary retention in a woman has several causes: a pelvic floor problem, a pelvic mass pressing on the bladder, or cauda equina syndrome (filed under Low Back Pain).',
+  },
+  {
+    match: /\burinary retention\b|\b(?:cant|cannot|unable to) (?:urinate|void|pee)\b/, always: true, sex: 'male',
+    unless: /\b(back|lumbar|spine|spinal|leg|legs|saddle|weakness|incontinence|lbp|cauda|postop|postoperative|catheter|bph|prostate|prostatic)\b/,
+    topics: [BPH_TOPIC, CAUDA_EQUINA],
+    reason: 'Urinary retention in a man is most often prostatic enlargement; with back pain or leg weakness it is cauda equina syndrome (filed under Low Back Pain).',
+  },
+  {
+    match: /\burinary retention\b|\b(?:cant|cannot|unable to) (?:urinate|void|pee)\b/, always: true, sex: 'unstated',
+    unless: /\b(back|lumbar|spine|spinal|leg|legs|saddle|weakness|incontinence|lbp|cauda|postop|postoperative|catheter|bph|prostate|prostatic)\b/,
+    topics: [BPH_TOPIC, PELVIC_FLOOR_TOPIC, CAUDA_EQUINA],
+    reason: 'ACR files urinary retention by its cause: prostatic enlargement in men, pelvic floor dysfunction in women, and cauda equina syndrome (under Low Back Pain) for either.',
+  },
+  {
+    match: /\b(?:luts|lower urinary tract symptoms)\b/, always: true, sex: 'female',
+    topics: [PELVIC_FLOOR_TOPIC, 'Recurrent Lower Urinary Tract Infections in Females'],
+    reason: 'ACR\'s lower urinary tract symptoms topic is about the prostate. For a woman these are the closest topics.',
+  },
+  // reviewed: a known aneurysm asked about without a dissection is still an acute aortic question first
+  {
+    match: /\b(?:aortic|aorta|thoracic|abdominal) aneurysm\b|\b(?:aaa|taa)\b/, always: true,
+    when: /\b(?:no|without|not) (?:\w+ ){0,2}dissection\b|\bdissection (?:ruled out|excluded)\b/,
+    topics: [AORTIC_SYNDROME_TOPIC, THORACIC_AORTA_FOLLOWUP, 'Abdominal Aortic Aneurysm Follow-up (Without Repair)'],
+    reason: 'A known aortic aneurysm with new symptoms is imaged as a suspected acute aortic syndrome; a stable one is followed under aneurysm follow-up.',
+  },
+  // reviewed (unsure): type B is managed medically but imaged like any acute aortic syndrome
+  {
+    match: /\btype b\b.*\bdissection\b|\bdissection\b.*\btype b\b/, always: true,
+    when: /\b(acute|new|suspected|sudden|tearing)\b/, unless: FOLLOW_UP_WORDS,
+    topics: [AORTIC_SYNDROME_TOPIC],
+    reason: 'An acute type B dissection is imaged as a suspected acute aortic syndrome.',
+  },
+  {
+    match: /\btype b\b.*\bdissection\b|\bdissection\b.*\btype b\b/, always: true, unless: FOLLOW_UP_WORDS,
+    topics: [AORTIC_SYNDROME_TOPIC, THORACIC_AORTA_FOLLOWUP],
+    reason: 'A type B dissection is imaged as a suspected acute aortic syndrome when it is new, and under treatment planning and follow-up once it is known.',
+  },
+  // reviewed: a brain bleed is not only intraparenchymal
+  {
+    match: /\b(?:brain bleed|bleed in brain|bleeding in brain|head bleed|brain hemorrhage|intracranial hemorrhage|intracranial bleed|ich)\b/, always: true,
+    when: BLEED_TRAUMA, unless: new RegExp(`${NO_TRAUMA.source}|\\b(subarachnoid|sah|subdural|sdh|epidural|edh|intraparenchymal|intracerebral)\\b`),
+    topics: ['Head Trauma'],
+    reason: 'A brain bleed after an injury is imaged under head trauma, which covers subdural and epidural bleeds.',
+  },
+  {
+    match: /\b(?:brain bleed|bleed in brain|bleeding in brain|head bleed|brain hemorrhage|intracranial hemorrhage|intracranial bleed|ich)\b/, always: true,
+    unless: /\b(subarachnoid|sah|subdural|sdh|epidural|edh|intraparenchymal|intracerebral|aneurysm|aneurysmal)\b/,
+    topics: [{ topic: STROKE_TOPIC, query: 'intraparenchymal hemorrhage' }, 'Head Trauma', ANEURYSM_TOPIC],
+    reason: 'ACR files a brain bleed by its type: a bleed within the brain under stroke, a subdural or epidural bleed under head trauma, and a subarachnoid bleed under aneurysm.',
+  },
+  // reviewed: the aneurysm and subarachnoid topic is a head topic as well as a
+  // vascular one, so a search that names the head still reaches it
+  {
+    match: /\b(?:avm|avf|arteriovenous (?:malformation|fistula)|vascular malformation|sah|subarachnoid(?: hemorrhage| bleed)?)\b/, always: true,
+    when: /\b(brain|head|cerebral|intracranial|cranial|dural)\b/, unless: /\b(pavm|lung|pulmonary|abscess)\b/,
+    topics: [ANEURYSM_TOPIC],
+    reason: 'ACR files brain vascular malformations and subarachnoid hemorrhage under one topic.',
+  },
+  // not yet reviewed: a cavernoma is a brain lesion; "AVM" alone can be brain, lung or limb
+  {
+    match: /\b(?:cavernoma|cavernous malformation)\b/, always: true, unless: /\b(liver|hepatic|spine|spinal|cord)\b/,
+    topics: [ANEURYSM_TOPIC],
+    reason: 'ACR files a cavernoma with the other brain vascular malformations.',
+  },
+  {
+    match: /\b(?:avm|arteriovenous malformation)\b/, always: true, only: true,
+    topics: [ANEURYSM_TOPIC, 'Pulmonary Arteriovenous Malformation (PAVM)', 'Clinically Suspected Vascular Malformation of the Extremities'],
+    reason: 'ACR files an arteriovenous malformation by where it is: the brain, the lung or a limb.',
+  },
+  // reviewed: an arm that cannot be moved is a stroke or a shoulder question
+  {
+    match: /\b(?:cant|cannot|unable to|not able to) (?:move|lift|raise) (?:the |my |his |her |left |right )*arm\b/, always: true,
+    unless: /\b(trauma|fall|fell|injury|dislocat\w+|fracture)\b/,
+    topics: [STROKE_TOPIC, 'Acute Shoulder Pain', { topic: 'Chronic Shoulder Pain', query: 'frozen shoulder' }],
+    reason: 'An arm that cannot be moved can be weakness from a stroke or a shoulder that will not move (an acute injury or a frozen shoulder).',
+  },
+  // reviewed: one weak leg is a stroke question as well as a cord question
+  {
+    match: /\bleg weakness\b|\bweak leg\b|\bweakness (?:in|of) (?:the |my |his |her |one |left |right )*leg\b/, always: true,
+    when: /\b(sudden|suddenly|acute|left|right|one)\b/, unless: WEAK_LEG_SETTLED,
+    topics: [STROKE_TOPIC, 'Myelopathy', 'Low Back Pain'],
+    reason: 'Sudden weakness of one leg can be a stroke, a spinal cord problem or a nerve root problem.',
+  },
+  {
+    match: /\bleg weakness\b|\bweak leg\b|\bweakness (?:in|of) (?:the |my |his |her )*leg\b/, always: true, unless: WEAK_LEG_SETTLED,
+    topics: ['Myelopathy', STROKE_TOPIC, 'Low Back Pain'],
+    reason: 'Leg weakness can come from the spinal cord, the brain or a nerve root.',
+  },
+  // reviewed: a third nerve palsy from an aneurysm also droops the lid
+  {
+    match: /\b(?:ptosis|droopy eyelid|drooping eyelid|eyelid droop|anisocoria|unequal pupils)\b/, always: true, unless: /\b(miosis|horner|horners|trauma)\b/,
+    topics: ['Horner Syndrome', ANEURYSM_TOPIC, 'Cranial Neuropathy'],
+    reason: 'A drooping lid or unequal pupils can be Horner syndrome or a third nerve palsy, which can be the first sign of an aneurysm.',
+  },
+  // reviewed: lower abdominal pain is not female pelvic pain in a man
+  {
+    match: /\blower (?:abdominal|abdomen|belly|stomach) pain\b|\bpain in (?:the |my |his )?lower (?:abdomen|belly|stomach)\b/, always: true, sex: 'male',
+    unless: /\b(left|right|llq|rlq|scrot\w+|testic\w+|groin|flank)\b/,
+    topics: ['Right Lower Quadrant Pain', 'Left Lower Quadrant Pain', 'Acute Nonlocalized Abdominal Pain'],
+    reason: 'ACR files lower abdominal pain in a man by its side. Which fits?',
+  },
+  {
+    match: /\blower (?:abdominal|abdomen|belly|stomach) pain\b|\bpain in (?:the |my |her |his )?lower (?:abdomen|belly|stomach)\b/, always: true, sex: 'unstated',
+    unless: /\b(left|right|llq|rlq|scrot\w+|testic\w+|groin|flank|postmenopausal|premenopausal|menopaus\w+|vaginal|period|menstrual|ectopic|hcg)\b/,
+    topics: ['Right Lower Quadrant Pain', 'Left Lower Quadrant Pain', PELVIC_PAIN_TOPIC, 'Acute Nonlocalized Abdominal Pain'],
+    reason: 'ACR files lower abdominal pain by its side, and pelvic pain in women as a topic of its own.',
+  },
+  // reviewed: a rising PSA is read with the treatment history
+  {
+    match: /\b(?:rising|elevated|high|increasing) psa\b|\bpsa (?:rising|elevated|increasing|high)\b/, always: true,
+    unless: new RegExp(`${PSA_TREATED.source}|\\b(biopsy|surveillance|staging|screening)\\b`),
+    topics: ['Pretreatment Detection, Surveillance, and Staging of Prostate Cancer', 'Post-Treatment Follow-up of Prostate Cancer'],
+    reason: 'A rising PSA is imaged differently before and after prostate cancer treatment.',
+  },
+  // reviewed: a groin injury in a man may be scrotal
+  {
+    match: /\bgroin (?:injury|trauma)\b|\b(?:injured|hurt|kicked in|hit in) (?:the |his |my )?groin\b/, always: true, sex: 'male',
+    unless: /\b(hip|scrot\w+|testic\w+|hernia)\b/,
+    topics: [{ topic: SCROTAL_MASS_TOPIC, query: 'scrotal trauma' }, 'Acute Hip Pain', { topic: 'Hernia', query: 'groin hernia' }],
+    reason: 'A groin injury in a man can be an injury to the scrotum, the hip or the groin wall.',
+  },
+  {
+    match: /\bgroin (?:injury|trauma)\b|\b(?:injured|hurt|kicked in|hit in) (?:the |his |my )?groin\b/, always: true, sex: 'unstated',
+    unless: /\b(hip|scrot\w+|testic\w+|hernia)\b/,
+    topics: ['Acute Hip Pain', { topic: SCROTAL_MASS_TOPIC, query: 'scrotal trauma' }, { topic: 'Hernia', query: 'groin hernia' }],
+    reason: 'A groin injury can be an injury to the hip, the scrotum or the groin wall.',
+  },
+  // reviewed: a disc or stenosis with no level named may be cervical
+  {
+    match: /\b(?:herniated dis[ck]|dis[ck] herniation|slipped dis[ck]|bulging dis[ck]|spinal stenosis)\b/, always: true,
+    unless: /\b(cervical|neck|arm|arms|lumbar|low|lower|back|lbp|leg|legs|sciatica|thoracic|buttock|foot|myelopathy|claudication)\b/,
+    topics: ['Low Back Pain', 'Cervical Pain or Cervical Radiculopathy', 'Thoracic Back Pain'],
+    reason: 'A herniated disc or spinal stenosis is most often lumbar, but ACR files it by level.',
+  },
+  // reviewed: a numb hand is carpal tunnel more often than the neck
+  {
+    match: /\b(?:hand|hands|finger|fingers) (?:numbness|tingling)\b|\b(?:numb|tingling|numbness in|tingling in) (?:the |my |his |her )?(?:hand|hands|finger|fingers)\b/, always: true,
+    unless: /\b(neck|cervical|overhead|raising|raised|stroke|sudden|suddenly|face|facial|speech|trauma|fall|fell)\b/,
+    topics: [{ topic: 'Chronic Hand and Wrist Pain', query: 'carpal tunnel' }, 'Cervical Pain or Cervical Radiculopathy', 'Thoracic Outlet Syndrome'],
+    reason: 'A numb or tingling hand can be carpal tunnel syndrome (filed under chronic hand and wrist pain), a pinched nerve in the neck or thoracic outlet syndrome.',
+  },
+  // reviewed: orbital pseudotumor is not pseudotumor cerebri
+  {
+    match: /\borbital pseudotumor\b|\bpseudotumor of orbit\b|\borbital inflammatory (?:disease|syndrome|pseudotumor)\b/, always: true,
+    topics: ['Orbits, Vision, and Visual Loss'],
+    reason: 'Orbital pseudotumor is inflammation of the orbit. ACR covers it under its orbit topic (proptosis, ophthalmoplegia, orbital cellulitis).',
+  },
+  // reviewed: trouble walking is weakness as often as ataxia
+  {
+    match: /\b(?:trouble|difficulty|problems?) walking\b|\bwalking (?:difficulty|problems?)\b/, always: true,
+    unless: /\b(pain|painful|fall|fell|trauma|injury|ankle|knee|hip|foot|dizz\w+|vertigo|atax\w+)\b/,
+    topics: ['Dizziness and Ataxia', 'Myelopathy', 'Low Back Pain', STROKE_TOPIC],
+    reason: 'Trouble walking can be a balance problem or weakness from the spinal cord, the nerve roots or the brain.',
+  },
+  // reviewed (unsure): the evaluation is the same, the "Parkinsonian" title confuses
+  {
+    match: /\b(?:essential tremor|(?:(?:hand|hands|arm|head|action|intention|postural) )?tremors?|dystonia)\b/, always: true, only: true,
+    topics: ['Movement Disorders and Neurodegenerative Diseases'],
+    reason: 'ACR has no scenario named for tremor or dystonia. They fall under its movement disorders topic, where the closest scenario is titled "Parkinsonian syndromes".',
   },
   {
     phrase: 'sarcoma', always: true,
@@ -2668,18 +2920,68 @@ const CLARIFY = [
     topics: ['Acutely Limping Child Up To Age 5'],
     reason: 'ACR has no scenario named for a toddler fracture; it covers the limping young child.',
   },
+  // Asked only when the search would otherwise end without an answer.
+  // reviewed: add the limb itself; ACR has no scenario for an isolated nerve palsy
+  {
+    phrase: 'foot drop', topics: ['Low Back Pain', 'Plexopathy', 'Myelopathy', STROKE_TOPIC],
+    reason: 'ACR has no scenario for foot drop or for an isolated peroneal nerve palsy at the knee.',
+  },
+  {
+    phrase: 'wrist drop',
+    topics: ['Cervical Pain or Cervical Radiculopathy', 'Plexopathy', STROKE_TOPIC, { topic: 'Chronic Elbow Pain', query: 'elbow pain chronic nerve abnormality suspected' }],
+    reason: 'ACR has no scenario for wrist drop or for an isolated radial nerve palsy; a nerve problem at the elbow is the closest limb scenario.',
+  },
+  // reviewed: testicular in a male, ovarian in a female
+  { phrase: 'torsion', topics: [{ topic: SCROTAL_PAIN_TOPIC, sex: 'male' }, { topic: PELVIC_PAIN_TOPIC, sex: 'female' }] },
+  // reviewed: answers are sex specific; ACR's pelvic pain topics are female
+  {
+    match: /\b(?:pelvic|pelvis) pain\b/, sex: 'male',
+    topics: ['Right Lower Quadrant Pain', 'Left Lower Quadrant Pain', { topic: 'Hernia', query: 'groin hernia' }, SCROTAL_PAIN_TOPIC, 'Anorectal Disease'],
+    reason: 'The ACR pelvic pain topics are written for women. For a man these are the closest topics.',
+  },
+  // reviewed: needs a question, not a joint replacement
+  {
+    match: /\b(?:hormone|estrogen) replacement\b|\bhrt\b/,
+    topics: ['Female Breast Cancer Screening', 'Osteoporosis and Bone Mineral Density', 'Abnormal Uterine Bleeding', 'Transgender Breast Cancer Screening'],
+    reason: 'ACR has no topic for hormone replacement therapy itself. These are the imaging questions it most often raises.',
+  },
 ];
 
+// Words that add no clinical content beside an "only" phrase.
+const CLARIFY_FILLER = /^(?:sudden|suddenly|acute|new|onset|chronic|left|right|bilateral|patient|pt|year|years|old|yo|man|woman|male|female|elderly|adult|\d+)$/;
+
 function clarify(query, scenarios, { always = false } = {}) {
-  const text = ` ${cleanWords(query)} `;
-  const entry = CLARIFY.find(c => !!c.always === always && text.includes(` ${c.phrase} `) && !(c.unless && c.unless.test(text)));
+  const text = ` ${cleanWords(query)} `.replace(/\bthe\b/g, ' ').replace(/\s+/g, ' ');
+  const qualifiers = extractQualifiers(query);
+  const sex = qualifiers.sex || 'unstated';
+  const entry = CLARIFY.find(c => {
+    if (!!c.always !== always) return false;
+    const hit = c.match ? c.match.exec(text) : (text.includes(` ${c.phrase} `) ? [c.phrase] : null);
+    if (!hit) return false;
+    if (c.unless && c.unless.test(text)) return false;
+    if (c.when && !c.when.test(text)) return false;
+    if (c.sex && c.sex !== sex) return false;
+    if (c.only && text.replace(hit[0], ' ').split(' ').some(w => w && !STOPWORDS.has(w) && !CLARIFY_FILLER.test(w))) return false;
+    return true;
+  });
   if (!entry) return null;
   const { topicCounts } = buildIndex(scenarios);
-  const topics = entry.topics.filter(t => topicCounts.has(t)).map(t => ({ topic: t, count: topicCounts.get(t), query: t }));
+  const child = qualifiers.age === 'pediatric';
+  const seen = new Set();
+  const topics = [];
+  for (const item of entry.topics) {
+    const t = typeof item === 'string' ? { topic: item } : item;
+    if (t.sex && qualifiers.sex && t.sex !== qualifiers.sex) continue;
+    const swapped = child && CHILD_TOPIC[t.topic];
+    const topic = swapped || t.topic;
+    if (!topicCounts.has(topic) || seen.has(topic)) continue;
+    seen.add(topic);
+    topics.push({ topic, count: topicCounts.get(topic), query: swapped ? topic : t.query || topic });
+  }
   if (topics.length === 0) return null;
   const reason = entry.reason || `ACR has no scenario named for ${entry.phrase}.`;
   if (topics.length === 1) return { mode: 'guide', topic: topics[0].topic, related: [], notice: reason };
-  return { mode: 'choose', topics, notice: `${reason} Which of these fits the presentation?` };
+  return { mode: 'choose', topics, notice: /\?$/.test(reason) ? reason : `${reason} Which of these fits the presentation?` };
 }
 
 // ---- Clinical inference, offered as a question ----
@@ -2818,6 +3120,10 @@ const INFERENCES = [
     offer: ['Lower Urinary Tract Symptoms: Suspicion of Benign Prostatic Hyperplasia'], sex: 'male',
     reason: 'A weak stream, hesitancy and nocturia in a man suggest benign prostatic enlargement.' },
   // children
+  // Clinician reviewed 2026-11-11: the adult appendicitis entry needs a child's twin.
+  { id: 'appendicitis-child', child: true, all: [/\b(?:periumbilical|belly button|umbilical) pain\b.*\b(?:moved|moving|migrat\w+|shifted|localiz\w+) to (?:the )?(?:right|rlq)\b/], dx: /\bappendi\w+\b/,
+    offer: ['Suspected Appendicitis-Child'],
+    reason: 'Periumbilical pain that moves to the right lower abdomen is the classic course of appendicitis.' },
   { id: 'intussusception', child: true, all: [/\bcurrant jelly\b/], dx: /\bintussus\w+\b/, offer: ['Abdominal Pain-Child'],
     reason: 'Currant jelly stool in a young child suggests intussusception, which ACR files under abdominal pain in children.' },
   { id: 'aspirated-foreign-body', child: true, all: [/\b(choking|choked)\b/, /\b(wheez\w+|stridor|cough\w*)\b/], dx: /\bforeign body\b/,

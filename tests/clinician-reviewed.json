@@ -1,0 +1,106 @@
+{
+  "_note": "Answers a clinician reviewed on 2026-11-11. review: the row id in docs/review/verdicts/2026-11-11_flagged_by_generator.csv. Keys are explained in clinician-reviewed.test.mjs. Change a case only on a clinician's word.",
+  "cases": [
+    { "review": "F-01", "q": "neck dissection", "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer" },
+    { "review": "F-01", "q": "post neck dissection", "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer" },
+    { "review": "F-01", "q": "carotid dissection", "first": "[Dd]issection" },
+
+    { "review": "F-02", "q": "cva tenderness", "mode": "choose", "shows": ["Pyelonephritis", "Stone"], "not": "Cerebrovascular|[Ss]troke" },
+    { "review": "F-02", "q": "fever and cva tenderness", "mode": "choose", "first": "Pyelonephritis", "not": "Cerebrovascular|[Ss]troke" },
+    { "review": "F-02", "q": "cva", "topic": "Cerebrovascular Diseases-Stroke and Stroke-Related Conditions" },
+
+    { "review": "F-03", "q": "urinary retention in a woman", "mode": "choose", "shows": ["Pelvic Floor", "Low Back Pain", "Fibroids|Adnexal"], "not": "Prostat" },
+    { "review": "F-03", "q": "urinary retention", "mode": "choose", "shows": ["Prostatic", "Pelvic Floor", "Low Back Pain"] },
+    { "review": "F-03", "q": "urinary retention man", "mode": "choose", "first": "Prostatic", "not": "Females" },
+    { "review": "F-03", "q": "urinary retention back pain", "first": "cauda equina" },
+    { "review": "F-03", "q": "luts woman", "mode": "choose", "not": "Prostat" },
+
+    { "review": "F-04", "q": "toddler fracture", "topic": "Acutely Limping Child Up To Age 5", "not": "[Ss]kull|abuse" },
+
+    { "review": "F-05", "q": "known aortic aneurysm, no dissection", "mode": "choose", "first": "Acute Aortic Syndrome", "not": "Cerebrovascular" },
+
+    { "review": "F-06", "q": "acute type b dissection", "topic": "Suspected Acute Aortic Syndrome" },
+    { "review": "F-06", "q": "type b dissection", "mode": "choose", "first": "Acute Aortic Syndrome", "shows": ["Follow-Up"] },
+    { "review": "F-06", "q": "type b dissection follow up", "topic": "Thoracic Aortic Aneurysm or Dissection-Treatment Planning and Follow-Up" },
+
+    { "review": "F-07", "q": "brain bleed", "mode": "choose", "shows": ["Stroke", "Head Trauma", "Subarachnoid"] },
+    { "review": "F-07", "q": "ich", "mode": "choose", "shows": ["Stroke", "Head Trauma", "Subarachnoid"] },
+    { "review": "F-07", "q": "intracranial hemorrhage", "mode": "choose", "shows": ["Stroke", "Head Trauma", "Subarachnoid"] },
+    { "review": "F-07", "q": "brain bleed after fall", "topic": "Head Trauma" },
+    { "review": "F-07", "q": "intraparenchymal hemorrhage", "first": "Intraparenchymal" },
+
+    { "review": "F-08", "q": "cant move arm", "mode": "choose", "shows": ["Stroke", "Acute Shoulder Pain", "Chronic Shoulder Pain"] },
+    { "review": "F-08", "q": "suddenly cant move left arm", "mode": "choose", "first": "Stroke", "shows": ["Shoulder"] },
+
+    { "review": "F-09", "q": "sarcoma", "mode": "choose", "shows": ["Soft Tissue Masses", "Bone Tumors"] },
+    { "review": "F-09", "q": "sarcoma femur", "mode": "choose", "shows": ["Soft Tissue Masses", "Bone Tumors"], "not": "[Oo]steomyelitis" },
+
+    { "review": "F-10", "q": "ectopic", "topic": "First Trimester Vaginal Bleeding" },
+    { "review": "F-10", "q": "ectopic pregnancy pelvic pain", "topic": "First Trimester Vaginal Bleeding" },
+
+    { "review": "F-11", "q": "leg weakness", "mode": "choose", "shows": ["Myelopathy", "Stroke"] },
+    { "review": "F-11", "q": "sudden left leg weakness", "mode": "choose", "first": "Stroke", "shows": ["Myelopathy"] },
+    { "review": "F-11", "q": "bilateral leg weakness", "topic": "Myelopathy" },
+
+    { "review": "F-12", "q": "ptosis", "mode": "choose", "shows": ["Horner", "Aneurysm"] },
+    { "review": "F-12", "q": "anisocoria", "mode": "choose", "shows": ["Horner", "Aneurysm"] },
+    { "review": "F-12", "q": "ptosis miosis", "shows": ["Horner"] },
+
+    { "review": "F-13", "q": "lower abdominal pain man", "mode": "choose", "shows": ["Lower Quadrant"], "not": "Postmenopausal|Reproductive|Females|Uterine|Adnexal" },
+    { "review": "F-13", "q": "pelvic pain man", "mode": "choose", "not": "Postmenopausal|Reproductive|Females|Uterine|Adnexal" },
+    { "review": "F-13", "q": "pelvic pain woman", "mode": "choose", "shows": ["Pelvic Pain"], "not": "Scrotal|Prostat" },
+
+    { "review": "F-14", "q": "rising psa after radiation", "first": "recurrent disease suspected, post nonsurgical" },
+    { "review": "F-14", "q": "rising psa after prostatectomy", "first": "recurrent disease suspected, post radical prostatectomy" },
+    { "review": "F-14", "q": "rising psa", "mode": "choose", "shows": ["Pretreatment", "Post-Treatment"] },
+
+    { "review": "F-15", "q": "torsion boy", "topic": "Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass" },
+    { "review": "F-15", "q": "torsion man", "topic": "Acute Onset of Scrotal Pain-Without Trauma, Without Antecedent Mass" },
+    { "review": "F-15", "q": "torsion woman", "topic": "Acute Pelvic Pain in the Reproductive Age Group" },
+    { "review": "F-15", "q": "torsion", "mode": "choose", "shows": ["Scrotal", "Pelvic Pain"] },
+
+    { "review": "F-16", "q": "back pain weight loss", "first": "cancer suspected|mets suspected" },
+    { "review": "F-16", "q": "low back pain with weight loss and night sweats", "first": "mets suspected" },
+    { "review": "F-16", "q": "thoracic back pain night sweats", "first": "cancer suspected" },
+
+    { "review": "F-17", "q": "groin injury man", "mode": "choose", "first": "Scrotal", "shows": ["Hip", "Hernia"] },
+    { "review": "F-17", "q": "groin injury", "mode": "choose", "shows": ["Scrotal", "Hip"] },
+
+    { "review": "F-18", "q": "cervical disc herniation", "topic": "Cervical Pain or Cervical Radiculopathy" },
+    { "review": "F-18", "q": "cervical spinal stenosis", "topic": "Cervical Pain or Cervical Radiculopathy" },
+    { "review": "F-18", "q": "herniated disc", "mode": "choose", "first": "Low Back Pain", "shows": ["Cervical"] },
+
+    { "review": "F-19", "q": "bilious vomiting infant", "first": "malrotation" },
+    { "review": "F-19", "q": "volvulus infant", "first": "bowel obstruction" },
+
+    { "review": "F-20", "q": "child periumbilical pain moved to the right", "mode": "choose", "shows": ["Suspected Appendicitis-Child"] },
+
+    { "review": "F-21", "q": "hand numbness", "mode": "choose", "shows": ["Hand and Wrist", "Cervical", "Thoracic Outlet"] },
+    { "review": "F-21", "q": "tingling fingers at night", "mode": "choose", "shows": ["Hand and Wrist", "Cervical", "Thoracic Outlet"] },
+    { "review": "F-21", "q": "carpal tunnel", "first": "carpal tunnel" },
+
+    { "review": "F-22", "q": "orbital pseudotumor", "topic": "Orbits, Vision, and Visual Loss" },
+    { "review": "F-22", "q": "pseudotumor cerebri", "first": "intracranial hypertension" },
+
+    { "review": "F-23", "q": "foot drop", "mode": "choose", "shows": ["Low Back Pain", "Stroke"] },
+    { "review": "F-23", "q": "wrist drop", "mode": "choose", "shows": ["Elbow", "Stroke", "Cervical"] },
+
+    { "review": "F-24", "q": "trouble walking", "mode": "choose", "shows": ["Ataxia", "Myelopathy", "Low Back Pain"] },
+
+    { "review": "F-25", "q": "essential tremor", "topic": "Movement Disorders and Neurodegenerative Diseases" },
+    { "review": "F-25", "q": "tremor", "topic": "Movement Disorders and Neurodegenerative Diseases" },
+
+    { "review": "F-26", "q": "hormone replacement therapy", "mode": "choose", "not": "[Aa]rthroplasty|replaced" },
+    { "review": "F-26", "q": "knee replacement pain", "first": "Knee replaced" },
+
+    { "review": "F-27", "q": "headache no red flags", "first": "no red flags", "shows": ["migraine", "tension", "trigeminal"], "not": "fever|neuro deficit|cancer|sudden onset|pregnant|immunocompromised" },
+
+    { "review": "F-28", "q": "head sah", "topic": "Cerebrovascular Diseases-Aneurysm, Vascular Malformation, and Subarachnoid Hemorrhage" },
+    { "review": "F-28", "q": "brain avm", "topic": "Cerebrovascular Diseases-Aneurysm, Vascular Malformation, and Subarachnoid Hemorrhage" },
+    { "review": "F-28", "q": "sah", "topic": "Cerebrovascular Diseases-Aneurysm, Vascular Malformation, and Subarachnoid Hemorrhage" },
+
+    { "review": "F-29", "q": "child abuse", "topic": "Suspected Physical Abuse-Child" },
+
+    { "review": "F-30", "q": "diabetes insipidus", "first": "Diabetes insipidus" }
+  ]
+}
