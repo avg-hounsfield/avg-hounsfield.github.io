@@ -20,6 +20,8 @@ tools/*
 !tools/build_semantic_index.py
 !tools/semantic_fallback_embed.py
 !tools/eval_semantic_fallback.mjs
+# Clinician review packet generator (writes docs/review/)
+!tools/build_review_packet.mjs
 
 # ML models (large binaries kept out of git by default).
 # Tracked exceptions (added via `git add -f`): models/acr-minilm/,
