@@ -42,7 +42,12 @@ export function judge(c, result) {
   if (c.topic && result.topic !== c.topic) reasons.push(`topic ${result.topic}`);
   if (c.name) {
     const re = new RegExp(c.name);
-    const hit = result.mode === 'guide' || result.mode === 'choose' ? shown.some(n => re.test(n)) : re.test(shown[0] || '');
+    // A chooser offers whole topics, so like a guide it is judged by the
+    // scenarios those topics hold as well as by their titles.
+    const offered = result.mode === 'choose'
+      ? [...shown, ...scenarios.filter(s => result.topics.some(t => t.topic === s.topic)).map(s => s.name)]
+      : shown;
+    const hit = result.mode === 'guide' || result.mode === 'choose' ? offered.some(n => re.test(n)) : re.test(shown[0] || '');
     if (!hit) reasons.push(`first "${shown[0] || ''}" !~ /${c.name}/`);
   }
   if (c.not) for (const name of shown) if (new RegExp(c.not).test(name)) reasons.push(`shown "${name}" ~ /${c.not}/`);

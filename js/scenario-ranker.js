@@ -779,8 +779,8 @@ const CONTEXT_ALIASES = [
   { phrase: 'vomiting', when: /\b(headache|ha)\b/, to: '', before: true },
   { phrase: 'nausea', when: /\b(headache|ha)\b/, to: '', before: true },
   // An isolated facial droop is a cranial neuropathy, not a stroke.
-  { phrase: 'facial droop', when: /\b(isolated|bell|bells|palsy|peripheral)\b/, to: 'facial weakness', before: true },
-  { phrase: 'face droop', when: /\b(isolated|bell|bells|palsy|peripheral)\b/, to: 'facial weakness', before: true },
+  { phrase: 'facial droop', when: /\b(isolated|bell|bells|palsy|peripheral)\b|\bno (?:stroke|cva|tia)\b/, to: 'facial weakness', before: true },
+  { phrase: 'face droop', when: /\b(isolated|bell|bells|palsy|peripheral)\b|\bno (?:stroke|cva|tia)\b/, to: 'facial weakness', before: true },
   { phrase: 'torsion', when: /\b(scrotum|scrotal|testis|testicle|testicular|testes)\b/, to: 'scrotum pain acute' },
   { phrase: 'torsion', when: /\b(ovary|ovarian|adnexa|adnexal|pelvis|pelvic)\b/, to: 'pelvis pain gynecological' },
   { phrase: 'abscess', when: /\b(thigh|leg|arm|forearm|hand|foot|calf|shoulder|hip|knee|elbow|wrist|ankle|neck|extremity|buttock|gluteal|groin|lower|upper)\b/, to: 'soft tissue infection' },
@@ -887,6 +887,15 @@ const IMPLIES = {
   trauma: ['fall', 'blunt', 'penetrating', 'ballistic'],
   cancer: ['met'],
   infection: ['septic', 'sepsis', 'osteomyelitis', 'abscess', 'cellulitis'],
+  projectile: ['pyloric'],
+  dissection: ['aortic'],
+};
+
+// Words an alias writes for a diagnosis ("tearing chest pain" is read as acute
+// aortic syndrome): when the search rules the diagnosis out, they go with it.
+const NEGATION_KIN = {
+  dissection: ['aortic', 'aorta', 'syndrome'],
+  stroke: ['ischemic', 'tia'],
 };
 
 // Scenario names this long are the variant text itself, not a name.
@@ -1022,6 +1031,7 @@ const NEGATED_AFTER_CLAUSE_RE = new RegExp(`(^|[,;.:]\\s*|\\b(?:and|but|with|the
 const NEGATED_AFTER_WORD_RE = new RegExp(`\\b([a-z]+) ${NEGATED_AFTER}${CLAUSE_END}`, 'g');
 const NEGATING_VERB_RE = /\b(?:(?:has|have|had|was|were|been) )*(?:ruled out|excluded|negative for)\s+(?:a |an |the |any )?(?=[a-z])/g;
 function readTrailingNegation(q) {
+  for (const [re, to] of NEGATIVE_TESTS) q = q.replace(re, to);
   return q
     .replace(NEGATED_AFTER_CLAUSE_RE, (m, lead, words) => `${lead} no ${words} xbreakx `)
     .replace(NEGATED_AFTER_WORD_RE, ' no $1 xbreakx ')
@@ -1081,6 +1091,14 @@ function normalizeSearch(query, { keepCommas = false } = {}) {
   // A sentence break ends a negation: "Not goiter. Euthyroid." negates goiter only.
   q = q.replace(/[.;]\s/g, ' xbreakx ');
   // A comma or "+" joins one complaint to the next, like "and".
+  // A comma ends a negation when a phrase of its own follows it: "no
+  // deformity, elbow pain only" negates the deformity alone. A list goes on
+  // being negated: "no fever, chills" and "no fever, chills, or night sweats".
+  q = q.replace(/\b(no|not|without|denies|denied|denying|never)\b([^,.;]*),\s*(?=([^,.;]*))/g, (m, neg, scope, next) => {
+    const words = next.trim().split(/\s+/).filter(Boolean);
+    const list = words.length <= 1 || /^(or|nor|and)\b/.test(next.trim()) || /\b(or|nor)\b/.test(next);
+    return list ? m : `${neg}${scope} xbreakx `;
+  });
   if (keepCommas) q = q.replace(/\s*[&+]\s*/g, ' and ').replace(/,\s*/g, ' xcommax ');
   q = cleanWords(q)
     .replace(/\b(ectopic|molar) pregnancy\b/g, (m, w) => (w === 'molar' ? 'gestational trophoblastic disease' : w))
@@ -1332,6 +1350,8 @@ function classifyWords(words, index, studyAnatomy = new Set(), ownWords = null) 
   // negation ("leg swelling, DVT ruled out").
   const own = ownWords ? t => ownWords.has(t) : () => true;
   const overruled = new Set(negated.filter(t => !own(t)));
+  // A negated diagnosis takes the words an alias wrote for it along.
+  for (const t of [...overruled]) for (const kin of NEGATION_KIN[t] || []) if (!own(kin)) overruled.add(kin);
   const stated = new Set([...required, ...soft].filter(t => !overruled.has(t)));
   const negatedSet = new Set(negated.filter(t => !stated.has(t)));
   return {
@@ -1666,7 +1686,7 @@ function buildIndex(scenarios) {
     const lowerName = s.name.toLowerCase();
     const isPregnant = PREGNANT_NAME_RE.test(cleanWords(shortName)) && !/\b(not pregnant|nonpregnant|postpartum|peripartum)\b/i.test(shortName);
     return {
-      scenario: s, nameText, detail, keywords, named, all, lowerName, population: populationOf(s), isPregnant,
+      scenario: s, nameText, detail, keywords, named, all, lowerName, longName, population: populationOf(s), isPregnant,
       // The side a scenario is written for, by a side word or a quadrant; a
       // name too long to be a name is read from its text.
       sides: new Set(SIDES_LIST.filter(side => SIDE_WORDS[side].some(w => (longName ? detail : nameText).positive.has(w)))),
@@ -1765,7 +1785,9 @@ function fitsPopulation(doc, { pregnant, notPregnant, age, years, sides, gcs, se
 function contradictsNegation(doc, negated, { nameOnly = false } = {}) {
   // For a model suggestion the name alone decides: "Seizure, post head trauma"
   // is no answer to "no head injury" whatever its longer text also negates.
-  const statesPositively = t => doc.nameText.positive.has(t) && !doc.nameText.negative.has(t) && (nameOnly || !doc.detail.negative.has(t));
+  // A name too long to be a name (the variant text itself) is read from its text.
+  const stated = doc.longName ? doc.detail : doc.nameText;
+  const statesPositively = t => stated.positive.has(t) && !stated.negative.has(t) && (nameOnly || !doc.detail.negative.has(t));
   return negated.some(t => statesPositively(t) || (IMPLIES[t] || []).some(statesPositively));
 }
 
@@ -2331,6 +2353,8 @@ function titleCompatible(topic, index, asked, scope, negated) {
 // antonyms. The organ check always uses every body part the search named.
 function suggestible(doc, index, parsed, qualifiers, asked, scope, population = qualifiers) {
   if (!fitsPopulation(doc, population)) return false;
+  // A search that names no pregnancy is not shown a scenario written for one.
+  if (!qualifiers.pregnant && doc.isPregnant) return false;
   if (contradictsNegation(doc, parsed.negated)) return false;
   const docRegions = groupsOf([...doc.nameText.positive]);
   if (scope.groups.size && docRegions.size && ![...docRegions].some(g => scope.groups.has(g))) return false;
@@ -2517,6 +2541,8 @@ function limbRecovery(query, parsed, qualifiers, index, scenarios) {
   };
 }
 
+const CHILD_TITLE_RE = /\bChild\b|\bChildren\b|\bInfants?\b|\bPediatric\b|\bNeonat\w+/;
+
 function recover(query, parsed, qualifiers, index, scenarios) {
   const terms = [...new Set([...parsed.required, ...parsed.soft])];
   const knownTerm = t => (index.docFreq.get(t) || 0) > 0;
@@ -2568,6 +2594,9 @@ function recover(query, parsed, qualifiers, index, scenarios) {
     if (docs.length === 0) continue;
     const topics = topicsFor([term], docs, index, asked)
       .filter(topic => !shown.has(topic) && titleCompatible(topic, index, asked, scope, parsed.negated) && !otherLimb(topic))
+      // A search that names no age is not offered a topic written for children
+      // beside an adult one.
+      .filter((topic, i, list) => qualifiers.age || qualifiers.teen || pediatricOnly || !CHILD_TITLE_RE.test(topic) || list.every(t => CHILD_TITLE_RE.test(t)))
       .slice(0, MAX_RECOVERY_TOPICS)
       .map(topic => ({ topic, count: index.topicCounts.get(topic) || 0, query: topicQuery(topic, qualifiers) }));
     if (topics.length === 0) continue;
@@ -2633,9 +2662,242 @@ function clarify(query, scenarios) {
   };
 }
 
+// ---- Clinical inference, offered as a question ----
+// NOT YET CLINICIAN REVIEWED. Each entry is a presentation that implies a
+// diagnosis ACR files under a topic the search never names. A match is never
+// the answer: the result is a "choose" screen that states the reason and asks,
+// with whatever the rules found on their own kept beside it.
+//   all:    every pattern must be stated positively (outside any negation)
+//   raw:    patterns read on the whole search, for cues that are themselves
+//           negative findings ("no flatus", "no pulses")
+//   dx:     the diagnosis in the search's own words; when the search names it
+//           the rules answer and nothing is inferred, and when the search
+//           negates it ("PE ruled out", "not septic") the entry never fires
+//   offer:  ACR topic titles, most likely first
+//   child:  true for entries written for children only; other entries never
+//           fire for a child. A pregnant search is offered only topics that
+//           hold a scenario written for pregnancy.
+// Every entry has a gold case and a negated one in tests/guard-inference-gold.json
+// or tests/inference-gold.json.
+const DYSPNEA = /\b(shortness of breath|short of breath|sob|dyspnea|breathless|breathlessness|cant breathe|trouble breathing|difficulty breathing)\b/;
+const LEG_SWELLING = /\b(?:(?:leg|legs|calf|calves|ankle|ankles) (?:is |are )?(?:swelling|swollen|edema)|(?:swollen|swelling of(?: the)?|edema of(?: the)?) (?:\w+ )?(?:leg|legs|calf|calves|ankle|ankles)|(?:leg|calf|ankle|pedal|lower extremity) edema|calf (?:pain|tenderness))\b/;
+const PE_RISK = /\b(long flight|long haul flight|plane flight|after (?:a |recent |her |his )?(?:\w+ )?(?:surgery|operation|replacement|arthroplasty)|post ?op|postoperative|postpartum|immobil\w+|bed ?bound|bedridden)\b/;
+const FEVER = /\b(fever|fevers|febrile|pyrexia)\b/;
+const INFERENCES = [
+  { id: 'pe-dyspnea-leg', all: [DYSPNEA, LEG_SWELLING], dx: /\b(pe|pulmonary embol\w*|embol\w+)\b/,
+    offer: ['Suspected Pulmonary Embolism', 'Suspected Lower Extremity Deep Vein Thrombosis', 'Suspected and Known Heart Failure'],
+    reason: 'Shortness of breath with leg swelling can mean a pulmonary embolism from a leg clot, or heart failure.' },
+  { id: 'pe-risk', all: [/\b(pleuritic|shortness of breath|short of breath|sob|dyspnea|tachycardi\w+|hypoxi\w+)\b/, PE_RISK], dx: /\b(pe|pulmonary embol\w*|embol\w+)\b/,
+    offer: ['Suspected Pulmonary Embolism'],
+    reason: 'Chest or breathing symptoms after a long flight, surgery or delivery raise the question of pulmonary embolism.' },
+  { id: 'pe-vitals', all: [/\btachycardi\w+\b/, /\b(hypoxi\w+|low oxygen|low sats|desaturat\w+)\b/], dx: /\b(pe|pulmonary embol\w*|embol\w+)\b/,
+    offer: ['Suspected Pulmonary Embolism'],
+    reason: 'Tachycardia with hypoxia raises the question of pulmonary embolism.' },
+  { id: 'pe-hemoptysis-leg', all: [/\b(hemoptysis|coughing (?:up )?blood|coughed (?:up )?blood)\b/, LEG_SWELLING], dx: /\b(pe|pulmonary embol\w*|embol\w+)\b/,
+    offer: ['Suspected Pulmonary Embolism', 'Hemoptysis'],
+    reason: 'Coughing blood with a swollen leg raises the question of pulmonary embolism.' },
+  { id: 'sepsis-rigors', all: [/\b(rigors?|shaking chills|chills)\b/], dx: /\b(sepsis|septic|bacteremia)\b/, offer: ['Sepsis'], alone: true,
+    reason: 'Chills and rigors can be the first sign of sepsis.' },
+  { id: 'sepsis-shock', all: [FEVER, /\b(hypotensi\w+|low blood pressure|low bp|shock)\b/], dx: /\b(sepsis|septic|bacteremia)\b/, offer: ['Sepsis'],
+    reason: 'Fever with low blood pressure raises the question of sepsis.' },
+  { id: 'foosh', all: [/\b(foosh|(?:fall|fell|falling|landed) (?:on|onto) (?:an? |the |his |her |my )?outstretched (?:hand|arm))\b/], dx: /\bwrist\b/,
+    offer: ['Acute Hand and Wrist Trauma', 'Acute Elbow and Forearm Pain'],
+    reason: 'A fall on an outstretched hand most often injures the wrist, and sometimes the elbow.' },
+  { id: 'aortic-syndrome', all: [/\b(tearing|ripping) (?:chest |back |chest and back )?pain\b|\bchest pain\b.*\b(?:radiat\w+|going|through) to (?:the |my )?back\b|\b(unequal|different|asymmetric) (?:arm )?(?:blood pressures?|bps?|pulses)\b|\bpulse deficit\b/],
+    dx: /\b(dissection|aortic|aorta)\b/, offer: ['Suspected Acute Aortic Syndrome'],
+    reason: 'Tearing chest pain, pain through to the back or unequal arm pressures raise the question of an acute aortic syndrome.' },
+  { id: 'acs', all: [/\bcrushing chest (?:pain|pressure)\b|\bchest (?:pain|pressure|tightness)\b.*\b(?:radiat\w+|going|spreading) (?:to|down|into) (?:the |my |his |her )?(?:left |right )?(?:arm|jaw|shoulder)\b|\bchest (?:pressure|tightness)\b.*\b(sweating|sweaty|diaphore\w+)\b/],
+    dx: /\b(acs|acute coronary|coronary|mi|myocardial|infarct\w*|heart attack)\b/, offer: ['Chest Pain-Possible Acute Coronary Syndrome'],
+    reason: 'Crushing chest pain, or chest pressure with sweating or pain into the arm or jaw, raises the question of an acute coronary syndrome.' },
+  { id: 'endocarditis', all: [FEVER, /\bmurmur\b/], dx: /\bendocarditis\b/, offer: ['Infective Endocarditis'],
+    reason: 'Fever with a murmur raises the question of infective endocarditis.' },
+  { id: 'heart-failure', all: [/\b(orthopnea|paroxysmal nocturnal dyspnea|pnd|wakes? up gasping|waking up gasping|cant lie flat|cannot lie flat)\b/],
+    dx: /\b(heart failure|chf|hfref|hfpef|cardiomyopathy)\b/, offer: ['Suspected and Known Heart Failure'],
+    reason: 'Breathlessness lying flat or waking at night gasping suggests heart failure.' },
+  { id: 'dvt-calf', all: [/\b(?:calf|leg) (?:is |was )?(?:swollen|swelling)\b|\b(?:swollen|swelling of(?: the)?) (?:\w+ )?(?:calf|leg)\b/, /\b(one|unilateral|single|left|right|tender|tenderness|red|warm)\b/],
+    dx: /\b(dvt|thrombosis|clot|cellulitis|infection)\b/, offer: ['Suspected Lower Extremity Deep Vein Thrombosis'],
+    reason: 'One swollen, tender calf or leg raises the question of a deep vein thrombosis.' },
+  { id: 'svc', all: [/\b(facial|face) swelling\b|\bswollen face\b/, /\b(distended|engorged|bulging) neck veins\b/], dx: /\b(svc|vena cava)\b/,
+    offer: ['Thoracic Venous Occlusions-Suspected Superior Vena Cava Syndrome'],
+    reason: 'Facial swelling with distended neck veins suggests superior vena cava obstruction.' },
+  { id: 'intracranial-hypotension', all: [/\bheadache\b.*\b(?:worse|worsens|worsening) (?:when |on |with )?(?:standing|upright|sitting up)\b|\bheadache\b.*\bbetter (?:when |on |with )?lying\b|\b(orthostatic|postural) headache\b/],
+    dx: /\bintracranial hypotension\b|\bcsf leak\b/, offer: ['Imaging of Suspected Intracranial Hypotension', 'Headache'],
+    reason: 'A headache that is worse upright and better lying down suggests intracranial hypotension.' },
+  { id: 'horner', all: [/\bptosis\b/, /\bmiosis\b/], dx: /\bhorner\b/, offer: ['Horner Syndrome'],
+    reason: 'Ptosis with miosis is Horner syndrome.' },
+  { id: 'nph', all: [/\b(urinary )?incontinen\w+\b/, /\bgait\b/, /\b(memory|forgetful\w*|dementia|cognitive)\b/], dx: /\b(nph|hydrocephalus)\b/, offer: ['Dementia'],
+    reason: 'Incontinence, gait disturbance and memory loss together suggest normal pressure hydrocephalus, which ACR files under dementia.' },
+  { id: 'parkinsonism', all: [/\b(resting|rest) tremor\b/, /\b(shuffling|bradykinesia|rigidity|cogwheel\w*)\b/], dx: /\bparkinson\w*\b/,
+    offer: ['Movement Disorders and Neurodegenerative Diseases'],
+    reason: 'A resting tremor with a shuffling gait or rigidity suggests parkinsonism.' },
+  { id: 'pyelonephritis', all: [FEVER, /\bflank pain\b/], dx: /\b(pyelo\w*|kidney infection)\b/,
+    offer: ['Acute Pyelonephritis', 'Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)'],
+    reason: 'Fever with flank pain raises the question of pyelonephritis.' },
+  { id: 'renal-colic', all: [/\bcolicky flank pain\b|\bflank pain\b.*\bradiat\w+ to (?:the |my )?groin\b|\bloin to groin\b/], dx: /\b(stones?|urolithiasis|nephrolithiasis|calcul\w+)\b/,
+    offer: ['Acute Onset Flank Pain-Suspicion of Stone Disease (Urolithiasis)'],
+    reason: 'Colicky flank pain going to the groin suggests a ureteral stone.' },
+  { id: 'appendicitis', all: [/\bperiumbilical pain\b.*\b(?:moved|moving|migrat\w+|shifted|localiz\w+) to (?:the )?(?:right|rlq)\b/], dx: /\bappendi\w+\b/,
+    offer: ['Right Lower Quadrant Pain'],
+    reason: 'Periumbilical pain that moves to the right lower abdomen is the classic course of appendicitis.' },
+  { id: 'pancreatitis', all: [/\bepigastric pain\b/, /\b(lipase|radiat\w+ to (?:the |my )?back|going to (?:the |my )?back)\b/], dx: /\bpancreatitis\b/,
+    offer: ['Acute Pancreatitis'],
+    reason: 'Epigastric pain going to the back, or with a high lipase, suggests acute pancreatitis.' },
+  { id: 'mesenteric-ischemia', all: [/\bpain out of proportion\b|\b(?:abdominal|belly|stomach) pain after (?:meals|eating)\b.*\b(weight loss|fear of eating|food fear)\b|\bpostprandial (?:abdominal )?pain\b.*\b(weight loss|fear of eating|food fear)\b/],
+    dx: /\bmesenteric\b|\bischemi\w+\b/, offer: ['Imaging of Mesenteric Ischemia'],
+    reason: 'Abdominal pain out of proportion to the exam, or pain after meals with weight loss, raises the question of mesenteric ischemia.' },
+  { id: 'bowel-obstruction', all: [/\bvomiting\b/, /\b(distension|distention|distended)\b/], raw: [/\b(?:no|not passing|unable to pass|hasnt passed|has not passed) (?:flatus|gas|stool)\b|\bobstipation\b/],
+    dx: /\b(obstruction|sbo)\b/, offer: ['Suspected Small-Bowel Obstruction'],
+    reason: 'Vomiting and distension without passing flatus suggest bowel obstruction.' },
+  { id: 'retroperitoneal-bleed', all: [/\b(warfarin|coumadin|anticoagula\w+|blood thinners?|heparin|eliquis|xarelto|apixaban|rivaroxaban|doac)\b/, /\b(flank|back|groin) pain\b/, /\b(?:falling|dropping|drop in|low|decreasing) (?:hemoglobin|hgb|hematocrit|hct|h and h)\b|\b(?:hemoglobin|hgb|hematocrit|hct) (?:drop|falling|dropping|low)\b/],
+    dx: /\b(retroperitoneal|bleed\w*|hematoma|hemorrhage)\b/, offer: ['Suspected Retroperitoneal Bleed'],
+    reason: 'Flank pain with a falling hemoglobin on anticoagulation raises the question of a retroperitoneal bleed.' },
+  { id: 'limb-ischemia', all: [/\b(?:sudden|acute)\w* (?:onset )?(?:of )?(?:leg|foot|calf) pain\b/, /\b(pale|pallor|cold|pulseless|white)\b/],
+    dx: /\b(ischemi\w+|embol\w+|occlusion)\b/, offer: ['Sudden Onset of Cold, Painful Leg'],
+    reason: 'Sudden leg pain with pallor or absent pulses is acute limb ischemia until shown otherwise.' },
+  { id: 'limb-ischemia-pulses', all: [/\b(?:sudden|acute)\w* (?:onset )?(?:of )?(?:leg|foot|calf) pain\b/], raw: [/\b(?:no|absent|without) (?:palpable )?pulses?\b/],
+    dx: /\b(ischemi\w+|embol\w+|occlusion)\b/, offer: ['Sudden Onset of Cold, Painful Leg'],
+    reason: 'Sudden leg pain with pallor or absent pulses is acute limb ischemia until shown otherwise.' },
+  { id: 'claudication', all: [/\b(?:calf|calves|leg|legs|thigh|buttock) (?:pain|cramps?|cramping|aching)\b.*\b(?:when|while|with|on|after) walking\b/], dx: /\b(claudication|pad|peripheral arter\w+)\b/,
+    offer: ['Lower Extremity Arterial Claudication-Imaging Assessment for Revascularization'],
+    reason: 'Leg pain that comes on with walking suggests arterial claudication.' },
+  { id: 'thoracic-outlet', all: [/\b(arm|hand) (?:numbness|swelling|tingling|pain|weakness)\b/, /\b(overhead|raising (?:the |my |his |her )?arms?|arms? (?:raised|elevated|above))\b/], dx: /\bthoracic outlet\b|\btos\b/,
+    offer: ['Thoracic Outlet Syndrome'],
+    reason: 'Arm symptoms brought on by raising the arms suggest thoracic outlet syndrome.' },
+  { id: 'endometriosis', all: [/\b(painful periods|dysmenorrhea|period pain)\b/, /\b(pain (?:with|during) (?:intercourse|sex)|dyspareunia)\b/], dx: /\bendometrio\w+\b/,
+    offer: ['Endometriosis'],
+    reason: 'Painful periods with pain during intercourse suggest endometriosis.' },
+  { id: 'hip-fracture', all: [/\b(fall|fell|fallen)\b/, /\bshortened\b/, /\bexternally rotated\b/], dx: /\bhip\b/, offer: ['Acute Hip Pain'],
+    reason: 'A shortened, externally rotated leg after a fall suggests a hip fracture.' },
+  { id: 'ankle-inversion', all: [/\binversion injury\b/], dx: /\bankle\b/,
+    offer: ['Acute Trauma to the Ankle'],
+    reason: 'An inversion injury is an ankle injury.' },
+  { id: 'septic-joint', all: [/\b(hot|red|warm)\b.*\bswollen (?:knee|hip|ankle|elbow|shoulder|wrist|joint)\b|\bswollen (?:knee|hip|ankle|elbow|shoulder|wrist|joint)\b.*\b(hot|red|warm)\b/, FEVER],
+    dx: /\b(septic|infection|infected|osteomyelitis)\b/,
+    offer: ['Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)'],
+    reason: 'A hot swollen joint with fever raises the question of septic arthritis.' },
+  { id: 'axial-spa', all: [/\bback pain\b/, /\bmorning stiffness\b/], dx: /\b(spondyl\w+|ankylosing|sacroiliitis)\b/,
+    offer: ['Inflammatory Back Pain: Known or Suspected Axial Spondyloarthropathy', 'Low Back Pain'],
+    reason: 'Back pain with morning stiffness that eases with exercise suggests inflammatory back pain.' },
+  { id: 'stress-fracture', all: [/\b(recruit|runner|marching|running|marathon|dancer)\b/, /\b(shin|tibia|tibial|foot|metatarsal|heel) pain\b/], dx: /\bstress\b|\bfracture\b/,
+    offer: ['Stress (Fatigue/Insufficiency) Fracture, Including Sacrum, Excluding Other Vertebrae'],
+    reason: 'Shin or foot pain from marching or running raises the question of a stress fracture.' },
+  { id: 'osteonecrosis', all: [/\bhip pain\b/, /\b(steroids?|prednisone|glucocorticoids?|corticosteroids?)\b/], dx: /\b(osteonecrosis|avn|avascular)\b/,
+    offer: ['Osteonecrosis', 'Chronic Hip Pain'],
+    reason: 'Hip pain in someone on long-term steroids raises the question of osteonecrosis.' },
+  { id: 'tuberculosis', all: [/\bnight sweats\b/, /\bweight loss\b/, /\b(hemoptysis|coughing (?:up )?blood|cough)\b/], dx: /\b(tb|tubercul\w+)\b/,
+    offer: ['Imaging of Possible Tuberculosis', 'Hemoptysis'],
+    reason: 'Night sweats, weight loss and cough or hemoptysis raise the question of tuberculosis.' },
+  { id: 'thyrotoxicosis', all: [/\bheat intolerance\b/, /\b(weight loss|tremor|palpitations)\b/], dx: /\b(thyro\w+|hyperthyroid\w*|graves)\b/, offer: ['Thyroid Disease'],
+    reason: 'Heat intolerance with weight loss or tremor suggests an overactive thyroid.' },
+  { id: 'hyperparathyroidism', all: [/\b(high|elevated|raised) calcium\b|\bhypercalcemia\b/, /\b(high|elevated|raised) (?:pth|parathyroid hormone)\b|\bpth (?:high|elevated)\b/], dx: /\b(hyperparathyroid\w*|parathyroid adenoma)\b/,
+    offer: ['Parathyroid Adenoma'],
+    reason: 'A high calcium with a high PTH is primary hyperparathyroidism.' },
+  { id: 'renovascular', all: [/\b(resistant|refractory|uncontrolled) hypertension\b/, /\bbruit\b/], dx: /\b(renovascular|renal artery)\b/, offer: ['Renovascular Hypertension'],
+    reason: 'Resistant hypertension with an abdominal bruit raises the question of renal artery stenosis.' },
+  { id: 'bph', all: [/\b(weak stream|hesitancy|nocturia|dribbling|straining to (?:urinate|void|pee))\b.*\b(weak stream|hesitancy|nocturia|dribbling|straining to (?:urinate|void|pee))\b/], dx: /\b(bph|prostat\w+)\b/,
+    offer: ['Lower Urinary Tract Symptoms: Suspicion of Benign Prostatic Hyperplasia'], sex: 'male',
+    reason: 'A weak stream, hesitancy and nocturia in a man suggest benign prostatic enlargement.' },
+  // children
+  { id: 'intussusception', child: true, all: [/\bcurrant jelly\b/], dx: /\bintussus\w+\b/, offer: ['Abdominal Pain-Child'],
+    reason: 'Currant jelly stool in a young child suggests intussusception, which ACR files under abdominal pain in children.' },
+  { id: 'aspirated-foreign-body', child: true, all: [/\b(choking|choked)\b/, /\b(wheez\w+|stridor|cough\w*)\b/], dx: /\bforeign body\b/,
+    offer: ['Ingested or Aspirated Foreign Body-Child'],
+    reason: 'A choking episode followed by wheeze raises the question of an inhaled foreign body.' },
+  { id: 'child-ataxia', child: true, all: [/\b(wobbly|unsteady|staggering)\b/], dx: /\batax\w+\b/, offer: ['Ataxia-Child'],
+    reason: 'An unsteady or wobbly child is evaluated as ataxia.' },
+  { id: 'child-uti', child: true, all: [FEVER, /\b(burning urination|burning when (?:peeing|urinating)|dysuria|painful urination)\b/], dx: /\b(uti|urinary tract infection)\b/,
+    offer: ['Urinary Tract Infection–Child'],
+    reason: 'Fever with painful urination in a child suggests a urinary tract infection.' },
+  { id: 'child-abuse', child: true, infant: true, all: [/\bbruis\w+\b/, /\bfractures?\b/, /\b(different ages|different stages|various stages|multiple|unexplained|no explanation)\b/], dx: /\b(abuse|abusive|nonaccidental|non accidental|nat)\b/,
+    offer: ['Suspected Physical Abuse-Child'],
+    reason: 'Bruises with fractures of different ages in an infant are evaluated under ACR\'s suspected physical abuse topic. This is a question to consider, not a conclusion.' },
+];
+
+// A negative test is the search's own exclusion of what the test looks for.
+const NEGATIVE_TESTS = [
+  [/\b(?:negative|normal|neg|clear|unremarkable) (?:leg |venous |lower extremity |compression )*(?:duplex|doppler|venous ultrasound|venous us)\b|\b(?:duplex|doppler|venous ultrasound) (?:was |is |came back )?(?:negative|normal|neg|clear|unremarkable)\b/g, ' no dvt xbreakx '],
+  [/\b(?:negative|normal|neg|clear|unremarkable) (?:ctpa|ct pulmonary angiogra\w+|ct angiogram of the chest|vq scan|v q scan|vq)\b|\b(?:ctpa|ct pulmonary angiogra\w+|vq scan|v q scan) (?:was |is |came back )?(?:negative|normal|neg|clear|unremarkable)\b/g, ' no pe xbreakx '],
+  [/\b(?:thyroid|tsh|thyroid function|thyroid tests|tfts?) (?:is |was |are |were )?normal\b|\bnormal (?:thyroid function|tsh|tfts?)\b/g, ' no thyroid xbreakx '],
+];
+
+// The words a search states and the words it negates, as two strings, read
+// the way the parser reads negation (reach and boundaries included).
+function polarText(query) {
+  const words = normalizeSearch(query, { keepCommas: true }).split(' ').filter(Boolean);
+  const positive = [];
+  const negative = [];
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    if (NEGATION_WORDS.includes(word)) {
+      let j = i + 1;
+      let reach = 0;
+      for (; j < words.length; j++) {
+        const w = words[j];
+        if (NEGATION_WORDS.includes(w) || NEGATION_BOUNDARY.has(w)) break;
+        negative.push(w);
+        if (!STOPWORDS.has(w) && !/^\d/.test(w) && ++reach >= NEGATION_REACH) { j++; break; }
+      }
+      positive.push('xbreakx');
+      i = j - 1;
+      continue;
+    }
+    positive.push(word);
+  }
+  const tidy = list => ` ${list.join(' ').replace(/\b(xcommax|xbreakx)\b/g, ' , ').replace(/\s+/g, ' ')} `;
+  return { positive: tidy(positive), negative: tidy(negative) };
+}
+
+/**
+ * The inference a search invites, as a choose screen, or null. `base` is what
+ * the rules answered on their own; its topics are kept beside the inferred
+ * ones unless the search negated them.
+ */
+function infer(query, scenarios, base) {
+  const { positive, negative } = polarText(query);
+  const raw = ` ${normalizeSearch(query)} `;
+  const qualifiers = extractQualifiers(query);
+  const index = buildIndex(scenarios);
+  const child = qualifiers.age === 'pediatric';
+  for (const entry of INFERENCES) {
+    if (Boolean(entry.child) !== child) continue;
+    if (entry.infant && !qualifiers.infant) continue;
+    if (entry.sex && qualifiers.sex && qualifiers.sex !== entry.sex) continue;
+    // Named outright, the rules answer; negated, nothing is inferred.
+    if (entry.dx.test(positive) || entry.dx.test(negative)) continue;
+    if (!entry.all.every(re => re.test(positive))) continue;
+    if (entry.raw && !entry.raw.every(re => re.test(raw))) continue;
+    // One cue alone fires only when it is all the search says.
+    if (entry.alone && base && !['none', 'recover', 'too-broad'].includes(base.mode)) continue;
+    const fits = topic => index.topicCounts.has(topic) && index.docs.some(doc => doc.scenario.topic === topic &&
+      (qualifiers.pregnant ? doc.isPregnant : !doc.isPregnant) &&
+      (child ? doc.population !== 'adult' : doc.population !== 'pediatric'));
+    const offered = entry.offer.filter(fits);
+    if (!offered.length) continue;
+    // What the rules found on their own stays beside the inference.
+    const own = base && base.mode === 'choose' ? base.topics.map(t => t.topic) : base && base.mode === 'guide' ? [base.topic] : [];
+    const topics = [...new Set([...offered, ...own])].slice(0, 6)
+      .map(topic => ({ topic, count: index.topicCounts.get(topic) || 0, query: topicQuery(topic, qualifiers) }));
+    // Several complaints keep their own groups, with the inference as one more.
+    let grouping = {};
+    if (base && base.mode === 'choose' && base.grouped && base.groups) {
+      const inferredTopics = topics.filter(t => offered.includes(t.topic));
+      const rest = base.groups.map(g => ({ ...g, topics: g.topics.filter(t => !offered.includes(t.topic)) })).filter(g => g.topics.length);
+      grouping = { grouped: true, groups: [{ complaint: 'the combination (to consider)', topics: inferredTopics, inferred: true }, ...rest] };
+    }
+    return {
+      ...grouping,
+      mode: 'choose', topics, inferred: true,
+      inference: { id: entry.id, reason: entry.reason, topics: offered, reviewed: false },
+      notice: `${entry.reason} ACR files that under ${offered.length > 1 ? 'the first topics below' : `"${offered[0]}"`}. This is a suggestion to consider, not a diagnosis: pick the topic that fits.`,
+    };
+  }
+  return null;
+}
+
 function resolveExact(query, scenarios) {
   let result = resolveTerms(query, scenarios);
   if (result.mode === 'recover' || result.mode === 'none') result = clarify(query, scenarios) || result;
+  result = infer(query, scenarios, result) || result;
   // A size no scenario here names is said to be unused, never ignored silently.
   const sizes = extractSizes(query);
   if (sizes.length && !result.sizeChecked && !['none', 'recover', 'too-broad'].includes(result.mode) && !result.notice) {
@@ -2738,8 +3000,11 @@ function resolveTerms(query, scenarios) {
   // (DVT, dialysis access, limb ischemia). Offer the limb's topics instead.
   const isVague = t => VAGUE_PARTS.has(t) || DROPPABLE.includes(t) || VAGUE_COMPANIONS.has(t);
   const limb = t => VAGUE_PARTS.has(t) && t !== 'upper' && t !== 'lower';
+  // A search that ruled a diagnosis out ("calf pain, negative duplex") is
+  // left with the limb alone and is offered its topics the same way.
+  const onlyRuledOut = parsed.negated.length > 0 && parsed.required.every(t => VAGUE_PARTS.has(t));
   if (parsed.required.length && parsed.required.every(isVague) && parsed.required.some(limb) &&
-      parsed.negated.length === 0) {
+      (parsed.negated.length === 0 || onlyRuledOut)) {
     return limbRecovery(query, parsed, qualifiers, index, scenarios) || recover(query, parsed, qualifiers, index, scenarios);
   }
 
