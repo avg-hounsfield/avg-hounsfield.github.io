@@ -3,6 +3,9 @@
  */
 
 export class DataLoader {
+  // Returned by applyClinicalRules when the library has no protocol for a study.
+  static NO_PROTOCOL = Object.freeze({ name: null });
+
   constructor() {
     this.cache = new Map();
     this.protocols = null;
@@ -15,7 +18,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20261111c';
+    const cacheBuster = '20261112a';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -142,6 +145,9 @@ export class DataLoader {
     // These are explicitly coded rules, so they're "curated"
     // Pass procedure name to make rules region-aware
     const clinicalMatch = this.applyClinicalRules(protocols, scenarioName, needsContrast, procedureName, region);
+    if (clinicalMatch === DataLoader.NO_PROTOCOL) {
+      return { protocol: null, matchType: null, supplementalSequences: null };
+    }
     if (clinicalMatch) {
       return { protocol: clinicalMatch, matchType: 'curated', supplementalSequences };
     }
@@ -197,6 +203,63 @@ export class DataLoader {
     // PROCEDURE-BASED ROUTING (Primary)
     // Match based on imaging recommendation title first
     // ========================================
+
+    // Studies with a dedicated protocol of their own. These come first so a
+    // body-part word in the study name ("hip", "pelvis") cannot claim them.
+    const byName = name => protocols.find(p => p.name === name);
+    if (isProcedureFor('arthrograph')) {
+      if (isProcedureFor('shoulder')) return byName('SHOULDER ARTHROGRAM') || byName('MR ARTHROGRAM');
+      if (isProcedureFor('wrist') || isProcedureFor('hand')) return byName('WRIST ARTHROGRAM') || byName('MR ARTHROGRAM');
+      if (isProcedureFor('hip')) return byName('HIP ARTHROGRAM') || byName('MR ARTHROGRAM');
+      const generic = byName('MR ARTHROGRAM');
+      if (generic) return generic;
+    }
+    if (isProcedureFor('defecograph') || isProcedureFor('dynamic maneuvers')) {
+      const defeco = byName('MR DEFECOGRAPHY');
+      if (defeco) return defeco;
+    }
+    if (isProcedureFor('fetal')) {
+      const fetal = byName('FETAL');
+      if (fetal) return fetal;
+    }
+    // No protocol in the library fits these; say so rather than borrow a
+    // brain or abdomen protocol.
+    if (isProcedureFor('lumbosacral plexus') || isProcedureFor('lymphangiograph')) {
+      return DataLoader.NO_PROTOCOL;
+    }
+
+    // MRI head combined with MRA head and neck (ACR uses it for Horner
+    // syndrome): the dissection protocol covers the sympathetic chain from C4
+    // to the sella on top of the TIA brain and MRA sequences.
+    if (/^mri head\b/.test(procLower) && isProcedureFor('mra head and neck')) {
+      if (/horner|dissect/.test(scenarioName)) return byName('TIA MRA DISSECTION') || byName('TIA');
+      return byName('TIA') || DataLoader.NO_PROTOCOL;
+    }
+
+    // MR urography -> KIDNEYS (the urographic phases live there).
+    if (/^mru\b/.test(procLower)) {
+      return byName('KIDNEYS') || DataLoader.NO_PROTOCOL;
+    }
+
+    // Vascular studies. Only the head and neck protocols and MRA RENALS carry
+    // angiographic sequences; a joint, spine or soft-tissue protocol would show
+    // the wrong sequences, so every other MRA or MRV gets no protocol.
+    if (/^mr[av]\b/.test(procLower)) {
+      if (/^mrv\b/.test(procLower) || procLower.includes('mra and mrv')) return DataLoader.NO_PROTOCOL;
+      const head = isProcedureFor('head');
+      const neck = isProcedureFor('neck');
+      if (head || neck) {
+        if (/dissect/.test(scenarioName)) return byName('TIA MRA DISSECTION') || byName('TIA');
+        if (head && !neck && /aneurysm|subarachnoid|vascular malformation|arteriovenous|\bavm\b/.test(scenarioName)) {
+          return byName('MRA ANEURYSM') || byName('TIA');
+        }
+        return byName('TIA') || DataLoader.NO_PROTOCOL;
+      }
+      if (isProcedureFor('abdomen') && !isProcedureFor('chest') && /renal|renovascular|kidney/.test(scenarioName)) {
+        return byName('MRA RENALS') || DataLoader.NO_PROTOCOL;
+      }
+      return DataLoader.NO_PROTOCOL;
+    }
 
     // ========================================
     // GENERIC "AREA OF INTEREST" ROUTING

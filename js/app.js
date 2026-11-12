@@ -8,12 +8,12 @@
 console.log('[GRAi Imaging Guide] Loading app.js module...');
 
 import { SearchEngine } from './search-engine.js?v=20261111a';
-import { DataLoader } from './data-loader.js?v=20261111c';
-import { UI } from './ui.js?v=20261109d';
+import { DataLoader } from './data-loader.js?v=20261112a';
+import { UI } from './ui.js?v=20261112a';
 import { RadLiteAPI } from './radlite-api.js?v=20260417a';
 import { ProtocolBuilder } from './protocol-builder.js?v=20261109c';
 import { conceptNormalize, matchConcept } from './concept-matcher.js?v=20260531a';
-import { resolveQuery, buildTopicGuide, topicSlug, _aliasTables } from './scenario-ranker.js?v=20261111c';
+import { resolveQuery, buildTopicGuide, topicSlug, _aliasTables } from './scenario-ranker.js?v=20261112a';
 import * as embeddingSearch from './embedding-search.js?v=20261111a';
 import { buildFacetModel, facetState, toggleOption, acrSourceUrl } from './guide-facets.js?v=20261110a';
 import { feedbackMailto, FEEDBACK_NOTE } from './feedback-link.js?v=20261110a';
@@ -208,7 +208,8 @@ class ProtocolHelpApp {
   // Shared by nav clicks, popstate (Back/Forward), and initial hash restore.
   _applyView(view) {
     if (view === this.currentView) return;
-    document.querySelectorAll('.nav-link').forEach(l => {
+    // Topics and About are plain page links with no view to toggle.
+    document.querySelectorAll('.nav-link[data-view]').forEach(l => {
       const on = l.dataset.view === view;
       l.classList.toggle('active', on);
       l.setAttribute('aria-pressed', String(on));
@@ -1403,8 +1404,8 @@ class ProtocolHelpApp {
   async _loadSearchMetadata() {
     try {
       const [topicsRes, infoRes] = await Promise.all([
-        fetch('data/search/topics.json?v=20261111c'),
-        fetch('data/data-info.json?v=20261111c'),
+        fetch('data/search/topics.json?v=20261112a'),
+        fetch('data/data-info.json?v=20261112a'),
       ]);
       if (topicsRes.ok) {
         const { topics } = await topicsRes.json();
@@ -1443,7 +1444,7 @@ class ProtocolHelpApp {
       try {
         const [ciRes, snRes] = await Promise.all([
           fetch('data/search/concept_index.json?v=20260521a'),
-          fetch('data/search/scenario_names.json?v=20261111c'),
+          fetch('data/search/scenario_names.json?v=20261112a'),
         ]);
         if (!ciRes.ok) return null;
         const ci = await ciRes.json();
@@ -2290,7 +2291,6 @@ class ProtocolHelpApp {
       const scanTime = this.estimateScanTime(protocol);
       const isBookmarked = this.isBookmarked(protocol.name);
       const highlightedName = this.highlightSearchTerm(protocol.display_name || protocol.name);
-      const isAIEnhanced = this.isAIGenerated(protocol);
 
       return `
         <div class="protocol-grid-card ${isBookmarked ? 'bookmarked' : ''}" data-index="${index}" style="position: relative;">
@@ -2305,9 +2305,6 @@ class ProtocolHelpApp {
           <div class="protocol-grid-card-meta">
             <span class="protocol-grid-card-region">${this.escapeHtml(region)}</span>
             ${hasContrast ? '<span class="contrast-badge with-contrast">Contrast</span>' : ''}
-            <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}" title="${isAIEnhanced ? 'Suggested protocol - verify before clinical use' : 'Protocol verified by radiologists'}">
-              ${isAIEnhanced ? 'Suggested' : 'Verified'}
-            </span>
           </div>
           ${indications ? `<div class="protocol-grid-card-indications">${this.escapeHtml(indications)}</div>` : ''}
           <div class="protocol-grid-card-footer">
@@ -2398,14 +2395,12 @@ class ProtocolHelpApp {
                     const hasContrast = protocol.uses_contrast;
                     const seqCount = protocol.sequences?.length || 0;
                     const isBookmarked = this.isBookmarked(protocol.name);
-                    const isAIEnhanced = this.isAIGenerated(protocol);
                     return `
                       <div class="protocol-list-item ${isBookmarked ? 'bookmarked' : ''}" data-region="${region}" data-index="${idx}">
                         <span class="protocol-list-item-name">${this.escapeHtml(protocol.display_name || protocol.name)}</span>
                         <div class="protocol-list-item-meta">
                           ${isBookmarked ? '<span class="contrast-badge with-contrast" style="background: var(--accent-muted); color: var(--accent);">Saved</span>' : ''}
                           ${hasContrast ? '<span class="contrast-badge with-contrast">Contrast</span>' : ''}
-                          <span class="source-badge ${isAIEnhanced ? 'suggested' : 'curated'}">${isAIEnhanced ? 'Suggested' : 'Verified'}</span>
                           <span class="protocol-grid-card-sequences"><span>${seqCount}</span> seq</span>
                         </div>
                       </div>
@@ -2471,23 +2466,8 @@ class ProtocolHelpApp {
     // Region badge
     document.getElementById('protocolDetailRegion').textContent = protocol.body_region || protocol.section || 'General';
 
-    // Source badge - indicate if protocol was AI-generated de novo
-    const sourceBadge = document.getElementById('protocolDetailSource');
-    const sourceText = document.getElementById('protocolDetailSourceText');
-    if (sourceBadge && sourceText) {
-      const isAI = this.isAIGenerated(protocol);
-      if (isAI) {
-        sourceBadge.classList.remove('curated');
-        sourceBadge.classList.add('suggested');
-        sourceBadge.title = 'Suggested protocol - verify before clinical use';
-        sourceText.textContent = 'Suggested';
-      } else {
-        sourceBadge.classList.remove('suggested');
-        sourceBadge.classList.add('curated');
-        sourceBadge.title = 'Protocol verified by radiologists';
-        sourceText.textContent = 'Human Verified';
-      }
-    }
+    // No "verified" or "suggested" badge until a clinician has reviewed the
+    // protocols and their routing (owner's request, November 2026).
 
     // Scan time badge
     document.getElementById('protocolDetailTime').textContent = this.estimateScanTime(protocol);

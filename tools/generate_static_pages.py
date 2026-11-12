@@ -77,7 +77,7 @@ REGION_ICONS = {
     "other":    '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
 }
 
-CSS_VERSION = "20261110a"
+CSS_VERSION = "20261112a"
 
 
 def slugify(text):
@@ -221,17 +221,82 @@ def shared_head(title, description, canonical, jsonld_dict):
 </head>"""
 
 
-def shared_header():
-    return """<header class="header" role="banner">
-  <div class="header-brand">
-    <a href="https://www.protocolinfo.com/" style="text-decoration:none;">
-      <span class="brand-text">GRAi Imaging Guide</span>
-    </a>
-  </div>
-  <nav class="header-nav" role="navigation" aria-label="Main navigation">
-    <a href="https://www.protocolinfo.com/" class="nav-link">Back to search</a>
+# One navigation for every page, the app included (index.html carries the
+# same five links; its Search, Protocols and Builder switch views in place).
+NAV = [
+    ("search", "Search", "/"),
+    ("topics", "Topics", "/topics/"),
+    ("protocols", "Protocols", "/#protocols"),
+    ("builder", "Builder", "/#builder"),
+    ("about", "About", "/about/"),
+]
+
+
+def shared_header(active=None):
+    links = "\n".join(
+        f'    <a href="{href}" class="nav-link{" active" if key == active else ""}"'
+        f'{" aria-current=\"page\"" if key == active else ""}>{label}</a>'
+        for key, label, href in NAV
+    )
+    return f"""<header class="header" role="banner">
+  <a class="header-brand" href="/" aria-label="GRAi Imaging Guide home">
+    <span class="brand-text">GRAi Imaging Guide</span>
+  </a>
+  <nav class="header-nav" id="headerNav" role="navigation" aria-label="Main navigation">
+{links}
   </nav>
+  <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="headerNav">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/>
+    </svg>
+  </button>
 </header>"""
+
+
+def crumbs(*items):
+    """Breadcrumb trail. Each item is (label, href); the last is the current page."""
+    parts = []
+    for i, (label, href) in enumerate(items):
+        if i == len(items) - 1:
+            parts.append(f'<li aria-current="page">{label}</li>')
+        else:
+            parts.append(f'<li><a href="{href}">{label}</a></li>')
+    return f'<nav class="crumbs" aria-label="Breadcrumb"><ol>{"".join(parts)}</ol></nav>'
+
+
+def page_intro(title, lede="", kicker=""):
+    kicker_html = f'<p class="page-kicker">{kicker}</p>' if kicker else ""
+    lede_html = f'<p class="page-lede">{lede}</p>' if lede else ""
+    return f"""<header class="page-intro">
+  <h1 class="page-title">{title}</h1>
+  {kicker_html}{lede_html}
+</header>"""
+
+
+def page_cta(href, label, note=""):
+    note_html = f'<span class="page-cta-note">{note}</span>' if note else ""
+    return f'<p class="page-cta-row"><a class="page-cta" href="{href}">{label}</a>{note_html}</p>'
+
+
+def render_page(head, body, active=None):
+    """The one page shell every generated page uses."""
+    return f"""<!DOCTYPE html>
+<html lang="en">
+{head}
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="app">
+    {shared_header(active)}
+    <main class="main page-main" id="content">
+      <div class="page">
+        {body}
+      </div>
+    </main>
+    {shared_footer()}
+  </div>
+  <script src="/js/site-nav.js?v={CSS_VERSION}" defer></script>
+</body>
+</html>"""
 
 
 def shared_footer():
@@ -242,7 +307,7 @@ def shared_footer():
       <span class="footer-divider">|</span>
       <a href="/topics/" class="footer-link">All topics</a>
       <span class="footer-divider">|</span>
-      <a href="/privacy-policy.html" class="footer-link">Terms</a>
+      <a href="/privacy-policy.html" class="footer-link">Privacy and terms</a>
       <span class="footer-divider">|</span>
       <a href="https://www.acr.org/Clinical-Resources/Clinical-Tools-and-Reference/Appropriateness-Criteria" target="_blank" rel="noopener" class="footer-link">ACR Guidelines</a>
       <span class="footer-divider">|</span>
@@ -250,8 +315,20 @@ def shared_footer():
       <span class="footer-divider">|</span>
       <a href="https://coregrai.com" target="_blank" rel="noopener" class="footer-link">CoreGRAI</a>
     </div>
+    <div class="footer-directory">
+      <span class="directory-label">Browse by region:</span>
+      <a href="/regions/neuro/" class="directory-link">Neuro</a>
+      <a href="/regions/spine/" class="directory-link">Spine</a>
+      <a href="/regions/msk/" class="directory-link">MSK</a>
+      <a href="/regions/abdomen/" class="directory-link">Abdomen</a>
+      <a href="/regions/chest/" class="directory-link">Chest</a>
+      <a href="/regions/vascular/" class="directory-link">Vascular</a>
+      <a href="/regions/breast/" class="directory-link">Breast</a>
+      <a href="/regions/peds/" class="directory-link">Pediatric</a>
+      <a href="/regions/other/" class="directory-link">General</a>
+    </div>
     <div class="footer-promo">
-      <a href="https://coregrai.com" target="_blank" rel="noopener" class="footer-promo-card">
+      <a href="https://coregrai.com" target="_blank" rel="noopener" class="footer-promo-card" aria-label="Visit CoreGRAi - radiology study platform">
         <span class="footer-promo-badge">Also by CoreGRAI</span>
         <div class="footer-promo-text">
           <p class="footer-promo-title">GRAi - Radiology Clinical Reference</p>
@@ -274,7 +351,7 @@ def write_file(rel_path, html):
     full_path.write_text(html, encoding="utf-8")
 
 
-def render_protocol(protocol, slug):
+def render_protocol(protocol, slug, routed=()):
     """Returns complete HTML string for one protocol page."""
     region = protocol.get("body_region", "")
     region_label = REGION_DISPLAY.get(region, region.title())
@@ -309,93 +386,73 @@ def render_protocol(protocol, slug):
     title = f"{display_name} Protocol - Sequences & Indications | GRAi Imaging Guide"
     head = shared_head(title, meta_desc, canonical, jsonld)
 
-    # Breadcrumb - region link only when region is in REGION_DISPLAY
+    esc = html.escape
+    trail = [("GRAi Imaging Guide", "/")]
     if region in REGION_DISPLAY:
-        region_crumb = (
-            f'<span class="static-breadcrumb-sep">&rsaquo;</span>'
-            f'<a href="/regions/{region}/">{region_label}</a>'
-            f'<span class="static-breadcrumb-sep">&rsaquo;</span>'
-        )
-    else:
-        region_crumb = '<span class="static-breadcrumb-sep">&rsaquo;</span>'
-
-    breadcrumb = f"""<nav class="static-breadcrumb" aria-label="Breadcrumb">
-  <a href="/">GRAi Imaging Guide</a>
-  {region_crumb}
-  <span>{display_name}</span>
-</nav>"""
+        trail.append((f"{esc(region_label)} imaging", f"/regions/{region}/"))
+    trail.append((esc(display_name), None))
 
     # Sequences table
     sequences = sorted(protocol.get("sequences", []), key=lambda s: s.get("sort_order", 0))
     seq_rows = ""
     for seq in sequences:
         contrast_label = "Post-contrast" if seq.get("is_post_contrast") == 1 else "Pre-contrast"
-        seq_rows += f"    <tr><td>{seq.get('sequence_name', '')}</td><td>{contrast_label}</td></tr>\n"
+        seq_rows += f"    <tr><td>{esc(seq.get('sequence_name', ''))}</td><td>{contrast_label}</td></tr>\n"
 
     if sequences:
         seq_table = f"""<table class="sequence-table">
   <thead>
-    <tr><th>Sequence</th><th>Contrast</th></tr>
+    <tr><th scope="col">Sequence</th><th scope="col">Contrast</th></tr>
   </thead>
   <tbody>
 {seq_rows}  </tbody>
 </table>"""
     else:
-        seq_table = '<p style="color:var(--text-muted);font-size:0.875rem;">No sequence data available.</p>'
+        seq_table = '<p class="page-note">No sequence list for this protocol yet.</p>'
 
-    # Top 5 related scenarios as pills
-    matches = sorted(
-        protocol.get("scenario_matches", []),
-        key=lambda m: m.get("relevance_score", 0),
-        reverse=True
-    )[:5]
+    # The ACR topics whose usually-appropriate MRI the app routes to this
+    # protocol (tools/build_protocol_scenarios.mjs), so the page and the app agree.
+    by_topic = {}
+    for s in routed:
+        by_topic.setdefault(s["topic"], []).append(s)
     scenarios_section = ""
-    if matches:
-        pills = "".join(
-            f'<div class="scenario-pill">{m.get("scenario_name", "")}</div>\n'
-            for m in matches
+    if by_topic:
+        ordered = sorted(by_topic.items(), key=lambda kv: (-len(kv[1]), kv[0]))
+        cards = "".join(
+            f'<a class="topic-card" href="/topics/{topic_slug(topic)}/">'
+            f'<span class="topic-card-name">{esc(clean_topic_name(topic))}</span>'
+            f'<span class="topic-card-meta">{len(items)} scenario{"" if len(items) == 1 else "s"} where ACR rates this MRI usually appropriate</span></a>\n'
+            for topic, items in ordered[:12]
         )
-        scenarios_section = f"""<h2 class="static-section-label" style="margin-top:1.75rem;">Related Clinical Scenarios</h2>
-<div>
-{pills}</div>"""
+        more = len(ordered) - 12
+        more_html = f'<p class="page-note">And {more} more topic{"" if more == 1 else "s"}.</p>' if more > 0 else ""
+        scenarios_section = f"""<section class="page-section">
+  <h2 class="page-section-title">Where ACR recommends this study</h2>
+  <div class="topic-grid">
+{cards}  </div>
+  {more_html}
+</section>"""
 
-    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
-  {breadcrumb}
-  <h1 style="margin-bottom:0.5rem;">{display_name}</h1>
-  <div style="margin-bottom:1.5rem;">
-    <span class="protocol-type-badge">MRI Protocol</span>
-    <span class="protocol-region-tag">{region_label}</span>
-  </div>
+    indications = esc(indications_text) if indications_text else "No indications recorded for this protocol yet."
+    body = f"""{crumbs(*trail)}
+{page_intro(esc(display_name), kicker=f'MRI protocol, {esc(region_label)}')}
 
-  <h2 class="static-section-label">Indications</h2>
-  <p style="color:var(--text-secondary);font-size:0.9375rem;line-height:1.6;margin-bottom:1.75rem;">{indications_text or "See the full protocol in the app."}</p>
+<section class="page-section">
+  <h2 class="page-section-title">Indications</h2>
+  <p class="page-text">{indications}</p>
+</section>
 
-  <h2 class="static-section-label">Sequences</h2>
+<section class="page-section">
+  <h2 class="page-section-title">Sequences</h2>
   {seq_table}
+  <p class="page-note">A sample protocol based on common practice. Your institution's sequences and parameters may differ.</p>
+</section>
 
-  {scenarios_section}
+{scenarios_section}
 
-  <a href="{BASE_URL}/#protocols" class="protocol-cta">
-    <span class="protocol-cta-label">View the full protocol in the app</span>
-    <span class="protocol-cta-action">Open the app &rarr;</span>
-  </a>
-</div>"""
+{page_cta("/#protocols", "Open in the protocol library")}"""
 
-    return f"""<!DOCTYPE html>
-<html lang="en">
-{head}
-<body>
-  <div class="app">
-    {shared_header()}
-    <main class="main">
-      <section class="anatomy-section">
-        {body}
-      </section>
-    </main>
-    {shared_footer()}
-  </div>
-</body>
-</html>"""
+    return render_page(head, body)
 
 
 def render_region(region, topics, region_protocols, slug_map, protocols, scenario_count):
@@ -427,35 +484,15 @@ def render_region(region, topics, region_protocols, slug_map, protocols, scenari
     title = f"{label} Imaging: ACR Appropriateness Criteria Summaries | GRAi Imaging Guide"
     head = shared_head(title, meta_desc, canonical, jsonld)
 
-    # Hero
-    icon_paths = REGION_ICONS.get(region, "")
-    hero = f"""<div class="static-hero">
-  <svg class="static-hero-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-    {icon_paths}
-  </svg>
-  <div>
-    <h1 class="static-hero-title">{label} imaging: ACR Appropriateness Criteria summaries</h1>
-    <p class="static-hero-desc">{REGION_INTRO[region]}</p>
-  </div>
-</div>"""
-
     # Topic links open the generated guide for that ACR topic
     topics_html = ""
     if topics:
-        topic_items = ""
-        for topic in topics:
-            name = html.escape(clean_topic_name(topic["name"]))
-            count = topic["count"]
-            topic_items += f"""<a class="topic-card" href="/topics/{topic_slug(topic['name'])}/">
-  <div class="topic-card-header">
-    <span class="topic-card-name">{name}</span>
-  </div>
-  <p class="topic-card-meta">{count} scenario{'' if count == 1 else 's'}</p>
-</a>
-"""
-        topics_html = f"""<h2 class="static-section-label">Clinical Topics</h2>
-<div class="topic-grid">
-{topic_items}</div>"""
+        topic_items = "".join(topic_card(topic["name"], topic["count"]) for topic in topics)
+        topics_html = f"""<section class="page-section">
+  <h2 class="page-section-title">Clinical topics</h2>
+  <div class="topic-grid">
+{topic_items}  </div>
+</section>"""
 
     # Protocols section
     protocols_html = ""
@@ -468,41 +505,23 @@ def render_region(region, topics, region_protocols, slug_map, protocols, scenari
                     p.get("canonical_procedure", p.get("name", "")),
                     p.get("display_name", p.get("name", ""))
                 )
-                proto_items += f'<a href="/protocols/{p_slug}/" class="protocol-list-item"><span>{p_name}</span><span class="protocol-list-arrow">&rsaquo;</span></a>\n'
-        protocols_html = f"""<h2 class="static-section-label">MRI Protocols</h2>
-<div class="protocol-list">
-{proto_items}</div>"""
+                proto_items += f'<a href="/protocols/{p_slug}/" class="protocol-list-item"><span>{html.escape(p_name)}</span></a>\n'
+        protocols_html = f"""<section class="page-section">
+  <h2 class="page-section-title">MRI protocols</h2>
+  <div class="protocol-list">
+{proto_items}  </div>
+</section>"""
 
-    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
-  {hero}
+    body = f"""{crumbs(("GRAi Imaging Guide", "/"), ("Topics", "/topics/"), (f"{label} imaging", None))}
+{page_intro(f"{label} imaging: ACR Appropriateness Criteria summaries", REGION_INTRO[region])}
 
-  {topics_html}
+{topics_html}
 
-  {protocols_html}
+{protocols_html}
 
-  <p class="topic-source"><a href="/topics/">Browse all topics</a></p>
+{page_cta("/", "Search all scenarios", f'or <a href="/topics/">browse every topic</a>')}"""
 
-  <a href="{BASE_URL}/#search" class="protocol-cta">
-    <span class="protocol-cta-label">Search all scenarios</span>
-    <span class="protocol-cta-action">Open the app &rarr;</span>
-  </a>
-</div>"""
-
-    return f"""<!DOCTYPE html>
-<html lang="en">
-{head}
-<body>
-  <div class="app">
-    {shared_header()}
-    <main class="main">
-      <section class="anatomy-section">
-        {body}
-      </section>
-    </main>
-    {shared_footer()}
-  </div>
-</body>
-</html>"""
+    return render_page(head, body, "topics")
 
 
 LEVELS = ["Usually Appropriate", "May Be Appropriate", "Usually Not Appropriate"]
@@ -512,6 +531,15 @@ LEVEL_CLASS = {"Usually Appropriate": "high", "May Be Appropriate": "mid", "Usua
 def clean_topic_name(name):
     """ACR writes some topic titles with en or em dashes; show one plain form."""
     return re.sub(r"\s*[\u2013\u2014]\s*", "-", name).strip()
+
+
+def topic_card(name, count):
+    """A link card to one topic page, used on every page that lists topics."""
+    return (
+        f'<a class="topic-card" href="/topics/{topic_slug(name)}/">'
+        f'<span class="topic-card-name">{html.escape(clean_topic_name(name))}</span>'
+        f'<span class="topic-card-meta">{count} scenario{"" if count == 1 else "s"}</span></a>\n'
+    )
 
 
 def topic_slug(name):
@@ -660,57 +688,32 @@ def render_topic(topic, related):
 
     related_html = ""
     if related:
-        links = "".join(
-            f'<a class="topic-card" href="/topics/{r["slug"]}/"><div class="topic-card-header">'
-            f'<span class="topic-card-name">{esc(r["name"])}</span></div>'
-            f'<p class="topic-card-meta">{len(r["scenarios"])} scenario{"" if len(r["scenarios"]) == 1 else "s"}</p></a>\n'
-            for r in related
-        )
-        related_html = f"""<h2 class="static-section-label">Related {esc(region_label)} topics</h2>
-<div class="topic-grid">
-{links}</div>"""
+        links = "".join(topic_card(r["name"], len(r["scenarios"])) for r in related)
+        related_html = f"""<section class="page-section">
+  <h2 class="page-section-title">Related {esc(region_label.lower())} topics</h2>
+  <div class="topic-grid">
+{links}  </div>
+</section>"""
 
-    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
-  <nav class="breadcrumbs" aria-label="Breadcrumb">
-    <a href="/">GRAi Imaging Guide</a> &rsaquo; <a href="/regions/{region}/">{esc(region_label)} imaging</a> &rsaquo; <a href="/topics/">Topics</a>
-  </nav>
-  <h1 class="static-hero-title">{esc(name)}: ACR Appropriateness Criteria summary</h1>
-  <p class="topic-kicker">Which imaging to order</p>
-  <p class="static-hero-desc">
-    {count} clinical scenario{plural} from the ACR Appropriateness Criteria topic "{esc(name)}", grouped by the
-    imaging study ACR rates highest for each. Studies listed together share the same ACR category;
-    ACR does not rank studies within a category.
-  </p>
-  <p class="topic-source">
-    Independent summary of the ACR Appropriateness Criteria as of {month}. Not affiliated with or endorsed by
-    the American College of Radiology. For education; confirm against the linked source and your institution's protocols.
-  </p>
+    lede = (
+        f'{count} clinical scenario{plural} from the ACR Appropriateness Criteria topic "{esc(name)}", grouped by the '
+        f"imaging study ACR rates highest for each. Studies listed together share the same ACR category; "
+        f"ACR does not rank studies within a category."
+    )
+    body = f"""{crumbs(("GRAi Imaging Guide", "/"), (f"{esc(region_label)} imaging", f"/regions/{region}/"), (esc(name), None))}
+{page_intro(f"{esc(name)}: ACR Appropriateness Criteria summary", lede, kicker="Which imaging to order")}
+<p class="page-note">
+  Independent summary of the ACR Appropriateness Criteria as of {month}. Not affiliated with or endorsed by
+  the American College of Radiology. For education; confirm against the linked source and your institution's protocols.
+</p>
 
-  <a href="{BASE_URL}/?q={quote(name)}" class="protocol-cta">
-    <span class="protocol-cta-label">Search within {esc(name)}</span>
-    <span class="protocol-cta-action">Open the app &rarr;</span>
-  </a>
+{page_cta(f"/?q={quote(name)}", "Narrow to your patient", "Opens this topic in the search, with buttons that narrow it by presentation.")}
 
-  {sections}
+{sections}
 
-  {related_html}
-</div>"""
+{related_html}"""
 
-    return f"""<!DOCTYPE html>
-<html lang="en">
-{head}
-<body>
-  <div class="app">
-    {shared_header()}
-    <main class="main">
-      <section class="anatomy-section">
-        {body}
-      </section>
-    </main>
-    {shared_footer()}
-  </div>
-</body>
-</html>"""
+    return render_page(head, body, "topics")
 
 
 def related_topics(topic, topics, limit=8):
@@ -739,47 +742,29 @@ def render_topic_index(topics):
     }
     head = shared_head(title, meta_desc, canonical, jsonld)
     sections = ""
+    jump = []
     for region, label in REGION_DISPLAY.items():
         in_region = sorted((t for t in topics.values() if t["region"] == region), key=lambda t: t["name"])
         if not in_region:
             continue
-        links = "".join(
-            f'<a class="topic-card" href="/topics/{t["slug"]}/"><div class="topic-card-header">'
-            f'<span class="topic-card-name">{html.escape(t["name"])}</span></div>'
-            f'<p class="topic-card-meta">{len(t["scenarios"])} scenario{"" if len(t["scenarios"]) == 1 else "s"}</p></a>\n'
-            for t in in_region
-        )
-        sections += f"""<h2 class="static-section-label"><a href="/regions/{region}/">{label}</a></h2>
-<div class="topic-grid">
-{links}</div>
+        links = "".join(topic_card(t["name"], len(t["scenarios"])) for t in in_region)
+        jump.append(f'<li><a href="#{region}">{label}</a></li>')
+        sections += f"""<section class="page-section" id="{region}">
+  <h2 class="page-section-title"><a href="/regions/{region}/">{label} imaging</a> <span class="page-section-count">{len(in_region)} topics</span></h2>
+  <div class="topic-grid">
+{links}  </div>
+</section>
 """
-    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
-  <h1 class="static-hero-title">Imaging appropriateness by topic</h1>
-  <p class="static-hero-desc">
-    {len(topics)} clinical topics covering {total:,} scenarios. Each page lists which imaging studies the
-    ACR Appropriateness Criteria rate usually appropriate, grouped by presentation.
-  </p>
-  {sections}
-  <a href="{BASE_URL}/" class="protocol-cta">
-    <span class="protocol-cta-label">Search all scenarios</span>
-    <span class="protocol-cta-action">Open the app &rarr;</span>
-  </a>
-</div>"""
-    return f"""<!DOCTYPE html>
-<html lang="en">
-{head}
-<body>
-  <div class="app">
-    {shared_header()}
-    <main class="main">
-      <section class="anatomy-section">
-        {body}
-      </section>
-    </main>
-    {shared_footer()}
-  </div>
-</body>
-</html>"""
+    lede = (
+        f"{len(topics)} clinical topics covering {total:,} scenarios. Each page lists which imaging studies the "
+        f"ACR Appropriateness Criteria rate usually appropriate, grouped by presentation."
+    )
+    body = f"""{crumbs(("GRAi Imaging Guide", "/"), ("Topics", None))}
+{page_intro("Imaging appropriateness by topic", lede)}
+<nav class="jump-links" aria-label="Body regions"><ul>{"".join(jump)}</ul></nav>
+{sections}
+{page_cta("/", "Search all scenarios")}"""
+    return render_page(head, body, "topics")
 
 
 def render_not_found():
@@ -787,30 +772,9 @@ def render_not_found():
     head = shared_head("Page not found | GRAi Imaging Guide", "This page does not exist.", f"{BASE_URL}/", {
         "@context": "https://schema.org", "@type": "WebPage", "name": "Page not found",
     }).replace('content="index, follow"', 'content="noindex, follow"')
-    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
-  <h1 class="static-hero-title">Page not found</h1>
-  <p class="static-hero-desc">That address does not exist on GRAi Imaging Guide. Search for a clinical scenario or browse by topic.</p>
-  <a href="{BASE_URL}/" class="protocol-cta">
-    <span class="protocol-cta-label">Search all scenarios</span>
-    <span class="protocol-cta-action">Open the app &rarr;</span>
-  </a>
-  <p class="topic-source"><a href="/topics/">Browse all topics</a></p>
-</div>"""
-    return f"""<!DOCTYPE html>
-<html lang="en">
-{head}
-<body>
-  <div class="app">
-    {shared_header()}
-    <main class="main">
-      <section class="anatomy-section">
-        {body}
-      </section>
-    </main>
-    {shared_footer()}
-  </div>
-</body>
-</html>"""
+    body = f"""{page_intro("Page not found", "That address does not exist on GRAi Imaging Guide. Search for a clinical scenario or browse by topic.")}
+{page_cta("/", "Search all scenarios", 'or <a href="/topics/">browse every topic</a>')}"""
+    return render_page(head, body)
 
 
 def render_about():
@@ -858,120 +822,162 @@ def render_about():
 
     head = shared_head(title, meta_desc, canonical, jsonld)
 
-    stats_pills = "\n".join([
-        '<div class="scenario-pill">3,900+ clinical scenarios across 260+ topics</div>',
-        '<div class="scenario-pill">72+ MRI protocols with sequence-level guidance</div>',
-        '<div class="scenario-pill">Every recommendation links to its ACR source scenario</div>',
-        '<div class="scenario-pill">Client-side AI inference - fully private, no data sent to servers</div>',
-        '<div class="scenario-pill">Offline-capable via Progressive Web App (PWA)</div>',
+    stats = "\n".join(f"    <li>{s}</li>" for s in [
+        "3,900+ clinical scenarios across 260+ topics",
+        "72+ MRI protocols with sequence-level guidance",
+        "Every recommendation links to its ACR source scenario",
+        "Client-side AI inference - fully private, no data sent to servers",
+        "Offline-capable via Progressive Web App (PWA)",
     ])
 
     region_links = "\n".join(
-        f'<a href="/regions/{r}/" class="protocol-list-item">'
-        f'<span>{label} Imaging</span>'
-        f'<span class="protocol-list-arrow">&rsaquo;</span>'
-        f'</a>'
+        f'    <a href="/regions/{r}/" class="protocol-list-item"><span>{label} imaging</span></a>'
         for r, label in REGION_DISPLAY.items()
     )
 
-    body = f"""<div style="max-width:800px;margin:0 auto;padding:2rem 1rem;">
-  <h1 style="margin-bottom:1.5rem;">About GRAi Imaging Guide</h1>
-  <p style="color:var(--text-muted);font-size:0.8125rem;margin:-1rem 0 1.25rem;">Formerly called Radex.</p>
+    body = f"""{crumbs(("GRAi Imaging Guide", "/"), ("About", None))}
+{page_intro("About GRAi Imaging Guide", kicker="Formerly called Radex.")}
+<p class="page-text page-text-lead">
+  GRAi Imaging Guide is an educational reference that helps clinicians find generic imaging guidance quickly,
+  without working through the full ACR Appropriateness Criteria scenario by scenario. It is an
+  independent project and is not affiliated with or endorsed by the American College of Radiology.
+</p>
 
-  <p style="color:var(--text-secondary);font-size:0.9375rem;line-height:1.6;margin-bottom:1.75rem;">
-    GRAi Imaging Guide is an educational reference that helps clinicians find generic imaging guidance quickly,
-    without working through the full ACR Appropriateness Criteria scenario by scenario. It is an
-    independent project and is not affiliated with or endorsed by the American College of Radiology.
+<section class="page-section">
+  <h2 class="page-section-title">Built by</h2>
+  <p class="page-text"><strong>Patrick Matulich, DO</strong><br><span class="page-muted">Radiology Resident | CoreGRAI</span></p>
+  <p class="page-text">
+    GRAi Imaging Guide was developed as a capstone project in radiology AI, motivated by a recurring challenge
+    in clinical training: imaging appropriateness guidelines exist, but accessing them quickly at
+    the point of care remains cumbersome. GRAi Imaging Guide is designed to reduce time-to-answer from minutes
+    to seconds while keeping every answer traceable to its source.
   </p>
+</section>
 
-  <h2 class="static-section-label">Built By</h2>
-  <div style="margin-bottom:1.75rem;">
-    <p style="font-weight:600;font-size:0.9375rem;margin-bottom:0.25rem;">Patrick Matulich, DO</p>
-    <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:0.75rem;">Radiology Resident | CoreGRAI</p>
-    <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;">
-      GRAi Imaging Guide was developed as a capstone project in radiology AI, motivated by a recurring challenge
-      in clinical training: imaging appropriateness guidelines exist, but accessing them quickly at
-      the point of care remains cumbersome. GRAi Imaging Guide is designed to reduce time-to-answer from minutes
-      to seconds while keeping every answer traceable to its source.
-    </p>
-  </div>
+<section class="page-section">
+  <h2 class="page-section-title">Key statistics</h2>
+  <ul class="page-list">
+{stats}
+  </ul>
+</section>
 
-  <h2 class="static-section-label">Key Statistics</h2>
-  <div style="margin-bottom:1.75rem;">
-{stats_pills}
-  </div>
-
-  <h2 style="margin-bottom:0.75rem;font-size:1rem;">Data Sources &amp; Methodology</h2>
-  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
+<section class="page-section">
+  <h2 class="page-section-title">Data sources and methodology</h2>
+  <p class="page-text">
     <strong>Source:</strong> Guidance is summarized from the ACR Appropriateness Criteria,
     evidence-based guidelines developed by the American College of Radiology. GRAi Imaging Guide shows when its
     data was captured, and that date may lag ACR updates, so confirm against the linked source.
   </p>
-  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
+  <p class="page-text">
     <strong>How answers are built:</strong> A broad search opens a topic guide that groups scenarios
     by what they recommend. A specific search goes to matching scenarios, with pregnancy and patient
     age applied as filters. ACR categories are shown as published, including panel disagreement
     flags, and studies in the same category are listed together because ACR does not rank them.
   </p>
-  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:0.75rem;">
+  <p class="page-text">
     <strong>MRI Protocols:</strong> Sample protocols based on common clinical practice.
     Your institution may have different sequences, parameters, or protocols based on
     scanner hardware, software versions, radiologist preferences, and institutional policies.
   </p>
-  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:1.75rem;">
+  <p class="page-text">
     <strong>AI:</strong> When no scenario matches a search directly, a small model running in your
     browser suggests the closest scenarios by meaning. These results are labelled as closest
     matches. Nothing you type is sent to a server for search.
   </p>
+</section>
 
-  <h2 class="static-section-label">Browse by Region</h2>
-  <div class="protocol-list" style="margin-bottom:1.75rem;">
+<section class="page-section">
+  <h2 class="page-section-title">Browse by region</h2>
+  <div class="protocol-list">
 {region_links}
   </div>
+</section>
 
-  <h2 style="margin-bottom:0.75rem;font-size:1rem;">Important Notice</h2>
-  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:1.75rem;">
+<section class="page-section">
+  <h2 class="page-section-title">Important notice</h2>
+  <p class="page-text">
     This tool is provided for <strong>educational purposes only</strong>. It is not a substitute
     for clinical judgment, institutional protocols, or direct consultation with radiologists.
     Imaging decisions should always be made in the context of individual patient circumstances.
   </p>
+</section>
 
-  <h2 class="static-section-label">Also by CoreGRAI</h2>
-  <p style="color:var(--text-secondary);font-size:0.875rem;line-height:1.6;margin-bottom:1.75rem;">
-    <a href="https://coregrai.com" target="_blank" rel="noopener" style="color:var(--accent);">GRAi</a>
+<section class="page-section">
+  <h2 class="page-section-title">Also by CoreGRAI</h2>
+  <p class="page-text">
+    <a href="https://coregrai.com" target="_blank" rel="noopener">GRAi</a>
     is an AI-powered radiology study and clinical reference platform built for residents
     preparing for the ABR Core Exam. It provides AI-assisted Q&amp;A across radiology topics,
     radiology corpus search powered by a proprietary knowledge base and custom retrieval model,
     differential diagnosis support, and structured lesson content - all through a conversational
     interface. Also built by Patrick Matulich, DO.
   </p>
+</section>
 
-  <h2 style="margin-bottom:0.75rem;font-size:1rem;">Contact</h2>
-  <p style="color:var(--text-secondary);font-size:0.875rem;margin-bottom:2rem;">
-    Questions or suggestions? <a href="mailto:support@coregrai.com" style="color:var(--accent);">support@coregrai.com</a>
-  </p>
+<section class="page-section">
+  <h2 class="page-section-title">Contact</h2>
+  <p class="page-text">Questions or suggestions? <a href="mailto:support@coregrai.com">support@coregrai.com</a></p>
+</section>
 
-  <a href="{BASE_URL}/" class="protocol-cta">
-    <span class="protocol-cta-label">Try GRAi Imaging Guide - free, browser-based</span>
-    <span class="protocol-cta-action">Open the app &rarr;</span>
-  </a>
-</div>"""
+{page_cta("/", "Search all scenarios")}"""
 
-    return f"""<!DOCTYPE html>
-<html lang="en">
-{head}
-<body>
-  <div class="app">
-    {shared_header()}
-    <main class="main">
-      <section class="anatomy-section">
-        {body}
-      </section>
-    </main>
-    {shared_footer()}
-  </div>
-</body>
-</html>"""
+    return render_page(head, body, "about")
+
+
+def render_privacy():
+    """The privacy policy and terms, on the shared page shell. The policy text
+    is the owner's; change its wording only on the owner's word."""
+    canonical = f"{BASE_URL}/privacy-policy.html"
+    head = shared_head(
+        "Privacy Policy and Terms | GRAi Imaging Guide",
+        "Privacy policy, terms of use and medical disclaimer for GRAi Imaging Guide, an educational imaging reference for clinicians.",
+        canonical,
+        {"@context": "https://schema.org", "@type": "WebPage", "name": "Privacy Policy", "url": canonical},
+    )
+
+    def section(title, inner):
+        return f'<section class="page-section">\n  <h2 class="page-section-title">{title}</h2>\n{inner}\n</section>\n'
+
+    def ul(*items):
+        return '  <ul class="page-list">\n' + "".join(f"    <li>{i}</li>\n" for i in items) + "  </ul>"
+
+    def p(text):
+        return f'  <p class="page-text">{text}</p>'
+
+    body = f"""{crumbs(("GRAi Imaging Guide", "/"), ("Privacy policy", None))}
+{page_intro("Privacy policy", kicker="Effective January 1, 2025. Last updated January 1, 2025.")}
+
+<aside class="page-callout" aria-labelledby="disclaimer-title">
+  <h2 class="page-callout-title" id="disclaimer-title">Important medical disclaimer</h2>
+  <p><strong>For educational use only:</strong> This website and its content are provided solely for educational purposes and professional reference for qualified healthcare professionals.</p>
+  <p><strong>Not for medical diagnosis:</strong> The information contained herein is NOT intended for use in medical diagnosis, treatment planning, or patient care decisions. This content should never be used as a substitute for professional medical judgment, clinical assessment, or direct patient consultation.</p>
+  <p><strong>Healthcare professionals only:</strong> This resource is intended exclusively for use by licensed healthcare professionals, including but not limited to physicians, radiologists, technologists, and other qualified medical personnel. It should not be accessed or relied upon by patients or the general public for medical decisions.</p>
+</aside>
+
+{section("1. About GRAi Imaging Guide", p("GRAi Imaging Guide is an educational platform designed to provide imaging protocol information and guidelines for healthcare professionals. Our mission is to serve as a reference tool for qualified medical personnel in their professional practice."))}
+{section("2. Information we collect", "\n".join([
+    p("<strong>No Personal Health Information:</strong> We do not collect, store, or process any personal health information (PHI) or patient data."),
+    p("<strong>Usage Data:</strong> We may collect anonymous usage statistics including:"),
+    ul("Pages visited and search queries (anonymized)", "Technical information (browser type, device type, IP address)", "Usage patterns and preferences (anonymized)"),
+    p("<strong>Local Storage:</strong> We may use browser local storage to save user preferences such as favorite protocols and display settings. This data remains on your device and is not transmitted to our servers."),
+]))}
+{section("3. How we use information", p("Any information we collect is used solely to:") + "\n" + ul(
+    "Improve the educational content and user experience", "Analyze usage patterns to enhance the platform",
+    "Ensure proper functionality of the website", "Maintain security and prevent misuse"))}
+{section("4. Information sharing", p("We do not sell, trade, or otherwise transfer your information to third parties. We may share anonymized, aggregated data for research or educational purposes only."))}
+{section("5. Data security", p("We implement appropriate security measures to protect against unauthorized access, alteration, disclosure, or destruction of data. However, no internet transmission is 100% secure, and we cannot guarantee absolute security."))}
+{section("6. Professional responsibility", p("<strong>Healthcare Provider Responsibility:</strong> Healthcare professionals using this platform are responsible for:") + "\n" + ul(
+    "Verifying all information against current medical standards", "Exercising independent professional judgment",
+    "Ensuring compliance with local regulations and institutional policies",
+    "Maintaining patient confidentiality in accordance with HIPAA and other applicable laws"))}
+{section("7. Limitation of liability", p("GRAi Imaging Guide and its operators disclaim all liability for any direct, indirect, incidental, or consequential damages arising from the use of this educational platform. Users assume all responsibility for the appropriate use of this information in their professional practice."))}
+{section("8. Compliance with regulations", p("This platform is designed to comply with:") + "\n" + ul(
+    "HIPAA (Health Insurance Portability and Accountability Act)", "GDPR (General Data Protection Regulation) where applicable",
+    "Other relevant healthcare and privacy regulations"))}
+{section("9. Changes to this policy", p("We may update this privacy policy periodically. Changes will be posted on this page with an updated effective date. Continued use of the platform constitutes acceptance of any changes."))}
+{section("10. Age restrictions", p("This platform is intended for use by licensed healthcare professionals only. It is not intended for use by individuals under 18 years of age or by unlicensed individuals seeking medical information."))}
+{section("Contact information", p("If you have questions about this privacy policy or concerns about our practices, please contact us through the appropriate professional channels.") + "\n" + p("<strong>Remember:</strong> This platform is for educational purposes only and should never replace professional medical consultation, institutional protocols, or evidence-based clinical decision-making."))}"""
+    return render_page(head, body)
 
 
 def build_sitemap(protocol_slugs, topic_slugs=()):
@@ -1021,9 +1027,11 @@ def main():
     count = 0
 
     # Protocol pages
+    with open(REPO_ROOT / "data" / "search" / "protocol_scenarios.json", encoding="utf-8") as f:
+        routed = json.load(f)["protocols"]
     for i, protocol in enumerate(protocols):
         slug = slug_map[i]
-        page = render_protocol(protocol, slug)
+        page = render_protocol(protocol, slug, routed.get(f'{protocol.get("name")}|{protocol.get("body_region")}', []))
         write_file(Path("protocols") / slug / "index.html", page)
         count += 1
 
@@ -1048,6 +1056,9 @@ def main():
     count += 1
 
     write_file(Path("404.html"), render_not_found())
+    count += 1
+
+    write_file(Path("privacy-policy.html"), render_privacy())
     count += 1
 
     # Sitemap

@@ -70,7 +70,7 @@
   <!-- Theme Color -->
   <meta name="theme-color" content="#9B5DE5">
 
-  <link rel="stylesheet" href="css/main.css?v=20261110a">
+  <link rel="stylesheet" href="css/main.css?v=20261112a">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23fafafa'/><stop offset='100%25' stop-color='%239B5DE5'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='700' font-family='system-ui' fill='url(%23g)'>G</text></svg>">
   <link rel="manifest" href="manifest.json">
 </head>
@@ -83,13 +83,17 @@
   <div class="app">
     <!-- Header -->
     <header class="header" role="banner">
-      <div class="header-brand">
+      <a class="header-brand" href="/" aria-label="GRAi Imaging Guide home">
         <span class="brand-text">GRAi Imaging Guide</span>
-      </div>
+      </a>
+      <!-- Same five links as every generated page (tools/generate_static_pages.py NAV).
+           Search, Protocols and Builder switch views in place; Topics and About are pages. -->
       <nav class="header-nav" id="headerNav" role="navigation" aria-label="Main navigation">
         <a href="/" class="nav-link active" data-view="search" aria-pressed="true">Search</a>
-        <a href="/about/" class="nav-link" data-view="protocols" aria-pressed="false">Protocols</a>
+        <a href="/topics/" class="nav-link">Topics</a>
+        <a href="#protocols" class="nav-link" data-view="protocols" aria-pressed="false">Protocols</a>
         <a href="#builder" class="nav-link" data-view="builder" aria-pressed="false">Builder</a>
+        <a href="/about/" class="nav-link">About</a>
         <button class="install-btn hidden" id="installBtn" aria-label="Install GRAi Imaging Guide for offline use">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" aria-hidden="true">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
@@ -100,7 +104,7 @@
       <!-- Mobile menu button -->
       <button class="mobile-menu-btn hidden" id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false" aria-controls="headerNav">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 12h18M3 6h18M3 18h18"/>
+          <path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/>
         </svg>
       </button>
     </header>
@@ -358,13 +362,6 @@
               </div>
             </div>
             <div class="protocol-detail-meta">
-              <span class="source-badge curated" id="protocolDetailSource" title="Protocol verified by radiologists">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                  <polyline points="22 4 12 14.01 9 11.01"/>
-                </svg>
-                <span id="protocolDetailSourceText">Human Verified</span>
-              </span>
               <span class="contrast-badge" id="protocolDetailContrast">No Contrast</span>
               <span class="body-region-badge" id="protocolDetailRegion">Neuro</span>
               <span class="scan-time-badge" id="protocolDetailTime">~15 min</span>
@@ -633,13 +630,6 @@
               <span id="protocolName">MRI Protocol</span>
             </div>
             <div class="protocol-card-meta">
-              <span class="source-badge curated hidden" id="sourceBadge" title="Protocol source">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                  <polyline points="22 4 12 14.01 9 11.01"/>
-                </svg>
-                <span id="sourceBadgeText">Human Verified</span>
-              </span>
               <span class="contrast-badge" id="contrastBadge">No Contrast</span>
             </div>
           </div>
@@ -887,7 +877,7 @@
           <span class="footer-divider">|</span>
           <a href="/topics/" class="footer-link">All topics</a>
           <span class="footer-divider">|</span>
-          <a href="/privacy-policy.html" class="footer-link" id="termsBtn">Terms</a>
+          <a href="/privacy-policy.html" class="footer-link" id="termsBtn">Privacy and terms</a>
           <span class="footer-divider">|</span>
           <a href="https://www.acr.org/Clinical-Resources/Clinical-Tools-and-Reference/Appropriateness-Criteria" target="_blank" rel="noopener" class="footer-link">ACR Guidelines</a>
           <span class="footer-divider">|</span>
@@ -897,7 +887,7 @@
         </div>
         
         <div class="footer-directory">
-          <span class="directory-label">MRI Protocols:</span>
+          <span class="directory-label">Browse by region:</span>
           <a href="/regions/neuro/" class="directory-link">Neuro</a>
           <a href="/regions/spine/" class="directory-link">Spine</a>
           <a href="/regions/msk/" class="directory-link">MSK</a>
@@ -905,7 +895,8 @@
           <a href="/regions/chest/" class="directory-link">Chest</a>
           <a href="/regions/vascular/" class="directory-link">Vascular</a>
           <a href="/regions/breast/" class="directory-link">Breast</a>
-          <a href="/regions/peds/" class="directory-link">Pediatrics</a>
+          <a href="/regions/peds/" class="directory-link">Pediatric</a>
+          <a href="/regions/other/" class="directory-link">General</a>
         </div>
 
         <div class="footer-promo">
@@ -1072,7 +1063,7 @@
   <script>
     // Service worker registration and install progress
     // Keep CURRENT_SW_VERSION in sync with CACHE_NAME in sw.js
-    const CURRENT_SW_VERSION = 'radex-v3.10.0';
+    const CURRENT_SW_VERSION = 'radex-v3.11.0';
 
     if ('serviceWorker' in navigator) {
       // Listen for install progress messages from the SW
@@ -1122,6 +1113,6 @@
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.0/dist/ort.min.js"></script>
   <!-- Self-hosted (was unpkg CDN) so the TF-IDF scenario ranking can't be lost
        when the CDN is unreachable, and to guarantee reliable offline caching. -->
-  <script type="module" src="js/app.js?v=20261111c"></script>
+  <script type="module" src="js/app.js?v=20261112a"></script>
 </body>
 </html>

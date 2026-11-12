@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__))
-from generate_static_pages import slugify, make_unique_slugs, make_display_name, REGION_ICONS, CSS_VERSION, render_region, render_protocol, render_about
+from generate_static_pages import slugify, make_unique_slugs, make_display_name, REGION_ICONS, CSS_VERSION, render_region, render_protocol, render_about, render_privacy, render_not_found
 
 class TestSlugify(unittest.TestCase):
     def test_basic(self):
@@ -96,7 +96,23 @@ class TestConstants(unittest.TestCase):
             self.assertTrue(len(svg) > 0, f"REGION_ICONS[{region!r}] is empty")
 
     def test_css_version_updated(self):
-        self.assertEqual(CSS_VERSION, "20261110a")
+        self.assertEqual(CSS_VERSION, "20261112a")
+
+
+def assert_shared_shell(case, html, active=None):
+    """Every generated page carries the same header, nav, footer and script."""
+    for href, label in [("/", "Search"), ("/topics/", "Topics"), ("/#protocols", "Protocols"),
+                        ("/#builder", "Builder"), ("/about/", "About")]:
+        case.assertIn(f'href="{href}" class="nav-link', html)
+        case.assertIn(f">{label}</a>", html)
+    case.assertIn('id="mobileMenuBtn"', html)
+    case.assertIn('src="/js/site-nav.js', html)
+    case.assertIn('class="site-footer"', html)
+    case.assertIn('class="page"', html)
+    case.assertNotIn('style="', html.split("<body>", 1)[1])
+    if active:
+        case.assertIn('class="nav-link active" aria-current="page">' + active, html)
+
 
 class TestRenderRegion(unittest.TestCase):
     def _make_card(self, topic="Headache", count=33):
@@ -110,15 +126,13 @@ class TestRenderRegion(unittest.TestCase):
         slug_map = {}
         return render_region("neuro", cards, protocols, slug_map, [], 100)
 
-    def test_uses_static_hero_class(self):
-        html = self._render()
-        self.assertIn('class="static-hero"', html)
+    def test_uses_shared_shell(self):
+        assert_shared_shell(self, self._render(), active="Topics")
 
-    def test_hero_contains_svg_icon(self):
+    def test_has_breadcrumb_and_title(self):
         html = self._render()
-        self.assertIn('class="static-hero-icon"', html)
-        # neuro icon path
-        self.assertIn('circle cx="12" cy="8"', html)
+        self.assertIn('class="crumbs"', html)
+        self.assertIn('<h1 class="page-title">Neuro imaging', html)
 
     def test_uses_topic_grid_class(self):
         html = self._render()
@@ -153,13 +167,18 @@ class TestRenderRegion(unittest.TestCase):
         html = render_region("neuro", [], [], {}, [], 100)
         self.assertNotIn('class="topic-grid"', html)
 
-    def test_uses_protocol_cta(self):
+    def test_has_one_call_to_action(self):
         html = self._render()
-        self.assertIn('class="protocol-cta"', html)
+        self.assertEqual(html.count('class="page-cta"'), 1)
 
 
 class TestRenderProtocol(unittest.TestCase):
-    def _make_protocol(self, region="neuro", sequences=None, matches=None):
+    ROUTED = [
+        {"id": "1", "name": "Headache, sudden onset", "topic": "Headache", "study": "MRI head without IV contrast"},
+        {"id": "2", "name": "Headache, new, older patient", "topic": "Headache", "study": "MRI head without IV contrast"},
+    ]
+
+    def _make_protocol(self, region="neuro", sequences=None):
         return {
             "canonical_procedure": "MRI Brain W/O Contrast",
             "display_name": "BRAIN",
@@ -169,17 +188,20 @@ class TestRenderProtocol(unittest.TestCase):
                 {"sequence_name": "SAG T1", "sort_order": 1, "is_post_contrast": 0},
                 {"sequence_name": "AX T2", "sort_order": 2, "is_post_contrast": 0},
             ],
-            "scenario_matches": matches or [
-                {"scenario_name": "Headache, acute onset", "relevance_score": 0.9},
-            ],
+            # Old precomputed list: often wrong (hand pain on the hip arthrogram
+            # page), so pages must not show it.
+            "scenario_matches": [{"scenario_name": "Hand pain, chronic, initial imaging", "relevance_score": 0.9}],
         }
 
-    def _render(self, region="neuro", sequences=None, matches=None):
-        return render_protocol(self._make_protocol(region, sequences, matches), "mri-brain-wo-contrast")
+    def _render(self, region="neuro", sequences=None, routed=None):
+        return render_protocol(self._make_protocol(region, sequences), "mri-brain-wo-contrast",
+                               self.ROUTED if routed is None else routed)
 
-    def test_uses_static_breadcrumb_class(self):
-        html = self._render()
-        self.assertIn('class="static-breadcrumb"', html)
+    def test_uses_shared_shell(self):
+        assert_shared_shell(self, self._render())
+
+    def test_uses_breadcrumb(self):
+        self.assertIn('class="crumbs"', self._render())
 
     def test_breadcrumb_includes_region_link_for_known_region(self):
         html = self._render(region="neuro")
@@ -189,9 +211,8 @@ class TestRenderProtocol(unittest.TestCase):
         html = self._render(region="neck")
         self.assertNotIn('href="/regions/neck/"', html)
 
-    def test_uses_protocol_type_badge(self):
-        html = self._render()
-        self.assertIn('class="protocol-type-badge"', html)
+    def test_says_it_is_an_mri_protocol(self):
+        self.assertIn('class="page-kicker">MRI protocol, Neuro', self._render())
 
     def test_uses_sequence_table_class(self):
         html = self._render()
@@ -203,31 +224,33 @@ class TestRenderProtocol(unittest.TestCase):
         self.assertIn("SAG T1", html)
         self.assertIn("Pre-contrast", html)
 
-    def test_uses_scenario_pill_class(self):
+    def test_routed_topics_link_to_topic_pages(self):
         html = self._render()
-        self.assertIn('class="scenario-pill"', html)
+        self.assertIn('href="/topics/headache/"', html)
+        self.assertIn("2 scenarios where ACR rates this MRI usually appropriate", html)
 
-    def test_scenario_name_displayed(self):
-        html = self._render()
-        self.assertIn("Headache, acute onset", html)
+    def test_old_precomputed_matches_not_shown(self):
+        self.assertNotIn("Hand pain", self._render())
 
-    def test_uses_protocol_cta_class(self):
-        html = self._render()
-        self.assertIn('class="protocol-cta"', html)
+    def test_no_topic_section_without_routed_scenarios(self):
+        self.assertNotIn("Where ACR recommends this study", self._render(routed=[]))
+
+    def test_has_one_call_to_action(self):
+        self.assertEqual(self._render().count('class="page-cta"'), 1)
 
     def test_no_old_inline_table_styles(self):
         html = self._render()
         self.assertNotIn("border-collapse:collapse", html)
 
-    def test_uses_static_section_label(self):
-        html = self._render()
-        self.assertIn('class="static-section-label"', html)
-
 
 class TestRenderAbout(unittest.TestCase):
-    def test_key_stats_uses_scenario_pill(self):
+    def test_uses_shared_shell(self):
+        assert_shared_shell(self, render_about(), active="About")
+
+    def test_key_stats_are_a_list(self):
         html = render_about()
-        self.assertIn('class="scenario-pill"', html)
+        self.assertIn('class="page-list"', html)
+        self.assertIn("<li>3,900+ clinical scenarios across 260+ topics</li>", html)
 
     def test_region_links_use_protocol_list_item(self):
         html = render_about()
@@ -235,20 +258,29 @@ class TestRenderAbout(unittest.TestCase):
         self.assertIn('href="/regions/neuro/"', html)
         self.assertIn('href="/regions/peds/"', html)
 
-    def test_list_headings_use_static_section_label(self):
+    def test_sections_use_shared_headings(self):
         html = render_about()
-        self.assertIn('class="static-section-label"', html)
-
-    def test_prose_headings_do_not_use_static_section_label(self):
-        html = render_about()
-        for heading in ["Data Sources", "Important Notice", "Contact"]:
-            self.assertNotIn(f'class="static-section-label">{heading}', html)
+        for heading in ["Built by", "Data sources and methodology", "Important notice", "Contact"]:
+            self.assertIn(f'class="page-section-title">{heading}<', html)
 
     def test_all_8_regions_linked(self):
         html = render_about()
         from generate_static_pages import REGION_DISPLAY
         for region in REGION_DISPLAY:
             self.assertIn(f'href="/regions/{region}/"', html)
+
+
+class TestOtherPages(unittest.TestCase):
+    def test_privacy_page_uses_shared_shell(self):
+        html = render_privacy()
+        assert_shared_shell(self, html)
+        self.assertIn('class="page-callout"', html)
+        self.assertIn("10. Age restrictions", html)
+
+    def test_not_found_uses_shared_shell(self):
+        html = render_not_found()
+        assert_shared_shell(self, html)
+        self.assertIn('content="noindex, follow"', html)
 
 
 if __name__ == "__main__":
