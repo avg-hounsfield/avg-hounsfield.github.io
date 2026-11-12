@@ -18,7 +18,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20261112a';
+    const cacheBuster = '20261112b';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
@@ -239,6 +239,20 @@ export class DataLoader {
     // MR urography -> KIDNEYS (the urographic phases live there).
     if (/^mru\b/.test(procLower)) {
       return byName('KIDNEYS') || DataLoader.NO_PROTOCOL;
+    }
+
+    // "MRI orbits face neck" is ACR's head and neck MRI. Head and neck cancer
+    // goes to the neck protocol (owner's decision, November 2026); the cranial
+    // nerve and sinonasal scenarios that share the study name go to their own
+    // protocols rather than to ORBITS.
+    if (isProcedureFor('orbits face neck')) {
+      if (scenarioName.includes('trigeminal neuralgia')) return byName('TRIGEMINAL NEURALGIA') || byName('CRANIAL NERVES/PAROTID');
+      if (/sinus|sinonasal/.test(scenarioName)) return byName('SINUSES') || byName('NECK SOFT TISSUE');
+      if (scenarioName.includes('cancer') && !scenarioName.includes('perineural')) return byName('NECK SOFT TISSUE');
+      if (/nerve|palsy|paralysis|weakness|numbness|spasm|sensory|anosmia|olfaction|dysphagia|oropharyngeal pain|perineural/.test(scenarioName)) {
+        return byName('CRANIAL NERVES/PAROTID') || byName('NECK SOFT TISSUE');
+      }
+      return byName('NECK SOFT TISSUE') || DataLoader.NO_PROTOCOL;
     }
 
     // Vascular studies. Only the head and neck protocols and MRA RENALS carry

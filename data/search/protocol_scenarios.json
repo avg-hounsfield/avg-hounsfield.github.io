@@ -4067,6 +4067,152 @@
     "study": "MRI chest without and with IV contrast"
    }
   ],
+  "CRANIAL NERVES/PAROTID|neuro": [
+   {
+    "id": "6185",
+    "name": "Anosmia, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6195",
+    "name": "Bell palsy, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6193",
+    "name": "Facial expression paralysis, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6190",
+    "name": "Facial numbness, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6192",
+    "name": "Facial weakness, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6189",
+    "name": "Head and face sensory abnormalities, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6208",
+    "name": "Head and neck cancer, perineural tumor spread suspected, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6209",
+    "name": "Head and neck cancer, perineural tumor spread, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6194",
+    "name": "Hemifacial spasm, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6207",
+    "name": "Lower cranial nerve syndromes cranial nerve IX–XII, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6188",
+    "name": "Mastication muscles paralysis, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6187",
+    "name": "Mastication muscles weakness, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6206",
+    "name": "Multiple lower cranial nerve palsies, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6196",
+    "name": "Multiple middle cranial nerve palsies, cranial nerve V–VII, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6186",
+    "name": "Olfaction abnormal, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6199",
+    "name": "Oropharnygeal neurogenic dysphagia, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6198",
+    "name": "Oropharyngeal pain, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6201",
+    "name": "Palatal paralysis, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6197",
+    "name": "Palate weakness, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6205",
+    "name": "Tongue paralysis, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6204",
+    "name": "Tongue weakness, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6203",
+    "name": "Trapezius and sternocleidomastoid muscle paralysis, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6202",
+    "name": "Trapezius and sternocleidomastoid muscle weakness, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6200",
+    "name": "Vocal cord paralysis, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
+   }
+  ],
   "ELBOW|msk": [
    {
     "id": "7795",
@@ -7255,416 +7401,6 @@
     "study": "MRI neck without and with IV contrast"
    },
    {
-    "id": "6537",
-    "name": "Soft tissue infection suspected, neck, hx of puncture wound, possible foreign body retained, radiography normal, next imaging study",
-    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
-    "study": "MRI neck without and with IV contrast"
-   },
-   {
-    "id": "6388",
-    "name": "Soft tissue infection suspected, neck, radiography findings suggest joint effusion, next imaging study",
-    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
-    "study": "MRI neck without and with IV contrast"
-   },
-   {
-    "id": "6417",
-    "name": "Soft tissue infection suspected, neck, radiography findings suggest soft tissue swelling, next imaging study",
-    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
-    "study": "MRI neck without and with IV contrast"
-   },
-   {
-    "id": "6554",
-    "name": "Soft tissue infection suspected, neck, radiography normal, necrotizing fasciitis highly suspected, next imaging study",
-    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
-    "study": "MRI neck without and with IV contrast"
-   },
-   {
-    "id": "6402",
-    "name": "Soft tissue infection suspected, neck, radiography normal, next imaging study",
-    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
-    "study": "MRI neck without and with IV contrast"
-   },
-   {
-    "id": "6569",
-    "name": "Soft tissue infection suspected, neck, soft tissue gas on radiography, no puncture wound, next imaging study",
-    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
-    "study": "MRI neck without and with IV contrast"
-   },
-   {
-    "id": "4663",
-    "name": "Thyroid cancer, differentiated, recurrence suspected",
-    "topic": "Thyroid Disease",
-    "study": "MRI neck without and with IV contrast"
-   },
-   {
-    "id": "4664",
-    "name": "Thyroid cancer, medullary, recurrence suspected",
-    "topic": "Thyroid Disease",
-    "study": "MRI neck without and with IV contrast"
-   }
-  ],
-  "ORBITS|neuro": [
-   {
-    "id": "6185",
-    "name": "Anosmia, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6195",
-    "name": "Bell palsy, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6193",
-    "name": "Facial expression paralysis, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6190",
-    "name": "Facial numbness, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6192",
-    "name": "Facial weakness, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6189",
-    "name": "Head and face sensory abnormalities, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6208",
-    "name": "Head and neck cancer, perineural tumor spread suspected, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6209",
-    "name": "Head and neck cancer, perineural tumor spread, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6194",
-    "name": "Hemifacial spasm, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6207",
-    "name": "Lower cranial nerve syndromes cranial nerve IX–XII, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6188",
-    "name": "Mastication muscles paralysis, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6187",
-    "name": "Mastication muscles weakness, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6206",
-    "name": "Multiple lower cranial nerve palsies, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6196",
-    "name": "Multiple middle cranial nerve palsies, cranial nerve V–VII, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6186",
-    "name": "Olfaction abnormal, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6199",
-    "name": "Oropharnygeal neurogenic dysphagia, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6198",
-    "name": "Oropharyngeal pain, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6201",
-    "name": "Palatal paralysis, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6197",
-    "name": "Palate weakness, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6205",
-    "name": "Tongue paralysis, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6204",
-    "name": "Tongue weakness, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6203",
-    "name": "Trapezius and sternocleidomastoid muscle paralysis, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6202",
-    "name": "Trapezius and sternocleidomastoid muscle weakness, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6191",
-    "name": "Trigeminal neuralgia, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6200",
-    "name": "Vocal cord paralysis, unilateral, isolated, initial imaging",
-    "topic": "Cranial Neuropathy",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "8700",
-    "name": "Demyelinating disease, new neuro deficits, initial imaging",
-    "topic": "Demyelinating Diseases",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "8701",
-    "name": "Demyelinating disease, progressive neuro deficits, initial imaging",
-    "topic": "Demyelinating Diseases",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "7392",
-    "name": "Intraocular mass suspected, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without and with IV contrast"
-   },
-   {
-    "id": "7391",
-    "name": "Leukocoria, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without and with IV contrast"
-   },
-   {
-    "id": "7387",
-    "name": "Papilledema on ophthalmologic exam, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without and with IV contrast"
-   },
-   {
-    "id": "7388",
-    "name": "Signs of raised intracranial pressure, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without and with IV contrast"
-   },
-   {
-    "id": "7379",
-    "name": "Vision loss due to congenital abnormality, bilateral, no leukocoria, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without IV contrast"
-   },
-   {
-    "id": "7378",
-    "name": "Vision loss due to congenital abnormality, unilateral, no leukocoria, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without IV contrast"
-   },
-   {
-    "id": "7380",
-    "name": "Vision loss due to developmental abnormality, bilateral, no leukocoria, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without IV contrast"
-   },
-   {
-    "id": "7381",
-    "name": "Vision loss due to developmental abnormality, unilateral, no leukocoria, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without IV contrast"
-   },
-   {
-    "id": "7376",
-    "name": "Vision loss, acute, nontraumatic, no papilledema, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without and with IV contrast"
-   },
-   {
-    "id": "7386",
-    "name": "Vision loss, optic pathway tumor suspected, with or without hx of neurofibromatosis type 1, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without and with IV contrast"
-   },
-   {
-    "id": "7383",
-    "name": "Visual acuity decreased due to congenital abnormality, bilateral, no leukocoria, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without IV contrast"
-   },
-   {
-    "id": "7382",
-    "name": "Visual acuity decreased due to congenital abnormality, unilateral, no leukocoria, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without IV contrast"
-   },
-   {
-    "id": "7385",
-    "name": "Visual acuity decreased due to developmental abnormality, bilateral, no leukocoria, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without IV contrast"
-   },
-   {
-    "id": "7384",
-    "name": "Visual acuity decreased due to developmental abnormality, unilateral, no leukocoria, initial imaging",
-    "topic": "Orbital Imaging and Vision Loss-Child",
-    "study": "MRI head and orbits without IV contrast"
-   },
-   {
-    "id": "3437",
-    "name": "Diplopia, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "3427",
-    "name": "Enophthalmos, nontraumatic, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "3426",
-    "name": "Exophthalmos, nontraumatic, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "3436",
-    "name": "Ophthalmoplegia, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "3390",
-    "name": "Optic neuritis suspected, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "3425",
-    "name": "Orbital asymmetry, nontraumatic, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "3428",
-    "name": "Orbital cellulitis suspected, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "3430",
-    "name": "Scleritis suspected, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "3429",
-    "name": "Uveitis suspected, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "3431",
-    "name": "Visual loss, intraocular mass, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "3432",
-    "name": "Visual loss, optic nerve symptoms, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "3433",
-    "name": "Visual loss, pre-chiasm symptoms, initial exam",
-    "topic": "Orbits, Vision, and Visual Loss",
-    "study": "MRI orbits without and with IV contrast"
-   },
-   {
-    "id": "5991",
-    "name": "Rhinosinusitis, acute, intracranial complication suspected, initial imaging",
-    "topic": "Sinonasal Disease",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "5990",
-    "name": "Rhinosinusitis, acute, orbital complication suspected, initial imaging",
-    "topic": "Sinonasal Disease",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6001",
-    "name": "Sinonasal mass suspected, initial imaging",
-    "topic": "Sinonasal Disease",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "5999",
-    "name": "Sinusitis, acute, rapid progression, initial imaging",
-    "topic": "Sinonasal Disease",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "6000",
-    "name": "Sinusitis, invasive fungal suspected, initial imaging",
-    "topic": "Sinonasal Disease",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "3536",
-    "name": "Ped, sinusitis, invasive fungal suspected, initial exam",
-    "topic": "Sinusitis–Child",
-    "study": "MRI paranasal sinuses without and with IV contrast"
-   },
-   {
-    "id": "808",
-    "name": "Ped, sinusitis, orbital or intracranial complications suspected, initial exam",
-    "topic": "Sinusitis–Child",
-    "study": "MRI head and paranasal sinuses without and with IV contrast"
-   },
-   {
     "id": "7029",
     "name": "Hypopharynx cancer suspected, initial staging",
     "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
@@ -7875,36 +7611,6 @@
     "study": "MRI orbits face neck without and with IV contrast"
    },
    {
-    "id": "7042",
-    "name": "Paranasal sinuses cancer suspected, initial staging",
-    "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "7043",
-    "name": "Paranasal sinuses cancer, initial staging",
-    "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "7076",
-    "name": "Paranasal sinuses cancer, treated, recurrence suspected, follow-up imaging",
-    "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "7078",
-    "name": "Paranasal sinuses cancer, treated, recurrence, follow-up imaging",
-    "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
-    "id": "7074",
-    "name": "Paranasal sinuses cancer, treated, surveillance imaging",
-    "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
-    "study": "MRI orbits face neck without and with IV contrast"
-   },
-   {
     "id": "7051",
     "name": "Parotid gland cancer suspected, initial staging",
     "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
@@ -8053,6 +7759,236 @@
     "name": "Unknown primary of the head and neck cancer, treated, surveillance imaging",
     "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
     "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6537",
+    "name": "Soft tissue infection suspected, neck, hx of puncture wound, possible foreign body retained, radiography normal, next imaging study",
+    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+    "study": "MRI neck without and with IV contrast"
+   },
+   {
+    "id": "6388",
+    "name": "Soft tissue infection suspected, neck, radiography findings suggest joint effusion, next imaging study",
+    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+    "study": "MRI neck without and with IV contrast"
+   },
+   {
+    "id": "6417",
+    "name": "Soft tissue infection suspected, neck, radiography findings suggest soft tissue swelling, next imaging study",
+    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+    "study": "MRI neck without and with IV contrast"
+   },
+   {
+    "id": "6554",
+    "name": "Soft tissue infection suspected, neck, radiography normal, necrotizing fasciitis highly suspected, next imaging study",
+    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+    "study": "MRI neck without and with IV contrast"
+   },
+   {
+    "id": "6402",
+    "name": "Soft tissue infection suspected, neck, radiography normal, next imaging study",
+    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+    "study": "MRI neck without and with IV contrast"
+   },
+   {
+    "id": "6569",
+    "name": "Soft tissue infection suspected, neck, soft tissue gas on radiography, no puncture wound, next imaging study",
+    "topic": "Suspected Osteomyelitis, Septic Arthritis, or Soft Tissue Infection (Excluding Spine and Diabetic Foot)",
+    "study": "MRI neck without and with IV contrast"
+   },
+   {
+    "id": "4663",
+    "name": "Thyroid cancer, differentiated, recurrence suspected",
+    "topic": "Thyroid Disease",
+    "study": "MRI neck without and with IV contrast"
+   },
+   {
+    "id": "4664",
+    "name": "Thyroid cancer, medullary, recurrence suspected",
+    "topic": "Thyroid Disease",
+    "study": "MRI neck without and with IV contrast"
+   }
+  ],
+  "ORBITS|neuro": [
+   {
+    "id": "8700",
+    "name": "Demyelinating disease, new neuro deficits, initial imaging",
+    "topic": "Demyelinating Diseases",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "8701",
+    "name": "Demyelinating disease, progressive neuro deficits, initial imaging",
+    "topic": "Demyelinating Diseases",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "7392",
+    "name": "Intraocular mass suspected, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without and with IV contrast"
+   },
+   {
+    "id": "7391",
+    "name": "Leukocoria, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without and with IV contrast"
+   },
+   {
+    "id": "7387",
+    "name": "Papilledema on ophthalmologic exam, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without and with IV contrast"
+   },
+   {
+    "id": "7388",
+    "name": "Signs of raised intracranial pressure, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without and with IV contrast"
+   },
+   {
+    "id": "7379",
+    "name": "Vision loss due to congenital abnormality, bilateral, no leukocoria, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without IV contrast"
+   },
+   {
+    "id": "7378",
+    "name": "Vision loss due to congenital abnormality, unilateral, no leukocoria, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without IV contrast"
+   },
+   {
+    "id": "7380",
+    "name": "Vision loss due to developmental abnormality, bilateral, no leukocoria, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without IV contrast"
+   },
+   {
+    "id": "7381",
+    "name": "Vision loss due to developmental abnormality, unilateral, no leukocoria, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without IV contrast"
+   },
+   {
+    "id": "7376",
+    "name": "Vision loss, acute, nontraumatic, no papilledema, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without and with IV contrast"
+   },
+   {
+    "id": "7386",
+    "name": "Vision loss, optic pathway tumor suspected, with or without hx of neurofibromatosis type 1, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without and with IV contrast"
+   },
+   {
+    "id": "7383",
+    "name": "Visual acuity decreased due to congenital abnormality, bilateral, no leukocoria, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without IV contrast"
+   },
+   {
+    "id": "7382",
+    "name": "Visual acuity decreased due to congenital abnormality, unilateral, no leukocoria, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without IV contrast"
+   },
+   {
+    "id": "7385",
+    "name": "Visual acuity decreased due to developmental abnormality, bilateral, no leukocoria, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without IV contrast"
+   },
+   {
+    "id": "7384",
+    "name": "Visual acuity decreased due to developmental abnormality, unilateral, no leukocoria, initial imaging",
+    "topic": "Orbital Imaging and Vision Loss-Child",
+    "study": "MRI head and orbits without IV contrast"
+   },
+   {
+    "id": "3437",
+    "name": "Diplopia, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3427",
+    "name": "Enophthalmos, nontraumatic, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3426",
+    "name": "Exophthalmos, nontraumatic, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3436",
+    "name": "Ophthalmoplegia, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3390",
+    "name": "Optic neuritis suspected, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3425",
+    "name": "Orbital asymmetry, nontraumatic, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3428",
+    "name": "Orbital cellulitis suspected, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3430",
+    "name": "Scleritis suspected, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3429",
+    "name": "Uveitis suspected, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3431",
+    "name": "Visual loss, intraocular mass, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3432",
+    "name": "Visual loss, optic nerve symptoms, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3433",
+    "name": "Visual loss, pre-chiasm symptoms, initial exam",
+    "topic": "Orbits, Vision, and Visual Loss",
+    "study": "MRI orbits without and with IV contrast"
+   },
+   {
+    "id": "3536",
+    "name": "Ped, sinusitis, invasive fungal suspected, initial exam",
+    "topic": "Sinusitis–Child",
+    "study": "MRI paranasal sinuses without and with IV contrast"
+   },
+   {
+    "id": "808",
+    "name": "Ped, sinusitis, orbital or intracranial complications suspected, initial exam",
+    "topic": "Sinusitis–Child",
+    "study": "MRI head and paranasal sinuses without and with IV contrast"
    },
    {
     "id": "8361",
@@ -13185,6 +13121,68 @@
     "study": "MRI sacroiliac joints without IV contrast"
    }
   ],
+  "SINUSES|neuro": [
+   {
+    "id": "5991",
+    "name": "Rhinosinusitis, acute, intracranial complication suspected, initial imaging",
+    "topic": "Sinonasal Disease",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "5990",
+    "name": "Rhinosinusitis, acute, orbital complication suspected, initial imaging",
+    "topic": "Sinonasal Disease",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6001",
+    "name": "Sinonasal mass suspected, initial imaging",
+    "topic": "Sinonasal Disease",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "5999",
+    "name": "Sinusitis, acute, rapid progression, initial imaging",
+    "topic": "Sinonasal Disease",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "6000",
+    "name": "Sinusitis, invasive fungal suspected, initial imaging",
+    "topic": "Sinonasal Disease",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "7042",
+    "name": "Paranasal sinuses cancer suspected, initial staging",
+    "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "7043",
+    "name": "Paranasal sinuses cancer, initial staging",
+    "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "7076",
+    "name": "Paranasal sinuses cancer, treated, recurrence suspected, follow-up imaging",
+    "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "7078",
+    "name": "Paranasal sinuses cancer, treated, recurrence, follow-up imaging",
+    "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
+    "study": "MRI orbits face neck without and with IV contrast"
+   },
+   {
+    "id": "7074",
+    "name": "Paranasal sinuses cancer, treated, surveillance imaging",
+    "topic": "Staging and Post-Therapy Assessment of Head and Neck Cancer",
+    "study": "MRI orbits face neck without and with IV contrast"
+   }
+  ],
   "SPINE INFECTION|neuro": [
    {
     "id": "8206",
@@ -14837,6 +14835,14 @@
     "name": "TMJ pain, idiopathic arthritis, follow-up imaging",
     "topic": "Joint Pain: Idiopathic Arthritis-Child",
     "study": "MRI temporomandibular joint without and with IV contrast"
+   }
+  ],
+  "TRIGEMINAL NEURALGIA|neuro": [
+   {
+    "id": "6191",
+    "name": "Trigeminal neuralgia, unilateral, isolated, initial imaging",
+    "topic": "Cranial Neuropathy",
+    "study": "MRI orbits face neck without and with IV contrast"
    }
   ],
   "WHOLE BODY|msk": [

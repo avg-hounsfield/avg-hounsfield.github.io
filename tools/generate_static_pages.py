@@ -945,7 +945,7 @@ def render_privacy():
         return f'  <p class="page-text">{text}</p>'
 
     body = f"""{crumbs(("GRAi Imaging Guide", "/"), ("Privacy policy", None))}
-{page_intro("Privacy policy", kicker="Effective January 1, 2025. Last updated January 1, 2025.")}
+{page_intro("Privacy policy", kicker="Effective January 1, 2025. Last updated November 11, 2026.")}
 
 <aside class="page-callout" aria-labelledby="disclaimer-title">
   <h2 class="page-callout-title" id="disclaimer-title">Important medical disclaimer</h2>
@@ -956,26 +956,18 @@ def render_privacy():
 
 {section("1. About GRAi Imaging Guide", p("GRAi Imaging Guide is an educational platform designed to provide imaging protocol information and guidelines for healthcare professionals. Our mission is to serve as a reference tool for qualified medical personnel in their professional practice."))}
 {section("2. Information we collect", "\n".join([
-    p("<strong>No Personal Health Information:</strong> We do not collect, store, or process any personal health information (PHI) or patient data."),
-    p("<strong>Usage Data:</strong> We may collect anonymous usage statistics including:"),
-    ul("Pages visited and search queries (anonymized)", "Technical information (browser type, device type, IP address)", "Usage patterns and preferences (anonymized)"),
-    p("<strong>Local Storage:</strong> We may use browser local storage to save user preferences such as favorite protocols and display settings. This data remains on your device and is not transmitted to our servers."),
+    p("<strong>We do not collect your information.</strong> The site has no accounts, no analytics and no tracking. Searches run entirely in your browser; nothing you type is sent to us or to anyone else."),
+    p("<strong>No patient information:</strong> We do not collect, store, or process any personal health information (PHI) or patient data. Please do not enter patient identifiers into the search."),
+    p("<strong>Saved on your device:</strong> Your browser keeps a few preferences, such as your recent searches and display settings, and a copy of the site so it works offline. These stay on your device and are never transmitted to us. Clearing your browser's site data removes them."),
+    p("<strong>Hosting:</strong> The site is served by GitHub Pages. Like any web host, GitHub may record technical details of each page request, such as your IP address, under its own privacy statement. We do not receive or use that data."),
 ]))}
-{section("3. How we use information", p("Any information we collect is used solely to:") + "\n" + ul(
-    "Improve the educational content and user experience", "Analyze usage patterns to enhance the platform",
-    "Ensure proper functionality of the website", "Maintain security and prevent misuse"))}
-{section("4. Information sharing", p("We do not sell, trade, or otherwise transfer your information to third parties. We may share anonymized, aggregated data for research or educational purposes only."))}
-{section("5. Data security", p("We implement appropriate security measures to protect against unauthorized access, alteration, disclosure, or destruction of data. However, no internet transmission is 100% secure, and we cannot guarantee absolute security."))}
-{section("6. Professional responsibility", p("<strong>Healthcare Provider Responsibility:</strong> Healthcare professionals using this platform are responsible for:") + "\n" + ul(
+{section("3. Professional responsibility", p("<strong>Healthcare Provider Responsibility:</strong> Healthcare professionals using this platform are responsible for:") + "\n" + ul(
     "Verifying all information against current medical standards", "Exercising independent professional judgment",
     "Ensuring compliance with local regulations and institutional policies",
-    "Maintaining patient confidentiality in accordance with HIPAA and other applicable laws"))}
-{section("7. Limitation of liability", p("GRAi Imaging Guide and its operators disclaim all liability for any direct, indirect, incidental, or consequential damages arising from the use of this educational platform. Users assume all responsibility for the appropriate use of this information in their professional practice."))}
-{section("8. Compliance with regulations", p("This platform is designed to comply with:") + "\n" + ul(
-    "HIPAA (Health Insurance Portability and Accountability Act)", "GDPR (General Data Protection Regulation) where applicable",
-    "Other relevant healthcare and privacy regulations"))}
-{section("9. Changes to this policy", p("We may update this privacy policy periodically. Changes will be posted on this page with an updated effective date. Continued use of the platform constitutes acceptance of any changes."))}
-{section("10. Age restrictions", p("This platform is intended for use by licensed healthcare professionals only. It is not intended for use by individuals under 18 years of age or by unlicensed individuals seeking medical information."))}
+    "Maintaining patient confidentiality in accordance with applicable laws"))}
+{section("4. Limitation of liability", p("GRAi Imaging Guide and its operators disclaim all liability for any direct, indirect, incidental, or consequential damages arising from the use of this educational platform. Users assume all responsibility for the appropriate use of this information in their professional practice."))}
+{section("5. Changes to this policy", p("We may update this privacy policy periodically. Changes will be posted on this page with an updated effective date. Continued use of the platform constitutes acceptance of any changes."))}
+{section("6. Age restrictions", p("This platform is intended for use by licensed healthcare professionals only. It is not intended for use by individuals under 18 years of age or by unlicensed individuals seeking medical information."))}
 {section("Contact information", p("If you have questions about this privacy policy or concerns about our practices, please contact us through the appropriate professional channels.") + "\n" + p("<strong>Remember:</strong> This platform is for educational purposes only and should never replace professional medical consultation, institutional protocols, or evidence-based clinical decision-making."))}"""
     return render_page(head, body)
 

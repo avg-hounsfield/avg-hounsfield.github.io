@@ -49,7 +49,29 @@ const CASES = [
   ['HTN, high suspicion renal vascular', 'MRA abdomen without IV contrast', 'MRA RENALS'],
   ['Hematuria', 'MRU without and with IV contrast', 'KIDNEYS'],
   ['Low back pain, cauda equina syndrome suspected', 'MRI lumbar spine without IV contrast', 'L-SPINE'],
+  ['Larynx cancer, initial staging', 'MRI orbits face neck without and with IV contrast', 'NECK SOFT TISSUE'],
+  ['Unknown primary head and neck cancer, initial staging', 'MRI orbits face neck without and with IV contrast', 'NECK SOFT TISSUE'],
+  ['Parotid gland cancer, treated, surveillance imaging', 'MRI orbits face neck W/O & W/ Contrast', 'NECK SOFT TISSUE'],
+  ['Vocal cord paralysis, unilateral, isolated, initial imaging', 'MRI orbits face neck without and with IV contrast', 'CRANIAL NERVES/PAROTID'],
+  ['Bell palsy, unilateral, isolated, initial imaging', 'MRI orbits face neck without and with IV contrast', 'CRANIAL NERVES/PAROTID'],
+  ['Head and neck cancer, perineural tumor spread, initial imaging', 'MRI orbits face neck without and with IV contrast', 'CRANIAL NERVES/PAROTID'],
+  ['Trigeminal neuralgia, unilateral, isolated, initial imaging', 'MRI orbits face neck without and with IV contrast', 'TRIGEMINAL NEURALGIA'],
+  ['Sinonasal mass suspected, initial imaging', 'MRI orbits face neck without and with IV contrast', 'SINUSES'],
+  ['Optic neuritis suspected, initial exam', 'MRI orbits without and with IV contrast', 'ORBITS'],
 ];
+
+// "MRI orbits face neck" never goes to ORBITS: none of its scenarios is an orbit study.
+test('no "MRI orbits face neck" study routes to ORBITS', async () => {
+  const wrong = [];
+  for (const s of all) {
+    for (const p of s.procedures) {
+      if (!/orbits face neck/i.test(p.name)) continue;
+      const { protocol } = await loader.getProtocol(s.region, s, p);
+      if (!protocol || protocol.name === 'ORBITS') wrong.push(`${s.name} -> ${protocol?.name ?? 'none'}`);
+    }
+  }
+  assert.deepEqual(wrong, []);
+});
 
 for (const [scenario, study, want] of CASES) {
   test(`${study} for "${scenario}" -> ${want ?? 'no protocol'}`, async () => {

@@ -275,7 +275,16 @@ class TestOtherPages(unittest.TestCase):
         html = render_privacy()
         assert_shared_shell(self, html)
         self.assertIn('class="page-callout"', html)
-        self.assertIn("10. Age restrictions", html)
+        self.assertIn("6. Age restrictions", html)
+
+    def test_privacy_page_claims_no_collection(self):
+        # The site collects nothing and certifies no compliance (owner, November 2026).
+        html = render_privacy()
+        self.assertIn("We do not collect your information.", html)
+        self.assertNotIn("HIPAA", html)
+        self.assertNotIn("search queries", html)
+        self.assertNotIn("usage statistics", html)
+        self.assertNotIn("Compliance with regulations", html)
 
     def test_not_found_uses_shared_shell(self):
         html = render_not_found()
