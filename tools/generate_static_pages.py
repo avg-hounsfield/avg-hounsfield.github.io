@@ -968,7 +968,7 @@ def render_privacy():
 {section("4. Limitation of liability", p("GRAi Imaging Guide and its operators disclaim all liability for any direct, indirect, incidental, or consequential damages arising from the use of this educational platform. Users assume all responsibility for the appropriate use of this information in their professional practice."))}
 {section("5. Changes to this policy", p("We may update this privacy policy periodically. Changes will be posted on this page with an updated effective date. Continued use of the platform constitutes acceptance of any changes."))}
 {section("6. Age restrictions", p("This platform is intended for use by licensed healthcare professionals only. It is not intended for use by individuals under 18 years of age or by unlicensed individuals seeking medical information."))}
-{section("Contact information", p("If you have questions about this privacy policy or concerns about our practices, please contact us through the appropriate professional channels.") + "\n" + p("<strong>Remember:</strong> This platform is for educational purposes only and should never replace professional medical consultation, institutional protocols, or evidence-based clinical decision-making."))}"""
+{section("Contact information", p("If you have questions about this privacy policy or concerns about our practices, please email <a href=\"mailto:support@coregrai.com\">support@coregrai.com</a>.") + "\n" + p("<strong>Remember:</strong> This platform is for educational purposes only and should never replace professional medical consultation, institutional protocols, or evidence-based clinical decision-making."))}"""
     return render_page(head, body)
 
 

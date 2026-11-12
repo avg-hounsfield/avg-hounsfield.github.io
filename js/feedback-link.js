@@ -7,7 +7,7 @@
  * tests/feedback-link.test.mjs.
  */
 
-export const FEEDBACK_ADDRESS = 'contact@coregrai.com';
+export const FEEDBACK_ADDRESS = 'support@coregrai.com';
 export const FEEDBACK_NOTE = 'Opens your email app; nothing is sent unless you send it.';
 
 // What each result screen is called in the draft.

@@ -18,7 +18,7 @@ export class DataLoader {
     }
 
     // Cache buster to ensure fresh data after updates
-    const cacheBuster = '20261112b';
+    const cacheBuster = '20261112c';
     const scenariosPath = `data/regions/${region}.json?v=${cacheBuster}`;
 
     try {
