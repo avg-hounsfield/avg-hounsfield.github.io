@@ -19,7 +19,13 @@ import { buildFacetModel, facetState, toggleOption, acrSourceUrl } from './guide
 import { feedbackMailto, FEEDBACK_NOTE } from './feedback-link.js?v=20261112c';
 import { buildSuggestIndex, suggest, SUGGEST_GROUPS } from './search-suggest.js?v=20261110a';
 
-const CLOSEST_MATCH_NOTICE = 'No scenario uses these words. These are suggestions by meaning, so check that they fit.';
+// MRI protocols (the Protocols library, the Builder and the MRI protocol card
+// under a selected MRI study) are off while the protocol content is reviewed.
+// Set to true to bring them back; index.html's two nav links and
+// SHOW_PROTOCOLS in tools/generate_static_pages.py go with it.
+const SHOW_PROTOCOLS = false;
+
+const CLOSEST_MATCH_NOTICE ='No scenario uses these words. These are suggestions by meaning, so check that they fit.';
 
 // Regions that have a backing data/regions/<name>.json file. Used to guard
 // navigation so a summary card with a body label that has no region file
@@ -196,11 +202,16 @@ class ProtocolHelpApp {
     // #builder link lands on the right view instead of always on Search.
     const initialView = this._viewFromHash();
     if (initialView !== 'search') this._applyView(initialView);
+    // Old #protocols / #builder links land on Search; drop the dead hash.
+    if (!SHOW_PROTOCOLS && /^#(protocols|builder)$/.test(location.hash)) {
+      history.replaceState(null, '', location.pathname + location.search);
+    }
   }
 
   // Derive the SPA view from the URL hash (defaults to 'search').
   _viewFromHash() {
     const h = (location.hash || '').replace(/^#/, '');
+    if (!SHOW_PROTOCOLS) return 'search';
     return (h === 'protocols' || h === 'builder') ? h : 'search';
   }
 
@@ -2002,7 +2013,7 @@ class ProtocolHelpApp {
 
   async handleProcedureSelect(procedure) {
     // Only show MRI protocol card for MRI procedures
-    if (procedure.modality !== 'MRI') {
+    if (!SHOW_PROTOCOLS || procedure.modality !== 'MRI') {
       this.ui.hideMriProtocol();
       return;
     }

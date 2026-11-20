@@ -9,6 +9,14 @@ from urllib.parse import quote
 BASE_URL = "https://www.protocolinfo.com"
 REPO_ROOT = Path(__file__).parent.parent
 
+# MRI protocols are off while the protocol content is reviewed. While False:
+# no Protocols/Builder nav links, no protocol lists on region pages or protocol
+# claims on the About page, protocol URLs left out of the sitemap, and each
+# /protocols/<slug>/ page replaced by a noindex "under review" notice so old
+# links still land somewhere. Set to True and rerun to restore everything;
+# SHOW_PROTOCOLS in js/app.js and the nav links in index.html go with it.
+SHOW_PROTOCOLS = False
+
 REGION_DISPLAY = {
     "neuro":    "Neuro",
     "spine":    "Spine",
@@ -201,7 +209,7 @@ def shared_head(title, description, canonical, jsonld_dict):
   <title>{title}</title>
   <meta name="description" content="{description}">
   <meta name="robots" content="index, follow">
-  <meta name="author" content="Patrick Matulich, DO - CoreGRAI">
+  <meta name="author" content="Patrick Matulich, DO - GRAi">
   <link rel="canonical" href="{canonical}">
   <meta property="og:type" content="website">
   <meta property="og:title" content="{title}">
@@ -222,7 +230,7 @@ def shared_head(title, description, canonical, jsonld_dict):
 
 
 # One navigation for every page, the app included (index.html carries the
-# same five links; its Search, Protocols and Builder switch views in place).
+# same links; its Search, Protocols and Builder switch views in place).
 NAV = [
     ("search", "Search", "/"),
     ("topics", "Topics", "/topics/"),
@@ -230,6 +238,8 @@ NAV = [
     ("builder", "Builder", "/#builder"),
     ("about", "About", "/about/"),
 ]
+if not SHOW_PROTOCOLS:
+    NAV = [item for item in NAV if item[0] not in ("protocols", "builder")]
 
 
 def shared_header(active=None):
@@ -313,7 +323,7 @@ def shared_footer():
       <span class="footer-divider">|</span>
       <a href="https://www.radsreview.net" target="_blank" rel="noopener" class="footer-link">RadsReview</a>
       <span class="footer-divider">|</span>
-      <a href="https://coregrai.com" target="_blank" rel="noopener" class="footer-link">CoreGRAI</a>
+      <a href="https://coregrai.com" target="_blank" rel="noopener" class="footer-link">CoreGRAi</a>
     </div>
     <div class="footer-directory">
       <span class="directory-label">Browse by region:</span>
@@ -329,9 +339,9 @@ def shared_footer():
     </div>
     <div class="footer-promo">
       <a href="https://coregrai.com" target="_blank" rel="noopener" class="footer-promo-card" aria-label="Visit CoreGRAi - radiology study platform">
-        <span class="footer-promo-badge">Also by CoreGRAI</span>
+        <span class="footer-promo-badge">Also by GRAi</span>
         <div class="footer-promo-text">
-          <p class="footer-promo-title">GRAi - Radiology Clinical Reference</p>
+          <p class="footer-promo-title">CoreGRAi - Radiology Clinical Reference</p>
           <p class="footer-promo-desc">AI-powered clinical decision support platform for diagnostic radiology</p>
         </div>
         <svg class="footer-promo-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
@@ -339,7 +349,7 @@ def shared_footer():
         </svg>
       </a>
     </div>
-    <p class="footer-copyright">&copy; 2025 CoreGRAI. Educational use only.</p>
+    <p class="footer-copyright">&copy; 2025 GRAi. Educational use only.</p>
   </div>
 </footer>"""
 
@@ -455,6 +465,21 @@ def render_protocol(protocol, slug, routed=()):
     return render_page(head, body)
 
 
+def render_protocol_under_review(slug):
+    """Stand-in for a protocol page while SHOW_PROTOCOLS is False: no protocol
+    content, noindex so search engines drop the old page, and a way back in."""
+    canonical = f"{BASE_URL}/protocols/{slug}/"
+    head = shared_head(
+        "MRI protocols under review | GRAi Imaging Guide",
+        "MRI protocol pages are offline while they are reviewed.",
+        canonical,
+        {"@context": "https://schema.org", "@type": "WebPage", "name": "MRI protocols under review"},
+    ).replace('content="index, follow"', 'content="noindex, follow"')
+    body = f"""{page_intro("MRI protocols are under review", "The MRI protocol pages are offline while their content is reviewed. Imaging guidance from the ACR Appropriateness Criteria is still available.")}
+{page_cta("/", "Search all scenarios", 'or <a href="/topics/">browse every topic</a>')}"""
+    return render_page(head, body)
+
+
 def render_region(region, topics, region_protocols, slug_map, protocols, scenario_count):
     """Returns complete HTML string for one regional landing page."""
     label = REGION_DISPLAY[region]
@@ -496,7 +521,7 @@ def render_region(region, topics, region_protocols, slug_map, protocols, scenari
 
     # Protocols section
     protocols_html = ""
-    if region_protocols:
+    if region_protocols and SHOW_PROTOCOLS:
         proto_items = ""
         for i, p in enumerate(protocols):
             if p.get("body_region") == region:
@@ -783,7 +808,8 @@ def render_about():
     title = "About GRAi Imaging Guide (formerly Radex)"
     meta_desc = (
         "GRAi Imaging Guide is a free, browser-based imaging guidance reference for clinicians, summarized "
-        "from the ACR Appropriateness Criteria. 3,900+ scenarios, 72+ MRI protocols."
+        "from the ACR Appropriateness Criteria. 3,900+ scenarios"
+        + (", 72+ MRI protocols." if SHOW_PROTOCOLS else ".")
     )
 
     jsonld = {
@@ -801,12 +827,12 @@ def render_about():
                     "name": "Patrick Matulich",
                     "honorificSuffix": "DO",
                     "jobTitle": "Radiology Resident",
-                    "worksFor": {"@type": "Organization", "name": "CoreGRAI", "url": "https://coregrai.com"}
+                    "worksFor": {"@type": "Organization", "name": "GRAi", "url": "https://coregrai.com"}
                 }
             },
             {
                 "@type": "Organization",
-                "name": "CoreGRAI",
+                "name": "GRAi",
                 "url": "https://coregrai.com",
                 "email": "support@coregrai.com"
             },
@@ -815,16 +841,23 @@ def render_about():
                 "name": "Patrick Matulich",
                 "honorificSuffix": "DO",
                 "jobTitle": "Radiology Resident",
-                "worksFor": {"@type": "Organization", "name": "CoreGRAI", "url": "https://coregrai.com"}
+                "worksFor": {"@type": "Organization", "name": "GRAi", "url": "https://coregrai.com"}
             }
         ]
     }
 
     head = shared_head(title, meta_desc, canonical, jsonld)
 
+    protocols_note = """
+  <p class="page-text">
+    <strong>MRI Protocols:</strong> Sample protocols based on common clinical practice.
+    Your institution may have different sequences, parameters, or protocols based on
+    scanner hardware, software versions, radiologist preferences, and institutional policies.
+  </p>""" if SHOW_PROTOCOLS else ""
+
     stats = "\n".join(f"    <li>{s}</li>" for s in [
         "3,900+ clinical scenarios across 260+ topics",
-        "72+ MRI protocols with sequence-level guidance",
+        *(["72+ MRI protocols with sequence-level guidance"] if SHOW_PROTOCOLS else []),
         "Every recommendation links to its ACR source scenario",
         "Client-side AI inference - fully private, no data sent to servers",
         "Offline-capable via Progressive Web App (PWA)",
@@ -845,7 +878,7 @@ def render_about():
 
 <section class="page-section">
   <h2 class="page-section-title">Built by</h2>
-  <p class="page-text"><strong>Patrick Matulich, DO</strong><br><span class="page-muted">Radiology Resident | CoreGRAI</span></p>
+  <p class="page-text"><strong>Patrick Matulich, DO</strong><br><span class="page-muted">Radiology Resident | GRAi</span></p>
   <p class="page-text">
     GRAi Imaging Guide was developed as a capstone project in radiology AI, motivated by a recurring challenge
     in clinical training: imaging appropriateness guidelines exist, but accessing them quickly at
@@ -873,12 +906,7 @@ def render_about():
     by what they recommend. A specific search goes to matching scenarios, with pregnancy and patient
     age applied as filters. ACR categories are shown as published, including panel disagreement
     flags, and studies in the same category are listed together because ACR does not rank them.
-  </p>
-  <p class="page-text">
-    <strong>MRI Protocols:</strong> Sample protocols based on common clinical practice.
-    Your institution may have different sequences, parameters, or protocols based on
-    scanner hardware, software versions, radiologist preferences, and institutional policies.
-  </p>
+  </p>{protocols_note}
   <p class="page-text">
     <strong>AI:</strong> When no scenario matches a search directly, a small model running in your
     browser suggests the closest scenarios by meaning. These results are labelled as closest
@@ -903,7 +931,7 @@ def render_about():
 </section>
 
 <section class="page-section">
-  <h2 class="page-section-title">Also by CoreGRAI</h2>
+  <h2 class="page-section-title">Also by GRAi</h2>
   <p class="page-text">
     <a href="https://coregrai.com" target="_blank" rel="noopener">GRAi</a>
     is an AI-powered radiology study and clinical reference platform built for residents
@@ -999,8 +1027,9 @@ def build_sitemap(protocol_slugs, topic_slugs=()):
     for slug in topic_slugs:
         entry(f"/topics/{slug}/", "0.8", "monthly")
 
-    for slug in protocol_slugs:
-        entry(f"/protocols/{slug}/", "0.7", "monthly")
+    if SHOW_PROTOCOLS:
+        for slug in protocol_slugs:
+            entry(f"/protocols/{slug}/", "0.7", "monthly")
 
     urls_block = "\n".join(entries)
     return f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -1023,7 +1052,10 @@ def main():
         routed = json.load(f)["protocols"]
     for i, protocol in enumerate(protocols):
         slug = slug_map[i]
-        page = render_protocol(protocol, slug, routed.get(f'{protocol.get("name")}|{protocol.get("body_region")}', []))
+        if SHOW_PROTOCOLS:
+            page = render_protocol(protocol, slug, routed.get(f'{protocol.get("name")}|{protocol.get("body_region")}', []))
+        else:
+            page = render_protocol_under_review(slug)
         write_file(Path("protocols") / slug / "index.html", page)
         count += 1
 

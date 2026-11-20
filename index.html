@@ -6,8 +6,8 @@
   <title>GRAi Imaging Guide - Which Imaging to Order (ACR Criteria Summaries)</title>
 
   <!-- SEO Meta Tags -->
-  <meta name="description" content="GRAi Imaging Guide (formerly Radex) is a free reference for clinicians: search 3,900+ clinical scenarios to see which imaging study the ACR Appropriateness Criteria rate appropriate. Includes MRI protocols.">
-  <meta name="keywords" content="radiology, ACR appropriateness criteria, imaging protocols, MRI protocols, CT protocols, radiology residents, clinical decision support, imaging recommendations, radiology education, protocol library">
+  <meta name="description" content="GRAi Imaging Guide (formerly Radex) is a free reference for clinicians: search 3,900+ clinical scenarios to see which imaging study the ACR Appropriateness Criteria rate appropriate.">
+  <meta name="keywords" content="radiology, ACR appropriateness criteria, which imaging to order, radiology residents, clinical decision support, imaging recommendations, radiology education">
   <meta name="author" content="GRAi">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://www.protocolinfo.com/">
@@ -22,7 +22,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="GRAi Imaging Guide - Which Imaging to Order">
-  <meta name="twitter:description" content="Free imaging guidance summarized from the ACR Appropriateness Criteria, plus an MRI protocol library. 3,900+ clinical scenarios.">
+  <meta name="twitter:description" content="Free imaging guidance summarized from the ACR Appropriateness Criteria. 3,900+ clinical scenarios.">
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -34,7 +34,7 @@
         "name": "GRAi Imaging Guide",
         "alternateName": "Radex",
         "url": "https://www.protocolinfo.com",
-        "description": "Free imaging guidance for clinicians, summarized from the ACR Appropriateness Criteria, with MRI protocol guidance for 3,900+ clinical scenarios.",
+        "description": "Free imaging guidance for clinicians, summarized from the ACR Appropriateness Criteria, across 3,900+ clinical scenarios.",
         "applicationCategory": "MedicalApplication",
         "operatingSystem": "Web",
         "isAccessibleForFree": true,
@@ -45,8 +45,6 @@
         },
         "featureList": [
           "Imaging guidance search",
-          "MRI protocol library",
-          "Protocol builder",
           "Offline access via PWA"
         ],
         "author": {
@@ -86,13 +84,15 @@
       <a class="header-brand" href="/" aria-label="GRAi Imaging Guide home">
         <span class="brand-text">GRAi Imaging Guide</span>
       </a>
-      <!-- Same five links as every generated page (tools/generate_static_pages.py NAV).
-           Search, Protocols and Builder switch views in place; Topics and About are pages. -->
+      <!-- Same links as every generated page (tools/generate_static_pages.py NAV).
+           Search switches views in place; Topics and About are pages.
+           Protocols and Builder are off while the protocols are reviewed (SHOW_PROTOCOLS
+           in js/app.js). To restore them, put these two back after Topics:
+           <a href="#protocols" class="nav-link" data-view="protocols" aria-pressed="false">Protocols</a>
+           <a href="#builder" class="nav-link" data-view="builder" aria-pressed="false">Builder</a> -->
       <nav class="header-nav" id="headerNav" role="navigation" aria-label="Main navigation">
         <a href="/" class="nav-link active" data-view="search" aria-pressed="true">Search</a>
         <a href="/topics/" class="nav-link">Topics</a>
-        <a href="#protocols" class="nav-link" data-view="protocols" aria-pressed="false">Protocols</a>
-        <a href="#builder" class="nav-link" data-view="builder" aria-pressed="false">Builder</a>
         <a href="/about/" class="nav-link">About</a>
         <button class="install-btn hidden" id="installBtn" aria-label="Install GRAi Imaging Guide for offline use">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" aria-hidden="true">
@@ -938,11 +938,13 @@
           evidence-based guidelines developed by the American College of Radiology to assist referring
           physicians and other providers in making the most appropriate imaging decisions.
         </p>
+        <!-- Off while the MRI protocols are reviewed (SHOW_PROTOCOLS in js/app.js); restore with them:
         <p>
           <strong>MRI Protocols:</strong> Sample protocols based on common clinical practice.
           <em>Your institution may have different sequences, parameters, or protocols based on
           scanner hardware, software versions, radiologist preferences, and institutional policies.</em>
         </p>
+        -->
 
         <h3>Important Notice</h3>
         <p>
@@ -1043,8 +1045,8 @@
           <strong>Educational Reference Only</strong>
         </p>
         <p>
-          This tool provides imaging appropriateness guidance based on ACR Appropriateness Criteria
-          and sample MRI protocols. Content has been generated with the assistance of AI.
+          This tool provides imaging appropriateness guidance based on ACR Appropriateness Criteria.
+          Content has been generated with the assistance of AI.
         </p>
         <ul class="welcome-list">
           <li>Always verify information with your institution's policies and protocols</li>
@@ -1113,6 +1115,6 @@
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.0/dist/ort.min.js"></script>
   <!-- Self-hosted (was unpkg CDN) so the TF-IDF scenario ranking can't be lost
        when the CDN is unreachable, and to guarantee reliable offline caching. -->
-  <script type="module" src="js/app.js?v=20261112c"></script>
+  <script type="module" src="js/app.js?v=20261119a"></script>
 </body>
 </html>
